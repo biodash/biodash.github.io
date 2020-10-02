@@ -1,0 +1,53 @@
+---
+title: "Building a Hugo Academic Site with `hugodown`"
+author: "Jelmer Poelstra"
+date: "10/1/2020"
+output: html_document
+---
+
+```{r}
+setwd('~/Dropbox/mcic/website/hugodown/')
+```
+
+## Workflow
+
+-   Following [Nate Kratzer's post](https://www.natekratzer.com/post/using_hugodown/):
+
+```{r}
+devtools::install_github("r-lib/hugodown")    # Intall hugodown
+hugodown::hugo_install("0.66.0")              # Install hugo
+hugodown::create_site_academic()              # Create site skeleton for academic theme
+#source('../myhugodown.R'); library(fs); library(rlang); library(hugodown); create_site_academic2() # Needed because of error
+
+hugodown::hugo_start()                        # Preview site
+hugodown::use_post("post/welcome-to-codeclub")# Create a new post
+
+hugodown::hugo_build(dest = "docs")           # Build site
+
+file.create("static/.nojekyll")               # .nojekyll file for Github
+usethis::use_git()
+```
+
+-   **Add line `publishDir = 'docs'` to `config.toml`**
+
+-   [[hugodown](https://hugodown.r-lib.org/articles/deploy.html) suggests to "Set `baseURL` to the url where you site will be published", but I did not do this.]
+
+-   Personalization:
+
+    -   Deactivated many of the widgets in `content/home/`
+
+    -   Edited `config/_default/menus.toml`
+
+    -   Edited `config/_default/params.toml`
+
+    -   Edited `config.toml`
+
+## Info
+
+-   Images in posts:
+
+    -   Put in post folder -- refer to with leading `./`!\
+        `![Top matter for a hugodown post](./top_of_hugodown.png)`
+
+    -   Put in `static/img` -- refer to without `static`!\
+        `![Top matter for a hugodown post](/img/top_of_hugodown.png)`
