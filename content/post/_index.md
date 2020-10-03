@@ -1,5 +1,5 @@
 ---
-title: Posts
+title: Code Club
 
 # View.
 #   1 = List
