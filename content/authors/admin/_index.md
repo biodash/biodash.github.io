@@ -10,7 +10,7 @@ authors:
 superuser: true
 
 # Role/position
-role: Bioinformatician
+role: Bioinformatician at MCIC
 
 # Organizations/Affiliations
 organizations:
