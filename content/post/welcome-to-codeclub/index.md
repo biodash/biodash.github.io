@@ -27,11 +27,11 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 7b8fca2929086748
+rmd_hash: 4be93f47a5ded69d
 
 ---
 
-Welcome to Code Club!!!
+Welcome to OSU Code Club! Materials for each episode will be provided in posts on this page. For more information about OSU Code Club, see the [About Code Club page](/about-codeclub/).
 
 <br/> <br/> <br/> <br/> <br/> <br/> <br/>
 

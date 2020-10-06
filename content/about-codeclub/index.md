@@ -1,30 +1,36 @@
+# About OSU Code Club
 
-## Join Code Club
-
-Code Club is a weekly gathering where we work on practical problems together to improve our coding skills.
-We welcome and hope to offer something to participants at any experience level.
-In every meeting, the presenter first introduces a concept or
-tool to be used for a challenge or goal. Then, we work on the challenge in pairs or trios
-(in Zoom "breakout rooms" while things are online), and finally,
+OSU Code Club is a weekly gathering where we work on practical problems together to improve our coding skills.
+We hope to offer something to participants at any experience level.
+In each meeting, the presenter first introduces a concept or tool to be used for a challenge.
+Then, we work on the challenge in pairs or trios (in Zoom "breakout rooms" while things are online), and finally,
 we reconvene to see what approaches were taken and which lessons were learned.  
 
-As the organizers, we are happy to present many of the sessions,
-but we hope that as a participant, you will also want to do so.
-For example, you could ask about an actual challenge you are facing in your data analysis,
-or introduce everyone to an new package you've been using or are excited about and want to dive into.
-
-In the first series, we will focus on all things R: from data analysis and visualization to
-efficient coding and R Markdown to create just about any document type.
-There will be no specific topic of analysis; instead, we will focus on building general skills
-and see them applied to a wide variety of topics.  
-
-Each week, materials and suggested reading will be posted upfront to this website.
-Like in a Journal Club, some preparatory homework will help you get the most out of it.
-Each session is intended to be mostly stand-alone to allow for occasional participation.
-
-The idea for this Code Club was taken from a paper recently published in PLoS Computational Biology:
+The idea for this Code Club was taken from a recent paper in PLoS Computational Biology:
 [Ten simple rules to increase computational skills among biologists with Code Clubs](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008119).
+We think this is a good idea particularly because of the high level of interaction,
+and the idea that gradual, well-spaced practice may lead to better retention of knowledge than short, intense exposure.
 
+### Join us --- and perhaps present a session too!
+
+As the organizers, we are happy to present sessions, but we hope that as a participant, you will also want to do so.
+For example, you could consult the group about an actual challenge you are facing in your data analysis.
+You could also introduce everyone to an new package or approach you've been using,
+or one that you are excited about and want to dive into -- teaching a topic can be one of the best ways to learn it!
+
+### Practical information
+
+- In the first series, we will focus on all things **R**: from data analysis and visualization to
+    efficient coding, R Markdown, and so on.
+- There will be no specific topic of analysis; instead, we will focus on building and applying general skills to a wide variety of topics.  
+- Each week, materials and suggested reading will be posted up front at the [Episodes page](post/).
+    Like in a Journal Club, doing some preparatory homework will help you get the most out of it.
+- Each session is intended to be mostly stand-alone to allow for occasional participation.
+- To allow for a welcoming environment for participants at all levels of experience,
+    we ask everyone to be respectful and patient when interacting at Code Club.
+    This is not a competitive event.
+
+### Sign up
 To sign up, please fill out [this Google Form](link.to.form).
 
 Hope to see you at Code Club!
