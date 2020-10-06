@@ -1,5 +1,5 @@
 
-## About Code Club
+## Join Code Club
 
 Code Club is a weekly gathering where we work on practical problems together to improve our coding skills.
 We welcome and hope to offer something to participants at any experience level.
@@ -26,5 +26,9 @@ The idea for this Code Club was taken from a paper recently published in PLoS Co
 [Ten simple rules to increase computational skills among biologists with Code Clubs](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008119).
 
 To sign up, please fill out [this Google Form](link.to.form).
+
+Hope to see you at Code Club!
+
+[Jelmer Poelstra](mailto:poelstra.1@osu.edu), [Mike Sovic](mailto:sovic.1@osu.edu), ...
 
 <br/> <br/> <br/> <br/>
