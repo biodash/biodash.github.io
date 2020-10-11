@@ -9,13 +9,13 @@ Here, we collect educational material that aims to empower folks at OSU in using
 
 ### Main contributors
 
-Jelmer Poelstra, MCIC Wooster
+[Jelmer Poelstra, MCIC Wooster](/authors/admin/)
 
-Mike Sovic, CAPS
+[Mike Sovic, CAPS](/authors/mike-sovic/)
 
-Stephen Opiyo, MCIC Columbus
+[Stephen Opiyo, MCIC Columbus](/authors/stephen-opiyo/)
 
-Michael Broe, Department of EEOB
+[Michael Broe, EEOB](/authors/michael-broe/)
 
 
 
