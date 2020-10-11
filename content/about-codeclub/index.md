@@ -1,19 +1,20 @@
 # About OSU Code Club
 
-OSU Code Club is a weekly gathering where we work on practical problems together to improve our coding skills.
-We hope to offer something to participants at any experience level.
-In each meeting, the presenter first introduces a concept or tool to be used for a challenge.
-Then, we work on the challenge in pairs or trios (in Zoom "breakout rooms" while things are online), and finally,
+OSU Code Club is a weekly gathering where we work on practical problems to improve our coding skills.
+We hope to offer something to participants at any experience level, and to encourage a supportive and fun culture of co-learning.
+
+In each meeting, a presenter first introduces a concept or tool to be used for a challenge.
+Then, we work on the challenge in pairs or trios (in Zoom "breakout rooms", while things are online), and finally,
 we reconvene to see what approaches were taken and which lessons were learned.  
 
 The idea for this Code Club was taken from a recent paper in PLoS Computational Biology:
 [Ten simple rules to increase computational skills among biologists with Code Clubs](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008119).
-We think this is a good idea particularly because of the high level of interaction,
-and the idea that gradual, well-spaced practice may lead to better retention of knowledge than short, intense exposure.
+We liked this is idea because of the high level of interaction and because gradual, well-spaced practice is excellent for the retention of knowledge.
 
 ### Join us --- and perhaps present a session too!
 
 As the organizers, we are happy to present sessions, but we hope that as a participant, you will also want to do so.
+
 For example, you could consult the group about an actual challenge you are facing in your data analysis.
 You could also introduce everyone to an new package or approach you've been using,
 or one that you are excited about and want to dive into -- teaching a topic can be one of the best ways to learn it!
@@ -22,9 +23,10 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 
 - In the first series, we will focus on all things **R**: from data analysis and visualization to
     efficient coding, R Markdown, and so on.
-- There will be no specific topic of analysis; instead, we will focus on building and applying general skills to a wide variety of topics.  
-- Each week, materials and suggested reading will be posted up front at the [Episodes page](post/).
-    Like in a Journal Club, doing some preparatory homework will help you get the most out of it.
+- There will be no consistent topic of analysis or data type (e.g. genomic data);
+  instead, we will focus on building and applying general skills to a wide variety of data.  
+- Each week, materials and suggested reading will be posted up front at the [Episodes page](/post/).
+    Like in a Journal Club, doing some preparatory homework by reading these materials will help you get the most out of it.
 - Each session is intended to be mostly stand-alone to allow for occasional participation.
 - To allow for a welcoming environment for participants at all levels of experience,
     we ask everyone to be respectful and patient when interacting at Code Club.
@@ -35,6 +37,7 @@ To sign up, please fill out [this Google Form](link.to.form).
 
 Hope to see you at Code Club!
 
-[Jelmer Poelstra](mailto:poelstra.1@osu.edu), [Mike Sovic](mailto:sovic.1@osu.edu), ...
+[Jelmer Poelstra](mailto:poelstra.1@osu.edu), [Mike Sovic](mailto:sovic.1@osu.edu),
+[Stephen Opiyo](mailto:opiyo.1@osu.edu), and [Michael Broe](mailto:broe.1@osu.edu).
 
 <br/> <br/> <br/> <br/>
