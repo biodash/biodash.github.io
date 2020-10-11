@@ -1,20 +1,20 @@
 ---
 # Display name
-name: Jelmer Poelstra
+name: Mike Sovic
 
 # Username (this should match the folder name)
 authors:
-- admin
+- mike-sovic
 
 # Is this the primary user of the site?
 superuser: true
 
 # Role/position
-role: Bioinformatician at MCIC
+role: Bioinformatician at CAPS
 
 # Organizations/Affiliations
 organizations:
-- name: MCIC Wooster, OSU
+- name: CAPS, OSU
   url: ""
 
 # Short bio (displayed in user profile at end of posts)
@@ -44,16 +44,16 @@ organizations:
 social:
 - icon: envelope
   icon_pack: fas
-  link: 'mailto:poelstra.1@osu.edu'  # For a direct email link, use "mailto:test@example.org".
+  link: 'mailto:sovic.1@osu.edu'  # For a direct email link, use "mailto:test@example.org".
 #- icon: twitter
 #  icon_pack: fab
 #  link: https://twitter.com/GeorgeCushen
-- icon: google-scholar
-  icon_pack: ai
-  link: https://scholar.google.com/citations?user=h_a6S0cAAAAJ
-- icon: github
-  icon_pack: fab
-  link: https://github.com/jelmerp
+#- icon: google-scholar
+#  icon_pack: ai
+#  link: https://scholar.google.com/citations?user=h_a6S0cAAAAJ
+#- icon: github
+#  icon_pack: fab
+#  link: https://github.com/jelmerp
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # - icon: cv
@@ -69,4 +69,4 @@ user_groups:
 - Bioinformaticians
 ---
 
-Jelmer Poelstra is ...
+Mike Sovic is ...
