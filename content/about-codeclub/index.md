@@ -33,11 +33,14 @@ or one that you are excited about and want to dive into -- teaching a topic can 
     This is not a competitive event.
 
 ### Sign up
-To sign up, please fill out [this Google Form](link.to.form).
+To sign up, please fill out the Google Form below.
 
-Hope to see you at Code Club!
+<br/>
 
+Hope to see you at Code Club!   
 [Jelmer Poelstra](mailto:poelstra.1@osu.edu), [Mike Sovic](mailto:sovic.1@osu.edu),
 [Stephen Opiyo](mailto:opiyo.1@osu.edu), and [Michael Broe](mailto:broe.1@osu.edu).
+
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScdMYgRZlmLaAQ0aXuz41UoZJgM5xwfoXNXg1-lKLIcsYhHqg/viewform?embedded=true" width="640" height="3025" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
 <br/> <br/> <br/> <br/>
