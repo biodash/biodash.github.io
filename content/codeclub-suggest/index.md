@@ -6,7 +6,7 @@ You are also welcome to leave a suggestion relating to the general format, organ
 or presentation of Code Club.
 
 If you suggest a topic, a broad range of suggestions are welcome -- it need not fit neatly as a single Code Club session.
-So your suggestion can be as broad as "object-oriented programming" and can be as specific as a single
+So your suggestion can be as broad as "object-oriented programming" or as specific as a single
 R function that you happen to struggle with or that you just really like.
 
 We do note that we prefer to cover topics that could be --at least in principle-- of interest to a broad
