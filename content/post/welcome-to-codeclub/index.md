@@ -5,8 +5,8 @@ output: hugodown::md_document
 title: "Welcome to Code Club"
 subtitle: ""
 summary: ""
-authors: []
-tags: []
+authors: [admin, mike-sovic, stephen-opiyo, michael-broe]
+tags: [codeclub]
 categories: []
 date: 2020-10-05
 lastmod: 2020-10-05
@@ -27,7 +27,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 4be93f47a5ded69d
+rmd_hash: d4f85992dd6e7b58
 
 ---
 
