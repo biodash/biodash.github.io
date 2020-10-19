@@ -13,8 +13,6 @@ Here, we collect educational material that aims to empower folks at OSU in using
 
 [Mike Sovic, CAPS](/authors/mike-sovic/)
 
-[Stephen Opiyo, MCIC Columbus](/authors/stephen-opiyo/)
-
 [Michael Broe, EEOB](/authors/michael-broe/)
 
 
