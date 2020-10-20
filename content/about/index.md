@@ -1,7 +1,7 @@
 
-## About OSU Applied Bioinformatics
+## About BioDASH
 
-This website is a joint initiative by OSU bioinformaticians at the [Molecular and Cellular Imaging Center (MCIC](https://mcic.osu.edu/);
+The BioDASH website is a joint initiative by OSU bioinformaticians at the [Molecular and Cellular Imaging Center (MCIC](https://mcic.osu.edu/);
 see also our [Read-The-Docs site](https://mcbl.readthedocs.io/)),
 the Center for [Applied Plant Sciences (CAPS)](https://caps.osu.edu/),
 and the [Department of Evolution, Ecology and Organismal Biology (EEOB)](https://eeob.osu.edu/).
