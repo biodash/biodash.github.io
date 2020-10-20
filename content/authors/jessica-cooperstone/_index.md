@@ -10,7 +10,7 @@ authors:
 superuser: true
 
 # Role/position
-role: Assistant Professor
+role: Assistant Professor at FST
 
 # Organizations/Affiliations
 organizations:

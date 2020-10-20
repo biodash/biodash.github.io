@@ -1,7 +1,7 @@
 # About OSU Code Club
 
 OSU Code Club is a regularly occurring, interactive, online gathering to improve coding skills.
-We hope to encourage a supportive and fun culture of learning together and offer something to participants at any experience level.
+We aim for a supportive and fun culture of learning together, and hope to offer something to participants at any experience level.
 
 In each meeting, a presenter first introduces a concept or tool to be used for a challenge.
 Then, we work on the challenge in pairs or trios in Zoom "breakout rooms," and finally,

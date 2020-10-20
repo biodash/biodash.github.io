@@ -5,11 +5,11 @@ output: hugodown::md_document
 title: "Welcome to Code Club"
 subtitle: ""
 summary: ""
-authors: [admin, mike-sovic, stephen-opiyo, michael-broe]
+authors: [admin, mike-sovic, stephen-opiyo, michael-broe, jessica-cooperstone]
 tags: [codeclub]
 categories: []
-date: 2020-10-05
-lastmod: 2020-10-05
+date: 2020-10-19
+lastmod: 2020-10-19
 featured: false
 draft: false
 
@@ -27,17 +27,11 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
+rmd_hash: 5414ee1d14928d1b
+
 ---
 
-Welcome to OSU Code Club!
-Materials for each episode will be provided in posts on this page.
-For more information about OSU Code Club, see the [About Code Club page](/about-codeclub/).
+Welcome to OSU Code Club! Materials for each episode will be provided in posts on this page. For more information about OSU Code Club, see the [About Code Club page](/about-codeclub/).
 
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
+<br/> <br/> <br/> <br/> <br/> <br/> <br/>
 
