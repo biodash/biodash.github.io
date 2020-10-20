@@ -1,5 +1,5 @@
 ---
-title: Code Club
+title: Code Club Sessions
 
 # View.
 #   1 = List

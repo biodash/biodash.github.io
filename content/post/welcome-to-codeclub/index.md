@@ -2,7 +2,7 @@
 output: hugodown::md_document
 # Documentation: https://sourcethemes.com/academic/docs/managing-content/
 
-title: "Welcome to Code Club"
+title: "E00 - Welcome to Code Club"
 subtitle: ""
 summary: ""
 authors: [admin, mike-sovic, stephen-opiyo, michael-broe, jessica-cooperstone]
@@ -27,7 +27,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 5414ee1d14928d1b
+rmd_hash: bd2cbbc402a837f2
 
 ---
 
