@@ -7,15 +7,17 @@ authors:
 - jessica-cooperstone
 
 # Is this the primary user of the site?
-superuser: true
+superuser: false
 
 # Role/position
-role: Assistant Professor at FST
+role: Assistant Professor at HCS
 
 # Organizations/Affiliations
 organizations:
+- name: Department of Horticulture and Crop Science, CFAES, OSU
+  url: "https://hcs.osu.edu/"
 - name: Department of Food Science and Technology, CFAES, OSU
-  url: ""
+  url: "https://fst.osu.edu/"
 
 # Short bio (displayed in user profile at end of posts)
 #bio: My research interests include distributed robotics, mobile computing and programmable matter.
@@ -45,15 +47,18 @@ social:
 - icon: envelope
   icon_pack: fas
   link: 'mailto:cooperstone.1@osu.edu'  # For a direct email link, use "mailto:test@example.org".
-#- icon: twitter
-#  icon_pack: fab
-#  link: https://twitter.com/GeorgeCushen
-#- icon: google-scholar
-#  icon_pack: ai
-#  link: https://scholar.google.com/citations?user=h_a6S0cAAAAJ
-#- icon: github
-#  icon_pack: fab
-#  link: https://github.com/jelmerp
+- icon: twitter
+  icon_pack: fab
+  link: https://twitter.com/CooperstoneLab
+- icon: google-scholar
+  icon_pack: ai
+  link: https://scholar.google.com/citations?user=d-FkQNQAAAAJ&hl=en
+- icon: github
+  icon_pack: fab
+  link: https://github.com/CooperstoneLab
+- icon: external-link-alt
+  icon_pack: fas
+  link: https://phytochemicals.osu.edu/
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # - icon: cv
@@ -69,4 +74,5 @@ user_groups:
 - CodeClub
 ---
 
-Jessica Cooperstone is ...
+Jessica Cooperstone is an Assistant Professor in Horticulture and Crop Science,
+and Food Science and Technology at The Ohio State University working at the intersection of plant science and human nutrition.
