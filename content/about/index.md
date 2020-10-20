@@ -5,7 +5,9 @@ The BioDASH website is a joint initiative by OSU bioinformaticians at the [Molec
 see also our [Read-The-Docs site](https://mcbl.readthedocs.io/)),
 the Center for [Applied Plant Sciences (CAPS)](https://caps.osu.edu/),
 and the [Department of Evolution, Ecology and Organismal Biology (EEOB)](https://eeob.osu.edu/).
-Here, we collect educational material that aims to empower folks at OSU in using computational tools for their research.
+Here, we collect educational material to empower folks at OSU in using computational tools for their research.
+
+**As of October 2020, this is still very much a work in progress, but more content will be added soon!**
 
 ### Main contributors
 
