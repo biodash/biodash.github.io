@@ -80,13 +80,15 @@ On Mac and Linux, these system dependencies are best installed outside of R,
 such as with `homebrew` on Mac or `apt` on Ubuntu.
 The installation errror message should tell you which libraries are needed.
 
-On Windows, you can use the `installr` package to install such dependencies or other software from within R:
+On Windows, you can use the `installr` package to install such dependencies or other software from within R -- for example:
 
 ```r
 install.packages("installr")    # Install the installr package first
 installlr::install.RStudio()    # Install RStudio
-installr::install.python()      # Install Python.
+installr::install.python()      # Install Python
 ```
+
+#### Packages from other sources
 
 Some packages are not available on CRAN.
 The two main alternative places that you may want to install packages from are Github and
