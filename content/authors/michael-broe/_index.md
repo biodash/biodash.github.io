@@ -14,8 +14,8 @@ role: Bioinformatician at EEOB
 
 # Organizations/Affiliations
 organizations:
-- name: EEOB, OSU
-  url: ""
+- name: Department of Evolution, Ecology, and Organismal Biology, OSU
+  url: "https://eeob.osu.edu/"
 
 # Short bio (displayed in user profile at end of posts)
 #bio: My research interests include distributed robotics, mobile computing and programmable matter.
@@ -69,4 +69,5 @@ user_groups:
 - Bioinformaticians
 ---
 
-Michael Broe is ...
+Michael Broe is a Bioinformatics Research Scientist at the Department of 
+Evolution, Ecology, and Organismal Biology.

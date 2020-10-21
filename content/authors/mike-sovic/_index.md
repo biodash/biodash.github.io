@@ -14,8 +14,8 @@ role: Bioinformatician at CAPS
 
 # Organizations/Affiliations
 organizations:
-- name: CAPS, OSU
-  url: ""
+- name: Center for Applied Plant Sciences, OSU
+  url: "http://caps.osu.edu/"
 
 # Short bio (displayed in user profile at end of posts)
 #bio: My research interests include distributed robotics, mobile computing and programmable matter.
@@ -54,6 +54,9 @@ social:
 - icon: github
   icon_pack: fab
   link: https://github.com/mikesovic
+- icon: youtube
+  icon_pack: fab
+  link: https://www.youtube.com/channel/UC2dB6jDTbqzlTM6edzfBSGQ
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # - icon: cv
@@ -69,4 +72,4 @@ user_groups:
 - Bioinformaticians
 ---
 
-Mike Sovic is ...
+Mike Sovic is a Bioinformatics Research Scientist at [CAPS](http://caps.osu.edu/), the Center for Applied Plant Sciences.

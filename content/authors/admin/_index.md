@@ -14,7 +14,7 @@ role: Bioinformatician at MCIC
 
 # Organizations/Affiliations
 organizations:
-- name: MCIC, OSU
+- name: Molecular and Cellular Imaging Center (MCIC) - Wooster, OSU
   url: "http://mcic.osu.edu/"
 
 # Short bio (displayed in user profile at end of posts)

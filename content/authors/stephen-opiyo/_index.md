@@ -14,8 +14,8 @@ role: Biostatistician at MCIC
 
 # Organizations/Affiliations
 organizations:
-- name: MCIC, OSU
-  url: ""
+- name: Molecular and Cellular Imaging Center (MCIC) - Columbus, OSU
+  url: "http://mcic.osu.edu"
 
 # Short bio (displayed in user profile at end of posts)
 #bio: My research interests include distributed robotics, mobile computing and programmable matter.
@@ -69,4 +69,5 @@ user_groups:
 - CodeClub
 ---
 
-Stephen Opiyo is ...
+Stephen Opiyo is a bioinformatics and biostatistics research scientist
+at MCIC Columbus.
