@@ -14,9 +14,45 @@ where we have a Classroom Project.
 
 ## Local installation
 
-### R and RStudio
+### Summary of what you need
+
+- R -- preferably version >= `4.0.0`, but at least `3.0.1`
+- RStudio
+- R packages that we will regularly use:
+  - `tidyverse`
+
+### Install R
+
+- To install R for **Windows** or **Mac**, follow the instructions on the [CRAN website](https://cran.r-project.org/).
+  Please install the latest version like the website will direct you to do (currently `4.0.3`).
+- On a **Linux** distribution, you can also install R using the website above, but you may prefer to use
+  a package manager instead -- for instance, [here](https://linuxize.com/post/how-to-install-r-on-ubuntu-20-04/) are instructions
+  for installing the latest R version on Ubuntu 20.04.
+
+### Install RStudio
+
+RStudio is a so-called Interactive Development Environment (IDE) for R,
+with panes for R scripts, an R concole, plots, help documents, and much more.
+While it is perfectly possible to use R without RStudio, RStudio has become
+the de facto standard for working with R and is incredibly useful.
+
+To install RStudio, go to the [RStudio download page](https://rstudio.com/products/rstudio/download/#download)
+and download and run the installer file for your operating system. 
+
 
 ### Installing R packages
+
+To install an R package within R (e.g. in the R console in R Studio),
+use the `install.packages()` function.
+
+Please install the *tidyverse* (which happens to be a *collection* of packages, but
+we can still install it using the same function) like so:
+
+`install.packages("tidyverse")`
+
+While this function will handle dependencies
+within R (i.e., other packages that need to be installed in order to be able to install the package you want),
+occasionally, there are errors relating to missing system dependencies that you will need to install *outside of R*.
 
 <br>
 
