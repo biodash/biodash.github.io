@@ -5,10 +5,10 @@ Here, you will find some general information on computer setup for Code Club.
 Additional setup for individual sessions (e.g., installing a specific package),
 will be stated clearly in the posts for each session.
 
-You may prefer to install the necessary software locally, so you can easily practice
+You may prefer to install the software locally, so you can easily practice
 outside of Code Club. Alternatively, you can access RStudio (as well as the terminal
 and Jupyter Notebooks) through your browser at the [Ohio Supercomputer Center (OSC)](http://osc.edu),
-where we have a Classroom Project. 
+where Code Club has a Classroom Project. 
 
 <br>
 
@@ -23,36 +23,107 @@ where we have a Classroom Project.
 
 ### Install R
 
-- To install R for **Windows** or **Mac**, follow the instructions on the [CRAN website](https://cran.r-project.org/).
-  Please install the latest version like the website will direct you to do (currently `4.0.3`).
+- **Windows**: Download and run the `.exe` file for the latest version of R from <https://cran.r-project.org/bin/windows/base/>,
+  by clicking the large `Download R [version-number] for Windows` link at the top of the gray box.
+- **Mac**: Download and run the `.pkg` file for the latest version of R from <https://cran.r-project.org/bin/macosx/>,
+  by clicking the link just below `Latest release`.
 - On a **Linux** distribution, you can also install R using the website above, but you may prefer to use
-  a package manager instead -- for instance, [here](https://linuxize.com/post/how-to-install-r-on-ubuntu-20-04/) are instructions
-  for installing the latest R version on Ubuntu 20.04.
+  a package manager instead -- for instance, seee [these instructions](https://linuxize.com/post/how-to-install-r-on-ubuntu-20-04/)
+  for installing the latest R version on Ubuntu 20.04 using the `apt` package manager.
 
 ### Install RStudio
 
 RStudio is a so-called Interactive Development Environment (IDE) for R,
-with panes for R scripts, an R concole, plots, help documents, and much more.
+with side-by-side panes for an R script, an R concole, plots, help documents, and much more.
 While it is perfectly possible to use R without RStudio, RStudio has become
-the de facto standard for working with R and is incredibly useful.
+the de facto standard for working with R and is very useful.
 
 To install RStudio, go to the [RStudio download page](https://rstudio.com/products/rstudio/download/#download)
 and download and run the installer file for your operating system. 
 
+### Install the tidyverse
+
+Install the `tidyverse`, which is a *collection* of useful packages, by
+typing the following command inside an R console:
+
+```r
+install.packages("tidyverse")
+```
+
+<br>
+
+## Additional info about setting up R
+
+### Updating R
+
+If you have an older version of R already installed, consider updating it
+(certainly do this your R version is below `3.0.1`, and preferably do this if your R version is below `4.0`).
+
+- **Windows**: Use the function `installr::updateR()` in an R console.
+- **Mac**: Download and install the latest `.pkg` file as if you were installing it for the first time.
+- **Linux**: In Ubuntu, if you installed R with `apt` or `apt-get`, you can use `apt-get upgrade` in a terminal.
+  Otherwise, simply download and install the latest version.
+
+#### Re-installing your packages after updating
+TBA
 
 ### Installing R packages
 
-To install an R package within R (e.g. in the R console in R Studio),
-use the `install.packages()` function.
+To install an R package that is available at [CRAN](https://cran.r-project.org/), the default R package repository,
+from within R (e.g. in the R console in RStudio), use the `install.packages()` function.
 
-Please install the *tidyverse* (which happens to be a *collection* of packages, but
-we can still install it using the same function) like so:
+The `install.packages()` function will handle dependencies within R -- i.e., it will install other R packages
+that your package depends on. Occasionally, when the install function needs to compile
+a package from source, errors arise that relate to missing system dependencies (i.e. software outside of R).
 
-`install.packages("tidyverse")`
+On Mac and Linux, these system dependencies are best installed outside of R,
+such as with `homebrew` on Mac or `apt` on Ubuntu.
+The installation errror message should tell you which libraries are needed.
 
-While this function will handle dependencies
-within R (i.e., other packages that need to be installed in order to be able to install the package you want),
-occasionally, there are errors relating to missing system dependencies that you will need to install *outside of R*.
+On Windows, you can use the `installr` package to install such dependencies or other software from within R:
+
+```r
+install.packages("installr")    # Install the installr package first
+installlr::install.RStudio()    # Install RStudio
+installr::install.python()      # Install Python.
+```
+
+Some packages are not available on CRAN.
+The two main alternative places that you may want to install packages from are Github and
+(if you are working with bioinformatics data) [Bioconductor](https://bioconductor.org/).
+
+To install a package from Github, use the `remotes` package -- for example:
+
+```r
+install.packages("remotes")                # Install the remotes package
+remotes::install_github("kbroman/broman")  # Install from a repository using "<username>/<repo-name>"
+```
+
+To install a package from Bioconductor, use the `BiocManager` package -- for example:
+```r
+install.packages("BiocManager")  # Install the BiocManager package
+BiocManager::install("edgeR")    # Install the edgeR package from Bioconductor
+```
+
+### Useful settings
+
+By default, R will try to save your "environment" (e.g., your loaded data, variables, etc)
+when you exit, and then reload everything the way it was upon restarting R. However, this is bad!
+You should always be able to reproduce your environment given a set of commands
+saved in an R script or R Markdown document, whereas saving and reloading your environment
+encourages you to be sloppy about this.
+
+To disable this in RStudio, go to `Tools` > `Global Options` > `General` and set the options
+as follows:
+
+{{< figure src="r_environment.png" width="500px" caption="Recommended R/RStudio settings" >}}
+
+To start R in the same way from the command line:
+
+```r
+R --no-save --no-restore-data
+```
+
 
 <br>
 
@@ -74,7 +145,7 @@ If you don't already have an OSC account, you do need to sign up:
 
 ### Use RStudio with OSC OnDemand
 
-OSC OnDemand lets you access OSC resources through your browser and run some software with GUIs, like RStudio.
+OSC OnDemand lets you access OSC resources through your browser and run a couple of applications with GUIs, like RStudio.
 - To get started, go to <https://ondemand.osc.edu/> and log in with your OSC username and password.
 - Then, click on `Interactive Apps` in the blue top bar, and select `RStudio Server (Owens and Pitzer)`.
 - Now, you're on a page from which you can launch an RStudio server that will run on an OSC cluster.
@@ -95,10 +166,10 @@ OSC OnDemand lets you access OSC resources through your browser and run some sof
 ### General info about using OSC
 
 The above instructions should be all you need to access RStudio using OSC,
-but there is lot more to OSC than that! For more information about using OSC, their website has excellent resources.
-If you work your way through the [getting started materials](https://www.osc.edu/resources/getting_started),
+but there is lot more to OSC than that! For more information about using OSC, their website has excellent resources --
+if you work your way through the [Getting Started materials](https://www.osc.edu/resources/getting_started),
 you should be pretty far along!
-In particular, it's worth looking through the topics in the
+In particular, once you're up and running with the basics, it's worth looking through the topics in the
 [HOWTOs](https://www.osc.edu/resources/getting_started/howto).
 
 Our very own Mike Sovic also has a [YouTube playlist "Getting Started With High Performance
