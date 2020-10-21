@@ -14,8 +14,8 @@ role: Bioinformatician at MCIC
 
 # Organizations/Affiliations
 organizations:
-- name: MCIC Wooster, OSU
-  url: ""
+- name: MCIC, OSU
+  url: "http://mcic.osu.edu/"
 
 # Short bio (displayed in user profile at end of posts)
 #bio: My research interests include distributed robotics, mobile computing and programmable matter.
@@ -69,4 +69,7 @@ user_groups:
 - Bioinformaticians
 ---
 
-Jelmer Poelstra is ...
+Jelmer Poelstra started at the [MCIC (Molecular and Cellular Imaging Center)](http://mcic.osu.edu/) in June 2020,
+where he provides bioinformatics support and education.
+His background is in evolutionary and population genetics,
+and most of his research has focused on understanding speciation using genomic approaches.
