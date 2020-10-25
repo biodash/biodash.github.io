@@ -34,7 +34,7 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   cd biodash
   ```
 
-- Create a new branch (by way of example "my-branch") and switch to it:
+- Create a new branch (by way of example called "my-branch") and switch to it:
   ```sh
   git checkout -b my-branch
   ```
@@ -119,10 +119,11 @@ You can do this in two ways, from RStudio or from the command line.
 
 ## Step 5: Get your post onto the website repo
 
-Your Markdown (`.md`) file will be built along with the rest of the website by a program called Hugo.
-(Hugo cannot recognize R Mardkown (`Rmd') files, that's why you needed to Knit you R Markdown yourself.)
-This will eventually be done automatically via Github actions; but if that's not yet setup, Jelmer
-will manually call Hugo to build the website. 
+Your Markdown (`.md`) file will be built along with the rest of the website by a program called Hugo 
+(Hugo does not recognize R Markdown (`Rmd`) files, that's why you needed to Knit you R Markdown yourself).
+
+This will eventually be done automatically via Github actions; but as long as that has not yet been set up,
+Jelmer will manually call Hugo to build the website. 
 
 ### Option A: Create a pull request
 
