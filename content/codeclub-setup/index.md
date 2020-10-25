@@ -65,6 +65,7 @@ If you have an older version of R already installed, consider updating it
   Otherwise, simply download and install the latest version.
 
 #### Re-installing your packages after updating
+
 TBA
 
 ### Installing R packages
