@@ -109,12 +109,6 @@ You can do this in two ways, from RStudio or from the command line.
   git commit -m "Add CodeClub session <session-nr> by <your-name>"
   ```
 
-- Merge your branch with the main (master) branch:
-  ```sh
-  git checkout master       # Move to the master branch prior to merging
-  git merge my-branch       # Merge into master (assuming your branch was named "my-branch")
-  ```
-
 <br>
 
 ## Step 5: Get your post onto the website repo
@@ -127,12 +121,34 @@ Jelmer will manually call Hugo to build the website.
 
 ### Option A: Create a pull request
 
-TBA
+When you create a *pull request*, you are asking the maintainers of a repository
+to *pull* your changes into their repository. 
+
+- Push to your branch:
+  ```sh
+  git push origin my-branch
+  ```
+
+- Create the pull request:
+  - Go to the Pull requests page of our repo at <https://github.com/biodash/biodash.github.io/pulls>.
+  - Click the green button on the right that says `New pull request`.
+  - In the grey bar on top, in the button that says `Compare: <branch>`, make sure the branch specifiied is your branch,
+    which we've named `my-branch` in these instructions.
+  - Enter a **title** (e.g. "*New Post: Session 6*") and **description** (say a little more about the post) for the pull request.
+  - Click the green button `Send pull request`.
+
 
 ### Option B: Push to the site repo (direct access required)
 
-```sh
-git push origin master
-```
+- Merge your branch with the main (master) branch:
+  ```sh
+  git checkout master       # Move to the master branch prior to merging
+  git merge my-branch       # Merge into master (assuming your branch was named "my-branch")
+  ```
+
+- Push to the master branch:
+  ```sh
+  git push origin master
+  ```
 
 <br/> <br/> <br/> <br/>
