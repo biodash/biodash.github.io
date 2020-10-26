@@ -2,14 +2,12 @@
 ## Suggest a topic or event
 
 If there is a topic you would like to see covered on this website,
-or an event you would like to see happen, please  fill out the form below.
+an event you would like to see happen,
+or an event you think should be listed under [Events](/events/),
+please fill out the form below.
 You can also indicate whether you would like to help with this content or event!
 
-*FORM TBA*
-
-<!-- Embed form! -->
-<!-- See https://biodata-club.github.io/teaching/ -->
-
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe13_VaCw5lMBgckIYrrU22wXcq5krMRjA9V_3dobcCt7UV6Q/viewform?embedded=true" width="640" height="1046" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
 
 <br/> <br/> <br/> <br/>
