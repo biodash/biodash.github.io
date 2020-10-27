@@ -18,7 +18,7 @@ If you know of an event that you think should be listed here, please use the for
 - **MCIC bioinformatics office hour**
   - Need some quick advice or help? Drop by!
   - Every Tuesday from 2-4 pm: [Zoom link](https://osu.zoom.us/j/96601785996?pwd=MVUxWWZjdGF6N3BSUGNDL3lmNWZlZz09).
-  - Anyone is welcome, but advance notice to [Jelmer Poelstra](mailto:poelstra.1@osu.edu) is appreciated.
+  - Anyone is welcome -- advance notice to [Jelmer Poelstra](mailto:poelstra.1@osu.edu) is appreciated.
 
 <br>
 
