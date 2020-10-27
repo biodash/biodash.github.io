@@ -39,15 +39,17 @@ If you know of an event that you think should be listed here, please use the for
 
 ## Relevant OSU Courses
 
-- [M5161 - Introduction to Computational Genomics](https://microbiology.osu.edu/m5161)
-  - Dept. of Microbiology -- Spring -- 3 credits
-- [M8161 - Microbiome Informatics](https://microbiology.osu.edu/M8161)
-  - Dept. of Microbiology -- Autumn -- 3 credits
-- [PLNTPTH 7003.01 - Agricultural Genomics: Principles and Applications](https://plantpath.osu.edu/courses/plntpth-700301)
-  - Dept. of Plant Pathology & Dept. of HCS -- Spring -- 2 credits
-- [HCS 7806 - Current Topics and Methods Courses](https://hcs.osu.edu/graduate/current-topics-and-methods-courses)
-  - Dept. of HCS -- Spring & Autumn -- variable credits
+- [M5161: Introduction to Computational Genomics](https://microbiology.osu.edu/m5161)
+- [M8161: Microbiome Informatics](https://microbiology.osu.edu/M8161)
+- [PLNTPTH 7003.01: Agricultural Genomics: Principles and Applications](https://plantpath.osu.edu/courses/plntpth-700301)
+- [HCS 7806: Current Topics and Methods Courses](https://hcs.osu.edu/graduate/current-topics-and-methods-courses)
   - Includes "Genome Analytics" and "Methods in Data Visualization".
+- [ENR8600: Introduction to R for Environmental Sciences](https://senr.osu.edu/courses/enr-8600)
+- [MOLGEN 5645: Quantitative, Population, and Evolutionary Genetics](https://molgen.osu.edu/undergraduate-courses)
+- [MOLGEN 5623: Genetics and Genomics](https://molgen.osu.edu/undergraduate-courses)
+- [STAT 6625: Statistical Analysis of Genetic Data](https://stat.osu.edu/courses/stat/6625)
+- [STAT 6730: Introduction to Computational Statistics](https://stat.osu.edu/courses/stat/6730)
+- [FDSCTE 7600: Metabolomics, Principles and Practice](https://fst.osu.edu/courses/fdscte-7600)
 
 <br>
 
