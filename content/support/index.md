@@ -24,7 +24,7 @@ and free access to workshops.
 To become a member, please fill out [this form](https://mcic.osu.edu/bioinformatics/mcbl-registration-form).
 
 For bioinformatics consultation, anyone is free to contact [Jelmer Poelstra](mailto:poelstra.1@osu.edu)
-or drop by at the Bioinformatics Open Hour over Zoom every Tuesday between 2 and 4 pm
+or drop by at the Bioinformatics Office Hour over Zoom every Tuesday between 2 and 4 pm
 ([Zoom link](https://osu.zoom.us/j/96601785996?pwd=MVUxWWZjdGF6N3BSUGNDL3lmNWZlZz09) -
 advance notice is appreciated!).
 
