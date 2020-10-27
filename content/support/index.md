@@ -1,10 +1,8 @@
 
 ## Bioinformatics support
 
-We provide support for data analysis in a variety of ways,
-in particular for bioinformatics work on high-throughput sequencing data.
-See below for support options with contact details at our various centers,
-or fill out the form at the bottom for a general query.
+Need some assistance in bioinformatics, high-throughput sequencing data analysis, working with big data, etc?
+See below for a list of support options for OSU researchers...
 
 <br>
 
@@ -32,7 +30,9 @@ advance notice is appreciated!).
 
 ### CAPS
 
-TBA
+The Center for Applied Plant Sciences (CAPS) supports OSU researchers working in the plant sciences. CAPS
+research scientist Mike Sovic leads bioinformatic support efforts for the Center. Details on 
+opportunities and resources available through CAPS are at http://caps.osu.edu/bioinformatics.
 
 <br>
 
