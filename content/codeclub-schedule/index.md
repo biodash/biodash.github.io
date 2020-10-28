@@ -13,5 +13,4 @@ Here we will post a tentative schedule for the next few sessions. Stay tuned for
   - Writing your own functions
   - What's new in dplyr 1.0
   
-
 <br/> <br/> <br/> <br/>

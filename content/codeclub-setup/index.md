@@ -62,11 +62,32 @@ If you have an older version of R already installed, consider updating it
 - **Windows**: Use the function `installr::updateR()` in an R console.
 - **Mac**: Download and install the latest `.pkg` file as if you were installing it for the first time.
 - **Linux**: In Ubuntu, if you installed R with `apt` or `apt-get`, you can use `apt-get upgrade` in a terminal.
-  Otherwise, simply download and install the latest version.
+  Otherwise, download and install the latest version after removing the old one.
+  [Rtask](https://rtask.thinkr.fr/installation-of-r-4-0-on-ubuntu-20-04-lts-and-tips-for-spatial-packages/) has some instructions for upgrading to
+  R 4.0 specifically, when using Ubuntu (along with upgrading to Ubuntu 20.04).
 
-#### Re-installing your packages after updating
+#### Re-installing your packages after updating (Mac and Linux)
 
-TBA
+While the `installr::updateR()` also takes care of reinstalling your packages,
+Mac and Linux users will have to re-install their packages.
+Some people prefer to re-install these packages on the fly, which can end up being one way
+to get rid of packages you no longer use.
+
+But if you want to try to reinstall all you packages, run this before you upgrade:
+
+```r
+my_packages <- installed.packages()
+saveRDS(my_packages, "my_packages.rds")
+```
+
+Then, after you've installed the latest R version:
+```r
+my_packages <- readRDS("CurrentPackages.rds")
+install.packages(my_packages[1, ])
+```
+
+This will only work for packages available on CRAN.
+
 
 ### Installing R packages
 
