@@ -23,7 +23,7 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 
 - In the first series, we will focus on all things **R**: from data analysis and visualization to
     efficient coding, R Markdown, and so on.
-- There will be no consistent analysis type or data type (e.g. genomic data);
+- There will be no consistent analysis type or data type ---
   instead, we will focus on **building general skills** and applying those to a wide variety of data.  
 - Each week, **materials and suggested reading** will be posted up front at the [Sessions page](/post/).
     Like at a Journal Club, doing some preparatory homework by reading these materials will help you get the most out of it.
@@ -31,7 +31,8 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 - To allow for a welcoming environment for participants at all levels of experience,
     we ask everyone to be **respectful, patient, and collaborative** when interacting at Code Club.
     This is not a competitive event.
-- **Installation instructions TBA**
+- We have a separate page with [**computer setup instructions**](/codeclub-setup/), where you'll see that we also
+  accommodate participating through your browser without any installations.
 - We also have [a form to suggest topics](/codeclub-suggest/) for Code Club!
 
 ### Sign up
