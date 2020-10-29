@@ -8,7 +8,7 @@ If you know of an event that you think should be listed here, please use the for
 
 ## Recurring Events
 
-- **Tn-seq working group**
+- **CAPS Tn-seq working group**
   - A working group dedicated to the analysis of Transposon-seq (Tn-seq) data.
   - Every Monday from 10-11 am.
   - Contact [Mike Sovic](mailto:sovic.1@osu.edu) for details.
@@ -18,7 +18,9 @@ If you know of an event that you think should be listed here, please use the for
 - **MCIC bioinformatics office hour**
   - Need some quick advice or help? Drop by!
   - Every Tuesday from 2-4 pm: [Zoom link](https://osu.zoom.us/j/96601785996?pwd=MVUxWWZjdGF6N3BSUGNDL3lmNWZlZz09).
-  - Anyone is welcome -- advance notice to [Jelmer Poelstra](mailto:poelstra.1@osu.edu) is appreciated.
+  - Advance notice to [Jelmer Poelstra](mailto:poelstra.1@osu.edu) is appreciated.
+  - Anyone at OSU is welcome, and if you're outside of OSU, feel free to [inquire](mailto:poelstra.1@osu.edu).
+  
 
 <br>
 
@@ -28,13 +30,16 @@ If you know of an event that you think should be listed here, please use the for
 
 <br>
 
-## Workshops
+## Upcoming Workshops
+
+None right now!
 
 <br>
 
 ## Upcoming Outside of OSU
 
 - For [Ohio Supercomputer Center](https://osc.edu) events, such as regular introductory sessions to computing at OSC, see the [OSC Events page](https://www.osc.edu/events).
+  Highly recommended!
 
 <br>
 
