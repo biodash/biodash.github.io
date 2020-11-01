@@ -1,5 +1,7 @@
 
-# For presenters
+# Information for Presenters
+
+## Introduction
 
 - Each Code Club session represents a blogpost on the website at <https://biodash.github.io/post/>.
 
@@ -11,7 +13,26 @@
 
 <br>
 
-## Step 1: Get the repo
+## Checklist
+
+An overview of what to do; see the sections further down on how to do it.
+
+- Get the session information as a blogpost onto the website about 1 week before the session. 
+  - At this point, your post should contain information on the topic and
+    recommended prep for participants.
+  - Additional content such as intro slides and example code can be included
+    right away, or added just before the session.
+- Include a link to an R script or R Markdown file that participants can download
+  (this file could just be your post with a modified YAML header,
+  or a completely separate file depending on your preference).
+- If your session includes a dataset, make sure to upload it and include code
+  in the abovementioned script/markdown file that downloads it.
+
+<br>
+
+## Step-by-step guide to get your Code Club session info onto the site
+
+### Step 1: Get the repo
 
 You only need to do this if you want to create a pull request or push your content to the website
 directly. If you want to send your R Markdown file by email, skip this and continue to Step 2.
@@ -41,7 +62,7 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 
 <br>
 
-## Step 2: Create a new post in R
+### Step 2: Create a new post in R
 
 - Start an R session.
 
@@ -60,17 +81,60 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   and `<short-title>` is a short title that you would like to give the post,
   which will be used for links and the folder name.
 
-- Write your actual post in R Markdown format.
+- Write the content of your Code Club session that you would like to share with participants, in R Markdown format.
+
+- **If you want participants to load an R Markdown file or script:**   
+  An easy solution is to place the file in the same directory as your post, and include it in your git commit,
+  so it will be uploaded to Github. In that case, the URL to the file for direct downloads for participants will be:
+  `https://raw.githubusercontent.com/biodash/biodash.github.io/master/docs/post/<session-number>_<short-title>/<filename>`.   
+  
+  In your post, include a function call like `file.download(<script-URL>)` for participants to get the file --
+  this will work both for participants working locally and those working in an OSC RStudio Server instance.
+
+- **If your session contains a dataset:**   
+  Like for the markdown/script, place the file(s) in the same directory as your post.
+  If you have a markdown/script for participants, include `file.download(<dataset-URL>)` in this file,
+  otherwise include it directly in your post.
+
+- **If you want to install an R package at OSC for all participants:**   
+  Many R packages are already installed at OSC (nearly 200 for R 4.0.2), including the `tidyverse`.
+  You can check which packages have been installed by typing, in an R session at OSC:
+
+  ```r
+  library()
+  ```
+  
+  This will list packages by library, which should include two locations available to all
+  OSC users (starting with `/usr/local/R`), your personal library, and the Code Club library
+  (`/fs/ess/PAS1838/CODECLUB/Rpkgs`).
+
+  If you want to make another package available to Code Club participants, you can do so
+  as follows in an RStudio Server session at OSC:
+  
+  ```r
+  install.packages("<pkg-name>", lib = "/fs/ess/PAS1838/CODECLUB/Rpkgs")
+  ```
+  
+  This library is available to all members of the Code Club OSC classroom project.
+  To check specifically which packages are available in this library -- and whether your newly
+  installed package has indeed been installed here, type:
+  
+  ```r
+  library(lib.loc = "/fs/ess/PAS1838/CODECLUB/Rpkgs")
+  ```
+  
+  Alternatively, you can let participants working at OSC install the packages themselves,
+  like for participants working locally.
 
 - Convert your `.Rmd` (R Markdown) file to a `.md` (Markdown) file, which is done most easitly by "knitting" your post in RStudio by clicking `Knit` in the top bar or pressing `Ctrl + Shift + K`.
 
 <br>
 
-## Step 3: Check your post on a locally rendered website (optional)
+### Step 3: Check your post on a locally rendered website (optional)
 
 You can do this in two ways, from RStudio or from the command line.
 
-### Option A: In RStudio
+#### Option A: In RStudio
 
 - Install Hugo:
   ```r
@@ -82,7 +146,7 @@ You can do this in two ways, from RStudio or from the command line.
   hugodown::hugo_start()
   ```
 
-### Option B: From the command line
+#### Option B: From the command line
 
 - Install Hugo using [these instructions](https://gohugo.io/getting-started/installing/).
 
@@ -97,7 +161,7 @@ You can do this in two ways, from RStudio or from the command line.
 
 <br>
 
-## Step 4: Commit your changes
+### Step 4: Commit your changes
 
 - Add the files from your post:
   ```sh
@@ -111,7 +175,7 @@ You can do this in two ways, from RStudio or from the command line.
 
 <br>
 
-## Step 5: Get your post onto the website repo
+### Step 5: Get your post onto the website repo
 
 Your Markdown (`.md`) file will be built along with the rest of the website by a program called Hugo 
 (Hugo does not recognize R Markdown (`Rmd`) files, that's why you needed to Knit your R Markdown yourself).
@@ -119,7 +183,9 @@ Your Markdown (`.md`) file will be built along with the rest of the website by a
 This will eventually be done automatically via Github actions; but as long as that has not yet been set up,
 Jelmer will manually call Hugo to build the website. 
 
-### Option A: Create a pull request
+<br>
+
+#### Option A: Create a pull request
 
 When you create a *pull request*, you are asking the maintainers of a repository
 to *pull* your changes into their repository. 
@@ -137,8 +203,9 @@ to *pull* your changes into their repository.
   - Enter a **title** (e.g. "*New Post: Session 6*") and **description** (say a little more about the post) for the pull request.
   - Click the green button `Send pull request`.
 
+<br>
 
-### Option B: Push to the site repo (direct access required)
+#### Option B: Push to the site repo (direct access required)
 
 - Merge your branch with the main (master) branch:
   ```sh
