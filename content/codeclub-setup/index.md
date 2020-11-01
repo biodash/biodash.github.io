@@ -2,15 +2,15 @@
 toc: true
 ---
 
-# Computer setup
+# Computer Setup
 
-Here, you will find some general information on computer setup for Code Club.
-Additional setup for individual sessions (e.g., installing a specific package),
-will be stated clearly in the posts for each session.
+Here, you will find general information on computer setup for Code Club.
+Additional setup instructions for individual sessions (e.g., installing a specific package)
+will appear in the posts for each session.
 
 You may prefer to install the software locally, so you can easily practice
-outside of Code Club. Alternatively, you can access RStudio (as well as the terminal
-and Jupyter Notebooks) through your browser at the [Ohio Supercomputer Center (OSC)](http://osc.edu),
+outside of Code Club. Alternatively, you can access RStudio (among other things)
+in your browser at the [Ohio Supercomputer Center (OSC)](http://osc.edu),
 where Code Club has a Classroom Project. 
 
 <br>
@@ -103,105 +103,11 @@ install.packages("tidyverse")
 
 <br>
 
-## More on setting up R
+## More info
 
-### Updating R
+Please see the [New to R?](/codeclub-novice/) section
+to get started with R and for more R setup tips.
 
-If you have an older version of R already installed, consider updating it
-(certainly do this your R version is below `3.0.1`, and preferably do this if your R version is below `4.0`).
-
-- **Windows**: Use the function `installr::updateR()` in an R console
-  (if needed, first install installr using `install.packages("installr")`).
-- **Mac**: Download and install the latest `.pkg` file as if you were installing it for the first time.
-- **Linux**: In Ubuntu, if you installed R with `apt` or `apt-get`, you can use `apt-get upgrade` in a terminal.
-  Otherwise, download and install the latest version after removing the old one.
-  [Rtask has some instructions](https://rtask.thinkr.fr/installation-of-r-4-0-on-ubuntu-20-04-lts-and-tips-for-spatial-packages/) for upgrading to
-  R 4.0 in Ubuntu (along with upgrading to Ubuntu 20.04).
-
-#### Re-installing your packages after updating (Mac and Linux)
-
-While the `installr::updateR()` function for Windows users takes care of reinstalling
-your packages along with updating R,
-Mac and Linux users will have to manually re-install their packages.
-Some people prefer to re-install these packages on the fly, which can end up being a way
-to get rid of packages you no longer use.
-
-But if you want immediately reinstall all your packages, run this before you upgrade:
-
-```r
-my_packages <- installed.packages()
-saveRDS(my_packages, "my_packages.rds")
-```
-
-Then, after you've installed the latest R version:
-```r
-my_packages <- readRDS("CurrentPackages.rds")
-install.packages(my_packages[1, ])
-```
-
-This will only work for packages available on CRAN. Of course, you can check your list
-for Github-only and Bioconductor packages and then install those with their respective commands
-(see below). Yes, this can be a bit of a hassle!
-
-
-### Installing R packages
-
-To install an R package that is available at [CRAN](https://cran.r-project.org/), the default R package repository,
-from within R (e.g. in the R console in RStudio), use the `install.packages()` function.
-
-The `install.packages()` function will handle dependencies within R -- i.e., it will install other R packages
-that your package depends on. Occasionally, when the install function needs to compile
-a package from source, errors arise that relate to missing system dependencies (i.e. software outside of R).
-
-On Mac and Linux, these system dependencies are best installed outside of R,
-such as with `homebrew` on Mac or `apt` on Ubuntu.
-The installation errror message should tell you which libraries are needed.
-
-On Windows, you can use the `installr` package to install such dependencies or other software from within R -- for example:
-
-```r
-install.packages("installr")    # Install the installr package first
-installlr::install.RStudio()    # Install RStudio
-installr::install.python()      # Install Python
-```
-
-#### Packages from other sources
-
-Some packages are not available on CRAN.
-The two main alternative places that you may want to install packages from are Github and
-(if you are working with bioinformatics data) [Bioconductor](https://bioconductor.org/).
-
-To install a package from Github, use the `remotes` package -- for example:
-
-```r
-install.packages("remotes")                # Install the remotes package
-remotes::install_github("kbroman/broman")  # Install from a repository using "<username>/<repo-name>"
-```
-
-To install a package from Bioconductor, use the `BiocManager` package -- for example:
-```r
-install.packages("BiocManager")  # Install the BiocManager package
-BiocManager::install("edgeR")    # Install the edgeR package from Bioconductor
-```
-
-### Useful settings
-
-By default, R will try to save your "environment" (e.g., your loaded data, variables, etc)
-when you exit, and then reload everything the way it was upon restarting R. However, this is bad!
-You should always be able to reproduce your environment given a set of commands
-saved in an R script or R Markdown document, whereas saving and reloading your environment
-encourages you to be sloppy about this.
-
-To disable this in RStudio, go to `Tools` > `Global Options` > `General` and set the options
-as follows:
-
-{{< figure src="r_environment.png" width="500px" caption="Recommended R/RStudio settings" >}}
-
-To start R in the same way from the command line:
-
-```r
-R --no-save --no-restore-data
-```
 
 
 <br/> <br/> <br/> <br/>
