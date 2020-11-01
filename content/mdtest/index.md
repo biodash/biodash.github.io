@@ -1,52 +1,52 @@
 ---
-title: |
-  | No coronavirus detected
-  | in sequences from human nose swab samples
-pagetitle: "corona blast"
-author: "Jelmer Poelstra (poelstra.1@osu.edu), MCIC Wooster"
-date: "2020-11-01"
-output:
-  html_document:
-    keep_md: yes
-    toc: true
-    toc_float: true
-    fig_caption: true
-    code_folding: hide
+output: hugodown::md_document
+# Documentation: https://sourcethemes.com/academic/docs/managing-content/
+
+title: "Md test"
+subtitle: ""
+summary: ""
+authors: [admin, mike-sovic, stephen-opiyo, michael-broe, jessica-cooperstone]
+tags: [codeclub]
+categories: []
+date: 2020-10-19
+lastmod: 2020-10-19
+featured: false
+draft: false
+toc: true
+# Featured image
+# To use, add an image named `featured.jpg/png` to your page's folder.
+# Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
+image:
+  caption: ""
+  focal_point: ""
+  preview_only: false
+
+# Projects (optional).
+#   Associate this post with one or more of your projects.
+#   Simply enter your project's folder or file name without extension.
+#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
+#   Otherwise, set `projects = []`.
+projects: []
+rmd_hash: 5428330b0cf253b4
+
 ---
 
-## Summary
-RNA-seq data derived from four human nose swabs was examined for the presence of
-sequences of coronavirus *SARS-CoV-2*, and none were detected.
+Section 1
+---------
 
-<br/>
+aap
 
-## Background
-Paired-end Illumina iSeq 100 sequences from 4 samples were received from Annika Diaz
-(Vlasova lab, Department of Veterinary Preventive Medicine). The samples were derived
-from human nose swab cDNA, with each sample representing a different patient.
+### Subsection
 
-The objective was to determine whether sequences derived from the coronavirus
-*SARS-CoV-2* could be detected.
+Materials for each episode will be provided in posts on this page.
 
-<br/>
+Section 2
+---------
 
-## About this document
-This document briefly presents the methods and results of the analysis performed.
-It also contains the code that was run (in a `bash` shell on `Ubuntu 20.04`),
-and this code can be shown by clicking the `Code` boxes below (or all code can be
-shown by clicking the `Code` box at the top). 
-Along with this document, I've sent a zipped folder that has the same
-directory structure as referred to below in the text and code.
+aap
 
-<br/>
+Section 3
+---------
 
-## Overview of the methods
-- I performed quality control on the 8 `.fastq` files using the software
-`fastqc`, and did a filtering and trimming step using
-`Trimmomatic` .
-- The remaining sequences were classified by source organism using the online tool `Taxonomer`.
-- Sequences inferred to be of viral origin by `Taxonomer` were also aligned to NCBI's coronavirus database using `BLAST`.
+<br/> <br/> <br/> <br/> <br/> <br/> <br/>
 
-<br/>
-
-## Raw data

@@ -126,7 +126,12 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   Alternatively, you can let participants working at OSC install the packages themselves,
   like for participants working locally.
 
-- Convert your `.Rmd` (R Markdown) file to a `.md` (Markdown) file, which is done most easitly by "knitting" your post in RStudio by clicking `Knit` in the top bar or pressing `Ctrl + Shift + K`.
+- Convert your `.Rmd` (R Markdown) file to a `.md` (Markdown) file.
+  Since your output was specified as `hugodown::md_document` when you called `hugodown::use_post()`
+  (and not as a HTML file -- recall that Hugo will perform the markdown to HTML conversion),
+  this is done most easitly by "knitting" your post in RStudio by clicking `Knit` in the top bar,
+  or by pressing `Ctrl + Shift + K`.
+  
 
 <br>
 
