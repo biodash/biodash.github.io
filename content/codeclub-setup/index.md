@@ -1,3 +1,6 @@
+---
+toc: true
+---
 
 # Computer setup
 
@@ -12,7 +15,7 @@ where Code Club has a Classroom Project.
 
 <br>
 
-## OSC
+## Option 1 -- OSC
 
 ### Sign up at OSC
 
@@ -31,7 +34,7 @@ Interactive Apps page below can take a few hours to appear after you become a me
 
 {{< figure src="osc_signup2.png" width="800px" caption="Enter Project Code PAS1838 in the red box (click to enlarge)" >}}
 
-### Use RStudio with OSC OnDemand Class
+### Run RStudio Server
 
 OSC OnDemand lets you access OSC resources through your browser and run a couple of applications with GUIs,
 like RStudio. It has a separate access point for classroom projects such as this one. 
@@ -47,7 +50,7 @@ like RStudio. It has a separate access point for classroom projects such as this
 {{< figure src="osc_running.png" width="700px" caption="" >}}
 - Click `Connect to RStudio Server` at the bottom of the box, and an RStudio Server instance will open. You're ready to go!
 
-### General info about using OSC
+### More about OSC
 
 The above instructions should be all you need to access RStudio using OSC,
 but there is lot more to OSC than that!
@@ -59,10 +62,11 @@ at his channel [The Data Point](https://www.youtube.com/channel/UC2dB6jDTbqzlTM6
 
 <br>
 
-## Option 2 - Local installation
+## Option 2 -- Local install
 
-### Summary of what you need
+### Summary
 
+You will need:
 - R -- preferably version >= `4.0.0`, but at least `3.0.1`
 - RStudio
 - R packages that we will regularly use:
@@ -99,7 +103,7 @@ install.packages("tidyverse")
 
 <br>
 
-## Additional info about setting up R
+## More on setting up R
 
 ### Updating R
 
