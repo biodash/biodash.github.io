@@ -1,3 +1,6 @@
+---
+toc: true
+---
 
 # Information for Presenters
 
@@ -30,7 +33,7 @@ An overview of what to do; see the sections further down on how to do it.
 
 <br>
 
-## Step-by-step guide to get your Code Club session info onto the site
+## Getting your documents onto the site
 
 ### Step 1: Get the repo
 
@@ -62,7 +65,7 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 
 <br>
 
-### Step 2: Create a new post in R
+### Step 2: Create a post
 
 - Start an R session.
 
@@ -82,6 +85,8 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   which will be used for links and the folder name.
 
 - Write the content of your Code Club session that you would like to share with participants, in R Markdown format.
+  - If you want a Table of Contents (TOC) for your file, add a line `toc: true` to the `YAML`
+    (*not* indented, as it is not an option of the output format).
 
 - **If you want participants to load an R Markdown file or script:**   
   An easy solution is to place the file in the same directory as your post, and include it in your git commit,
@@ -135,7 +140,7 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 
 <br>
 
-### Step 3: Check your post on a locally rendered website (optional)
+### Step 3: Preview your post (optional)
 
 You can do this in two ways, from RStudio or from the command line.
 
@@ -166,7 +171,7 @@ You can do this in two ways, from RStudio or from the command line.
 
 <br>
 
-### Step 4: Commit your changes
+### Step 4: Commit
 
 - Add the files from your post:
   ```sh
@@ -180,7 +185,7 @@ You can do this in two ways, from RStudio or from the command line.
 
 <br>
 
-### Step 5: Get your post onto the website repo
+### Step 5: Push or submit pull request
 
 Your Markdown (`.md`) file will be built along with the rest of the website by a program called Hugo 
 (Hugo does not recognize R Markdown (`Rmd`) files, that's why you needed to Knit your R Markdown yourself).
