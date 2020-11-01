@@ -7,11 +7,15 @@ toc: true
 <br>
 
 ## New to R?
-If you are completely new to R, we recommend watching at least the first video
-of [Mike Sovic's Youtube playlist of short videos on R](https://www.youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe),
-and ideally all of them, prior to attending Code Club.
+If you are completely new to R, we recommend watching at least the first couple of
+videos from [Mike Sovic's Youtube playlist of short videos on R](https://www.youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe),
+and ideally all of them, prior to attending Code Club. Here is the first video:
 
-Another useful and fun tutorial is [R for cats](https://rforcats.net/).
+{{< youtube ByxF3xjN2JQ >}}
+
+<br>
+
+A useful and fun written tutorial is [R for cats](https://rforcats.net/).
 For a more systematic and lengthy introduction to R, see
 [A Tutorial Introduction to R](https://kingaa.github.io/R_Tutorial/)
 (which gets fairly advanced after section 9).
