@@ -1,3 +1,7 @@
+---
+toc: true
+---
+
 # About OSU Code Club
 
 OSU Code Club is a regularly occurring, interactive, online gathering to improve coding skills.
