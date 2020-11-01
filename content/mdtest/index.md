@@ -22,6 +22,7 @@ image:
   preview_only: false
 
 toc: true
+source_extension: '.Rmd'
 
 # Projects (optional).
 #   Associate this post with one or more of your projects.
@@ -29,7 +30,7 @@ toc: true
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: c5c40cf88460fa1d
+rmd_hash: 4bfc497be550acdd
 
 ---
 
