@@ -85,8 +85,10 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   which will be used for links and the folder name.
 
 - Write the content of your Code Club session that you would like to share with participants, in R Markdown format.
-  - If you want a Table of Contents (TOC) for your file, add a line `toc: true` to the `YAML`
+  - If you want a **Table of Contents** (TOC) for your file, add a line `toc: true` to the `YAML`
     (*not* indented, as it is not an option of the output format).
+  - Add a line saying `source_extension: '.Rmd'` (not indented) to your R Markdown,
+    which will ensure that there is a link to the source document at the top of your post.
 
 - **If you want participants to load an R Markdown file or script:**   
   An easy solution is to place the file in the same directory as your post, and include it in your git commit,
