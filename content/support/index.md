@@ -1,10 +1,12 @@
+---
+toc: true
+---
+
 
 ## Bioinformatics support
 
-Need some assistance in bioinformatics, high-throughput sequencing data analysis, working with big data, etc?
+Need assistance with bioinformatics, high-throughput sequencing data analysis, working with big data, etc?
 See below for a list of support options for OSU researchers...
-
-<br>
 
 ### MCIC
 
@@ -42,7 +44,7 @@ TBA
 
 <br>
 
-### Request support
+## Request support
 
 <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfC-g3YSG84KBerEwRLilje4kz7-9WRIevzHAUNTMQKgKmCuQ/viewform?embedded=true" width="640" height="1078" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
