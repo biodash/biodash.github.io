@@ -239,26 +239,36 @@ to *pull* your changes into their repository.
 - It can be useful to provide solutions to small challenges in the file,
   but to hide them by default. This can be done with a little HTML:
   
-  ```{html}
+  ````{html}
   <details>
     <summary>
-    **Solution** (click here)
+    Solution (click here)
     </summary>
   
-  ... Your solution ...
-  
-  </details>
+  <br>
+  ... Your solution - this can be a long section including a code block...
+  ```{r}
+  install.packages("tidyverse")
   ```
+
+  </details>
+  ````
 
   This would create:
 
   <details>
     <summary>
-  **Solution** (click here)
+  Solution (click here)
     </summary>
   
-  ... Your solution ...
+  <br>
   
+  ... Your solution - this can be a long section including a code block...
+
+    ```{r}
+  install.packages("tidyverse")
+  ```
+
   </details>
 
 <br/> <br/> <br/> <br/>
