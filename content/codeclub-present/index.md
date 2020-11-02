@@ -4,6 +4,10 @@ toc: true
 
 # Information for Presenters
 
+----
+
+<br>
+
 ## Introduction
 
 - Each Code Club session represents a blogpost on the website at <https://biodash.github.io/post/>.
@@ -14,6 +18,7 @@ toc: true
 - Occasional presenters can either send their material directly to [Jelmer](mailto:poelstra.1@osu.edu)
   or create a "pull request" with their new post.
 
+----
 <br>
 
 ## Checklist
@@ -33,11 +38,12 @@ An overview of what to do; see the sections further down on how to do it.
 - If your session includes a dataset, upload it and include code
   in the abovementioned script/markdown file that will download the dataset file(s).
 
+----
 <br>
 
 ## Getting your files onto the site
 
-### Step 1: Get the repo
+### 1: Get the repo
 
 You only need to do this if you want to create a pull request or push your content to the website
 directly. If you want to send your R Markdown file by email, skip this and continue to Step 2.
@@ -65,13 +71,12 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   git checkout -b my-branch
   ```
 
+----
 <br>
 
-### Step 2: Create a post
+### 2: Create a post
 
-- Start an R session.
-
-- If you don't have the `hugodown` package installed, install it:
+- Start an R session. If you don't have the `hugodown` package installed, install it:
   ```r
   remotes::install_github("r-lib/hugodown")
   ```
@@ -86,11 +91,8 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   and `<short-title>` is a short title that you would like to give the post,
   which will be used for links and the folder name.
 
-- Write the content of your Code Club session that you would like to share with participants, in R Markdown format.
-  - If you want a **Table of Contents** (TOC) for your file, add a line `toc: true` to the `YAML`
-    (*not* indented, as it is not an option of the output format).
-  - Add a line saying `source_extension: '.Rmd'` (not indented) to your R Markdown,
-    which will ensure that there is a link to the source document at the top of your post.
+- Write the contents of your Code Club session that you would like to share with participants, in R Markdown format.
+  For formatting tips, see [below](/codeclub-present/#format).
 
 - **If you want participants to load an R Markdown file or script:**   
   An easy solution is to place the file in the same directory as your post, and include it in your git commit,
@@ -105,46 +107,16 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   If you have a markdown/script for participants, include `file.download(<dataset-URL>)` in this file,
   otherwise include it directly in your post.
 
-- **If you want to install an R package at OSC for all participants:**   
-  Many R packages are already installed at OSC (nearly 200 for R 4.0.2), including the `tidyverse`.
-  You can check which packages have been installed by typing, in an R session at OSC:
-
-  ```r
-  library()
-  ```
-  
-  This will list packages by library, which should include two locations available to all
-  OSC users (starting with `/usr/local/R`), your personal library, and the Code Club library
-  (`/fs/ess/PAS1838/CODECLUB/Rpkgs`).
-
-  If you want to make another package available to Code Club participants, you can do so
-  as follows in an RStudio Server session at OSC:
-  
-  ```r
-  install.packages("<pkg-name>", lib = "/fs/ess/PAS1838/CODECLUB/Rpkgs")
-  ```
-  
-  This library is available to all members of the Code Club OSC classroom project.
-  To check specifically which packages are available in this library -- and whether your newly
-  installed package has indeed been installed here, type:
-  
-  ```r
-  library(lib.loc = "/fs/ess/PAS1838/CODECLUB/Rpkgs")
-  ```
-  
-  Alternatively, you can let participants working at OSC install the packages themselves,
-  like for participants working locally.
-
 - Convert your `.Rmd` (R Markdown) file to a `.md` (Markdown) file.
   Since your output was specified as `hugodown::md_document` when you called `hugodown::use_post()`
   (and not as a HTML file -- recall that Hugo will perform the markdown to HTML conversion),
-  this is done most easitly by "knitting" your post in RStudio by clicking `Knit` in the top bar,
+  this is done most easily by "knitting" your post in RStudio by clicking `Knit` in the top bar,
   or by pressing `Ctrl + Shift + K`.
   
-
+----
 <br>
 
-### Step 3: Preview your post (optional)
+### 3: Preview your post (optional)
 
 You can do this in two ways, from RStudio or from the command line.
 
@@ -173,9 +145,10 @@ You can do this in two ways, from RStudio or from the command line.
   Until you press `Ctrl + C` on the command line, the server will keep running and will update
   whenever you save changes in a file within the website directory.
 
+----
 <br>
 
-### Step 4: Commit
+### 4: Commit
 
 - Add the files from your post:
   ```sh
@@ -187,9 +160,10 @@ You can do this in two ways, from RStudio or from the command line.
   git commit -m "Add CodeClub session <session-nr> by <your-name>"
   ```
 
+----
 <br>
 
-### Step 5: Push or submit pull request
+### 5: Push or submit pull request
 
 Your Markdown (`.md`) file will be built along with the rest of the website by a program called Hugo 
 (Hugo does not recognize R Markdown (`Rmd`) files, that's why you needed to Knit your R Markdown yourself).
@@ -232,43 +206,171 @@ to *pull* your changes into their repository.
   git push origin master
   ```
 
+----
 <br>
 
-## Markdown tips
+### 6: Install packages at OSC (optional)
 
-- It can be useful to provide solutions to small challenges in the file,
-  but to hide them by default. This can be done with a little HTML:
-  
-  ````{html}
-  <details>
-    <summary>
-    Solution (click here)
-    </summary>
-  
-  <br>
-  ... Your solution - this can be a long section including a code block...
-  ```{r}
-  install.packages("tidyverse")
-  ```
+Many R packages are already installed at OSC (nearly 200 for R 4.0.2), including the `tidyverse`.
+You can check which packages have been installed by typing, in an R session at OSC:
+```r
+library()
+```
 
-  </details>
-  ````
+This will list packages by library, which should include two locations available to all
+OSC users (starting with `/usr/local/R`), your personal library, and the Code Club library
+(`/fs/ess/PAS1838/CODECLUB/Rpkgs`).
 
-  This would create:
+If you want to make another package available to Code Club participants, you can do so
+as follows in an RStudio Server session at OSC:
 
-  <details>
-    <summary>
+```r
+install.packages("<pkg-name>", lib = "/fs/ess/PAS1838/CODECLUB/Rpkgs")
+```
+
+This library is available to all members of the Code Club OSC classroom project.
+To check specifically which packages are available in this library -- and whether your newly
+installed package has indeed been installed here, type:
+
+```r
+library(lib.loc = "/fs/ess/PAS1838/CODECLUB/Rpkgs")
+```
+
+Alternatively, you can let participants working at OSC install the packages themselves,
+like participants that work locally will have to do.
+
+----
+<br>
+
+## Formatting tips {#format}
+
+### Miscellaneous
+
+- If you want a **Table of Contents** (TOC) for your file, add a line `toc: true` to the `YAML`
+  (*not* indented, as it is not an option of the output format).
+
+- Add a line saying `source_extension: '.Rmd'` (not indented) to your R Markdown,
+  which will ensure that there is a link to the source document at the top of your post.
+
+- To add an image, put it in the same directory as the markdown file,
+  and refer to it without prepending a path.
+
+<br>
+
+### Hidden sections
+
+It can be useful to provide solutions to small challenges in the file,
+but to hide them by default. This can be done with a little HTML:
+
+````{html}
+<details>
+  <summary>
   Solution (click here)
-    </summary>
-  
-  <br>
-  
-  ... Your solution - this can be a long section including a code block...
+  </summary>
 
-    ```{r}
-  install.packages("tidyverse")
+<br>
+... Your solution - this can be a long section including a code block...
+```{r}
+install.packages("tidyverse")
+```
+</details>
+````
+This is rendered as:
+<details>
+  <summary>
+Solution (click here)
+  </summary>
+
+<br>
+
+... Your solution - this can be a long section including a code block...
+  ```{r}
+install.packages("tidyverse")
+```
+</details>
+
+<br>
+
+### Info/alert notes
+
+To produce boxes to draw attention to specific content,
+you can use two classes that are specific to the [Hugo Academic Theme](https://themes.gohugo.io/academic/)
+(now branded as ["Wowchemy"](https://wowchemy.com/)).
+
+- `alert-note` for a blue box with an info symbol:
+
+  ```{HTML}
+  <div class="alert alert-note">
+  <div>
+    This is an alert note.
+  </div>
+  ```
+  
+  Which is rendered as:
+  
+  <div class="alert alert-note">
+  <div>
+    This is an alert note.
+  </div>
+
+- `alert-warning` for a red box with a warning symbol:
+  
+   ```{HTML}
+  <div class="alert alert-warning">
+  <div>
+    This is an alert warning.
+  </div>
   ```
 
-  </details>
+  Which is rendered as:
+
+  <div class="alert alert-warning">
+  <div>
+    This is an alert warning.
+  </div>
+
+<br>
+
+### Shortcodes
+
+Hugo shortcodes are little code snippets for specific content. 
+
+#### Icons
+
+Wowchemy supports shortcodes for icons, for instance: 
+
+{{< icon name="r-project" pack="fab" >}}
+```bash
+{{</* icon name="r-project" pack="fab" */>}}
+```
+
+{{< icon name="python" pack="fab" >}}  
+```bash
+{{</* icon name="python" pack="fab" */>}}
+```
+
+{{< icon name="terminal" pack="fas" >}}
+```bash
+{{</* icon name="terminal" pack="fas" */>}}
+```
+
+<br>
+
+#### General Hugo shortcodes
+
+- To embed a Youtube video, use the following, replacing "videoID" by the actual ID
+  (https://www.youtube.com/watch?v=ID) in 
+  ```{bash}
+  {{</* youtube ID */>}}
+  ```
+
+- To embed a Tweet, use the following, replacing "tweetID" by the actual ID
+  (https://twitter.com/user/status/ID): 
+    ```{bash}
+  {{</* tweet ID */>}}
+  ```
+
+For more info and more shortcodes,
+see the [Hugo documentation on shortcodes](https://gohugo.io/content-management/shortcodes/).
 
 <br/> <br/> <br/> <br/>
