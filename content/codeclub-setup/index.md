@@ -15,9 +15,9 @@ where Code Club has a Classroom Project.
 
 <br>
 
-## Option 1 -- OSC
+## Option 1 -- OSC {#osc}
 
-### Sign up at OSC
+### Sign up at OSC {#osc-signup}
 
 All Code Club participants automatically get access to the OSC Classroom Project for Code Club (`PAS1838`).
 This way, you can work e.g. in RStudio from your browser rather than with a local installation.
@@ -34,10 +34,10 @@ Interactive Apps page below can take a few hours to appear after you become a me
 
 {{< figure src="osc_signup2.png" width="800px" caption="Enter Project Code PAS1838 in the red box (click to enlarge)" >}}
 
-### Run RStudio Server
+### Run RStudio Server {#osc-run-rstudio}
 
-OSC OnDemand lets you access OSC resources through your browser and run a couple of applications with GUIs,
-like RStudio. It has a separate access point for classroom projects such as this one. 
+[OSC OnDemand](https://ondemand.osc.edu/) lets you access OSC resources through your browser and run a couple of applications with GUIs,
+like RStudio. It has a separate access point, <https://class.osc.edu/>, for classroom projects such as this one. 
 - To get started, go to <https://class.osc.edu/> and log in with your OSC username and password.
 - Then, click on `Interactive Apps` in the blue top bar, and select `RStudio Server (Owens and Pitzer): Form`.
 - Now, you're on a page from which you can launch an RStudio server that will run on an OSC cluster.
@@ -50,7 +50,7 @@ like RStudio. It has a separate access point for classroom projects such as this
 {{< figure src="osc_running.png" width="700px" caption="" >}}
 - Click `Connect to RStudio Server` at the bottom of the box, and an RStudio Server instance will open. You're ready to go!
 
-### More about OSC
+### More about OSC {#osc-more}
 
 The above instructions should be all you need to access RStudio using OSC,
 but there is lot more to OSC than that!
@@ -62,9 +62,9 @@ at his channel [The Data Point](https://www.youtube.com/channel/UC2dB6jDTbqzlTM6
 
 <br>
 
-## Option 2 -- Local install
+## Option 2 -- Local install {#local}
 
-### Summary
+### Summary {#local-summary}
 
 You will need:
 - R -- preferably version >= `4.0.0`, but at least `3.0.1`
@@ -72,7 +72,7 @@ You will need:
 - R packages that we will regularly use:
   - `tidyverse`
 
-### Install R
+### Install R {#install-r}
 
 - **Windows**: Download and run the `.exe` file for the latest version of R from <https://cran.r-project.org/bin/windows/base/>,
   by clicking the large `Download R [version-number] for Windows` link at the top of the gray box.
@@ -82,7 +82,7 @@ You will need:
   a package manager instead -- for instance, seee [these instructions](https://linuxize.com/post/how-to-install-r-on-ubuntu-20-04/)
   for installing the latest R version on Ubuntu 20.04 using the `apt` package manager.
 
-### Install RStudio
+### Install RStudio {#install-rstudio}
 
 RStudio is a so-called Interactive Development Environment (IDE) for R,
 with side-by-side panes for an R script, an R concole, plots, help documents, and much more.
@@ -92,7 +92,7 @@ the de facto standard for working with R and is very useful.
 To install RStudio, go to the [RStudio download page](https://rstudio.com/products/rstudio/download/#download)
 and download and run the installer file for your operating system. 
 
-### Install the tidyverse
+### Install the tidyverse {#install-tidy}
 
 Install the `tidyverse`, which is a *collection* of useful packages, by
 typing the following command inside an R console:
@@ -103,7 +103,7 @@ install.packages("tidyverse")
 
 <br>
 
-## More info
+## More info {#more}
 
 Please see the [New to R?](/codeclub-novice/) section
 to get started with R and for more R setup tips.

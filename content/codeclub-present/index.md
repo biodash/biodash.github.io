@@ -20,20 +20,22 @@ toc: true
 
 An overview of what to do; see the sections further down on how to do it.
 
-- Get the session information as a blogpost onto the website about 1 week before the session. 
+- Get the session info onto the website **about 1 week before the session**. 
+  
   - At this point, your post should contain information on the topic and
     recommended prep for participants.
+  
   - Additional content such as intro slides and example code can be included
     right away, or added just before the session.
-- Include a link to an R script or R Markdown file that participants can download
-  (this file could just be your post with a modified YAML header,
-  or a completely separate file depending on your preference).
-- If your session includes a dataset, make sure to upload it and include code
-  in the abovementioned script/markdown file that downloads it.
+
+- Include a link to an R script/markdown that participants can download.
+
+- If your session includes a dataset, upload it and include code
+  in the abovementioned script/markdown file that will download the dataset file(s).
 
 <br>
 
-## Getting your documents onto the site
+## Getting your files onto the site
 
 ### Step 1: Get the repo
 
@@ -229,5 +231,34 @@ to *pull* your changes into their repository.
   ```sh
   git push origin master
   ```
+
+<br>
+
+## Markdown tips
+
+- It can be useful to provide solutions to small challenges in the file,
+  but to hide them by default. This can be done with a little HTML:
+  
+  ```{html}
+  <details>
+    <summary>
+    **Solution** (click here)
+    </summary>
+  
+  ... Your solution ...
+  
+  </details>
+  ```
+
+  This would create:
+
+  <details>
+    <summary>
+  **Solution** (click here)
+    </summary>
+  
+  ... Your solution ...
+  
+  </details>
 
 <br/> <br/> <br/> <br/>
