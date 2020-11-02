@@ -4,6 +4,10 @@ toc: true
 
 # About OSU Code Club
 
+<br>
+
+----
+
 OSU Code Club is a regularly occurring, interactive, online gathering to improve coding skills.
 We aim for a supportive and fun culture of learning together, and hope to offer something to participants at any experience level.
 
@@ -25,6 +29,8 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 
 <br>
 
+----
+
 ## Practical information
 
 - In the first series, we will focus on all things **R**: from data analysis and visualization to
@@ -43,6 +49,8 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 
 <br>
 
+----
+
 ## Organizers
 - [Jelmer Poelstra](/authors/admin/) - bioinformatician at [MCIC](http://mcic.osu.edu/) Wooster
 - [Mike Sovic](/authors/mike-sovic/) - bioinformatician at [CAPS](http://caps.osu.edu/)
@@ -52,6 +60,8 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 
 <br>
 
+----
+
 ## Sign up
 To sign up, please fill out the Google Form below. Hope to see you at Code Club! 
 
@@ -59,4 +69,6 @@ To sign up, please fill out the Google Form below. Hope to see you at Code Club!
 
 <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScdMYgRZlmLaAQ0aXuz41UoZJgM5xwfoXNXg1-lKLIcsYhHqg/viewform?embedded=true" width="640" height="3025" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
-<br/> <br/> <br/> <br/>
+<br/> <br/> <br/>
+
+----

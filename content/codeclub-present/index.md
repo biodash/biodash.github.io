@@ -18,8 +18,9 @@ toc: true
 - Occasional presenters can either send their material directly to [Jelmer](mailto:poelstra.1@osu.edu)
   or create a "pull request" with their new post.
 
-----
 <br>
+
+----
 
 ## Checklist
 
@@ -38,8 +39,9 @@ An overview of what to do; see the sections further down on how to do it.
 - If your session includes a dataset, upload it and include code
   in the abovementioned script/markdown file that will download the dataset file(s).
 
-----
 <br>
+
+----
 
 ## Getting your files onto the site
 
@@ -71,8 +73,9 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   git checkout -b my-branch
   ```
 
-----
 <br>
+
+----
 
 ### 2: Create a post
 
@@ -113,8 +116,9 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   this is done most easily by "knitting" your post in RStudio by clicking `Knit` in the top bar,
   or by pressing `Ctrl + Shift + K`.
   
-----
 <br>
+
+----
 
 ### 3: Preview your post (optional)
 
@@ -145,8 +149,9 @@ You can do this in two ways, from RStudio or from the command line.
   Until you press `Ctrl + C` on the command line, the server will keep running and will update
   whenever you save changes in a file within the website directory.
 
-----
 <br>
+
+----
 
 ### 4: Commit
 
@@ -160,8 +165,9 @@ You can do this in two ways, from RStudio or from the command line.
   git commit -m "Add CodeClub session <session-nr> by <your-name>"
   ```
 
-----
 <br>
+
+----
 
 ### 5: Push or submit pull request
 
@@ -206,8 +212,9 @@ to *pull* your changes into their repository.
   git push origin master
   ```
 
-----
 <br>
+
+----
 
 ### 6: Install packages at OSC (optional)
 
@@ -239,8 +246,9 @@ library(lib.loc = "/fs/ess/PAS1838/CODECLUB/Rpkgs")
 Alternatively, you can let participants working at OSC install the packages themselves,
 like participants that work locally will have to do.
 
-----
 <br>
+
+----
 
 ## Formatting tips {#format}
 

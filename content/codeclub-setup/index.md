@@ -4,6 +4,9 @@ toc: true
 
 # Computer Setup
 
+----
+<br>
+
 Here, you will find general information on computer setup for Code Club.
 Additional setup instructions for individual sessions (e.g., installing a specific package)
 will appear in the posts for each session.
@@ -14,6 +17,8 @@ in your browser at the [Ohio Supercomputer Center (OSC)](http://osc.edu),
 where Code Club has a Classroom Project. 
 
 <br>
+
+----
 
 ## Option 1 -- OSC {#osc}
 
@@ -62,6 +67,8 @@ at his channel [The Data Point](https://www.youtube.com/channel/UC2dB6jDTbqzlTM6
 
 <br>
 
+----
+
 ## Option 2 -- Local install {#local}
 
 ### Summary {#local-summary}
@@ -103,6 +110,8 @@ install.packages("tidyverse")
 
 <br>
 
+----
+
 ## More info {#more}
 
 Please see the [New to R?](/codeclub-novice/) section
@@ -110,4 +119,6 @@ to get started with R and for more R setup tips.
 
 
 
-<br/> <br/> <br/> <br/>
+<br/> <br/> <br/>
+
+----

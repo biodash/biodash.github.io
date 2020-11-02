@@ -1,7 +1,11 @@
 
 # Upcoming sessions
 
-Here we will post a tentative schedule for the next few sessions. Stay tuned for more! 
+----
+<br>
+
+Here, we will post a tentative schedule for the next few sessions.   
+Stay tuned for more! 
 
 - **First session: week of November 9th**.
 
@@ -18,3 +22,6 @@ Here we will post a tentative schedule for the next few sessions. Stay tuned for
   - What's new in dplyr 1.0
   
 <br/> <br/> <br/> <br/>
+
+----
+

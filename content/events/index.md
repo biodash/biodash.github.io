@@ -4,10 +4,15 @@ toc: true
 
 # Other Events
 
+----
+<br>
+
 At this page, we will list upcoming events related to computational biology, coding, and data analysis. 
 If you know of an event that you think should be listed here, please use the form in the [Suggest...](/suggest/) page.
 
 <br>
+
+----
 
 ## Recurring Events
 
@@ -24,7 +29,6 @@ If you know of an event that you think should be listed here, please use the for
   - Advance notice to [Jelmer Poelstra](mailto:poelstra.1@osu.edu) is appreciated.
   - Anyone at OSU is welcome, and if you're outside of OSU, feel free to [inquire](mailto:poelstra.1@osu.edu).
   
-
 <br>
 
 - **Center of Microbiome Center working groups**
@@ -33,18 +37,23 @@ If you know of an event that you think should be listed here, please use the for
 
 <br>
 
+----
+
 ## Upcoming Workshops
 
 None right now!
 
 <br>
 
+----
+
 ## Upcoming Outside of OSU
 
 - For [Ohio Supercomputer Center](https://osc.edu) events, such as regular introductory sessions to computing at OSC, see the [OSC Events page](https://www.osc.edu/events).
-  Highly recommended!
 
 <br>
+
+----
 
 ## Relevant OSU Courses
 
@@ -62,6 +71,12 @@ None right now!
 
 <br>
 
+----
+
 ## Past Events
 
-<br/> <br/> <br/> <br/>
+TBA
+
+<br/> <br/> <br/>
+
+----

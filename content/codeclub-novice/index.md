@@ -4,6 +4,7 @@ toc: true
 
 # New to R? And other R tips.
 
+----
 <br>
 
 ## New to R?
@@ -24,6 +25,8 @@ Also, don't hesitate to reach out to the [Code Club organizers](/codeclub-about/
 if you have any questions! 
 
 <br>
+
+----
 
 ## Miscellaneous R tips
 
@@ -47,6 +50,8 @@ R --no-save --no-restore-data
 ```
 
 <br>
+
+----
 
 ### Installing R packages
 
@@ -132,5 +137,6 @@ for Github-only and Bioconductor packages and then install those with their resp
 (see below). Yes, this can be a bit of a hassle!
 
 
+<br/> <br/> <br/>
 
-<br/> <br/> <br/> <br/>
+----

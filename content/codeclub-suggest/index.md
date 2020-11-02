@@ -1,6 +1,9 @@
 
 # Suggest a Code Club Topic!
 
+----
+<br>
+
 Please use the form below to suggest a topic or concept to be covered at Code Club.
 You are also welcome to leave a suggestion relating to the general format, organization,
 or presentation of Code Club.
@@ -15,4 +18,7 @@ to cover in detail the high-level functions of an R package to analyze microbiom
 
 <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSclFCVWI7mjHeJfoHfLKnV7k9fE0r76-bTwpt_3nEv4tjJyEA/viewform?embedded=true" width="640" height="983" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
-<br/> <br/> <br/> <br/>
+<br/> <br/> <br/>
+
+----
+

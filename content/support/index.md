@@ -2,8 +2,12 @@
 toc: true
 ---
 
+# Bioinformatics support
 
-## Bioinformatics support
+----
+<br>
+
+## Available support
 
 Need assistance with bioinformatics, high-throughput sequencing data analysis, working with big data, etc?
 See below for a list of support options for OSU researchers...
@@ -28,15 +32,11 @@ or drop by at the Bioinformatics Office Hour over Zoom every Tuesday between 2 a
 ([Zoom link](https://osu.zoom.us/j/96601785996?pwd=MVUxWWZjdGF6N3BSUGNDL3lmNWZlZz09) -
 advance notice is appreciated!).
 
-<br>
-
 ### CAPS
 
 The Center for Applied Plant Sciences (CAPS) supports OSU researchers working in the plant sciences. CAPS
 research scientist Mike Sovic leads bioinformatic support efforts for the Center. Details on 
 opportunities and resources available through CAPS are at http://caps.osu.edu/bioinformatics.
-
-<br>
 
 ### EEOB
 
@@ -44,8 +44,12 @@ TBA
 
 <br>
 
+----
+
 ## Request support
 
 <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfC-g3YSG84KBerEwRLilje4kz7-9WRIevzHAUNTMQKgKmCuQ/viewform?embedded=true" width="640" height="1078" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
-<br/> <br/> <br/> <br/>
+<br/> <br/> <br/>
+
+----
