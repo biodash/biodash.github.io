@@ -341,7 +341,25 @@ you can use two classes that are specific to the [Hugo Academic Theme](https://t
 
 ### Shortcodes
 
-Hugo shortcodes are little code snippets for specific content. 
+Hugo shortcodes are little code snippets for specific content.
+Some of these are specific to Wowchemy,
+and others are available for any Hugo site.
+
+<br>
+
+#### Highlight text
+
+You can highlight text as follows:
+
+```bash
+Here is some {{</* hl */>}}highlighted text{{</* /hl */>}}.
+```
+
+This will render as:
+
+Here is some {{< hl >}}highlighted text{{< /hl >}}.
+
+<br>
 
 #### Icons
 
