@@ -2,7 +2,7 @@
 toc: true
 ---
 
-# Information for Presenters
+# Code Club: <br/> Information for Presenters
 
 ----
 

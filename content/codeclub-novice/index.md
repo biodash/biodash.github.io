@@ -2,7 +2,7 @@
 toc: true
 ---
 
-# New to R? And other R tips.
+# Code Club: <br/> New to R? And other R tips.
 
 ----
 <br>

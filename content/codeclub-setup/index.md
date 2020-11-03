@@ -2,7 +2,7 @@
 toc: true
 ---
 
-# Computer Setup
+# Code Club: <br/> Computer Setup
 
 ----
 <br>

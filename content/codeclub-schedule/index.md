@@ -1,5 +1,5 @@
 
-# Upcoming sessions
+# Code Club: <br/> Upcoming sessions
 
 ----
 <br>

@@ -15,11 +15,11 @@ and the [Department of Evolution, Ecology and Organismal Biology (EEOB)](https:/
 
 ## Main Contributors
 
-[Jelmer Poelstra, MCIC Wooster](/authors/admin/)
+- [Jelmer Poelstra, MCIC Wooster](/authors/admin/)
 
-[Mike Sovic, CAPS](/authors/mike-sovic/)
+- [Mike Sovic, CAPS](/authors/mike-sovic/)
 
-[Michael Broe, EEOB](/authors/michael-broe/)
+- [Michael Broe, EEOB](/authors/michael-broe/)
 
 
 <br/> <br/> <br/>
