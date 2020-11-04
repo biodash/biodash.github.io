@@ -14,7 +14,7 @@ will appear in the posts for each session.
 You may prefer to install the software locally, so you can easily practice
 outside of Code Club. Alternatively, you can access RStudio (among other things)
 in your browser at the [Ohio Supercomputer Center (OSC)](http://osc.edu),
-where Code Club has a Classroom Project. 
+where Code Club has a Classroom Project.
 
 <br>
 
@@ -24,10 +24,9 @@ where Code Club has a Classroom Project.
 
 ### Sign up at OSC {#osc-signup}
 
-All Code Club participants automatically get access to the OSC Classroom Project for Code Club (`PAS1838`).
-This way, you can work e.g. in RStudio from your browser rather than with a local installation.
-However, you only need to do this if you prefer not to install anything, or if you have problems
-with locally installing the software or individual packages -- we will not be running heavy computational analyses that will require the use of the cluster.
+All Code Club participants will get access to the OSC Classroom Project for Code Club (`PAS1838`).
+This way, you can code in (e.g.) RStudio from your browser rather than with a local installation.
+This is a good option if you prefer not to install anything locally or run into problems when doing so.
 
 If you don't already have an OSC account, you do need to sign up:
 - Go to <https://my.osc.edu/> and click the blue "*Sign Up*" bar.
@@ -39,7 +38,7 @@ Interactive Apps page below can take a few hours to appear after you become a me
 
 {{< figure src="osc_signup2.png" width="800px" caption="Enter Project Code PAS1838 in the red box (click to enlarge)" >}}
 
-### Run RStudio Server {#osc-run-rstudio}
+### Run RStudio Server during Code Club {#osc-run-rstudio}
 
 [OSC OnDemand](https://ondemand.osc.edu/) lets you access OSC resources through your browser and run a couple of applications with GUIs,
 like RStudio. It has a separate access point, <https://class.osc.edu/>, for classroom projects such as this one. 

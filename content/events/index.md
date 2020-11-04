@@ -7,7 +7,7 @@ toc: true
 ----
 <br>
 
-At this page, we will list upcoming events related to computational biology, coding, and data analysis. 
+On this page, we will list upcoming events related to computational biology, coding, and data analysis. 
 If you know of an event that you think should be listed here, please use the form in the [Suggest...](/suggest/) page.
 
 <br>
