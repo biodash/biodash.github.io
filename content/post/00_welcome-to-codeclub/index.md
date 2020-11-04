@@ -2,7 +2,7 @@
 output: hugodown::md_document
 # Documentation: https://sourcethemes.com/academic/docs/managing-content/
 
-title: "E00 - Welcome to Code Club"
+title: "Welcome to Code Club"
 subtitle: ""
 summary: ""
 authors: [admin, mike-sovic, stephen-opiyo, michael-broe, jessica-cooperstone]
