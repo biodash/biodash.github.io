@@ -36,7 +36,7 @@ or one that you are excited about and want to dive into -- teaching a topic can 
     efficient coding, R Markdown, and so on.
 - There will be no consistent analysis type or data type ---
   instead, we will focus on **building general skills** and applying those to a wide variety of data.  
-- Each week, **materials and suggested reading** will be posted up front at the [Sessions page](/post/).
+- Each week, **materials and suggested reading** will be posted up front at the [Sessions page](/codeclub/).
     Like at a Journal Club, doing some preparatory homework by reading these materials will help you get the most out of it.
 - Each session is intended to be **mostly stand-alone** to allow for occasional participation.
 - To allow for a welcoming environment for participants at all levels of experience,

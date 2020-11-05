@@ -10,7 +10,7 @@ toc: true
 
 ## Introduction
 
-- Each Code Club session represents a blogpost on the website at <https://biodash.github.io/post/>.
+- Each Code Club session represents a blogpost on the website at <https://biodash.github.io/codeclub/>.
 
 - Regular presenters will be given direct access to the [Github repository](https://github.com/biodash/biodash.github.io)
   and will be able to push a new post to the website directly.
@@ -87,8 +87,8 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   that contains the post, as well as associated images and so on.
   To create a post bundle along with a R Markdown file that already has many useful YAML header tags:
   ```r
-  hugodown::use_post('post/<session-number>_<short-title>')
-  # An example would be: hugodown::use_post('post/01_intro-to-R')
+  hugodown::use_post('codeclub/<session-number>_<short-title>')
+  # An example would be: hugodown::use_post('codeclub/01_intro-to-R')
   ```
   The `<session-number>` is the actual Code Club session number,
   and `<short-title>` is a short title that you would like to give the post,
@@ -100,7 +100,7 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 - **If you want participants to load an R Markdown file or script:**   
   An easy solution is to place the file in the same directory as your post, and include it in your git commit,
   so it will be uploaded to Github. In that case, the URL to the file for direct downloads for participants will be:
-  `https://raw.githubusercontent.com/biodash/biodash.github.io/master/docs/post/<session-number>_<short-title>/<filename>`.   
+  `https://raw.githubusercontent.com/biodash/biodash.github.io/master/docs/codeclub/<session-number>_<short-title>/<filename>`.   
   
   In your post, include a function call like `file.download(<script-URL>)` for participants to get the file --
   this will work both for participants working locally and those working in an OSC RStudio Server instance.
@@ -157,7 +157,7 @@ You can do this in two ways, from RStudio or from the command line.
 
 - Add the files from your post:
   ```sh
-  git add post/<your-post-name>/*
+  git add codeclub/<your-post-name>/*
   ```
 
 - Commit:
