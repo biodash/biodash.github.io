@@ -14,7 +14,9 @@ will appear in the posts for each session.
 You may prefer to install the software locally, so you can easily practice
 outside of Code Club. Alternatively, you can access RStudio (among other things)
 in your browser at the [Ohio Supercomputer Center (OSC)](http://osc.edu),
-where Code Club has a Classroom Project.
+where Code Club has a Classroom Project. We recommend that you make sure you have
+an active OSC account with access to the Code Club project either way,
+which can be a helpful backup option when something fails with locall installs.
 
 <br>
 
