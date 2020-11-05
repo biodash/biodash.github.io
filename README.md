@@ -1,8 +1,5 @@
-This is a [hugo](http://gohugo.io/) [academic](https://sourcethemes.com/academic) site created by [hugodown](http://hugodown.r-lib.org/).
+This is the repo for the BioDASH website at http://biodash.github.io, which hosts bioinformatics materials, a Code Club, and more,
+by researchers at OSU.
 
-## Basic operation
+It was made using [hugo](http://gohugo.io/) [academic](https://sourcethemes.com/academic) and [hugodown](http://hugodown.r-lib.org/).
 
-* Preview the site with `hugodown::hugo_start()`; it will automatically
-  update (navigating to the latest change) as you modify `content/`.
-
-* Create a new post bundle with `hugodown::use_post('post/short-title')`.
