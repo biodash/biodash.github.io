@@ -4,7 +4,7 @@ output: hugodown::md_document
 
 title: "Welcome to Code Club"
 subtitle: ""
-summary: ""
+summary: "Welcome to OSU Code Club! In this brief post, we point you to information related to Code Club on the website."
 authors: [admin, mike-sovic, stephen-opiyo, michael-broe, jessica-cooperstone]
 tags: [codeclub]
 categories: []
