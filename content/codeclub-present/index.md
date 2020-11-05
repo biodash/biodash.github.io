@@ -94,6 +94,11 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   and `<short-title>` is a short title that you would like to give the post,
   which will be used for links and the folder name.
 
+- Fill out some of the YAML, such as the `title`, `subtitle`, `authors` (in kebab-case, e.g. john-doe,
+  to link to your author profile; note that Jelmer's name here is "admin"),
+  and optionally `tags` and summary (this will appear on Biodash's front page;
+  the default "summary" there can be awkward as it combines headers and paragraphs).
+
 - Write the contents of your Code Club session that you would like to share with participants, in R Markdown format.
   For formatting tips, see [below](/codeclub-present/#format).
 
