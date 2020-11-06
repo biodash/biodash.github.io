@@ -28,4 +28,4 @@ subtitle = ""
 
 <br>
 
-{{< figure src="BioDash_Logo_110320.png" width="700px" caption="" >}}
+{{< figure src="logo_frontpage.png" width="700px" caption="" >}}
