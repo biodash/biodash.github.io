@@ -31,10 +31,12 @@ rmd_hash: bd2cbbc402a837f2
 
 ---
 
+----
+
 <br>
 
 **Welcome to OSU Code Club! Materials for each episode will be provided in posts like this one,
-collected in the [Sessions page](/post/).**
+collected in the [Code Club Sessions page](/codeclub/).**
 
 - For more information about OSU Code Club, and a form to sign up,
   see the [About Code Club page](/codeclub-about/).
@@ -43,7 +45,7 @@ collected in the [Sessions page](/post/).**
 
 - You can code locally or in your browser, see our [page with computer setup instructions](/codeclub-setup/).
 
-- If you are completely new to R, see our [page with resources and tips](/codeclub/novice/). 
+- If you are completely new to R, see our [page with resources and tips](/codeclub-novice/). 
 
 - You can also [suggest a topic to be covered at Code Club](/codeclub-suggest/). 
 
