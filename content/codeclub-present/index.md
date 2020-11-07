@@ -307,7 +307,7 @@ install.packages("tidyverse")
 ### Info/alert notes
 
 To produce boxes to draw attention to specific content,
-you can use two classes that are specific to the [Hugo Academic Theme](https://themes.gohugo.io/academic/)
+you can use two classes specific to the [Hugo Academic Theme](https://themes.gohugo.io/academic/)
 (now branded as ["Wowchemy"](https://wowchemy.com/)).
 
 - `alert-note` for a blue box with an info symbol:
@@ -341,6 +341,38 @@ you can use two classes that are specific to the [Hugo Academic Theme](https://t
   <div>
     This is an alert warning.
   </div>
+
+- I also added a custom class, "puzzle":
+  
+  ```{HTML}
+  <div class="alert puzzle">
+  <div>
+    This is a puzzle div, for do-it-yourself challenges.
+  </div>
+  ```
+  <div class="puzzle">
+  This is a puzzle div, for do-it-yourself challenges.
+  </div>
+
+  Custom classes and other custom formatting can be written in CSS
+  in the `assets/scss/custom.scss` file.
+
+- All of these classes can also be called using pandoc's `:::` notation
+  when you're writing in `.Rmd` (but not if you're writing in `md`).
+  This way, you can also use Markdown syntax within the div:
+
+  ```
+  :::puzzle
+  This is a **puzzle** div, for do-it-yourself challenges.
+  :::
+  ```
+
+  Will be rendered as:
+
+  <div class="puzzle">
+  This is a <strong>puzzle</strong> div, for do-it-yourself challenges.
+  </div>
+
 
 <br>
 
