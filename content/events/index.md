@@ -20,6 +20,8 @@ If you know of an event that you think should be listed here, please use the for
 
 <br>
 
+<br>
+
 ----
 
 ## Recurring Events

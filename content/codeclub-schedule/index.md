@@ -15,6 +15,8 @@ Here are the dates for the reminder of the year:
 3. Wed Dec 9 & Fri Dec 11 -- Mike S.
 4. Wed Dec 16 & Fri Dec 18 -- Michael B.
 
+See also the [BioDASH calendar](/events/#calendar) for an overview.
+
 <br>
 
 ## What will we cover?
