@@ -376,6 +376,29 @@ you can use two classes specific to the [Hugo Academic Theme](https://themes.goh
 
 <br>
 
+### Code highlighting
+
+Hugo supports code highlighting using the syntax below in `md` documents:
+
+````
+```r {hl_lines=[1,"3-4"]}
+library("tidyverse")
+weight_df %>%
+  mutate(mean_weight = mean(weight)) %>%
+  select(mean_weight, everything())
+dim(weight_df)
+```
+````
+
+```r {hl_lines=[1,"3-4"]}
+library("tidyverse")
+weight_df %>%
+  mutate(mean_weight = mean(weight)) %>%
+  select(mean_weight, everything())
+dim(weight_df)
+```
+
+
 ### Shortcodes
 
 Hugo shortcodes are little code snippets for specific content.
