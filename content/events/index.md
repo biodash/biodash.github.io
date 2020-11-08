@@ -14,6 +14,16 @@ If you know of an event that you think should be listed here, please use the for
 
 ----
 
+## Calendar
+
+<iframe src="https://calendar.google.com/calendar/embed?src=9ri5c3hf39o8kusvpqgtfig6t0%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+
+<br>
+
+<br>
+
+----
+
 ## Recurring Events
 
 - **CAPS Tn-seq working group**

@@ -4,18 +4,34 @@
 ----
 <br>
 
-Here, we will post a tentative schedule for the next few sessions.   
-Stay tuned for more! 
+For Nov/Dec 2020, we will do each session twice:
+Wednesdays at 5 pm and Fridays at 3 pm.
+Please attend whichever one works better for you!
 
-- **First session: week of November 9th**.
+Here are the dates for the reminder of the year:
 
-- We'll start with exploring some **OSU admission and enrollment data**!
+1. Wed Nov 18 & Fri Nov 20 -- Jelmer -- getting started & Rstudio Projects
+2. Wed Dec 2 & Fri Dec 4 -- Jessica -- `dplyr` core verbs
+3. Wed Dec 9 & Fri Dec 11 -- Mike S.
+4. Wed Dec 16 & Fri Dec 18 -- Michael B.
 
-- Some **coding topics** we'll likely touch on in the first sessions: 
+See also the [BioDASH calendar](/events/#calendar) for an overview.
+
+<br>
+
+## What will we cover?
+
+- Details for each session will be sent out in the preceding week.
+
+- If we can get our hands on it, we'll start with exploring some
+  *OSU admission and enrollment* data.
+  Otherwise, we'll be working with *Backyard Bird Count* data.
+
+- Some coding topics we inted to touch on: 
   - Reading and writing data
   - Tidy data
   - Data wrangling
-  - Good workflow habits (paths, here(), and .Rproj)
+  - Good workflow habits (.Rproj, paths, here())
   - Factors -- why & when
   - How to avoid repeating yourself 
   - Writing your own functions

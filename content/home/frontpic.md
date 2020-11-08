@@ -26,4 +26,6 @@ subtitle = ""
  css_class = "mini" # CSS class.
 +++
 
-{{< figure src="biodash.jpg" width="1000px" caption="" >}}
+<br>
+
+{{< figure src="logo_frontpage.png" width="700px" caption="" >}}

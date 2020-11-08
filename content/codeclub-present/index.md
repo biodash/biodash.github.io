@@ -94,6 +94,11 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   and `<short-title>` is a short title that you would like to give the post,
   which will be used for links and the folder name.
 
+- Fill out some of the YAML, such as the `title`, `subtitle`, `authors` (in kebab-case, e.g. john-doe,
+  to link to your author profile; note that Jelmer's name here is "admin"),
+  and optionally `tags` and summary (this will appear on Biodash's front page;
+  the default "summary" there can be awkward as it combines headers and paragraphs).
+
 - Write the contents of your Code Club session that you would like to share with participants, in R Markdown format.
   For formatting tips, see [below](/codeclub-present/#format).
 
@@ -302,7 +307,7 @@ install.packages("tidyverse")
 ### Info/alert notes
 
 To produce boxes to draw attention to specific content,
-you can use two classes that are specific to the [Hugo Academic Theme](https://themes.gohugo.io/academic/)
+you can use two classes specific to the [Hugo Academic Theme](https://themes.gohugo.io/academic/)
 (now branded as ["Wowchemy"](https://wowchemy.com/)).
 
 - `alert-note` for a blue box with an info symbol:
@@ -337,7 +342,62 @@ you can use two classes that are specific to the [Hugo Academic Theme](https://t
     This is an alert warning.
   </div>
 
+- I also added a custom class, "puzzle":
+  
+  ```{HTML}
+  <div class="alert puzzle">
+  <div>
+    This is a puzzle div, for do-it-yourself challenges.
+  </div>
+  ```
+  <div class="puzzle">
+  This is a puzzle div, for do-it-yourself challenges.
+  </div>
+
+  Custom classes and other custom formatting can be written in CSS
+  in the `assets/scss/custom.scss` file.
+
+- All of these classes can also be called using pandoc's `:::` notation
+  when you're writing in `.Rmd` (but not if you're writing in `md`).
+  This way, you can also use Markdown syntax within the div:
+
+  ```
+  :::puzzle
+  This is a **puzzle** div, for do-it-yourself challenges.
+  :::
+  ```
+
+  Will be rendered as:
+
+  <div class="puzzle">
+  This is a <strong>puzzle</strong> div, for do-it-yourself challenges.
+  </div>
+
+
 <br>
+
+### Code highlighting
+
+Hugo supports code highlighting using the syntax below in `md` documents:
+
+````
+```r {hl_lines=[1,"3-4"]}
+library("tidyverse")
+weight_df %>%
+  mutate(mean_weight = mean(weight)) %>%
+  select(mean_weight, everything())
+dim(weight_df)
+```
+````
+
+```r {hl_lines=[1,"3-4"]}
+library("tidyverse")
+weight_df %>%
+  mutate(mean_weight = mean(weight)) %>%
+  select(mean_weight, everything())
+dim(weight_df)
+```
+
 
 ### Shortcodes
 

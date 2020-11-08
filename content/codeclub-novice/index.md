@@ -16,10 +16,15 @@ and ideally all of them, prior to attending Code Club. Here is the first video:
 
 <br>
 
-A useful and fun written tutorial is [R for cats](https://rforcats.net/).
-For a more systematic and lengthy introduction to R, see
-[A Tutorial Introduction to R](https://kingaa.github.io/R_Tutorial/)
-(which gets fairly advanced after section 9).
+In case you want to do more self-study (note that this is *not* required/needed),
+here are some additional resources:
+- A useful and fun written tutorial is [R for cats](https://rforcats.net/).
+- For a more systematic and lengthy introduction to R, see 
+  [A Tutorial Introduction to R](https://kingaa.github.io/R_Tutorial/)
+  (this gets fairly advanced after section 9).
+- Excellent comprehensive introductions are the [R Basics](https://www.edx.org/course/data-science-r-basics)
+  and [Visualization](https://www.edx.org/course/data-science-visualization) classes by Rafael Irizarry
+  that can be freely accessed; you do have to create an account. 
 
 Also, don't hesitate to reach out to the [Code Club organizers](/codeclub-about/#organizers)
 if you have any questions! 
