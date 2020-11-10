@@ -29,7 +29,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 73cd09129d519e77
+rmd_hash: 4e40f5cce51b3828
 
 ---
 
@@ -94,11 +94,11 @@ Session content
 
 Rstudio Projects help you to organize your work and to make it more portable. We recommend creating a separate Project for each research project with an R component -- and for things like Code Club. Using Projects has several advantages:
 
--   They record which files you have open in RStudio, and will reopen all of those when you reopen the project. This becomes quite handy, say, when you work on three projects, each of which use several scripts.
+-   They record which files are open in RStudio, and will reopen all of those when you reopen the project. This becomes quite handy, say, when you work on three projects, each of which use a number of scripts.
 
--   An even more significant advantage is that Projects allow you to use relative file paths, which ... **TBA**
+-   An even more significant advantage is that Projects allow you to use *relative file paths*, and avoids having to manually set your working directory. This way, even if you move the directory on your computer or copy it to a different computer, the same commands would still work. This would not be the case if you had a command like [`setwd('C:/Users/Jane/Documents/')`](https://rdrr.io/r/base/getwd.html) in your code.
 
--   Finally, as the previous point implied, RStudio Projects encourage you to use the recommended approach of organizing your research projects inside self-contained directories.
+-   Finally, Projects encourage you to organizing your research projects inside self-contained directories, rather than have files spread around your computer, which increases reproducibility.
 
 ### Create an RStudio Project
 
@@ -114,7 +114,7 @@ Let's create an RStudio Project for Code Club:
 
     -   *If you're working at OSC*, keep the default choice "[`~`](https://rdrr.io/r/base/tilde.html)" (i.e., *home*), which is the directory you started in when entering the RStudio Server session.
 
--   You should now see the file ending in `.Rproj` in the RStudio `Files` tab in the lower right pane.
+-   You should now see the file ending in `.Rproj` in the RStudio `Files` tab in the lower right pane. (You can open a project from inside RStudio, or by clicking on the `.Rproj` file in your file browser.)
 
 ### Orienting ourselves
 
@@ -129,11 +129,12 @@ Type in the console (bottom left):
 
 The working directory will *always* be the directory that contains the `.Rproj` file when we have that project open. This way, we can refer to all of our files in Code Club using relative paths starting from that directory, and we don't need to set the working directory using an absolute path with [`setwd()`](https://rdrr.io/r/base/getwd.html), which is not portable.
 
-Let's create a new directory:
+Let's create two new directories, one for this session, and one of the data (which we will be reusing across sessions):
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S01'</span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'data/birds/'</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='c'># The "recursive" argument lets us create two levels at once</span>
 </code></pre>
 
 </div>
@@ -164,9 +165,9 @@ Download:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>file_url</span> <span class='o'>&lt;-</span> <span class='s'>'ADD_FILE_LOC'</span>
-<span class='nv'>bbc_file</span> <span class='o'>&lt;-</span> <span class='s'>'S01/BBC.csv'</span>
-<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>file_url</span>, destfile <span class='o'>=</span> <span class='nv'>bbc_file</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/data/birds/backyard-birds_Ohio.tsv'</span>
+<span class='nv'>birds_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/backyard-birds_Ohio.tsv'</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -175,8 +176,30 @@ Read it into R:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bbc</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span><span class='nv'>birds_file</span><span class='o'>)</span>
 </code></pre>
+
+</div>
+
+<div class="alert alert-note">
+
+<div>
+
+This is an **alert** note.
+
+</div>
+
+<div class="alert puzzle">
+
+<div>
+
+This is a puzzle div, for do-it-yourself challenges.
+
+</div>
+
+<div class="puzzle">
+
+This is a **puzzle** div, for do-it-yourself challenges.
 
 </div>
 
