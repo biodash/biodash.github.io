@@ -29,7 +29,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 545aa7bd568f706e
+rmd_hash: 437a2adcf94bfdbd
 
 ---
 
@@ -37,8 +37,8 @@ rmd_hash: 545aa7bd568f706e
 
 <br>
 
-Prep for this week
-------------------
+Prep homework
+-------------
 
 #### Basic computer setup
 
@@ -69,9 +69,7 @@ Session summary
 
 -   RStudio Projects
 
--   The Backyard Bird Count
-
--   If we have time: Reading in & exploring the bird data
+-   If we have time: Getting started with data from the Great Backyard Bird Count
 
 <br>
 
@@ -92,13 +90,13 @@ Projects are an RStudio-specific concept that create a special file (`.Rproj`), 
 
 **Why use Projects?**
 
-In brief, Projects help you to organize your work and to make it more portable. More specifically:
+In brief, Projects help you to organize your work and to make it more portable.
 
--   They record which files (scripts, R Markdown) are open in RStudio, and will reopen all of those when you reopen the project. This becomes quite handy, say, when you work on three different projects, each of which uses a number of scripts.
+-   They record which scripts (and R Markdown files) are open in RStudio, and will reopen all of those when you reopen the project. This becomes quite handy, say, when you work on three different projects, each of which uses a number of scripts.
 
--   An even more significant advantage is that Projects allow you to avoid manually setting your working directory, and to use *relative file paths* to refer to files within the project. This way, even if you move the project directory, or copy it to a different computer, the same paths will still work. This would not be the case if you used [`setwd()`](https://rdrr.io/r/base/getwd.html) which will generally require you to use an absolute path, e.g. [`setwd('C:/Users/Jane/Documents/')`](https://rdrr.io/r/base/getwd.html).
+-   When using Projects, you generally don't have to manually set your working directory, and can use *relative file paths* to refer to files within the project. This way, even if you move the project directory, or copy it to a different computer, the same paths will still work. (This would not be the case if you used [`setwd()`](https://rdrr.io/r/base/getwd.html) which will generally require you to use an absolute path, e.g. [`setwd('C:/Users/Jane/Documents/')`](https://rdrr.io/r/base/getwd.html).)
 
--   Finally, Projects encourage organizing research projects inside self-contained directories, rather than have files spread around your computer, which can save you a lot of headaches and increases reproducibility.
+-   Projects encourage you to organize research projects inside self-contained directories, rather than with files spread around your computer. This can save you a lot of headaches and increases reproducibility.
 
 </div>
 
@@ -130,57 +128,88 @@ In brief, Projects help you to organize your work and to make it more portable. 
 Orienting ourselves
 -------------------
 
--   **Where are we?** Type in the console (bottom left):
-    <div class="highlight">
+#### Where are we?
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>    <span class='c'># short for "get working directory"</span>
-    </code></pre>
+Type in the console (bottom left):
 
-    </div>
+<div class="highlight">
 
-When a Project is open, the R working directory will always be the directory that contains the `.Rproj` file. This way, we can refer to all of our files in Code Club using relative paths starting from that directory, and have no need for [`setwd()`](https://rdrr.io/r/base/getwd.html).
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>    <span class='c'># short for "get working directory"</span>
+</code></pre>
 
--   **Create two new directories** -- one for this session, and one for a dataset that we will download shortly (and will be reusing across sessions):
-    <div class="highlight">
+</div>
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Dir for Code Club Session 1:</span>
-    <span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S01'</span><span class='o'>)</span>
+When a Project is open, the R working directory will always be the directory that contains the `.Rproj` file.
 
-    <span class='c'># Dir for our bird data:</span>
-    <span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'data/birds/'</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='c'># The "recursive" argument lets us</span>
-                                                <span class='c'># create two levels at once</span>
-    </code></pre>
+#### Create directories
 
-    </div>
+Create two new directories -- one for this session, and one for a dataset that we will download shortly (and will be reusing across sessions):
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Dir for Code Club Session 1:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S01'</span><span class='o'>)</span>
+
+<span class='c'># Dir for our bird data:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'data/birds/'</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='c'># The "recursive" argument lets us</span>
+                                            <span class='c'># create two levels at once</span>
+</code></pre>
+
+</div>
+
+#### Create a script
 
 To keep a record of what we are doing, and to easily modify and rerun earlier commands, we'll want to save our commands in a script and execute them from there, rather than typing our commands directly in the console.
 
--   **Open a new R** script using `File` (top menu bar) \> `New File` \> `R script`.  
-    Save the script (`File` \> `Save`) as `S01.R` inside your `S01` directory.
+-   Click `File` (top menu bar) \> `New File` \> `R script`.
 
--   Type a command to **load the *tidyverse*** on the first line of the script:
+-   Save the script (`File` \> `Save`) as `S01.R` inside your `S01` directory.
 
-    <div class="highlight">
+#### First line of the script
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
-    </code></pre>
+Type the following command on the first line of the script:
 
-    </div>
+<div class="highlight">
 
--   **Execute the line**, i.e. to send it to the console, by pressing `Ctrl Enter`.
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+</code></pre>
 
-<br>
+</div>
 
-------------------------------------------------------------------------
+Now we have loaded the core set of 8 *tidyverse* packages all at once. ([`library()`](https://rdrr.io/r/base/library.html) is the standard function to load packages and usually loads just a single package.)
 
 <div class="alert alert-note">
 
 <div>
 
-The Great Backyard Bird Count
------------------------------
+The *tidyverse* is a very popular ecosystem of R packages for data analysis, which we will be using a lot in Code Club.
+
+It can be characterized as a dialect of R, and as such can sometimes cause confusion. Its rapid development in the past few years has also meant that in some cases, a function you learned is no longer recommended or --more rarely-- supported a year or so later. Such big changes should become less common now that the ecosystem has matured a fair bit.
+
+Overall, we think the *tidyverse* is well worth learning and using.
+
+</div>
+
+</div>
+
+#### Run the line
+
+Execute the line, i.e. to send it to the console: press `Ctrl Enter`.
 
 <br>
+
+------------------------------------------------------------------------
+
+Getting a bird dataset
+----------------------
+
+We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a) from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/). Because the file was 3.1 GB large, I selected only the records from Ohio and removed some uninformative columns. I have put the resulting 36 MB file in our Github repo from which we'll download it now.
+
+<div class="alert alert-note">
+
+<div>
+
+### The Great Backyard Bird Count
 
 <div class="highlight">
 
@@ -190,20 +219,11 @@ The Great Backyard Bird Count
 
 <br>
 
-The [Great Backyard Bird Count (GBBC)](https://gbbc.birdcount.org/) is an annual citizen science event where everyone is encouraged to to identify and count birds in their backyard -- or anywhere else -- for at least 15 minutes, and report their sightings online. Since 2013, it is a global event, but it has been done since 1998 in the US and Canada.
+The [GBBC](https://gbbc.birdcount.org/) is an annual citizen science event where everyone is encouraged to to identify and count birds in their backyard -- or anywhere else -- for at least 15 minutes, and report their sightings online. Since 2013, it is a global event, but it has been done since 1998 in the US and Canada.
 
 </div>
 
 </div>
-
-<br>
-
-------------------------------------------------------------------------
-
-Getting the bird data
----------------------
-
-We downloaded a [GBBC dataset](https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a) from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/). Because the file was 3.1 GB large, we selected only the records from Ohio and removed some uninformative columns. We put the resulting 36 MB file in our Github repo from which we'll download it now.
 
 #### Download the data
 
@@ -220,7 +240,7 @@ We can download the dataset using the [`download.file()`](https://rdrr.io/r/util
 
 #### Read the data
 
-Now, let's read the file into R. The `.tsv` extension ("tab-separated values") tells us this is a plain text file in which columns are separated by tabs, so we will use a convenience function for exactly this type of file:
+Now, let's read the file into R. The `.tsv` extension ("tab-separated values") tells us this is a plain text file in which columns are separated by tabs, so we will use a convenience function from the *readr* package (which is part of the core set of 8 *tidyverse* packages, so it is already loaded) for exactly this type of file:
 
 <div class="highlight">
 
@@ -229,25 +249,7 @@ Now, let's read the file into R. The `.tsv` extension ("tab-separated values") t
 
 </div>
 
-<br>
-
-<div class="alert alert-note">
-
-<div>
-
-**Reading tabular data into R**
-
-Here, we used the `read_tsv()` function from the *readr* package, which is part of the core set of 8 *tidyverse* packages. The more general counterpart of this function is `read_delim()`, which allows you to specify the delimiter using an argument.
-
-There are also functions in "base R" (i.e., they are loaded into R by default, and not part of the *tidyverse*) that read tabular data, such as [`read.table()`](https://rdrr.io/r/utils/read.table.html) and [`read.delim()`](https://rdrr.io/r/utils/read.table.html). These are generally a bit slower than the *readr* functions, and have perhaps less sensible default options to their arguments. Particularly relevant is how columns with characters (strings) are parsed -- until R 4.0, which was released earlier this year, base R's default behavior was to parse them as **factors**, which is generally not desirable. *readr* functions will never convert character columns to factors.
-
-(You can check which version of R you are running by typing [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html). You can also check directly how characters are read by default with [`default.stringsAsFactors()`](https://rdrr.io/r/base/data.frame.html). To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your [`read.table()`](https://rdrr.io/r/utils/read.table.html) / [`read.delim()`](https://rdrr.io/r/utils/read.table.html) function call.)
-
-If speed is important, which it becomes when reading in very large files (\~ 100s of MBs or larger), you should consider using the `fread()` function from the *data.table* package.
-
-</div>
-
-</div>
+Done! We have now read our data into a *tibble*, which is a type of data frame (formally a *data.frame*): R's object type to deals with tabular data wherein each column can contain a different type of data (numeric, characters/strings, etc).
 
 <br>
 
@@ -256,14 +258,16 @@ If speed is important, which it becomes when reading in very large files (\~ 100
 Exploring backyard birds
 ------------------------
 
-**To get a feel for our data**, we can run the following functions:
+To get a feel for our data, we can run the following commands:
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span>          <span class='c'># Simply typing the name of an object will print it to screen</span>
 <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>   <span class='c'># Same as above, but explicitly calling print()    </span>
+
 <span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>     <span class='c'># Short for "structure", for column-wise information </span>
 <span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span> <span class='c'># tidyverse version of str()</span>
+
 <span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>    <span class='c'># In RStudio, will open object in a table in an Rstudio tab.</span>
                <span class='c'># Clicking on the object in the `Environment` pane will do the same!</span>
 </code></pre>
@@ -272,15 +276,17 @@ Exploring backyard birds
 
 <div class="puzzle">
 
-### Your turn: what's in the dataset?
+### Exercise 1
+
+**What's in the dataset?**
 
 -   Explore the output of the commands above, and try to understand what you see. What does a single row represent, and what is in each column?
 
--   In particular, pay attention to the classes and types of the different columns, which several of these functions print.
+-   In particular, pay attention to the data types (e.g., "character" or `chr`) of the different columns, which several of these functions print. The output of our `read_csv()` command also printed this information -- this function parsed our column into the types we see now. Were all the columns parsed correctly?
 
 -   How many rows and how many columns does the dataset have?
 
--   Write down some simple questions you would like to answer using this dataset.
+-   What are some simple questions you would like to answer using this dataset? We'll collect some of these and try to answer them in later sessions.
 
 <details>
 
@@ -325,33 +331,102 @@ Exploring backyard birds
 
 </div>
 
+<br> <br>
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+Bonus material
+--------------
+
 <br>
 
 <div class="alert alert-note">
 
 <div>
 
-**Types of data frames**
+### `readr` options for challenging files
 
-`data.frame` is R's basic object type that deals with tabular data wherein each column can contain a different type of data. When you use base R functions to read in data, you will get a `data.frame` object. However, when you use *readr*, you will get the *tidyverse*'s **subclass** of `data.frame`: colloquially called a `tibble` and formally a `tbl_df`.
+Note that our function call worked without specifying any additional arguments, i.e. with all the default options. It is not always this easy!
+
+Some options for more complex cases:
+
+-   The more general counterpart of this function is `read_delim()`, which allows you to specify the delimiter using an argument using the `sep` argument, e.g. `sep="\t"` for tabs.
+
+-   There are also arguments to these functions for when you need to skip lines, when you don't have column headers, when you need to specify the column types of some or all the columns, and so forth -- see this example:  
+
+    <div class="highlight">
+
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>my_df</span> <span class='o'>&lt;-</span> <span class='nf'>read_delim</span><span class='o'>(</span>
+      <span class='s'>'file.txt'</span>,
+      col_names <span class='o'>=</span> <span class='kc'>FALSE</span>,        <span class='c'># Don't consider the first line to be a header</span>
+      skip <span class='o'>=</span> <span class='m'>3</span>,                 <span class='c'># Skip the first three lines of the file</span>
+      comment <span class='o'>=</span> <span class='s'>"#"</span>,            <span class='c'># Skip any line beginning iwth a "#"</span>
+      col_types <span class='o'>=</span> <span class='nf'>cols</span><span class='o'>(</span>         <span class='c'># Specify column types</span>
+        col1 <span class='o'>=</span> <span class='nf'>col_character</span><span class='o'>(</span><span class='o'>)</span>, <span class='c'># ..Note that we only need to specify columns </span>
+        col2 <span class='o'>=</span> <span class='nf'>col_double</span><span class='o'>(</span><span class='o'>)</span>     <span class='c'># ..for which we need non-automatic typing</span>
+        <span class='o'>)</span>
+      <span class='o'>)</span>
+    </code></pre>
+
+    </div>
+
+-   It is also possible to read Excel files directly using functions from the *readxl* package.
+
+</div>
+
+</div>
+
+<br>
+
+<div class="alert alert-note">
+
+<div>
+
+### Other options for reading data
+
+There are also functions in "base R" (i.e., they are loaded into R by default, and not part of the *tidyverse*) that read tabular data, such as [`read.table()`](https://rdrr.io/r/utils/read.table.html) and [`read.delim()`](https://rdrr.io/r/utils/read.table.html).
+
+These are generally slower than the *readr* functions, and have less sensible default options to their arguments. Particularly relevant is how columns with characters (strings) are parsed -- until R 4.0, which was released earlier this year, base R's default behavior was to parse them as **factors**, which is generally not desirable[^1]. *readr* functions will never convert columns with strings to factors.
+
+If speed is important, which it becomes when reading in very large files (\~ 100s of MBs or larger), you should consider using the `fread()` function from the *data.table* package.
+
+</div>
+
+</div>
+
+<br>
+
+<div class="alert alert-note">
+
+<div>
+
+### Types of data frames
+
+When you use base R functions to read in data, you will get a `data.frame` object. However, when you use *readr*, you will get the *tidyverse*'s **subclass** of `data.frame`: colloquially called a `tibble` and formally a `tbl_df`.
 
 `tibbles` and "regular" `data.frames` can generally be used interchangeably, but some default behavior does differ. Most strikingly, they are printed to screen differently.
 
 To tell what kind of data frame your are dealing with, and to tell the class of any R object, use the [`class()`](https://rdrr.io/r/base/class.html) function, e.g. [`class(birds)`](https://rdrr.io/r/base/class.html).
 
+</div>
+
+</div>
+
 <div class="puzzle">
 
-***Optional: comparing data frame types***
+### Exercise 2 (optional/homework)
 
-Read in the bird data as a `data.frame` and compare overviews of the `tibble` and the `data.frame`.
+**Comparing *tibbles* and regular *data.frames***
+
+Read in the bird data as a *data.frame* and compare overviews of the *tibble* and the *data.frame*.
 
 -   What are some differences in how they are displayed and behave? In particular, compare what happens when you use [`print()`](https://rdrr.io/r/base/print.html) (or simply type the object name).
 
--   Were all the columns parsed in the same way -- i.e., did the `tibble` and the `data.frame` assign the same class to each column?
+-   Were all the columns parsed in the same way -- i.e., did the *tibble* and the *data.frame* assign the same class to each column?
 
--   How could you switch (convert) directly between `tibble` and `data.frame` objects?
-
-</div>
+-   How could you switch (convert) directly between *tibble* and *data.frame* objects?
 
 <details>
 <summary> Hints (click here) </summary> <br>
@@ -396,29 +471,7 @@ Use the <code>as.data.frame()</code> and <code>as\_tibble()</code> functions to 
 
 </div>
 
-</div>
-
-<br>
-
-<div class="alert alert-note">
-
-<div>
-
-**Pro-tip for data frame summaries**
-
-Use the `skim` function from the *skimr* package:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='nv'>skimr</span><span class='o'>)</span>
-<span class='nf'>skim</span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
-</code></pre>
-
-</div>
-
-</div>
-
-</div>
-
 <br> <br> <br>
+
+[^1]: You can check which version of R you are running by typing [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html). You can also check directly how strings are read by default with [`default.stringsAsFactors()`](https://rdrr.io/r/base/data.frame.html). To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your [`read.table()`](https://rdrr.io/r/utils/read.table.html) / [`read.delim()`](https://rdrr.io/r/utils/read.table.html) function call.
 
