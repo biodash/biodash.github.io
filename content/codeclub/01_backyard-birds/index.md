@@ -29,7 +29,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: eb90c00ea0efcf09
+rmd_hash: 26848d64271a2daf
 
 ---
 
@@ -196,10 +196,10 @@ Execute the line, i.e. to send it to the console: press `Ctrl Enter`.
 
 ------------------------------------------------------------------------
 
-3 - Getting a dataset
----------------------
+3 - Getting our dataset
+-----------------------
 
-We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a) from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/). Because the file was 3.1 GB large, I selected only the records from Ohio and removed some uninformative columns. I have put the resulting 36 MB file in our Github repo from which we'll download it now.
+We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a) from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/). Because the file was 3.1 GB large, we selected only the records from Ohio and removed some uninformative columns. We'll download the resulting 36 MB file from our Github repo.
 
 <div class="alert alert-note">
 
