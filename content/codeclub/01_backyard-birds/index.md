@@ -29,7 +29,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 26848d64271a2daf
+rmd_hash: 77b500db08c95242
 
 ---
 
@@ -355,10 +355,10 @@ Some options for more complex cases:
     <div class="highlight">
 
     <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>my_df</span> <span class='o'>&lt;-</span> <span class='nf'>read_delim</span><span class='o'>(</span>
-      <span class='s'>'file.txt'</span>,
+      file <span class='o'>=</span> <span class='s'>'file.txt'</span>,
       col_names <span class='o'>=</span> <span class='kc'>FALSE</span>,        <span class='c'># Don't consider the first line to be a header</span>
       skip <span class='o'>=</span> <span class='m'>3</span>,                 <span class='c'># Skip the first three lines of the file</span>
-      comment <span class='o'>=</span> <span class='s'>"#"</span>,            <span class='c'># Skip any line beginning iwth a "#"</span>
+      comment <span class='o'>=</span> <span class='s'>"#"</span>,            <span class='c'># Skip any line beginning with a "#"</span>
       col_types <span class='o'>=</span> <span class='nf'>cols</span><span class='o'>(</span>         <span class='c'># Specify column types</span>
         col1 <span class='o'>=</span> <span class='nf'>col_character</span><span class='o'>(</span><span class='o'>)</span>, <span class='c'># ..Note that we only need to specify columns </span>
         col2 <span class='o'>=</span> <span class='nf'>col_double</span><span class='o'>(</span><span class='o'>)</span>     <span class='c'># ..for which we need non-automatic typing</span>
@@ -368,9 +368,121 @@ Some options for more complex cases:
 
     </div>
 
--   It is also possible to read Excel files directly using functions from the *readxl* package.
+</div>
 
 </div>
+
+<br>
+
+<div class="puzzle">
+
+### Exercise 2 (Optional)
+
+**Read this file!**
+
+Try to read the following file into R, which is a modified and much smaller version of the bird dataset.
+
+Make the function parse the "order" column as a factor, and the "year", "month", and "day" columns as whatever you think is sensible.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Download and read the file:</span>
+<span class='nv'>birds2_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/data/birds/birds_read-challenge.txt'</span>
+<span class='nv'>birds2_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/birds_read-challenge.txt'</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds2_file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds2_file</span><span class='o'>)</span>
+
+<span class='c'># Your turn!</span>
+<span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nv'>read_</span>
+
+</code></pre>
+
+</div>
+
+<details>
+
+<summary> Hints (click here) </summary> <br>
+
+-   The file is saved as `.txt`, so the delimiter is not obvious -- first have a look at it (open it in RStudio, a text editor, or the terminal) to determine the delimiter. Then, use `read_delim()` with manual specification of the delimiter using the `delim` argument, or use a specialized convenience function.
+
+-   Besides a leading line with no data, there is another problematic line further down. You will need both the `skip` and `comment` arguments to circumvent these.
+
+-   Note that *readr* erroneously parses `month` as a character column if you don't manually specify its type.
+
+-   Note that you can also use a succinct column type specification like `col_types = 'fc'`, which would parse, for a two-column file, the first column as a factor and the second as a character -- type e.g. `?read_tsv` for details in the help file.
+
+</details>
+
+<br>
+
+<details>
+
+<summary> Bare solution (click here) </summary> <br>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># With succint column type specification:</span>
+<span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>
+  file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
+  skip <span class='o'>=</span> <span class='m'>1</span>,
+  comment <span class='o'>=</span> <span class='s'>'$'</span>,
+  col_types <span class='o'>=</span> <span class='s'>'fcdiii'</span>
+  <span class='o'>)</span>
+
+<span class='c'># With long column type specification:</span>
+<span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>
+  file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
+  skip <span class='o'>=</span> <span class='m'>1</span>,
+  comment <span class='o'>=</span> <span class='s'>'$'</span>,
+  col_types <span class='o'>=</span> <span class='nf'>cols</span><span class='o'>(</span>
+    order <span class='o'>=</span> <span class='nf'>col_factor</span><span class='o'>(</span><span class='o'>)</span>,
+    year <span class='o'>=</span>  <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>,
+    month <span class='o'>=</span> <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>,
+    day <span class='o'>=</span> <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>
+    <span class='o'>)</span>
+  <span class='o'>)</span>
+
+</code></pre>
+
+</div>
+
+</details>
+
+<br>
+
+<details>
+
+<summary> Solution with explanations (click here) </summary> <br>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># With succinct column type specification:</span>
+<span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>     <span class='c'># `read_csv()` because the file is comma-delimited</span>
+  file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
+  skip <span class='o'>=</span> <span class='m'>1</span>,             <span class='c'># The first line is not part of the data frame</span>
+  comment <span class='o'>=</span> <span class='s'>'$'</span>,        <span class='c'># Line 228 is a comment that starts with a `$`.</span>
+  col_types <span class='o'>=</span> <span class='s'>'fcdiii'</span>  <span class='c'># 'f' for factor, 'c' for character,</span>
+                        <span class='c'># ... 'd' for double (=numeric), 'i' for integer.</span>
+  <span class='o'>)</span>
+
+<span class='c'># With long column type specification:</span>
+<span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>
+  file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
+  skip <span class='o'>=</span> <span class='m'>1</span>,
+  comment <span class='o'>=</span> <span class='s'>'$'</span>,
+  col_types <span class='o'>=</span> <span class='nf'>cols</span><span class='o'>(</span>        <span class='c'># Note that we can omit columns for which we</span>
+    order <span class='o'>=</span> <span class='nf'>col_factor</span><span class='o'>(</span><span class='o'>)</span>,  <span class='c'># ... accept the automatic parsing,</span>
+    year <span class='o'>=</span>  <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>, <span class='c'># ... when using the long specification. </span>
+    month <span class='o'>=</span> <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>,
+    day <span class='o'>=</span> <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>
+    <span class='o'>)</span>
+  <span class='o'>)</span>
+</code></pre>
+
+</div>
+
+</details>
+
+<br>
 
 </div>
 
@@ -386,7 +498,9 @@ There are also functions in *base R* that read tabular data, such as [`read.tabl
 
 These are generally slower than the *readr* functions, and have less sensible default options to their arguments. Particularly relevant is how columns with characters (strings) are parsed -- until R 4.0, which was released earlier this year, base R's default behavior was to parse them as **factors**, which is generally not desirable[^2]. *readr* functions will never convert columns with strings to factors.
 
-If speed is important, which it becomes when reading in very large files (\~ 100s of MBs or larger), you should consider using the `fread()` function from the *data.table* package.
+If speed is important, such as when reading in very large files (\~ 100s of MBs or larger), you should consider using the `fread()` function from the *data.table* package.
+
+Finally, you can read excel files directly using the *readxl* package, Google Sheets directly from the web using the *googlesheets4* package, and non-tabular data using the base R [`readLines()`](https://rdrr.io/r/base/readLines.html) function.
 
 </div>
 
@@ -394,7 +508,7 @@ If speed is important, which it becomes when reading in very large files (\~ 100
 
 <br> <br> <br>
 
-[^1]: As it is in some ways a dialect of R, the *tidyverse* can cause confusion and make it seem like there is even more to learn, because base R can't be fully ignored. Its rapid development in the past few years has also meant that in some cases, a function you learned is no longer recommended or --more rarely-- supported a year or so later.
+[^1]: As it is in some ways a dialect of R, the *tidyverse* can cause confusion ("tidy evaluation" in particular) and can sometimes make it seem like there is just more to learn -- because base R can't be fully ignored. Its rapid development has also meant that in some cases, new functions and approaches are already retired/soft-deprecated a few years later.
 
 [^2]: You can check which version of R you are running by typing [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html). You can also check directly how strings are read by default with [`default.stringsAsFactors()`](https://rdrr.io/r/base/data.frame.html). To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your [`read.table()`](https://rdrr.io/r/utils/read.table.html) / [`read.delim()`](https://rdrr.io/r/utils/read.table.html) function call.
 

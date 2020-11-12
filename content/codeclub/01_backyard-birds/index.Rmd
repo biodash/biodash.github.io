@@ -199,11 +199,11 @@ library(tidyverse)    # library() is the standard function to load R packages
 The *tidyverse* is a very popular and useful ecosystem of R packages
 for data analysis, which we will be using a lot in Code Club (despite some
 disadvantages^[As it is in some ways a dialect of R, the *tidyverse* can
-cause confusion and make it seem like there is even more to learn,
-because base R can't be fully ignored.
-Its rapid development in the past few years has also meant that in some cases,
-a function you learned is no longer recommended or --more rarely-- supported
-a year or so later.]).
+cause confusion ("tidy evaluation" in particular) and can sometimes make it seem like
+there is just more to learn -- because base R can't be fully ignored.
+Its rapid development has also meant that in some cases,
+new functions and approaches are being retired/soft-deprecated just
+a few years later.]).
 
 When we refer to "*base R*" as opposed to the *tidyverse*,
 we mean functions that are loaded in R by default (without loading a package),
@@ -397,10 +397,10 @@ Some options for more complex cases:
   of some or all the columns, and so forth -- see this example:  
   ```{r}
   my_df <- read_delim(
-    'file.txt',
+    file = 'file.txt',
     col_names = FALSE,        # Don't consider the first line to be a header
     skip = 3,                 # Skip the first three lines of the file
-    comment = "#",            # Skip any line beginning iwth a "#"
+    comment = "#",            # Skip any line beginning with a "#"
     col_types = cols(         # Specify column types
       col1 = col_character(), # ..Note that we only need to specify columns 
       col2 = col_double()     # ..for which we need non-automatic typing
@@ -408,11 +408,132 @@ Some options for more complex cases:
     )
   ```
 
-- It is also possible to read Excel files directly using functions from
-  the *readxl* package.
+</div>
+</div>
+
+<br>
+
+:::puzzle
+
+### Exercise 2 (Optional)
+
+**Read this file!**
+
+Try to read the following file into R, which is a modified and much smaller
+version of the bird dataset.
+
+Make the function parse the "order" column as a factor,
+and the "year", "month", and "day" columns as whatever you think is sensible.
+
+```{r}
+# Download and read the file:
+birds2_file_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/data/birds/birds_read-challenge.txt'
+birds2_file <- 'data/birds/birds_read-challenge.txt'
+download.file(url = birds2_file_url, destfile = birds2_file)
+
+# Your turn!
+birds2 <- read_
+
+```
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+<br>
+
+- The file is saved as `.txt`, so the delimiter is not obvious --
+  first have a look at it (open it in RStudio, a text editor, or the terminal)
+  to determine the delimiter.
+  Then, use `read_delim()` with manual specification of the delimiter using the
+  `delim` argument, or use a specialized convenience function.
   
-</div>
-</div>
+- Besides a leading line with no data,
+  there is another problematic line further down.
+  You will need both the `skip` and `comment` arguments to circumvent these.
+  
+- Note that *readr* erroneously parses `month` as a character column
+  if you don't manually specify its type.
+  
+- Note that you can also use a succinct column type specification like
+  `col_types = 'fc'`, which would parse, for a two-column file,
+  the first column as a factor and the second as a character --
+  type e.g. `?read_tsv` for details in the help file.
+
+</details>
+
+<br>
+
+
+<details>
+  <summary>
+  Bare solution (click here)
+  </summary>
+<br>
+
+```{r}
+# With succint column type specification:
+birds2 <- read_csv(
+  file = birds2_file,
+  skip = 1,
+  comment = '$',
+  col_types = 'fcdiii'
+  )
+
+# With long column type specification:
+birds2 <- read_csv(
+  file = birds2_file,
+  skip = 1,
+  comment = '$',
+  col_types = cols(
+    order = col_factor(),
+    year =  col_integer(),
+    month = col_integer(),
+    day = col_integer()
+    )
+  )
+
+```
+
+</details>
+
+<br>
+
+<details>
+  <summary>
+  Solution with explanations (click here)
+  </summary>
+<br>
+
+```{r}
+# With succinct column type specification:
+birds2 <- read_csv(     # `read_csv()` because the file is comma-delimited
+  file = birds2_file,
+  skip = 1,             # The first line is not part of the data frame
+  comment = '$',        # Line 228 is a comment that starts with a `$`.
+  col_types = 'fcdiii'  # 'f' for factor, 'c' for character,
+                        # ... 'd' for double (=numeric), 'i' for integer.
+  )
+
+# With long column type specification:
+birds2 <- read_csv(
+  file = birds2_file,
+  skip = 1,
+  comment = '$',
+  col_types = cols(        # Note that we can omit columns for which we
+    order = col_factor(),  # ... accept the automatic parsing,
+    year =  col_integer(), # ... when using the long specification. 
+    month = col_integer(),
+    day = col_integer()
+    )
+  )
+```
+
+</details>
+
+<br>
+
+:::
 
 <br>
 
@@ -436,9 +557,13 @@ To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your
 `read.table()` / `read.delim()` function call.].
 *readr* functions will never convert columns with strings to factors.
 
-If speed is important, which it becomes when reading in very large files
+If speed is important, such as when reading in very large files
 (~ 100s of MBs or larger), you should consider using the `fread()` function
 from the *data.table* package.
+
+Finally, you can read excel files directly using the *readxl* package,
+Google Sheets directly from the web using the *googlesheets4* package,
+and non-tabular data using the base R `readLines()` function.
 
 </div>
 </div>
