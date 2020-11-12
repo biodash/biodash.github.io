@@ -29,7 +29,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 437a2adcf94bfdbd
+rmd_hash: eb90c00ea0efcf09
 
 ---
 
@@ -67,9 +67,9 @@ Session summary
 
 -   Making sure everyone has a working RStudio session
 
--   RStudio Projects
+-   RStudio Projects & orienting ourselves
 
--   If we have time: Getting started with data from the Great Backyard Bird Count
+-   Getting started with data from the Great Backyard Bird Count
 
 <br>
 
@@ -77,8 +77,8 @@ Session summary
 
 ------------------------------------------------------------------------
 
-Create an RStudio Project
--------------------------
+1 - Create an RStudio Project
+-----------------------------
 
 Projects are an RStudio-specific concept that create a special file (`.Rproj`), primarily to designate a directory as the working directory for everything within it. We recommend creating exactly one separate Project for each research project with an R component -- and for things like Code Club.
 
@@ -125,8 +125,8 @@ In brief, Projects help you to organize your work and to make it more portable.
 
 ------------------------------------------------------------------------
 
-Orienting ourselves
--------------------
+2 - Orienting ourselves
+-----------------------
 
 #### Where are we?
 
@@ -167,26 +167,22 @@ To keep a record of what we are doing, and to easily modify and rerun earlier co
 
 #### First line of the script
 
-Type the following command on the first line of the script:
+Type the following command on the first line of the script, to load the core set of 8 *tidyverse* packages all at once:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>    <span class='c'># library() is the standard function to load R packages</span>
 </code></pre>
 
 </div>
-
-Now we have loaded the core set of 8 *tidyverse* packages all at once. ([`library()`](https://rdrr.io/r/base/library.html) is the standard function to load packages and usually loads just a single package.)
 
 <div class="alert alert-note">
 
 <div>
 
-The *tidyverse* is a very popular ecosystem of R packages for data analysis, which we will be using a lot in Code Club.
+The *tidyverse* is a very popular and useful ecosystem of R packages for data analysis, which we will be using a lot in Code Club (despite some disadvantages[^1]).
 
-It can be characterized as a dialect of R, and as such can sometimes cause confusion. Its rapid development in the past few years has also meant that in some cases, a function you learned is no longer recommended or --more rarely-- supported a year or so later. Such big changes should become less common now that the ecosystem has matured a fair bit.
-
-Overall, we think the *tidyverse* is well worth learning and using.
+When we refer to "*base R*" as opposed to the *tidyverse*, we mean functions that are loaded in R by default (without loading a package), and that can perform similar operations in a different way.
 
 </div>
 
@@ -200,8 +196,8 @@ Execute the line, i.e. to send it to the console: press `Ctrl Enter`.
 
 ------------------------------------------------------------------------
 
-Getting a bird dataset
-----------------------
+3 - Getting a dataset
+---------------------
 
 We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a) from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/). Because the file was 3.1 GB large, I selected only the records from Ohio and removed some uninformative columns. I have put the resulting 36 MB file in our Github repo from which we'll download it now.
 
@@ -255,8 +251,8 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 
 ------------------------------------------------------------------------
 
-Exploring backyard birds
-------------------------
+4 - Exploring backyard birds
+----------------------------
 
 To get a feel for our data, we can run the following commands:
 
@@ -384,11 +380,11 @@ Some options for more complex cases:
 
 <div>
 
-### Other options for reading data
+### Other options for reading tabular data
 
-There are also functions in "base R" (i.e., they are loaded into R by default, and not part of the *tidyverse*) that read tabular data, such as [`read.table()`](https://rdrr.io/r/utils/read.table.html) and [`read.delim()`](https://rdrr.io/r/utils/read.table.html).
+There are also functions in *base R* that read tabular data, such as [`read.table()`](https://rdrr.io/r/utils/read.table.html) and [`read.delim()`](https://rdrr.io/r/utils/read.table.html).
 
-These are generally slower than the *readr* functions, and have less sensible default options to their arguments. Particularly relevant is how columns with characters (strings) are parsed -- until R 4.0, which was released earlier this year, base R's default behavior was to parse them as **factors**, which is generally not desirable[^1]. *readr* functions will never convert columns with strings to factors.
+These are generally slower than the *readr* functions, and have less sensible default options to their arguments. Particularly relevant is how columns with characters (strings) are parsed -- until R 4.0, which was released earlier this year, base R's default behavior was to parse them as **factors**, which is generally not desirable[^2]. *readr* functions will never convert columns with strings to factors.
 
 If speed is important, which it becomes when reading in very large files (\~ 100s of MBs or larger), you should consider using the `fread()` function from the *data.table* package.
 
@@ -396,82 +392,9 @@ If speed is important, which it becomes when reading in very large files (\~ 100
 
 </div>
 
-<br>
-
-<div class="alert alert-note">
-
-<div>
-
-### Types of data frames
-
-When you use base R functions to read in data, you will get a `data.frame` object. However, when you use *readr*, you will get the *tidyverse*'s **subclass** of `data.frame`: colloquially called a `tibble` and formally a `tbl_df`.
-
-`tibbles` and "regular" `data.frames` can generally be used interchangeably, but some default behavior does differ. Most strikingly, they are printed to screen differently.
-
-To tell what kind of data frame your are dealing with, and to tell the class of any R object, use the [`class()`](https://rdrr.io/r/base/class.html) function, e.g. [`class(birds)`](https://rdrr.io/r/base/class.html).
-
-</div>
-
-</div>
-
-<div class="puzzle">
-
-### Exercise 2 (optional/homework)
-
-**Comparing *tibbles* and regular *data.frames***
-
-Read in the bird data as a *data.frame* and compare overviews of the *tibble* and the *data.frame*.
-
--   What are some differences in how they are displayed and behave? In particular, compare what happens when you use [`print()`](https://rdrr.io/r/base/print.html) (or simply type the object name).
-
--   Were all the columns parsed in the same way -- i.e., did the *tibble* and the *data.frame* assign the same class to each column?
-
--   How could you switch (convert) directly between *tibble* and *data.frame* objects?
-
-<details>
-<summary> Hints (click here) </summary> <br>
-<ul>
-<li>
-Use the <code>read.table()</code> function, and note that you will need to specify non-default options for the arguments <code>sep</code> and <code>header</code>. Type <code>?read.table</code> for details.
-</li>
-<li>
-Have a close look at the class for the "eventDate" column. Note that <code>POSIXct</code> is the formal date-time class, while tibbles/tidyverse will refer to these as <code>ddtm</code>.
-</li>
-<li>
-Use the <code>as.data.frame()</code> and <code>as\_tibble()</code> functions to change the object type.
-</li>
-</ul>
-</details>
-
-<br>
-
-<details>
-
-<summary> Solutions (click here) </summary> <br>
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Read the dataset as data.frame using read.table():</span>
-<span class='nv'>birds_df</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/utils/read.table.html'>read.table</a></span><span class='o'>(</span><span class='nv'>infile</span>, sep <span class='o'>=</span> <span class='s'>'\t'</span>, header <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
-
-<span class='c'># Class of the eventDate column -- read.table() did not parse the date as a date!</span>
-<span class='nf'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>eventDate</span><span class='o'>)</span>
-<span class='c'># [1] "POSIXct" "POSIXt" </span>
-<span class='nf'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='o'>(</span><span class='nv'>birds_df</span><span class='o'>$</span><span class='nv'>eventDate</span><span class='o'>)</span>
-<span class='c'># [1] "character"</span>
-
-<span class='c'># Convert between a data.frame and a tibble:</span>
-<span class='nv'>birds_df</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
-<span class='nv'>birds_tibble</span> <span class='o'>&lt;-</span> <span class='nf'>as_tibble</span><span class='o'>(</span><span class='nv'>birds_df</span><span class='o'>)</span>
-</code></pre>
-
-</div>
-
-</details>
-
-</div>
-
 <br> <br> <br>
 
-[^1]: You can check which version of R you are running by typing [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html). You can also check directly how strings are read by default with [`default.stringsAsFactors()`](https://rdrr.io/r/base/data.frame.html). To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your [`read.table()`](https://rdrr.io/r/utils/read.table.html) / [`read.delim()`](https://rdrr.io/r/utils/read.table.html) function call.
+[^1]: As it is in some ways a dialect of R, the *tidyverse* can cause confusion and make it seem like there is even more to learn, because base R can't be fully ignored. Its rapid development in the past few years has also meant that in some cases, a function you learned is no longer recommended or --more rarely-- supported a year or so later.
+
+[^2]: You can check which version of R you are running by typing [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html). You can also check directly how strings are read by default with [`default.stringsAsFactors()`](https://rdrr.io/r/base/data.frame.html). To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your [`read.table()`](https://rdrr.io/r/utils/read.table.html) / [`read.delim()`](https://rdrr.io/r/utils/read.table.html) function call.
 
