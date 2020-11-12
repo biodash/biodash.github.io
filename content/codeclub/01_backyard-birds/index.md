@@ -29,7 +29,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 77b500db08c95242
+rmd_hash: 536176dd6467c04b
 
 ---
 
@@ -508,7 +508,7 @@ Finally, you can read excel files directly using the *readxl* package, Google Sh
 
 <br> <br> <br>
 
-[^1]: As it is in some ways a dialect of R, the *tidyverse* can cause confusion ("tidy evaluation" in particular) and can sometimes make it seem like there is just more to learn -- because base R can't be fully ignored. Its rapid development has also meant that in some cases, new functions and approaches are already retired/soft-deprecated a few years later.
+[^1]: As it is in some ways a dialect of R, the *tidyverse* can cause confusion ("tidy evaluation" in particular) and can sometimes make it seem like there is just more to learn -- because base R can't be fully ignored. Its rapid development has also meant that in some cases, new functions and approaches are being retired/soft-deprecated just a few years later.
 
 [^2]: You can check which version of R you are running by typing [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html). You can also check directly how strings are read by default with [`default.stringsAsFactors()`](https://rdrr.io/r/base/data.frame.html). To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your [`read.table()`](https://rdrr.io/r/utils/read.table.html) / [`read.delim()`](https://rdrr.io/r/utils/read.table.html) function call.
 
