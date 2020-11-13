@@ -1,10 +1,8 @@
 ---
 output: hugodown::md_document
-# Documentation: https://sourcethemes.com/academic/docs/managing-content/
-
 title: "Session 1: Backyard Birds"
 subtitle: "Starting with RStudio Projects and reading in our data"
-summary: ""
+summary: "In the first session of Code Club, we'll make sure that everyone is properly set up, create an RStudio Project, and start working with some data from the Great Backyard Bird Count."
 authors: [admin]
 tags: [codeclub, backyard-birds]
 categories: []
@@ -29,7 +27,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 20a709f104b25f90
+rmd_hash: 77bf928717aa1b24
 
 ---
 
