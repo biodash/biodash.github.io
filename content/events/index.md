@@ -49,6 +49,24 @@ If you know of an event that you think should be listed here, please use the for
 
 ----
 
+## Spring '21 Course: <br> Practical Computing Skills for Biologists
+
+Jelmer Poelstra will teach a computing course as a section of PlantPath 8300
+in the '21 spring semester.
+
+- Focused on the command line, bash and Python scripting,
+  and reproducible science with version control and automated workflows.
+- 14 weeks, 2 credits, online-only
+- Zoom sessions on Tuesdays and Thursdays from 3:55-4:55 pm.
+- Graduate level, but undergraduates may be eligible to take the course as an IS.
+- Sign up for class number 35953.
+- Contact [Jelmer](mailto:poelstra.1@osu.edu) for more information and a syllabus.
+
+
+<br>
+
+----
+
 ## Upcoming Workshops
 
 None right now!
@@ -65,7 +83,7 @@ None right now!
 
 ----
 
-## Relevant OSU Courses
+## Misc. Relevant OSU Courses
 
 - [M5161: Introduction to Computational Genomics](https://microbiology.osu.edu/m5161)
 - [M8161: Microbiome Informatics](https://microbiology.osu.edu/M8161)
