@@ -1,10 +1,8 @@
 ---
 output: hugodown::md_document
-# Documentation: https://sourcethemes.com/academic/docs/managing-content/
-
 title: "Session 1: Backyard Birds"
 subtitle: "Starting with RStudio Projects and reading in our data"
-summary: ""
+summary: "In the first session of Code Club, we'll make sure that everyone is properly set up, create an RStudio Project, and start working with some data from the Great Backyard Bird Count."
 authors: [admin]
 tags: [codeclub, backyard-birds]
 categories: []
@@ -12,7 +10,6 @@ date: 2020-11-04
 lastmod: 2020-11-04
 featured: false
 draft: false
-
 toc: true
 
 # Featured image
@@ -29,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 536176dd6467c04b
+rmd_hash: 4af89d1fcc15e5ee
 
 ---
 
@@ -106,9 +103,10 @@ In brief, Projects help you to organize your work and to make it more portable.
 
 **Let's create an RStudio Project for Code Club:**
 
--   Open RStudio locally or [start an OSC RStudio Server session](/codeclub-setup/#osc-run-rstudio).
+-   Open RStudio locally or [start an OSC RStudio Server session](/codeclub-setup/#osc-run-rstudio).  
+    (*If you're at OSC*, you should see a file `0_CODECLUB.md` that's open in your top-left panel. You can ignore/close this file.)
 
--   *If you're working locally*, create a directory wherever you like on your computer for all things Code Club. You can do this in R using [`dir.create()`](https://rdrr.io/r/base/files2.html), or outside of R.  
+-   *If you're working locally*, create a directory wherever you like on your computer for all things Code Club. You can do this in R using [`dir.create("path/to/your/dir")`](https://rdrr.io/r/base/files2.html), or outside of R.  
     (*If you're at OSC*, skip this step because you're automatically inside a Code Club-specific, personal directory.)
 
 -   Click `File` (top menu bar) \> `New Project`, and then select `Existing Directory`.
@@ -117,9 +115,9 @@ In brief, Projects help you to organize your work and to make it more portable.
 
     -   *If you're working at OSC*, keep the default choice "[`~`](https://rdrr.io/r/base/tilde.html)" (i.e., *home*), which is the directory you started in when entering the RStudio Server session.
 
--   You should now see the file ending in `.Rproj` in the RStudio `Files` tab in the lower right pane.
+-   After RStudio automatically reloads, you should see the file ending in `.Rproj` in the RStudio `Files` tab in the lower right pane, and you will have the Project open. All done for now!
 
-(To open an existing Project, use `File` \> `Open Project` inside RStudio, or click the `.Rproj` file in your file browser.)
+(For future Code Club sessions, OSC users will have the Project automatically opened upon opening RStudio Server. If you're working locally and also using RStudio outside of this Project, you can open it by `File` \> `Open Project` inside RStudio, or by clicking the `.Rproj` file in your file browser, which will open RStudio *and* the Project.)
 
 <br>
 
@@ -130,16 +128,19 @@ In brief, Projects help you to organize your work and to make it more portable.
 
 #### Where are we?
 
-Type in the console (bottom left):
+We don't need to set our working directory, because our newly created Project is open, and we will therefore automatically be in the directory that contains the `.Rproj` file.
+
+To see where you are, type or copy into the console (bottom left):
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>    <span class='c'># short for "get working directory"</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>    <span class='c'># Short for "get working directory"</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='o'>(</span><span class='o'>)</span>      <span class='c'># Listing files in your current directory.</span>
+           <span class='c'># This should return the `.RProj` file.</span>
 </code></pre>
 
 </div>
-
-When a Project is open, the R working directory will always be the directory that contains the `.Rproj` file.
 
 #### Create directories
 
@@ -167,14 +168,29 @@ To keep a record of what we are doing, and to easily modify and rerun earlier co
 
 #### First line of the script
 
-Type the following command on the first line of the script, to load the core set of 8 *tidyverse* packages all at once:
+We will now load the core set of 8 *tidyverse* packages all at once. To do so, type/copy the command below on the first line of the script, and then **execute it** by clicking `Run` (top right of script pane) or by pressing `Ctrl Enter` (Windows/Linux, this should also work in your browser) or `⌘ Enter` (Mac).
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>    <span class='c'># library() is the standard function to load R packages</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("tidyverse") # If you're working locally and did not install it yet</span>
+
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>    <span class='c'># library() is the standard function to load R packages</span>
+
+<span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span><span> ─────────────────────────────────────── tidyverse 1.3.0 ──</span></span>
+
+<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>ggplot2</span><span> 3.3.2     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>purrr  </span><span> 0.3.4</span></span>
+<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>tibble </span><span> 3.0.4     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>dplyr  </span><span> 1.0.2</span></span>
+<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>tidyr  </span><span> 1.1.2     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>stringr</span><span> 1.4.0</span></span>
+<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>readr  </span><span> 1.3.1     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>forcats</span><span> 0.5.0</span></span>
+
+<span class='c'>#&gt; ── <span style='font-weight: bold;'>Conflicts</span><span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span class='c'>#&gt; <span style='color: #BB0000;'>✖</span><span> </span><span style='color: #0000BB;'>dplyr</span><span>::</span><span style='color: #00BB00;'>filter()</span><span> masks </span><span style='color: #0000BB;'>stats</span><span>::filter()</span></span>
+<span class='c'>#&gt; <span style='color: #BB0000;'>✖</span><span> </span><span style='color: #0000BB;'>dplyr</span><span>::</span><span style='color: #00BB00;'>lag()</span><span>    masks </span><span style='color: #0000BB;'>stats</span><span>::lag()</span></span>
 </code></pre>
 
 </div>
+
+If it worked, you should get the same output as shown in the code block above: it attached 8 packages, and it warns that some of its functions are now "masking" base R functions.
 
 <div class="alert alert-note">
 
@@ -187,10 +203,6 @@ When we refer to "*base R*" as opposed to the *tidyverse*, we mean functions tha
 </div>
 
 </div>
-
-#### Run the line
-
-Execute the line, i.e. to send it to the console: press `Ctrl Enter`.
 
 <br>
 
