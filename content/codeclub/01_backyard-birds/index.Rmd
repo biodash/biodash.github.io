@@ -29,7 +29,7 @@ projects: []
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval=FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval=TRUE)
 ```
 
 ----
@@ -154,15 +154,16 @@ which will open RStudio *and* the Project.)
 
 We don't need to set our working directory,
 because our newly created Project is open,
-and we will therefore automatically be in the directory that contains the `.Rproj` file.
+and we will therefore automatically have as our working directory
+the directory that contains the `.Rproj` file.
 
 To see where you are, type or copy into the console (bottom left):
 
-```{r}
+```{r, eval = FALSE}
 getwd()    # Short for "get working directory"
 
 dir()      # Listing files in your current directory.
-           # This should return the `.RProj` file.
+           # This should return at least the `.RProj` file.
 ```
 
 #### Create directories
@@ -171,7 +172,7 @@ Create two new directories -- one for this session,
 and one for a dataset that we will download shortly
 (and will be reusing across sessions):
 
-```{r}
+```{r, eval = FALSE}
 # Dir for Code Club Session 1:
 dir.create('S01')
 
@@ -198,7 +199,7 @@ and then **execute it** by clicking `Run` (top right of script pane)
 or by pressing `Ctrl Enter` (Windows/Linux,
 this should also work in your browser) or `⌘ Enter` (Mac).
 
-```{r, eval=TRUE}
+```{r, eval = TRUE}
 # install.packages("tidyverse") # If you're working locally and did not install it yet
 
 library(tidyverse)    # library() is the standard function to load R packages
@@ -261,9 +262,14 @@ Since 2013, it is a global event, but it has been done since 1998 in the US and 
 #### Download the data
 
 We can download the dataset using the `download.file()` function:
-```{r, eval=FALSE}
+```{r}
+# The URL to our file:
 birds_file_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv'
+
+# The path to the file we want to download to:
 birds_file <- 'data/birds/backyard-birds_Ohio.tsv'
+
+# Download
 download.file(url = birds_file_url, destfile = birds_file)
 ```
 
@@ -276,7 +282,7 @@ so we will use a convenience function from the *readr* package
 (which is part of the core set of 8 *tidyverse* packages, so it is already loaded)
 for exactly this type of file:
 
-```{r, eval=FALSE}
+```{r}
 birds <- read_tsv(birds_file)
 ```
 
@@ -290,27 +296,25 @@ column can contain a different type of data (numeric, characters/strings, etc).
 
 ## 4 - Exploring backyard birds
 
-To get a feel for our data, we can run the following commands:
-
-```{r}
-birds          # Simply typing the name of an object will print it to screen
-print(birds)   # Same as above, but explicitly calling print()    
-
-str(birds)     # Short for "structure", for column-wise information 
-glimpse(birds) # tidyverse version of str()
-
-View(birds)    # In RStudio, will open object in a table in an Rstudio tab.
-               # Clicking on the object in the `Environment` pane will do the same!
-```
-
 :::puzzle
 
 ### Exercise 1
 
 **What's in the dataset?**
 
-- Explore the output of the commands above, and try to understand what you see.
+- Explore the output of the following commands, and try to understand what you see.
   What does a single row represent, and what is in each column?
+
+```{r, eval = FALSE}
+birds          # Type the name of an object to print it to screen
+print(birds)   # Same as above, but explicitly calling print()    
+
+str(birds)     # Short for "structure", for column-wise information 
+glimpse(birds) # tidyverse version of str()
+
+View(birds)    # In RStudio, will open object in a table in an Rstudio tab.
+               # Or: clicking on the object in the `Environment` pane!
+```
 
 - In particular, pay attention to the data types (e.g., "character" or `chr`)
   of the different columns, which several of these functions print.
@@ -357,7 +361,7 @@ glimpse(birds)
 
 ```{r}
 # You can also check the number of rows and columns directly using:
-dim(birds)          # Will return "number_of_rows, number_of_columns"
+dim(birds)          # Will return the number of rows and columns
 
 nrow(birds)         # Will return the number of rows
 ncol(birds)         # Will return the number of columns
@@ -386,8 +390,10 @@ ncol(birds)         # Will return the number of columns
 
 ### `readr` options for challenging files
 
-Note that our function call worked without specifying any additional arguments,
-i.e. with all the default options. It is not always this easy!
+Note that we read in our file specifying any additional arguments to the
+`readr()` function,
+i.e. with all the default options.
+It is not always this easy!
 
 Some options for more complex cases:
 
@@ -398,9 +404,10 @@ Some options for more complex cases:
 - There are also arguments to these functions for when you need to skip lines,
   when you don't have column headers, when you need to specify the column types
   of some or all the columns, and so forth -- see this example:  
-  ```{r}
+  ```{r, eval = FALSE}
   my_df <- read_delim(
     file = 'file.txt',
+    sep = '\t',               # Manually specify tab as delimiter
     col_names = FALSE,        # Don't consider the first line to be a header
     skip = 3,                 # Skip the first three lines of the file
     comment = "#",            # Skip any line beginning with a "#"
@@ -430,14 +437,16 @@ and the "year", "month", and "day" columns as whatever you think is sensible.
 
 ```{r}
 # Download and read the file:
-birds2_file_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/birds_read-challenge.txt'
-birds2_file <- 'data/birds/birds_read-challenge.txt'
+birds2_file_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_read-challenge.txt'
+birds2_file <- 'data/birds/backyard-birds_read-challenge.txt'
 download.file(url = birds2_file_url, destfile = birds2_file)
+```
 
+```{r, eval = FALSE}
 # Your turn!
 birds2 <- read_    # Complete the command
-
 ```
+
 
 <details>
   <summary>
@@ -515,8 +524,7 @@ birds2 <- read_csv(     # `read_csv()` because the file is comma-delimited
   skip = 1,             # The first line is not part of the data frame
   comment = '$',        # Line 228 is a comment that starts with a `$`.
   col_types = 'fcdiii'  # 'f' for factor, 'c' for character,
-                        # ... 'd' for double (=numeric), 'i' for integer.
-  )
+  )                     # ... 'd' for double (=numeric), 'i' for integer.
 
 # With long column type specification:
 birds2 <- read_csv(
@@ -564,13 +572,15 @@ If speed is important, such as when reading in very large files
 (~ 100s of MBs or larger), you should consider using the `fread()` function
 from the *data.table* package.
 
-Finally, you can read excel files directly using the *readxl* package,
-Google Sheets directly from the web using the *googlesheets4* package,
-and non-tabular data using the base R `readLines()` function.
+Finally, some examples of reading other types of files:
+
+- Read excel files directly using the *readxl* package.
+- Read Google Sheets directly from the web using the *googlesheets4* package.
+- Read non-tabular data using the base R `readLines()` function.
 
 </div>
 </div>
 
 
-<br> <br> <br>
+<br> <br> <br> <br>
 

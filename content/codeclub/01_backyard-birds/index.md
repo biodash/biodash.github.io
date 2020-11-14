@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: ef5a1acb66cac8dd
+rmd_hash: 10731d94ac9086fb
 
 ---
 
@@ -128,7 +128,7 @@ In brief, Projects help you to organize your work and to make it more portable.
 
 #### Where are we?
 
-We don't need to set our working directory, because our newly created Project is open, and we will therefore automatically be in the directory that contains the `.Rproj` file.
+We don't need to set our working directory, because our newly created Project is open, and we will therefore automatically have as our working directory the directory that contains the `.Rproj` file.
 
 To see where you are, type or copy into the console (bottom left):
 
@@ -137,7 +137,7 @@ To see where you are, type or copy into the console (bottom left):
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>    <span class='c'># Short for "get working directory"</span>
 
 <span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='o'>(</span><span class='o'>)</span>      <span class='c'># Listing files in your current directory.</span>
-           <span class='c'># This should return the `.RProj` file.</span>
+           <span class='c'># This should return at least the `.RProj` file.</span>
 </code></pre>
 
 </div>
@@ -239,8 +239,13 @@ We can download the dataset using the [`download.file()`](https://rdrr.io/r/util
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv'</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># The URL to our file:</span>
+<span class='nv'>birds_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv'</span>
+
+<span class='c'># The path to the file we want to download to:</span>
 <span class='nv'>birds_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/backyard-birds_Ohio.tsv'</span>
+
+<span class='c'># Download</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds_file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
 </code></pre>
 
@@ -253,6 +258,22 @@ Now, let's read the file into R. The `.tsv` extension ("tab-separated values") t
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span><span class='nv'>birds_file</span><span class='o'>)</span>
+
+<span class='c'>#&gt; Parsed with column specification:</span>
+<span class='c'>#&gt; cols(</span>
+<span class='c'>#&gt;   class = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='c'>#&gt;   order = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='c'>#&gt;   family = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='c'>#&gt;   genus = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='c'>#&gt;   species = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='c'>#&gt;   locality = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='c'>#&gt;   stateProvince = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='c'>#&gt;   decimalLatitude = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='c'>#&gt;   decimalLongitude = <span style='color: #00BB00;'>col_double()</span><span>,</span></span>
+<span class='c'>#&gt;   eventDate = <span style='color: #0000BB;'>col_datetime(format = "")</span><span>,</span></span>
+<span class='c'>#&gt;   species_en = <span style='color: #BB0000;'>col_character()</span><span>,</span></span>
+<span class='c'>#&gt;   range = <span style='color: #BB0000;'>col_character()</span></span>
+<span class='c'>#&gt; )</span>
 </code></pre>
 
 </div>
@@ -266,29 +287,27 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 4 - Exploring backyard birds
 ----------------------------
 
-To get a feel for our data, we can run the following commands:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span>          <span class='c'># Simply typing the name of an object will print it to screen</span>
-<span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>   <span class='c'># Same as above, but explicitly calling print()    </span>
-
-<span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>     <span class='c'># Short for "structure", for column-wise information </span>
-<span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span> <span class='c'># tidyverse version of str()</span>
-
-<span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>    <span class='c'># In RStudio, will open object in a table in an Rstudio tab.</span>
-               <span class='c'># Clicking on the object in the `Environment` pane will do the same!</span>
-</code></pre>
-
-</div>
-
 <div class="puzzle">
 
 ### Exercise 1
 
 **What's in the dataset?**
 
--   Explore the output of the commands above, and try to understand what you see. What does a single row represent, and what is in each column?
+-   Explore the output of the following commands, and try to understand what you see. What does a single row represent, and what is in each column?
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span>          <span class='c'># Type the name of an object to print it to screen</span>
+<span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>   <span class='c'># Same as above, but explicitly calling print()    </span>
+
+<span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>     <span class='c'># Short for "structure", for column-wise information </span>
+<span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span> <span class='c'># tidyverse version of str()</span>
+
+<span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>    <span class='c'># In RStudio, will open object in a table in an Rstudio tab.</span>
+               <span class='c'># Or: clicking on the object in the `Environment` pane!</span>
+</code></pre>
+
+</div>
 
 -   In particular, pay attention to the data types (e.g., "character" or `chr`) of the different columns, which several of these functions print. The output of our `read_csv()` command also printed this information -- this function parsed our column into the types we see now. Were all the columns parsed correctly?
 
@@ -316,6 +335,21 @@ To get a feel for our data, we can run the following commands:
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Just printing the glimpse() output which will show the number of rows and columns:</span>
 <span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
+
+<span class='c'>#&gt; Rows: 311,441</span>
+<span class='c'>#&gt; Columns: 12</span>
+<span class='c'>#&gt; $ class            <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Aves", "Aves", "Aves", "Aves", "Aves", "Aves", "Ave…</span></span>
+<span class='c'>#&gt; $ order            <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Passeriformes", "Passeriformes", "Passeriformes", "…</span></span>
+<span class='c'>#&gt; $ family           <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Corvidae", "Corvidae", "Corvidae", "Corvidae", "Cor…</span></span>
+<span class='c'>#&gt; $ genus            <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Cyanocitta", "Cyanocitta", "Cyanocitta", "Cyanocitt…</span></span>
+<span class='c'>#&gt; $ species          <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Cyanocitta cristata", "Cyanocitta cristata", "Cyano…</span></span>
+<span class='c'>#&gt; $ locality         <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "44805 Ashland", "45244 Cincinnati", "44132 Euclid",…</span></span>
+<span class='c'>#&gt; $ stateProvince    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohi…</span></span>
+<span class='c'>#&gt; $ decimalLatitude  <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 40.86166, 39.10666, 41.60768, 39.24236, 39.28207, 41…</span></span>
+<span class='c'>#&gt; $ decimalLongitude <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> -82.31558, -84.32972, -81.50085, -84.35545, -84.4688…</span></span>
+<span class='c'>#&gt; $ eventDate        <span style='color: #555555;font-style: italic;'>&lt;dttm&gt;</span><span> 2007-02-16, 2007-02-17, 2007-02-17, 2007-02-19, 200…</span></span>
+<span class='c'>#&gt; $ species_en       <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Blue Jay", "Blue Jay", "Blue Jay", "Blue Jay", "Blu…</span></span>
+<span class='c'>#&gt; $ range            <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span></span>
 </code></pre>
 
 </div>
@@ -325,8 +359,16 @@ To get a feel for our data, we can run the following commands:
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># You can also check the number of rows and columns directly using:</span>
 <span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>          <span class='c'># Will return "number_of_rows, number_of_columns"</span>
 
+<span class='c'>#&gt; [1] 311441     12</span>
+
+
 <span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>         <span class='c'># Will return the number of rows</span>
+
+<span class='c'>#&gt; [1] 311441</span>
+
 <span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>         <span class='c'># Will return the number of columns</span>
+
+<span class='c'>#&gt; [1] 12</span>
 </code></pre>
 
 </div>
@@ -352,7 +394,7 @@ Bonus material
 
 ### `readr` options for challenging files
 
-Note that our function call worked without specifying any additional arguments, i.e. with all the default options. It is not always this easy!
+Note that we read in our file specifying any additional arguments to the `readr()` function, i.e. with all the default options. It is not always this easy!
 
 Some options for more complex cases:
 
@@ -364,6 +406,7 @@ Some options for more complex cases:
 
     <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>my_df</span> <span class='o'>&lt;-</span> <span class='nf'>read_delim</span><span class='o'>(</span>
       file <span class='o'>=</span> <span class='s'>'file.txt'</span>,
+      sep <span class='o'>=</span> <span class='s'>'\t'</span>,               <span class='c'># Manually specify tab as delimiter</span>
       col_names <span class='o'>=</span> <span class='kc'>FALSE</span>,        <span class='c'># Don't consider the first line to be a header</span>
       skip <span class='o'>=</span> <span class='m'>3</span>,                 <span class='c'># Skip the first three lines of the file</span>
       comment <span class='o'>=</span> <span class='s'>"#"</span>,            <span class='c'># Skip any line beginning with a "#"</span>
@@ -395,13 +438,17 @@ Make the function parse the "order" column as a factor, and the "year", "month",
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Download and read the file:</span>
-<span class='nv'>birds2_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/birds_read-challenge.txt'</span>
-<span class='nv'>birds2_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/birds_read-challenge.txt'</span>
+<span class='nv'>birds2_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_read-challenge.txt'</span>
+<span class='nv'>birds2_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/backyard-birds_read-challenge.txt'</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds2_file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds2_file</span><span class='o'>)</span>
+</code></pre>
 
-<span class='c'># Your turn!</span>
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Your turn!</span>
 <span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nv'>read_</span>    <span class='c'># Complete the command</span>
-
 </code></pre>
 
 </div>
@@ -448,7 +495,6 @@ Make the function parse the "order" column as a factor, and the "year", "month",
     day <span class='o'>=</span> <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>
     <span class='o'>)</span>
   <span class='o'>)</span>
-
 </code></pre>
 
 </div>
@@ -469,8 +515,7 @@ Make the function parse the "order" column as a factor, and the "year", "month",
   skip <span class='o'>=</span> <span class='m'>1</span>,             <span class='c'># The first line is not part of the data frame</span>
   comment <span class='o'>=</span> <span class='s'>'$'</span>,        <span class='c'># Line 228 is a comment that starts with a `$`.</span>
   col_types <span class='o'>=</span> <span class='s'>'fcdiii'</span>  <span class='c'># 'f' for factor, 'c' for character,</span>
-                        <span class='c'># ... 'd' for double (=numeric), 'i' for integer.</span>
-  <span class='o'>)</span>
+  <span class='o'>)</span>                     <span class='c'># ... 'd' for double (=numeric), 'i' for integer.</span>
 
 <span class='c'># With long column type specification:</span>
 <span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>
@@ -508,13 +553,17 @@ These are generally slower than the *readr* functions, and have less sensible de
 
 If speed is important, such as when reading in very large files (\~ 100s of MBs or larger), you should consider using the `fread()` function from the *data.table* package.
 
-Finally, you can read excel files directly using the *readxl* package, Google Sheets directly from the web using the *googlesheets4* package, and non-tabular data using the base R [`readLines()`](https://rdrr.io/r/base/readLines.html) function.
+Finally, some examples of reading other types of files:
+
+-   Read excel files directly using the *readxl* package.
+-   Read Google Sheets directly from the web using the *googlesheets4* package.
+-   Read non-tabular data using the base R [`readLines()`](https://rdrr.io/r/base/readLines.html) function.
 
 </div>
 
 </div>
 
-<br> <br> <br>
+<br> <br> <br> <br>
 
 [^1]: As it is in some ways a dialect of R, the *tidyverse* can cause confusion ("tidy evaluation" in particular) and can sometimes make it seem like there is just more to learn -- because base R can't be fully ignored. Its rapid development has also meant that in some cases, new functions and approaches are being retired/soft-deprecated just a few years later.
 
