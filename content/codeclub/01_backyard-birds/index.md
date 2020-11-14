@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 10731d94ac9086fb
+rmd_hash: b8b079ba560ad7f5
 
 ---
 
@@ -357,7 +357,7 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># You can also check the number of rows and columns directly using:</span>
-<span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>          <span class='c'># Will return "number_of_rows, number_of_columns"</span>
+<span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>          <span class='c'># Will return the number of rows and columns</span>
 
 <span class='c'>#&gt; [1] 311441     12</span>
 
