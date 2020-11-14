@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 4af89d1fcc15e5ee
+rmd_hash: ef5a1acb66cac8dd
 
 ---
 
@@ -211,7 +211,7 @@ When we refer to "*base R*" as opposed to the *tidyverse*, we mean functions tha
 3 - Getting our dataset
 -----------------------
 
-We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a) from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/). Because the file was 3.1 GB large, we selected only the records from Ohio and removed some uninformative columns. We'll download the resulting 36 MB file from our Github repo.
+We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a) from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/). Because the file was 3.1 GB large, we selected only the records from Ohio and removed some uninformative columns. We'll download the resulting much smaller file (41.5 MB) from our Github repo.
 
 <div class="alert alert-note">
 
@@ -239,7 +239,7 @@ We can download the dataset using the [`download.file()`](https://rdrr.io/r/util
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/data/birds/backyard-birds_Ohio.tsv'</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv'</span>
 <span class='nv'>birds_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/backyard-birds_Ohio.tsv'</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds_file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
 </code></pre>
@@ -314,26 +314,22 @@ To get a feel for our data, we can run the following commands:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Just printing the glimpse() output to show the number of rows and columns:</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Just printing the glimpse() output which will show the number of rows and columns:</span>
 <span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
-
-<span class='c'>## Rows: 311,441</span>
-<span class='c'>## Columns: 10</span>
-<span class='c'>## $ class            &lt;chr&gt; "Aves", "Aves", "Aves", "Aves", "Aves", "Aves", "Aves", "Aves", "Aves", "Aves", "Aves", "Aves", "Aves…</span>
-<span class='c'>## $ order            &lt;chr&gt; "Passeriformes", "Passeriformes", "Passeriformes", "Passeriformes", "Passeriformes", "Passeriformes",…</span>
-<span class='c'>## $ family           &lt;chr&gt; "Corvidae", "Corvidae", "Corvidae", "Corvidae", "Corvidae", "Corvidae", "Corvidae", "Corvidae", "Corv…</span>
-<span class='c'>## $ genus            &lt;chr&gt; "Cyanocitta", "Cyanocitta", "Cyanocitta", "Cyanocitta", "Cyanocitta", "Cyanocitta", "Cyanocitta", "Cy…</span>
-<span class='c'>## $ species          &lt;chr&gt; "Cyanocitta cristata", "Cyanocitta cristata", "Cyanocitta cristata", "Cyanocitta cristata", "Cyanocit…</span>
-<span class='c'>## $ locality         &lt;chr&gt; "44805 Ashland", "45244 Cincinnati", "44132 Euclid", "45242 Cincinnati", "45246 Cincinnati", "44484 W…</span>
-<span class='c'>## $ stateProvince    &lt;chr&gt; "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohio", "Ohio…</span>
-<span class='c'>## $ decimalLatitude  &lt;dbl&gt; 40.86166, 39.10666, 41.60768, 39.24236, 39.28207, 41.23180, 41.38730, 41.31395, 41.70916, 39.96116, 3…</span>
-<span class='c'>## $ decimalLongitude &lt;dbl&gt; -82.31558, -84.32972, -81.50085, -84.35545, -84.46880, -80.75410, -81.31230, -81.68515, -83.70952, -8…</span>
-<span class='c'>## $ eventDate        &lt;dttm&gt; 2007-02-16, 2007-02-17, 2007-02-17, 2007-02-19, 2007-02-18, 2007-02-17, 2008-02-16, 2008-02-17, 2008…</span>
 </code></pre>
 
 </div>
 
--   The dataset has 311,441 rows, and 10 columns.
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># You can also check the number of rows and columns directly using:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>          <span class='c'># Will return "number_of_rows, number_of_columns"</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>         <span class='c'># Will return the number of rows</span>
+<span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>         <span class='c'># Will return the number of columns</span>
+</code></pre>
+
+</div>
 
 </details>
 
@@ -399,12 +395,12 @@ Make the function parse the "order" column as a factor, and the "year", "month",
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Download and read the file:</span>
-<span class='nv'>birds2_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/data/birds/birds_read-challenge.txt'</span>
+<span class='nv'>birds2_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/birds_read-challenge.txt'</span>
 <span class='nv'>birds2_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/birds_read-challenge.txt'</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds2_file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds2_file</span><span class='o'>)</span>
 
 <span class='c'># Your turn!</span>
-<span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nv'>read_</span>
+<span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nv'>read_</span>    <span class='c'># Complete the command</span>
 
 </code></pre>
 
