@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 3701e510fdd06458
+rmd_hash: 371e2fc4ab16c7b8
 
 ---
 
@@ -161,6 +161,7 @@ We will now load the core set of 8 *tidyverse* packages all at once. To do so, t
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># If you're working locally, and did not install it yet:</span>
 <span class='c'># install.packages("tidyverse")</span>
 
+<span class='c'># Load the tidyverse (meta)package:</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 
 <span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span><span> ─────────────────────────────────────── tidyverse 1.3.0 ──</span></span>
@@ -206,13 +207,9 @@ We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/
 
 ### The Great Backyard Bird Count
 
-<div class="highlight">
-
-<img src="GBBC_screenshot.png" width="90%" style="display: block; margin: auto;" />
-
-</div>
-
-<br>
+<p align="center">
+<img src=GBBC_screenshot.png width="100%">
+</p>
 
 The [GBBC](https://gbbc.birdcount.org/) is an annual citizen science event where everyone is encouraged to to identify and count birds in their backyard -- or anywhere else -- for at least 15 minutes, and report their sightings online. Since 2013, it is a global event, but it has been done since 1998 in the US and Canada.
 
@@ -325,7 +322,8 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Just printing the glimpse() output which will show the number of rows and columns:</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Just printing the glimpse() output,</span>
+<span class='c'># which will show the number of rows and columns:</span>
 <span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
 
 <span class='c'>#&gt; Rows: 311,441</span>
