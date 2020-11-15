@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 78ddfdcf5da36a1f
+rmd_hash: f2739d972b525922
 
 ---
 
@@ -77,7 +77,7 @@ Session summary
 1 - Create an RStudio Project
 -----------------------------
 
-Projects are an RStudio-specific concept that create a special file (`.Rproj`), primarily to designate a directory as the working directory for everything within it. We recommend creating exactly one separate Project for each research project with an R component -- and for things like Code Club.
+Projects are an RStudio-specific concept that create a special file (`.Rproj`), primarily to designate a directory as the working directory for everything within it. We recommend *creating exactly one separate Project for each research project* with an R component -- and for things like Code Club.
 
 <br>
 
@@ -128,16 +128,17 @@ In brief, Projects help you to organize your work and to make it more portable.
 
 #### Where are we?
 
-We don't need to set our working directory, because our newly created Project is open, and we will therefore automatically have as our working directory the directory that contains the `.Rproj` file.
+We don't need to set our working directory, because our newly created Project is open, and therefore, our working directory is the directory that contains the `.Rproj` file.
 
 To see where you are, type or copy into the console (bottom left):
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>    <span class='c'># Short for "get working directory"</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Print the working directory (short for "get working directory"):</span>
+<span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>
 
-<span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='o'>(</span><span class='o'>)</span>      <span class='c'># Listing files in your current directory.</span>
-           <span class='c'># This should return at least the `.RProj` file.</span>
+<span class='c'># List the files in your current directory:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='o'>(</span><span class='o'>)</span>          <span class='c'># This should print at least the `.RProj` file.</span>
 </code></pre>
 
 </div>
@@ -152,8 +153,8 @@ Create two new directories -- one for this session, and one for a dataset that w
 <span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S01'</span><span class='o'>)</span>
 
 <span class='c'># Dir for our bird data:</span>
-<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'data/birds/'</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='c'># The "recursive" argument lets us</span>
-                                            <span class='c'># create two levels at once</span>
+<span class='c'># ("recursive" to create two levels at once.)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'data/birds/'</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -172,9 +173,10 @@ We will now load the core set of 8 *tidyverse* packages all at once. To do so, t
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("tidyverse") # If you're working locally and did not install it yet</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># If you're working locally, and did not install it yet:</span>
+<span class='c'># install.packages("tidyverse")</span>
 
-<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>    <span class='c'># library() is the standard function to load R packages</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 
 <span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span><span> ─────────────────────────────────────── tidyverse 1.3.0 ──</span></span>
 
@@ -190,13 +192,13 @@ We will now load the core set of 8 *tidyverse* packages all at once. To do so, t
 
 </div>
 
-If it worked, you should get the same output as shown in the code block above: it attached 8 packages, and it warns that some of its functions are now "masking" base R functions.
+If this worked, you should get the same output as shown in the code block above: it attached 8 packages, and it warns that some of its functions are now "masking" base R functions.
 
 <div class="alert alert-note">
 
 <div>
 
-The *tidyverse* is a very popular and useful ecosystem of R packages for data analysis, which we will be using a lot in Code Club (despite some disadvantages[^1]).
+The *tidyverse* is a very popular and useful ecosystem of R packages for data analysis, which we will be using a lot in Code Club.
 
 When we refer to "*base R*" as opposed to the *tidyverse*, we mean functions that are loaded in R by default (without loading a package), and that can perform similar operations in a different way.
 
@@ -245,7 +247,7 @@ We can download the dataset using the [`download.file()`](https://rdrr.io/r/util
 <span class='c'># The path to the file we want to download to:</span>
 <span class='nv'>birds_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/backyard-birds_Ohio.tsv'</span>
 
-<span class='c'># Download</span>
+<span class='c'># Download:</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds_file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
 </code></pre>
 
@@ -253,7 +255,7 @@ We can download the dataset using the [`download.file()`](https://rdrr.io/r/util
 
 #### Read the data
 
-Now, let's read the file into R. The `.tsv` extension ("tab-separated values") tells us this is a plain text file in which columns are separated by tabs, so we will use a convenience function from the *readr* package (which is part of the core set of 8 *tidyverse* packages, so it is already loaded) for exactly this type of file:
+Now, let's read the file into R. The `.tsv` extension ("tab-separated values") tells us this is a plain text file in which columns are separated by tabs, so we will use a convenience function from the *readr* package (which is loaded as part of the core set *tidyverse* packages) for exactly this type of file:
 
 <div class="highlight">
 
@@ -297,14 +299,19 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span>          <span class='c'># Type the name of an object to print it to screen</span>
-<span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>   <span class='c'># Same as above, but explicitly calling print()    </span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Type an object's name to print it to screen:</span>
+<span class='nv'>birds</span>
+<span class='c'># Same as above, but explicitly calling print():</span>
+<span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>   
 
-<span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>     <span class='c'># Short for "structure", for column-wise information </span>
-<span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span> <span class='c'># tidyverse version of str()</span>
+<span class='c'># For column-wise information (short for "structure"):</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
+<span class='c'># tidyverse version of str():</span>
+<span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
 
-<span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>    <span class='c'># In RStudio, will open object in a table in an Rstudio tab.</span>
-               <span class='c'># Or: clicking on the object in the `Environment` pane!</span>
+<span class='c'># In RStudio, open object in a separate tab:</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
+<span class='c'># (Or: click on the object in the `Environment` pane.)</span>
 </code></pre>
 
 </div>
@@ -313,15 +320,15 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 
 -   How many rows and how many columns does the dataset have?
 
--   What are some questions you would like to explore with this dataset? We'll collect some of these and try to answer them in later sessions. If your group has sufficient R skills already, you are also welcome to go ahead and try to answer one or more of these questions already.
+-   What are some questions you would like to explore with this dataset? We'll collect some of these and try to answer them in later sessions. If your group has sufficient R skills already, you are also welcome to go ahead and try to answer one or more of these questions.
 
 <details>
 
 <summary> Hints (click here) </summary> <br>
 
--   Note that in R, `dbl` (for "double") and `num` (for "numeric") are both used, and almost interchangeably so, for floating point numbers. (Integers are a separate class that are simply called "integers" and abbreviated as `int`, but we have no integer columns in this dataset.)
+-   Note that in R, `dbl` (for "double") and `num` (for "numeric") are both used, and almost interchangeably so, for floating point numbers. (Integers are a separate type that are simply called "integers" and abbreviated as `int`, but we have no integer columns in this dataset.)
 
--   `read_tsv()` parsed our date as a "date-time" (`dttm` or `POSIXct` for short), which contains both a date and a time (this is not a common format for most R users). In our case, it looks like the time is always "00:00:00" and thus doesn't provide any information.
+-   `read_tsv()` parsed our date as a "date-time" (`dttm` or `POSIXct` for short), which contains both a date and a time. In our case, it looks like the time is always "00:00:00" and thus doesn't provide any information.
 
 </details>
 
@@ -386,6 +393,8 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 Bonus material
 --------------
 
+If you're breakout group is done with Exercise 1, you can have a look at the bonus material below which includes another exercise. You can also have a look at this as homework. Or not at all!
+
 <br>
 
 <div class="alert alert-note">
@@ -394,11 +403,11 @@ Bonus material
 
 ### `readr` options for challenging files
 
-Note that we read in our file specifying any additional arguments to the `readr()` function, i.e. with all the default options. It is not always this easy!
+Note that we read in our file without specifying any arguments other than the file name to the `read_tsv()` function, i.e. with all the default options. It is not always this easy!
 
 Some options for more complex cases:
 
--   The more general counterpart of this function is `read_delim()`, which allows you to specify the delimiter using an argument using the `sep` argument, e.g. `sep="\t"` for tabs.
+-   The more general counterpart of this function is `read_delim()`, which allows you to specify the delimiter using the `sep` argument, e.g. `sep="\t"` for tabs.
 
 -   There are also arguments to these functions for when you need to skip lines, when you don't have column headers, when you need to specify the column types of some or all the columns, and so forth -- see this example:  
 
@@ -406,13 +415,13 @@ Some options for more complex cases:
 
     <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>my_df</span> <span class='o'>&lt;-</span> <span class='nf'>read_delim</span><span class='o'>(</span>
       file <span class='o'>=</span> <span class='s'>'file.txt'</span>,
-      sep <span class='o'>=</span> <span class='s'>'\t'</span>,               <span class='c'># Manually specify tab as delimiter</span>
-      col_names <span class='o'>=</span> <span class='kc'>FALSE</span>,        <span class='c'># Don't consider the first line to be a header</span>
-      skip <span class='o'>=</span> <span class='m'>3</span>,                 <span class='c'># Skip the first three lines of the file</span>
+      sep <span class='o'>=</span> <span class='s'>'\t'</span>,               <span class='c'># Specify tab as delimiter</span>
+      col_names <span class='o'>=</span> <span class='kc'>FALSE</span>,        <span class='c'># First line is not a header</span>
+      skip <span class='o'>=</span> <span class='m'>3</span>,                 <span class='c'># Skip the first three lines</span>
       comment <span class='o'>=</span> <span class='s'>"#"</span>,            <span class='c'># Skip any line beginning with a "#"</span>
       col_types <span class='o'>=</span> <span class='nf'>cols</span><span class='o'>(</span>         <span class='c'># Specify column types</span>
-        col1 <span class='o'>=</span> <span class='nf'>col_character</span><span class='o'>(</span><span class='o'>)</span>, <span class='c'># ..Note that we only need to specify columns </span>
-        col2 <span class='o'>=</span> <span class='nf'>col_double</span><span class='o'>(</span><span class='o'>)</span>     <span class='c'># ..for which we need non-automatic typing</span>
+        col1 <span class='o'>=</span> <span class='nf'>col_character</span><span class='o'>(</span><span class='o'>)</span>, <span class='c'># ..We only need to specify columns for </span>
+        col2 <span class='o'>=</span> <span class='nf'>col_double</span><span class='o'>(</span><span class='o'>)</span>     <span class='c'># ..which we need non-automatic typing</span>
         <span class='o'>)</span>
       <span class='o'>)</span>
     </code></pre>
@@ -463,7 +472,7 @@ Make the function parse the "order" column as a factor, and the "year", "month",
 
 -   Note that *readr* erroneously parses `month` as a character column if you don't manually specify its type.
 
--   Note that you can also use a succinct column type specification like `col_types = 'fc'`, which would parse, for a two-column file, the first column as a factor and the second as a character -- type e.g. `?read_tsv` for details in the help file.
+-   Note that you can also use a succinct column type specification like `col_types = 'fc'`, which would parse, for a two-column file, the first column as a factor and the second as a character -- type e.g. `?read_tsv` for details.
 
 </details>
 
@@ -510,21 +519,22 @@ Make the function parse the "order" column as a factor, and the "year", "month",
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># With succinct column type specification:</span>
-<span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>     <span class='c'># `read_csv()` because the file is comma-delimited</span>
+<span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>     <span class='c'># `read_csv()`: file is comma-delimited</span>
   file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
-  skip <span class='o'>=</span> <span class='m'>1</span>,             <span class='c'># The first line is not part of the data frame</span>
-  comment <span class='o'>=</span> <span class='s'>'$'</span>,        <span class='c'># Line 228 is a comment that starts with a `$`.</span>
+  skip <span class='o'>=</span> <span class='m'>1</span>,             <span class='c'># First line is not part of the dataframe</span>
+  comment <span class='o'>=</span> <span class='s'>'$'</span>,        <span class='c'># Line 228 is a comment that starts with `$`</span>
   col_types <span class='o'>=</span> <span class='s'>'fcdiii'</span>  <span class='c'># 'f' for factor, 'c' for character,</span>
-  <span class='o'>)</span>                     <span class='c'># ... 'd' for double (=numeric), 'i' for integer.</span>
+  <span class='o'>)</span>                     <span class='c'># ..'d' for double(=numeric),</span>
+                        <span class='c'># ..'i' for integer.</span>
 
 <span class='c'># With long column type specification:</span>
 <span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>
   file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
   skip <span class='o'>=</span> <span class='m'>1</span>,
   comment <span class='o'>=</span> <span class='s'>'$'</span>,
-  col_types <span class='o'>=</span> <span class='nf'>cols</span><span class='o'>(</span>        <span class='c'># Note that we can omit columns for which we</span>
-    order <span class='o'>=</span> <span class='nf'>col_factor</span><span class='o'>(</span><span class='o'>)</span>,  <span class='c'># ... accept the automatic parsing,</span>
-    year <span class='o'>=</span>  <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>, <span class='c'># ... when using the long specification. </span>
+  col_types <span class='o'>=</span> <span class='nf'>cols</span><span class='o'>(</span>        <span class='c'># We can omit columns for which we</span>
+    order <span class='o'>=</span> <span class='nf'>col_factor</span><span class='o'>(</span><span class='o'>)</span>,  <span class='c'># ..accept the automatic parsing,</span>
+    year <span class='o'>=</span>  <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>, <span class='c'># ..when using the long specification. </span>
     month <span class='o'>=</span> <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>,
     day <span class='o'>=</span> <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>
     <span class='o'>)</span>
@@ -549,7 +559,7 @@ Make the function parse the "order" column as a factor, and the "year", "month",
 
 There are also functions in *base R* that read tabular data, such as [`read.table()`](https://rdrr.io/r/utils/read.table.html) and [`read.delim()`](https://rdrr.io/r/utils/read.table.html).
 
-These are generally slower than the *readr* functions, and have less sensible default options to their arguments. Particularly relevant is how columns with characters (strings) are parsed -- until R 4.0, which was released earlier this year, base R's default behavior was to parse them as **factors**, which is generally not desirable[^2]. *readr* functions will never convert columns with strings to factors.
+These are generally slower than the *readr* functions, and have less sensible default options to their arguments. Particularly relevant is how columns with characters (strings) are parsed -- until R 4.0, which was released earlier this year, base R's default behavior was to parse them as **factors**, and this is generally not desirable[^1]. *readr* functions will never convert columns with strings to factors.
 
 If speed is important, such as when reading in very large files (\~ 100s of MBs or larger), you should consider using the `fread()` function from the *data.table* package.
 
@@ -565,7 +575,5 @@ Finally, some examples of reading other types of files:
 
 <br> <br> <br> <br>
 
-[^1]: As it is in some ways a dialect of R, the *tidyverse* can cause confusion ("tidy evaluation" in particular) and can sometimes make it seem like there is just more to learn -- because base R can't be fully ignored. Its rapid development has also meant that in some cases, new functions and approaches are being retired/soft-deprecated just a few years later.
-
-[^2]: You can check which version of R you are running by typing [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html). You can also check directly how strings are read by default with [`default.stringsAsFactors()`](https://rdrr.io/r/base/data.frame.html). To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your [`read.table()`](https://rdrr.io/r/utils/read.table.html) / [`read.delim()`](https://rdrr.io/r/utils/read.table.html) function call.
+[^1]: You can check which version of R you are running by typing [`sessionInfo()`](https://rdrr.io/r/utils/sessionInfo.html). You can also check directly how strings are read by default with [`default.stringsAsFactors()`](https://rdrr.io/r/base/data.frame.html). To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your [`read.table()`](https://rdrr.io/r/utils/read.table.html) / [`read.delim()`](https://rdrr.io/r/utils/read.table.html) function call.
 

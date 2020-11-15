@@ -86,7 +86,7 @@ it will be useful to have a look at some of the resources listed on our
 
 Projects are an RStudio-specific concept that create a special file (`.Rproj`),
 primarily to designate a directory as the working directory for everything within it.
-We recommend creating exactly one separate Project for each research project
+We recommend *creating exactly one separate Project for each research project*
 with an R component -- 
 and for things like Code Club.
 
@@ -153,17 +153,17 @@ which will open RStudio *and* the Project.)
 #### Where are we?
 
 We don't need to set our working directory,
-because our newly created Project is open,
-and we will therefore automatically have as our working directory
-the directory that contains the `.Rproj` file.
+because our newly created Project is open, and therefore,
+our working directory is the directory that contains the `.Rproj` file.
 
 To see where you are, type or copy into the console (bottom left):
 
 ```{r, eval = FALSE}
-getwd()    # Short for "get working directory"
+# Print the working directory (short for "get working directory"):
+getwd()
 
-dir()      # Listing files in your current directory.
-           # This should return at least the `.RProj` file.
+# List the files in your current directory:
+dir()          # This should print at least the `.RProj` file.
 ```
 
 #### Create directories
@@ -177,8 +177,8 @@ and one for a dataset that we will download shortly
 dir.create('S01')
 
 # Dir for our bird data:
-dir.create('data/birds/', recursive = TRUE) # The "recursive" argument lets us
-                                            # create two levels at once
+# ("recursive" to create two levels at once.)
+dir.create('data/birds/', recursive = TRUE)
 ```
 
 #### Create a script
@@ -200,25 +200,20 @@ or by pressing `Ctrl Enter` (Windows/Linux,
 this should also work in your browser) or `⌘ Enter` (Mac).
 
 ```{r, eval = TRUE}
-# install.packages("tidyverse") # If you're working locally and did not install it yet
+# If you're working locally, and did not install it yet:
+# install.packages("tidyverse")
 
-library(tidyverse)    # library() is the standard function to load R packages
+library(tidyverse)
 ```
 
-If it worked, you should get the same output as shown in the code block above:
+If this worked, you should get the same output as shown in the code block above:
 it attached 8 packages,
 and it warns that some of its functions are now "masking" base R functions.
 
 <div class="alert alert-note">
 <div>
 The *tidyverse* is a very popular and useful ecosystem of R packages
-for data analysis, which we will be using a lot in Code Club (despite some
-disadvantages^[As it is in some ways a dialect of R, the *tidyverse* can
-cause confusion ("tidy evaluation" in particular) and can sometimes make it seem like
-there is just more to learn -- because base R can't be fully ignored.
-Its rapid development has also meant that in some cases,
-new functions and approaches are being retired/soft-deprecated just
-a few years later.]).
+for data analysis, which we will be using a lot in Code Club.
 
 When we refer to "*base R*" as opposed to the *tidyverse*,
 we mean functions that are loaded in R by default (without loading a package),
@@ -269,7 +264,7 @@ birds_file_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/m
 # The path to the file we want to download to:
 birds_file <- 'data/birds/backyard-birds_Ohio.tsv'
 
-# Download
+# Download:
 download.file(url = birds_file_url, destfile = birds_file)
 ```
 
@@ -279,7 +274,7 @@ Now, let's read the file into R.
 The `.tsv` extension ("tab-separated values") tells us this is a plain text
 file in which columns are separated by tabs,
 so we will use a convenience function from the *readr* package 
-(which is part of the core set of 8 *tidyverse* packages, so it is already loaded)
+(which is loaded as part of the core set *tidyverse* packages)
 for exactly this type of file:
 
 ```{r}
@@ -306,14 +301,19 @@ column can contain a different type of data (numeric, characters/strings, etc).
   What does a single row represent, and what is in each column?
 
 ```{r, eval = FALSE}
-birds          # Type the name of an object to print it to screen
-print(birds)   # Same as above, but explicitly calling print()    
+# Type an object's name to print it to screen:
+birds
+# Same as above, but explicitly calling print():
+print(birds)   
 
-str(birds)     # Short for "structure", for column-wise information 
-glimpse(birds) # tidyverse version of str()
+# For column-wise information (short for "structure"):
+str(birds)
+# tidyverse version of str():
+glimpse(birds)
 
-View(birds)    # In RStudio, will open object in a table in an Rstudio tab.
-               # Or: clicking on the object in the `Environment` pane!
+# In RStudio, open object in a separate tab:
+View(birds)
+# (Or: click on the object in the `Environment` pane.)
 ```
 
 - In particular, pay attention to the data types (e.g., "character" or `chr`)
@@ -327,7 +327,7 @@ View(birds)    # In RStudio, will open object in a table in an Rstudio tab.
 - What are some questions you would like to explore with this dataset?
   We'll collect some of these and try to answer them in later sessions.
   If your group has sufficient R skills already, you are also welcome
-  to go ahead and try to answer one or more of these questions already.
+  to go ahead and try to answer one or more of these questions.
 
 <details>
   <summary>
@@ -337,12 +337,12 @@ View(birds)    # In RStudio, will open object in a table in an Rstudio tab.
 
 - Note that in R, `dbl` (for "double") and `num` (for "numeric") are both used,
   and almost interchangeably so, for floating point numbers.
-  (Integers are a separate class that are simply called "integers" and
+  (Integers are a separate type that are simply called "integers" and
   abbreviated as `int`,
   but we have no integer columns in this dataset.)
 
 - `read_tsv()` parsed our date as a "date-time" (`dttm` or `POSIXct` for short),
-  which contains both a date and a time (this is not a common format for most R users).
+  which contains both a date and a time.
   In our case, it looks like the time is always "00:00:00" and thus
   doesn't provide any information.
 
@@ -384,6 +384,10 @@ ncol(birds)         # Will return the number of columns
 
 ## Bonus material
 
+If you're breakout group is done with Exercise 1, you can have a look at the
+bonus material below which includes another exercise.
+You can also have a look at this as homework. Or not at all!
+
 <br>
 
 
@@ -392,15 +396,15 @@ ncol(birds)         # Will return the number of columns
 
 ### `readr` options for challenging files
 
-Note that we read in our file specifying any additional arguments to the
-`readr()` function,
+Note that we read in our file without specifying any arguments other than the
+file name to the `read_tsv()` function,
 i.e. with all the default options.
 It is not always this easy!
 
 Some options for more complex cases:
 
 - The more general counterpart of this function is `read_delim()`,
-  which allows you to specify the delimiter using an argument using the `sep`
+  which allows you to specify the delimiter using the `sep`
   argument, e.g. `sep="\t"` for tabs.
 
 - There are also arguments to these functions for when you need to skip lines,
@@ -409,13 +413,13 @@ Some options for more complex cases:
   ```{r, eval = FALSE}
   my_df <- read_delim(
     file = 'file.txt',
-    sep = '\t',               # Manually specify tab as delimiter
-    col_names = FALSE,        # Don't consider the first line to be a header
-    skip = 3,                 # Skip the first three lines of the file
+    sep = '\t',               # Specify tab as delimiter
+    col_names = FALSE,        # First line is not a header
+    skip = 3,                 # Skip the first three lines
     comment = "#",            # Skip any line beginning with a "#"
     col_types = cols(         # Specify column types
-      col1 = col_character(), # ..Note that we only need to specify columns 
-      col2 = col_double()     # ..for which we need non-automatic typing
+      col1 = col_character(), # ..We only need to specify columns for 
+      col2 = col_double()     # ..which we need non-automatic typing
       )
     )
   ```
@@ -472,7 +476,7 @@ birds2 <- read_    # Complete the command
 - Note that you can also use a succinct column type specification like
   `col_types = 'fc'`, which would parse, for a two-column file,
   the first column as a factor and the second as a character --
-  type e.g. `?read_tsv` for details in the help file.
+  type e.g. `?read_tsv` for details.
 
 </details>
 
@@ -521,21 +525,22 @@ birds2 <- read_csv(
 
 ```{r}
 # With succinct column type specification:
-birds2 <- read_csv(     # `read_csv()` because the file is comma-delimited
+birds2 <- read_csv(     # `read_csv()`: file is comma-delimited
   file = birds2_file,
-  skip = 1,             # The first line is not part of the data frame
-  comment = '$',        # Line 228 is a comment that starts with a `$`.
+  skip = 1,             # First line is not part of the dataframe
+  comment = '$',        # Line 228 is a comment that starts with `$`
   col_types = 'fcdiii'  # 'f' for factor, 'c' for character,
-  )                     # ... 'd' for double (=numeric), 'i' for integer.
+  )                     # ..'d' for double(=numeric),
+                        # ..'i' for integer.
 
 # With long column type specification:
 birds2 <- read_csv(
   file = birds2_file,
   skip = 1,
   comment = '$',
-  col_types = cols(        # Note that we can omit columns for which we
-    order = col_factor(),  # ... accept the automatic parsing,
-    year =  col_integer(), # ... when using the long specification. 
+  col_types = cols(        # We can omit columns for which we
+    order = col_factor(),  # ..accept the automatic parsing,
+    year =  col_integer(), # ..when using the long specification. 
     month = col_integer(),
     day = col_integer()
     )
@@ -563,7 +568,7 @@ and have less sensible default options to their arguments.
 Particularly relevant is how columns with characters (strings) are parsed --
 until R 4.0, which was released earlier this year,
 base R's default behavior was to parse them as **factors**,
-which is generally not desirable^[You can check which version of R you are running by typing `sessionInfo()`.
+and this is generally not desirable^[You can check which version of R you are running by typing `sessionInfo()`.
 You can also check directly how strings are read by default
 with `default.stringsAsFactors()`.
 To avoid conversion to factors, specify `stringsAsFactors = FALSE` in your
