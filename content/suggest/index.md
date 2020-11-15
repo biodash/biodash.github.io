@@ -1,4 +1,8 @@
 
+---
+toc: true
+---
+
 # Suggest a topic or event
 
 ----
