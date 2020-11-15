@@ -26,13 +26,13 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: f2739d972b525922
+rmd_hash: 3701e510fdd06458
 
 ---
 
-------------------------------------------------------------------------
-
 <br>
+
+------------------------------------------------------------------------
 
 Prep homework
 -------------
@@ -52,21 +52,6 @@ If you're able to do so, please open RStudio again a bit before Code Club starts
 #### New to R?
 
 If you're completely new to R, it will be useful to have a look at some of the resources listed on our [New to R?](/codeclub-novice/) page prior to Code Club.
-
-<br>
-
-------------------------------------------------------------------------
-
-Session summary
----------------
-
--   Introducing Code Club
-
--   Making sure everyone has a working RStudio session
-
--   RStudio Projects & orienting ourselves
-
--   Getting started with data from the Great Backyard Bird Count
 
 <br>
 
@@ -237,7 +222,7 @@ The [GBBC](https://gbbc.birdcount.org/) is an annual citizen science event where
 
 #### Download the data
 
-We can download the dataset using the [`download.file()`](https://rdrr.io/r/utils/download.file.html) function:
+Let's download the dataset using the [`download.file()`](https://rdrr.io/r/utils/download.file.html) function:
 
 <div class="highlight">
 
@@ -393,7 +378,7 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 Bonus material
 --------------
 
-If you're breakout group is done with Exercise 1, you can have a look at the bonus material below which includes another exercise. You can also have a look at this as homework. Or not at all!
+If your breakout group is done with Exercise 1, you can have a look at the bonus material below which includes another exercise. You can also have a look at this as homework. Or not at all!
 
 <br>
 
@@ -403,7 +388,7 @@ If you're breakout group is done with Exercise 1, you can have a look at the bon
 
 ### `readr` options for challenging files
 
-Note that we read in our file without specifying any arguments other than the file name to the `read_tsv()` function, i.e. with all the default options. It is not always this easy!
+Earlier, we successfully read in our file without specifying any arguments other than the file name to the `read_tsv()` function, i.e. with all the default options. It is not always this easy!
 
 Some options for more complex cases:
 
