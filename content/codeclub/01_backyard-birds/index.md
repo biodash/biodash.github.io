@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: b8b079ba560ad7f5
+rmd_hash: 78ddfdcf5da36a1f
 
 ---
 
@@ -313,7 +313,7 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 
 -   How many rows and how many columns does the dataset have?
 
--   What are some simple questions you would like to answer using this dataset? We'll collect some of these and try to answer them in later sessions.
+-   What are some questions you would like to explore with this dataset? We'll collect some of these and try to answer them in later sessions. If your group has sufficient R skills already, you are also welcome to go ahead and try to answer one or more of these questions already.
 
 <details>
 
