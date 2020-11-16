@@ -275,7 +275,7 @@
     
       <meta property="article:published_time" content="2020-11-04T00:00:00&#43;00:00">
     
-    <meta property="article:modified_time" content="2020-11-15T17:03:12-05:00">
+    <meta property="article:modified_time" content="2020-11-16T08:40:47-05:00">
   
 
   
@@ -689,7 +689,7 @@
   <span class="article-date">
     
     
-    Nov 15, 2020
+    Nov 16, 2020
   </span>
   
 
@@ -812,7 +812,7 @@
 <p>After RStudio automatically reloads, you should see the file ending in <code>.Rproj</code> in the RStudio <code>Files</code> tab in the lower right pane, and you will have the Project open. All done for now!</p>
 </li>
 </ul>
-<p>(For future Code Club sessions, OSC users will have the Project automatically opened upon opening RStudio Server. If you&rsquo;re working locally and also using RStudio outside of this Project, you can open it by <code>File</code> &gt; <code>Open Project</code> inside RStudio, or by clicking the <code>.Rproj</code> file in your file browser, which will open RStudio <em>and</em> the Project.)</p>
+<p>(For future Code Club sessions: RStudio will by default reopen the most recently used Project, and therefore, OSC users will have the Project automatically opened. If you&rsquo;re working locally and are also using other Projects, you can open this Project with <code>File</code> &gt; <code>Open Project</code> inside RStudio, or by clicking the <code>.Rproj</code> file in your file browser, which will open RStudio <em>and</em> the Project.)</p>
 <br>
 <hr>
 <h2 id="2---orienting-ourselves">2 - Orienting ourselves</h2>
@@ -820,7 +820,7 @@
 <p>We don&rsquo;t need to set our working directory, because our newly created Project is open, and therefore, our working directory is the directory that contains the <code>.Rproj</code> file.</p>
 <p>To see where you are, type or copy into the console (bottom left):</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Print the working directory (short for "get working directory"):</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Print the working directory:</span>
 <span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='c'># List the files in your current directory:</span>
@@ -881,15 +881,15 @@
 <h2 id="3---getting-our-dataset">3 - Getting our dataset</h2>
 <p>We downloaded a Great Backyard Bird Count (GBBC) 
 <a href="https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a" target="_blank" rel="noopener">dataset</a> from the 
-<a href="https://www.gbif.org/" target="_blank" rel="noopener">Global Biodiversity Information Facility (GBIF)</a>. Because the file was 3.1 GB large, we selected only the records from Ohio and removed some uninformative columns. We&rsquo;ll download the resulting much smaller file (41.5 MB) from our Github repo.</p>
+<a href="https://www.gbif.org/" target="_blank" rel="noopener">Global Biodiversity Information Facility (GBIF)</a>. Because the file was 3.1 GB large, we selected only the records from Ohio and removed some uninformative columns. We also added columns with English names and the breeding range for each species. We&rsquo;ll download the resulting much smaller file (41.5 MB) from our Github repo.</p>
 <div class="alert alert-note">
 <div>
 <h3 id="the-great-backyard-bird-count">The Great Backyard Bird Count</h3>
 <p align="center">
-<img src=GBBC_screenshot.png width="100%">
+<img src=GBBC_screenshot.png width="95%">
 </p>
 <p>The 
-<a href="https://gbbc.birdcount.org/" target="_blank" rel="noopener">GBBC</a> is an annual citizen science event where everyone is encouraged to to identify and count birds in their backyard &ndash; or anywhere else &ndash; for at least 15 minutes, and report their sightings online. Since 2013, it is a global event, but it has been done since 1998 in the US and Canada.</p>
+<a href="https://gbbc.birdcount.org/" target="_blank" rel="noopener">GBBC</a> is an annual citizen science event where everyone is encouraged to to identify and count birds in their backyard &ndash; or anywhere else &ndash; for at least 15 minutes, and report their sightings online. Since 2013, it is a global event, but it has been organized in the US and Canada since 1998.</p>
 </div>
 </div>
 <h4 id="download-the-data">Download the data</h4>
@@ -928,7 +928,7 @@
 <span class='c'>#&gt; )</span>
 </code></pre>
 </div>
-<p>Done! We have now read our data into a <em>tibble</em>, which is a type of data frame (formally a <em>data.frame</em>): R&rsquo;s object type to deals with tabular data wherein each column can contain a different type of data (numeric, characters/strings, etc).</p>
+<p>Done! We have now read our data into a <em>tibble</em>, which is a type of data frame (formally a <em>data.frame</em>): R&rsquo;s object class to deal with tabular data wherein each column can contain a different type of data (numeric, characters/strings, etc).</p>
 <br>
 <hr>
 <h2 id="4---exploring-backyard-birds">4 - Exploring backyard birds</h2>
@@ -936,8 +936,21 @@
 <h3 id="exercise-1">Exercise 1</h3>
 <p><strong>What&rsquo;s in the dataset?</strong></p>
 <ul>
-<li>Explore the output of the following commands, and try to understand what you see. What does a single row represent, and what is in each column?</li>
+<li>
+<p>Explore the dataset using some functions and methods you may know to get a quick overview of data(frames), and try to understand what you see. What does a single row represent, and what is in each column? (Be sure to check out the hints below at some point, especially if you&rsquo;re stuck.)</p>
+</li>
+<li>
+<p>Pay attention to the data types (e.g., &ldquo;character&rdquo; or <code>chr</code>) of the different columns, which several of these functions print. The output of our <code>read_csv()</code> command also printed this information &ndash; this function parsed our columns as the types we see now. Were all the columns parsed correctly?</p>
+</li>
+<li>
+<p>How many rows and how many columns does the dataset have?</p>
+</li>
+<li>
+<p>What are some questions you would like to explore with this dataset? We&rsquo;ll collect some of these and try to answer them in later sessions. If your group has sufficient R skills already, you are also welcome to go ahead and try to answer one or more of these questions.</p>
+</li>
 </ul>
+<details>
+<summary> Hints (click here) </summary> <br>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Type an object's name to print it to screen:</span>
 <span class='nv'>birds</span>
@@ -951,22 +964,8 @@
 
 <span class='c'># In RStudio, open object in a separate tab:</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
-<span class='c'># (Or: click on the object in the `Environment` pane.)</span>
 </code></pre>
 </div>
-<ul>
-<li>
-<p>In particular, pay attention to the data types (e.g., &ldquo;character&rdquo; or <code>chr</code>) of the different columns, which several of these functions print. The output of our <code>read_csv()</code> command also printed this information &ndash; this function parsed our column into the types we see now. Were all the columns parsed correctly?</p>
-</li>
-<li>
-<p>How many rows and how many columns does the dataset have?</p>
-</li>
-<li>
-<p>What are some questions you would like to explore with this dataset? We&rsquo;ll collect some of these and try to answer them in later sessions. If your group has sufficient R skills already, you are also welcome to go ahead and try to answer one or more of these questions.</p>
-</li>
-</ul>
-<details>
-<summary> Hints (click here) </summary> <br>
 <ul>
 <li>
 <p>Note that in R, <code>dbl</code> (for &ldquo;double&rdquo;) and <code>num</code> (for &ldquo;numeric&rdquo;) are both used, and almost interchangeably so, for floating point numbers. (Integers are a separate type that are simply called &ldquo;integers&rdquo; and abbreviated as <code>int</code>, but we have no integer columns in this dataset.)</p>
@@ -1125,7 +1124,7 @@
   skip <span class='o'>=</span> <span class='m'>1</span>,             <span class='c'># First line is not part of the dataframe</span>
   comment <span class='o'>=</span> <span class='s'>'$'</span>,        <span class='c'># Line 228 is a comment that starts with `$`</span>
   col_types <span class='o'>=</span> <span class='s'>'fcdiii'</span>  <span class='c'># 'f' for factor, 'c' for character,</span>
-  <span class='o'>)</span>                     <span class='c'># ..'d' for double(=numeric),</span>
+  <span class='o'>)</span>                     <span class='c'># ..'d' for double (=numeric),</span>
                         <span class='c'># ..'i' for integer.</span>
 
 <span class='c'># With long column type specification:</span>
