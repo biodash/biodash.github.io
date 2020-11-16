@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 371e2fc4ab16c7b8
+rmd_hash: e8e4091a1a564ed7
 
 ---
 
@@ -102,7 +102,7 @@ In brief, Projects help you to organize your work and to make it more portable.
 
 -   After RStudio automatically reloads, you should see the file ending in `.Rproj` in the RStudio `Files` tab in the lower right pane, and you will have the Project open. All done for now!
 
-(For future Code Club sessions, OSC users will have the Project automatically opened upon opening RStudio Server. If you're working locally and also using RStudio outside of this Project, you can open it by `File` \> `Open Project` inside RStudio, or by clicking the `.Rproj` file in your file browser, which will open RStudio *and* the Project.)
+(For future Code Club sessions: RStudio will by default reopen the most recently used Project, and therefore, OSC users will have the Project automatically opened. If you're working locally and are also using other Projects, you can open this Project with `File` \> `Open Project` inside RStudio, or by clicking the `.Rproj` file in your file browser, which will open RStudio *and* the Project.)
 
 <br>
 
@@ -119,7 +119,7 @@ To see where you are, type or copy into the console (bottom left):
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Print the working directory (short for "get working directory"):</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Print the working directory:</span>
 <span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='c'># List the files in your current directory:</span>
@@ -199,7 +199,7 @@ When we refer to "*base R*" as opposed to the *tidyverse*, we mean functions tha
 3 - Getting our dataset
 -----------------------
 
-We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a) from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/). Because the file was 3.1 GB large, we selected only the records from Ohio and removed some uninformative columns. We'll download the resulting much smaller file (41.5 MB) from our Github repo.
+We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/dataset/82cb293c-f762-11e1-a439-00145eb45e9a) from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/). Because the file was 3.1 GB large, we selected only the records from Ohio and removed some uninformative columns. We also added columns with English names and the breeding range for each species. We'll download the resulting much smaller file (41.5 MB) from our Github repo.
 
 <div class="alert alert-note">
 
@@ -208,10 +208,10 @@ We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/
 ### The Great Backyard Bird Count
 
 <p align="center">
-<img src=GBBC_screenshot.png width="100%">
+<img src=GBBC_screenshot.png width="95%">
 </p>
 
-The [GBBC](https://gbbc.birdcount.org/) is an annual citizen science event where everyone is encouraged to to identify and count birds in their backyard -- or anywhere else -- for at least 15 minutes, and report their sightings online. Since 2013, it is a global event, but it has been done since 1998 in the US and Canada.
+The [GBBC](https://gbbc.birdcount.org/) is an annual citizen science event where everyone is encouraged to to identify and count birds in their backyard -- or anywhere else -- for at least 15 minutes, and report their sightings online. Since 2013, it is a global event, but it has been organized in the US and Canada since 1998.
 
 </div>
 
@@ -262,7 +262,7 @@ Now, let's read the file into R. The `.tsv` extension ("tab-separated values") t
 
 </div>
 
-Done! We have now read our data into a *tibble*, which is a type of data frame (formally a *data.frame*): R's object type to deals with tabular data wherein each column can contain a different type of data (numeric, characters/strings, etc).
+Done! We have now read our data into a *tibble*, which is a type of data frame (formally a *data.frame*): R's object class to deal with tabular data wherein each column can contain a different type of data (numeric, characters/strings, etc).
 
 <br>
 
@@ -277,7 +277,17 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 
 **What's in the dataset?**
 
--   Explore the output of the following commands, and try to understand what you see. What does a single row represent, and what is in each column?
+-   Explore the dataset using some functions and methods you may know to get a quick overview of data(frames), and try to understand what you see. What does a single row represent, and what is in each column? (Be sure to check out the hints below at some point, especially if you're stuck.)
+
+-   Pay attention to the data types (e.g., "character" or `chr`) of the different columns, which several of these functions print. The output of our `read_csv()` command also printed this information -- this function parsed our columns as the types we see now. Were all the columns parsed correctly?
+
+-   How many rows and how many columns does the dataset have?
+
+-   What are some questions you would like to explore with this dataset? We'll collect some of these and try to answer them in later sessions. If your group has sufficient R skills already, you are also welcome to go ahead and try to answer one or more of these questions.
+
+<details>
+
+<summary> Hints (click here) </summary> <br>
 
 <div class="highlight">
 
@@ -293,20 +303,9 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 
 <span class='c'># In RStudio, open object in a separate tab:</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
-<span class='c'># (Or: click on the object in the `Environment` pane.)</span>
 </code></pre>
 
 </div>
-
--   In particular, pay attention to the data types (e.g., "character" or `chr`) of the different columns, which several of these functions print. The output of our `read_csv()` command also printed this information -- this function parsed our column into the types we see now. Were all the columns parsed correctly?
-
--   How many rows and how many columns does the dataset have?
-
--   What are some questions you would like to explore with this dataset? We'll collect some of these and try to answer them in later sessions. If your group has sufficient R skills already, you are also welcome to go ahead and try to answer one or more of these questions.
-
-<details>
-
-<summary> Hints (click here) </summary> <br>
 
 -   Note that in R, `dbl` (for "double") and `num` (for "numeric") are both used, and almost interchangeably so, for floating point numbers. (Integers are a separate type that are simply called "integers" and abbreviated as `int`, but we have no integer columns in this dataset.)
 
@@ -507,7 +506,7 @@ Make the function parse the "order" column as a factor, and the "year", "month",
   skip <span class='o'>=</span> <span class='m'>1</span>,             <span class='c'># First line is not part of the dataframe</span>
   comment <span class='o'>=</span> <span class='s'>'$'</span>,        <span class='c'># Line 228 is a comment that starts with `$`</span>
   col_types <span class='o'>=</span> <span class='s'>'fcdiii'</span>  <span class='c'># 'f' for factor, 'c' for character,</span>
-  <span class='o'>)</span>                     <span class='c'># ..'d' for double(=numeric),</span>
+  <span class='o'>)</span>                     <span class='c'># ..'d' for double (=numeric),</span>
                         <span class='c'># ..'i' for integer.</span>
 
 <span class='c'># With long column type specification:</span>

@@ -127,7 +127,11 @@ In brief, Projects help you to organize your work and to make it more portable.
 - After RStudio automatically reloads, you should see the file ending in `.Rproj` in the RStudio `Files` tab in the lower right pane,
   and you will have the Project open. All done for now!
 
-(For future Code Club sessions, OSC users will have the Project automatically opened upon opening RStudio Server. If you're working locally and also using RStudio outside of this Project, you can open it by `File` > `Open Project` inside RStudio, or by clicking the `.Rproj` file in your file browser,
+(For future Code Club sessions: RStudio will by default reopen the most recently used
+Project, and therefore, OSC users will have the Project automatically opened.
+If you're working locally and are also using other Projects,
+you can open this Project with `File` > `Open Project` inside RStudio,
+or by clicking the `.Rproj` file in your file browser,
 which will open RStudio *and* the Project.)
 
 <br>
@@ -145,7 +149,7 @@ our working directory is the directory that contains the `.Rproj` file.
 To see where you are, type or copy into the console (bottom left):
 
 ```{r, eval = FALSE}
-# Print the working directory (short for "get working directory"):
+# Print the working directory:
 getwd()
 
 # List the files in your current directory:
@@ -219,6 +223,7 @@ We downloaded a Great Backyard Bird Count (GBBC) [dataset](https://www.gbif.org/
 from the [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org/).
 Because the file was 3.1 GB large, we selected only the records from Ohio
 and removed some uninformative columns.
+We also added columns with English names and the breeding range for each species.
 We'll download the resulting much smaller file (41.5 MB) from our Github repo.
 
 <div class="alert alert-note">
@@ -234,7 +239,8 @@ The [GBBC](https://gbbc.birdcount.org/) is an annual
 citizen science event where everyone is encouraged to to identify
 and count birds in their backyard -- or anywhere else -- for at least 15 minutes,
 and report their sightings online.
-Since 2013, it is a global event, but it has been done since 1998 in the US and Canada.
+Since 2013, it is a global event, but it has been organized in the US and Canada
+since 1998.
 
 </div>
 </div>
@@ -267,7 +273,7 @@ birds <- read_tsv(birds_file)
 ```
 
 Done! We have now read our data into a *tibble*, which is a type of data frame
-(formally a *data.frame*): R's object type to deals with tabular data wherein each
+(formally a *data.frame*): R's object class to deal with tabular data wherein each
 column can contain a different type of data (numeric, characters/strings, etc).
 
 <br>
@@ -282,29 +288,15 @@ column can contain a different type of data (numeric, characters/strings, etc).
 
 **What's in the dataset?**
 
-- Explore the output of the following commands, and try to understand what you see.
+- Explore the dataset using some functions and methods you may know to get a quick
+  overview of data(frames), and try to understand what you see.
   What does a single row represent, and what is in each column?
+  (Be sure to check out the hints below at some point, especially if you're stuck.)
 
-```{r, eval = FALSE}
-# Type an object's name to print it to screen:
-birds
-# Same as above, but explicitly calling print():
-print(birds)   
-
-# For column-wise information (short for "structure"):
-str(birds)
-# tidyverse version of str():
-glimpse(birds)
-
-# In RStudio, open object in a separate tab:
-View(birds)
-# (Or: click on the object in the `Environment` pane.)
-```
-
-- In particular, pay attention to the data types (e.g., "character" or `chr`)
+- Pay attention to the data types (e.g., "character" or `chr`)
   of the different columns, which several of these functions print.
   The output of our `read_csv()` command also printed this information --
-  this function parsed our column into the types we see now.
+  this function parsed our columns as the types we see now.
   Were all the columns parsed correctly? 
 
 - How many rows and how many columns does the dataset have?
@@ -320,11 +312,25 @@ View(birds)
   </summary>
 <br>
 
+```{r, eval = FALSE}
+# Type an object's name to print it to screen:
+birds
+# Same as above, but explicitly calling print():
+print(birds)   
+
+# For column-wise information (short for "structure"):
+str(birds)
+# tidyverse version of str():
+glimpse(birds)
+
+# In RStudio, open object in a separate tab:
+View(birds)
+```
+
 - Note that in R, `dbl` (for "double") and `num` (for "numeric") are both used,
   and almost interchangeably so, for floating point numbers.
   (Integers are a separate type that are simply called "integers" and
-  abbreviated as `int`,
-  but we have no integer columns in this dataset.)
+  abbreviated as `int`, but we have no integer columns in this dataset.)
 
 - `read_tsv()` parsed our date as a "date-time" (`dttm` or `POSIXct` for short),
   which contains both a date and a time.
@@ -516,7 +522,7 @@ birds2 <- read_csv(     # `read_csv()`: file is comma-delimited
   skip = 1,             # First line is not part of the dataframe
   comment = '$',        # Line 228 is a comment that starts with `$`
   col_types = 'fcdiii'  # 'f' for factor, 'c' for character,
-  )                     # ..'d' for double(=numeric),
+  )                     # ..'d' for double (=numeric),
                         # ..'i' for integer.
 
 # With long column type specification:
