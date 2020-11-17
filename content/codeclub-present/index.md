@@ -177,6 +177,9 @@ You can do this in two ways, from RStudio or from the command line.
 - Add the files from your post:
   ```sh
   git add codeclub/<your-post-name>/*
+  
+  ## Or, e.g. if you added files elswehere too, or have built the site:
+  # git add *
   ```
 
 - Commit:
