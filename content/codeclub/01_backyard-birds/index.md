@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: e8e4091a1a564ed7
+rmd_hash: dfc1f5054f109cda
 
 ---
 
@@ -241,7 +241,7 @@ Now, let's read the file into R. The `.tsv` extension ("tab-separated values") t
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span><span class='nv'>birds_file</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span>file <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
 
 <span class='c'>#&gt; Parsed with column specification:</span>
 <span class='c'>#&gt; cols(</span>
