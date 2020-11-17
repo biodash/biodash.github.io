@@ -79,7 +79,7 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 
 ### 2: Create a post
 
-- Start an R session. If you don't have the `hugodown` package installed, install it:
+- Start an R session. If you don't have the *hugodown* package installed, install it:
   ```r
   remotes::install_github("r-lib/hugodown")
   ```
@@ -125,7 +125,7 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 
 ----
 
-### 3: Preview your post (optional)
+### 3: Preview your post or build the website (optional) {#preview-build}
 
 You can do this in two ways, from RStudio or from the command line.
 
@@ -136,9 +136,18 @@ You can do this in two ways, from RStudio or from the command line.
   hugodown::hugo_install("0.66.0")
   ```
 
-- Preview the site:
+- Preview the website:
   ```r
   hugodown::hugo_start()
+  ```
+
+- If you *build* the website,
+  changes you make will be reflected on the online website after you push to remote.
+  The entire rendered website is in the `docs/` dir; HTML files rendered from markdown
+  files will be placed there, any images and other files will be copied there, and so on.
+  To build the website using *hugodown*:
+  ```r
+  hugodown::hugo_build(dest = "docs")
   ```
 
 #### Option B: From the command line
@@ -153,6 +162,11 @@ You can do this in two ways, from RStudio or from the command line.
   Click the link or copy and paste the address into a browser, and you will see the rendered website.
   Until you press `Ctrl + C` on the command line, the server will keep running and will update
   whenever you save changes in a file within the website directory.
+
+- Build the website:
+  ```sh
+  hugo -d docs/
+  ```
 
 <br>
 
