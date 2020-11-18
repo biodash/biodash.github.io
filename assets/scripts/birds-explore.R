@@ -49,6 +49,7 @@ birds %>% count(order)
 
 # What is the most common species (i.e., most occurrences across rows) overall?
 birds %>% count(species) %>% arrange(n) %>% tail(1)
+birds %>% count(species) %>% slice_max(n)
 
 
 # What is the most common species for each year?
@@ -56,10 +57,20 @@ yr_counts <- birds %>%
   mutate(year = year(date)) %>%
   group_by(year, species) %>%
   summarise(yr_count = n())
-
 yr_counts %>%
   group_by(year) %>%
   slice_max(yr_count, n = 1)
+
+most_common <- birds %>%
+  count(species, year = format(date, "%Y")) %>%
+  group_by(year) %>%
+  slice_max(n)
+
+most_common %>%
+  ggplot(aes(x = as.Date(year, "%Y"), y = n)) +
+  geom_line() +
+  theme_bw() +
+  scale_x_date()
 
 
 # Extract just the 2nd most common species,
@@ -99,6 +110,8 @@ birds %>%
 
 # Which birds have increased most in first 2 vs last 2 years?
 # And which ones have decreased most?
+## TODO: CAN ALSO DO THIS WITH RANK!
+
 birds_sel <- birds %>%
   mutate(year = year(date)) %>%
   filter(year %in% c(1998, 1999, 2008, 2009)) %>%

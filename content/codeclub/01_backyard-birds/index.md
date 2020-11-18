@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: a21353949eab8da9
+rmd_hash: a586835f1c2c6a24
 
 ---
 
@@ -76,7 +76,7 @@ In brief, Projects help you to organize your work and to make it more portable.
 
 -   They record which scripts (and R Markdown files) are open in RStudio, and will reopen all of those when you reopen the project. This becomes quite handy, say, when you work on three different projects, each of which uses a number of scripts.
 
--   When using Projects, you generally don't have to manually set your working directory, and can use *relative file paths* to refer to files within the project. This way, even if you move the project directory, or copy it to a different computer, the same paths will still work. (This would not be the case if you used [`setwd()`](https://rdrr.io/r/base/getwd.html) which will generally require you to use an absolute path, e.g. [`setwd("C:/Users/Jane/Documents/")`](https://rdrr.io/r/base/getwd.html).)
+-   When using Projects, you generally don't have to manually set your working directory, and can use *relative file paths* to refer to files within the project. This way, even if you move the project directory, or copy it to a different computer, the same paths will still work. (This would not be the case if you used [`setwd()`](https://rdrr.io/r/base/getwd.html) which will generally require you to use an absolute path, e.g. [`setwd("C:/Users/Jelmer/Documents/")`](https://rdrr.io/r/base/getwd.html).)
 
 -   Projects encourage you to organize research projects inside self-contained directories, rather than with files spread around your computer. This can save you a lot of headaches and increases reproducibility. And because R will restart whenever you switch Projects, there is no risk of unwanted cross-talk between your projects.
 
