@@ -40,7 +40,7 @@ opportunities and resources available through CAPS are at http://caps.osu.edu/bi
 
 ### EEOB
 
-TBA
+Research Scientist Michael Broe provides bioinformatics support to faculty and students in the Department of Evolution, Ecology and Organismal Biology. His primary role is to assist graduate students learning various types of computational analysis, but he also works directly with PIs. Types of analysis include whole genome assembly, genome annotation, transcriptomics, RADseq, hybrid capture pipelines, variant calling etc. Michael also teaches a 7 week Introduction to Computation in Biology for incoming EEOB graduate students each year, covering R, Python, and Unix.
 
 <br>
 
