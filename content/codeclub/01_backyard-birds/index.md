@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: dfc1f5054f109cda
+rmd_hash: bbba43ef41ef9e56
 
 ---
 
@@ -78,7 +78,7 @@ In brief, Projects help you to organize your work and to make it more portable.
 
 -   When using Projects, you generally don't have to manually set your working directory, and can use *relative file paths* to refer to files within the project. This way, even if you move the project directory, or copy it to a different computer, the same paths will still work. (This would not be the case if you used [`setwd()`](https://rdrr.io/r/base/getwd.html) which will generally require you to use an absolute path, e.g. [`setwd('C:/Users/Jane/Documents/')`](https://rdrr.io/r/base/getwd.html).)
 
--   Projects encourage you to organize research projects inside self-contained directories, rather than with files spread around your computer. This can save you a lot of headaches and increases reproducibility.
+-   Projects encourage you to organize research projects inside self-contained directories, rather than with files spread around your computer. This can save you a lot of headaches and increases reproducibility. And because R will restart whenever you switch Projects, there is no risk of unwanted cross-talk between your projects.
 
 </div>
 
@@ -241,7 +241,8 @@ Now, let's read the file into R. The `.tsv` extension ("tab-separated values") t
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span>file <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Read the data:</span>
+<span class='nv'>birds</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span>file <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
 
 <span class='c'>#&gt; Parsed with column specification:</span>
 <span class='c'>#&gt; cols(</span>
@@ -279,7 +280,7 @@ Done! We have now read our data into a *tibble*, which is a type of data frame (
 
 -   Explore the dataset using some functions and methods you may know to get a quick overview of data(frames), and try to understand what you see. What does a single row represent, and what is in each column? (Be sure to check out the hints below at some point, especially if you're stuck.)
 
--   Pay attention to the data types (e.g., "character" or `chr`) of the different columns, which several of these functions print. The output of our `read_csv()` command also printed this information -- this function parsed our columns as the types we see now. Were all the columns parsed correctly?
+-   Pay attention to the data types (e.g., "character" or `chr`) of the different columns, which several of these functions print. The output of our `read_tsv()` command also printed this information -- this function parsed our columns as the types we see now. Were all the columns parsed correctly?
 
 -   How many rows and how many columns does the dataset have?
 
