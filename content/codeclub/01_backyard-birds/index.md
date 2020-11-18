@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: bbba43ef41ef9e56
+rmd_hash: a21353949eab8da9
 
 ---
 
@@ -76,7 +76,7 @@ In brief, Projects help you to organize your work and to make it more portable.
 
 -   They record which scripts (and R Markdown files) are open in RStudio, and will reopen all of those when you reopen the project. This becomes quite handy, say, when you work on three different projects, each of which uses a number of scripts.
 
--   When using Projects, you generally don't have to manually set your working directory, and can use *relative file paths* to refer to files within the project. This way, even if you move the project directory, or copy it to a different computer, the same paths will still work. (This would not be the case if you used [`setwd()`](https://rdrr.io/r/base/getwd.html) which will generally require you to use an absolute path, e.g. [`setwd('C:/Users/Jane/Documents/')`](https://rdrr.io/r/base/getwd.html).)
+-   When using Projects, you generally don't have to manually set your working directory, and can use *relative file paths* to refer to files within the project. This way, even if you move the project directory, or copy it to a different computer, the same paths will still work. (This would not be the case if you used [`setwd()`](https://rdrr.io/r/base/getwd.html) which will generally require you to use an absolute path, e.g. [`setwd("C:/Users/Jane/Documents/")`](https://rdrr.io/r/base/getwd.html).)
 
 -   Projects encourage you to organize research projects inside self-contained directories, rather than with files spread around your computer. This can save you a lot of headaches and increases reproducibility. And because R will restart whenever you switch Projects, there is no risk of unwanted cross-talk between your projects.
 
@@ -135,11 +135,11 @@ Create two new directories -- one for this session, and one for a dataset that w
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Dir for Code Club Session 1:</span>
-<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S01'</span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S01"</span><span class='o'>)</span>
 
 <span class='c'># Dir for our bird data:</span>
 <span class='c'># ("recursive" to create two levels at once.)</span>
-<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'data/birds/'</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"data/birds/"</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -224,10 +224,10 @@ Let's download the dataset using the [`download.file()`](https://rdrr.io/r/utils
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># The URL to our file:</span>
-<span class='nv'>birds_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv'</span>
+<span class='nv'>birds_file_url</span> <span class='o'>&lt;-</span> <span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv"</span>
 
 <span class='c'># The path to the file we want to download to:</span>
-<span class='nv'>birds_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/backyard-birds_Ohio.tsv'</span>
+<span class='nv'>birds_file</span> <span class='o'>&lt;-</span> <span class='s'>"data/birds/backyard-birds_Ohio.tsv"</span>
 
 <span class='c'># Download:</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds_file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
@@ -390,15 +390,15 @@ Earlier, we successfully read in our file without specifying any arguments other
 
 Some options for more complex cases:
 
--   The more general counterpart of this function is `read_delim()`, which allows you to specify the delimiter using the `sep` argument, e.g. `sep="\t"` for tabs.
+-   The more general counterpart of this function is `read_delim()`, which allows you to specify the delimiter using the `sep` argument, e.g. `delim="\t"` for tabs.
 
 -   There are also arguments to these functions for when you need to skip lines, when you don't have column headers, when you need to specify the column types of some or all the columns, and so forth -- see this example:  
 
     <div class="highlight">
 
     <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>my_df</span> <span class='o'>&lt;-</span> <span class='nf'>read_delim</span><span class='o'>(</span>
-      file <span class='o'>=</span> <span class='s'>'file.txt'</span>,
-      sep <span class='o'>=</span> <span class='s'>'\t'</span>,               <span class='c'># Specify tab as delimiter</span>
+      file <span class='o'>=</span> <span class='s'>"file.txt"</span>,
+      delim <span class='o'>=</span> <span class='s'>"\t"</span>,             <span class='c'># Specify tab as delimiter</span>
       col_names <span class='o'>=</span> <span class='kc'>FALSE</span>,        <span class='c'># First line is not a header</span>
       skip <span class='o'>=</span> <span class='m'>3</span>,                 <span class='c'># Skip the first three lines</span>
       comment <span class='o'>=</span> <span class='s'>"#"</span>,            <span class='c'># Skip any line beginning with a "#"</span>
@@ -430,8 +430,8 @@ Make the function parse the "order" column as a factor, and the "year", "month",
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Download and read the file:</span>
-<span class='nv'>birds2_file_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_read-challenge.txt'</span>
-<span class='nv'>birds2_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/backyard-birds_read-challenge.txt'</span>
+<span class='nv'>birds2_file_url</span> <span class='o'>&lt;-</span> <span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_read-challenge.txt"</span>
+<span class='nv'>birds2_file</span> <span class='o'>&lt;-</span> <span class='s'>"data/birds/backyard-birds_read-challenge.txt"</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds2_file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds2_file</span><span class='o'>)</span>
 </code></pre>
 
@@ -455,7 +455,7 @@ Make the function parse the "order" column as a factor, and the "year", "month",
 
 -   Note that *readr* erroneously parses `month` as a character column if you don't manually specify its type.
 
--   Note that you can also use a succinct column type specification like `col_types = 'fc'`, which would parse, for a two-column file, the first column as a factor and the second as a character -- type e.g. `?read_tsv` for details.
+-   Note that you can also use a succinct column type specification like `col_types = "fc"`, which would parse, for a two-column file, the first column as a factor and the second as a character -- type e.g. `?read_tsv` for details.
 
 </details>
 
@@ -471,15 +471,15 @@ Make the function parse the "order" column as a factor, and the "year", "month",
 <span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>
   file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
   skip <span class='o'>=</span> <span class='m'>1</span>,
-  comment <span class='o'>=</span> <span class='s'>'$'</span>,
-  col_types <span class='o'>=</span> <span class='s'>'fcdiii'</span>
+  comment <span class='o'>=</span> <span class='s'>"$"</span>,
+  col_types <span class='o'>=</span> <span class='s'>"fcdiii"</span>
   <span class='o'>)</span>
 
 <span class='c'># With long column type specification:</span>
 <span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>
   file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
   skip <span class='o'>=</span> <span class='m'>1</span>,
-  comment <span class='o'>=</span> <span class='s'>'$'</span>,
+  comment <span class='o'>=</span> <span class='s'>"$"</span>,
   col_types <span class='o'>=</span> <span class='nf'>cols</span><span class='o'>(</span>
     order <span class='o'>=</span> <span class='nf'>col_factor</span><span class='o'>(</span><span class='o'>)</span>,
     year <span class='o'>=</span>  <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>,
@@ -505,16 +505,16 @@ Make the function parse the "order" column as a factor, and the "year", "month",
 <span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>     <span class='c'># `read_csv()`: file is comma-delimited</span>
   file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
   skip <span class='o'>=</span> <span class='m'>1</span>,             <span class='c'># First line is not part of the dataframe</span>
-  comment <span class='o'>=</span> <span class='s'>'$'</span>,        <span class='c'># Line 228 is a comment that starts with `$`</span>
-  col_types <span class='o'>=</span> <span class='s'>'fcdiii'</span>  <span class='c'># 'f' for factor, 'c' for character,</span>
-  <span class='o'>)</span>                     <span class='c'># ..'d' for double (=numeric),</span>
-                        <span class='c'># ..'i' for integer.</span>
+  comment <span class='o'>=</span> <span class='s'>"$"</span>,        <span class='c'># Line 228 is a comment that starts with `$`</span>
+  col_types <span class='o'>=</span> <span class='s'>"fcdiii"</span>  <span class='c'># "f" for factor, "c" for character,</span>
+  <span class='o'>)</span>                     <span class='c'># .."d" for double (=numeric),</span>
+                        <span class='c'># .."i" for integer.</span>
 
 <span class='c'># With long column type specification:</span>
 <span class='nv'>birds2</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span>
   file <span class='o'>=</span> <span class='nv'>birds2_file</span>,
   skip <span class='o'>=</span> <span class='m'>1</span>,
-  comment <span class='o'>=</span> <span class='s'>'$'</span>,
+  comment <span class='o'>=</span> <span class='s'>"$"</span>,
   col_types <span class='o'>=</span> <span class='nf'>cols</span><span class='o'>(</span>        <span class='c'># We can omit columns for which we</span>
     order <span class='o'>=</span> <span class='nf'>col_factor</span><span class='o'>(</span><span class='o'>)</span>,  <span class='c'># ..accept the automatic parsing,</span>
     year <span class='o'>=</span>  <span class='nf'>col_integer</span><span class='o'>(</span><span class='o'>)</span>, <span class='c'># ..when using the long specification. </span>
