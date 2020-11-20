@@ -24,19 +24,25 @@ which can be a helpful backup option when something fails with locall installs.
 
 ## Option 1 -- OSC {#osc}
 
-### Sign up at OSC {#osc-signup}
-
 All Code Club participants will get access to the OSC Classroom Project for Code Club (`PAS1838`).
 This way, you can code in (e.g.) RStudio from your browser rather than with a local installation.
 This is a good option if you prefer not to install anything locally or run into problems when doing so.
 
-If you don't already have an OSC account, you do need to sign up:
+*If you already had an OSC account*, you should have been added to the Code Club OSC project
+and can continue to the [second step](/codeclub-setup/#osc-run-rstudio).
+Otherwise, please follow the instructions below to sign up and get access to the project.
+
+### Sign up at OSC {#osc-signup}
+
+To sign up:
+
 - Go to <https://my.osc.edu/> and click the blue "*Sign Up*" bar.
+
 - In the bottom right portion of the form where you provide your info (see screenshot below),
   you should enter Code Club's Project Code, which is `PAS1838`.
-**If you want to use OSC, please do this on a day prior to your first Code Club participation.**
-This way, there is time to troubleshoot if needed. Moreover, the `Code Club` option on the
-Interactive Apps page below can take a few hours to appear after you become a member of the project.
+  **If you want to use OSC, please do this on a day prior to your first Code Club participation.**
+  This way, there is time to troubleshoot if needed. Moreover, the `Code Club` option on the
+  Interactive Apps page below can take a few hours to appear after you become a member of the project.
 
 {{< figure src="osc_signup2.png" width="800px" caption="Enter Project Code PAS1838 in the red box (click to enlarge)" >}}
 
@@ -108,6 +114,30 @@ typing the following command inside an R console:
 ```r
 install.packages("tidyverse")
 ```
+
+### Test whether you can load the tidyverse
+
+When you issue the command `library("tidyverse")`,
+you should get the output shown below:
+
+```r
+library("tidyverse")
+
+#> ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
+
+#> ✔ ggplot2 3.3.2     ✔ purrr   0.3.4
+#> ✔ tibble  3.0.4     ✔ dplyr   1.0.2
+#> ✔ tidyr   1.1.2     ✔ stringr 1.4.0
+#> ✔ readr   1.3.1     ✔ forcats 0.5.0
+
+#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+#> ✖ dplyr::filter() masks stats::filter()
+#> ✖ dplyr::lag()    masks stats::lag()
+```
+
+If you get an error instead, please try to troubleshoot it.
+Updating R itself may be necessary, see [here](/codeclub-novice/#updating-r) for instructions.
+You can also send the [organizers of Code Club](https://biodash.github.io/codeclub-about/#organizers) an email.
 
 <br>
 
