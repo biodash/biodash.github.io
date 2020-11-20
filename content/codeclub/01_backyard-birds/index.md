@@ -26,11 +26,11 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: a586835f1c2c6a24
+rmd_hash: 7a78ebc77538426d
 
 ---
 
-<br>
+<br> <br> <br>
 
 ------------------------------------------------------------------------
 
@@ -44,6 +44,8 @@ If you didn't already do this, please follow the [Code Club Computer Setup](/cod
 #### Test if it works
 
 Please open RStudio locally or [start an OSC RStudio Server session](/codeclub-setup/#osc-run-rstudio).
+
+**Nov 19 addition: If you're working locally, test if you can load the *tidyverse* package with [`library("tidyverse")`](http://tidyverse.tidyverse.org) inside R.** (If you haven't installed the *tidyverse* yet, please go to the [Code Club Computer Setup](/codeclub-setup/#install-tidy) instructions.)
 
 If you have not used RStudio before, take a moment to explore what's in the panels and tabs. (It may help to check out [Mike Sovic's 1-minute intro to the RStudio interface](https://www.youtube.com/watch?v=ByxF3xjN2JQ&list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe&t=2m15s) or [RStudio's 3-minute intro](https://fast.wistia.net/embed/iframe/520zbd3tij?videoFoam=true).)
 
