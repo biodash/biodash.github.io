@@ -105,8 +105,9 @@ BiocManager::install("edgeR")    # Install the edgeR package from Bioconductor
 
 ### Updating R
 
-If you have an older version of R already installed, consider updating it
-(certainly do this your R version is below `3.0.1`, and preferably do this if your R version is below `4.0`).
+Consider updating R if you have an older version of R installed.
+**Specifically, in the first session of Code Club, we've seen problems when installing
+the *tidyverse* with R versions below `R 3.6`.**
 
 - **Windows**: Use the function `installr::updateR()` in an R console
   (if needed, first install installr using `install.packages("installr")`).
