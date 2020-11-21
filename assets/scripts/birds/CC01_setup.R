@@ -4,24 +4,29 @@
 # Set-up ---------------------------------------------------------
 
 # Load the tidyverse meta-package:
+message("\n-> Loading/installing the tidyverse...")
+if (!require("tidyverse")) install.packages("tidyverse")
 library(tidyverse)
 
 # Create an RStudio project:
 if (!any(str_detect(list.files(), ".*.Rproj"))) {
-  message("Creating an RStudio project in the current directory")
-  file.create("codeclub.Rproj")
+  message("\n-> Creating an RStudio project in the current directory...")
+  message("-> First loading/installing the usethis package...")
+  if (!require("usethis")) iinstall.packages("usethis")
+  library(usethis)
+  create_project(path = getwd(), open = FALSE)
 } else {
-  message("An RStudio project already exists in the current directory: nothing was done.")
+  message("\n-> An RStudio project already exists in the current directory: nothing was done.")
 }
 
 # If the bird data dir does not exist, create it:
 data_dir <- "data/birds"
 
 if (!dir.exists(data_dir)) {
-  message(paste("\nCreating the dir", data_dir))
+  message(paste("\n-> Creating the dir", data_dir))
   dir.create(data_dir, recursive = TRUE)
 } else {
-  message(paste("\nThe dir", data_dir, "already exists, nothing was done."))
+  message(paste("\n-> The dir", data_dir, "already exists, nothing was done."))
 }
 
 
@@ -35,14 +40,14 @@ birds_file <- "data/birds/backyard-birds_Ohio.tsv"
 
 # Download the file if it doesn't exist already:
 if (!file.exists(birds_file)) {
-  message(paste("\nDownloading the bird data into", birds_file))
+  message(paste("\n-> Downloading the bird data into", birds_file))
   download.file(url = birds_file_url, destfile = birds_file)
 } else {
-  message(paste("\nThe file", birds_file, "already exists: nothing was done."))
+  message(paste("\n-> The file", birds_file, "already exists: nothing was done."))
 }
 
 
 # Reading the bird data -----------------------------------------
 
-message("\nReading the bird data...")
-birds <- read_tsv(file = birds_file)
+# message("\nReading the bird data...")
+# birds <- read_tsv(file = birds_file)
