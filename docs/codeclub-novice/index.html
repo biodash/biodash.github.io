@@ -775,23 +775,42 @@ from within R (e.g. in the R console in RStudio), use the <code>install.packages
 <p>The <code>install.packages()</code> function will handle dependencies within R &ndash; i.e., it will install other R packages
 that your package depends on. Occasionally, when the install function needs to compile
 a package from source, errors arise that relate to missing system dependencies (i.e. software outside of R).</p>
-<p>On Mac and Linux, these system dependencies are best installed outside of R,
+<p>On <strong>Mac</strong> and <strong>Linux</strong>, these system dependencies are best installed outside of R,
 such as with <code>homebrew</code> on Mac or <code>apt</code> on Ubuntu.
-The installation errror message should tell you which libraries are needed.</p>
+The errror message you got when trying to install an R package should tell you which system dependencies are needed.</p>
 <p>On Windows, you can use the <code>installr</code> package to install such dependencies or other software from within R &ndash; for example:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;installr&#34;</span><span class="p">)</span>    <span class="c1"># Install the installr package first</span>
 <span class="n">installlr</span><span class="o">::</span><span class="nf">install.RStudio</span><span class="p">()</span>    <span class="c1"># Install RStudio</span>
 <span class="n">installr</span><span class="o">::</span><span class="nf">install.python</span><span class="p">()</span>      <span class="c1"># Install Python</span>
 </code></pre></div><br>
-<h4 id="packages-from-other-sources">Packages from other sources</h4>
-<p>Some packages are not available on CRAN.
-The two main alternative places that you may want to install packages from are Github and
-(if you are working with bioinformatics data) 
-<a href="https://bioconductor.org/" target="_blank" rel="noopener">Bioconductor</a>.</p>
-<p>To install a package from Github, use the <code>remotes</code> package &ndash; for example:</p>
-<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;remotes&#34;</span><span class="p">)</span>                <span class="c1"># Install the remotes package</span>
-<span class="n">remotes</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;kbroman/broman&#34;</span><span class="p">)</span>  <span class="c1"># Install from a repository using &#34;&lt;username&gt;/&lt;repo-name&gt;&#34;</span>
-</code></pre></div><p>To install a package from Bioconductor, use the <code>BiocManager</code> package &ndash; for example:</p>
+<h4 id="system-setup-to-installing-packages-from-source">System setup to installing packages &ldquo;from source&rdquo;</h4>
+<p>Sometimes you need to install a package from source, that is,
+you need to compile the package rather than simply installing a pre-existing binary.
+(On <strong>Linux</strong>, where installing from source is often needed, this should work without additional steps.)
+On <strong>Windows</strong> and <strong>Mac</strong>, installing from source is generally only needed when you
+install a package from outside of CRAN (such as from Github, see below),
+<em>but</em> you will need to make sure you have the following non-R software:</p>
+<p><strong>On <strong>Windows</strong>, you will need <em>Rtools</em> (
+<a href="http://cran.r-project.org/bin/windows/Rtools/" target="_blank" rel="noopener">Rtools installation instructions</a>).</strong></p>
+<p><strong>On a Mac, you will need <em>Xcode</em> (which can be installed from the Mac App store).</strong></p>
+<p>You can test whether or not you are able to install packages from source using the <em>devtools</em> package:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;devtools&#34;</span><span class="p">)</span>    <span class="c1"># Install the devtools package</span>
+<span class="n">devtools</span><span class="o">::</span><span class="nf">has_devel</span><span class="p">()</span>           <span class="c1"># Check whether you can install packages from source</span>
+</code></pre></div><p>For a bit more info, see 
+<a href="https://rstats.wtf/set-up-an-r-dev-environment.html" target="_blank" rel="noopener">this page</a>.</p>
+<br>
+<h4 id="installing-packages-from-github">Installing packages from Github</h4>
+<p>To install a package from Github, use either the <em>devtools</em> or the <em>remotes</em> package &ndash; for example:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;devtools&#34;</span><span class="p">)</span>                <span class="c1"># Install the devtools package</span>
+<span class="n">devtools</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&#34;kbroman/broman&#34;</span><span class="p">)</span>  <span class="c1"># Install from a repository using &#34;&lt;username&gt;/&lt;repo-name&gt;&#34;</span>
+</code></pre></div><p>This will install the package <em>from source</em>, so you will need to make sure you are able to do so
+by following the instructions in the section right above this one.</p>
+<br>
+<h4 id="installing-packages-from-bioconductor">Installing packages from Bioconductor</h4>
+<p>If you&rsquo;re doing bioinfomatic analyses in R, you will probably run into packages
+that are not on CRAN but on 
+<a href="https://bioconductor.org/" target="_blank" rel="noopener">Bioconductor</a>.
+To install a package from Bioconductor, use the <em>BiocManager</em> package &ndash; for example:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;BiocManager&#34;</span><span class="p">)</span>  <span class="c1"># Install the BiocManager package</span>
 <span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;edgeR&#34;</span><span class="p">)</span>    <span class="c1"># Install the edgeR package from Bioconductor</span>
 </code></pre></div><br>
@@ -823,9 +842,9 @@ R 4.0 in Ubuntu (along with upgrading to Ubuntu 20.04).</p>
 </ul>
 <br>
 <h4 id="re-installing-your-packages-after-updating-mac-and-linux">Re-installing your packages after updating (Mac and Linux)</h4>
-<p>While the <code>installr::updateR()</code> function for Windows users takes care of reinstalling
+<p>While the <code>installr::updateR()</code> function for <strong>Windows</strong> users takes care of reinstalling
 your packages along with updating R,
-Mac and Linux users will have to manually re-install their packages.
+<strong>Mac</strong> and <strong>Linux</strong> users will have to manually re-install their packages.
 Some people prefer to re-install these packages on the fly, which can end up being a way
 to get rid of packages you no longer use.</p>
 <p>But if you want immediately reinstall all your packages, run this before you upgrade:</p>

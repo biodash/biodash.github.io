@@ -68,9 +68,9 @@ The `install.packages()` function will handle dependencies within R -- i.e., it 
 that your package depends on. Occasionally, when the install function needs to compile
 a package from source, errors arise that relate to missing system dependencies (i.e. software outside of R).
 
-On Mac and Linux, these system dependencies are best installed outside of R,
+On **Mac** and **Linux**, these system dependencies are best installed outside of R,
 such as with `homebrew` on Mac or `apt` on Ubuntu.
-The installation errror message should tell you which libraries are needed.
+The errror message you got when trying to install an R package should tell you which system dependencies are needed.
 
 On Windows, you can use the `installr` package to install such dependencies or other software from within R -- for example:
 
@@ -82,20 +82,50 @@ installr::install.python()      # Install Python
 
 <br>
 
-#### Packages from other sources
+#### System setup to installing packages "from source"
 
-Some packages are not available on CRAN.
-The two main alternative places that you may want to install packages from are Github and
-(if you are working with bioinformatics data) [Bioconductor](https://bioconductor.org/).
+Sometimes you need to install a package from source, that is,
+you need to compile the package rather than simply installing a pre-existing binary.
+(On **Linux**, where installing from source is often needed, this should work without additional steps.) 
+On **Windows** and **Mac**, installing from source is generally only needed when you
+install a package from outside of CRAN (such as from Github, see below),
+*but* you will need to make sure you have the following non-R software:
 
-To install a package from Github, use the `remotes` package -- for example:
+**On **Windows**, you will need *Rtools* ([Rtools installation instructions](http://cran.r-project.org/bin/windows/Rtools/)).**
+
+**On a Mac, you will need *Xcode* (which can be installed from the Mac App store).**
+
+You can test whether or not you are able to install packages from source using the *devtools* package:
 
 ```r
-install.packages("remotes")                # Install the remotes package
-remotes::install_github("kbroman/broman")  # Install from a repository using "<username>/<repo-name>"
+install.packages("devtools")    # Install the devtools package
+devtools::has_devel()           # Check whether you can install packages from source
 ```
 
-To install a package from Bioconductor, use the `BiocManager` package -- for example:
+For a bit more info, see [this page](https://rstats.wtf/set-up-an-r-dev-environment.html).
+
+<br>
+
+#### Installing packages from Github
+
+To install a package from Github, use either the *devtools* or the *remotes* package -- for example:
+
+```r
+install.packages("devtools")                # Install the devtools package
+devtools::install_github("kbroman/broman")  # Install from a repository using "<username>/<repo-name>"
+```
+
+This will install the package *from source*, so you will need to make sure you are able to do so
+by following the instructions in the section right above this one.
+
+<br>
+
+#### Installing packages from Bioconductor
+
+If you're doing bioinfomatic analyses in R, you will probably run into packages
+that are not on CRAN but on [Bioconductor](https://bioconductor.org/).
+To install a package from Bioconductor, use the *BiocManager* package -- for example:
+
 ```r
 install.packages("BiocManager")  # Install the BiocManager package
 BiocManager::install("edgeR")    # Install the edgeR package from Bioconductor
@@ -137,9 +167,9 @@ sessionInfo()
 
 #### Re-installing your packages after updating (Mac and Linux)
 
-While the `installr::updateR()` function for Windows users takes care of reinstalling
+While the `installr::updateR()` function for **Windows** users takes care of reinstalling
 your packages along with updating R,
-Mac and Linux users will have to manually re-install their packages.
+**Mac** and **Linux** users will have to manually re-install their packages.
 Some people prefer to re-install these packages on the fly, which can end up being a way
 to get rid of packages you no longer use.
 

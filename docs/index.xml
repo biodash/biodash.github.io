@@ -720,23 +720,42 @@ from within R (e.g. in the R console in RStudio), use the &lt;code&gt;install.pa
 &lt;p&gt;The &lt;code&gt;install.packages()&lt;/code&gt; function will handle dependencies within R &amp;ndash; i.e., it will install other R packages
 that your package depends on. Occasionally, when the install function needs to compile
 a package from source, errors arise that relate to missing system dependencies (i.e. software outside of R).&lt;/p&gt;
-&lt;p&gt;On Mac and Linux, these system dependencies are best installed outside of R,
+&lt;p&gt;On &lt;strong&gt;Mac&lt;/strong&gt; and &lt;strong&gt;Linux&lt;/strong&gt;, these system dependencies are best installed outside of R,
 such as with &lt;code&gt;homebrew&lt;/code&gt; on Mac or &lt;code&gt;apt&lt;/code&gt; on Ubuntu.
-The installation errror message should tell you which libraries are needed.&lt;/p&gt;
+The errror message you got when trying to install an R package should tell you which system dependencies are needed.&lt;/p&gt;
 &lt;p&gt;On Windows, you can use the &lt;code&gt;installr&lt;/code&gt; package to install such dependencies or other software from within R &amp;ndash; for example:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;nf&#34;&gt;install.packages&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;installr&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;# Install the installr package first&lt;/span&gt;
 &lt;span class=&#34;n&#34;&gt;installlr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;install.RStudio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;# Install RStudio&lt;/span&gt;
 &lt;span class=&#34;n&#34;&gt;installr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;install.python&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;      &lt;span class=&#34;c1&#34;&gt;# Install Python&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;br&gt;
-&lt;h4 id=&#34;packages-from-other-sources&#34;&gt;Packages from other sources&lt;/h4&gt;
-&lt;p&gt;Some packages are not available on CRAN.
-The two main alternative places that you may want to install packages from are Github and
-(if you are working with bioinformatics data) 
-&lt;a href=&#34;https://bioconductor.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Bioconductor&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;To install a package from Github, use the &lt;code&gt;remotes&lt;/code&gt; package &amp;ndash; for example:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;nf&#34;&gt;install.packages&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;remotes&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;                &lt;span class=&#34;c1&#34;&gt;# Install the remotes package&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;remotes&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;install_github&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;kbroman/broman&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# Install from a repository using &amp;#34;&amp;lt;username&amp;gt;/&amp;lt;repo-name&amp;gt;&amp;#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To install a package from Bioconductor, use the &lt;code&gt;BiocManager&lt;/code&gt; package &amp;ndash; for example:&lt;/p&gt;
+&lt;h4 id=&#34;system-setup-to-installing-packages-from-source&#34;&gt;System setup to installing packages &amp;ldquo;from source&amp;rdquo;&lt;/h4&gt;
+&lt;p&gt;Sometimes you need to install a package from source, that is,
+you need to compile the package rather than simply installing a pre-existing binary.
+(On &lt;strong&gt;Linux&lt;/strong&gt;, where installing from source is often needed, this should work without additional steps.)
+On &lt;strong&gt;Windows&lt;/strong&gt; and &lt;strong&gt;Mac&lt;/strong&gt;, installing from source is generally only needed when you
+install a package from outside of CRAN (such as from Github, see below),
+&lt;em&gt;but&lt;/em&gt; you will need to make sure you have the following non-R software:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;On &lt;strong&gt;Windows&lt;/strong&gt;, you will need &lt;em&gt;Rtools&lt;/em&gt; (
+&lt;a href=&#34;http://cran.r-project.org/bin/windows/Rtools/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Rtools installation instructions&lt;/a&gt;).&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;On a Mac, you will need &lt;em&gt;Xcode&lt;/em&gt; (which can be installed from the Mac App store).&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;You can test whether or not you are able to install packages from source using the &lt;em&gt;devtools&lt;/em&gt; package:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;nf&#34;&gt;install.packages&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;devtools&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;# Install the devtools package&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;devtools&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;has_devel&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;           &lt;span class=&#34;c1&#34;&gt;# Check whether you can install packages from source&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For a bit more info, see 
+&lt;a href=&#34;https://rstats.wtf/set-up-an-r-dev-environment.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this page&lt;/a&gt;.&lt;/p&gt;
+&lt;br&gt;
+&lt;h4 id=&#34;installing-packages-from-github&#34;&gt;Installing packages from Github&lt;/h4&gt;
+&lt;p&gt;To install a package from Github, use either the &lt;em&gt;devtools&lt;/em&gt; or the &lt;em&gt;remotes&lt;/em&gt; package &amp;ndash; for example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;nf&#34;&gt;install.packages&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;devtools&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;                &lt;span class=&#34;c1&#34;&gt;# Install the devtools package&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;devtools&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;install_github&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;kbroman/broman&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# Install from a repository using &amp;#34;&amp;lt;username&amp;gt;/&amp;lt;repo-name&amp;gt;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This will install the package &lt;em&gt;from source&lt;/em&gt;, so you will need to make sure you are able to do so
+by following the instructions in the section right above this one.&lt;/p&gt;
+&lt;br&gt;
+&lt;h4 id=&#34;installing-packages-from-bioconductor&#34;&gt;Installing packages from Bioconductor&lt;/h4&gt;
+&lt;p&gt;If you&amp;rsquo;re doing bioinfomatic analyses in R, you will probably run into packages
+that are not on CRAN but on 
+&lt;a href=&#34;https://bioconductor.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Bioconductor&lt;/a&gt;.
+To install a package from Bioconductor, use the &lt;em&gt;BiocManager&lt;/em&gt; package &amp;ndash; for example:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;nf&#34;&gt;install.packages&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;BiocManager&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# Install the BiocManager package&lt;/span&gt;
 &lt;span class=&#34;n&#34;&gt;BiocManager&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;install&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;edgeR&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;# Install the edgeR package from Bioconductor&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;br&gt;
@@ -768,9 +787,9 @@ R 4.0 in Ubuntu (along with upgrading to Ubuntu 20.04).&lt;/p&gt;
 &lt;/ul&gt;
 &lt;br&gt;
 &lt;h4 id=&#34;re-installing-your-packages-after-updating-mac-and-linux&#34;&gt;Re-installing your packages after updating (Mac and Linux)&lt;/h4&gt;
-&lt;p&gt;While the &lt;code&gt;installr::updateR()&lt;/code&gt; function for Windows users takes care of reinstalling
+&lt;p&gt;While the &lt;code&gt;installr::updateR()&lt;/code&gt; function for &lt;strong&gt;Windows&lt;/strong&gt; users takes care of reinstalling
 your packages along with updating R,
-Mac and Linux users will have to manually re-install their packages.
+&lt;strong&gt;Mac&lt;/strong&gt; and &lt;strong&gt;Linux&lt;/strong&gt; users will have to manually re-install their packages.
 Some people prefer to re-install these packages on the fly, which can end up being a way
 to get rid of packages you no longer use.&lt;/p&gt;
 &lt;p&gt;But if you want immediately reinstall all your packages, run this before you upgrade:&lt;/p&gt;
@@ -1463,18 +1482,18 @@ a package manager instead &amp;ndash; for instance, seee
 for installing the latest R version on Ubuntu 20.04 using the &lt;code&gt;apt&lt;/code&gt; package manager.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;install-rstudio&#34;&gt;Install RStudio&lt;/h3&gt;
-&lt;p&gt;RStudio is a so-called Interactive Development Environment (IDE) for R,
+&lt;p&gt;RStudio is a so-called Integrated Development Environment (IDE) for R,
 with side-by-side panes for an R script, an R concole, plots, help documents, and much more.
 While it is perfectly possible to use R without RStudio, RStudio has become
 the de facto standard for working with R and is very useful.&lt;/p&gt;
 &lt;p&gt;To install RStudio, go to the 
 &lt;a href=&#34;https://rstudio.com/products/rstudio/download/#download&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;RStudio download page&lt;/a&gt;
 and download and run the installer file for your operating system.&lt;/p&gt;
-&lt;h3 id=&#34;install-tidy&#34;&gt;Install the tidyverse&lt;/h3&gt;
-&lt;p&gt;Install the &lt;code&gt;tidyverse&lt;/code&gt;, which is a &lt;em&gt;collection&lt;/em&gt; of useful packages, by
-typing the following command inside an R console:&lt;/p&gt;
+&lt;h3 id=&#34;install-tidy&#34;&gt;Install the &lt;em&gt;tidyverse&lt;/em&gt;&lt;/h3&gt;
+&lt;p&gt;Install the &lt;em&gt;tidyverse&lt;/em&gt;, which is a collection of useful R packages,
+by typing the following command inside an R console:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;nf&#34;&gt;install.packages&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;tidyverse&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;test-whether-you-can-load-the-tidyverse&#34;&gt;Test whether you can load the tidyverse&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;test-whether-you-can-load-the-tidyverse&#34;&gt;Test whether you can load the &lt;em&gt;tidyverse&lt;/em&gt;&lt;/h3&gt;
 &lt;p&gt;When you issue the command &lt;code&gt;library(&amp;quot;tidyverse&amp;quot;)&lt;/code&gt;,
 you should get the output shown below:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;nf&#34;&gt;library&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;tidyverse&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
@@ -1493,7 +1512,10 @@ you should get the output shown below:&lt;/p&gt;
 Updating R itself may be necessary, see 
 &lt;a href=&#34;https://mcic2.github.io/codeclub-novice/#updating-r&#34;&gt;here&lt;/a&gt; for instructions.
 You can also send the 
-&lt;a href=&#34;https://biodash.github.io/codeclub-about/#organizers&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;organizers of Code Club&lt;/a&gt; an email.&lt;/p&gt;
+&lt;a href=&#34;https://biodash.github.io/codeclub-about/#organizers&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;organizers of Code Club&lt;/a&gt; an email.
+And if you can&amp;rsquo;t get it to work yet,
+you can always use OSC for the time being, see the 
+&lt;a href=&#34;https://mcic2.github.io/codeclub-setup/#osc&#34;&gt;setup instructions further up on this page&lt;/a&gt;.&lt;/p&gt;
 &lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;more&#34;&gt;More info&lt;/h2&gt;
@@ -1505,7 +1527,7 @@ You can also send the
 &lt;li&gt;
 &lt;a href=&#34;https://mcic2.github.io/codeclub-novice/#useful-settings&#34;&gt;Useful R and RStudio settings&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;
-&lt;a href=&#34;https://mcic2.github.io/codeclub-novice/#installing-r-packages&#34;&gt;The basics of installing packages&lt;/a&gt;&lt;/li&gt;
+&lt;a href=&#34;https://mcic2.github.io/codeclub-novice/#installing-r-packages&#34;&gt;The basics of installing packages in R&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;a href=&#34;https://mcic2.github.io/codeclub-novice/#updating-r&#34;&gt;Instructions for updating R&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;

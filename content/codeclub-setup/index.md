@@ -100,7 +100,7 @@ You will need:
 
 ### Install RStudio {#install-rstudio}
 
-RStudio is a so-called Interactive Development Environment (IDE) for R,
+RStudio is a so-called Integrated Development Environment (IDE) for R,
 with side-by-side panes for an R script, an R concole, plots, help documents, and much more.
 While it is perfectly possible to use R without RStudio, RStudio has become
 the de facto standard for working with R and is very useful.
@@ -108,16 +108,16 @@ the de facto standard for working with R and is very useful.
 To install RStudio, go to the [RStudio download page](https://rstudio.com/products/rstudio/download/#download)
 and download and run the installer file for your operating system. 
 
-### Install the tidyverse {#install-tidy}
+### Install the *tidyverse* {#install-tidy}
 
-Install the `tidyverse`, which is a *collection* of useful packages, by
-typing the following command inside an R console:
+Install the *tidyverse*, which is a collection of useful R packages,
+by typing the following command inside an R console:
 
 ```r
 install.packages("tidyverse")
 ```
 
-### Test whether you can load the tidyverse
+### Test whether you can load the *tidyverse*
 
 When you issue the command `library("tidyverse")`,
 you should get the output shown below:
@@ -140,6 +140,8 @@ library("tidyverse")
 If you get an error instead, please try to troubleshoot it.
 Updating R itself may be necessary, see [here](/codeclub-novice/#updating-r) for instructions.
 You can also send the [organizers of Code Club](https://biodash.github.io/codeclub-about/#organizers) an email.
+And if you can't get it to work yet,
+you can always use OSC for the time being, see the [setup instructions further up on this page](/codeclub-setup/#osc).
 
 <br>
 
@@ -151,7 +153,7 @@ Please see the **[Getting started with R](/codeclub-novice/)** page for:
 
 - [Resources to get started with R](/codeclub-novice/#new-to-r)
 - [Useful R and RStudio settings](/codeclub-novice/#useful-settings)
-- [The basics of installing packages](/codeclub-novice/#installing-r-packages)
+- [The basics of installing packages in R](/codeclub-novice/#installing-r-packages)
 - [Instructions for updating R](/codeclub-novice/#updating-r)
 
 
