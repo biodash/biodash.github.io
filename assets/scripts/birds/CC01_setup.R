@@ -1,3 +1,6 @@
+# To run:
+# source("https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/scripts/birds/CC01_setup.R")
+
 # Set-up ---------------------------------------------------------
 
 # Load the tidyverse meta-package:
