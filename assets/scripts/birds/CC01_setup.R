@@ -6,7 +6,7 @@
 # if (!any(str_detect(list.files(), ".*.Rproj"))) {
 #   message("\n-> Creating an RStudio project in the current directory...")
 #   message("-> First loading/installing the usethis package...")
-#   if (!require("usethis")) iinstall.packages("usethis")
+#   if (!require("usethis")) install.packages("usethis")
 #   library(usethis)
 #   create_project(path = getwd(), open = FALSE)
 # } else {
