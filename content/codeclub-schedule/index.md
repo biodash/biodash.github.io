@@ -3,7 +3,7 @@ toc: true
 ---
 
 
-# Code Club: <br/> Upcoming sessions
+# Code Club: <br/> Schedule
 
 ----
 <br>
@@ -21,7 +21,7 @@ Here are the dates for the first four sessions:
 Session nr.  | Wed 5 pm | Fri 3 pm | Presenter     | Topic (+ link)   | Other |
 -------------|----------|----------|---------------|------------------|-------|
 1            | Nov 18   | Nov 20   | Jelmer        | [RStudio Projects & getting started]((/codeclub/01_backyard-birds/)) | [slides](/slides/CC01/)
-2            | Dec 2    | Dec 4    | Jessica       | `dplyr` core verbs | 
+2            | Dec 2    | Dec 4    | Jessica       | *dplyr* core verbs | 
 3            | Dec 9    | Dec 11   | Mike S.       | TBD                |
 4            | Dec 16   | Dec 18   | Michael B.    | TBD                |
 
