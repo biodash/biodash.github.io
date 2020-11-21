@@ -1,23 +1,25 @@
 # To run:
 # source("https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/scripts/birds/CC01_setup.R")
 
+# Create an RStudio project -------------------------------------
+
+# if (!any(str_detect(list.files(), ".*.Rproj"))) {
+#   message("\n-> Creating an RStudio project in the current directory...")
+#   message("-> First loading/installing the usethis package...")
+#   if (!require("usethis")) iinstall.packages("usethis")
+#   library(usethis)
+#   create_project(path = getwd(), open = FALSE)
+# } else {
+#   message("\n-> An RStudio project already exists in the current directory: nothing was done.")
+# }
+
+
 # Set-up ---------------------------------------------------------
 
 # Load the tidyverse meta-package:
 message("\n-> Loading/installing the tidyverse...")
 if (!require("tidyverse")) install.packages("tidyverse")
 library(tidyverse)
-
-# Create an RStudio project:
-if (!any(str_detect(list.files(), ".*.Rproj"))) {
-  message("\n-> Creating an RStudio project in the current directory...")
-  message("-> First loading/installing the usethis package...")
-  if (!require("usethis")) iinstall.packages("usethis")
-  library(usethis)
-  create_project(path = getwd(), open = FALSE)
-} else {
-  message("\n-> An RStudio project already exists in the current directory: nothing was done.")
-}
 
 # If the bird data dir does not exist, create it:
 data_dir <- "data/birds"
