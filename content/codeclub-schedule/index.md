@@ -12,7 +12,11 @@ For Nov/Dec 2020, we will do each session twice:
 Wednesdays at 5 pm and Fridays at 3 pm.
 Please attend whichever one works better for you!
 
-Here are the dates for the first 4 sessions:
+Before you attend for the first time,
+make sure to have a look at the [Computer Setup page](/codeclub-setup/),
+and especially if you're new to R, at the [Getting Started with R page](/codeclub-novice/).
+
+Here are the dates for the first four sessions:
 
 Session nr.  | Wed 5 pm | Fri 3 pm | Presenter     | Topic (+ link) 
 -------------|----------|----------|---------------|---------------|
