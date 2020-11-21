@@ -81,7 +81,7 @@ at his channel [The Data Point](https://www.youtube.com/channel/UC2dB6jDTbqzlTM6
 ### Summary {#local-summary}
 
 You will need:
-- R -- preferably version >= `4.0.0`, but at least `3.0.1`
+- R: At least version `3.6` -- [See here for instructions to update R](/codeclub-novice/#updating-r)
 - RStudio
 - R packages that we will regularly use:
   - `tidyverse`
@@ -145,8 +145,12 @@ You can also send the [organizers of Code Club](https://biodash.github.io/codecl
 
 ## More info {#more}
 
-Please see the [New to R?](/codeclub-novice/) section
-to get started with R and for more R setup tips.
+Please see the **[Getting started with R](/codeclub-novice/)** page for:
+
+- [Resources to get started with R](/codeclub-novice/#new-to-r)
+- [Useful R and RStudio settings](/codeclub-novice/#useful-settings)
+- [The basics of installing packages](/codeclub-novice/#installing-r-packages)
+- [Instructions for updating R](/codeclub-novice/#updating-r)
 
 
 
