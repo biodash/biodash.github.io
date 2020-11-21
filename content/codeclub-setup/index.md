@@ -18,6 +18,8 @@ where Code Club has a Classroom Project. We recommend that you make sure you hav
 an active OSC account with access to the Code Club project either way,
 which can be a helpful backup option when something fails with locall installs.
 
+If you missed the first session, have a look at the [introductory slides](/slides/CC01/) as well.
+
 <br>
 
 ----

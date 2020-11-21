@@ -26,7 +26,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 7a78ebc77538426d
+rmd_hash: fd17b439d7337efd
 
 ---
 
@@ -54,6 +54,15 @@ If you're able to do so, please open RStudio again a bit before Code Club starts
 #### New to R?
 
 If you're completely new to R, it will be useful to have a look at some of the resources listed on our [New to R?](/codeclub-novice/) page prior to Code Club.
+
+<br>
+
+------------------------------------------------------------------------
+
+Slides
+------
+
+On Friday, we started with a couple of [introductory slides](/slides/CC01/).
 
 <br>
 
