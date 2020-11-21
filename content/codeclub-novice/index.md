@@ -2,7 +2,7 @@
 toc: true
 ---
 
-# Code Club: <br/> New to R? And other R tips.
+# Code Club: <br/> R -- Getting Started and Some Tips
 
 ----
 <br>
@@ -109,13 +109,31 @@ Consider updating R if you have an older version of R installed.
 **Specifically, in the first session of Code Club, we've seen problems when installing
 the *tidyverse* with R versions below `R 3.6`.**
 
-- **Windows**: Use the function `installr::updateR()` in an R console
-  (if needed, first install installr using `install.packages("installr")`).
+You can check which version of R you have by looking at the first lines of
+output when running the following command inside R:
+
+```r
+sessionInfo()
+```
+
+#### To update:
+
+- **Windows**: You can update R from within R. The `updateR()` function will also take care
+  of updating your packages:
+  
+  ```r
+  install.packages("installr")
+  installr::updateR()
+  ```
+
 - **Mac**: Download and install the latest `.pkg` file as if you were installing it for the first time.
+
 - **Linux**: In Ubuntu, if you installed R with `apt` or `apt-get`, you can use `apt-get upgrade` in a terminal.
   Otherwise, download and install the latest version after removing the old one.
   [Rtask has some instructions](https://rtask.thinkr.fr/installation-of-r-4-0-on-ubuntu-20-04-lts-and-tips-for-spatial-packages/) for upgrading to
   R 4.0 in Ubuntu (along with upgrading to Ubuntu 20.04).
+
+<br>
 
 #### Re-installing your packages after updating (Mac and Linux)
 
