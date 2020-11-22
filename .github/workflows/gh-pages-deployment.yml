@@ -1,55 +1,30 @@
-name: build website
+name: github pages
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master  # Set a branch to deploy
 
 jobs:
-  build:
-    name: Build Hugo Site
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-20.04
     steps:
-      - name: Install Hugo
-        env:
-          HUGO_VERSION: 0.78.2
-        run: |
-          mkdir ~/hugo
-          cd ~/hugo
-          curl -L "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz" --output hugo.tar.gz
-          tar -xvzf hugo.tar.gz
-          sudo mv hugo /usr/local/bin
-
-      - name: Checkout master branch
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
-          ref: master
-          path: main
-          submodules: true
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v2
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
         with:
-          ref: gh-pages
-          path: gh-pages
+          hugo-version: '0.78.2'
+          extended: true
 
-      - name: Hugo Build
-        run: cd main && hugo
+      - name: Build
+        run: hugo --minify
 
-      - name: Copy files
-        run: cp -rf main/public/* gh-pages/
-
-      - name: Commit changes
-        run: |
-          cd gh-pages
-
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Action"
-
-          git add -A .
-
-          if git diff-index --quiet HEAD --; then
-            echo "No changes..."
-          else
-            git commit -m "[CI] build hugo static site"
-            git push
-          fi
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: ./docs
