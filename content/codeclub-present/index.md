@@ -8,7 +8,7 @@ toc: true
 
 <br>
 
-## Introduction - TEST
+## Introduction
 
 - Each Code Club session should be represented by one post on the website at <https://biodash.github.io/codeclub/>.
 
