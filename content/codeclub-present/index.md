@@ -10,7 +10,7 @@ toc: true
 
 ## Introduction
 
-- Each Code Club session represents a blogpost on the website at <https://biodash.github.io/codeclub/>.
+- Each Code Club session should be represented by one post on the website at <https://biodash.github.io/codeclub/>.
 
 - Regular presenters will be given direct access to the [Github repository](https://github.com/biodash/biodash.github.io)
   and will be able to push a new post to the website directly.
@@ -18,27 +18,13 @@ toc: true
 - Occasional presenters can either send their material directly to [Jelmer](mailto:poelstra.1@osu.edu)
   or create a "pull request" with their new post.
 
-<br>
+- Content should be written in R Markdown (`.Rmd`) or "plain" Markdown (`.md`).
+  If you write in `.Rmd`, you need to render to `.md` locally.
+  Conversion of `.md` to an HTML file suitable for the website will be done
+  automatically upon pushing the master branch of the repository. 
 
-----
-
-## Checklist
-
-An overview of what to do; see the sections further down on how to do it.
-
-- Get the session info onto the website **about 1 week before the session**. 
+- Make sure to get the session materials onto the website *at least several days before the session*. 
   
-  - At this point, your post should contain information on the topic and
-    recommended prep for participants.
-  
-  - Additional content such as intro slides and example code can be included
-    right away, or added just before the session.
-
-- Include a link to an R script/markdown that participants can download.
-
-- If your session includes a dataset, upload it and include code
-  in the abovementioned script/markdown file that will download the dataset file(s).
-
 <br>
 
 ----
@@ -48,7 +34,7 @@ An overview of what to do; see the sections further down on how to do it.
 ### 1: Get the repo
 
 You only need to do this if you want to create a pull request or push your content to the website
-directly. If you want to send your R Markdown file by email, skip this and continue to Step 2.
+directly. If you want to send your (R) Markdown file by email, skip this and continue to Step 2.
 
 The following assumes you have git installed (if not, see [these instructions](https://github.com/git-guides/install-git)),
 and a Github account (if not, sign up [here](https://github.com/join)).
@@ -79,10 +65,21 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 
 ### 2: Create a post
 
-- Start an R session. If you don't have the *hugodown* package installed, install it:
+- Here, we'll use the *hugodown* package to create a Markdown skeleton for our post,
+  and below we'll also use *hugodown* to preview the site.
+  
+  <div class="alert alert-note">
+  Note that you can easily bypass <i>hugodown</i> by simply copying the YAML header from
+  the first code club session
+  (see <a href="https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/01_backyard-birds/index.Rmd">here</a>
+  for the <code>.Rmd</code> file) into a new file and taking it from there.
+  </div>
+
+  If you don't have the *hugodown* package installed, install it:
   ```r
-  remotes::install_github("r-lib/hugodown")
+  remotes::install_github("r-lib/hugodown") # Or equivalently, use devtools::install_githhub()
   ```
+
 - A *post bundle* is a separate folder for a post which will hold the R Markdown file
   that contains the post, as well as associated images and so on.
   To create a post bundle along with a R Markdown file that already has many useful YAML header tags:
@@ -102,7 +99,7 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 - Write the contents of your Code Club session that you would like to share with participants, in R Markdown format.
   For formatting tips, see [below](/codeclub-present/#format).
 
-- **If you want participants to load an R Markdown file or script:**   
+- *If you want participants to load an R Markdown file or script:*   
   An easy solution is to place the file in the same directory as your post, and include it in your git commit,
   so it will be uploaded to Github. In that case, the URL to the file for direct downloads for participants will be:
   `https://raw.githubusercontent.com/biodash/biodash.github.io/master/docs/codeclub/<session-number>_<short-title>/<filename>`.   
@@ -110,14 +107,19 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   In your post, include a function call like `file.download(<script-URL>)` for participants to get the file --
   this will work both for participants working locally and those working in an OSC RStudio Server instance.
 
-- **If your session contains a dataset:**   
+- *If your session contains a dataset:*   
   Like for the markdown/script, place the file(s) in the same directory as your post.
   If you have a markdown/script for participants, include `file.download(<dataset-URL>)` in this file,
   otherwise include it directly in your post.
 
-- Convert your `.Rmd` (R Markdown) file to a `.md` (Markdown) file.
-  Since your output was specified as `hugodown::md_document` when you called `hugodown::use_post()`
-  (and not as a HTML file -- recall that Hugo will perform the markdown to HTML conversion),
+- **Convert your `.Rmd` (R Markdown) file to a `.md` (Markdown) file.**   
+  
+  <div class="alert alert-note">
+  Hugo renders <code>.md</code> but not <code>.Rmd</code> to HTML,
+  so we have to always render to <code>.md</code> first when writing in <code>.Rmd</code>.
+  </div>
+  
+  Since your output is specified as `hugodown::md_document`,
   this is done most easily by "knitting" your post in RStudio by clicking `Knit` in the top bar,
   or by pressing `Ctrl + Shift + K`.
   
@@ -141,15 +143,6 @@ You can do this in two ways, from RStudio or from the command line.
   hugodown::hugo_start()
   ```
 
-- If you *build* the website,
-  changes you make will be reflected on the online website after you push to remote.
-  The entire rendered website is in the `docs/` dir; HTML files rendered from markdown
-  files will be placed there, any images and other files will be copied there, and so on.
-  To build the website using *hugodown*:
-  ```r
-  hugodown::hugo_build(dest = "docs")
-  ```
-
 #### Option B: From the command line
 
 - Install Hugo using [these instructions](https://gohugo.io/getting-started/installing/).
@@ -160,13 +153,33 @@ You can do this in two ways, from RStudio or from the command line.
   ```
   You will see a message that includes "*Web Server is available at [...]*".
   Click the link or copy and paste the address into a browser, and you will see the rendered website.
-  Until you press `Ctrl + C` on the command line, the server will keep running and will update
-  whenever you save changes in a file within the website directory.
+  
+  <div class="alert alert-note">
+  The server will keep running and will update whenever you save changes in a file
+  that is within the website directory, until you stop it using <code>Ctrl + C</code>.
+  </div>
 
-- Build the website:
+#### Side note: Building the website
+
+Note that you don't need to *build* the website,
+because it will be built automatically from Markdown files whenever you push to
+(the master branch of) the Github repo.
+
+But as background info, or in case automatic builds fail,
+here is how you *would* build the site:
+
+- Using Hugo from the shell:
   ```sh
   hugo -d docs/
   ```
+
+- Using *hugodown* in R:  
+  ```r
+  hugodown::hugo_build(dest = "docs")
+  ```
+
+The entire rendered website is in the `docs/` dir; HTML files rendered from Markdown
+files will be placed there, any images and other files will be copied there, and so on.
 
 <br>
 
@@ -182,6 +195,12 @@ You can do this in two ways, from RStudio or from the command line.
   # git add *
   ```
 
+- Check if all your changes and new files have been staged:
+
+  ```sh
+  git status
+  ```
+
 - Commit:
   ```sh
   git commit -m "Add CodeClub session <session-nr> by <your-name>"
@@ -193,13 +212,11 @@ You can do this in two ways, from RStudio or from the command line.
 
 ### 5: Push or submit pull request
 
-Your Markdown (`.md`) file will be built along with the rest of the website by a program called Hugo 
-(Hugo does not recognize R Markdown (`Rmd`) files, that's why you needed to Knit your R Markdown yourself).
-
-This will eventually be done automatically via Github actions; but as long as that has not yet been set up,
-Jelmer will manually call Hugo to build the website. 
-
-<br>
+Your Markdown (`.md`) file(s) will be built along with the rest of the website by Hugo. 
+Using Github Actions, this will be done automatically upon pushing to the master branch on Github,
+which is all we need to do.
+Note that the built website will be committed by Github Actions not to the master
+branch but to the *gh-actions* branch.
 
 #### Option A: Create a pull request
 
@@ -212,14 +229,12 @@ to *pull* your changes into their repository.
   ```
 
 - Create the pull request:
-  - Go to the Pull requests page of our repo at <https://github.com/biodash/biodash.github.io/pulls>.
-  - Click the green button on the right that says `New pull request`.
-  - In the grey bar on top, in the button that says `Compare: <branch>`, make sure the branch specifiied is your branch,
+  1. Go to the Pull requests page of our repo at <https://github.com/biodash/biodash.github.io/pulls>.
+  2. Click the green button on the right that says `New pull request`.
+  3. In the grey bar on top, in the button that says `Compare: <branch>`, make sure the branch specified is your branch,
     which we've named `my-branch` in these instructions.
-  - Enter a **title** (e.g. "*New Post: Session 6*") and **description** (say a little more about the post) for the pull request.
-  - Click the green button `Send pull request`.
-
-<br>
+  4. Enter a **title** (e.g. "*New Post: Session 6*") and **description** (say a little more about the post) for the pull request.
+  5. Click the green button `Send pull request`.
 
 #### Option B: Push to the site repo (direct access required)
 
@@ -240,7 +255,7 @@ to *pull* your changes into their repository.
 
 ### 6: Install packages at OSC (optional)
 
-Many R packages are already installed at OSC (nearly 200 for R 4.0.2), including the `tidyverse`.
+Many R packages are already installed at OSC (nearly 200 for R 4.0.2), including the *tidyverse*.
 You can check which packages have been installed by typing, in an R session at OSC:
 ```r
 library()
@@ -279,8 +294,13 @@ like participants that work locally will have to do.
 - If you want a **Table of Contents** (TOC) for your file, add a line `toc: true` to the `YAML`
   (*not* indented, as it is not an option of the output format).
 
-- Add a line saying `source_extension: '.Rmd'` (not indented) to your R Markdown,
-  which will ensure that there is a link to the source document at the top of your post.
+- ~~Add a line that reads `source_extension: '.Rmd'` (not indented) to your R Markdown,
+  which will ensure that there is a link to the source document at the top of your post.~~   
+  *EDIT: I have removed these source links for now.
+  They were also visible in the "Recent Posts" widget on the home page,
+  and some people clicked on that link rather than the website link.
+  Then, they ended up on in the Github repo but didn't even know they were
+  in the wrong place since the contents of the post is present.*
 
 - To add an image, put it in the same directory as the markdown file,
   and refer to it without prepending a path.
@@ -294,9 +314,9 @@ but to hide them by default. This can be done with a little HTML:
 
 ````{html}
 <details>
-  <summary>
-  Solution (click here)
-  </summary>
+<summary>
+Solution (click here)
+</summary>
 
 <br>
 ... Your solution - this can be a long section including a code block...
@@ -307,9 +327,9 @@ install.packages("tidyverse")
 ````
 This is rendered as:
 <details>
-  <summary>
+<summary>
 Solution (click here)
-  </summary>
+</summary>
 
 <br>
 
@@ -331,42 +351,38 @@ you can use two classes specific to the [Hugo Academic Theme](https://themes.goh
 
   ```{HTML}
   <div class="alert alert-note">
-  <div>
-    This is an alert note.
+  This is an alert note.
   </div>
   ```
   
   Which is rendered as:
   
   <div class="alert alert-note">
-  <div>
-    This is an alert note.
+  This is an alert note.
   </div>
 
 - `alert-warning` for a red box with a warning symbol:
   
    ```{HTML}
   <div class="alert alert-warning">
-  <div>
-    This is an alert warning.
+  This is an alert warning.
   </div>
   ```
 
   Which is rendered as:
 
   <div class="alert alert-warning">
-  <div>
-    This is an alert warning.
+  This is an alert warning.
   </div>
 
 - I also added a custom class, "puzzle":
   
   ```{HTML}
   <div class="alert puzzle">
-  <div>
-    This is a puzzle div, for do-it-yourself challenges.
+  This is a puzzle div, for do-it-yourself challenges.
   </div>
   ```
+
   <div class="puzzle">
   This is a puzzle div, for do-it-yourself challenges.
   </div>
@@ -375,27 +391,27 @@ you can use two classes specific to the [Hugo Academic Theme](https://themes.goh
   in the `assets/scss/custom.scss` file.
 
 - All of these classes can also be called using pandoc's `:::` notation
-  when you're writing in `.Rmd` (but not if you're writing in `md`).
-  This way, you can also use Markdown syntax within the div:
+  when you're writing in `.Rmd` (but not if you're writing in `.md`), e.g.:
 
   ```
   :::puzzle
-  This is a **puzzle** div, for do-it-yourself challenges.
+  This is a puzzle div, for do-it-yourself challenges.
   :::
   ```
-
-  Will be rendered as:
-
-  <div class="puzzle">
-  This is a <strong>puzzle</strong> div, for do-it-yourself challenges.
-  </div>
-
 
 <br>
 
 ### Code highlighting
 
-Hugo supports code highlighting using the syntax below in `md` documents:
+<div class="alert alert-warning">
+<div>
+Code highlighting doesn't work with out of the box with <code>.Rmd</code> files.
+But it should be possible to get it to work, stay tuned!
+</div>
+</div>
+
+Hugo supports the highlighting of specific lines of code
+using the syntax below in `md` documents:
 
 ````
 ```r {hl_lines=[1,"3-4"]}
@@ -414,15 +430,21 @@ weight_df %>%
   select(mean_weight, everything())
 dim(weight_df)
 ```
-
 
 ### Shortcodes
+
+<div class="alert alert-warning">
+<div>
+Like code highlighting, shortcodes only work with <code>.md</code> files.
+The <i>blogdown</i> package has a <code>shortcode()</code> function to support them
+(see <a href="https://bookdown.org/yihui/blogdown/content.html#shortcode">here</a>,
+but <i>hugodown</i> does not support them.
+</div>
+</div>
 
 Hugo shortcodes are little code snippets for specific content.
 Some of these are specific to Wowchemy,
 and others are available for any Hugo site.
-
-<br>
 
 #### Highlight text
 
@@ -435,8 +457,6 @@ Here is some {{</* hl */>}}highlighted text{{</* /hl */>}}.
 This will render as:
 
 Here is some {{< hl >}}highlighted text{{< /hl >}}.
-
-<br>
 
 #### Icons
 
@@ -456,8 +476,6 @@ Wowchemy supports shortcodes for icons, for instance:
 ```bash
 {{</* icon name="terminal" pack="fas" */>}}
 ```
-
-<br>
 
 #### General Hugo shortcodes
 
