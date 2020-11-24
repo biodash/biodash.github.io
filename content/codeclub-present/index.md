@@ -93,8 +93,10 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 
 - Fill out some of the YAML, such as the `title`, `subtitle`, `authors` (in kebab-case, e.g. john-doe,
   to link to your author profile; note that Jelmer's name here is "admin"),
-  and optionally `tags` and summary (this will appear on Biodash's front page;
-  the default "summary" there can be awkward as it combines headers and paragraphs).
+  and optionally `tags` and `summary`
+  (the `summary` will appear on Biodash's front page in the "Recent Posts" widget;
+  this can be good to fill out here because the default summary can be awkward,
+  as it combines headers and paragraphs).
 
 - Write the contents of your Code Club session that you would like to share with participants, in R Markdown format.
   For formatting tips, see [below](/codeclub-present/#format).
@@ -141,7 +143,12 @@ You can do this in two ways, from RStudio or from the command line.
 - Preview the website:
   ```r
   hugodown::hugo_start()
+
+  #> Starting server on port 1313
   ```
+  This will provide a preview RStudio.
+  To look at it in a browser, go to `localhost:1313`,
+  where 1313 corresponds to the port returned in the R console (see above). 
 
 #### Option B: From the command line
 
@@ -225,7 +232,7 @@ to *pull* your changes into their repository.
 
 - Push to your branch:
   ```sh
-  git push origin my-branch
+  git push -u origin my-branch # -u to set the upstream branch, since it did not exist there yet
   ```
 
 - Create the pull request:
