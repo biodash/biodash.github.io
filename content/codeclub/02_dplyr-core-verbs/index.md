@@ -3,7 +3,7 @@ title: "Session 2: dplyr core verbs"
 subtitle: "Using select, filter, mutate, arrange, and summarize"
 summary: "During this second session of Code Club, we will be learning how to use some of the most popular dplyr one-table functions, including filter, select, mutate, arrange, and summarize."  
 authors: [jessica-cooperstone]
-date: 2020-12-02
+date: 2020-11-25
 output: hugodown::md_document
 
 image: 
@@ -11,7 +11,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: 387e8e1d0be5bcdd
+rmd_hash: 42c99d08be33acca
 
 ---
 
