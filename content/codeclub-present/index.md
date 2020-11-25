@@ -162,9 +162,14 @@ You can do this in two ways, from RStudio or from the command line.
   Click the link or copy and paste the address into a browser, and you will see the rendered website.
   
   <div class="alert alert-note">
+  <div>
   The server will keep running and will update whenever you save changes in a file
   that is within the website directory, until you stop it using <code>Ctrl + C</code>.
   </div>
+  </div>
+
+<div class="alert alert-note">
+<div>
 
 #### Side note: Building the website
 
@@ -187,6 +192,9 @@ here is how you *would* build the site:
 
 The entire rendered website is in the `docs/` dir; HTML files rendered from Markdown
 files will be placed there, any images and other files will be copied there, and so on.
+
+</div>
+</div>
 
 <br>
 
@@ -301,6 +309,14 @@ like participants that work locally will have to do.
 - If you want a **Table of Contents** (TOC) for your file, add a line `toc: true` to the `YAML`
   (*not* indented, as it is not an option of the output format).
 
+- To add an image, put it in the same directory as the markdown file,
+  and refer to it without prepending a path.
+
+- `<br>` will insert a line break,
+  which can be useful to get more space between sections.
+
+- I add lines above each major section header using `----` (preceded by a `<br>`).
+
 - ~~Add a line that reads `source_extension: '.Rmd'` (not indented) to your R Markdown,
   which will ensure that there is a link to the source document at the top of your post.~~   
   *EDIT: I have removed these source links for now.
@@ -308,9 +324,6 @@ like participants that work locally will have to do.
   and some people clicked on that link rather than the website link.
   Then, they ended up on in the Github repo but didn't even know they were
   in the wrong place since the contents of the post is present.*
-
-- To add an image, put it in the same directory as the markdown file,
-  and refer to it without prepending a path.
 
 <br>
 
@@ -358,40 +371,52 @@ you can use two classes specific to the [Hugo Academic Theme](https://themes.goh
 
   ```{HTML}
   <div class="alert alert-note">
+  <div>
   This is an alert note.
+  </div>
   </div>
   ```
   
   Which is rendered as:
   
   <div class="alert alert-note">
+  <div>
   This is an alert note.
+  </div>
   </div>
 
 - `alert-warning` for a red box with a warning symbol:
   
    ```{HTML}
   <div class="alert alert-warning">
+  <div>
   This is an alert warning.
+  </div>
   </div>
   ```
 
   Which is rendered as:
 
   <div class="alert alert-warning">
+  <div>
   This is an alert warning.
+  <div>
   </div>
 
-- I also added a custom class, "puzzle":
+- I also added a custom class, `puzzle`:
   
   ```{HTML}
   <div class="alert puzzle">
+  <div>
   This is a puzzle div, for do-it-yourself challenges.
+  </div>
   </div>
   ```
 
   <div class="puzzle">
+  <div>
   This is a puzzle div, for do-it-yourself challenges.
+  </div>
   </div>
 
   Custom classes and other custom formatting can be written in CSS
@@ -444,7 +469,7 @@ dim(weight_df)
 <div>
 Like code highlighting, shortcodes only work with <code>.md</code> files.
 The <i>blogdown</i> package has a <code>shortcode()</code> function to support them
-(see <a href="https://bookdown.org/yihui/blogdown/content.html#shortcode">here</a>,
+(see <a href="https://bookdown.org/yihui/blogdown/content.html#shortcode">here</a>),
 but <i>hugodown</i> does not support them.
 </div>
 </div>
