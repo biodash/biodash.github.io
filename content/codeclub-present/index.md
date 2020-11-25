@@ -117,8 +117,10 @@ and a Github account (if not, sign up [here](https://github.com/join)).
 - **Convert your `.Rmd` (R Markdown) file to a `.md` (Markdown) file.**   
   
   <div class="alert alert-note">
+  <div>
   Hugo renders <code>.md</code> but not <code>.Rmd</code> to HTML,
   so we have to always render to <code>.md</code> first when writing in <code>.Rmd</code>.
+  </div>
   </div>
   
   Since your output is specified as `hugodown::md_document`,
