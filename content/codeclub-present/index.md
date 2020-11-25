@@ -10,7 +10,7 @@ toc: true
 
 ## Introduction
 
-- Each Code Club session should be represented by one post on the website at <https://biodash.github.io/codeclub/>.
+- ...Each Code Club session should be represented by one post on the website at <https://biodash.github.io/codeclub/>.
 
 - Regular presenters will be given direct access to the [Github repository](https://github.com/biodash/biodash.github.io)
   and will be able to push a new post to the website directly.
