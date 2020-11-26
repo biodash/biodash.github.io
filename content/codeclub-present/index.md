@@ -150,8 +150,8 @@ and have [a Github account](https://github.com/join).
   and it should keep that name!
   Keep this name also if you create your <code>.Rmd</code> manually or by copying
   the file from another Code Club session.
-  It will eventually turn into <code>index.html</code> which the name needed
-  to be displayed on the website.
+  It will eventually turn into <code>index.html</code>,
+  which is the name that will trigger the file to be displayed on the website.
   </div>
   </div>
 
@@ -161,6 +161,15 @@ and have [a Github account](https://github.com/join).
   (the `summary` will appear on Biodash's front page in the "Recent Posts" widget;
   this can be good to fill out here because the default summary can be awkward,
   as it combines headers and paragraphs).
+
+  <div class="alert alert-warning">
+  <div>
+  If you specify a date in the future (e.g. the date of the Code Club session),
+  the page will not be built and will thus not appear on the website!
+  Specifiying the date in the YAML is not particularly useful anyway --
+  when you edit the post after the specified date, it will use the edit date.
+  </div>
+  </div>
 
 - Write the contents of your Code Club session that you would like to share with participants, in R Markdown format.
   For formatting tips, see [below](/codeclub-present/#format).
