@@ -41,12 +41,538 @@ If you've never used `dplyr` before (or even if you have), you may find [this ch
 
 ## Getting Started
 
-### Download today's R script
+### Want to download an R script with the content from todays session?
 ```{r, eval = FALSE}
 
 todays_R_script <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/02_dplyr-core-verbs/2_Dplyr_one-table_verbs.R'
 
 download.file(todays_R_script)
 ```
+
+<br>
+
+----
+
+
+## 1 - What is data wrangling?
+
+It has been estimated that the process of getting your data into the appropriate formats ttakes about 80% of the total time of analysis.  We will talk about formatting as tidy data (e.g., such that each column is a single variable, each row is a single observation, and each cell is a single value, you can learn more about tidy data [here](https://r4ds.had.co.nz/tidy-data.html)) in a future session of Code Club.  
+
+The package [`dplyr`](https://dplyr.tidyverse.org/), as part of the [`tidyverse`](https://www.rdocumentation.org/packages/tidyverse/versions/1.3.0) has a number of very helpful functions that will help you get your data into a format suitable for your analysis.  
+
+<br>
+<div class="alert alert-note">
+<div>
+
+**What will we go over today**
+
+These five core `dplyr()` verbs will help you get wrangling.
+
+- [`select()`](https://dplyr.tidyverse.org/reference/select.html) - picks variables (i.e., columns) based on their names
+- [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) - picks observations (i.e., rows) based on their values
+- [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) - makes new variables, keeps existing columns
+- [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) - sorts rows based on values in columns
+- [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html) - reduces values down to a summary form
+
+</div>
+</div>
+
+<br>
+
+----
+
+## 2 - Get ready to wrangle
+
+**Let's get set up and grab some data so that we can get familiar with these verbs**
+
+* You can do this locally, or at OSC.  You can find instructions if you are having trouble [here](/codeclub-setup/).
+
+First load your libraries.
+```{r, warning = FALSE}
+library(tidyverse)
+```
+
+Then let's access the [iris](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/iris.html) dataset that comes pre-loaded in base R.  We will take that data frame and assign it to a new object called `iris_data`.  Then we will look at our data.
+```{r}
+iris_data <- iris
+
+# look at the first 6 rows, all columns
+head(iris_data)
+
+# check the structure of iris_data
+glimpse(iris_data)
+```
+
+This dataset contains the measurements (in cm) of `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width` for three different `Species` of iris, setosa, versicolor, and virginica.   
+
+<br>
+
+----
+
+## 3 - Using `select()`
+`select()` allows you to pick certain columns to be included in your data frame.
+
+We will create a dew data frame called iris_petals_species that includes the columns `Species`, `Petal.Length` and `Petal.Width`.
+
+```{r}
+iris_petals_species <- iris_data %>%
+  select(Species, Petal.Length, Petal.Width)
+```
+
+What does our new data frame look like?
+```{r}
+head(iris_petals_species)
+```
+
+**Note - look what happened to the order of the columns!**
+
+<div class="alert alert-warning">
+**This is not the only way to select columns.**  
+
+You could also subset by indexing with the square brackets, but you can see how much more readable using `select()` is.  It's nice not to have to refer back to remember what column is which index.
+
+```{r}
+iris_data_indexing <- iris_data[,3:5]
+
+head(iris_data_indexing)
+```
+
+</div>
+
+<br>
+
+----
+
+## 4 - Using  `filter()`
+
+![Artwork by @allison_horst](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/dplyr_filter.jpg)
+Artwork by [@allison_horst](https://github.com/allisonhorst/stats-illustrations).
+
+`filter()` allows you to pick certain obsevations (i.e, rows) based on their values to be included in your data frame.
+
+We will create a new data frame that only includes information about the irises where their `Species` is setosa.
+```{r}
+iris_setosa <- iris_data %>%
+  filter(Species == "setosa")
+```
+
+Let's check the dimensions of our data frame.  Remember, our whole data set is 150 observations, and we are expecting 50 observations per `Species`.
+```{r}
+dim(iris_setosa)
+```
+
+<br>
+
+----
+
+## 5 - Using `mutate()`
+
+![Artwork by @allison_horst](https://raw.github.com/allisonhorst/stats-illustrations/master/rstats-artwork/dplyr_mutate.png)
+Artwork by [@allison_horst](https://github.com/allisonhorst/stats-illustrations).
+
+`mutate()` allows you to make new variables, while keeping all your existing columns.
+
+Let's make a new column that is the ratio of `Sepal.Length`/`Sepal.Width`
+```{r}
+iris_sepal_length_to_width <- iris_data %>%
+  mutate(Sepal.Length_div_Sepal.Width = Sepal.Length/Sepal.Width)
+```
+
+```{r}
+head(iris_sepal_length_to_width)
+```
+
+**Note -- see the new column location**
+
+<br>
+
+----
+
+## 6 - Using `arrange()`
+
+Very often you will want to order your data frame by some values.  To do this, you can use `arrange()`.
+
+Let's arrange the values in our `iris_data` by `Sepal.Length`.
+```{r}
+iris_data %>%
+  arrange(Sepal.Length)
+```
+
+What if we want to arrange by `Sepal.Length`, but within `Species`?  We can do that using the helper [`group_by()`](https://dplyr.tidyverse.org/reference/group_by.html).
+
+```{r}
+iris_data %>%
+  group_by(Species) %>%
+  arrange(Sepal.Length)
+```
+
+<br>
+
+----
+
+## 7 - Using `summarize()`
+By using `summarize()`, you can create a new data frame that has the summary output you have requested.
+
+We can calculate the mean `Sepal.Length` across our dataset.
+```{r}
+iris_data %>%
+  summarize(mean = mean(Sepal.Length))
+```
+
+What if we want to calculate means within `Species`?
+```{r}
+iris_data %>%
+  group_by(Species) %>%
+  summarize(mean = mean(Sepal.Length))
+```
+
+We can integrate some helper functions into our code to simply get out a variety of outputs.  We can use [`across()`](https://dplyr.tidyverse.org/reference/across.html) to apply our summary aross a set of columns.  I really like this function.
+```{r}
+iris_data %>%
+  group_by(Species) %>%
+  summarize(across(where(is.numeric), mean))
+```
+
+This can also be useful for counting observations per group.  Here, how many iris observations do we have per `Species`?
+```{r}
+iris_data %>%
+  group_by(Species) %>%
+  tally()
+```
+
+
+<br>
+
+----
+## 8 - Breakout rooms!
+### Read in data
+Now you try!  We are going to use the Great Backyard Birds dataset we downloaded two weeks ago and you will apply the functions we have learned above to investigate this dataset.
+
+If you weren't here for [Session 1](/codeclub/01_backyard-birds/), get the birds data set.
+```{r}
+# create a directory called S02
+dir.create('S02')
+
+# within S02, create a directory called data, within, a directory called birds
+dir.create('data/birds/', recursive = TRUE)
+```
+
+Download the file from the internet.
+```{r}
+# set the location of the file
+birds_file_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv'
+
+# set the path for the downloaded file
+birds_file <- 'data/birds/backyard-birds_Ohio.tsv'
+
+# download 
+download.file(url = birds_file_url, destfile = birds_file)
+```
+
+If you were here for [Session 1](/codeclub/01_backyard-birds/), join back in!  Let's read in our data.
+```{r}
+birds_file <- 'data/birds/backyard-birds_Ohio.tsv'
+birds <- read_tsv(birds_file)
+```
+
+# Exercises
+Below you can find our breakout room exercises for today.
+
+### Take a look at the data
+
+<div class="alert puzzle">
+<div>
+Investigate the structure of the birds dataset.
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+```{r}
+glimpse(birds)
+```
+</details>
+
+</div>
+</div>
+
+----
+
+### Create new columns
+
+<div class="alert puzzle">
+<div>
+Create a new data frame that removes the column `range`.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+  Try using select().  Remember, you can tell select() what you want to keep, and what you want to remove.
+<br>
+</details>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+```{r}
+birds_no_range <- birds %>%
+  select(-range)
+
+head(birds_no_range)
+```
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+### Find number of unique birds
+
+<div class="alert puzzle">
+<div>
+How many unique species of birds have been observed?.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+  Try using summarize() with a group_by() helper.
+<br>
+</details>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+```{r}
+# using a combo of group_by() and summarize()
+unique_birds <- birds %>%
+  group_by(species_en) %>%
+  summarize()
+
+dim(unique_birds) # question - are there really 170 different birds observed?  take a look at this summary
+
+# a one line, base R approach
+length(unique(birds$species_en))
+```
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+### How rare are Bald Eagle sightings?
+
+<div class="alert puzzle">
+<div>
+How many times have Bald Eagles been observed?.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+  Try using filter().  Remember the syntax you need to use to indicate you are looking for a Bald Eagle.
+<br>
+</details>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+```{r}
+birds_bald_eagle <- birds %>%
+  filter(species_en == "Bald Eagle")
+
+dim(birds_bald_eagle)
+```
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+### How rare are all eagle sightings?
+
+<div class="alert puzzle">
+<div>
+How many times have any kind of eagle been observed?.  Group hint: there are only Bald Eagle and Golden Eagle in this dataset.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+  There is a way to denote OR within filter().
+<br>
+</details>
+
+<details>
+  <summary>
+  More Hints (click here)
+  </summary>
+  You denote OR by using the vertical bar.
+<br>
+</details>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+```{r}
+birds_alleagles <- birds %>%
+  filter(species_en == "Bald Eagle" | species_en == "Golden Eagle")
+
+dim(birds_alleagles)
+```
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+### North-est bird location?
+
+<div class="alert puzzle">
+<div>
+What is the north most location of the bird observations in Ohio?
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+  Try using arrange().  Remember that you can arrange in both ascending and descending order.  You can also use your Ohio knowledge to check if you've done this correctly.
+<br>
+</details>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+```{r}
+birds_sort_lat <- birds %>%
+  arrange(-decimalLatitude)
+
+head(birds_sort_lat)
+```
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+### Most common sighting?
+
+<div class="alert puzzle">
+<div>
+What is the most commonly observed bird in Ohio?
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+  Try using tally() and a little helper term.
+<br>
+</details>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+```{r}
+unique_birds_tally <- birds %>%
+  group_by(species_en) %>%
+  tally(sort = TRUE)
+
+head(unique_birds_tally)
+```
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+### Rarest sightings?
+
+<div class="alert puzzle">
+<div>
+What is the least commonly observed bird (or birds) in Ohio?
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+  Try using the data frame you've created in the previous exercise.
+<br>
+</details>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+```{r}
+unique_birds_tally %>%
+  arrange(n) %>%
+  filter(n == 1)
+```
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+## Bonus time!
+
+<div class="alert puzzle">
+<div>
+In what year were the most Bald Eagles observed?
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+  You may want to convert your date column to a more simplified year-only date.  Check out the package lubridate.
+<br>
+</details>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+```{r}
+library(lubridate)
+birds_bald_eagle_year <- birds_bald_eagle %>%
+  mutate(year = year(eventDate)) %>% # year() takes a date and outputs only year
+  group_by(year) %>%
+  tally()
+
+arrange(birds_bald_eagle_year, -n)
+```
+</details>
+<br>
+
+</div>
+</div>
 
 <br> <br> <br> <br>
