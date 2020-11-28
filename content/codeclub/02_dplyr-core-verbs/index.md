@@ -5,6 +5,7 @@ summary: "During this second session of Code Club, we will be learning how to us
 authors: [jessica-cooperstone]
 date: 2020-11-25
 output: hugodown::md_document
+toc: true
 
 image: 
   caption: "Artwork by @allison_horst"
@@ -22,37 +23,27 @@ rmd_hash: eca3ce58a4cb4b3b
 Prep homework
 -------------
 
-#### Basic computer setup
+### Basic computer setup
 
-If you didn't already do this, please follow the [Code Club Computer Setup](/codeclub-setup/) instructions.
+-   If you didn't already do this, please follow the [Code Club Computer Setup](/codeclub-setup/) instructions, which also has pointers for if you're new to R or RStudio.
 
-#### Test if it works
+-   If you're able to do so, please open RStudio a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll troubleshoot.
 
-Please open RStudio locally or [start an OSC RStudio Server session](/codeclub-setup/#osc-run-rstudio).
-
-**Nov 19 addition: If you're working locally, test if you can load the *tidyverse* package with [`library("tidyverse")`](http://tidyverse.tidyverse.org) inside R.** (If you haven't installed the *tidyverse* yet, please go to the [Code Club Computer Setup](/codeclub-setup/#install-tidy) instructions.)
-
-If you have not used RStudio before, take a moment to explore what's in the panels and tabs. (It may help to check out [Mike Sovic's 1-minute intro to the RStudio interface](https://www.youtube.com/watch?v=ByxF3xjN2JQ&list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe&t=2m15s) or [RStudio's 3-minute intro](https://fast.wistia.net/embed/iframe/520zbd3tij?videoFoam=true).)
-
-If you're able to do so, please open RStudio again a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll troubleshoot.
-
-#### New to R?
-
-If you're completely new to R, it will be useful to have a look at some of the resources listed on our [New to R?](/codeclub-novice/) page prior to Code Club.
-
-#### New to dplyr?
+### New to dplyr?
 
 If you've never used `dplyr` before (or even if you have), you may find [this cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) useful.
 
 <br>
 
-------------------------------------------------------------------------
+----
+----
 
 ### Want to download an R script with the content from todays session?
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>todays_R_script</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/02_dplyr-core-verbs/2_Dplyr_one-table_verbs.R'</span>
+<pre class='chroma'><code class='language-r' data-lang='r'>
+<span class='nv'>todays_R_script</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/02_dplyr-core-verbs/2_Dplyr_one-table_verbs.R'</span>
 
 <span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span><span class='nv'>todays_R_script</span><span class='o'>)</span>
 </code></pre>
@@ -1064,4 +1055,6 @@ In what year were the most Bald Eagles observed?
 </div>
 
 </div>
+
+<br> <br> <br> <br>
 
