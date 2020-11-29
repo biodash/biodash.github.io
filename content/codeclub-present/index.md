@@ -37,8 +37,9 @@ You only need to do this if you want to create a pull request or push your conte
 directly. If you want to send your (R) Markdown file by email, skip this and continue to Step 2.
 
 The following assumes you have git [installed](https://github.com/git-guides/install-git),
-[set up](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/set-up-git#next-steps-authenticating-with-github-from-git),
-and have [a Github account](https://github.com/join).
+[set up](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/set-up-git#setting-up-git),
+have [a Github account](https://github.com/join),
+and have your git [linked up to Github](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/set-up-git#next-steps-authenticating-with-github-from-git).
 
 #### Option A: Fork the repo to prep for a Pull Request
 
@@ -164,9 +165,11 @@ and have [a Github account](https://github.com/join).
 
   <div class="alert alert-warning">
   <div>
-  If you specify a date in the future (e.g. the date of the Code Club session),
+  If you specify a date using the `date` tag in the YAML,
+  and this date is in the future (e.g. the date of the Code Club session),
   the page will not be built and will thus not appear on the website!
-  Specifiying the date in the YAML is not particularly useful anyway --
+  Specifiying the date using `date` or `lastmod` in the YAML is not particularly
+  useful anyway --
   when you edit the post after the specified date, it will use the edit date.
   </div>
   </div>
