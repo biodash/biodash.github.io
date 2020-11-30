@@ -8,17 +8,27 @@ toc: true
 <br>
 
 Here, you will find general information on computer setup for Code Club.
-Additional setup instructions for individual sessions (e.g., installing a specific package)
-will appear in the posts for each session.
+Additional setup instructions for individual sessions will appear in the posts for each session.
 
-You may prefer to install the software locally, so you can easily practice
-outside of Code Club. Alternatively, you can access RStudio (among other things)
-in your browser at the [Ohio Supercomputer Center (OSC)](http://osc.edu),
-where Code Club has a Classroom Project. We recommend that you make sure you have
-an active OSC account with access to the Code Club project either way,
-which can be a helpful backup option when something fails with locall installs.
+#### Summary:
 
-If you missed the first session, have a look at the [introductory slides](/slides/CC01/) as well.
+- You can work [locally](/codeclub-setup/#local) or at at the [Ohio Supercomputer Center (OSC)](/codeclub-setup/#osc)
+  in your browser.
+- If you plan to work **at OSC**:
+  - Sign up at OSC if you don't have an account yet.
+  - You should have received 
+  - Test if you can start an RStudio Server session.
+- If you plan to work **locally**:
+  - [Install R](/codeclub-setup/#install-r) and [install RStudio](/codeclub-setup/#install-rstudio),
+    or [update R](/codeclub-novice/#updating-r) if your version is below `R 3.6`.
+  - [Install the *tidyverse*](/codeclub-setup/#install-tidy) and [test if you can load it](/codeclub-setup/#install-tidy).
+  - We recommend you do make sure you have an active OSC account with
+    access to the Code Club project, as a backup option.
+- Have a look at the **[introductory slides](/slides/CC01/)** if you missed the first session.
+- See the **[Getting Started with R page](/codeclub-novice/)** if you have little experience with R.
+- If you have not used *RStudio* before, take a moment to explore it,
+  and it may help to check out [Mike Sovic's 1-minute intro](https://www.youtube.com/watch?v=ByxF3xjN2JQ&list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe&t=2m15s) 
+  or [RStudio's intro video](https://fast.wistia.net/embed/iframe/520zbd3tij?videoFoam=true).
 
 <br>
 
@@ -26,7 +36,8 @@ If you missed the first session, have a look at the [introductory slides](/slide
 
 ## Option 1 -- OSC {#osc}
 
-All Code Club participants will get access to the OSC Classroom Project for Code Club (`PAS1838`).
+All Code Club participants will get access to the [Ohio Supercomputer Center (OSC)](http://osc.edu)
+Classroom Project for Code Club (`PAS1838`).
 This way, you can code in (e.g.) RStudio from your browser rather than with a local installation.
 This is a good option if you prefer not to install anything locally or run into problems when doing so.
 
@@ -117,7 +128,7 @@ by typing the following command inside an R console:
 install.packages("tidyverse")
 ```
 
-### Test whether you can load the *tidyverse*
+### Test whether you can load the *tidyverse* {#test-tidy}
 
 When you issue the command `library("tidyverse")`,
 you should get the output shown below:

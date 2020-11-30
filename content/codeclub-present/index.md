@@ -36,34 +36,87 @@ toc: true
 You only need to do this if you want to create a pull request or push your content to the website
 directly. If you want to send your (R) Markdown file by email, skip this and continue to Step 2.
 
-The following assumes you have git installed (if not, see [these instructions](https://github.com/git-guides/install-git)),
-and a Github account (if not, sign up [here](https://github.com/join)).
+The following assumes you have git [installed](https://github.com/git-guides/install-git),
+[set up](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/set-up-git#next-steps-authenticating-with-github-from-git),
+and have [a Github account](https://github.com/join).
+
+#### Option A: Fork the repo to prep for a Pull Request
+
+- **Fork the repo**:
+  go to <https://github.com/biodash/biodash.github.io> and click the `Fork` button
+  way in the top-right corner of the page.
+
+- **Get the URL for your repo**:
+  In your forked repo,
+  click the green `Code` button and copy the URL for the repo
+  to your clipboard (either the HTTPS or the SSH URL; the former will be less likely
+  to lead to authentication problems).
+
 
 - Go to a dir that you would like to be the parent dir of the Biodash/Codeclub repo:
   ```sh
   cd my-dir
   ```
 
-- Clone the repo:
+- **Clone your forked repo**, using the URL that you copied
+  to your clipboard:
   ```sh
-  git clone git@github.com:biodash/biodash.github.io.git
+  git clone https://github.com/<YOUR-USERNAME>/biodash.github.io.git
   ```
 
-- Move into the newly downloaded repo dir:
+- Move into the newly cloned (downloaded) repository dir:
   ```sh
-  cd biodash
+  cd biodash.github.io
   ```
 
-- Create a new branch (by way of example called "my-branch") and switch to it:
+- **Add the original repository as an "upstream" remote**:
+  ```sh
+  git remote add upstream https://github.com/biodash/biodash.github.io.git
+  ```
+  <div class="alert alert-note">
+  <div>
+  
+  You can check which remote repos (i.e., repos on Github)
+  are linked to your local repo using:
+  
+  ```sh
+  git remote -v
+  ``` 
+  
+  This should show <i>your forked repo</i> as "origin",
+  and the <i>original repo</i> as "upstream".
+  You won't be able to push to the original repo,
+  but you can push to your forked repo and then submit a <i>pull request</i>,
+  as we'll do below.
+  </div>
+  </div>
+
+
+#### Option B: Clone the repo directly (direct access required)
+
+- Go to a dir that you would like to be the parent dir of the Biodash/Codeclub repo:
+  ```sh
+  cd my-dir
+  ```
+
+- **Clone the website repo**:
+  ```sh
+  git clone https://github.com/biodash/biodash.github.io.git # Using HTTPS
+  # Or: `git clone git@github.com:biodash/biodash.github.io.git` using SSH
+  ```
+
+- **Create a new branch** (by way of example called "my-branch") and switch to it:
   ```sh
   git checkout -b my-branch
   ```
+  Creating a new branch is not strictly necessary but it may be safer/easier
+  to experiment in.
 
 <br>
 
 ----
 
-### 2: Create a post
+### 2: Create a Code Club post
 
 - Here, we'll use the *hugodown* package to create a Markdown skeleton for our post,
   and below we'll also use *hugodown* to preview the site.
@@ -91,6 +144,17 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   and `<short-title>` is a short title that you would like to give the post,
   which will be used for links and the folder name.
 
+  <div class="alert alert-note">
+  <div>
+  The name of the <code>.Rmd</code> file will be <code>index.Rmd</code>,
+  and it should keep that name!
+  Keep this name also if you create your <code>.Rmd</code> manually or by copying
+  the file from another Code Club session.
+  It will eventually turn into <code>index.html</code>,
+  which is the name that will trigger the file to be displayed on the website.
+  </div>
+  </div>
+
 - Fill out some of the YAML, such as the `title`, `subtitle`, `authors` (in kebab-case, e.g. john-doe,
   to link to your author profile; note that Jelmer's name here is "admin"),
   and optionally `tags` and `summary`
@@ -98,21 +162,38 @@ and a Github account (if not, sign up [here](https://github.com/join)).
   this can be good to fill out here because the default summary can be awkward,
   as it combines headers and paragraphs).
 
+  <div class="alert alert-warning">
+  <div>
+  If you specify a date in the future (e.g. the date of the Code Club session),
+  the page will not be built and will thus not appear on the website!
+  Specifiying the date in the YAML is not particularly useful anyway --
+  when you edit the post after the specified date, it will use the edit date.
+  </div>
+  </div>
+
 - Write the contents of your Code Club session that you would like to share with participants, in R Markdown format.
   For formatting tips, see [below](/codeclub-present/#format).
 
-- *If you want participants to load an R Markdown file or script:*   
-  An easy solution is to place the file in the same directory as your post, and include it in your git commit,
-  so it will be uploaded to Github. In that case, the URL to the file for direct downloads for participants will be:
-  `https://raw.githubusercontent.com/biodash/biodash.github.io/master/docs/codeclub/<session-number>_<short-title>/<filename>`.   
-  
-  In your post, include a function call like `file.download(<script-URL>)` for participants to get the file --
-  this will work both for participants working locally and those working in an OSC RStudio Server instance.
 
-- *If your session contains a dataset:*   
-  Like for the markdown/script, place the file(s) in the same directory as your post.
-  If you have a markdown/script for participants, include `file.download(<dataset-URL>)` in this file,
-  otherwise include it directly in your post.
+<div class="alert alert-note">
+<div>
+
+**If you want participants to load an R Markdown file or script:**   
+An easy solution is to place the file in the same directory as your post, and include it in your git commit,
+so it will be uploaded to Github. In that case, the URL to the file for direct downloads for participants will be:
+`https://raw.githubusercontent.com/biodash/biodash.github.io/master/docs/codeclub/<session-number>_<short-title>/<filename>`.   
+
+In your post, include a function call like `file.download(<script-URL>)` for participants to get the file --
+this will work both for participants working locally and those working in an OSC RStudio Server instance.
+
+**If your session contains a dataset:**   
+Like for the markdown/script, place the file(s) in the same directory as your post.
+If you have a markdown/script for participants, include `file.download(<dataset-URL>)` in this file,
+otherwise include it directly in your post.
+
+</div>
+</div>
+
 
 - **Convert your `.Rmd` (R Markdown) file to a `.md` (Markdown) file.**   
   
@@ -163,12 +244,8 @@ You can do this in two ways, from RStudio or from the command line.
   You will see a message that includes "*Web Server is available at [...]*".
   Click the link or copy and paste the address into a browser, and you will see the rendered website.
   
-  <div class="alert alert-note">
-  <div>
   The server will keep running and will update whenever you save changes in a file
   that is within the website directory, until you stop it using <code>Ctrl + C</code>.
-  </div>
-  </div>
 
 <div class="alert alert-note">
 <div>
@@ -240,18 +317,36 @@ branch but to the *gh-actions* branch.
 When you create a *pull request*, you are asking the maintainers of a repository
 to *pull* your changes into their repository. 
 
-- Push to your branch:
+- **Pull from the original repo** to make sure your repo is up-to-date:
+
   ```sh
-  git push -u origin my-branch # -u to set the upstream branch, since it did not exist there yet
+  git pull upstream master      # "upstream" refers to the original Github repo
   ```
 
-- Create the pull request:
+  This will first fetch the upstream changes and then merge them into your
+  local repo, thus keeping your local changes.
+  If git does not manage to perform this merge automatically,
+  which can happen if the same parts of the same files have been edited
+  both locally and upstream, there will be a *merge conflict* which you will
+  need to [resolve manually](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/resolving-a-merge-conflict-on-github).
+
+
+- **Push to your forked repo**:
+  ```sh
+  git push origin master        # "origin" refers to your forked Github repo
+  ```
+
+- **Create the _pull request_**:
   1. Go to the Pull requests page of our repo at <https://github.com/biodash/biodash.github.io/pulls>.
   2. Click the green button on the right that says `New pull request`.
-  3. In the grey bar on top, in the button that says `Compare: <branch>`, make sure the branch specified is your branch,
-    which we've named `my-branch` in these instructions.
-  4. Enter a **title** (e.g. "*New Post: Session 6*") and **description** (say a little more about the post) for the pull request.
-  5. Click the green button `Send pull request`.
+  3. Under the large `Compare changes` header, click `Compare across forks`.
+  4. In the drop-down menu to the right of the arrow, select your fork.
+  5. Enter a **title** (e.g. "*New Post: Session 6*") and **description** (say a little more about the post) for the pull request.
+  6. Click the green button `Send pull request`.
+
+For a more detailed step-by-step of creating a pull request from a fork,
+see [here](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork).
+
 
 #### Option B: Push to the site repo (direct access required)
 
