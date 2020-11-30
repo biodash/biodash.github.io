@@ -22,6 +22,14 @@ iris_petals_species <- iris_data %>%
 View(iris_petals_species)
 # note - what happened to the order?
 
+# there are other ways you can select columns too
+iris_data_indexing <- iris_data[,3:5]
+head(iris_data_indexing)
+
+iris_data_c <- iris_data[,c("Petal.Length", "Petal.Width", "Species")]
+
+head(iris_data_c)
+
 # filter
 # picks observations (i.e., rows) based on their values
 iris_setosa <- iris_data %>%
@@ -62,6 +70,15 @@ iris_data %>%
 iris_data %>%
   group_by(Species) %>%
   tally()
+
+# another option using count()
+iris_data %>%
+  count(Species)
+
+# another option using summarize()
+iris_data %>%
+  group_by(Species) %>%
+  summarize(n = n())
 
 #################
 # now you try!
