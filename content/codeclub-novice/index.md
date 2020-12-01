@@ -122,7 +122,7 @@ by following the instructions in the section right above this one.
 
 #### Installing packages from Bioconductor
 
-If you're doing bioinfomatic analyses in R, you will probably run into packages
+If you're doing bioinformatic analyses in R, you will probably run into packages
 that are not on CRAN but on [Bioconductor](https://bioconductor.org/).
 To install a package from Bioconductor, use the *BiocManager* package -- for example:
 
