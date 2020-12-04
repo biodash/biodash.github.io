@@ -95,7 +95,7 @@ If you want to follow along, you can find the code [here](https://raw.githubuser
 
 #### Load Packages
 
-Since the *\_join()\* functions come from the *dplyr* package, which is
+Since the *_join()* functions come from the *dplyr* package, which is
 part of *tidyverse*, I'll load that first...
 
     #this assumes you've already installed tidyverse
