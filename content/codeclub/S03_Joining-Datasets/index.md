@@ -1,7 +1,7 @@
 ---
 title: "Session 3: Joining Datasets"
 subtitle: "Using join functions to merge pairs of datasets"
-summary: "In this session of Code Club, we'll explore some methods for combining datasets according to a shared variable, with primary focus on the ***_join** set of functions from **dplyr**. We'll also keep practicing with some of the core dplyr verbs from last session."  
+summary: "In this session of Code Club, we'll explore some methods for combining datasets according to a shared variable, with primary focus on the ***_join()** set of functions from **dplyr**. We'll also keep practicing with some of the core dplyr verbs from last session."  
 authors: [mike-sovic]
 date: "2020-12-04"
 output: md_document
@@ -34,10 +34,10 @@ image:
 
 
 -   Differentiate between different types of joins... 
-	- inner\_join()
-    - full\_join() 
-    - left\_join() 
-    - right\_join()
+	- inner_join()
+    - full_join() 
+    - left_join() 
+    - right_join()
 -   Use a join function to add new variables to the birds dataset
 -   Keep practicing with dplyr core verbs from last week, esp...
 	- select()
@@ -95,7 +95,7 @@ If you want to follow along, you can find the code [here](https://raw.githubuser
 
 #### Load Packages
 
-Since the \*\_join\* functions come from the *dplyr* package, which is
+Since the *\_join()\* functions come from the *dplyr* package, which is
 part of *tidyverse*, I'll load that first...
 
     #this assumes you've already installed tidyverse
