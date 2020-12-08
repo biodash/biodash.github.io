@@ -495,7 +495,7 @@ Solution (click here)
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 311441     12</span>
+<span class='c'>#&gt; [1] 311441     5</span>
 </code></pre>
 
 </div>
