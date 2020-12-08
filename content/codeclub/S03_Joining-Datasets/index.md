@@ -54,7 +54,7 @@ Sometimes you don't have all your data in the same place. For example, maybe you
 -   `semi_join()`
 -   `anti_join()`
 
-Check out the 'Combine Data Sets' section of this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) for a brief look at these functions.
+Check out the 'Combine Data Sets' section of this [cheat sheet](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) for a brief look at these functions.
 
 You can also get more details [here](https://dplyr.tidyverse.org/reference/join.html), or, as with any R function, by accessing the function's documentation inside R with the '?'. For example, type `?inner_join` at your R prompt and hit Enter. (Make sure the package the function comes from is loaded first! In this case, you need *dplyr*, which is loaded as part of *tidyverse*.)
 
