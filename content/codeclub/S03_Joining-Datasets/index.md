@@ -260,7 +260,7 @@ Now explore them a bit...
 
 </div>
 
-Let's use the shared ID column to join the two datasets together. We'll do this in 4 different ways to compare different types of joins: `inner_join()`, `left_join()`, `right_join()`, and `full_join()`. Pay attention to the number of rows in the joined dataset each time and how it relates to the number of rows in each of the two individual datasets.
+Let's use the shared ID column to join the two datasets together. We'll do this in 4 different ways to compare different types of joins: `inner_join()`, `left_join()`, `right_join()`, and `full_join()`. **Pay attention to the number of rows in the joined dataset each time and how it relates to the number of rows in each of the two individual datasets**.
 
 The basic structure of the dplyr `*_join()` functions is...
 
