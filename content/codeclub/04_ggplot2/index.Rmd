@@ -6,12 +6,13 @@ authors: [michael-broe]
 date: "2020-12-10"
 output: hugodown::md_document
 toc: true
-
 image: 
   caption: "Image from http://r-statistics.co/ggplot2-Tutorial-With-R.html"
   focal_point: ""
   preview_only: false
-
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -20,57 +21,81 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <br> <br> <br>
 
-
-
-
-
-
 ------------------------------------------------------------------------
 
 ## New To Code Club?
 
--   First, check out the [Code Club Computer
-    Setup](/codeclub-setup/) instructions, which also has some pointers
-    that might be helpful if you're new to R or RStudio.
+-   First, check out the [Code Club Computer Setup](/codeclub-setup/)
+    instructions, which also has some pointers that might be helpful if
+    you're new to R or RStudio.
 
--   Please open RStudio before Code Club to test things out -- if
-    you run into issues, join the Zoom call early and we'll
-    troubleshoot.
+-   Please open RStudio before Code Club to test things out -- if you
+    run into issues, join the Zoom call early and we'll troubleshoot.
 
------
+------------------------------------------------------------------------
 
 ## Session Goals
 
-- Learn the philosophy of **coding** a graphic.
-- Learn the basic **template** of a **ggplot2** graphic, so you can reuse it for multiple chart types.
-- Learn how you can quickly add visual information to a graphic using **aesthetics** and **layers**.
+-   Learn the philosophy of **coding** a graphic.
+-   Learn the basic **template** of a **ggplot2** graphic, so you can
+    reuse it for multiple chart types.
+-   Learn how you can quickly add visual information to a graphic using
+    **aesthetics** and **layers**.
 
-
------
+------------------------------------------------------------------------
 
 ## Intro: The ggplot2 philosophy
 
-We have already seen that in R, instead of manually manipulating data frames as you might do when editing Excel sheets, we **code** the operations we want to perform using **dplyr** verbs like `select()`, `mutate()`, `inner_join()`, and so on. 
+We have already seen that in R, instead of manually manipulating data
+frames as you might do when editing Excel sheets, we **code** the
+operations we want to perform using **dplyr** verbs like `select()`,
+`mutate()`, `inner_join()`, and so on.
 
-In a similar way when performing visualization, instead of clicking on a chart type in Excel, we **code the chart** in R. 
+In a similar way when performing visualization, instead of clicking on a
+chart type in Excel, we **code the chart** in R.
 
-And just as **dplyr** gives us efficient ways to manipulate data frames, **ggplot2** (which is also part of the **tidyverse**) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).
+And just as **dplyr** gives us efficient ways to manipulate data frames,
+**ggplot2** (which is also part of the **tidyverse**) gives us efficient
+ways to manipulate charts/plots/graphics (we use these terms
+interchangeably).
 
-The **gg** in **ggplot2** stands for *grammar of graphics*, an systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about 'pulling apart' various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar). 
+The **gg** in **ggplot2** stands for *grammar of graphics*, a systematic
+approach for designing statistical plots developed by Leland Wilkinson.
+The idea behind this was to think about 'pulling apart' various plots
+into their shared component pieces, then provide code that could put
+them together again. We can then create new plots like we create new
+sentences (once we understand this grammar).
 
-There are two parts to this. First, the 'nouns and verbs' we need to work with plots are very different than those we need to work with data frames. **ggplot2** is like a mini-language of its own, with its own verbs and syntax.
+There are two parts to this. First, the 'nouns and verbs' we need to
+work with plots are very different than those we need to work with data
+frames. **ggplot2** is like a mini-language of its own, with its own
+verbs and syntax.
 
-Second, this notion of pulling apart a graphic leads to the idea of *layers*. You can build up a plot of any complexity by *overlaying* different views of the same data.
+Second, this notion of pulling apart a graphic leads to the idea of
+*layers*. You can build up a plot of any complexity by *overlaying*
+different views of the same data.
 
-There's a learning curve here for sure, but there are a couple of things that help us.
+There's a learning curve here for sure, but there are a couple of things
+that help us.
 
-First, every graphic shares a *common template*. This is like thinking about the sentence "The cat sat on the mat" grammatically as the template `NP V PP` (`N`oun `P`hrase "The cat", `V`erb "sat", `P`repositional `P`hrase "on the mat"). Once you understand this structure you can "say" a *lot* of different things.
+First, every graphic shares a *common template*. This is like thinking
+about the sentence "The cat sat on the mat" grammatically as the
+template `NP V PP` (`N`oun `P`hrase "The cat", `V`erb "sat",
+`P`repositional `P`hrase "on the mat"). Once you understand this
+structure you can "say" a *lot* of different things.
 
-(And I mean a *lot*. The [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) gives an overview of the things you can do, but because this is a language, users can create their own [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can also utilize.)
+(And I mean a *lot*. The [ggplot cheat
+sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
+gives an overview of the things you can do, but because this is a
+language, users can create their own
+[extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can
+also utilize.)
 
-Second, they way we put layers together is identical to the way we use pipes. You can read `%>%` as "and then": `select()` and then `mutate()` and then `summarize()`. In graphics, we can say "show this layer, and then *overlay* this layer, and then *overlay* this layer", etc., using a very similar syntax.
-
-
+Second, the way we put layers together is identical to the way we use
+pipes. You can read `%>%` as "and then": `select()` and then `mutate()`
+and then `summarize()`. In graphics, we can say "show this layer, and
+then *overlay* this layer, and then *overlay* this layer", etc., using a
+very similar syntax.
 
 <br>
 
@@ -78,52 +103,107 @@ Second, they way we put layers together is identical to the way we use pipes. Yo
 
 ## Examples
 
-So how does this work in practice? We'll work through visualizing the **iris** dataset that you've seen before. This is an extremely famous [dataset](https://en.m.wikipedia.org/wiki/Iris_flower_data_set) that was first analyzed by R. A. Fisher in 1936 *The use of multiple measurements in taxonomic problems*.
+So how does this work in practice? We'll work through visualizing the
+**iris** dataset that you've seen before. This is an extremely famous
+[dataset](https://en.m.wikipedia.org/wiki/Iris_flower_data_set) that was
+first analyzed by R. A. Fisher in 1936: *The use of multiple
+measurements in taxonomic problems*. He was attempting to use the petal
+and sepal measurements to discriminate one species from another.
 
-*ggplot2** is part of the tidyverse package so we need to load that first:
-
+**ggplot2** is part of the tidyverse package so we need to load that
+first:
 
 ```{r, warning = FALSE}
 # this assumes you've already installed tidyverse
 library(tidyverse)
 ```
 
-And recall that the **iris** dataset (3 species, 50 observations per species) is automatically available to us:
+And recall that the **iris** dataset (3 species, 50 observations per
+species) is automatically available to us:
 
 ```{r}
 head(iris)
 ```
 
-What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let's look a the ggplot template:
+What is the correlation between petal length and width in these species?
+Are longer petals also wider? We can visualize this with a scatterplot.
+But first let's look a the ggplot template:
 
-```
-ggplot(data = <DATA>) + 
-  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
-```
-These are the obligatory parts of any plot. The first argument to ggplot is the data frame:
+    ggplot(data = <DATA>) + 
+      <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+
+These are the obligatory parts of any plot. The first argument to
+`ggplot` is the data frame:
 
 ```{r}
 ggplot(data = iris)
 ```
 
-This is not very interesting! but it's notable that it is *something*. `ggplot()` has created a base coordinate system that we can add visual layers to. The *add a layer* operator is "**+**", which is the ggplot equivalent of the pipe symbol, and **it must occur at the end of the line**.
+This is not very interesting! but it's notable that it is *something*.
+`ggplot()` has created a base coordinate system (a base layer) that we
+can add visual layers to. The *add a layer* operator is "**+**", which
+is the ggplot equivalent of the pipe symbol, and **it must occur at the
+end of the line**.
 
-The next argument specifies the **kind** plot we want: scatterplot, bar chart, fitted line, boxplot, etc. ggplot refers to these as **geoms**: the geometrical object that a plot uses to represent data. You can see an overview of all these in the [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf). The geom for a scatterplot is the point geom `geom_point()`.
+The next argument specifies the kind plot we want: scatterplot, bar
+chart, fitted line, boxplot, pie chart, etc. **ggplot2** refers to these as
+**geoms**: the geometrical object that a plot uses to represent data.
+You can see an overview of many of these geoms in the [cheat
+sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
+The geom for a scatterplot is `geom_point()`.
 
-But we also require a `mapping` argument, which relates the *variables* in the dataset we want to focus on to their *visual representation* in the plot. Finally we need to specify an "aesthetic" for the geometric objects in the plot, which will control things like shape, color, transparency, etc. Perhaps surprisingly, for a ggplot scatterplot, the x and y coordinates are aesthetics, since this controls not the shape or color, but the position of the points in the grid. Here is our complete plot:
+But we also require a `mapping` argument, which maps the *variables* in
+the dataset we want to focus on to their *visual representation* in the
+plot. 
 
+And finally we need to specify an **aesthetic** for the geometric
+objects in the plot, which will control things like shape, color,
+transparency, etc. Perhaps surprisingly, for a scatterplot, the x
+and y coordinates are aesthetics, since these control,  not the shape or
+color, but the relative position of the points in the coordinate system.
+
+Here is our complete plot:
 
 ```{r}
 ggplot(data = iris) +
   geom_point(mapping = aes(x = Petal.Length, y = Petal.Width))
 ```
 
+There is clearly a positive correlation between length and width. And we
+can make this even more apparent by visually fitting a line to the data, by
+*overlaying* another geom in the same plot.
 
+```{r}
+ggplot(data = iris) +
+  geom_point(mapping = aes(x = Petal.Length, y = Petal.Width)) +
+  geom_smooth(mapping = aes(x = Petal.Length, y = Petal.Width))
+```
+There is clearly some code redundancy here, and we here we really don't want the mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level.
+
+```{r}
+ggplot(data = iris) +
+  (mapping = aes(x = Petal.Length, y = Petal.Width)) +
+  geom_point() +
+  geom_smooth()
+```
+So we have the possibility of *local* layer specifications, and *global* specifications. Global specifications are *inherited* by all the local layers.
+
+### The power of aesthetics
+
+The aim of Fisher's paper was to try to discriminate different species based on their morphological measurements. It looks from this plot that there are two distinct clusters. Do these clusters correspond to different species? There are two clusters, but three species. How can we explore this further?
+
+Our current plot uses two numeric variables: `Petal.Length` and `Petal.width`. We can add a third variable, like `Species`, to a two dimensional scatterplot by mapping it to a different visual aesthetic. We've mapped length and width to x,y coordinates. Now we'll simultaneously map species to `color` by expanding our list of aesthetics:
+
+```{r}
+ggplot(data = iris) +
+  (mapping = aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+  geom_point()
+```
 
 
 The National Health and Nutrition Examination Survey [(NHANES)
 dataset](https://www.rdocumentation.org/packages/NHANES/versions/2.1.0/topics/NHANES)
-contains survey data obtained annually from ~5,000 individuals on a
+contains survey data obtained annually from \~5,000 individuals on a
 variety of health and lifestyle-related metrics. A subset of the data
 are available as an R package - install and load it...
 
@@ -132,16 +212,17 @@ install.packages("NHANES", repos = "http://cran.us.r-project.org")
 library(NHANES)
 ```
 
-Now preview the dataset...    
+Now preview the dataset...
 
 ```{r}
 glimpse(NHANES)
 ```
 
-To try out merging/joining, we'll create two separate data frames by pulling out some variables from this
-NHANES dataset. One will contain demographic variables, and the other with have some physical measurements. Then
-we'll join them back together. Let's create the two sub-datasets
-first...
+To try out merging/joining, we'll create two separate data frames by
+pulling out some variables from this NHANES dataset. One will contain
+demographic variables, and the other with have some physical
+measurements. Then we'll join them back together. Let's create the two
+sub-datasets first...
 
 ```{r}
 #Filter out rows with data from 2009-2010 and Age > 5, 
@@ -175,11 +256,15 @@ glimpse(dem_data)
 glimpse(phys_data)
 ```
 
+```{r}
+head(phys_data)
+```
+
 Let's use the shared ID column to join the two datasets together. We'll
-do this in 4 different ways to compare different types of joins: `inner_join()`, `left_join()`, `right_join()`, and `full_join()`. Pay
-attention to the number of rows in the joined dataset each time and
-how it relates to the number of rows in each of the two
-individual datasets.
+do this in 4 different ways to compare different types of joins:
+`inner_join()`, `left_join()`, `right_join()`, and `full_join()`. Pay
+attention to the number of rows in the joined dataset each time and how
+it relates to the number of rows in each of the two individual datasets.
 
 The basic structure of the dplyr `*_join()` functions is...
 
@@ -192,15 +277,26 @@ The basic structure of the dplyr `*_join()` functions is...
 ## 1 - `inner_join()`
 
 ```{r}
-#perform an inner join
-join_inner <- inner_join(dem_data, phys_data, by = "ID")
 
 #preview the new object
 head(join_inner)
 
-#get dimensions
-dim(join_inner)
 ```
+```{r}
+nhanes <- NHANES
+```
+
+```{r}
+ggplot(data = NHANES) +
+  geom_point(mapping = (aes(x = Height, y = BMI, color = PhysActive)))
+```
+
+```{r}
+ggplot(data = NHANES) +
+  geom_point(mapping = (aes(x = Height, y = BMI, color = Gender)))
+```
+
+
 
 ## 2 - `left_join()`
 
@@ -244,7 +340,6 @@ dim(join_full)
 <br>
 
 ------------------------------------------------------------------------
-
 
 # Breakout rooms
 
@@ -303,6 +398,7 @@ Reduce the backyard bird dataset and keep just the following columns:
 
 </div>
 </div>
+
 ------------------------------------------------------------------------
 
 ## Exercise 2
@@ -554,8 +650,7 @@ joined_data %>% group_by(species) %>%
 
 ------------------------------------------------------------------------
 
-Bonus time!
------------
+## Bonus time!
 
 ## Bonus 1
 
@@ -584,6 +679,7 @@ joined_data %>% mutate(ratio = adult_body_mass_g/adult_svl_cm) %>%
 
 </div>
 </div>
+
 ------------------------------------------------------------------------
 
 ### Bonus 2
@@ -707,6 +803,7 @@ joined_data <- left_join(birds, life_hist_aves, by = "species")
 
 </div>
 </div>
+
 ------------------------------------------------------------------------
 
 <br> <br> <br> <br>

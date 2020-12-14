@@ -6,13 +6,14 @@ authors: [michael-broe]
 date: "2020-12-10"
 output: hugodown::md_document
 toc: true
-
 image: 
   caption: "Image from http://r-statistics.co/ggplot2-Tutorial-With-R.html"
   focal_point: ""
   preview_only: false
-
-rmd_hash: f0509ecb33c287e7
+editor_options: 
+  markdown: 
+    wrap: 72
+rmd_hash: bd03dd8c951672c4
 
 ---
 
@@ -44,7 +45,7 @@ In a similar way when performing visualization, instead of clicking on a chart t
 
 And just as **dplyr** gives us efficient ways to manipulate data frames, **ggplot2** (which is also part of the **tidyverse**) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).
 
-The **gg** in **ggplot2** stands for *grammar of graphics*, an systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about 'pulling apart' various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar).
+The **gg** in **ggplot2** stands for *grammar of graphics*, a systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about 'pulling apart' various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar).
 
 There are two parts to this. First, the 'nouns and verbs' we need to work with plots are very different than those we need to work with data frames. **ggplot2** is like a mini-language of its own, with its own verbs and syntax.
 
@@ -56,7 +57,7 @@ First, every graphic shares a *common template*. This is like thinking about the
 
 (And I mean a *lot*. The [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) gives an overview of the things you can do, but because this is a language, users can create their own [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can also utilize.)
 
-Second, they way we put layers together is identical to the way we use pipes. You can read `%>%` as "and then": `select()` and then `mutate()` and then `summarize()`. In graphics, we can say "show this layer, and then *overlay* this layer, and then *overlay* this layer", etc., using a very similar syntax.
+Second, the way we put layers together is identical to the way we use pipes. You can read `%>%` as "and then": `select()` and then `mutate()` and then `summarize()`. In graphics, we can say "show this layer, and then *overlay* this layer, and then *overlay* this layer", etc., using a very similar syntax.
 
 <br>
 
@@ -64,9 +65,9 @@ Second, they way we put layers together is identical to the way we use pipes. Yo
 
 ## Examples
 
-So how does this work in practice? We'll work through visualizing the **iris** dataset that you've seen before. This is an extremely famous [dataset](https://en.m.wikipedia.org/wiki/Iris_flower_data_set) that was first analyzed by R. A. Fisher in 1936 *The use of multiple measurements in taxonomic problems*.
+So how does this work in practice? We'll work through visualizing the **iris** dataset that you've seen before. This is an extremely famous [dataset](https://en.m.wikipedia.org/wiki/Iris_flower_data_set) that was first analyzed by R. A. Fisher in 1936: *The use of multiple measurements in taxonomic problems*. He was attempting to use the petal and sepal measurements to discriminate one species from another.
 
-\*ggplot2\*\* is part of the tidyverse package so we need to load that first:
+**ggplot2** is part of the tidyverse package so we need to load that first:
 
 <div class="highlight">
 
@@ -109,7 +110,7 @@ What is the correlation between petal length and width in these species? Are lon
     ggplot(data = <DATA>) + 
       <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
 
-These are the obligatory parts of any plot. The first argument to ggplot is the data frame:
+These are the obligatory parts of any plot. The first argument to `ggplot` is the data frame:
 
 <div class="highlight">
 
@@ -120,11 +121,15 @@ These are the obligatory parts of any plot. The first argument to ggplot is the 
 
 </div>
 
-This is not very interesting! but it's notable that it is *something*. `ggplot()` has created a base coordinate system that we can add visual layers to. The *add a layer* operator is "**+**", which is the ggplot equivalent of the pipe symbol, and **it must occur at the end of the line**.
+This is not very interesting! but it's notable that it is *something*. `ggplot()` has created a base coordinate system (a base layer) that we can add visual layers to. The *add a layer* operator is "**+**", which is the ggplot equivalent of the pipe symbol, and **it must occur at the end of the line**.
 
-The next argument specifies the **kind** plot we want: scatterplot, bar chart, fitted line, boxplot, etc. ggplot refers to these as **geoms**: the geometrical object that a plot uses to represent data. You can see an overview of all these in the [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf). The geom for a scatterplot is the point geom `geom_point()`.
+The next argument specifies the kind plot we want: scatterplot, bar chart, fitted line, boxplot, pie chart, etc. **ggplot2** refers to these as **geoms**: the geometrical object that a plot uses to represent data. You can see an overview of many of these geoms in the [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf). The geom for a scatterplot is `geom_point()`.
 
-But we also require a `mapping` argument, which relates the *variables* in the dataset we want to focus on to their *visual representation* in the plot. Finally we need to specify an "aesthetic" for the geometric objects in the plot, which will control things like shape, color, transparency, etc. Perhaps surprisingly, for a ggplot scatterplot, the x and y coordinates are aesthetics, since this controls not the shape or color, but the position of the points in the grid. Here is our complete plot:
+But we also require a `mapping` argument, which maps the *variables* in the dataset we want to focus on to their *visual representation* in the plot.
+
+And finally we need to specify an **aesthetic** for the geometric objects in the plot, which will control things like shape, color, transparency, etc. Perhaps surprisingly, for a scatterplot, the x and y coordinates are aesthetics, since these control, not the shape or color, but the relative position of the points in the coordinate system.
+
+Here is our complete plot:
 
 <div class="highlight">
 
@@ -136,6 +141,56 @@ But we also require a `mapping` argument, which relates the *variables* in the d
 
 </div>
 
+There is clearly a positive correlation between length and width. And we can make this even more apparent by fitting a line to the data, by *overlaying* another geom in the same plot.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_smooth</span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'>#&gt; `geom_smooth()` using method = 'loess' and formula 'y ~ x'</span>
+
+</code></pre>
+<img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
+There is clearly some redundancy here, and we don't want the mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_smooth</span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='c'>#&gt; `geom_smooth()` using method = 'loess' and formula 'y ~ x'</span>
+
+</code></pre>
+<img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
+So we have the possibility of *local* layer specifications, and *global* specifications. Global specifications are *inherited* by all the local layers.
+
+### The power of aesthetics
+
+The aim of Fisher's paper was to try to discriminate different species based on their morphological measurements. It looks from this plot that there are two distinct clusters. Do these clusters correspond to different species? There are two clusters, but three species. How can we explore this further?
+
+Our current plot uses two numeric variables: Petal.Length and Petal.width. We can add a third variable, like species, to a two dimensional scatterplot by mapping it to a different visual aesthetic. An aesthetic is a visual property of the objects in your plot. Aesthetics include things like the size, the shape, or the color of your point. We've mapped length and width to x,y coordinates. Now we'll simultaneously map species to color by expanding our list of aesthetics:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span>, color <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span>
+
+</code></pre>
+<img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
 The National Health and Nutrition Examination Survey [(NHANES) dataset](https://www.rdocumentation.org/packages/NHANES/versions/2.1.0/topics/NHANES) contains survey data obtained annually from \~5,000 individuals on a variety of health and lifestyle-related metrics. A subset of the data are available as an R package - install and load it...
 
 <div class="highlight">
@@ -144,7 +199,7 @@ The National Health and Nutrition Examination Survey [(NHANES) dataset](https://
 
 <span class='c'>#&gt; </span>
 <span class='c'>#&gt; The downloaded binary packages are in</span>
-<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpnW4Ybx/downloaded_packages</span>
+<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpsGOIkA/downloaded_packages</span>
 
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'>NHANES</span><span class='o'>)</span>
 </code></pre>
