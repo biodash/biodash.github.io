@@ -12,7 +12,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: beb3855fe290072b
+rmd_hash: f0509ecb33c287e7
 
 ---
 
@@ -31,43 +31,32 @@ rmd_hash: beb3855fe290072b
 ## Session Goals
 
 -   Learn the philosophy of **coding** a graphic.
--   Learn the basic **template** of a `ggplot2` graphic, so you can reuse it for multiple chart types.
+-   Learn the basic **template** of a **ggplot2** graphic, so you can reuse it for multiple chart types.
 -   Learn how you can quickly add visual information to a graphic using **aesthetics** and **layers**.
 
 ------------------------------------------------------------------------
 
-## Intro: The `ggplot2` philosophy
+## Intro: The ggplot2 philosophy
 
-We have already seen that in R, instead of manually manipulating data frames as you might do when editing Excel sheets, we **code** the operations we want to perform using `dplyr` verbs like `select()`, `mutate()`, `inner_join()`, and so on.
+We have already seen that in R, instead of manually manipulating data frames as you might do when editing Excel sheets, we **code** the operations we want to perform using **dplyr** verbs like `select()`, `mutate()`, `inner_join()`, and so on.
 
 In a similar way when performing visualization, instead of clicking on a chart type in Excel, we **code the chart** in R.
 
-And just as `dplyr` gives us efficient ways to manipulate data frames, `ggplot2` (which is also part of the `tidyverse`) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).
+And just as **dplyr** gives us efficient ways to manipulate data frames, **ggplot2** (which is also part of the **tidyverse**) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).
 
-The `gg` in `ggplot2` stands for *grammar of graphics*, an approach to systematically designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about 'pulling apart' various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar).
+The **gg** in **ggplot2** stands for *grammar of graphics*, an systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about 'pulling apart' various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar).
 
-There are two parts to this. First, the 'nouns and verbs' we need to work with plots are very different than those we need to work with data frames. `ggplot2` is like a mini-language of its own, with its own verbs and syntax.
+There are two parts to this. First, the 'nouns and verbs' we need to work with plots are very different than those we need to work with data frames. **ggplot2** is like a mini-language of its own, with its own verbs and syntax.
 
 Second, this notion of pulling apart a graphic leads to the idea of *layers*. You can build up a plot of any complexity by *overlaying* different views of the same data.
 
 There's a learning curve here for sure, but there are a couple of things that help us.
 
-First, every graphic shares a *common template*. This is like thinking about "The cat sat on the mat" grammatically as the template `NP V PP` (`N`oun `P`hrase "The cat", `V`erb "sat", `P`repositional `P`hrase "on the mat"). Once you understand this structure you can "say" a *lot* of different things.
+First, every graphic shares a *common template*. This is like thinking about the sentence "The cat sat on the mat" grammatically as the template `NP V PP` (`N`oun `P`hrase "The cat", `V`erb "sat", `P`repositional `P`hrase "on the mat"). Once you understand this structure you can "say" a *lot* of different things.
+
+(And I mean a *lot*. The [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) gives an overview of the things you can do, but because this is a language, users can create their own [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can also utilize.)
 
 Second, they way we put layers together is identical to the way we use pipes. You can read `%>%` as "and then": `select()` and then `mutate()` and then `summarize()`. In graphics, we can say "show this layer, and then *overlay* this layer, and then *overlay* this layer", etc., using a very similar syntax.
-
-They include...
-
--   `inner_join()`
--   `full_join()`
--   `left_join()`
--   `right_join()`
--   `semi_join()`
--   `anti_join()`
-
-Check out the 'Combine Data Sets' section of this [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) for a brief look at these functions.
-
-You can also get more details [here](https://dplyr.tidyverse.org/reference/join.html), or, as with any R function, by accessing the function's documentation inside R with the '?'. For example, type `?inner_join` at your R prompt and hit Enter. (Make sure the package the function comes from is loaded first! In this case, you need *dplyr*, which is loaded as part of *tidyverse*.)
 
 <br>
 
@@ -75,19 +64,13 @@ You can also get more details [here](https://dplyr.tidyverse.org/reference/join.
 
 ## Examples
 
-Below we'll go through a few examples of joins. You're welcome to follow along and run this code on your own, **but it's not necessary** - the exercises in the breakout rooms are independent of these examples and will give you a chance to try these things out on your own.
+So how does this work in practice? We'll work through visualizing the **iris** dataset that you've seen before. This is an extremely famous [dataset](https://en.m.wikipedia.org/wiki/Iris_flower_data_set) that was first analyzed by R. A. Fisher in 1936 *The use of multiple measurements in taxonomic problems*.
 
-If you want to follow along, you can find the code [here](https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/scripts/birds/S03_Examples_Code.R).
-
-<br>
-
-------------------------------------------------------------------------
-
-Since the `*_join()` functions come from the *dplyr* package, which is part of *tidyverse*, I'll load that first...
+\*ggplot2\*\* is part of the tidyverse package so we need to load that first:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#this assumes you've already installed tidyverse</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># this assumes you've already installed tidyverse</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 
 <span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span><span> ─────────────────────────────────────── tidyverse 1.3.0 ──</span></span>
@@ -104,6 +87,55 @@ Since the `*_join()` functions come from the *dplyr* package, which is part of *
 
 </div>
 
+And recall that the **iris** dataset (3 species, 50 observations per species) is automatically available to us:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>iris</span><span class='o'>)</span>
+
+<span class='c'>#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class='c'>#&gt; 1          5.1         3.5          1.4         0.2  setosa</span>
+<span class='c'>#&gt; 2          4.9         3.0          1.4         0.2  setosa</span>
+<span class='c'>#&gt; 3          4.7         3.2          1.3         0.2  setosa</span>
+<span class='c'>#&gt; 4          4.6         3.1          1.5         0.2  setosa</span>
+<span class='c'>#&gt; 5          5.0         3.6          1.4         0.2  setosa</span>
+<span class='c'>#&gt; 6          5.4         3.9          1.7         0.4  setosa</span>
+</code></pre>
+
+</div>
+
+What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let's look a the ggplot template:
+
+    ggplot(data = <DATA>) + 
+      <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+
+These are the obligatory parts of any plot. The first argument to ggplot is the data frame:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span>
+
+</code></pre>
+<img src="figs/unnamed-chunk-3-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
+This is not very interesting! but it's notable that it is *something*. `ggplot()` has created a base coordinate system that we can add visual layers to. The *add a layer* operator is "**+**", which is the ggplot equivalent of the pipe symbol, and **it must occur at the end of the line**.
+
+The next argument specifies the **kind** plot we want: scatterplot, bar chart, fitted line, boxplot, etc. ggplot refers to these as **geoms**: the geometrical object that a plot uses to represent data. You can see an overview of all these in the [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf). The geom for a scatterplot is the point geom `geom_point()`.
+
+But we also require a `mapping` argument, which relates the *variables* in the dataset we want to focus on to their *visual representation* in the plot. Finally we need to specify an "aesthetic" for the geometric objects in the plot, which will control things like shape, color, transparency, etc. Perhaps surprisingly, for a ggplot scatterplot, the x and y coordinates are aesthetics, since this controls not the shape or color, but the position of the points in the grid. Here is our complete plot:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span>
+
+</code></pre>
+<img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
 The National Health and Nutrition Examination Survey [(NHANES) dataset](https://www.rdocumentation.org/packages/NHANES/versions/2.1.0/topics/NHANES) contains survey data obtained annually from \~5,000 individuals on a variety of health and lifestyle-related metrics. A subset of the data are available as an R package - install and load it...
 
 <div class="highlight">
@@ -112,7 +144,7 @@ The National Health and Nutrition Examination Survey [(NHANES) dataset](https://
 
 <span class='c'>#&gt; </span>
 <span class='c'>#&gt; The downloaded binary packages are in</span>
-<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//Rtmpt9DLIK/downloaded_packages</span>
+<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpnW4Ybx/downloaded_packages</span>
 
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'>NHANES</span><span class='o'>)</span>
 </code></pre>
