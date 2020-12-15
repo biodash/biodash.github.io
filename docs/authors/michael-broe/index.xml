@@ -13,6 +13,361 @@
     </image>
     
     <item>
+      <title>Session 4: Visualizing Data</title>
+      <link>https://biodash.github.io/codeclub/04_ggplot2/</link>
+      <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/04_ggplot2/</guid>
+      <description>&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;new-to-code-club&#34;&gt;New To Code Club?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;First, check out the 
+&lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has some pointers that might be helpful if you&amp;rsquo;re new to R or RStudio.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Please open RStudio before Code Club to test things out &amp;ndash; if you run into issues, join the Zoom call early and we&amp;rsquo;ll troubleshoot.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;session-goals&#34;&gt;Session Goals&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Learn the philosophy of &lt;strong&gt;coding&lt;/strong&gt; a graphic.&lt;/li&gt;
+&lt;li&gt;Learn the basic &lt;strong&gt;template&lt;/strong&gt; of a &lt;strong&gt;ggplot2&lt;/strong&gt; graphic, so you can reuse it for multiple chart types.&lt;/li&gt;
+&lt;li&gt;Learn how you can quickly add visual information to a graphic using &lt;strong&gt;aesthetics&lt;/strong&gt; and &lt;strong&gt;layers&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;intro-the-ggplot2-philosophy&#34;&gt;Intro: The ggplot2 philosophy&lt;/h2&gt;
+&lt;p&gt;We have already seen that in R, instead of manually manipulating data frames as you might do when editing Excel sheets, we &lt;strong&gt;code&lt;/strong&gt; the operations we want to perform using &lt;strong&gt;dplyr&lt;/strong&gt; verbs like &lt;code&gt;select()&lt;/code&gt;, &lt;code&gt;mutate()&lt;/code&gt;, &lt;code&gt;inner_join()&lt;/code&gt;, and so on.&lt;/p&gt;
+&lt;p&gt;In a similar way when performing visualization, instead of clicking on a chart type in Excel, we &lt;strong&gt;code the chart&lt;/strong&gt; in R.&lt;/p&gt;
+&lt;p&gt;And just as &lt;strong&gt;dplyr&lt;/strong&gt; gives us efficient ways to manipulate data frames, &lt;strong&gt;ggplot2&lt;/strong&gt; (which is also part of the &lt;strong&gt;tidyverse&lt;/strong&gt;) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;gg&lt;/strong&gt; in &lt;strong&gt;ggplot2&lt;/strong&gt; stands for &lt;em&gt;grammar of graphics&lt;/em&gt;, a systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about &amp;lsquo;pulling apart&amp;rsquo; various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar).&lt;/p&gt;
+&lt;p&gt;There are two parts to this. First, the &amp;lsquo;nouns and verbs&amp;rsquo; we need to work with plots are very different than those we need to work with data frames. &lt;strong&gt;ggplot2&lt;/strong&gt; is like a mini-language of its own, with its own verbs and syntax.&lt;/p&gt;
+&lt;p&gt;Second, this notion of pulling apart a graphic leads to the idea of &lt;em&gt;layers&lt;/em&gt;. You can build up a plot of any complexity by &lt;em&gt;overlaying&lt;/em&gt; different views of the same data.&lt;/p&gt;
+&lt;p&gt;There&amp;rsquo;s a learning curve here for sure, but there are a couple of things that help us.&lt;/p&gt;
+&lt;p&gt;First, every graphic shares a &lt;em&gt;common template&lt;/em&gt;. This is like thinking about the sentence &amp;ldquo;The cat sat on the mat&amp;rdquo; grammatically as the template &lt;code&gt;NP V PP&lt;/code&gt; (&lt;code&gt;N&lt;/code&gt;oun &lt;code&gt;P&lt;/code&gt;hrase &amp;ldquo;The cat&amp;rdquo;, &lt;code&gt;V&lt;/code&gt;erb &amp;ldquo;sat&amp;rdquo;, &lt;code&gt;P&lt;/code&gt;repositional &lt;code&gt;P&lt;/code&gt;hrase &amp;ldquo;on the mat&amp;rdquo;). Once you understand this structure you can &amp;ldquo;say&amp;rdquo; a &lt;em&gt;lot&lt;/em&gt; of different things.&lt;/p&gt;
+&lt;p&gt;(And I mean a &lt;em&gt;lot&lt;/em&gt;. The 
+&lt;a href=&#34;https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ggplot cheat sheet&lt;/a&gt; lists over 40 geoms, but because this is a language, users can create their own 
+&lt;a href=&#34;https://exts.ggplot2.tidyverse.org/gallery/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;extensions&lt;/a&gt; that you can also utilize, adding over 80 more.)&lt;/p&gt;
+&lt;p&gt;Second, the way we put layers together is identical to the way we use pipes. You can read &lt;code&gt;%&amp;gt;%&lt;/code&gt; as &amp;ldquo;and then&amp;rdquo;: &lt;code&gt;select()&lt;/code&gt; and then &lt;code&gt;mutate()&lt;/code&gt; and then &lt;code&gt;summarize()&lt;/code&gt;. In graphics, we can say &amp;ldquo;show this layer, and then &lt;em&gt;overlay&lt;/em&gt; this layer, and then &lt;em&gt;overlay&lt;/em&gt; this layer&amp;rdquo;, etc., using a very similar syntax.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;examples&#34;&gt;Examples&lt;/h2&gt;
+&lt;p&gt;So how does this work in practice? We&amp;rsquo;ll work through visualizing the &lt;strong&gt;iris&lt;/strong&gt; dataset that you&amp;rsquo;ve seen before. This is an extremely famous 
+&lt;a href=&#34;https://en.m.wikipedia.org/wiki/Iris_flower_data_set&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;dataset&lt;/a&gt; that was first analyzed by R. A. Fisher in 1936: &lt;em&gt;The use of multiple measurements in taxonomic problems&lt;/em&gt;. He was attempting to use the petal and sepal measurements to discriminate one species from another.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ggplot2&lt;/strong&gt; is part of the tidyverse package so we need to load that first:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# this assumes you&#39;ve already installed tidyverse&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching packages&lt;/span&gt;&lt;span&gt; ─────────────────────────────────────── tidyverse 1.3.0 ──&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;ggplot2&lt;/span&gt;&lt;span&gt; 3.3.2     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;purrr  &lt;/span&gt;&lt;span&gt; 0.3.4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;tibble &lt;/span&gt;&lt;span&gt; 3.0.4     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr  &lt;/span&gt;&lt;span&gt; 0.8.5&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;tidyr  &lt;/span&gt;&lt;span&gt; 1.0.3     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;stringr&lt;/span&gt;&lt;span&gt; 1.4.0&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;readr  &lt;/span&gt;&lt;span&gt; 1.3.1     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;forcats&lt;/span&gt;&lt;span&gt; 0.5.0&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Conflicts&lt;/span&gt;&lt;span&gt; ────────────────────────────────────────── tidyverse_conflicts() ──&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;&lt;span&gt;::&lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;filter()&lt;/span&gt;&lt;span&gt; masks &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;&lt;span&gt;::filter()&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;&lt;span&gt;::&lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;&lt;span&gt;    masks &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;&lt;span&gt;::lag()&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;And recall that the &lt;strong&gt;iris&lt;/strong&gt; dataset (3 species, 50 observations per species) is automatically available to us:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1          5.1         3.5          1.4         0.2  setosa&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2          4.9         3.0          1.4         0.2  setosa&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3          4.7         3.2          1.3         0.2  setosa&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4          4.6         3.1          1.5         0.2  setosa&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5          5.0         3.6          1.4         0.2  setosa&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6          5.4         3.9          1.7         0.4  setosa&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let&amp;rsquo;s look a the ggplot template:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ggplot(data = &amp;lt;DATA&amp;gt;) + 
+  &amp;lt;GEOM_FUNCTION&amp;gt;(mapping = aes(&amp;lt;MAPPINGS&amp;gt;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;These are the obligatory parts of any plot. The first argument to &lt;code&gt;ggplot&lt;/code&gt; is the data frame:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-3-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;This is not very interesting! but it&amp;rsquo;s notable that it is &lt;em&gt;something&lt;/em&gt;. &lt;code&gt;ggplot()&lt;/code&gt; has created a base coordinate system (a base layer) that we can add visual layers to. The &lt;em&gt;add a layer&lt;/em&gt; operator is &amp;ldquo;&lt;strong&gt;+&lt;/strong&gt;&amp;rdquo;, which is the ggplot equivalent of the pipe symbol, and &lt;strong&gt;it must occur at the end of the line&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The next argument specifies the kind plot we want: scatterplot, bar chart, fitted line, boxplot, pie chart, etc. &lt;strong&gt;ggplot2&lt;/strong&gt; refers to these as &lt;strong&gt;geoms&lt;/strong&gt;: the geometrical object that a plot uses to represent data. You can see an overview of many of these geoms in the 
+&lt;a href=&#34;https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;cheat sheet&lt;/a&gt;. The geom for a scatterplot is &lt;code&gt;geom_point()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;But we also require a &lt;code&gt;mapping&lt;/code&gt; argument, which maps the &lt;em&gt;variables&lt;/em&gt; in the dataset we want to focus on to their &lt;em&gt;visual representation&lt;/em&gt; in the plot.&lt;/p&gt;
+&lt;p&gt;And finally we need to specify an &lt;strong&gt;aesthetic&lt;/strong&gt; for the geometric objects in the plot, which will control things like shape, color, transparency, etc. Perhaps surprisingly, for a scatterplot, the x and y coordinates are aesthetics, since these control, not the shape or color, but the relative position of the points in the coordinate system.&lt;/p&gt;
+&lt;p&gt;Here is our complete plot:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Length&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Width&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-4-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;There is clearly a positive correlation between length and width. And we can make this even more apparent by visually fitting a line to the data, by &lt;em&gt;overlaying&lt;/em&gt; another geom in the same plot.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Length&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Width&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Length&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Width&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-5-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;There is clearly some code redundancy here, and we here we really don&amp;rsquo;t want the mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;, &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mapping&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Length&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Width&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-6-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;So we have the possibility of &lt;em&gt;local&lt;/em&gt; layer specifications, and &lt;em&gt;global&lt;/em&gt; specifications. Global specifications are &lt;em&gt;inherited&lt;/em&gt; by all the local layers.&lt;/p&gt;
+&lt;h3 id=&#34;the-power-of-aesthetics&#34;&gt;The power of aesthetics&lt;/h3&gt;
+&lt;p&gt;The aim of Fisher&amp;rsquo;s paper was to try to discriminate different species based on their morphological measurements. It looks from this plot that there are two distinct clusters. Do these clusters correspond to different species? There are two clusters, but three species. How can we explore this further?&lt;/p&gt;
+&lt;p&gt;Our current plot uses two numeric variables: &lt;code&gt;Petal.Length&lt;/code&gt; and &lt;code&gt;Petal.width&lt;/code&gt;. We can add a third categorical variable, like &lt;code&gt;Species&lt;/code&gt;, to a two dimensional scatterplot by mapping it to a different visual aesthetic. We&amp;rsquo;ve mapped length and width to x,y coordinates. Now we&amp;rsquo;ll simultaneously map species to &lt;code&gt;color&lt;/code&gt; by expanding our list of aesthetics:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mapping&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Length&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Width&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-7-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;breakout-rooms&#34;&gt;Breakout Rooms&lt;/h2&gt;
+&lt;p&gt;In the exercises we&amp;rsquo;ll be looking a little more at the &lt;strong&gt;iris&lt;/strong&gt; data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in &lt;strong&gt;Excercise 7&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;If you haven&amp;rsquo;t installed the NHANES dataset do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;NHANES&#34;&lt;/span&gt;, repos &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;http://cran.us.r-project.org&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; The downloaded binary packages are in&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpAoycXA/downloaded_packages&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Once installed, load it with:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;NHANES&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;A prebuilt joined data set has been loaded on github.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# create a data directory for the new file if you haven&#39;t done so yet:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#dir.create(&#39;data/birds&#39;, recursive = TRUE)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# set the url&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#joined_data_url &amp;lt;- &#39;https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/04_ggplot2/joined_data.tsv&#39;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# set the path for the downloaded file&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#joined_file &amp;lt;- &#39;data/birds/joined_data.tsv&#39;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#download to file&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#download.file(url = joined_data_url, destfile = joined_file)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# read file&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#$joined_data &amp;lt;- read_tsv(joined_file)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;joined_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;read_tsv&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#39;joined_data.tsv&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Parsed with column specification:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; cols(&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species = &lt;span style=&#39;color: #BB0000;&#39;&gt;col_character()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   locality = &lt;span style=&#39;color: #BB0000;&#39;&gt;col_character()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   stateProvince = &lt;span style=&#39;color: #BB0000;&#39;&gt;col_character()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   eventDate = &lt;span style=&#39;color: #0000BB;&#39;&gt;col_datetime(format = &#34;&#34;)&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species_en = &lt;span style=&#39;color: #BB0000;&#39;&gt;col_character()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   adult_body_mass_g = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   adult_svl_cm = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   longevity_y = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   litter_or_clutch_size_n = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; )&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;Revisit the &lt;strong&gt;iris&lt;/strong&gt; data set, and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one. &lt;br&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mapping&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Sepal.Length&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Sepal.Width&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-11-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Note this solution shows yet another way to position global mapping information: as its own layer. This can help readability and avoid too many nested parentheses.&lt;/p&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;Use the NHANES data set to plot body mass index against height. Color by gender. Which gender has the highest BMI?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+glimpse() the dataset to identify the variable names. &lt;br&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;NHANES&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Height&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;BMI&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Gender&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 366 rows containing missing values (geom_point).&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-12-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;exercise-3&#34;&gt;Exercise 3&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;Use the same plot but now color by physical activity. How active are those people with the highest BMI?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+Again, glimpse() the dataset to identify the variable names. &lt;br&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;NHANES&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Height&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;BMI&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PhysActive&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 366 rows containing missing values (geom_point).&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-13-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;exercise-4&#34;&gt;Exercise 4&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the &lt;code&gt;joined_data&lt;/code&gt; set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? &lt;br&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;joined_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;longevity_y&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;adult_body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 24089 rows containing missing values (geom_point).&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-14-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;joined_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;adult_body_mass_g&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10000&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 228 x 9&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    species locality stateProvince eventDate           species_en&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;   &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;    &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;         &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dttm&amp;gt;&lt;/span&gt;&lt;span&gt;              &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt;&lt;span&gt; Cygnus… Findlay  Ohio          2008-02-17 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Mute Swan &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt;&lt;span&gt; Cygnus… Dundee   Ohio          2004-02-16 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Mute Swan &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt;&lt;span&gt; Cygnus… 44805 A… Ohio          2006-02-18 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Mute Swan &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt;&lt;span&gt; Cygnus… 45011 H… Ohio          2005-02-19 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Mute Swan &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt;&lt;span&gt; Cygnus… 45042 M… Ohio          2009-02-13 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Trumpeter…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt;&lt;span&gt; Cygnus… 44813 B… Ohio          2007-02-19 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Mute Swan &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt;&lt;span&gt; Cygnus… Spencer  Ohio          2008-02-16 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Mute Swan &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt;&lt;span&gt; Cygnus… 44903 M… Ohio          2009-02-16 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Mute Swan &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt;&lt;span&gt; Cygnus… 44601 A… Ohio          2002-02-16 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Mute Swan &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt;&lt;span&gt; Cygnus… Avon La… Ohio          2007-02-17 &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;00:00:00&lt;/span&gt;&lt;span&gt; Mute Swan &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 218 more rows, and 4 more variables: adult_body_mass_g &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   adult_svl_cm &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, longevity_y &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, litter_or_clutch_size_n &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;joined_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;adult_body_mass_g&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10000&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;distinct&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 2 x 1&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species          &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;            &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; Cygnus olor      &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; Cygnus buccinator&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;joined_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;adult_body_mass_g&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10000&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;adult_body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;distinct&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 2 x 1&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   adult_body_mass_g&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;               &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt;             &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;10&lt;/span&gt;&lt;span&gt;230&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt;             &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;10&lt;/span&gt;&lt;span&gt;300&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;bonus-a-new-geom&#34;&gt;Bonus, a new geom!&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;Revisit the &lt;strong&gt;iris&lt;/strong&gt; data and generate a density histogram for sepal length, categorized by species.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+Use geom_density(). Check the help to see what aesthetics it supports. &lt;br&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mapping&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Sepal.Length&lt;/span&gt;, fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_density&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;alpha &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-18-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Note, what does the &lt;strong&gt;alpha&lt;/strong&gt; aesthetic control? &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Welcome to Code Club</title>
       <link>https://biodash.github.io/codeclub/00_welcome-to-codeclub/</link>
       <pubDate>Mon, 19 Oct 2020 00:00:00 +0000</pubDate>
