@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 018d9eaf0fb58ee7
+rmd_hash: 1c33cc9a0bb6242f
 
 ---
 
@@ -202,7 +202,7 @@ If you haven't installed the NHANES dataset do:
 
 <span class='c'>#&gt; </span>
 <span class='c'>#&gt; The downloaded binary packages are in</span>
-<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpAoycXA/downloaded_packages</span>
+<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//Rtmp7BXLxb/downloaded_packages</span>
 </code></pre>
 
 </div>
@@ -221,21 +221,22 @@ A prebuilt joined data set has been loaded on github.
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># create a data directory for the new file if you haven't done so yet:</span>
-<span class='c'>#dir.create('data/birds', recursive = TRUE)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'data/birds'</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<span class='c'>#&gt; Warning in dir.create("data/birds", recursive = TRUE): 'data/birds' already exists</span>
+
 
 <span class='c'># set the url</span>
-<span class='c'>#joined_data_url &lt;- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/04_ggplot2/joined_data.tsv'</span>
+<span class='nv'>joined_data_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/04_ggplot2/joined_data.tsv'</span>
 
 <span class='c'># set the path for the downloaded file</span>
-<span class='c'>#joined_file &lt;- 'data/birds/joined_data.tsv'</span>
+<span class='nv'>joined_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/joined_data.tsv'</span>
 
 <span class='c'>#download to file</span>
-<span class='c'>#download.file(url = joined_data_url, destfile = joined_file)</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>joined_data_url</span>, destfile <span class='o'>=</span> <span class='nv'>joined_file</span><span class='o'>)</span>
 
 <span class='c'># read file</span>
-<span class='c'>#$joined_data &lt;- read_tsv(joined_file)</span>
-
-<span class='nv'>joined_data</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span><span class='s'>'joined_data.tsv'</span><span class='o'>)</span>
+<span class='nv'>joined_data</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span><span class='nv'>joined_file</span><span class='o'>)</span>
 
 <span class='c'>#&gt; Parsed with column specification:</span>
 <span class='c'>#&gt; cols(</span>
