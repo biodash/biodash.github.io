@@ -1,6 +1,6 @@
 ---
 title: "Session 4: Visualizing Data"
-subtitle: "Introduction to Data Visualization with `ggplot2`"
+subtitle: "Introduction to Data Visualization with **ggplot2**"
 summary: "In this session of Code Club, we'll look at how to visualize data in R using **ggplot2**."  
 authors: [michael-broe]
 date: "2020-12-10"
@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 8f283f23e0754bbc
+rmd_hash: a4aa5ef52dffd74c
 
 ---
 
@@ -55,7 +55,7 @@ There's a learning curve here for sure, but there are a couple of things that he
 
 First, every graphic shares a *common template*. This is like thinking about the sentence "The cat sat on the mat" grammatically as the template `NP V PP` (`N`oun `P`hrase "The cat", `V`erb "sat", `P`repositional `P`hrase "on the mat"). Once you understand this structure you can "say" a *lot* of different things.
 
-(And I mean a *lot*. The [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) gives has over 40 geoms, but because this is a language, users can create their own [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can also utilize, adding over 80 more.)
+(And I mean a *lot*. The [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) lists over 40 geoms, but because this is a language, users can create their own [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can also utilize, adding over 80 more.)
 
 Second, the way we put layers together is identical to the way we use pipes. You can read `%>%` as "and then": `select()` and then `mutate()` and then `summarize()`. In graphics, we can say "show this layer, and then *overlay* this layer, and then *overlay* this layer", etc., using a very similar syntax.
 
@@ -202,7 +202,7 @@ If you haven't installed the NHANES dataset do:
 
 <span class='c'>#&gt; </span>
 <span class='c'>#&gt; The downloaded binary packages are in</span>
-<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//Rtmpj2BYNj/downloaded_packages</span>
+<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpGqZdr6/downloaded_packages</span>
 </code></pre>
 
 </div>
