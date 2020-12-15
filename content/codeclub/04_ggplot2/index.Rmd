@@ -178,11 +178,10 @@ ggplot(data = iris) +
   geom_point(mapping = aes(x = Petal.Length, y = Petal.Width)) +
   geom_smooth(mapping = aes(x = Petal.Length, y = Petal.Width))
 ```
-There is clearly some code redundancy here, and we here we really don't want the mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level.
+There is clearly some code redundancy here, and we here we really don't want the mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:
 
 ```{r}
-ggplot(data = iris) +
-  (mapping = aes(x = Petal.Length, y = Petal.Width)) +
+ggplot(data = iris, (mapping = aes(x = Petal.Length, y = Petal.Width))) +
   geom_point() +
   geom_smooth()
 ```
@@ -200,610 +199,173 @@ ggplot(data = iris) +
   geom_point()
 ```
 
+## Breakout Rooms
 
-The National Health and Nutrition Examination Survey [(NHANES)
-dataset](https://www.rdocumentation.org/packages/NHANES/versions/2.1.0/topics/NHANES)
-contains survey data obtained annually from \~5,000 individuals on a
-variety of health and lifestyle-related metrics. A subset of the data
-are available as an R package - install and load it...
+In the exercises we'll be looking a little more at the iris data, and in addition, the NHANES data we used last week, and the lef-joined bird dataset we built last week in **Excercise 7**.
 
+If you haven't installed the NHANES dataset do:
 ```{r}
 install.packages("NHANES", repos = "http://cran.us.r-project.org")
+```
+Once installed, load it with:
+```{r}
 library(NHANES)
 ```
 
-Now preview the dataset...
+A prebuilt joined data set has been loaded on github.
 
 ```{r}
-glimpse(NHANES)
-```
+# create a data directory for the new file if you haven't done so yet:
+dir.create('data/birds', recursive = TRUE)
 
-To try out merging/joining, we'll create two separate data frames by
-pulling out some variables from this NHANES dataset. One will contain
-demographic variables, and the other with have some physical
-measurements. Then we'll join them back together. Let's create the two
-sub-datasets first...
-
-```{r}
-#Filter out rows with data from 2009-2010 and Age > 5, 
-#select a subset (4) of the variables, then get rid of 
-#all duplicate rows. Assign the output to object 'dem_data'.
-dem_data <- NHANES %>% 
-            filter(SurveyYr == "2009_10") %>% 
-            filter(Age > 5) %>% 
-            select(ID, Gender, Age, Education) %>% 
-            distinct()
-
-#similar as above, but with a different filter and 
-#selecting different variables. Save as 'phys_data'
-phys_data <- NHANES %>% 
-             filter(SurveyYr == "2009_10") %>% 
-             filter(Height < 180)  %>%
-             select(ID, Height, BMI, Pulse) %>% 
-             distinct()
-
-```
-
-Now explore them a bit...
-
-```{r}
-#view the first 6 rows of each - note the shared ID column
-head(dem_data)
-head(phys_data)
-
-#preview in another way - note the different numbers of observations (rows)
-glimpse(dem_data)
-glimpse(phys_data)
-```
-
-```{r}
-head(phys_data)
-```
-
-Let's use the shared ID column to join the two datasets together. We'll
-do this in 4 different ways to compare different types of joins:
-`inner_join()`, `left_join()`, `right_join()`, and `full_join()`. Pay
-attention to the number of rows in the joined dataset each time and how
-it relates to the number of rows in each of the two individual datasets.
-
-The basic structure of the dplyr `*_join()` functions is...
-
-`*_join(dataframe 'x', dataframe 'y', by = shared column name)`
-
-<br>
-
-------------------------------------------------------------------------
-
-## 1 - `inner_join()`
-
-```{r}
-
-#preview the new object
-head(join_inner)
-
-```
-```{r}
-nhanes <- NHANES
-```
-
-```{r}
-ggplot(data = NHANES) +
-  geom_point(mapping = (aes(x = Height, y = BMI, color = PhysActive)))
-```
-
-```{r}
-ggplot(data = NHANES) +
-  geom_point(mapping = (aes(x = Height, y = BMI, color = Gender)))
-```
-
-
-
-## 2 - `left_join()`
-
-```{r}
-#perform an left join
-join_left <- left_join(dem_data, phys_data, by = "ID")
-
-#preview the new object
-head(join_left)
-
-#get dimensions
-dim(join_left)
-```
-
-## 3 - `right_join()`
-
-```{r}
-#perform an right join
-join_right <- right_join(dem_data, phys_data, by = "ID")
-
-#preview the new object
-head(join_right)
-
-#get dimensions
-dim(join_right)
-```
-
-## 4 - `full_join()`
-
-```{r}
-#perform an full join
-join_full <- full_join(dem_data, phys_data, by = "ID")
-
-#preview the new object
-head(join_full)
-
-#get dimensions
-dim(join_full)
-```
-
-<br>
-
-------------------------------------------------------------------------
-
-# Breakout rooms
-
-We're going to add to our backyard birds dataset. I found a dataset that
-has life history data for a large number of species (birds and others).
-We'll use species names to merge some of these life history variables in
-to the occurrence data we already have.
-
-If you're new and haven't yet gotten the backyard bird dataset, get it
-first by running the code below. Otherwise, you can skip this step...
-
-```{r}
-# create a directory called data that contains a subdirectory called birds
-dir.create('data/birds/', recursive = TRUE)
-
-# set the location of the file
-birds_file_url <-
-'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv'
+# set the url
+joined_data_url <-
+'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/codeclub/04_ggplot2/joined_data.tsv'
 
 # set the path for the downloaded file
-birds_file <- 'data/birds/backyard-birds_Ohio.tsv'
-#download
-download.file(url = birds_file_url, destfile = birds_file)
+joined_file <- 'data/birds/joined_data.tsv'
 
+#download to file
+download.file(url = joined_data_url, destfile = joined_file)
+
+# read file
+joined_data <- read_tsv(joined_file)
 ```
 
-Now **(everybody)**, read in the bird data for this session...
 
-```{r}
-birds_file <- 'data/birds/backyard-birds_Ohio.tsv'
-birds <- read_tsv(birds_file)
-
-```
 
 ## Exercise 1
 
-<div class="alert puzzle">
-<div>
+:::puzzle
 
-Reduce the backyard bird dataset and keep just the following columns:
-**species, locality, stateProvince, eventDate, species\_en**
+Revisit the **iris** data set and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
 
 <details> <summary> Hints (click here) </summary>
-
-<br> Use `select()` to pull out the columns you want. <br>
-
+Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one.
+<br> 
 </details>
 
 <details> <summary> Solution (click here) </summary>
+```{r}
+ggplot(data = iris) +
+  (mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point()
+```
 
-<br>
-
-    birds <- birds %>% select(species, locality, stateProvince, eventDate, species_en)
-
+Note this solution shows yet another way to position global mapping information: as its own layer. This can help readability and avoid too many nested parentheses.
 </details>
-
-</div>
-</div>
+:::
 
 ------------------------------------------------------------------------
 
 ## Exercise 2
 
-<div class="alert puzzle">
-<div>
+:::puzzle
 
-Check to make sure things look right - how many columns does the birds
-dataset now have?
+Use the NHANES data set to plot body mass index against height. Color by gender. Which gender has the highest BMI?
 
 <details> <summary> Hints (click here) </summary>
-
-<br> Use the `dim()` function. Or the `ncol()` function. Or `glimpse()`. Or
-`head()`. Or `str()`. Or even `summary()`. There's lots of ways to do this.
-<br> </details>
-
-<details> <summary> Solution (click here) </summary>
-
 <br>
-
-```{r}
-dim(birds)
-```
-
+`glimpse()` the dataset to identify the variable names.
+<br> 
 </details>
 
-</div>
-</div>
+<details> <summary> Solution (click here) </summary>
+```{r}
+ggplot(data = NHANES) +
+  geom_point(mapping = (aes(x = Height, y = BMI, color = Gender)))
+```
+</details>
+:::
 
 ------------------------------------------------------------------------
 
 ## Exercise 3
 
-<div class="alert puzzle">
-<div>
+:::puzzle
 
-Now download and read in the new life history dataset (tab separated)
-available at
-<https://github.com/biodash/biodash.github.io/raw/master/assets/data/birds/esa_life_history_data_cc.tsv>.
-Then explore it a bit - how many rows and columns are there?
+Use the same plot but now color by physical activity. How active are those people with the highest BMI?
 
 <details> <summary> Hints (click here) </summary>
-
-<br> Use the `download.file()` function like we did previously for the
-bird dataset. You'll need to define the arguments 'url' and 'destfile'
-inside the parentheses. You can put the file anywhere you want, but I'd
-suggest in the same directory as the bird file we got, so, for example, the
-destination file could be "data/birds/life_history_data.tsv". <br>
+<br>
+Again, `glimpse()` the dataset to identify the variable names.
+<br> 
 </details>
 
 <details> <summary> Solution (click here) </summary>
-
-<br>
-
 ```{r}
-#download the file from online and save it as a '.tsv' file (since it's tab delimited)
-download.file(url = "https://github.com/biodash/biodash.github.io/raw/master/assets/data/birds/esa_life_history_data_cc.tsv",
-destfile = "data/birds/life_history_data.tsv")
-
-#read the data in to R as an object named 'life_hist'
-life_hist <- read_tsv(file = "data/birds/life_history_data.tsv")
-
-#preview the data
-glimpse(life_hist)
+ggplot(data = NHANES) +
+  geom_point(mapping = (aes(x = Height, y = BMI, color = PhysActive)))
 ```
-
 </details>
-
-</div>
-</div>
+:::
 
 ------------------------------------------------------------------------
 
 ## Exercise 4
 
-<div class="alert puzzle">
-<div>
+:::puzzle
 
-This new dataset contains life history data for more than just birds.
-What Classes of organisms are represented in the 'Class' variable?
+Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent.
 
 <details> <summary> Hints (click here) </summary>
-
-<br> Try using a combination of the `select()` and `distinct()` functions to pull out the column you're interested in, and then to get the distinct values, respectively.
-<br> </details>
-
-<details> <summary> Solutions (click here) </summary>
-
-```{r}
-life_hist %>% select(class) %>% distinct()
-```
-
-</details> <br>
-
-</div>
-</div>
-
-------------------------------------------------------------------------
-
-## Exercise 5
-
-<div class="alert puzzle">
-<div>
-
-Reduce the life history dataset down to keep just the rows for Class
-**Aves** and the columns **species, adult_body_mass_g,
-adult_svl_cm, longevity_y, litter_or_clutch_size_n**. What are the dimensions now?
-
-<details> <summary> Hints (click here) </summary>
-
-Use `filter()` along with an appropriate logical expression to keep the
-rows we want. Use `select()` to get the desired columns. <br> </details>
-
-<details> <summary> Solutions (click here) </summary>
-
-```{r}
-# pull out target rows and columns
-life_hist_aves <- life_hist %>% 
-    				      filter(class == "Aves") %>% 
-    				      select(species, adult_body_mass_g, adult_svl_cm, longevity_y, litter_or_clutch_size_n)
-
-dim(life_hist_aves)
-```
-
-</details> <br>
-
-</div>
-</div>
-
-------------------------------------------------------------------------
-
-## Exercise 6
-
-<div class="alert puzzle">
-<div>
-
-Preview each dataset again, just to make sure you're clear about what's
-in each one. Are there any columns that are shared between the two?
-
-<details> <summary> Hints (click here) </summary>
-
-Consider `glimpse()` or `head()` to preview the datasets (tibbles/data frames).
-If you want to use a function to find shared columns, try a combination of `intersect()` and `names()`
-
+<br>
+Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there? What species are represented by these data points? How many weights are reported? Why is the plot misleading here?
+<br> 
 </details>
 
-<details> <summary> Solutions (click here) </summary>
-
+<details> <summary> Solution (click here) </summary>
 ```{r}
-glimpse(birds)
-
-glimpse(life_hist_aves)
-
-intersect(names(birds), names(life_hist_aves))
+ggplot(data = joined_data) +
+  geom_point(mapping = (aes(x = longevity_y, y = adult_body_mass_g)))
 ```
 
-</details> <br>
-
-</div>
-</div>
-
-------------------------------------------------------------------------
-
-## Exercise 7
-
-<div class="alert puzzle">
-<div>
-
-Now lets join them together based on their shared variable. Not all
-species in the backyard bird (Ohio) dataset are included in the life
-history dataset. Likewise, there are life history data for many species
-that aren't in the Ohio dataset. We want to keep all the Ohio
-observations, and merge in life history data for species where it's
-availble, but we also don't want to add in life history data for species
-that aren't in the Ohio dataset. Choose an appropriate join function
-with those things in mind.
-
-<details> <summary> Hints (click here) </summary>
-
-Try a `left_join()`, defining the Ohio backyard bird dataset as the 'x'
-dataset in the join and the life history data as the 'y' dataset. Get
-details on that function with `?left_join`. <br>
-
-</details>
-
-<details> <summary> Solutions (click here) </summary>
-
 ```{r}
-joined_data <- left_join(x = birds, y = life_hist_aves, by = "species")
+joined_data %>% 
+  filter(adult_body_mass_g > 10000)
 ```
-
-</details> <br>
-
-</div>
-</div>
-
-------------------------------------------------------------------------
-
-## Exercise 8
-
-<div class="alert puzzle">
-<div>
-
-What are the longest- and shortest-living bird species in Ohio based on
-the data in the longevity\_y column?
-
-<details> <summary> Hints (click here) </summary> Try using `select()` to pull out just
-the columns species and longevity_y, then use `distinct()` to get the unique
-rows, then `arrange()` based on the longevity_y column. You might also
-find the dplyr function `desc()` helpful.
-
-Alternatively, you could try grouping by species, then use summarise() to get
-either the max, min, or mean value for longevity_y for each species
-(there's just one value for each species, so all of those statistics
-give the same value in this case). Then sort (arrange) the resulting
-summarized data frame on the longevity value.
-
-<br> </details>
-
-<details> <summary> Solutions (click here) </summary>
-
 ```{r}
-#option 1 - shortest-lived birds
-joined_data %>% select(species, longevity_y) %>% 
-                distinct() %>% 
-                arrange(longevity_y)
-
-#option 1 - longest-lived birds
-joined_data %>% select(species, longevity_y) %>% 
-    				    distinct() %>% 
-    				    arrange(desc(longevity_y))
-
-#option 2 - shortest-lived birds
-joined_data %>% group_by(species) %>% 
-                summarise(longevity = max(longevity_y)) %>% 
-                arrange(longevity)
-    
-#option 2 - longest-lived birds
-joined_data %>% group_by(species) %>% 
-                summarise(longevity = max(longevity_y)) %>% 
-                arrange(desc(longevity))
-    
+joined_data %>% 
+  filter(adult_body_mass_g > 10000) %>% 
+  select(species) %>% 
+  distinct()
 ```
-
-</details> <br>
-
-</div>
-</div>
-
-------------------------------------------------------------------------
-
-## Bonus time!
-
-## Bonus 1
-
-<div class="alert puzzle">
-<div>
-
-What species in Ohio has the largest ratio of adult body mass to
-length (measured as snout vent length, or 'adult_svl_cm')?
-
-<details> <summary> Hints (click here) </summary>
-
-Use mutate() to create a new variable containing the body mass divided by svl, then
-arrange the dataset using that new variable to get the species with the highest value.
-
-</details>
-
-<details> <summary> Solutions (click here) </summary>
-
 ```{r}
-joined_data %>% mutate(ratio = adult_body_mass_g/adult_svl_cm) %>% 
-                select(species_en, ratio) %>% distinct() %>% 
-                arrange(desc(ratio))
-```
-
-</details> <br>
-
-</div>
-</div>
-
-------------------------------------------------------------------------
-
-### Bonus 2
-
-<div class="alert puzzle">
-<div>
-There are 2 additional joins we haven't talked about - semi_join() and anti_join(). Take a look at the documentation to see what these do. Use one of them to find what species in the backyard birds dataset are not in the life history dataset.
-
-<details>
-  <summary>
-  Hints (click here)
-  </summary>
-  
-  Use anti_join() and distinct().
-
-</details>
-
-<details>
-  <summary>
-  Solutions (click here)
-  </summary>
-  
-```{r}
-anti_join(birds, life_hist_aves, by = "species") %>% select(species, species_en) %>%
-                                                     distinct()
-
+joined_data %>% 
+  filter(adult_body_mass_g > 10000) %>% 
+  select(adult_body_mass_g) %>% 
+  distinct()
 ```
 
 </details>
+:::
 
-</div>
-</div>
+## Bonus, a new geom!
 
-------------------------------------------------------------------------
+:::puzzle
 
-## Bonus 3
-
-<div class="alert puzzle">
-<div>
-
-The life history dataset we downloaded above is actually a modified
-version of the original file, which is located at
-'<http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv>'
-
-Try starting with the original file and repeating what we did above -
-merging the variables **species, adult_body_mass\_g, adult_svl_cm, longevity_y, litter_or_clutch_size_n** in to the original birds
-dataset. First, make sure to get it read in correctly. Then pay
-attention to the species column in the life history dataset - what needs
-to be done before a join/merge can be performed?
+Revisit the **iris** data and generate a density histogram for sepal length, categorized by species.
 
 <details> <summary> Hints (click here) </summary>
+Use geom_density(). Check the help to see what aesthetics it supports.
+<br> 
+</details>
 
-Pay attention to how missing data are coded in this dataset (it's -999).
-Also, data are very sparse for some of the variables - in other words,
-they have lots of missing data. This seems to cause a problem with the
-read\_csv function, as it only considers the first 1000 rows for the
-purpose of defining the class of each column. This can be a problem if
-all of the first 1000 rows are missing. Finally, it appears that even
-though this is a comma separated file (commas define the column breaks),
-there are a few instances where commas are used within a field. This
-happens in the 'common name' column in a few cases where multiple common
-names are listed for a specific observation. This is one example of
-something that can become quite frustrating when trying to get data
-loaded in, and is worth keeping an eye out for. Fortunately, in our case, it only seems to happen for non-bird species in this dataset, which we filter out anyway, so it can be dealt with. However, if it had impacted any of the bird observations, I think fixing this might require a solution outside of R - possibly a command line approach.
+<details> <summary> Solution (click here) </summary>
 
+```{r}
+ggplot(data = iris) +
+  (mapping = (aes(x = Sepal.Length, fill = Species))) +
+  geom_density(alpha = 0.5)
+```
+Note, what does the **alpha** aesthetic control?
 <br>
 
 </details>
-
-<details> <summary> Solutions (click here) </summary>
-
-```{r}
-#download
-download.file(url = "http://www.esapubs.org/archive/ecol/E096/269/Data_Files/Amniote_Database_Aug_2015.csv", 
-destfile = "data/birds/orig_life_history.csv")
-
-#read the data in to R as an object named 'full_life_hist'
-
-full_life_hist <- read_csv("data/birds/orig_life_history.csv", 
-                  na = "-999", 
-                  col_types = cols(birth_or_hatching_svl_cm = col_double(),
-                  weaning_d = col_double(),gestation_d = col_double(), 
-                  weaning_weight_g = col_double(), 
-                  male_svl_cm = col_double(), 
-                  female_svl_cm = col_double(),
-                  no_sex_svl_cm = col_double(), 
-                  female_body_mass_at_maturity_g = col_double(),
-                  female_svl_at_maturity_cm = col_double()))
-
-#get the original version of the birds dataset
-birds <- read_tsv('data/birds/backyard-birds_Ohio.tsv')
-
-#subset each for the columns and rows we want
-life_hist_aves <- full_life_hist %>% filter(class == "Aves") %>% 
-                  select(species, adult_body_mass_g, adult_svl_cm, longevity_y, litter_or_clutch_size_n)
-
-birds <- birds %>% select(species, locality, stateProvince, eventDate, species_en)
-
-glimpse(birds)
-
-glimpse(life_hist_aves)
-
-#notice the species column in the life history data doesn't include the genus name. Since the names don't match in the species column from each dataset, a join won't work. Add the genus variable in from the original life history data...
-
-life_hist_aves <- full_life_hist %>% filter(class == "Aves") %>% 
-                  select(genus, species, adult_body_mass_g, adult_svl_cm, longevity_y, litter_or_clutch_size_n)
-
-#now use mutate to replace the species column so it includes both the genus and species...
-
-life_hist_aves <- life_hist_aves %>% mutate(species = paste0(genus, " ", species)) %>% select(-genus)
-
-#preview again
-glimpse(birds)
-glimpse(life_hist_aves)
-
-#now we can join
-joined_data <- left_join(birds, life_hist_aves, by = "species")
-```
-
-</details> <br>
-
-</div>
-</div>
-
+:::
 ------------------------------------------------------------------------
+
+
+
 
 <br> <br> <br> <br>
