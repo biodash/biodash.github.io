@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: a4aa5ef52dffd74c
+rmd_hash: 018d9eaf0fb58ee7
 
 ---
 
@@ -202,7 +202,7 @@ If you haven't installed the NHANES dataset do:
 
 <span class='c'>#&gt; </span>
 <span class='c'>#&gt; The downloaded binary packages are in</span>
-<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpGqZdr6/downloaded_packages</span>
+<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpAoycXA/downloaded_packages</span>
 </code></pre>
 
 </div>
@@ -224,7 +224,7 @@ A prebuilt joined data set has been loaded on github.
 <span class='c'>#dir.create('data/birds', recursive = TRUE)</span>
 
 <span class='c'># set the url</span>
-<span class='c'>#joined_data_url &lt;- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/codeclub/04_ggplot2/joined_data.tsv'</span>
+<span class='c'>#joined_data_url &lt;- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/04_ggplot2/joined_data.tsv'</span>
 
 <span class='c'># set the path for the downloaded file</span>
 <span class='c'>#joined_file &lt;- 'data/birds/joined_data.tsv'</span>
