@@ -1,7 +1,7 @@
 ---
 title: "Session 4: Visualizing Data"
 subtitle: "Introduction to Data Visualization with `ggplot2`"
-summary: "In this session of Code Club, we'll look at how to visualize data in R using `ggplot2`."  
+summary: "In this session of Code Club, we'll look at how to visualize data in R using **ggplot2**."  
 authors: [michael-broe]
 date: "2020-12-10"
 output: hugodown::md_document
@@ -86,10 +86,10 @@ structure you can "say" a *lot* of different things.
 
 (And I mean a *lot*. The [ggplot cheat
 sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
-gives an overview of the things you can do, but because this is a
+gives has over 40 geoms, but because this is a
 language, users can create their own
 [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can
-also utilize.)
+also utilize, adding over 80 more.)
 
 Second, the way we put layers together is identical to the way we use
 pipes. You can read `%>%` as "and then": `select()` and then `mutate()`
@@ -191,7 +191,7 @@ So we have the possibility of *local* layer specifications, and *global* specifi
 
 The aim of Fisher's paper was to try to discriminate different species based on their morphological measurements. It looks from this plot that there are two distinct clusters. Do these clusters correspond to different species? There are two clusters, but three species. How can we explore this further?
 
-Our current plot uses two numeric variables: `Petal.Length` and `Petal.width`. We can add a third variable, like `Species`, to a two dimensional scatterplot by mapping it to a different visual aesthetic. We've mapped length and width to x,y coordinates. Now we'll simultaneously map species to `color` by expanding our list of aesthetics:
+Our current plot uses two numeric variables: `Petal.Length` and `Petal.width`. We can add a third categorical variable, like `Species`, to a two dimensional scatterplot by mapping it to a different visual aesthetic. We've mapped length and width to x,y coordinates. Now we'll simultaneously map species to `color` by expanding our list of aesthetics:
 
 ```{r}
 ggplot(data = iris) +
@@ -201,7 +201,7 @@ ggplot(data = iris) +
 
 ## Breakout Rooms
 
-In the exercises we'll be looking a little more at the iris data, and in addition, the NHANES data we used last week, and the lef-joined bird dataset we built last week in **Excercise 7**.
+In the exercises we'll be looking a little more at the **iris** data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in **Excercise 7**.
 
 If you haven't installed the NHANES dataset do:
 ```{r}
@@ -216,20 +216,21 @@ A prebuilt joined data set has been loaded on github.
 
 ```{r}
 # create a data directory for the new file if you haven't done so yet:
-dir.create('data/birds', recursive = TRUE)
+#dir.create('data/birds', recursive = TRUE)
 
 # set the url
-joined_data_url <-
-'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/codeclub/04_ggplot2/joined_data.tsv'
+#joined_data_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/codeclub/04_ggplot2/joined_data.tsv'
 
 # set the path for the downloaded file
-joined_file <- 'data/birds/joined_data.tsv'
+#joined_file <- 'data/birds/joined_data.tsv'
 
 #download to file
-download.file(url = joined_data_url, destfile = joined_file)
+#download.file(url = joined_data_url, destfile = joined_file)
 
 # read file
-joined_data <- read_tsv(joined_file)
+#$joined_data <- read_tsv(joined_file)
+
+joined_data <- read_tsv('joined_data.tsv')
 ```
 
 
@@ -238,7 +239,7 @@ joined_data <- read_tsv(joined_file)
 
 :::puzzle
 
-Revisit the **iris** data set and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
+Revisit the **iris** data set, and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
 
 <details> <summary> Hints (click here) </summary>
 Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one.
@@ -265,8 +266,7 @@ Note this solution shows yet another way to position global mapping information:
 Use the NHANES data set to plot body mass index against height. Color by gender. Which gender has the highest BMI?
 
 <details> <summary> Hints (click here) </summary>
-<br>
-`glimpse()` the dataset to identify the variable names.
+glimpse() the dataset to identify the variable names.
 <br> 
 </details>
 
@@ -287,8 +287,7 @@ ggplot(data = NHANES) +
 Use the same plot but now color by physical activity. How active are those people with the highest BMI?
 
 <details> <summary> Hints (click here) </summary>
-<br>
-Again, `glimpse()` the dataset to identify the variable names.
+Again, glimpse() the dataset to identify the variable names.
 <br> 
 </details>
 
@@ -306,11 +305,10 @@ ggplot(data = NHANES) +
 
 :::puzzle
 
-Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent.
+Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent?
 
 <details> <summary> Hints (click here) </summary>
-<br>
-Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there? What species are represented by these data points? How many weights are reported? Why is the plot misleading here?
+Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here?
 <br> 
 </details>
 

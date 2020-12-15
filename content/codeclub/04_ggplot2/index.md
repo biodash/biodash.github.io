@@ -1,7 +1,7 @@
 ---
 title: "Session 4: Visualizing Data"
 subtitle: "Introduction to Data Visualization with `ggplot2`"
-summary: "In this session of Code Club, we'll look at how to visualize data in R using `ggplot2`."  
+summary: "In this session of Code Club, we'll look at how to visualize data in R using **ggplot2**."  
 authors: [michael-broe]
 date: "2020-12-10"
 output: hugodown::md_document
@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 5cb78018f6cf8b41
+rmd_hash: 8f283f23e0754bbc
 
 ---
 
@@ -55,7 +55,7 @@ There's a learning curve here for sure, but there are a couple of things that he
 
 First, every graphic shares a *common template*. This is like thinking about the sentence "The cat sat on the mat" grammatically as the template `NP V PP` (`N`oun `P`hrase "The cat", `V`erb "sat", `P`repositional `P`hrase "on the mat"). Once you understand this structure you can "say" a *lot* of different things.
 
-(And I mean a *lot*. The [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) gives an overview of the things you can do, but because this is a language, users can create their own [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can also utilize.)
+(And I mean a *lot*. The [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) gives has over 40 geoms, but because this is a language, users can create their own [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can also utilize, adding over 80 more.)
 
 Second, the way we put layers together is identical to the way we use pipes. You can read `%>%` as "and then": `select()` and then `mutate()` and then `summarize()`. In graphics, we can say "show this layer, and then *overlay* this layer, and then *overlay* this layer", etc., using a very similar syntax.
 
@@ -177,7 +177,7 @@ So we have the possibility of *local* layer specifications, and *global* specifi
 
 The aim of Fisher's paper was to try to discriminate different species based on their morphological measurements. It looks from this plot that there are two distinct clusters. Do these clusters correspond to different species? There are two clusters, but three species. How can we explore this further?
 
-Our current plot uses two numeric variables: `Petal.Length` and `Petal.width`. We can add a third variable, like `Species`, to a two dimensional scatterplot by mapping it to a different visual aesthetic. We've mapped length and width to x,y coordinates. Now we'll simultaneously map species to `color` by expanding our list of aesthetics:
+Our current plot uses two numeric variables: `Petal.Length` and `Petal.width`. We can add a third categorical variable, like `Species`, to a two dimensional scatterplot by mapping it to a different visual aesthetic. We've mapped length and width to x,y coordinates. Now we'll simultaneously map species to `color` by expanding our list of aesthetics:
 
 <div class="highlight">
 
@@ -192,7 +192,7 @@ Our current plot uses two numeric variables: `Petal.Length` and `Petal.width`. W
 
 ## Breakout Rooms
 
-In the exercises we'll be looking a little more at the iris data, and in addition, the NHANES data we used last week, and the lef-joined bird dataset we built last week in **Excercise 7**.
+In the exercises we'll be looking a little more at the **iris** data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in **Excercise 7**.
 
 If you haven't installed the NHANES dataset do:
 
@@ -202,7 +202,7 @@ If you haven't installed the NHANES dataset do:
 
 <span class='c'>#&gt; </span>
 <span class='c'>#&gt; The downloaded binary packages are in</span>
-<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpBlfuYa/downloaded_packages</span>
+<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//Rtmpj2BYNj/downloaded_packages</span>
 </code></pre>
 
 </div>
@@ -220,7 +220,22 @@ A prebuilt joined data set has been loaded on github.
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>joined_data</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span><span class='s'>"joined_data.tsv"</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># create a data directory for the new file if you haven't done so yet:</span>
+<span class='c'>#dir.create('data/birds', recursive = TRUE)</span>
+
+<span class='c'># set the url</span>
+<span class='c'>#joined_data_url &lt;- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/codeclub/04_ggplot2/joined_data.tsv'</span>
+
+<span class='c'># set the path for the downloaded file</span>
+<span class='c'>#joined_file &lt;- 'data/birds/joined_data.tsv'</span>
+
+<span class='c'>#download to file</span>
+<span class='c'>#download.file(url = joined_data_url, destfile = joined_file)</span>
+
+<span class='c'># read file</span>
+<span class='c'>#$joined_data &lt;- read_tsv(joined_file)</span>
+
+<span class='nv'>joined_data</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span><span class='s'>'joined_data.tsv'</span><span class='o'>)</span>
 
 <span class='c'>#&gt; Parsed with column specification:</span>
 <span class='c'>#&gt; cols(</span>
@@ -238,23 +253,11 @@ A prebuilt joined data set has been loaded on github.
 
 </div>
 
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds_file_url</span> <span class='o'>&lt;-</span>
-<span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv'</span>
-<span class='c'># set the path for the downloaded file</span>
-<span class='nv'>birds_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/backyard-birds_Ohio.tsv'</span>
-<span class='c'>#download</span>
-<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds_file_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
-</code></pre>
-
-</div>
-
 ## Exercise 1
 
 <div class="puzzle">
 
-Revisit the **iris** data set and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
+Revisit the **iris** data set, and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
 
 <details>
 <summary>
@@ -274,7 +277,7 @@ Solution (click here)
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -295,7 +298,7 @@ Use the NHANES data set to plot body mass index against height. Color by gender.
 <summary>
 Hints (click here)
 </summary>
-<br> `glimpse()` the dataset to identify the variable names. <br>
+glimpse() the dataset to identify the variable names. <br>
 </details>
 <details>
 <summary>
@@ -310,7 +313,7 @@ Solution (click here)
 <span class='c'>#&gt; Warning: Removed 366 rows containing missing values (geom_point).</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -330,7 +333,7 @@ Use the same plot but now color by physical activity. How active are those peopl
 <summary>
 Hints (click here)
 </summary>
-<br> Again, `glimpse()` the dataset to identify the variable names. <br>
+Again, glimpse() the dataset to identify the variable names. <br>
 </details>
 <details>
 <summary>
@@ -345,7 +348,7 @@ Solution (click here)
 <span class='c'>#&gt; Warning: Removed 366 rows containing missing values (geom_point).</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -359,13 +362,13 @@ Solution (click here)
 
 <div class="puzzle">
 
-Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent.
+Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent?
 
 <details>
 <summary>
 Hints (click here)
 </summary>
-<br> Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? <br>
+Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? <br>
 </details>
 <details>
 <summary>
@@ -380,7 +383,7 @@ Solution (click here)
 <span class='c'>#&gt; Warning: Removed 24089 rows containing missing values (geom_point).</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -468,7 +471,7 @@ Solution (click here)
   <span class='nf'>geom_density</span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
