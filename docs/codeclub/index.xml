@@ -40,21 +40,21 @@
 &lt;h2 id=&#34;intro-the-ggplot2-philosophy&#34;&gt;Intro: The ggplot2 philosophy&lt;/h2&gt;
 &lt;p&gt;We have already seen that in R, instead of manually manipulating data frames as you might do when editing Excel sheets, we &lt;strong&gt;code&lt;/strong&gt; the operations we want to perform using &lt;strong&gt;dplyr&lt;/strong&gt; verbs like &lt;code&gt;select()&lt;/code&gt;, &lt;code&gt;mutate()&lt;/code&gt;, &lt;code&gt;inner_join()&lt;/code&gt;, and so on.&lt;/p&gt;
 &lt;p&gt;In a similar way when performing visualization, instead of clicking on a chart type in Excel, we &lt;strong&gt;code the chart&lt;/strong&gt; in R.&lt;/p&gt;
-&lt;p&gt;And just as &lt;strong&gt;dplyr&lt;/strong&gt; gives us efficient ways to manipulate data frames, &lt;strong&gt;ggplot2&lt;/strong&gt; (which is also part of the &lt;strong&gt;tidyverse&lt;/strong&gt;) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).&lt;/p&gt;
+&lt;p&gt;And just as &lt;strong&gt;dplyr&lt;/strong&gt; gives us efficient ways to manipulate data frames, &lt;strong&gt;ggplot2&lt;/strong&gt; (which is also part of the tidyverse) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).&lt;/p&gt;
 &lt;p&gt;The &lt;strong&gt;gg&lt;/strong&gt; in &lt;strong&gt;ggplot2&lt;/strong&gt; stands for &lt;em&gt;grammar of graphics&lt;/em&gt;, a systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about &amp;lsquo;pulling apart&amp;rsquo; various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar).&lt;/p&gt;
 &lt;p&gt;There are two parts to this. First, the &amp;lsquo;nouns and verbs&amp;rsquo; we need to work with plots are very different than those we need to work with data frames. &lt;strong&gt;ggplot2&lt;/strong&gt; is like a mini-language of its own, with its own verbs and syntax.&lt;/p&gt;
 &lt;p&gt;Second, this notion of pulling apart a graphic leads to the idea of &lt;em&gt;layers&lt;/em&gt;. You can build up a plot of any complexity by &lt;em&gt;overlaying&lt;/em&gt; different views of the same data.&lt;/p&gt;
 &lt;p&gt;There&amp;rsquo;s a learning curve here for sure, but there are a couple of things that help us.&lt;/p&gt;
 &lt;p&gt;First, every graphic shares a &lt;em&gt;common template&lt;/em&gt;. This is like thinking about the sentence &amp;ldquo;The cat sat on the mat&amp;rdquo; grammatically as the template &lt;code&gt;NP V PP&lt;/code&gt; (&lt;code&gt;N&lt;/code&gt;oun &lt;code&gt;P&lt;/code&gt;hrase &amp;ldquo;The cat&amp;rdquo;, &lt;code&gt;V&lt;/code&gt;erb &amp;ldquo;sat&amp;rdquo;, &lt;code&gt;P&lt;/code&gt;repositional &lt;code&gt;P&lt;/code&gt;hrase &amp;ldquo;on the mat&amp;rdquo;). Once you understand this structure you can &amp;ldquo;say&amp;rdquo; a &lt;em&gt;lot&lt;/em&gt; of different things.&lt;/p&gt;
 &lt;p&gt;(And I mean a &lt;em&gt;lot&lt;/em&gt;. The 
-&lt;a href=&#34;https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ggplot cheat sheet&lt;/a&gt; lists over 40 geoms, but because this is a language, users can create their own 
+&lt;a href=&#34;https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ggplot cheat sheet&lt;/a&gt; lists over 40 plot-types, but because this is a language, users can create their own 
 &lt;a href=&#34;https://exts.ggplot2.tidyverse.org/gallery/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;extensions&lt;/a&gt; that you can also utilize, adding over 80 more.)&lt;/p&gt;
-&lt;p&gt;Second, the way we put layers together is identical to the way we use pipes. You can read &lt;code&gt;%&amp;gt;%&lt;/code&gt; as &amp;ldquo;and then&amp;rdquo;: &lt;code&gt;select()&lt;/code&gt; and then &lt;code&gt;mutate()&lt;/code&gt; and then &lt;code&gt;summarize()&lt;/code&gt;. In graphics, we can say &amp;ldquo;show this layer, and then &lt;em&gt;overlay&lt;/em&gt; this layer, and then &lt;em&gt;overlay&lt;/em&gt; this layer&amp;rdquo;, etc., using a very similar syntax.&lt;/p&gt;
+&lt;p&gt;Second, the way we put layers together is identical to the way we use pipes. You can read &lt;code&gt;%&amp;gt;%&lt;/code&gt; as &amp;ldquo;and then&amp;rdquo;: &lt;code&gt;select()&lt;/code&gt; &lt;em&gt;and then&lt;/em&gt; &lt;code&gt;mutate()&lt;/code&gt; &lt;em&gt;and then&lt;/em&gt; &lt;code&gt;summarize()&lt;/code&gt;. In graphics, we can say &amp;ldquo;show this layer, and then &lt;em&gt;overlay&lt;/em&gt; this layer, and then &lt;em&gt;overlay&lt;/em&gt; this layer&amp;rdquo;, etc., using a very similar syntax.&lt;/p&gt;
 &lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;examples&#34;&gt;Examples&lt;/h2&gt;
 &lt;p&gt;So how does this work in practice? We&amp;rsquo;ll work through visualizing the &lt;strong&gt;iris&lt;/strong&gt; dataset that you&amp;rsquo;ve seen before. This is an extremely famous 
-&lt;a href=&#34;https://en.m.wikipedia.org/wiki/Iris_flower_data_set&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;dataset&lt;/a&gt; that was first analyzed by R. A. Fisher in 1936: &lt;em&gt;The use of multiple measurements in taxonomic problems&lt;/em&gt;. He was attempting to use the petal and sepal measurements to discriminate one species from another.&lt;/p&gt;
+&lt;a href=&#34;https://en.m.wikipedia.org/wiki/Iris_flower_data_set&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;dataset&lt;/a&gt; that was first analyzed by R. A. Fisher in 1936: &lt;em&gt;The use of multiple measurements in taxonomic problems&lt;/em&gt;. He was attempting to use petal and sepal measurements to discriminate one species from another.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;ggplot2&lt;/strong&gt; is part of the tidyverse package so we need to load that first:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# this assumes you&#39;ve already installed tidyverse&lt;/span&gt;
@@ -85,11 +85,11 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; 6          5.4         3.9          1.7         0.4  setosa&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let&amp;rsquo;s look a the ggplot template:&lt;/p&gt;
+&lt;p&gt;What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let&amp;rsquo;s look a the ggplot template. (Note the package is &lt;strong&gt;ggplot2&lt;/strong&gt;, the command is &lt;code&gt;ggplot&lt;/code&gt;.)&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;ggplot(data = &amp;lt;DATA&amp;gt;) + 
   &amp;lt;GEOM_FUNCTION&amp;gt;(mapping = aes(&amp;lt;MAPPINGS&amp;gt;))
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;These are the obligatory parts of any plot. The first argument to &lt;code&gt;ggplot&lt;/code&gt; is the data frame:&lt;/p&gt;
+&lt;p&gt;These are the obligatory parts of any plot. The first argument to &lt;code&gt;ggplot()&lt;/code&gt; is the data frame:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
@@ -120,7 +120,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-5-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
-&lt;p&gt;There is clearly some code redundancy here, and we here we really don&amp;rsquo;t want the mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:&lt;/p&gt;
+&lt;p&gt;There is clearly some code redundancy here, and we really don&amp;rsquo;t want the x, y mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;, &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mapping&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Length&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Petal.Width&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
@@ -143,6 +143,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-7-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
+&lt;p&gt;The R help for a specific geoms will list, among other things, all the aesthetics that geom supports.&lt;/p&gt;
 &lt;h2 id=&#34;breakout-rooms&#34;&gt;Breakout Rooms&lt;/h2&gt;
 &lt;p&gt;In the exercises we&amp;rsquo;ll be looking a little more at the &lt;strong&gt;iris&lt;/strong&gt; data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in &lt;strong&gt;Excercise 7&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;If you haven&amp;rsquo;t installed the NHANES dataset do:&lt;/p&gt;
@@ -151,7 +152,7 @@
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; The downloaded binary packages are in&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//Rtmp7BXLxb/downloaded_packages&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpPvm8W9/downloaded_packages&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Once installed, load it with:&lt;/p&gt;
@@ -195,17 +196,18 @@
 &lt;/div&gt;
 &lt;h2 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h2&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
-&lt;p&gt;Revisit the &lt;strong&gt;iris&lt;/strong&gt; data set, and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?&lt;/p&gt;
+&lt;p&gt;Revisit the &lt;strong&gt;iris&lt;/strong&gt; data set, and plot sepal width (y) against sepal length (x) colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 Hints (click here)
 &lt;/summary&gt;
-Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one. &lt;br&gt;
+&lt;br&gt;Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one. &lt;br&gt; &lt;br&gt;
 &lt;/details&gt;
 &lt;details&gt;
 &lt;summary&gt;
 Solution (click here)
 &lt;/summary&gt;
+&lt;br&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mapping&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Sepal.Length&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Sepal.Width&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
@@ -220,17 +222,18 @@ Solution (click here)
 &lt;hr&gt;
 &lt;h2 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h2&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
-&lt;p&gt;Use the NHANES data set to plot body mass index against height. Color by gender. Which gender has the highest BMI?&lt;/p&gt;
+&lt;p&gt;Use the NHANES data set to plot body mass index (y) against height (x). Color by gender. Which gender has the highest BMI?&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 Hints (click here)
 &lt;/summary&gt;
-glimpse() the dataset to identify the variable names. &lt;br&gt;
+&lt;br&gt;&lt;code&gt;glimpse()&lt;/code&gt; the dataset to identify the variable names. &lt;br&gt; &lt;br&gt;
 &lt;/details&gt;
 &lt;details&gt;
 &lt;summary&gt;
 Solution (click here)
 &lt;/summary&gt;
+&lt;br&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;NHANES&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Height&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;BMI&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Gender&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
@@ -250,12 +253,13 @@ Solution (click here)
 &lt;summary&gt;
 Hints (click here)
 &lt;/summary&gt;
-Again, glimpse() the dataset to identify the variable names. &lt;br&gt;
+&lt;br&gt;Again, &lt;code&gt;glimpse()&lt;/code&gt; the dataset to identify the variable names. &lt;br&gt; &lt;br&gt;
 &lt;/details&gt;
 &lt;details&gt;
 &lt;summary&gt;
 Solution (click here)
 &lt;/summary&gt;
+&lt;br&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;NHANES&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Height&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;BMI&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PhysActive&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
@@ -270,17 +274,18 @@ Solution (click here)
 &lt;hr&gt;
 &lt;h2 id=&#34;exercise-4&#34;&gt;Exercise 4&lt;/h2&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
-&lt;p&gt;Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the &lt;code&gt;joined_data&lt;/code&gt; set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent?&lt;/p&gt;
+&lt;p&gt;Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the &lt;code&gt;joined_data&lt;/code&gt; set, plot adult body mass (y) against longevity (x). Identify extreme data points at the high end of body mass. How can we identify what these points represent?&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 Hints (click here)
 &lt;/summary&gt;
-Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? &lt;br&gt;
+&lt;br&gt; Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? &lt;br&gt; &lt;br&gt;
 &lt;/details&gt;
 &lt;details&gt;
 &lt;summary&gt;
 Solution (click here)
 &lt;/summary&gt;
+&lt;br&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;joined_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;longevity_y&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;adult_body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
@@ -346,12 +351,13 @@ Solution (click here)
 &lt;summary&gt;
 Hints (click here)
 &lt;/summary&gt;
-Use geom_density(). Check the help to see what aesthetics it supports. &lt;br&gt;
+&lt;br&gt;Use &lt;code&gt;geom_density()&lt;/code&gt;. Check the help to see what aesthetics it supports. Note that while you &#39;color&#39; a point, you &#39;fill&#39; an area. &lt;br&gt; &lt;br&gt;
 &lt;/details&gt;
 &lt;details&gt;
 &lt;summary&gt;
 Solution (click here)
 &lt;/summary&gt;
+&lt;br&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;iris&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mapping&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Sepal.Length&lt;/span&gt;, fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;

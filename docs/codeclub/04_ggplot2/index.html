@@ -275,7 +275,7 @@
     
       <meta property="article:published_time" content="2020-12-10T00:00:00&#43;00:00">
     
-    <meta property="article:modified_time" content="2020-12-15T13:43:27-05:00">
+    <meta property="article:modified_time" content="2020-12-16T11:14:28-05:00">
   
 
   
@@ -675,7 +675,7 @@
   <span class="article-date">
     
     
-    Dec 15, 2020
+    Dec 16, 2020
   </span>
   
 
@@ -746,21 +746,21 @@
 <h2 id="intro-the-ggplot2-philosophy">Intro: The ggplot2 philosophy</h2>
 <p>We have already seen that in R, instead of manually manipulating data frames as you might do when editing Excel sheets, we <strong>code</strong> the operations we want to perform using <strong>dplyr</strong> verbs like <code>select()</code>, <code>mutate()</code>, <code>inner_join()</code>, and so on.</p>
 <p>In a similar way when performing visualization, instead of clicking on a chart type in Excel, we <strong>code the chart</strong> in R.</p>
-<p>And just as <strong>dplyr</strong> gives us efficient ways to manipulate data frames, <strong>ggplot2</strong> (which is also part of the <strong>tidyverse</strong>) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).</p>
+<p>And just as <strong>dplyr</strong> gives us efficient ways to manipulate data frames, <strong>ggplot2</strong> (which is also part of the tidyverse) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).</p>
 <p>The <strong>gg</strong> in <strong>ggplot2</strong> stands for <em>grammar of graphics</em>, a systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about &lsquo;pulling apart&rsquo; various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar).</p>
 <p>There are two parts to this. First, the &lsquo;nouns and verbs&rsquo; we need to work with plots are very different than those we need to work with data frames. <strong>ggplot2</strong> is like a mini-language of its own, with its own verbs and syntax.</p>
 <p>Second, this notion of pulling apart a graphic leads to the idea of <em>layers</em>. You can build up a plot of any complexity by <em>overlaying</em> different views of the same data.</p>
 <p>There&rsquo;s a learning curve here for sure, but there are a couple of things that help us.</p>
 <p>First, every graphic shares a <em>common template</em>. This is like thinking about the sentence &ldquo;The cat sat on the mat&rdquo; grammatically as the template <code>NP V PP</code> (<code>N</code>oun <code>P</code>hrase &ldquo;The cat&rdquo;, <code>V</code>erb &ldquo;sat&rdquo;, <code>P</code>repositional <code>P</code>hrase &ldquo;on the mat&rdquo;). Once you understand this structure you can &ldquo;say&rdquo; a <em>lot</em> of different things.</p>
 <p>(And I mean a <em>lot</em>. The 
-<a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf" target="_blank" rel="noopener">ggplot cheat sheet</a> lists over 40 geoms, but because this is a language, users can create their own 
+<a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf" target="_blank" rel="noopener">ggplot cheat sheet</a> lists over 40 plot-types, but because this is a language, users can create their own 
 <a href="https://exts.ggplot2.tidyverse.org/gallery/" target="_blank" rel="noopener">extensions</a> that you can also utilize, adding over 80 more.)</p>
-<p>Second, the way we put layers together is identical to the way we use pipes. You can read <code>%&gt;%</code> as &ldquo;and then&rdquo;: <code>select()</code> and then <code>mutate()</code> and then <code>summarize()</code>. In graphics, we can say &ldquo;show this layer, and then <em>overlay</em> this layer, and then <em>overlay</em> this layer&rdquo;, etc., using a very similar syntax.</p>
+<p>Second, the way we put layers together is identical to the way we use pipes. You can read <code>%&gt;%</code> as &ldquo;and then&rdquo;: <code>select()</code> <em>and then</em> <code>mutate()</code> <em>and then</em> <code>summarize()</code>. In graphics, we can say &ldquo;show this layer, and then <em>overlay</em> this layer, and then <em>overlay</em> this layer&rdquo;, etc., using a very similar syntax.</p>
 <br>
 <hr>
 <h2 id="examples">Examples</h2>
 <p>So how does this work in practice? We&rsquo;ll work through visualizing the <strong>iris</strong> dataset that you&rsquo;ve seen before. This is an extremely famous 
-<a href="https://en.m.wikipedia.org/wiki/Iris_flower_data_set" target="_blank" rel="noopener">dataset</a> that was first analyzed by R. A. Fisher in 1936: <em>The use of multiple measurements in taxonomic problems</em>. He was attempting to use the petal and sepal measurements to discriminate one species from another.</p>
+<a href="https://en.m.wikipedia.org/wiki/Iris_flower_data_set" target="_blank" rel="noopener">dataset</a> that was first analyzed by R. A. Fisher in 1936: <em>The use of multiple measurements in taxonomic problems</em>. He was attempting to use petal and sepal measurements to discriminate one species from another.</p>
 <p><strong>ggplot2</strong> is part of the tidyverse package so we need to load that first:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># this assumes you've already installed tidyverse</span>
@@ -791,11 +791,11 @@
 <span class='c'>#&gt; 6          5.4         3.9          1.7         0.4  setosa</span>
 </code></pre>
 </div>
-<p>What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let&rsquo;s look a the ggplot template:</p>
+<p>What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let&rsquo;s look a the ggplot template. (Note the package is <strong>ggplot2</strong>, the command is <code>ggplot</code>.)</p>
 <pre><code>ggplot(data = &lt;DATA&gt;) + 
   &lt;GEOM_FUNCTION&gt;(mapping = aes(&lt;MAPPINGS&gt;))
 </code></pre>
-<p>These are the obligatory parts of any plot. The first argument to <code>ggplot</code> is the data frame:</p>
+<p>These are the obligatory parts of any plot. The first argument to <code>ggplot()</code> is the data frame:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span>
 
@@ -826,7 +826,7 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>There is clearly some code redundancy here, and we here we really don&rsquo;t want the mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:</p>
+<p>There is clearly some code redundancy here, and we really don&rsquo;t want the x, y mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span>, <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
@@ -849,6 +849,7 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
+<p>The R help for a specific geoms will list, among other things, all the aesthetics that geom supports.</p>
 <h2 id="breakout-rooms">Breakout Rooms</h2>
 <p>In the exercises we&rsquo;ll be looking a little more at the <strong>iris</strong> data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in <strong>Excercise 7</strong>.</p>
 <p>If you haven&rsquo;t installed the NHANES dataset do:</p>
@@ -857,7 +858,7 @@
 
 <span class='c'>#&gt; </span>
 <span class='c'>#&gt; The downloaded binary packages are in</span>
-<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//Rtmp7BXLxb/downloaded_packages</span>
+<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpPvm8W9/downloaded_packages</span>
 </code></pre>
 </div>
 <p>Once installed, load it with:</p>
@@ -901,17 +902,18 @@
 </div>
 <h2 id="exercise-1">Exercise 1</h2>
 <div class="puzzle">
-<p>Revisit the <strong>iris</strong> data set, and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?</p>
+<p>Revisit the <strong>iris</strong> data set, and plot sepal width (y) against sepal length (x) colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?</p>
 <details>
 <summary>
 Hints (click here)
 </summary>
-Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one. <br>
+<br>Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one. <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+<br>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Sepal.Length</span>, y <span class='o'>=</span> <span class='nv'>Sepal.Width</span>, color <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
@@ -926,17 +928,18 @@ Solution (click here)
 <hr>
 <h2 id="exercise-2">Exercise 2</h2>
 <div class="puzzle">
-<p>Use the NHANES data set to plot body mass index against height. Color by gender. Which gender has the highest BMI?</p>
+<p>Use the NHANES data set to plot body mass index (y) against height (x). Color by gender. Which gender has the highest BMI?</p>
 <details>
 <summary>
 Hints (click here)
 </summary>
-glimpse() the dataset to identify the variable names. <br>
+<br><code>glimpse()</code> the dataset to identify the variable names. <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+<br>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>NHANES</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Height</span>, y <span class='o'>=</span> <span class='nv'>BMI</span>, color <span class='o'>=</span> <span class='nv'>Gender</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span>
@@ -956,12 +959,13 @@ Solution (click here)
 <summary>
 Hints (click here)
 </summary>
-Again, glimpse() the dataset to identify the variable names. <br>
+<br>Again, <code>glimpse()</code> the dataset to identify the variable names. <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+<br>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>NHANES</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Height</span>, y <span class='o'>=</span> <span class='nv'>BMI</span>, color <span class='o'>=</span> <span class='nv'>PhysActive</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span>
@@ -976,17 +980,18 @@ Solution (click here)
 <hr>
 <h2 id="exercise-4">Exercise 4</h2>
 <div class="puzzle">
-<p>Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the <code>joined_data</code> set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent?</p>
+<p>Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the <code>joined_data</code> set, plot adult body mass (y) against longevity (x). Identify extreme data points at the high end of body mass. How can we identify what these points represent?</p>
 <details>
 <summary>
 Hints (click here)
 </summary>
-Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? <br>
+<br> Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+<br>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>joined_data</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>longevity_y</span>, y <span class='o'>=</span> <span class='nv'>adult_body_mass_g</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span>
@@ -1052,12 +1057,13 @@ Solution (click here)
 <summary>
 Hints (click here)
 </summary>
-Use geom_density(). Check the help to see what aesthetics it supports. <br>
+<br>Use <code>geom_density()</code>. Check the help to see what aesthetics it supports. Note that while you 'color' a point, you 'fill' an area. <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+<br>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Sepal.Length</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
