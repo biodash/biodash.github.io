@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 1c33cc9a0bb6242f
+rmd_hash: dfbb37fe11a412ae
 
 ---
 
@@ -43,7 +43,7 @@ We have already seen that in R, instead of manually manipulating data frames as 
 
 In a similar way when performing visualization, instead of clicking on a chart type in Excel, we **code the chart** in R.
 
-And just as **dplyr** gives us efficient ways to manipulate data frames, **ggplot2** (which is also part of the **tidyverse**) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).
+And just as **dplyr** gives us efficient ways to manipulate data frames, **ggplot2** (which is also part of the tidyverse) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).
 
 The **gg** in **ggplot2** stands for *grammar of graphics*, a systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about 'pulling apart' various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar).
 
@@ -55,9 +55,9 @@ There's a learning curve here for sure, but there are a couple of things that he
 
 First, every graphic shares a *common template*. This is like thinking about the sentence "The cat sat on the mat" grammatically as the template `NP V PP` (`N`oun `P`hrase "The cat", `V`erb "sat", `P`repositional `P`hrase "on the mat"). Once you understand this structure you can "say" a *lot* of different things.
 
-(And I mean a *lot*. The [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) lists over 40 geoms, but because this is a language, users can create their own [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can also utilize, adding over 80 more.)
+(And I mean a *lot*. The [ggplot cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) lists over 40 plot-types, but because this is a language, users can create their own [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can also utilize, adding over 80 more.)
 
-Second, the way we put layers together is identical to the way we use pipes. You can read `%>%` as "and then": `select()` and then `mutate()` and then `summarize()`. In graphics, we can say "show this layer, and then *overlay* this layer, and then *overlay* this layer", etc., using a very similar syntax.
+Second, the way we put layers together is identical to the way we use pipes. You can read `%>%` as "and then": `select()` *and then* `mutate()` *and then* `summarize()`. In graphics, we can say "show this layer, and then *overlay* this layer, and then *overlay* this layer", etc., using a very similar syntax.
 
 <br>
 
@@ -65,7 +65,7 @@ Second, the way we put layers together is identical to the way we use pipes. You
 
 ## Examples
 
-So how does this work in practice? We'll work through visualizing the **iris** dataset that you've seen before. This is an extremely famous [dataset](https://en.m.wikipedia.org/wiki/Iris_flower_data_set) that was first analyzed by R. A. Fisher in 1936: *The use of multiple measurements in taxonomic problems*. He was attempting to use the petal and sepal measurements to discriminate one species from another.
+So how does this work in practice? We'll work through visualizing the **iris** dataset that you've seen before. This is an extremely famous [dataset](https://en.m.wikipedia.org/wiki/Iris_flower_data_set) that was first analyzed by R. A. Fisher in 1936: *The use of multiple measurements in taxonomic problems*. He was attempting to use petal and sepal measurements to discriminate one species from another.
 
 **ggplot2** is part of the tidyverse package so we need to load that first:
 
@@ -105,12 +105,12 @@ And recall that the **iris** dataset (3 species, 50 observations per species) is
 
 </div>
 
-What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let's look a the ggplot template:
+What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let's look a the ggplot template. (Note the package is **ggplot2**, the command is `ggplot`.)
 
     ggplot(data = <DATA>) + 
       <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
 
-These are the obligatory parts of any plot. The first argument to `ggplot` is the data frame:
+These are the obligatory parts of any plot. The first argument to `ggplot()` is the data frame:
 
 <div class="highlight">
 
@@ -156,7 +156,7 @@ There is clearly a positive correlation between length and width. And we can mak
 
 </div>
 
-There is clearly some code redundancy here, and we here we really don't want the mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:
+There is clearly some code redundancy here, and we really don't want the x, y mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:
 
 <div class="highlight">
 
@@ -190,6 +190,8 @@ Our current plot uses two numeric variables: `Petal.Length` and `Petal.width`. W
 
 </div>
 
+The R help for a specific geoms will list, among other things, all the aesthetics that geom supports.
+
 ## Breakout Rooms
 
 In the exercises we'll be looking a little more at the **iris** data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in **Excercise 7**.
@@ -202,7 +204,7 @@ If you haven't installed the NHANES dataset do:
 
 <span class='c'>#&gt; </span>
 <span class='c'>#&gt; The downloaded binary packages are in</span>
-<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//Rtmp7BXLxb/downloaded_packages</span>
+<span class='c'>#&gt;   /var/folders/d4/h4yjqs1560zbsgvrrwbmbp5r0000gn/T//RtmpPvm8W9/downloaded_packages</span>
 </code></pre>
 
 </div>
@@ -258,18 +260,20 @@ A prebuilt joined data set has been loaded on github.
 
 <div class="puzzle">
 
-Revisit the **iris** data set, and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
+Revisit the **iris** data set, and plot sepal width (y) against sepal length (x) colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
 
 <details>
 <summary>
 Hints (click here)
 </summary>
-Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one. <br>
+<br>Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one. <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+
+<br>
 
 <div class="highlight">
 
@@ -293,18 +297,19 @@ Note this solution shows yet another way to position global mapping information:
 
 <div class="puzzle">
 
-Use the NHANES data set to plot body mass index against height. Color by gender. Which gender has the highest BMI?
+Use the NHANES data set to plot body mass index (y) against height (x). Color by gender. Which gender has the highest BMI?
 
 <details>
 <summary>
 Hints (click here)
 </summary>
-glimpse() the dataset to identify the variable names. <br>
+<br><code>glimpse()</code> the dataset to identify the variable names. <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+<br>
 
 <div class="highlight">
 
@@ -334,12 +339,14 @@ Use the same plot but now color by physical activity. How active are those peopl
 <summary>
 Hints (click here)
 </summary>
-Again, glimpse() the dataset to identify the variable names. <br>
+<br>Again, <code>glimpse()</code> the dataset to identify the variable names. <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+
+<br>
 
 <div class="highlight">
 
@@ -363,18 +370,19 @@ Solution (click here)
 
 <div class="puzzle">
 
-Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent?
+Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass (y) against longevity (x). Identify extreme data points at the high end of body mass. How can we identify what these points represent?
 
 <details>
 <summary>
 Hints (click here)
 </summary>
-Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? <br>
+<br> Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+<br>
 
 <div class="highlight">
 
@@ -458,12 +466,13 @@ Revisit the **iris** data and generate a density histogram for sepal length, cat
 <summary>
 Hints (click here)
 </summary>
-Use geom_density(). Check the help to see what aesthetics it supports. <br>
+<br>Use <code>geom_density()</code>. Check the help to see what aesthetics it supports. Note that while you 'color' a point, you 'fill' an area. <br> <br>
 </details>
 <details>
 <summary>
 Solution (click here)
 </summary>
+<br>
 
 <div class="highlight">
 

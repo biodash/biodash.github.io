@@ -55,7 +55,7 @@ In a similar way when performing visualization, instead of clicking on a
 chart type in Excel, we **code the chart** in R.
 
 And just as **dplyr** gives us efficient ways to manipulate data frames,
-**ggplot2** (which is also part of the **tidyverse**) gives us efficient
+**ggplot2** (which is also part of the tidyverse) gives us efficient
 ways to manipulate charts/plots/graphics (we use these terms
 interchangeably).
 
@@ -85,14 +85,14 @@ template `NP V PP` (`N`oun `P`hrase "The cat", `V`erb "sat",
 structure you can "say" a *lot* of different things.
 
 (And I mean a *lot*. The [ggplot cheat
-sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) lists over 40 geoms, but because this is a
+sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) lists over 40 plot-types, but because this is a
 language, users can create their own
 [extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can
 also utilize, adding over 80 more.)
 
 Second, the way we put layers together is identical to the way we use
-pipes. You can read `%>%` as "and then": `select()` and then `mutate()`
-and then `summarize()`. In graphics, we can say "show this layer, and
+pipes. You can read `%>%` as "and then": `select()` *and then* `mutate()`
+*and then* `summarize()`. In graphics, we can say "show this layer, and
 then *overlay* this layer, and then *overlay* this layer", etc., using a
 very similar syntax.
 
@@ -106,7 +106,7 @@ So how does this work in practice? We'll work through visualizing the
 **iris** dataset that you've seen before. This is an extremely famous
 [dataset](https://en.m.wikipedia.org/wiki/Iris_flower_data_set) that was
 first analyzed by R. A. Fisher in 1936: *The use of multiple
-measurements in taxonomic problems*. He was attempting to use the petal
+measurements in taxonomic problems*. He was attempting to use petal
 and sepal measurements to discriminate one species from another.
 
 **ggplot2** is part of the tidyverse package so we need to load that
@@ -126,13 +126,13 @@ head(iris)
 
 What is the correlation between petal length and width in these species?
 Are longer petals also wider? We can visualize this with a scatterplot.
-But first let's look a the ggplot template:
+But first let's look a the ggplot template. (Note the package is **ggplot2**, the command is `ggplot`.)
 
     ggplot(data = <DATA>) + 
       <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
 
 These are the obligatory parts of any plot. The first argument to
-`ggplot` is the data frame:
+`ggplot()` is the data frame:
 
 ```{r}
 ggplot(data = iris)
@@ -177,7 +177,7 @@ ggplot(data = iris) +
   geom_point(mapping = aes(x = Petal.Length, y = Petal.Width)) +
   geom_smooth(mapping = aes(x = Petal.Length, y = Petal.Width))
 ```
-There is clearly some code redundancy here, and we here we really don't want the mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:
+There is clearly some code redundancy here, and we really don't want the x, y mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:
 
 ```{r}
 ggplot(data = iris, (mapping = aes(x = Petal.Length, y = Petal.Width))) +
@@ -197,6 +197,8 @@ ggplot(data = iris) +
   (mapping = aes(x = Petal.Length, y = Petal.Width, color = Species)) +
   geom_point()
 ```
+
+The R help for a specific geoms will list, among other things, all the aesthetics that geom supports.
 
 ## Breakout Rooms
 
@@ -237,14 +239,19 @@ joined_data <- read_tsv(joined_file)
 
 :::puzzle
 
-Revisit the **iris** data set, and plot sepal width against sepal length colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
+Revisit the **iris** data set, and plot sepal width (y) against sepal length (x) colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
 
 <details> <summary> Hints (click here) </summary>
-Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one.
-<br> 
+
+<br>Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one.
+<br>
+<br>
 </details>
 
 <details> <summary> Solution (click here) </summary>
+
+<br>
+
 ```{r}
 ggplot(data = iris) +
   (mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
@@ -261,14 +268,16 @@ Note this solution shows yet another way to position global mapping information:
 
 :::puzzle
 
-Use the NHANES data set to plot body mass index against height. Color by gender. Which gender has the highest BMI?
+Use the NHANES data set to plot body mass index (y) against height (x). Color by gender. Which gender has the highest BMI?
 
 <details> <summary> Hints (click here) </summary>
-glimpse() the dataset to identify the variable names.
+<br><code>glimpse()</code> the dataset to identify the variable names.
 <br> 
+<br>
 </details>
 
 <details> <summary> Solution (click here) </summary>
+<br>
 ```{r}
 ggplot(data = NHANES) +
   geom_point(mapping = (aes(x = Height, y = BMI, color = Gender)))
@@ -285,11 +294,14 @@ ggplot(data = NHANES) +
 Use the same plot but now color by physical activity. How active are those people with the highest BMI?
 
 <details> <summary> Hints (click here) </summary>
-Again, glimpse() the dataset to identify the variable names.
-<br> 
+<br>Again, <code>glimpse()</code> the dataset to identify the variable names.
+<br>
+<br>
 </details>
 
 <details> <summary> Solution (click here) </summary>
+<br>
+
 ```{r}
 ggplot(data = NHANES) +
   geom_point(mapping = (aes(x = Height, y = BMI, color = PhysActive)))
@@ -303,14 +315,18 @@ ggplot(data = NHANES) +
 
 :::puzzle
 
-Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass against longevity. Identify extreme data points at the high end of both scales. How can we identify what these points represent?
+Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass (y) against longevity (x). Identify extreme data points at the high end of body mass. How can we identify what these points represent?
 
 <details> <summary> Hints (click here) </summary>
+<br>
 Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here?
-<br> 
+<br>
+<br>
 </details>
 
 <details> <summary> Solution (click here) </summary>
+
+<br>
 ```{r}
 ggplot(data = joined_data) +
   geom_point(mapping = (aes(x = longevity_y, y = adult_body_mass_g)))
@@ -343,12 +359,13 @@ joined_data %>%
 Revisit the **iris** data and generate a density histogram for sepal length, categorized by species.
 
 <details> <summary> Hints (click here) </summary>
-Use geom_density(). Check the help to see what aesthetics it supports.
-<br> 
+<br>Use <code>geom_density()</code>. Check the help to see what aesthetics it supports. Note that while you 'color' a point, you 'fill' an area.
+<br>
+<br>
 </details>
 
 <details> <summary> Solution (click here) </summary>
-
+<br>
 ```{r}
 ggplot(data = iris) +
   (mapping = (aes(x = Sepal.Length, fill = Species))) +
