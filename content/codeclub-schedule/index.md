@@ -11,6 +11,14 @@ toc: true
 
 **Dates and times for sessions during the Spring semester will be determined in December. Stay tuned!**
 
+Session nr.  | ? ? pm   | Presenter    | Topic (+ link)   |
+-------------|----------|--------------|------------------|
+**5**        | Jan ?    | Jessica      | **More ggplot** 
+**6**        | Jan ?    | Stephen      | **Factors**
+**7**        | Jan ?    | Jelmer       | **R Markdown**
+**8**        | Jan ?    | Mike S.      | **Pivoting data**
+**9**        | Jan ?    | Michael B.   | **Subsetting data**
+
 See also the [BioDASH calendar](/events/#calendar) for an overview.
 
 <br>
