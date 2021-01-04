@@ -55,7 +55,7 @@ social:
   link: https://scholar.google.com/citations?user=d-FkQNQAAAAJ&hl=en
 - icon: github
   icon_pack: fab
-  link: https://github.com/CooperstoneLab
+  link: https://github.com/jcooperstone
 - icon: external-link-alt
   icon_pack: fas
   link: https://phytochemicals.osu.edu/
