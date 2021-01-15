@@ -3,7 +3,7 @@ title: "Session 5: ggplot2, round 2"
 subtitle: "Getting up close and personal with our data"
 summary: "During this fifth session of Code Club, we will be continuing to learn to use ggplot2, including techniques that better enable us to see our true data distribution."  
 authors: [jessica-cooperstone]
-date: "2021-01-04"
+date: "2021-01-15"
 output: hugodown::md_document
 toc: true
 
@@ -12,7 +12,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: f8e48cd31787b5f0
+rmd_hash: 38fe7e29f214ed0b
 
 ---
 
@@ -54,7 +54,7 @@ Getting Started
 <span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S05/scripts/"</span><span class='o'>)</span>
 
 <span class='c'># save the url location for today's script</span>
-<span class='nv'>todays_R_script</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/05-ggplot-round-2/5_ggplot.R'</span>
+<span class='nv'>todays_R_script</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/05_ggplot-round-2/Session5_ggplot2.R'</span>
 
 <span class='c'># indicate the name of the new script file</span>
 <span class='nv'>Session5_script</span> <span class='o'>&lt;-</span> <span class='s'>"S05/scripts/Session5_script.R"</span>
@@ -873,6 +873,13 @@ Take your density ridge plot from Bonus 1, and try applying a theme from `hrbrth
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("hrbrthemes")</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://github.com/hrbrmstr/hrbrthemes'>hrbrthemes</a></span><span class='o'>)</span>
+
+<span class='c'>#&gt; NOTE: Either Arial Narrow or Roboto Condensed fonts are required to use these themes.</span>
+
+<span class='c'>#&gt;       Please use hrbrthemes::import_roboto_condensed() to install Roboto Condensed and</span>
+
+<span class='c'>#&gt;       if Arial Narrow is not on your system, please see https://bit.ly/arialnarrow</span>
+
 <span class='nv'>NHANES_over20_noNA</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>TotChol</span>, y <span class='o'>=</span> <span class='nv'>AgeDecade</span>, fill <span class='o'>=</span> <span class='nv'>AgeDecade</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.7</span>, scale <span class='o'>=</span> <span class='m'>0.9</span><span class='o'>)</span> <span class='o'>+</span>
