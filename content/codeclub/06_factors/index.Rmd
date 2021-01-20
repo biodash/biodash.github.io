@@ -1,0 +1,483 @@
+---
+output: hugodown::md_document
+title: "Session 6: Factors"
+subtitle: "Learn how to use them to your advantage!"
+summary: "In this sixth session of Code Club, we'll learn how to use factors to our advantage"
+authors: [stephen-opiyo]
+tags: [codeclub, factors]
+date: 2021-01-18
+toc: true
+
+# Featured image
+# To use, add an image named `featured.jpg/png` to your page's folder.
+# Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
+image:
+  caption: "Artwork by @allison_horst"
+  focal_point: ""
+  preview_only: false
+
+# Projects (optional).
+#   Associate this post with one or more of your projects.
+#   Simply enter your project's folder or file name without extension.
+#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
+#   Otherwise, set `projects = []`.
+projects: []
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=TRUE)
+```
+
+<br>
+<br>
+
+-----
+
+Factors form the basis for many powerful operations in R,
+including many performed on tabular data.
+The motivation for factors comes from the notion of categorical variables.
+These variables are non-numeric in nature corresponding to categories such as
+male and female, or Democrat, Republican and Independent. 
+
+**A factor might be viewed simply as a vector with a bit of more information added.**
+The extra information consists of a record of distinct values in that vector,
+which are called: ***levels***.
+
+Let us look at some examples of factors. We will make use of the package *forcats*,
+which is one of the 8 core *tidyverse* packages.
+Therefore, we start by loading the *tidyverse*:
+
+```{r include=TRUE}
+library(tidyverse)
+
+## Check whether "forcats" is listed among the loaded packages.
+## Alternatively, you could load "forcats" (and "ggplot2") separately:
+# install.packages("forcats")
+# library(forcats)
+# library(ggplot2)
+```
+
+<br>
+
+----
+
+## Example 1: From a numeric vector to a factor
+
+Let us create a factor `xf` from a vector `x` with the numbers `5`, `12`, `13`,
+and `12`:
+
+```{r include=TRUE}
+x <- c(5,12, 13,12)
+x
+
+# Convert the vector to a factor:
+xf <- factor(x)
+xf
+```
+
+The *distinct values* in `xf` are `5`, `12` and `13`,
+and are listed as *levels*.
+
+Let us look in a bit more details at our factor using the R functions
+`str` and `unclass`:
+
+```{r include=TRUE}
+str(xf)
+unclass(xf)
+```
+
+Notice that the values in the factor are not stored as `(5, 12, 13, 12)`,
+but rather as `(1, 2, 3, 2)`!
+
+This means that our data consists first of a level-1 value,
+then level-2 and level 3 values, and finally another level-2 value.
+So, the data has been recorded by level.
+
+The values attached to each level are recorded too,
+but as *characters* such as `"5"` rather than as numbers such as `5`.
+
+<br>
+
+----
+
+## Example 2: From a character vector to a factor
+
+We will use the levels Democrat (`D`), Republican (`R`), and Independent (`I`).
+First, we save a *vector*:
+
+```{r include=TRUE}
+y <- c("D", "R", "R", "I", "R", "I", "D", "I")
+y
+str(y)
+```
+
+Then, we again convert the *vector* to a *factor*, and look at the levels:
+
+```{r inclue=TRUE}
+fy <- factor(y)
+fy
+unclass(fy)
+```
+
+<br>
+
+----
+
+## Example 3: Ordering factor levels
+
+Some variables can be challenging to sort automatically,
+because the desired sorting order is not alphabetical or numeric.
+
+For instance, months that are listed using characters:
+
+```{r include=TRUE}
+months_vector <- c("Dec", "Apr", "Jan", "Mar")
+
+# Try to sort using the `sort` function
+sort(months_vector)
+```
+
+That didn't sort in a useful way.
+**But, the problem can be fixed by using a factor.**
+
+First, we create a list of the valid levels, which are all 12 months in a year:
+
+```{r include=TRUE}
+month_levels <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+```
+
+Then we convert the vector into a factor, like before,
+but now we additionally specify the desired levels of the factor, **in order**,
+using the `levels` argument:
+
+```{r include=TRUE}
+months_factor <- factor(months_vector, levels = month_levels)
+```
+
+Now it sorts the way we want to!
+
+```{r include=TRUE}
+sort(months_factor)
+```
+
+<br>
+
+----
+
+## Example 4: Use of factors in plots with *forcats*
+
+### 4A: Plot after reordering manually with `fct_relevel()`
+
+We will use the *mtcars* data,
+which was extracted from the 1974 Motor Trend US magazine,
+and comprises fuel consumption and 10 aspects of automobile design and
+performance for 32 automobiles (1973–74 models) --
+a data frame with 32 observations for  11 (numeric) variables,
+
+```{r include=TRUE}
+data(mtcars)
+
+names(mtcars)
+dim(mtcars)
+str(mtcars)
+```
+
+we will select six variables (`mpg`, `cyl`, `disp`, `hp`, and `wt`)
+to create a dataset `Data`.
+
+- `mpg`: Miles per (US) gallon,
+- `cyl`: Number of cylinders
+- `disp`:	Displacement (cu.in.)
+- `hp`: Horse power
+- `wt`: Weight (in 1000 lbs)
+
+```{r include=TRUE}
+Data <- mtcars %>%
+  select("mpg", "cyl", "disp", "hp", "wt")
+```
+
+Now, we'll add a new column `cyl_chr` by converting `cyl`
+from *numeric* to *character*:
+
+```{r include=TRUE}
+Data <- Data %>%
+  mutate(cyl_chr = recode(cyl,`4` = "Four", `6` = "Six", `8` = "Eight"))
+
+head(Data)
+```
+
+We plot a bar chart for cyl_1:
+```{r include=TRUE}
+Data %>%
+  ggplot(aes(x = cyl_chr)) +
+  geom_bar() 
+```
+
+In the plot, the levels of the factor were arranged in alphabetical order
+(`Eight`, `Four`, and `Six`).
+
+Instead, we want the bar graph arranged in the order `Four`, `Six`, and `Eight`.
+
+An alternative to using `factor(levels = ...)` like we did above,
+is to use the `fct_relevel()` function from the *forcats* package:
+
+```{r include=TRUE}
+Data %>%
+  mutate(cyl_chr = fct_relevel(cyl_chr, "Four", "Six", "Eight")) %>%
+  ggplot(aes(x = cyl_chr)) +
+  geom_bar() +
+  labs(x = "Cylinder", y = "Miles/per gallon")
+```
+
+<br>
+
+### 4B: Plot after reordering by the value of another column (`fct_reorder`)
+
+Create a dataset called `Data_a`:
+
+```{r include=TRUE}
+Data_a <- data.frame(name = c("North", "South", "East", "West"),
+                     var = sample(seq(1, 10), 4))
+```
+
+Plot a bar chart of `Data_a`:
+
+```{r include=TRUE}
+Data_a %>%
+  ggplot(aes(x = name, y = var)) +
+  geom_bar(stat = "identity", fill = "#f68034", alpha = 0.6, width = 0.4) 
+```
+
+Reorder following the value of another column using the `fct_reorder()` function,
+and flip the plot:
+
+```{r include=TRUE}
+Data_a %>%
+  mutate(name = fct_reorder(name, var)) %>%
+  ggplot(aes(x = name, y = var)) +
+  geom_bar(stat = "identity", fill = "#f68034", alpha = 0.6, width = 0.4) +
+  coord_flip() 
+```
+
+<br>
+
+There are several more convenient reordering functions in the *forcats* package,
+including:
+
+- `fact_infreq()` to reorder by occurrence frequencies of each level
+  (see the picture at the top of the post).
+
+- `fct_inorder()` to reorder by order of appearance in the dataframe.
+   This can be useful, for example,
+   if your dataframe has already been sorted properly,
+   and you just need to prevent automatic alphabetic reordering when plotting. 
+
+<br>
+
+----
+
+## Breakout rooms!
+
+For the Breakout room exercises,
+we will use datasets from *mtcars* and
+the `gss_cat` dataset from the *forcats* package.
+
+### Exercise 1
+
+<div class="puzzle">
+<div>
+Convert the variable `gear` from *mtcars* to a character vector with words
+for each number (link in example 4A), and plot a bar chart.
+
+Then, use a factor to reorder the bars to appear in the regular "numeric" order:
+"Three" then "Four" then "Five".
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p>
+- Use the `mutate()`, `recode()`, and `fct_relevel()` functions.
+
+- Add a column called `gear_chr` by converting gear from *numeric* to *character*.
+</p>
+</details>
+
+<br>
+
+<details>
+<summary>
+Solutions (click here)
+</summary>
+<br>
+
+- Start by loading the dataset:
+
+```{r echo=TRUE}
+data("mtcars")
+```
+
+<br>
+
+- Now, create a new dataset `Gear` from *mtcars*, adding a column `gear_chr`:
+
+```{r echo=TRUE}
+gear_df <- mtcars %>%
+  mutate(gear_chr = recode(gear,
+                         `3`= "Three",
+                         `4` ="Four",
+                         `5`= "Five"))
+
+head(gear_df)
+```
+
+<br>
+
+- Finally, use the *forcats* function `fct_relevel()` to rearrange `gear_chr`
+  in nonalphabetical order, and plot the barchart using `geom_bar()`:
+
+```{r echo=TRUE}
+gear_df %>%
+  mutate(gear_fct = fct_relevel(gear_chr, "Three", "Four", "Five")) %>%
+  ggplot(aes(x = gear_fct)) +
+  geom_bar() +
+  labs(x = "Gear", y = "Miles/per gallon")
+```
+
+<br>
+</details>
+
+</div>
+</div>
+
+<br>
+
+----
+
+### Exercise 2
+
+<div class="puzzle">
+<div>
+
+Using the `gss_cat` dataset from the *forcats* package (available as `gsscat`
+in your environment),
+create a plot that compares the average number of hours spent watching TV
+per day across religions, and where *religions are ordered by the average 
+number of hours*.
+
+(Despite what we've learned last week, start by merely plotting the mean,
+and no distributions, using a barplot or with `geom_point()`.)
+
+*Source: (R for Data Science)*
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>
+In order to be able to order the factor by the average number of hours
+spent watching TV, first compute this average per religion, and save 
+the results in a dataframe (use `mutate()` and `summarize()`).
+
+Then, use `fct_recorder()` to reorder the factor.
+
+</details>
+
+<br>
+
+<details>
+<summary>
+Solutions (click here)
+</summary>
+<br>
+
+First, have a look at the dataset:
+
+```{r echo=TRUE}
+forcats::gss_cat
+```
+
+Then, calculate the mean number of tv-hours and create a plot:
+
+```{r echo=TRUE}
+relig <- gss_cat %>%
+	group_by(relig) %>%
+	summarize(tvhours = mean(tvhours, na.rm = TRUE))
+
+ggplot(relig, aes(tvhours, relig)) +
+  geom_point()
+```
+
+It is difficult to interpret this plot because there is no overall pattern. 
+
+We can improve the plot by reordering the level of religion
+using `fct_reorder()`:
+
+```{r echo=TRUE}
+relig <- gss_cat %>%
+	group_by(relig) %>%
+	summarize(tvhours = mean(tvhours, na.rm = TRUE))
+
+relig %>%
+  mutate(relig = fct_reorder(relig, tvhours)) %>%
+  ggplot(aes(tvhours, relig)) +
+  geom_point()
+```
+
+Reordering religion makes it much easier to see that people in the
+"Don't know" category watch much more TV.
+
+<br>
+</details>
+
+<br>
+
+</div>
+</div>
+
+----
+
+### Bonus: Exercise 3
+
+<div class="puzzle">
+<div>
+
+In exercise 2, we saw large differences in the *average* time spent watching TV
+across religions, but we should perhaps have a closer look at the data
+by plotting distributions.
+
+Go back to the [previous Code Club session](https://biodash.github.io/codeclub/05_ggplot-round-2/)
+and decide which type of plot could be ideal with so many categories.
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>
+`geom_density_ridges()` from the *ggridges* package is very well suited
+for a plot with so many categories.
+</details>
+<br>
+<details>
+<summary>
+Solutions (click here)
+</summary>
+<br>
+
+```{r echo=TRUE}
+library(ggridges)
+
+ggplot(gss_cat, aes(x = tvhours, y = relig, fill = relig)) +
+  geom_density_ridges(alpha = 0.8) +
+  labs(x = 'Number of hours spent watching TV', y = 'Religion') +
+  guides(fill = FALSE) +
+  theme_minimal()
+```
+
+</details>
+
+</div>
+</div>
+
+<br>
