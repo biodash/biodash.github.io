@@ -3,7 +3,7 @@ title: "Session 5: ggplot2, round 2"
 subtitle: "Getting up close and personal with our data"
 summary: "During this fifth session of Code Club, we will be continuing to learn to use ggplot2, including techniques that better enable us to see our true data distribution."  
 authors: [jessica-cooperstone]
-date: "2021-01-15"
+date: "2021-01-19"
 output: hugodown::md_document
 toc: true
 
@@ -12,7 +12,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: 38fe7e29f214ed0b
+rmd_hash: 121149cd4e846cec
 
 ---
 
@@ -466,7 +466,7 @@ You can adjust `scale` within [`geom_density_ridges()`](https://wilkelab.org/ggr
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("ggridges")</span>
-<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://wilkelab.org/ggridges'>ggridges</a></span><span class='o'>)</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://wilkelab.org/ggridges/'>ggridges</a></span><span class='o'>)</span>
 <span class='nv'>penguins_noNA</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>species</span>, fill <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.8</span><span class='o'>)</span>
@@ -580,7 +580,7 @@ We are going to use the NHANES dataset we used in [Session 3](/codeclub/s03_join
 
 #### Exercise 1
 
-<div class="alert puzzle">
+<div class="puzzle">
 
 <div>
 
@@ -592,6 +592,9 @@ Create a new data frame includes the NHANES data only from individuals that are 
 
 Try using a series of [`filter()`](https://rdrr.io/r/stats/filter.html) statements. Remember, you can tell filter what you want, or what you don't want. You can filter for if specific variables have NAs by using [`is.na()`](https://rdrr.io/r/base/NA.html) on your variable of interest. Also remember that [`!`](https://rdrr.io/r/base/Logic.html) means "not." You will notice that if you want to use `drop_NA()` you need to specific which specific variables you want to use, or you will inadvertably drop a lot of observations which have missing data for variables other than those we are plotting.. <br>
 </details>
+
+<br>
+
 <details>
 
 <summary> Solutions (click here) </summary>
@@ -632,7 +635,7 @@ Try using a series of [`filter()`](https://rdrr.io/r/stats/filter.html) statemen
 
 #### Exercise 2
 
-<div class="alert puzzle">
+<div class="puzzle">
 
 <div>
 
@@ -644,6 +647,9 @@ Create a boxplot to show the relationship between total cholesterol (`TotChol`) 
 
 Try `geom_boxplot()`. Map your variables of interest to the `x` and `y` aesthetics. Which you variable you put on `x` and `y` will determine if your boxplot is vertical or horizontal. <br>
 </details>
+
+<br>
+
 <details>
 
 <summary> Solutions (click here) </summary>
@@ -671,7 +677,7 @@ Try `geom_boxplot()`. Map your variables of interest to the `x` and `y` aestheti
 
 #### Exercise 3
 
-<div class="alert puzzle">
+<div class="puzzle">
 
 <div>
 
@@ -683,6 +689,9 @@ Take your plot from Exercise 2 and make it a violin plot instead of a boxplot. T
 
 The geom for a violin plot is `geom_violin()`. You can change color by mapping to `color` or to `fill`. <br>
 </details>
+
+<br>
+
 <details>
 
 <summary> Solutions (click here) </summary>
@@ -723,7 +732,7 @@ Note the difference between mapping to `color` vs. `fill`.
 
 #### Exercise 4
 
-<div class="alert puzzle">
+<div class="puzzle">
 
 <div>
 
@@ -735,6 +744,9 @@ Make add a boxplot to your violin plot from Exercise 3. Adjust the parameters so
 
 In `geom_boxplot()`, you can adjust the width of the boxplot by setting `width = X`. A width of 1 is the default. <br>
 </details>
+
+<br>
+
 <details>
 
 <summary> Solutions (click here) </summary>
@@ -763,7 +775,7 @@ In `geom_boxplot()`, you can adjust the width of the boxplot by setting `width =
 
 #### Exercise 5
 
-<div class="alert puzzle">
+<div class="puzzle">
 
 <div>
 
@@ -775,6 +787,9 @@ Add all of the data points on top of your boxplot from Exercise 2 of total chole
 
 Remember that ggplot layers your plots, so layers that are further down in your code, will be applied on top of those that come earlier. <br>
 </details>
+
+<br>
+
 <details>
 
 <summary> Solutions (click here) </summary>
@@ -812,7 +827,9 @@ Remember that ggplot layers your plots, so layers that are further down in your 
 
 #### Bonus 1
 
-<div class="alert puzzle">
+<div class="puzzle">
+
+<div>
 
 Make a density ridge plot for age by total cholesterol.
 
@@ -820,8 +837,11 @@ Make a density ridge plot for age by total cholesterol.
 
 <summary> Hints (click here) </summary>
 
-Try [`geom_density_ridges()`](https://wilkelab.org/ggridges/reference/geom_density_ridges.html), and remember, this is not a part of `ggplot2`, so be sure to call [`library(ggridges)`](https://wilkelab.org/ggridges). <br>
+Try [`geom_density_ridges()`](https://wilkelab.org/ggridges/reference/geom_density_ridges.html), and remember, this is not a part of `ggplot2`, so be sure to call [`library(ggridges)`](https://wilkelab.org/ggridges/). <br>
 </details>
+
+<br>
+
 <details>
 
 <summary> Solutions (click here) </summary>
@@ -829,7 +849,7 @@ Try [`geom_density_ridges()`](https://wilkelab.org/ggridges/reference/geom_densi
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("ggridges")</span>
-<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://wilkelab.org/ggridges'>ggridges</a></span><span class='o'>)</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://wilkelab.org/ggridges/'>ggridges</a></span><span class='o'>)</span>
 <span class='nv'>NHANES_over20_noNA</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>TotChol</span>, y <span class='o'>=</span> <span class='nv'>AgeDecade</span>, fill <span class='o'>=</span> <span class='nv'>AgeDecade</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.7</span><span class='o'>)</span> 
@@ -853,7 +873,7 @@ Try [`geom_density_ridges()`](https://wilkelab.org/ggridges/reference/geom_densi
 
 #### Bonus 2
 
-<div class="alert puzzle">
+<div class="puzzle">
 
 <div>
 
@@ -865,6 +885,9 @@ Take your density ridge plot from Bonus 1, and try applying a theme from `hrbrth
 
 `hrbrthemes` is not part of `ggplot2` so remember to install the package, and then call [`library(hrbrthemes)`](http://github.com/hrbrmstr/hrbrthemes). You can google the package to see what all your theme options are. I like [`theme_ipsum_rc()`](https://rdrr.io/pkg/hrbrthemes/man/theme_ipsum_rc.html), try that one if you like! <br>
 </details>
+
+<br>
+
 <details>
 
 <summary> Solutions (click here) </summary>
@@ -904,7 +927,7 @@ Take your density ridge plot from Bonus 1, and try applying a theme from `hrbrth
 
 #### Bonus 3
 
-<div class="alert puzzle">
+<div class="puzzle">
 
 <div>
 
@@ -917,6 +940,9 @@ Tidy up your plot from Bonus 2 by giving it a title, axis labels, and try adding
 Using [`stat_summary()`](https://ggplot2.tidyverse.org/reference/stat_summary.html) will help you add the median.  
 <br>
 </details>
+
+<br>
+
 <details>
 
 <summary> Solutions (click here) </summary>
@@ -961,7 +987,7 @@ Using [`stat_summary()`](https://ggplot2.tidyverse.org/reference/stat_summary.ht
 
 #### Bonus 4
 
-<div class="alert puzzle">
+<div class="puzzle">
 
 <div>
 
@@ -973,6 +999,9 @@ Commonly used cutoffs for cholesterol are: \< 5.2 mmol/L is normal, 5.2-6.2 mmol
 
 Using [`geom_vline()`](https://ggplot2.tidyverse.org/reference/geom_abline.html) will let you add a vertical line with an `xintercept` that is appropriate. <br>
 </details>
+
+<br>
+
 <details>
 
 <summary> Solutions (click here) </summary>
