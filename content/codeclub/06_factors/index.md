@@ -6,6 +6,7 @@ summary: "In this sixth session of Code Club, we'll learn how to use factors to 
 authors: [stephen-opiyo]
 tags: [codeclub, factors]
 date: 2021-01-18
+lastmod: 2021-01-18
 toc: true
 
 # Featured image
@@ -22,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 23d7fb7b27623ec5
+rmd_hash: b8854dc3e62db1ae
 
 ---
 

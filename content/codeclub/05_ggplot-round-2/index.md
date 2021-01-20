@@ -3,7 +3,8 @@ title: "Session 5: ggplot2, round 2"
 subtitle: "Getting up close and personal with our data"
 summary: "During this fifth session of Code Club, we will be continuing to learn to use ggplot2, including techniques that better enable us to see our true data distribution."  
 authors: [jessica-cooperstone]
-date: "2021-01-19"
+date: 2021-01-15
+lastmod: 2021-01-15
 output: hugodown::md_document
 toc: true
 
@@ -12,7 +13,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: 121149cd4e846cec
+rmd_hash: 7b46ac376c4f09de
 
 ---
 
