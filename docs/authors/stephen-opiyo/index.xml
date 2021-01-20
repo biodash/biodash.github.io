@@ -13,6 +13,443 @@
     </image>
     
     <item>
+      <title>Session 6: Factors</title>
+      <link>https://biodash.github.io/codeclub/06_factors/</link>
+      <pubDate>Mon, 18 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/06_factors/</guid>
+      <description>&lt;p&gt;&lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Factors form the basis for many powerful operations in R, including many performed on tabular data. The motivation for factors comes from the notion of categorical variables. These variables are non-numeric in nature corresponding to categories such as male and female, or Democrat, Republican and Independent.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A factor might be viewed simply as a vector with a bit of more information added.&lt;/strong&gt; The extra information consists of a record of distinct values in that vector, which are called: &lt;em&gt;&lt;strong&gt;levels&lt;/strong&gt;&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Let us look at some examples of factors. We will make use of the package &lt;em&gt;forcats&lt;/em&gt;, which is one of the 8 core &lt;em&gt;tidyverse&lt;/em&gt; packages. Therefore, we start by loading the &lt;em&gt;tidyverse&lt;/em&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching packages&lt;/span&gt;&lt;span&gt; ─────────────────────────────────────── tidyverse 1.3.0 ──&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;ggplot2&lt;/span&gt;&lt;span&gt; 3.3.3     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;purrr  &lt;/span&gt;&lt;span&gt; 0.3.4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;tibble &lt;/span&gt;&lt;span&gt; 3.0.4     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr  &lt;/span&gt;&lt;span&gt; 1.0.2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;tidyr  &lt;/span&gt;&lt;span&gt; 1.1.2     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;stringr&lt;/span&gt;&lt;span&gt; 1.4.0&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;readr  &lt;/span&gt;&lt;span&gt; 1.4.0     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;forcats&lt;/span&gt;&lt;span&gt; 0.5.0&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Conflicts&lt;/span&gt;&lt;span&gt; ────────────────────────────────────────── tidyverse_conflicts() ──&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;&lt;span&gt;::&lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;filter()&lt;/span&gt;&lt;span&gt; masks &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;&lt;span&gt;::filter()&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;&lt;span&gt;::&lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;&lt;span&gt;    masks &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;&lt;span&gt;::lag()&lt;/span&gt;&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;## Check whether &#34;forcats&#34; is listed among the loaded packages.&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;## Alternatively, you could load &#34;forcats&#34; (and &#34;ggplot2&#34;) separately:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# install.packages(&#34;forcats&#34;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# library(forcats)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# library(ggplot2)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;example-1-from-a-numeric-vector-to-a-factor&#34;&gt;Example 1: From a numeric vector to a factor&lt;/h2&gt;
+&lt;p&gt;Let us create a factor &lt;code&gt;xf&lt;/code&gt; from a vector &lt;code&gt;x&lt;/code&gt; with the numbers &lt;code&gt;5&lt;/code&gt;, &lt;code&gt;12&lt;/code&gt;, &lt;code&gt;13&lt;/code&gt;, and &lt;code&gt;12&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;12&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;13&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;12&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]  5 12 13 12&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# Convert the vector to a factor:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;xf&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/factor.html&#39;&gt;factor&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;xf&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 5  12 13 12&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Levels: 5 12 13&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The &lt;em&gt;distinct values&lt;/em&gt; in &lt;code&gt;xf&lt;/code&gt; are &lt;code&gt;5&lt;/code&gt;, &lt;code&gt;12&lt;/code&gt; and &lt;code&gt;13&lt;/code&gt;, and are listed as &lt;em&gt;levels&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Let us look in a bit more details at our factor using the R functions &lt;code&gt;str&lt;/code&gt; and &lt;code&gt;unclass&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/str.html&#39;&gt;str&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;xf&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Factor w/ 3 levels &#34;5&#34;,&#34;12&#34;,&#34;13&#34;: 1 2 3 2&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;unclass&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;xf&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1 2 3 2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; attr(,&#34;levels&#34;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;5&#34;  &#34;12&#34; &#34;13&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice that the values in the factor are not stored as &lt;code&gt;(5, 12, 13, 12)&lt;/code&gt;, but rather as &lt;code&gt;(1, 2, 3, 2)&lt;/code&gt;!&lt;/p&gt;
+&lt;p&gt;This means that our data consists first of a level-1 value, then level-2 and level 3 values, and finally another level-2 value. So, the data has been recorded by level.&lt;/p&gt;
+&lt;p&gt;The values attached to each level are recorded too, but as &lt;em&gt;characters&lt;/em&gt; such as &lt;code&gt;&amp;quot;5&amp;quot;&lt;/code&gt; rather than as numbers such as &lt;code&gt;5&lt;/code&gt;.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;example-2-from-a-character-vector-to-a-factor&#34;&gt;Example 2: From a character vector to a factor&lt;/h2&gt;
+&lt;p&gt;We will use the levels Democrat (&lt;code&gt;D&lt;/code&gt;), Republican (&lt;code&gt;R&lt;/code&gt;), and Independent (&lt;code&gt;I&lt;/code&gt;). First, we save a &lt;em&gt;vector&lt;/em&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;D&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;R&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;R&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;I&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;R&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;I&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;D&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;I&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;D&#34; &#34;R&#34; &#34;R&#34; &#34;I&#34; &#34;R&#34; &#34;I&#34; &#34;D&#34; &#34;I&#34;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/str.html&#39;&gt;str&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  chr [1:8] &#34;D&#34; &#34;R&#34; &#34;R&#34; &#34;I&#34; &#34;R&#34; &#34;I&#34; &#34;D&#34; &#34;I&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Then, we again convert the &lt;em&gt;vector&lt;/em&gt; to a &lt;em&gt;factor&lt;/em&gt;, and look at the levels:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;fy&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/factor.html&#39;&gt;factor&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;fy&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] D R R I R I D I&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Levels: D I R&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;unclass&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;fy&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1 3 3 2 3 2 1 2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; attr(,&#34;levels&#34;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;D&#34; &#34;I&#34; &#34;R&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;example-3-ordering-factor-levels&#34;&gt;Example 3: Ordering factor levels&lt;/h2&gt;
+&lt;p&gt;Some variables can be challenging to sort automatically, because the desired sorting order is not alphabetical or numeric.&lt;/p&gt;
+&lt;p&gt;For instance, months that are listed using characters:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;months_vector&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Dec&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Apr&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Jan&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Mar&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# Try to sort using the `sort` function&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/sort.html&#39;&gt;sort&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;months_vector&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Apr&#34; &#34;Dec&#34; &#34;Jan&#34; &#34;Mar&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;That didn&amp;rsquo;t sort in a useful way. &lt;strong&gt;But, the problem can be fixed by using a factor.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;First, we create a list of the valid levels, which are all 12 months in a year:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;month_levels&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Jan&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Feb&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Mar&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Apr&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;May&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Jun&#34;&lt;/span&gt;,
+                  &lt;span class=&#39;s&#39;&gt;&#34;Jul&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Aug&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Sep&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Oct&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Nov&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Dec&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Then we convert the vector into a factor, like before, but now we additionally specify the desired levels of the factor, &lt;strong&gt;in order&lt;/strong&gt;, using the &lt;code&gt;levels&lt;/code&gt; argument:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;months_factor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/factor.html&#39;&gt;factor&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;months_vector&lt;/span&gt;, levels &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;month_levels&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Now it sorts the way we want to!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/sort.html&#39;&gt;sort&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;months_factor&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] Jan Mar Apr Dec&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;example-4-use-of-factors-in-plots-with-forcats&#34;&gt;Example 4: Use of factors in plots with &lt;em&gt;forcats&lt;/em&gt;&lt;/h2&gt;
+&lt;h3 id=&#34;4a-plot-after-reordering-manually-with-fct_relevel&#34;&gt;4A: Plot after reordering manually with &lt;code&gt;fct_relevel()&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;We will use the &lt;em&gt;mtcars&lt;/em&gt; data, which was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973&amp;ndash;74 models) &amp;ndash; a data frame with 32 observations for 11 (numeric) variables,&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/data.html&#39;&gt;data&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mtcars&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/names.html&#39;&gt;names&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mtcars&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] &#34;mpg&#34;  &#34;cyl&#34;  &#34;disp&#34; &#34;hp&#34;   &#34;drat&#34; &#34;wt&#34;   &#34;qsec&#34; &#34;vs&#34;   &#34;am&#34;   &#34;gear&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [11] &#34;carb&#34;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/dim.html&#39;&gt;dim&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mtcars&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 32 11&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/str.html&#39;&gt;str&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mtcars&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &#39;data.frame&#39;:  32 obs. of  11 variables:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ disp: num  160 160 108 258 360 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ qsec: num  16.5 17 18.6 19.4 17 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ am  : num  1 1 1 0 0 0 0 0 0 0 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;we will select six variables (&lt;code&gt;mpg&lt;/code&gt;, &lt;code&gt;cyl&lt;/code&gt;, &lt;code&gt;disp&lt;/code&gt;, &lt;code&gt;hp&lt;/code&gt;, and &lt;code&gt;wt&lt;/code&gt;) to create a dataset &lt;code&gt;Data&lt;/code&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mpg&lt;/code&gt;: Miles per (US) gallon,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cyl&lt;/code&gt;: Number of cylinders&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;disp&lt;/code&gt;: Displacement (cu.in.)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;hp&lt;/code&gt;: Horse power&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;wt&lt;/code&gt;: Weight (in 1000 lbs)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;Data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mtcars&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mpg&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;cyl&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;disp&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;hp&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;wt&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Now, we&amp;rsquo;ll add a new column &lt;code&gt;cyl_chr&lt;/code&gt; by converting &lt;code&gt;cyl&lt;/code&gt; from &lt;em&gt;numeric&lt;/em&gt; to &lt;em&gt;character&lt;/em&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;Data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cyl_chr &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;recode&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;cyl&lt;/span&gt;,`4` &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Four&#34;&lt;/span&gt;, `6` &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Six&#34;&lt;/span&gt;, `8` &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Eight&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    mpg cyl disp  hp    wt cyl_chr&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 21.0   6  160 110 2.620     Six&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2 21.0   6  160 110 2.875     Six&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3 22.8   4  108  93 2.320    Four&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4 21.4   6  258 110 3.215     Six&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5 18.7   8  360 175 3.440   Eight&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6 18.1   6  225 105 3.460     Six&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We plot a bar chart for cyl_1:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;Data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cyl_chr&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_bar&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; 
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-13-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;In the plot, the levels of the factor were arranged in alphabetical order (&lt;code&gt;Eight&lt;/code&gt;, &lt;code&gt;Four&lt;/code&gt;, and &lt;code&gt;Six&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;Instead, we want the bar graph arranged in the order &lt;code&gt;Four&lt;/code&gt;, &lt;code&gt;Six&lt;/code&gt;, and &lt;code&gt;Eight&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;An alternative to using 
+&lt;a href=&#34;https://rdrr.io/r/base/factor.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;factor(levels = ...)&lt;/code&gt;&lt;/a&gt; like we did above, is to use the &lt;code&gt;fct_relevel()&lt;/code&gt; function from the &lt;em&gt;forcats&lt;/em&gt; package:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;Data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cyl_chr &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;fct_relevel&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;cyl_chr&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Four&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Six&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Eight&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cyl_chr&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_bar&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Cylinder&#34;&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Miles/per gallon&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-14-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;h3 id=&#34;4b-plot-after-reordering-by-the-value-of-another-column-fct_reorder&#34;&gt;4B: Plot after reordering by the value of another column (&lt;code&gt;fct_reorder&lt;/code&gt;)&lt;/h3&gt;
+&lt;p&gt;Create a dataset called &lt;code&gt;Data_a&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;Data_a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;name &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;North&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;South&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;East&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;West&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                     var &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/sample.html&#39;&gt;sample&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/seq.html&#39;&gt;seq&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Plot a bar chart of &lt;code&gt;Data_a&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;Data_a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;name&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;var&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_bar&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;stat &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;identity&#34;&lt;/span&gt;, fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;#f68034&#34;&lt;/span&gt;, alpha &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.6&lt;/span&gt;, width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; 
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-16-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Reorder following the value of another column using the &lt;code&gt;fct_reorder()&lt;/code&gt; function, and flip the plot:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;Data_a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;name &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;fct_reorder&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;name&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;var&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;name&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;var&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_bar&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;stat &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;identity&#34;&lt;/span&gt;, fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;#f68034&#34;&lt;/span&gt;, alpha &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.6&lt;/span&gt;, width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;coord_flip&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; 
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-17-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;p&gt;There are several more convenient reordering functions in the &lt;em&gt;forcats&lt;/em&gt; package, including:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;fact_infreq()&lt;/code&gt; to reorder by occurrence frequencies of each level (see the picture at the top of the post).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;fct_inorder()&lt;/code&gt; to reorder by order of appearance in the dataframe. This can be useful, for example, if your dataframe has already been sorted properly, and you just need to prevent automatic alphabetic reordering when plotting.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;breakout-rooms&#34;&gt;Breakout rooms!&lt;/h2&gt;
+&lt;p&gt;For the Breakout room exercises, we will use datasets from &lt;em&gt;mtcars&lt;/em&gt; and the &lt;code&gt;gss_cat&lt;/code&gt; dataset from the &lt;em&gt;forcats&lt;/em&gt; package.&lt;/p&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Convert the variable &lt;code&gt;gear&lt;/code&gt; from &lt;em&gt;mtcars&lt;/em&gt; to a character vector with words for each number (link in example 4A), and plot a bar chart.&lt;/p&gt;
+&lt;p&gt;Then, use a factor to reorder the bars to appear in the regular &amp;ldquo;numeric&amp;rdquo; order: &amp;ldquo;Three&amp;rdquo; then &amp;ldquo;Four&amp;rdquo; then &amp;ldquo;Five&amp;rdquo;.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt; Hints (click here) &lt;/summary&gt;
+&lt;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Use the &lt;code&gt;mutate()&lt;/code&gt;, &lt;code&gt;recode()&lt;/code&gt;, and &lt;code&gt;fct_relevel()&lt;/code&gt; functions.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Add a column called &lt;code&gt;gear_chr&lt;/code&gt; by converting gear from &lt;em&gt;numeric&lt;/em&gt; to &lt;em&gt;character&lt;/em&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt; Solutions (click here) &lt;/summary&gt; &lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;Start by loading the dataset:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/data.html&#39;&gt;data&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mtcars&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;Now, create a new dataset &lt;code&gt;Gear&lt;/code&gt; from &lt;em&gt;mtcars&lt;/em&gt;, adding a column &lt;code&gt;gear_chr&lt;/code&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;gear_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mtcars&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;gear_chr &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;recode&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;gear&lt;/span&gt;,
+                         `3`&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Three&#34;&lt;/span&gt;,
+                         `4` &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Four&#34;&lt;/span&gt;,
+                         `5`&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Five&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;gear_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    mpg cyl disp  hp drat    wt  qsec vs am gear carb gear_chr&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 21.0   6  160 110 3.90 2.620 16.46  0  1    4    4     Four&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4     Four&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1     Four&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1    Three&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2    Three&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1    Three&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;Finally, use the &lt;em&gt;forcats&lt;/em&gt; function &lt;code&gt;fct_relevel()&lt;/code&gt; to rearrange &lt;code&gt;gear_chr&lt;/code&gt; in nonalphabetical order, and plot the barchart using &lt;code&gt;geom_bar()&lt;/code&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;gear_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;gear_fct &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;fct_relevel&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;gear_chr&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Three&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Four&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Five&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;gear_fct&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_bar&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Gear&#34;&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Miles/per gallon&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-20-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Using the &lt;code&gt;gss_cat&lt;/code&gt; dataset from the &lt;em&gt;forcats&lt;/em&gt; package (available as &lt;code&gt;gsscat&lt;/code&gt; in your environment), create a plot that compares the average number of hours spent watching TV per day across religions, and where &lt;em&gt;religions are ordered by the average number of hours&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;(Despite what we&amp;rsquo;ve learned last week, start by merely plotting the mean, and no distributions, using a barplot or with &lt;code&gt;geom_point()&lt;/code&gt;.)&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Source: (R for Data Science)&lt;/em&gt;&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt; Hints (click here) &lt;/summary&gt; &lt;br&gt; In order to be able to order the factor by the average number of hours spent watching TV, first compute this average per religion, and save the results in a dataframe (use `mutate()` and `summarize()`).
+&lt;p&gt;Then, use &lt;code&gt;fct_recorder()&lt;/code&gt; to reorder the factor.&lt;/p&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt; Solutions (click here) &lt;/summary&gt; &lt;br&gt;
+&lt;p&gt;First, have a look at the dataset:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;forcats&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://forcats.tidyverse.org/reference/gss_cat.html&#39;&gt;gss_cat&lt;/a&gt;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 21,483 x 9&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;     year marital     age race  rincome    partyid     relig     denom    tvhours&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;      &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;       &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;      &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Never ma…    26 White $8000 to … Ind,near r… Protesta… Souther…      12&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Divorced     48 White $8000 to … Not str re… Protesta… Baptist…      &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Widowed      67 White Not appli… Independent Protesta… No deno…       2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Never ma…    39 White Not appli… Ind,near r… Orthodox… Not app…       4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Divorced     25 White Not appli… Not str de… None      Not app…       1&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Married      25 White $20000 - … Strong dem… Protesta… Souther…      &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Never ma…    36 White $25000 or… Not str re… Christian Not app…       3&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Divorced     44 White $7000 to … Ind,near d… Protesta… Luthera…      &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Married      44 White $25000 or… Not str de… Protesta… Other          0&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;&lt;span&gt;000 Married      47 White $25000 or… Strong rep… Protesta… Souther…       3&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 21,473 more rows&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Then, calculate the mean number of tv-hours and create a plot:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;gss_cat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;group_by&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;summarize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;tvhours &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;tvhours&lt;/span&gt;, na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `summarise()` ungrouping output (override with `.groups` argument)&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt;, &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;tvhours&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-22-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;It is difficult to interpret this plot because there is no overall pattern.&lt;/p&gt;
+&lt;p&gt;We can improve the plot by reordering the level of religion using &lt;code&gt;fct_reorder()&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;gss_cat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;group_by&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;summarize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;tvhours &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;tvhours&lt;/span&gt;, na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `summarise()` ungrouping output (override with `.groups` argument)&lt;/span&gt;
+
+
+&lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;relig &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;fct_reorder&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;tvhours&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;tvhours&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-23-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Reordering religion makes it much easier to see that people in the &amp;ldquo;Don&amp;rsquo;t know&amp;rdquo; category watch much more TV.&lt;/p&gt;
+&lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;bonus-exercise-3&#34;&gt;Bonus: Exercise 3&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;In exercise 2, we saw large differences in the &lt;em&gt;average&lt;/em&gt; time spent watching TV across religions, but we should perhaps have a closer look at the data by plotting distributions.&lt;/p&gt;
+&lt;p&gt;Go back to the 
+&lt;a href=&#34;https://biodash.github.io/codeclub/05_ggplot-round-2/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;previous Code Club session&lt;/a&gt; and decide which type of plot could be ideal with so many categories.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt; Hints (click here) &lt;/summary&gt; &lt;br&gt; [`geom_density_ridges()`](https://wilkelab.org/ggridges/reference/geom_density_ridges.html) from the *ggridges* package is very well suited for a plot with so many categories.
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt; Solutions (click here) &lt;/summary&gt; &lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://wilkelab.org/ggridges/&#39;&gt;ggridges&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;gss_cat&lt;/span&gt;, &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;tvhours&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt;, fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;relig&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://wilkelab.org/ggridges/reference/geom_density_ridges.html&#39;&gt;geom_density_ridges&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;alpha &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;Number of hours spent watching TV&#39;&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;Religion&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;guides&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;FALSE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;theme_minimal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Picking joint bandwidth of 0.586&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 10146 rows containing non-finite values (stat_density_ridges).&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-24-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Welcome to Code Club</title>
       <link>https://biodash.github.io/codeclub/00_welcome-to-codeclub/</link>
       <pubDate>Mon, 19 Oct 2020 00:00:00 +0000</pubDate>
