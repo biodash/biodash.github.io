@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: b8854dc3e62db1ae
+rmd_hash: 8a71e7bb1069da40
 
 ---
 
@@ -290,7 +290,7 @@ Now, we'll add a new column `cyl_chr` by converting `cyl` from *numeric* to *cha
 
 </div>
 
-We plot a bar chart for cyl\_1:
+We plot a bar chart for `cyl_chr`:
 
 <div class="highlight">
 
@@ -395,9 +395,9 @@ Then, use a factor to reorder the bars to appear in the regular "numeric" order:
 <summary> Hints (click here) </summary>
 <p>
 
--   Use the `mutate()`, `recode()`, and `fct_relevel()` functions.
+-   First, create a dataframe with a column that codes the gears as words, using the `mutate()` and `recode()` functions.
 
--   Add a column called `gear_chr` by converting gear from *numeric* to *character*.
+-   Then, create a factor from this modified gear column, and order it manually using the `fct_relevel()` function.
 
 </p>
 </details>
