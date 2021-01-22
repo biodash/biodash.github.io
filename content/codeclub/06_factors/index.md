@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 8a71e7bb1069da40
+rmd_hash: 74814bacddbe1d60
 
 ---
 
@@ -315,7 +315,7 @@ An alternative to using [`factor(levels = ...)`](https://rdrr.io/r/base/factor.h
   <span class='nf'>mutate</span><span class='o'>(</span>cyl_chr <span class='o'>=</span> <span class='nf'>fct_relevel</span><span class='o'>(</span><span class='nv'>cyl_chr</span>, <span class='s'>"Four"</span>, <span class='s'>"Six"</span>, <span class='s'>"Eight"</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>cyl_chr</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_bar</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Cylinder"</span>, y <span class='o'>=</span> <span class='s'>"Miles/per gallon"</span><span class='o'>)</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Cylinder"</span>, y <span class='o'>=</span> <span class='s'>"Number of cars"</span><span class='o'>)</span>
 
 </code></pre>
 <img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" />
@@ -452,7 +452,7 @@ Then, use a factor to reorder the bars to appear in the regular "numeric" order:
   <span class='nf'>mutate</span><span class='o'>(</span>gear_fct <span class='o'>=</span> <span class='nf'>fct_relevel</span><span class='o'>(</span><span class='nv'>gear_chr</span>, <span class='s'>"Three"</span>, <span class='s'>"Four"</span>, <span class='s'>"Five"</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>gear_fct</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_bar</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Gear"</span>, y <span class='o'>=</span> <span class='s'>"Miles/per gallon"</span><span class='o'>)</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Gear"</span>, y <span class='o'>=</span> <span class='s'>"Number of cars"</span><span class='o'>)</span>
 
 </code></pre>
 <img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" />
