@@ -1,7 +1,7 @@
 ---
 output: hugodown::md_document
 title: "Session 7: R Markdown"
-subtitle: "An easy way to create many types of content with or without R code"
+subtitle: "Text + Code + Output"
 summary: "In this 7th session of Code Club, we will learn about Markdown syntax and some of the great functionality of R Markdown."
 authors: [admin]
 tags: [codeclub, markdown, rmarkdown]
@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: cc9b3688ba6c598c
+rmd_hash: ef427a23248b110d
 
 ---
 
@@ -50,7 +50,7 @@ We'll focus on HTML page output, but will glimpse at the **many possibilities fo
 
 #### Setup
 
-We need to install the *rmarkdown* package but don't need to load it.
+At the core of the R Markdown ecosystem is the *rmarkdown* package. We need to install this but don't need to load it:
 
 <div class="highlight">
 
@@ -59,16 +59,12 @@ We need to install the *rmarkdown* package but don't need to load it.
 
 </div>
 
-Open [your RStudio project for Code Club](link...) and create a directory for this week:
+Inside your directory for Code Club, create a directory for this week:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S07_markdown'</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S07'</span><span class='o'>)</span>
 </code></pre>
-
-</div>
-
-<div class="highlight">
 
 </div>
 
@@ -91,7 +87,7 @@ Notice that the YAML header is not printed, at least not verbatim, while some of
 This is what the raw and rendered output look side-by-side:
 
 <p align="center">
-<img src=rmd-demo-both.png width="1000px">
+<img src=img/rmd-demo-both.png width="1000px">
 </p>
 
 We'll now talk about Markdown, code chunks, and the YAML header in turn.
@@ -103,39 +99,41 @@ We'll now talk about Markdown, code chunks, and the YAML header in turn.
 I: Markdown
 -----------
 
-Markdown is a very lightweight language to format plain text files.  
-Markdown evolved from simple in-line formatting applied in emails before those started using HTML. Want to emphasize a word without being able to make it italic or bold? How about adding emphasis with asterisks \*like so\*?
+Markdown is a very lightweight language to format plain text files, which evolved from simple in-line formatting applied in emails before those started using HTML.
+
+Need to emphasize a word without being able to make it italic or bold? How about adding emphasis with asterisks \*like so\*?
+
+<br>
 
 #### An overview of commonly used Markdown syntax
 
-| Syntax                                | Result                                                              |
-|---------------------------------------|---------------------------------------------------------------------|
-| \# My Title                           | Header level 1 (largest)                                            |
-| \#\# My Section                       | Header level 2                                                      |
-| \#\#\# My Subsection                  | Header level 3 -- and so forth                                      |
-| \*italic\* or \_italic\_              | *italic*                                                            |
-| \*\*bold\*\* or \_\_bold\_\_          | **bold**                                                            |
-| `[Markdown Guide](markdownguide.org)` | [Markdown Guide](https://markdownguide.org) (Link with custom text) |
-| !\[\](path/to/figure.png)             | Figure                                                              |
-| \- List item                          | Unordered (bulleted) list                                           |
-| 1\. List item                         | Ordered (numbered) list                                             |
-| `` `inline code` ``                   | `inline code`                                                       |
-| ```` ``` ```` or 4 leading spaces     | Start/end of generic code block                                     |
-| ```` ```r ````                        | Start of `r` code block (end with ```` ``` ````)                    |
-| `---`                                 | Horizontal rule (line)                                              |
+| Syntax                                | Result                                                                 |
+|---------------------------------------|------------------------------------------------------------------------|
+| \# My Title                           | Header level 1 (largest)                                               |
+| \#\# My Section                       | Header level 2                                                         |
+| \#\#\# My Subsection                  | Header level 3 -- and so forth                                         |
+| \*italic\* or \_italic\_              | *italic*                                                               |
+| \*\*bold\*\* or \_\_bold\_\_          | **bold**                                                               |
+| `[Markdown Guide](markdownguide.org)` | [Markdown Guide](https://markdownguide.org) (Link with custom text)    |
+| !\[\](path/to/figure.png)             | Figure                                                                 |
+| \- List item                          | Unordered (bulleted) list                                              |
+| 1\. List item                         | Ordered (numbered) list                                                |
+| `` `inline code` ``                   | `inline code`                                                          |
+| ```` ``` ```` or 4 leading spaces     | Start/end of generic code block (for formatting only)                  |
+| ```` ```r ````                        | Start of `r` code block (end with ```` ``` ````) (for formatting only) |
+| `---`                                 | Horizontal rule (line)                                                 |
 
 To see this formatting in action, see below an example of a raw Markdown file on the left, and its *rendered* (formatted) output on the right:
 
 <p align="center">
-<img src=md-demo.png width="1000px">
+<img src=img/md-demo.png width="1000px">
 </p>
 
 <div class="alert alert-note">
 
 <div>
 
-"Plain" Markdown files have the extension `.md`,  
-whereas R Markdown files have the extension `.Rmd`.
+"Plain" Markdown files have the extension `.md`, whereas R Markdown files have the extension `.Rmd`.
 
 </div>
 
@@ -148,7 +146,7 @@ whereas R Markdown files have the extension `.Rmd`.
 II: Integrating R code
 ----------------------
 
-As we saw above, "plain" Markdown has syntax for code *formatting*, but the code is not actually being executed. **But in R Markdown, we are able run code!** The syntax to do so is only slightly modified from what we saw above:
+As we saw above, plain Markdown has syntax for code *formatting*, but the code is not actually being executed. **In R Markdown, however, we are able run code!** The syntax to do so is only slightly modified from what we saw above:
 
 -   For **inline code**, we add `r` and a space before the R code that is to be executed, for example:
 
@@ -157,15 +155,16 @@ As we saw above, "plain" Markdown has syntax for code *formatting*, but the code
     | There are `` `r 365*24` `` hours in a year | There are 8760 hours in a year |
 
 -   To generate *code blocks*, which we call **code chunks** in an R Markdown context:  
-    following the three backticks, we add r *inside curly braces* (`{r}`).  
-    We can optionally add a chunk label and/or settings that we want to apply to that chunk:  
+    following the three backticks, we add r *inside curly braces* (`{r}`).
+
+    We can optionally add settings that we want to apply to that chunk and/or chunk labels:  
     `{r, option1=value, ...}` or `{r unique-chunk-label, option1=value, ...}`.
 
     <div class="alert alert-note">
 
     <div>
 
-    In **RStudio**, there is a handy keyboard shortcut to insert a code chunk: <kbd>Cmd/Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd>.
+    RStudio keyboard shortcut to insert a code chunk: <kbd>Cmd/Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd>.
 
     </div>
 
@@ -175,11 +174,11 @@ As we saw above, "plain" Markdown has syntax for code *formatting*, but the code
 
 #### Code chunk examples
 
--   For example, a code chunk with *default options*...
+-   A code chunk with **default options**...
 
     <p align="left">
 
-    <img src=example-chunk-1.png width="100%">
+    <img src=img/example-chunk-1.png width="100%">
 
     </p>
 
@@ -194,11 +193,11 @@ As we saw above, "plain" Markdown has syntax for code *formatting*, but the code
 
     </div>
 
--   As an example of using a *code chunk option*, we will disable printing the code using `echo=FALSE` (the code will still run and the output will still be shown):
+-   As an example of using a **code chunk option**, we will disable printing the code using `echo=FALSE` (the code will still run and the output will still be shown):
 
     <p align="left">
 
-    <img src=example-chunk-2.png width="100%">
+    <img src=img/example-chunk-2.png width="100%">
 
     </p>
 
@@ -209,11 +208,11 @@ As we saw above, "plain" Markdown has syntax for code *formatting*, but the code
 
     </div>
 
--   Figures can, of course, also be printed:
+-   **Figures** can, of course, also be printed:
 
     <p align="left">
 
-    <img src=example-chunk-3.png width="100%">
+    <img src=img/example-chunk-3.png width="100%">
 
     </p>
 
@@ -244,6 +243,8 @@ Above, we added a **caption** for the figure using the `fig.cap` argument (with 
 
 <div>
 
+#### Code chunk options
+
 Here is an overview of some the most commonly made *changes to defaults* for code chunk options. This quickly gets confusing, but you'll get the hang of it after experimenting a bit.
 
 -   `echo=FALSE` -- Don't print the code in the output file.
@@ -252,16 +253,15 @@ Here is an overview of some the most commonly made *changes to defaults* for cod
 -   `results="hide"` -- Don't print the *text output* of the code.
 -   `fig.show="hide"` -- Don't print *figures* produced by the code.
 
-Furthermore, you can use `message=FALSE`, `warning=FALSE`, and `error=FALSE` to suppress any *messages* (like the output when loading packages), *warnings* (like the warning for the penguin figure above), and *errors*, respectively, that R might produce.
+Furthermore, you can use `message=FALSE` and `warning=FALSE` to suppress any *messages* (like the output when loading packages) and *warnings* (like the warning for the penguin figure above), respectively, that R might produce.
 
-For figures, the following options are useful:
+For figures, the following options are especially useful:
 
 -   `fig.cap="My caption"` -- Include a caption.
--   `fig.asp=0.625` -- Aspect ratio.
+-   `fig.asp=0.6` -- Aspect ratio.
 -   `fig.width=6` -- Width of in inches: same as sizing in regular R code.
 -   `fig.height=9.6` -- Height in inches: same as sizing in regular R code.
--   `out.width=70%` -- Width at which the figure is *printed in the document*.
--   `fig.path=Figs/` -- Where to store separate files for each figure.
+-   `out.width="70%"` -- Width at which the figure is *printed in the document*.
 
 Finally, if your document takes a long time to knit, use `cache=TRUE` to enable caching of results.
 
@@ -273,13 +273,16 @@ Finally, if your document takes a long time to knit, use `cache=TRUE` to enable 
 
 <div>
 
-It is often practical to set **default chunk options** for the entire document, and you can do so with the `opts_chunk$set()` function as shown below:
+#### Default chunk options
+
+It is often practical to set default chunk options for the entire document, and you can do so with the `opts_chunk$set()` function as shown below:
 
 <p align="left">
-<img src=global-chunk.png width="100%">
+<img src=img/global-chunk.png width="100%">
 </p>
 
-This is usually done in separate *"global setup chunk"* at the start of the document. Then, you can override these defaults for specific chunks.
+This is usually done in separate *"global setup chunk"* at the start of the document.  
+Whenever necessary, you can then override these defaults for specific chunks.
 
 </div>
 
@@ -319,7 +322,9 @@ Often, a value (like `html_document`) can itself be given key-value pairs to spe
         toc_float: true
     ---
 
-Note the syntax changes (newlines and added indentation) between the above two examples, this is perhaps a little awkward and often leads to mistakes. (YAML is *sensitive to indentation errors*.)
+-   Note the syntax changes (newlines and added indentation) between the above two examples, this is perhaps a little awkward and often leads to mistakes.
+
+-   Indentation in YAML is using two or four spaces (no tabs!) per indentation level, and it is *sensitive to indentation errors*. (Fortunately, RStudio inserts spaces for tabs by default -- check/set in `Tools` =\> `Global Options` =\> `Code` =\> `Editing`.)
 
 <div class="alert alert-note">
 
@@ -329,16 +334,21 @@ Note the syntax changes (newlines and added indentation) between the above two e
 
 `html_document` is the most commonly used output format for R Markdown documents, and here are few particularly useful options to customize the output:
 
--   `code_download: true` -- Include a button at the top of the document that enables readers to download the code.
--   `code_folding: hide` -- While the default is `none`, using `hide` or `show` will enable the folding of code chunks, with `hide` hiding them by default, and `show` showing them by defaults.
--   `toc: true` -- Include a table of contents.
--   `toc_float: true` -- Let the table of contents "float" as you scroll down the document.
--   `toc_depth: 3` -- The number of heading levels to include in the table of contents.
+-   `code_download: true` -- Include a button to download the code.
+-   `code_folding: hide` -- Using `hide` or `show` will enable the folding of code chunks, with `hide` hiding them by default.
+-   `toc: true` -- Include a table of contents (Also: `toc_depth: 3` sets depth to 3, `toc_float: true` lets the TOC "float" as you scroll down the document).
 -   `number_sections: true` -- Number the section headings.
--   `theme: cerulean` -- Use a pre-built theme, controlling the overall look and feel of the document. See [here](https://www.datadreaming.org/post/r-markdown-theme-gallery/) for a visual overview -- three options shown below are `darkly`, `flatly`, and `cerulean`:
-    <p align="left">
-    <img src=rmd-3themes.png width="100%">
-    </p>
+-   `df_print: paged` -- Get nicely formatted and paged data frame printing (also try: `df_print: kable`).
+-   `theme: cerulean` -- Use a pre-built theme, controlling the overall look and feel of the document. See [here](https://www.datadreaming.org/post/r-markdown-theme-gallery/) for a visual overview.
+
+<figure>
+<p align="center">
+<img src=img/rmd-3themes.png width="100%">
+<figcaption>
+Three HTML document <code>theme</code> options: <code>darkly</code>, <code>flatly</code>, and <code>cerulean</code>.
+</figcaption>
+</p>
+</figure>
 
 </div>
 
@@ -392,14 +402,14 @@ use the *infinite moon reader* from the *xaringan* package:
 
 If your RStudio version is at least 1.4 (Click `Help` =\> `About RStudio`), which was released last fall, you can also use the *Visual Markdown Editor*.
 
-This makes writing in R Markdown almost like using a Word Processor, and also includes many other features such as better citation support that includes integration with Zotero. Read more about the visual editor [here](https://rstudio.github.io/visual-markdown-editing).
+This makes writing in R Markdown almost like using a word processor, and also includes many other features such as better citation support with Zotero integration. Read more about the visual editor [here](https://rstudio.github.io/visual-markdown-editing).
 
-To switch between the visual editor and regular mode, click the ruler button in the top-right corner or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F4</kbd>.
+To switch between the visual editor and regular ("source") editing mode, click the A-shaped ruler button in the top-right corner or press <kbd>Cmd/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F4</kbd>.
 
-This is what our document looks like in the visual editor:
+This is what our document looks like in the visual editor -- kind of intermediate between the raw R Markdown and the rendered output:
 
 <p align="center">
-<img src=visual-editor.png width="70%">
+<img src=img/visual-editor.png width="70%">
 </p>
 
 <br>
@@ -416,7 +426,7 @@ One of the greatest features of R Markdown is that you can output to many format
 The [built-in output formats](https://rmarkdown.rstudio.com/docs/reference/index.html#section-output-formats), which can be used with just the *rmarkdown* package, are listed below. These include HTML, PDF, Word, PowerPoint, and different HTML slide show formats!
 
 <p align="center">
-<img src=rmarkdown-output-formats.png width="80%">
+<img src=img/rmarkdown-output-formats.png width="80%">
 </p>
 
 <br>
@@ -425,11 +435,9 @@ The [built-in output formats](https://rmarkdown.rstudio.com/docs/reference/index
 
 It's worth highlighting a few of the output formats that can be used with the following packages in the R Markdown ecosystem:
 
--   [*distill*](https://rstudio.github.io/distill/) -- An output format specifically geared towards technical content, with e.g. support for equations, citations, and footnotes.
+-   [*distill*](https://rstudio.github.io/distill/) -- An output format geared towards technical content, e.g. with extended support for equations, citations, and footnotes. Can also create websites.
 
 -   [*rticles*](https://github.com/rstudio/rticles) -- R Markdown templates to format output for specific scientific journals.
-
--   [*blogdown*](https://bookdown.org/yihui/blogdown/) -- Create more complex websites, mostly with the *Hugo* static site generator.
 
 -   [*flexdashboard*](https://rmarkdown.rstudio.com/flexdashboard/) -- Create interactive "dashboards" to present data.
 
@@ -441,9 +449,7 @@ Starting to use these and other output formats is often as simple as changing th
 
 ``` yaml
 ---
-output:
-  distill::distill_article: default
-  bookdown::html_document2: default
+output: distill::distill_article
 ---
 ```
 
@@ -454,36 +460,92 @@ output:
 Breakout rooms!
 ---------------
 
-In the exercises, we will work with a started `.Rmd` document that you can download [here](INCLUDE%20LINK).
+In the exercises, we will work with an `.Rmd` file that you can download as follows:
 
-To start, **open the document in RStudio and fire up the *infinite moon reader***:  
-use [`xaringan::inf_mr()`](https://rdrr.io/pkg/xaringan/man/inf_mr.html), assuming you have installed *xaringan*. This way, you will be able to nearly instantaneously see the effect of your changes: save the document whenever you want the server to update.
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># dir.create("S07")     # You should have already done this</span>
+
+<span class='c'># Save the URL for the Rmd file:</span>
+<span class='nv'>todays_rmd</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/07_rmarkdown/penguins.Rmd'</span>
+
+<span class='c'># Download the Rmd file:</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_rmd</span>, destfile <span class='o'>=</span> <span class='s'>'S07/penguins.Rmd'</span><span class='o'>)</span>
+</code></pre>
+
+</div>
+
+Next, open the document in RStudio, and fire up the *infinite moon reader*:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("xaringan")</span>
+
+<span class='nf'>xaringan</span><span class='nf'>::</span><span class='nf'><a href='https://rdrr.io/pkg/xaringan/man/inf_mr.html'>inf_mr</a></span><span class='o'>(</span><span class='o'>)</span>
+</code></pre>
+
+</div>
+
+This way, you will be able to nearly instantaneously see the effect of your changes: save the document whenever you want the server to update.
+
+You can use either the "visual editor" or the regular ("source") editor -- and you could also start by compating the two.
 
 <div class="puzzle">
 
 <div>
 
-### Exercise 1: YAML
+### Exercise 1: Output formatting with YAML
 
-In this exercise, you will fiddle with the YAML header to modify some aspects of the output format for `html_document`:
+In this exercise, you will fiddle with the YAML header to modify aspects of the `html_document` output format:
 
--   Add a `theme` directive to `html_output`, and try several of the available options ("*default*", "*cerulean*", "*journal*", "*flatly*", "*darkly*", "*readable*", "*spacelab*", "*united*", "*cosmo*", "*lumen*", "*paper*", "*sandstone*", "*simplex*", "*yeti*").
+-   Add a `theme` key to `html_output`, and try a few of the available value options ("*default*", "*cerulean*", "*journal*", "*flatly*", "*darkly*", "*readable*", "*spacelab*", "*united*", "*cosmo*", "*lumen*", "*paper*", "*sandstone*", "*simplex*", "*yeti*").
 
     Determine, once and for all, what the best theme is.
 
--   Try some of the other options discussed above (`code_download`, `code_folding`, `toc`, `toc_float`, `toc_depth`), and look at the effects on the rendered output.
+-   Try some of the other options mentioned above (`code_download`, `code_folding`, `toc`, `toc_float`, `toc_depth`, `df_print`), and look at the effects on the rendered output.
 
 <details>
 <summary> Hints (click here) </summary>
 <p>
-...
+
+-   To add options to `html_document` in the YAML header, you'll need to go from `output: html_document` on a single line, to a multi-line format with indentation, and with a colon added after `html_document`:
+
+    ``` yaml
+    output:
+      html_document:
+        <option>
+    ```
+
 </p>
 </details>
 
 <br>
 
 <details>
-<summary> Solutions (click here) </summary> <br> ... <br>
+
+<summary> Solutions (click here) </summary> <br>
+
+-   An example YAML header with several options added:
+
+``` yaml
+---
+title: "Penguins, demystified."
+author: "Jelmer Poelstra"
+date: "1/29/2021"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+    toc_depth: 5
+    number_sections: true
+    code_download: true
+    code_folding: hide
+    df_print: kable
+---
+```
+
+<br>
 </details>
 
 </div>
@@ -498,29 +560,74 @@ In this exercise, you will fiddle with the YAML header to modify some aspects of
 
 ### Exercise 2: Code chunks
 
-Create an output document in which:
+Our output document looks nice, but there is plenty of room for improvement. In this exercise, we'll refine the output using code chunk options.
 
--   As default settings for all chunks, R messages are suppressed (but warning and error messages are shown). Set the default figure width to 6 and the aspect ratio to 0.625, and the output width to 80%.
+Before you start, take another look at the box [Code chunk options](#code-chunk-options) above.
 
--   For XXX chunk, the output is shown but the code is hidden.
+-   Did you notice those messages (when the *tidyverse* is loaded) and warnings (for the two plots) in the output? Let's get rid of those all at once: suppress R *messages* and *warnings* for all chunks by adding arguments to the `knitr::opts_chunk$set()` function in the first code chunk.
 
--   For XXX chunk, the code is shown but it is not executed.
+-   Currently, the code line in the `install-package` code chunk is commented out to avoid the code from running, while still printing it. Try to accomplish this using a code chunk option instead, so you can uncomment the line.
 
--   For XXX chunk, set the figure width to 10. \[HAVE OTHER CHUNK WITH SAME FIG\]
+-   We do want to print the code in some cases, but not in others. For the chunk labeled `print-tibble`, which prints `penguins`, alter the settings such that the code is no longer printed.
 
--   For XXX chunk, set the output width to 100%.
+-   Our first figure is kind of squished, and the point and font sizes are perhaps too large. Compare this with the second figure, which has a different setting *only* for `out.width`.
+
+    Play around with the values for the three options that are already in the code chunks (`fig.width`, `out.width`, and `fig.asp`), for one or both figures, see what the effects are, and try to make some improvements.
+
+    Do you understand the difference between the two methods to indicate the figure size (`fig.width` and `out.width`)?
+
+-   Insert a new code chunk that prints the `penguins_raw` tibble in some way (this is available in your environment).
 
 <details>
 <summary> Hints (click here) </summary>
 <p>
-...
+
+-   To suppress messages and warnings throughout:  
+    Add `message=FALSE` and `warnings=FALSE` inside `knitr::opts_chunk$set()` in the `setup` chunk.
+
+-   To avoid running the code:  
+    Use `eval=FALSE` in the header of the `install-package` code chunk.
+
+-   To avoid printing the code:  
+    Use the `echo` option in the header of the `print-tibble` code chunk.
+
+-   Figure sizing:  
+    There are two types of sizes that you can set: the size at which R creates figures (`fig.width` and `fig.height`), and the size at which the figures are inserted in the document (`out.width` and `out.height`). The former will effectively only control relative font and point sizes, whereas the latter controls the "actual" / final size. For more details and advice, see [this section](https://r4ds.had.co.nz/graphics-for-communication.html#figure-sizing) in R for Data Science.
+
+    The aspect ratio (`fig.asp`) is height/width, so a value smaller than one creates a wide figure and a value larger than one creates a narrow figure.
+
+    Here, we've been setting width only -- you can also set `fig.height` and `out.height`, but these options become redundant when you set the width *and* the aspect ratio.
+
 </p>
 </details>
 
 <br>
 
 <details>
-<summary> Solutions (click here) </summary> <br> ... <br>
+
+<summary> Solutions (click here) </summary> <br>
+
+-   To suppress messages and warnings throughout:  
+    `knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)`
+
+-   To avoid running the code: `{r install-package, eval=FALSE}`
+
+-   To avoid printing the code:  
+    `{r print-tibble, echo=FALSE}`
+
+-   Figure sizing:  
+    Example settings for better-sized figures --  
+    `{r plot-bills, out.width="80%", fig.width=6, fig.asp=0.7}`
+
+-   A code chunk to print the `penguins_raw` tibble (replace single quotes by backticks):
+
+<!-- -->
+
+    '''{r}
+    penguins_raw
+    '''
+
+<br>
 </details>
 
 </div>
@@ -533,23 +640,25 @@ Create an output document in which:
 
 <div>
 
-### Exercise 3: Markdown and inline code
+### Bonus 1: Markdown and inline code
 
-In this exercise, you will try out some Markdown formatting and inline code. You are free to do this either in the visual editor or the regular ("source") editor.
+The formatting for the prose in our document could also be improved. For instance:
 
--   Include a sentence in which you **report the minimum, mean, and maximum bill length** in the palmer penguin dataset *using interspersed, inline R code*.
+-   Use inline code *formatting* in a couple of cases where this is appropriate.
 
--   Include a sentence in which you **mention an R function in prose**, and format the name of the R function as code.
+-   Instead of simply saying "8 variables (n = 344 penguins)" (under the *Summary of the dataset*\" heading), use *inline R code* that makes these calculations and print the results.
 
--   Make an **ordered (numbered) list** of the three best R Markdown themes.
-
--   Make an **unordered (bulleted) list** with italic and bold formatting. (Bonus: try a nested list by indenting some items with a tab!)
+-   Try a couple of other things: heading levels (one of them is currently not right!), *italic* text, **bold** text, and/or ordered (numbered) and unordered (bulleted) lists.
 
 <details>
 <summary> Hints (click here) </summary>
 <p>
 
-Besides making calculations directly inline, like `` `r 5 + 6` ``, you can also **recall variables** in the inline R code. Let's say you assigned the mean bill length to the variable `mean_length` in a preceding code chunk, then you will be able to recall that variable inline using `` `r mean_length` ``.
+-   Simply put backticks around the inline text you want have formatted as code. You can do this, for instance, for mentions of [`palmerpenguins::penguins`](https://allisonhorst.github.io/palmerpenguins/reference/penguins.html).
+
+-   For inline code that runs, use `` `r my-code` ``.
+
+    The number of variables and penguins in the penguin dataset are the number of columns and rows, respectively, in the `penguin` tibble.
 
 </p>
 </details>
@@ -557,7 +666,15 @@ Besides making calculations directly inline, like `` `r 5 + 6` ``, you can also 
 <br>
 
 <details>
-<summary> Solutions (click here) </summary> <br> ... <br>
+
+<summary> Solutions (click here) </summary> <br>
+
+Inline calculation of the number of variables and penguins:
+
+    [...] that contains `r ncol(penguins)` variables
+    (n = `r nrow(penguins)` penguins).
+
+<br>
 </details>
 
 </div>
@@ -570,15 +687,15 @@ Besides making calculations directly inline, like `` `r 5 + 6` ``, you can also 
 
 <div>
 
-### Bonus Exercise: Other output formats
+### Bonus 2: Other output formats
 
-Try one or more output formats other than `html_document`, see [here](https://rmarkdown.rstudio.com/docs/reference/index.html#section-output-formats) for the list of available options. If you want to try presentations, note that three dashes `---` are used to separate slides.
+Try one or more output formats other than `html_document`, see [this website](https://rmarkdown.rstudio.com/docs/reference/index.html#section-output-formats) for the list of available options. If you want to try presentations, note that three dashes `---` are used to separate slides.
 
 <div class="alert alert-note">
 
 <div>
 
-It might be confusing that, on the website linked to above (see also the screenshot in section V), the output formats are listed *functions* (`html_document()` rather than `html_document`) -- but this is simply because under the hood, these functions are called via the YAML header.
+It might be confusing that on the website linked to above (see also the screenshot in section V), the output formats are listed *functions* (`html_document()` rather than `html_document`) -- but this is simply because under the hood, these functions are called via the YAML header.
 
 </div>
 
@@ -600,12 +717,9 @@ Go further
 -   **The working directory**  
     By default, the working directory for an R Markdown document is the directory in which the file resides.
 
-    This can be a bit annoying if you're used to using your project's root directory as your working directory (which you should be) and the R Markdown file is not in the project's root directory (which it probably shouldn't be). But simply using `../` notation to move one or two directories up should generally work.
+    This can be a bit annoying if you're used to using your project's root directory as your working directory (which you should be) and the R Markdown file is not in the project's root directory (which it probably shouldn't be). Nevertheless, simply using `../` notation to move one or two directories up should generally work.
 
-    If you really need to set a different working directory, you should be aware that surprisingly, setting the working directory with `setwd()` is **not persistent** across code chunks. To set a different working directory for the entire document, use `knitr::opts_knit$set(root.dir = '/my/working/dir')` in a setup chunk.
-
--   **Figure sizing**  
-    There are two types of sizes that you can set: the size at which R creates figures (`fig.width` and `fig.height`), and the size at which the figures are inserted in the document (`out.width` and `out.height`). The former will effectively only control relative font and point sizes, whereas the latter controls the "actual" / final size. For more details and advice, see [this section](https://r4ds.had.co.nz/graphics-for-communication.html#figure-sizing) in R for Data Science.
+    If you really need to set a different working directory, you should be aware that surprisingly, setting the working directory with `setwd()` in a code chunk is **not persistent** across code chunks. To set a different working directory for the entire document, use `knitr::opts_knit$set(root.dir = '/my/working/dir')` in a setup chunk.
 
 -   **Chunk labels**  
     Chunk labels are optional but if you do give them, note that they have to be *unique*: the document will fail to render if have two chunks with the same label. Also, *avoid using spaces and underscores in the labels* (`good-chunk-label`, `bad chunk label`, `bad_chunk_label`).
@@ -635,8 +749,10 @@ Go further
 
     In the Visual Markdown editor in RStudio, you can simply insert a table with a little dialogue box after clicking `Table` =\> `Insert Table`.
 
--   **Tables produced by R code**  
-    There are several packages *GT* package **FINISH**.
+-   **Tables (dataframes) produced by R code**  
+    Using `kable(my_df)` in a code chunk will create nicer output for individual dataframes (recall the `df_print: kable` YAML option for document-wide "kable" printing).
+
+    There are many packages available for more advanced options, such as [*GT*](https://gt.rstudio.com/), [*DT*](https://rstudio.github.io/DT/), and [*reactable*](https://glin.github.io/reactable/).
 
 <br>
 
@@ -646,6 +762,8 @@ Note that `rmarkdown::render_site()` can create simple websites that connects mu
 
 Options with more features, like a blog, are [*distill websites*](https://rstudio.github.io/distill/website.html), and the [*blogdown* package](https://bookdown.org/yihui/blogdown/) for Hugo sites.
 
+<br>
+
 #### Further resources
 
 -   Free online books by the primary creator of R Markdown and other authors:
@@ -653,5 +771,6 @@ Options with more features, like a blog, are [*distill websites*](https://rstudi
     -   [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)
 -   [RStudio's 5-page R Markdown Reference PDF](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
 -   [RStudio's R Markdown Cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf)
+-   [RStudio R Markdown lessons](https://rmarkdown.rstudio.com/lesson-1.html)
 -   [Markdown tutorial](https://commonmark.org/help/tutorial/)
 
