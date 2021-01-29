@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: ef427a23248b110d
+rmd_hash: b6e963420f061154
 
 ---
 
@@ -107,26 +107,26 @@ Need to emphasize a word without being able to make it italic or bold? How about
 
 #### An overview of commonly used Markdown syntax
 
-| Syntax                                | Result                                                                 |
-|---------------------------------------|------------------------------------------------------------------------|
-| \# My Title                           | Header level 1 (largest)                                               |
-| \#\# My Section                       | Header level 2                                                         |
-| \#\#\# My Subsection                  | Header level 3 -- and so forth                                         |
-| \*italic\* or \_italic\_              | *italic*                                                               |
-| \*\*bold\*\* or \_\_bold\_\_          | **bold**                                                               |
-| `[Markdown Guide](markdownguide.org)` | [Markdown Guide](https://markdownguide.org) (Link with custom text)    |
-| !\[\](path/to/figure.png)             | Figure                                                                 |
-| \- List item                          | Unordered (bulleted) list                                              |
-| 1\. List item                         | Ordered (numbered) list                                                |
-| `` `inline code` ``                   | `inline code`                                                          |
-| ```` ``` ```` or 4 leading spaces     | Start/end of generic code block (for formatting only)                  |
-| ```` ```r ````                        | Start of `r` code block (end with ```` ``` ````) (for formatting only) |
-| `---`                                 | Horizontal rule (line)                                                 |
+| Syntax                                            | Result                                                                                  |
+|---------------------------------------------------|-----------------------------------------------------------------------------------------|
+| \# My Title                                       | Header level 1 (largest)                                                                |
+| \#\# My Section                                   | Header level 2                                                                          |
+| \#\#\# My Subsection                              | Header level 3 -- and so forth                                                          |
+| \*italic\* or \_italic\_                          | *italic*                                                                                |
+| \*\*bold\*\* or \_\_bold\_\_                      | **bold**                                                                                |
+| `[Markdown Guide](markdownguide.org)`             | [Markdown Guide](https://markdownguide.org) (Link with custom text)                     |
+| !\[\](path/to/figure.png)                         | Figure                                                                                  |
+| \- List item                                      | Unordered (bulleted) list                                                               |
+| 1\. List item                                     | Ordered (numbered) list                                                                 |
+| `` `inline code` ``                               | `inline code`                                                                           |
+| ```` ``` ```` <br> ...code... <br> ```` ``` ````  | Generic code block (for formatting only) <br> (*Alternative syntax: 4 leading spaces.*) |
+| ```` ```r ```` <br> ...code... <br> ```` ``` ```` | `r` code block (for formatting only)                                                    |
+| `---`                                             | Horizontal rule (line)                                                                  |
 
 To see this formatting in action, see below an example of a raw Markdown file on the left, and its *rendered* (formatted) output on the right:
 
 <p align="center">
-<img src=img/md-demo.png width="1000px">
+<img src=img/md-demo.png width="2000px">
 </p>
 
 <div class="alert alert-note">
@@ -154,11 +154,11 @@ As we saw above, plain Markdown has syntax for code *formatting*, but the code i
     |--------------------------------------------|--------------------------------|
     | There are `` `r 365*24` `` hours in a year | There are 8760 hours in a year |
 
--   To generate *code blocks*, which we call **code chunks** in an R Markdown context:  
-    following the three backticks, we add r *inside curly braces* (`{r}`).
+-   To generate *code blocks*, which we call **code chunks** in an R Markdown context,  
+    we add r *inside curly braces*: ```` ```{r} ````
 
     We can optionally add settings that we want to apply to that chunk and/or chunk labels:  
-    `{r, option1=value, ...}` or `{r unique-chunk-label, option1=value, ...}`.
+    ```` ```{r, option1=value, ...} ```` or ```` ```{r, unique-chunk-label, option1=value, ...} ````
 
     <div class="alert alert-note">
 
@@ -261,7 +261,8 @@ For figures, the following options are especially useful:
 -   `fig.asp=0.6` -- Aspect ratio.
 -   `fig.width=6` -- Width of in inches: same as sizing in regular R code.
 -   `fig.height=9.6` -- Height in inches: same as sizing in regular R code.
--   `out.width="70%"` -- Width at which the figure is *printed in the document*.
+-   `out.width="70%"` -- Figure width as *printed in the document* (in `%` or pixels, `px`).
+-   `out.height="500px"` -- Figure height as *printed in the document*.
 
 Finally, if your document takes a long time to knit, use `cache=TRUE` to enable caching of results.
 
