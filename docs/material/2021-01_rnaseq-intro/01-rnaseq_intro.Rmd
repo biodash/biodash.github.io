@@ -1,0 +1,284 @@
+---
+title: "RNA-seq Intro"
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    seal: false
+    css: ["default", "default-fonts", "slides.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: rainbow
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class:inverse middle center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Introductory notes on <br>RNA-seq and NGS data
+
+----
+
+<br> <br> <br> <br> <br>
+
+### Jelmer Poelstra
+### 2021/01/07 (updated: `r Sys.Date()`)
+
+---
+
+## RNA-seq applications
+
+- Transcriptome assembly
+
+  - Needed when no reference genome is available
+  
+  - Can also be done to identify novel transcripts
+
+- SNP detection
+
+- **Differential expression**
+
+---
+
+## Overview of the analysis pipeline
+
+<p align="center">
+<img src=img/pipeline-overview1.png width="90%">
+</p>
+
+---
+
+## Overview of the analysis pipeline
+
+<p align="center">
+<img src=img/pipeline-overview2.png width="90%">
+</p>
+
+---
+
+## fasta files (*.fasta* or *.fa*)
+
+Can have one or (many) more sequences of any length.  
+
+For every sequence:
+
+- The first line has a sequence identifier starting with `>`
+
+- The second line has the sequence (can be spread across multiple lines!)
+  
+```sh
+>unique_sequence_ID Optional description (free form!)
+ATTCATTAAAGCAGTTTATTGGCTTAATGTACATCAGTGAAATCATAAATGCTAAAAA
+>unique_sequence_ID2
+ATTCATTAAAGCAGTTTATTGGCTTAATGTACATCAGTGAAATCATAAATGCTAAATG
+```
+
+--
+
+.content-box-info[
+Sequences can be individuals reads or *consensus* sequences.
+]
+
+.content-box-info[
+Reference genomes are usually stored as fasta files,
+with each chromosome/scaffold as a sequence entry.
+]
+
+---
+
+## fastq files (*.fastq* or *.fq*)
+
+- Basically a fasta file with quality scores added, but more formalized.
+  Represents individual reads from a sequencer.
+
+--
+
+- Each read (sequence) *covers exactly 4 lines*:
+
+| Line | Description |
+|------|-------------|
+| 1    | Sequence header: begins with **`@`**, then information about the read
+| 2    | DNA sequence
+| 3    | **`+`** separator (optionally with repeated header)
+| 4    | Quality scores: *a single character for each base*, <br>1-on-1 correspondence with sequences on line 2. 
+
+```sh
+@DJB775P1:248:D0MDGACXX:7:1202:12362:49613
+TGCTTACTCTGCGTTGATACCACTGCTTAGATCGGAAGAGCACACGTCTGAA
++
+JJJJJIIJJJJJJHIHHHGHFFFFFFCEEEEEDBD?DDDDDDBDDDABDDCA
+@DJB775P1:248:D0MDGACXX:7:1202:12782:49716
+CTCTGCGTTGATACCACTGCTTACTCTGCGTTGATACCACTGCTTAGATCGG
++
+IIIIIIIIIIIIIIIHHHHHHFFFFFFEECCCCBCECCCCCCCCCCCCCCCC
+```
+
+---
+
+## fastq header
+
+<br>
+
+<p align="center">
+<img src=img/fastq.png width="120%">
+</p>
+  
+
+---
+
+## fastq quality score
+
+- Each base call is associated with a quality score (Q):
+
+.content-box-purple[
+**Q = -10 x log10(P)**
+]
+
+- Where P is the probability that a base call is erroneous:
+
+| Q score | P error   | rough interpretation |
+|---------|-----------|-------| 
+| 10      | 1:10      | bad |
+| 20      | 1:100     | bad |
+| 30      | 1:1,000   | good |
+| 40      | 1:10,000  | excellent |
+
+---
+
+## fastq quality score (cont.)
+
+- Illumina quality scores can go up to 62,
+  and to allow for a single-character representation,
+  the quality score is presented by an ASCII character.
+  
+- Because some ASCII characters are not printable,
+  the lowest quality score is not the first ASCII character,
+  but there is an offset:
+
+| Symbol | ASCII Code | Q |
+|--------|------------|---| 
+| !      | 33         | 0 |
+| "      | 34         | 1 |
+| #      | 35         | 2 |
+| $      | 36         | 3 |
+
+Etc... See [this Illumina webpage](https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm).
+  
+
+---
+
+## Side note: Paired-end reads
+
+<br>
+
+<p align="center">
+<img src=img/forward-reverse-reads.png width="120%">
+</p>
+
+
+---
+
+## FastQC
+
+.pull-left[
+**Good:**
+
+<p align="center">
+<img src=img/fastqc_good.png width="100%">
+</p>
+]
+
+.pull-right[
+**Bad:**
+
+<p align="center">
+<img src=img/fastqc_bad.png width="100%">
+</p>
+]
+
+.content-box-info[
+- A decrease in sequence quality along the reads is normal.
+- R2 (reverse) reads are usually worse than R1 (forward) reads.
+]
+
+---
+
+## FastQC &mdash; other checks
+
+FastQC will also check for things like:
+
+- Adapter content
+
+- Possible contaminants
+
+- GC content
+
+---
+
+## Other file formats
+
+- **Alignment files: SAM and BAM**  
+  *SAM* and the binary/compressed counterpart *BAM*  contain the original
+  sequences (reads) and the coordinates of the genome they were aligned to.
+  
+  Forward and reverse reads are stored in the same sam/bam,  
+  so you tend to have one sam/bam per sample.
+  
+- **Index files**  
+  Genome fasta files and bam files often have to be *indexed*
+  for quick access.
+  For fasta files, these indices are *specific* to the program used for
+  alignment.
+  
+  ```sh
+  my_genome.fa
+  my_genome.fa.fai
+  
+  sample1.bam
+  sample1.bam.bai
+  ```
+  
+---
+
+## Other file formats (cont.)
+
+- **Annotation files: GTF and GFF**  
+  One "feature" (annotated element, e.g. gene, exon, UTR, etc) per row.
+  Contains genomic coordinates and other info for each feature.
+
+- **Simple coordinate files: BED**
+
+- **Variant files: VCF**
+
+---
+
+## Working with compressed files
+
+- To save space, fastq files and some other formats are often compressed
+  with `gzip`, so their extension is, e.g., `fastq.gz`.
+  
+- Many programs, e.g. aligners, can work directly with compressed files.
+
+- Several Unix shell utilities have counterparts to directly view and
+  access compressed files (`cat` -> `zcat`, `less` -> `zless`, `grep` -> `zgrep`).
+
+.content-box-info[
+While BAM files can't be viewed by Unix utilities, they *can* be used by many programs,
+and you can use `samtools` to view them.
+]
+
+---
+
+## Key resources to get started
+
+- Shell tutorial geared towards genomics work:  
+  [Data Carpentry &ndash; Introduction to the Command Line for Genomics](https://datacarpentry.org/shell-genomics/)
+  
+
+- Youtube playlist of videos from an RNAseq workshop:  
+  [Bioinformatics.ca 2018 RNAseq Workshop](https://www.youtube.com/playlist?list=PL3izGL6oi0S_lif045bSwBgbdwb9I1Hdo)
+
