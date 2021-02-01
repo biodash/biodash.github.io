@@ -1,0 +1,609 @@
+---
+title: "FastQC at OSC"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default", "default-fonts", "slides.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: rainbow
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class:inverse middle center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Running FasqtQC and MultiQC at OSC
+
+----
+
+### With a focus on writing a bash script <br> and submitting it to SLURM
+
+<br> <br> <br>
+
+### Jelmer Poelstra, MCIC Wooster
+### 2021/01/29 (updated: `r Sys.Date()`)
+
+---
+
+## FastQC: A program for quality control of fastq files 
+
+FastQC produces **visualizations** and **assessments**
+("*Pass*"/ "*Warning*" / "*Fail*")
+of fastq files for statistics such as per-base quality (below) and
+adapter content.
+
+.pull-left[
+<p align="center">
+<img src=img/fastqc_good.png width="80%">
+</p>
+]
+
+.pull-right[
+<p align="center">
+<img src=img/fastqc_bad.png width="80%">
+</p>
+]
+
+- FastQC analyzes **one fastq file at a time**
+  (which can be gzipped: `fastq.gz`),
+  and outputs a nice HTML file.
+  
+  Running it is straightforward:
+  ```sh
+  $ fastqc --outdir=<output-dir> <fastq-file>
+  ```
+
+---
+
+## A FastQC script to submit to SLURM
+
+<br>
+
+### The next slides will go through the steps to wrap this in a script <br> that can be submitted to OSC and looped over for many files. 
+
+---
+
+## First line of the script: *shebang* line
+
+- It is good practice to use a so-called **"*shebang*" line** as the first line
+  of a script, and this is necessary when submitting a script to the SLURM
+  scheduler.
+  
+  The function of this line is to tell the computer which program to use to
+  run the script. Since we are creating a bash script, and the bash program
+  is located at `/bin/bash`, we enter this after the shebang construct
+  **`#!`**:
+
+  ```sh
+  #!/bin/bash
+  ```
+
+---
+
+## SLURM directives
+
+- Next, we need to tell the SLURM scheduler about the resources
+  that we request.
+
+- This can be done in two ways:
+  *inside a script* and/or *in the shell as we submit the script*.
+  **Here, we will put the SLURM directives in the script.**
+
+- These directives should each be on its own line that starts with `#SBATCH`.
+  For example:
+  ```sh
+  #SBATCH --nodes=1
+  #SBATCH --cpus-per-task=1
+  #SBATCH --time=60
+  #SBATCH --account=PAS0471
+  ```
+  
+---
+
+## SLURM directives (cont.)
+
+**The following SLURM directives are most often used:**  
+(Note that many have both a *short* and a *long* notation to specify the
+option.)
+  
+| Resource/use                 | short    | long
+|------------------------------|----------|-------
+| Project to be billed &ndash; **required** | -A PAS0471 | --account=PAS0471
+| Time limit (4 hours)         | -t 4:00:00 | --time=4:00:00 (or: 0)
+| Log output file (%j = job number) | -o filename |  --output=slurm-fastqc-%j.out
+| Number of nodes (N=1)        | -N 1     | --nodes=1
+| Number of cores (N=1)        | -c 1     | --cpus-per-task=1
+| Memory limit per node (4 GB) | -        | --mem=4G
+
+--
+
+.content-box-info[
+To specifiy the **time limit**, acceptable time formats include: "minutes", "minutes:seconds", "hours:minutes:seconds", "days-hours", "days-hours:minutes"
+and "days-hours:minutes:seconds".
+]
+
+.content-box-info[
+You can also request to be emailed when a job begins/ends/fails.
+]
+
+---
+
+## SLURM directives (cont.)
+
+**Some options that can occasionally be useful include:**
+
+| Resource/use                 | short    | long
+|------------------------------|----------|-------
+| Error output (*stderr*)        | -e filename  | --error=slurm-fastqc-%j.err
+| Job name (displayed in the queue) | -         | --job-name=fastqc
+| Let job begin at/after specific time | -      | --begin=2021-02-01T12:00:00
+| Partition/queue               | -             | --partition=longserial
+| Number of "tasks" (processes) | -n 1          | --ntasks=1
+| Number of tasks per node      | -             | --ntasks-per-node
+
+--
+
+.content-box-info[
+By default, standard output **and** standard error (*stderr*) are sent to the
+same output file (`-o` / `--output`).
+To send *stderr* to its own output file , use the `-e` / `--error` option.
+]          
+
+.content-box-info[
+Using multiple tasks (`--ntasks` and `--ntasks-per-node`) is only recommended for parallel jobs such as those using *MPI*.
+]
+
+---
+
+## SLURM directives (cont.)
+
+In this case, we're happy with most of the defaults, which include 1 node
+and 1 core, so we only specify the following options:
+
+- The job should be billed to the `PAS0471` project
+  (recall that we always need to provide the project number):
+  ```sh
+  #SBATCH --account=PAS0471
+  ```
+
+- The job has a time limit of 15 minutes:
+  ```sh
+  #SBATCH --time=15
+  ```
+- We add "*fastqc*" to the default output file name for the log.  
+  This is useful for when you're running multiple different jobs,
+  and also for archiving the files and finding them later.
+  
+  Recall that `%j` is the job number. By including this, we will avoid
+  have multiple jobs that produce the same log file.
+  ```sh
+  #SBATCH --output=slurm-fastqc-%j.out
+  ```
+---
+
+## Safe bash settings
+
+- Our next line consists of more boilerplate setup code needed to make
+  running the bash script safer and more robust.
+  
+  By default, bash will keep running a script after it encounters errors,
+  which is not desirable when we're running a script.
+  
+  ```sh
+  set -e -u -o pipefail
+  ```
+  
+- With these settings, bash will abort the script in different
+  circumstances:
+  
+| Setting | Aborts when encountering:  
+|---------|----------------------------
+| `-u`    | An attempt to use a variable that has not been set
+| `-o pipefail` | An error in commands connected by pipes
+| `-e`    | Any other type of error
+
+<br>
+
+.content-box-info[
+Always include this line at the start of a bash script.
+]
+
+---
+
+## Processing arguments
+
+- It's always a good idea not to hardcode input and output files into scripts.
+  **Instead, we will let the script take arguments.**
+
+- For instance, in case of a script that takes two arguments,
+  these arguments are provided **in the shell** as follows:
+  ```sh
+  # In the abstract:
+  $ script.sh <argument1> <argument2>
+  # For example:
+  $ fastqc.sh input.fastq.gz my/output/dir
+  ```
+
+- And recalled as variables **inside the script** as follows:
+  ```sh
+  fastq_file="$1"
+  output_dir="$2" 
+  ```
+
+  .content-box-info[
+  You *could* also use the arguments "as is" in the script:
+  ```sh
+  fastqc --outdir="$2" "$1"
+  ```
+  ]
+
+---
+
+## Processing arguments (cont.)
+
+- After naming the variables, we will also process them:
+
+  - If the output dir doesn't exist yet, we'll create it.
+  
+  - We'll print the arguments back to screen to check whether all is well.
+
+  ```sh
+  fastq_file="$1"
+  output_dir="$2" 
+  
+  # Create the output directory, if needed:
+  # -p: can create multiple levels & won't complain if dir exists
+  mkdir -p "$output_dir" 
+  
+  # Report the variables as we have parsed them:
+  echo "Running fastqc for file: $fastq_file"
+  echo "Output dir: $output_dir"
+  ```
+
+---
+
+## Run FastQC
+
+- We need to load OSC's `fastqc` module:
+  ```sh
+  module load fastqc
+  ```
+
+- Finally, we'll run FastQC:  
+  ```sh
+  fastqc --outdir="$output_dir" "$fastq_file"
+  ```
+
+---
+
+## The full script
+
+```sh
+#!/bin/bash
+set -e -u -o pipefail
+  
+#SBATCH --account=PAS0471
+#SBATCH --time=60
+#SBATCH --output=slurm-fastqc-%j.out
+
+fastq_file="$1"
+output_dir="$2" 
+
+mkdir -p "$output_dir"
+
+echo "Running fastqc for file: $fastq_file"
+echo "Output dir: $output_dir"
+
+module load fastqc
+fastqc --outdir="$output_dir" "$fastq_file"
+```
+
+---
+
+## The full script &ndash; dressed up a bit more
+
+```sh
+#!/bin/bash
+set -e -u -o pipefail
+  
+#SBATCH --account=PAS0471
+#SBATCH --time=15
+#SBATCH --output=slurm-fastqc-%j.out
+
+fastq_file="$1"
+output_dir="$2" 
+
+mkdir -p "$output_dir"
+
+date                              # Report date+time to time script
+echo "Starting FastQC script..."  # Report what script is being run
+echo "Running fastqc for file: $fastq_file"
+echo "Output dir: $output_dir"
+echo -e "---------\n\n"           # Separate from program output
+
+module load fastqc
+fastqc --outdir="$output_dir" "$fastq_file"
+
+echo -e "\n---------\nAll done!"  # Separate from program output
+date                              # Report date+time to time script
+```
+
+---
+
+## Make the script executable
+
+- First, we go to the project directory:
+  ```sh
+  cd /fs/project/PAS0471/proj/2021-01_tomato-rnaseq_ponce
+  ```
+
+
+- We need to make the script executable:
+  ```sh
+  chmod a+x scripts/QC_fastq/fastqc_single.sh
+  ```
+
+.content-box-info[
+The `chmod` commands changes permissions.
+
+- There are several different ways to use it but one is to say:  
+`chmod <who>+<permission-to-add` or   
+`chmod <who>-<permission-to-remove`.
+
+- "Who" can be: **`a`** (all), **`u`** (user=owner of the file),
+  **`g`** (group),  
+  or **`o`** (others).
+
+- The different permissions are: **`r`** (read), **`w`** (write),  
+  and **`x`** (execute).
+]
+
+---
+
+## Submit the job
+
+- We need to provide the script with an output dir and a fastq file,   
+  whose names we will store in variables:
+  
+  ```sh
+  output_dir=analysis/QC_fastq
+  fastq_file=data/fastq/2020-02-18/links/X6465_Benitez-PonceM_C6_myb2_V1N_1_S1_L001_R1_001.fastq.gz
+  ```
+
+- Now we can submit the job:
+
+  ```sh
+  sbatch scripts/QC_fastq/fastqc_single.sh "$output_dir" "$fastq_file"
+  # Submitted batch job 2451088
+  ```
+
+---
+
+## Monitor the job
+
+- We can check what's happening with the job using the SLURM command `squeue`:
+
+- Initially the job may be queued &ndash; `PD` in the `ST` (**st**atus) column:
+```sh
+squeue -u $USER
+# JOBID   PARTITION     NAME       USER    ST      TIME  NODES NODELIST(REASON)
+# 2526085 serial-40     fastqc_s   jelmer  PD       0:00      1 (None) 
+```
+
+- Then the job should be running &ndash; `R` in the `ST` column:
+```sh
+squeue -u $USER
+# JOBID   PARTITION     NAME       USER    ST      TIME  NODES NODELIST(REASON) 
+# 2526085 serial-40     fastqc_s   jelmer  R       0:02      1 p0002 
+```
+
+- When the job has finished, `squeue` will return nothing (!):
+```sh
+squeue -u $USER
+# JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
+```
+
+---
+
+## More statistics about the job
+
+- We could get more statistics about our job using `scontrol`:
+
+  ```sh
+  $ scontrol show job 2526085 # Replace the number with your JOBID
+  
+  # UserId=jelmer(33227) GroupId=PAS0471(3773) MCS_label=N/A
+# Priority=200005206 Nice=0 Account=pas0471 QOS=pitzer-default
+# JobState=RUNNING Reason=None Dependency=(null)
+# Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+# RunTime=00:02:00 TimeLimit=01:00:00 TimeMin=N/A
+# SubmitTime=2020-12-14T14:32:44 EligibleTime=2020-12-14T14:32:44
+# AccrueTime=2020-12-14T14:32:44
+# StartTime=2020-12-14T14:32:47 EndTime=2020-12-14T15:32:47 Deadline=N/A
+# SuspendTime=None SecsPreSuspend=0 LastSchedEval=2020-12-14T14:32:47
+# Partition=serial-40core AllocNode:Sid=pitzer-login01:57954
+# ReqNodeList=(null) ExcNodeList=(null)
+# NodeList=p0002
+# BatchHost=p0002
+# NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+# TRES=cpu=1,mem=4556M,node=1,billing=1,gres/gpfs:project=0
+# Socks/Node=* NtasksPerN:B:S:C=1:0:*:1 CoreSpec=*
+# MinCPUsNode=1 MinMemoryCPU=4556M MinTmpDiskNode=0
+# Features=(null) DelayBoot=00:00:00
+# OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+# Command=/fs/project/PAS0471/workshops/2020-12_micro/master/scripts/01-cutadapt.sh data/raw/fastq_subsample # da/processed/fastq_trimmed
+# WorkDir=/fs/project/PAS0471/workshops/2020-12_micro/master
+# Comment=stdout=/fs/project/PAS0471/workshops/2020-12_micro/master/slurm-cutadapt-jelmer-2526085.out 
+# StdErr=/fs/project/PAS0471/workshops/2020-12_micro/master/slurm-cutadapt-jelmer-2526085.out
+# StdIn=/dev/null
+# StdOut=/fs/project/PAS0471/workshops/2020-12_micro/master/slurm-cutadapt-jelmer-2526085.out
+# Power=
+# TresPerNode=gpfs:project:1
+# MailUser=jelmer MailType=NONE
+  ```
+
+---
+
+## Check the log and the output files
+
+- Let's look for *SLURM* log files: 
+
+  ```sh
+  $ ls
+  # slurm-fastqc-2451088.out
+  ```
+
+--
+
+- Let's look at the contents of the log file:
+
+  ```sh
+  $ less slurm-fastqc-2451088.out
+  ```
+.content-box-info[
+**`less` keyboard shortcuts** 
+
+| key | function |
+|--|--|
+| `q` | Exit `less` | 
+| `d` / `u` | Go down / up half a page.
+| `g` / `G` | Go to the first / last line (`home` / `end` also work)
+|`/` | Search: next type keyword to search for
+| `n` / `N` | Go to next/previous search match
+
+]
+
+---
+
+## Check the log and the output files
+
+- Let's look for *SLURM* log files: 
+
+  ```sh
+  $ ls
+  # slurm-fastqc-2851832.out
+  ```
+
+- Let's look at the contents of the log file:
+
+  ```sh
+  $ less slurm-2451088.out
+  ```
+
+- Let's check the output dir:
+
+  ```sh
+  $ ls -lh $output_dir
+  ```
+
+---
+
+## Example job: Housekeeping
+
+- Finally, let's keep things tidy and organized,
+  and move the log file to the analysis dir:
+
+  ```sh
+  $ mkdir -p analysis/QC_fastq/logs
+  $ mv slurm* analysis/QC_fastq/logs
+  ```
+
+---
+
+## Now loop through all files!
+
+The script that we wrote above will run FastQC for a single fastq file.  
+
+**Next, we can write a second script that loops over many files and submits the
+script for each of them.**
+
+- In this case, we will do so by simply looping over all fastq files in a
+specified directory.
+
+  This is what the loop looks like:
+
+  ```sh
+  $ for fastq_file in "$fastqc_dir"/*fastq.gz; do
+  >  scripts/qc/fastqc_single.sh "$fastq_file" "$output_dir" 
+  > done
+  ```
+
+---
+
+## The full script to loop over a directory
+
+Script `fastqc_dir.sh`:
+
+```sh
+#!/bin/bash
+set -e -u -o pipefail
+
+fastq_dir="$1"
+output_dir="$2" 
+
+echo "Submitting FastQC scripts..."
+echo "Input dir: $fastq_dir"
+echo "Output dir: $output_dir"
+echo "Number of files: $(find $fastq_dir -name "*fastq.gz" | wc -l)"
+
+for fastq_file in "$fastqc_dir"/*fastq.gz; do
+  scripts/qc/fastqc_single.sh "$fastq_file" "$output_dir" 
+done
+
+echo -e "\n---------\nAll done!" 
+```
+
+---
+
+## Run the loop script
+
+- Make sure the script is executable:
+  ```sh
+  chmod a+x scripts/QC_fastq/*
+  ```
+
+- Run the script:
+  ```sh
+  $ fastq_dir=data/fastq/2020-02-18/links
+  $ output_dir=analysis/QC_fastq/
+  $ scripts/QC_fastq/fastqc_dir.sh "$fastq_dir" "$output_dir"
+  ```
+
+<br>
+
+.content-box-info[
+We don't need to submit *this* script to the queue:
+all it does is submit jobs, which can be done just fine on a login node.
+]
+
+---
+
+## Monitor the loop script
+
+- Check the queue:
+  ```sh
+  $ squeue -u $USER
+  ```
+
+- Peak at all the log files:
+  ```sh
+  $ tail slurm-fastqc*
+  
+  $ less slurm-fastqc*  # Press ":n" to go the next file!
+  ```
+
+<br>
+
+.content-box-info[
+We could also "follow" the output in the log file as it's added:
+
+```sh
+tail -f <file>
+```
+]
