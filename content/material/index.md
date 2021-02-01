@@ -18,8 +18,6 @@ slidedecks, materials from past workshops, and so on.
 
 - [Slides from RNA-seq intro meetings, Jan-Feb 2021](/material_2021-01_rnaseq-intro/).
 
-- [Code Club schedule](/codeclub-schedule/)
-
 <br/> <br/> <br/>
 
 ----
