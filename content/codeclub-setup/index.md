@@ -2,7 +2,7 @@
 toc: true
 ---
 
-# Code Club: <br/> Computer Setup
+# Code Club: <br/> Computer setup and <br> other information for newcomers
 
 ----
 <br>
@@ -12,23 +12,40 @@ Additional setup instructions for individual sessions will appear in the posts f
 
 #### Summary:
 
-- You can work [locally](/codeclub-setup/#local) or at at the [Ohio Supercomputer Center (OSC)](/codeclub-setup/#osc)
-  in your browser.
-- If you plan to work **at OSC**:
-  - Sign up at OSC if you don't have an account yet.
-  - You should have received 
-  - Test if you can start an RStudio Server session.
-- If you plan to work **locally**:
+- You can work [with local installations](/codeclub-setup/#local) or
+  in your browser at the [Ohio Supercomputer Center (OSC)](/codeclub-setup/#osc).
+
+- **If you plan to work with local installations**:
+  
   - [Install R](/codeclub-setup/#install-r) and [install RStudio](/codeclub-setup/#install-rstudio),
     or [update R](/codeclub-novice/#updating-r) if your version is below `R 3.6`.
+  
   - [Install the *tidyverse*](/codeclub-setup/#install-tidy) and [test if you can load it](/codeclub-setup/#install-tidy).
+  
   - We recommend you do make sure you have an active OSC account with
     access to the Code Club project, as a backup option.
-- Have a look at the **[introductory slides](/slides/CC01/)** if you missed the first session.
-- See the **[Getting Started with R page](/codeclub-novice/)** if you have little experience with R.
-- If you have not used *RStudio* before, take a moment to explore it,
-  and it may help to check out [Mike Sovic's 1-minute intro](https://www.youtube.com/watch?v=ByxF3xjN2JQ&list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe&t=2m15s) 
+
+- **If you plan to work at OSC**:
+  
+  - Sign up at OSC if you don't have an account yet.
+  
+  - You should have received 
+  
+  - Test if you can start an RStudio Server session.
+  
+- **Planning to come to Code Club for the first time?** Have a look at the **[introductory slides](/slides/CC01/)**.
+
+- **Have not used R before?**
+  See the **[Getting Started with R](/codeclub-novice/)** page.
+
+- **Have not used RStudio before?**  
+  Take a moment to explore it, and it may help to check out
+  [Mike Sovic's 1-minute intro](https://www.youtube.com/watch?v=ByxF3xjN2JQ&list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe&t=2m15s) 
   or [RStudio's intro video](https://fast.wistia.net/embed/iframe/520zbd3tij?videoFoam=true).
+
+- **Questions?** Don't hesitate to contact [Jelmer](mailto:poelstra.1@osu.edu) or
+  one of the other organizers. You can also join the Code Club Zoom call
+  15 minutes early, and one or more of the organizers will be on there already.
 
 <br>
 
