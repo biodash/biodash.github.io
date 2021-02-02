@@ -12,24 +12,28 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: 254518aa3afac37d
+rmd_hash: 00a989dc0819f91b
 
 ---
 
+<br> <br>
+
 ------------------------------------------------------------------------
 
-## Session Goals
+Session Goals
+-------------
 
 -   Describe differences in long data vs wide data.
 -   Identify scenarios where it might be helpful to have data in one format over another (longer vs. wider).
--   Use the functions pivot_longer() and pivot_wider() to reshape data.
+-   Use the functions `pivot_longer()` and `pivot_wider()` to reshape data.
 -   Use NHANES data to address whether blood pressure values vary in a predictable way with successive measurements.
 
 ------------------------------------------------------------------------
 
-## Intro: The Shape Of A Dataset
+Intro: The Shape Of A Dataset
+-----------------------------
 
-A single set of data can somtimes be stored in different ways, or in other words, it can have different shapes. Below is a small example. It's a hypothetical dataset that stores the number of visitors at each of two parks over a long weekend, and we'll look at two different versions of it...
+A single set of data can sometimes be stored in different ways, or in other words, it can have different shapes. Below is a small example. It's a hypothetical dataset that stores the number of visitors at each of two parks over a long weekend, and we'll look at two different versions of it...
 
 ### Wide Format
 
@@ -79,15 +83,18 @@ A single set of data can somtimes be stored in different ways, or in other words
 
 Notice that both datasets store the same information - it's just formatted differently. These two datasets can be said to have different shapes. The first has a wider shape - it has more columns, stretching it out from left to right. The second has a longer shape, as it has fewer columns and more rows. Again, importantly, **both datasets store the same information**.
 
-## What Shape Should Your Data Be In?
+What Shape Should Your Data Be In?
+----------------------------------
 
 The best answer to the question of what shape your data *should* be in is probably something like 'Whatever shape makes it easiest to accomplish your goals with the data at any given time'. For example, sometimes when you're entering data - say in to a spreadsheet in Excel or a similar program, you might find the data entry process easier if the dataset is in a wider format. Alternatively, if you're trying to generate plots from the data, longer formats are often better. This means that as you work with your data, you might find it helpful or even necessary to reshape the data - possibly multiple times as you continue to work with the same dataset.
 
-## How To Reshape Data
+How To Reshape Data
+-------------------
 
 R offers several approaches for reshaping data. Functions for doing so often come in pairs that transform from wider to longer, and longer to wider, respectively. Pairs of functions include `cast()` and `melt()`, `spread()` and `gather()`, and `pivot_longer()` and `pivot_wider()`. While any of these can be used, we'll focus on the 'pivot' pair, as they were written most recently with a goal of being the most user-friendly of the available functions so far.
 
-## Pivoting Resources
+Pivoting Resources
+------------------
 
 If you want to dig in to pivoting a bit more, R offers a very useful [vignette on pivoting](https://tidyr.tidyverse.org/articles/pivot.html), which is worth a look - portions of today's breakout sessions will come from there. [Chapter 12 of "R For Data Science"](https://r4ds.had.co.nz/tidy-data.html) by Wickham and Grolemund, which covers tidy data, also includes a nice section on pivoting.
 
@@ -95,7 +102,8 @@ If you want to dig in to pivoting a bit more, R offers a very useful [vignette o
 
 ------------------------------------------------------------------------
 
-## Examples
+Examples
+--------
 
 Let's revisit the park visitors dataset for an example of how `pivot_longer()` and `pivot_wider()` work in their most basic form. Previously, I created each of the wide and long forms of this dataset by hand. It was manageable to do that, since it's a very small dataset, but for most datasets, you're not going to want to just recreate a data frame from scratch each time you need to reshape the data. Let's start with the data in wide format...
 
@@ -116,9 +124,10 @@ What if we wanted to plot the total mean number of visitors per day across both 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
-<span class='nv'>visitors_longer</span> <span class='o'>&lt;-</span> <span class='nv'>visitors_wide</span> <span class='o'>%&gt;%</span> <span class='nf'>pivot_longer</span><span class='o'>(</span><span class='o'>-</span><span class='nv'>park</span>, 
-                                                  names_to <span class='o'>=</span> <span class='s'>"day"</span>,
-                                                  values_to <span class='o'>=</span> <span class='s'>"visitors"</span><span class='o'>)</span>
+<span class='nv'>visitors_longer</span> <span class='o'>&lt;-</span> <span class='nv'>visitors_wide</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='o'>-</span><span class='nv'>park</span>,
+               names_to <span class='o'>=</span> <span class='s'>"day"</span>,
+               values_to <span class='o'>=</span> <span class='s'>"visitors"</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -132,7 +141,7 @@ First, we need to point it to the dataset we're interested in reshaping - I'm do
 
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 8 x 3</span></span>
 <span class='c'>#&gt;   park       day   visitors</span>
-<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>1</span><span> north_park Fri         65</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>2</span><span> north_park Sat        184</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>3</span><span> north_park Sun        135</span></span>
@@ -149,8 +158,9 @@ In this longer format, we're able to apply the `group_by()` and `summarize()` fu
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>visitors_longer</span> <span class='o'>%&gt;%</span> <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>day</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-                    <span class='nf'>summarise</span><span class='o'>(</span><span class='s'>"mean"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>visitors</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>visitors_longer</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>day</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>summarise</span><span class='o'>(</span><span class='s'>"mean"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>visitors</span><span class='o'>)</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 
@@ -169,12 +179,13 @@ And we can go in the opposite direction with `pivot_wider()`...
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>visitors_longer</span> <span class='o'>%&gt;%</span> <span class='nf'>pivot_wider</span><span class='o'>(</span>names_from <span class='o'>=</span> <span class='nv'>day</span>, 
-                                values_from <span class='o'>=</span> <span class='nv'>visitors</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>visitors_longer</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>pivot_wider</span><span class='o'>(</span>names_from <span class='o'>=</span> <span class='nv'>day</span>,
+              values_from <span class='o'>=</span> <span class='nv'>visitors</span><span class='o'>)</span>
 
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 2 x 5</span></span>
 <span class='c'>#&gt;   park         Fri   Sat   Sun   Mon</span>
-<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>1</span><span> north_park    65   184   135    87</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>2</span><span> south_park    80   160   140    71</span></span>
 </code></pre>
@@ -217,10 +228,11 @@ Notice there are columns named 'wk1' through 'wk73' that store the weekly rankin
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>billboard</span> <span class='o'>%&gt;%</span> <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>starts_with</span><span class='o'>(</span><span class='s'>"wk"</span><span class='o'>)</span>,
-                           names_to <span class='o'>=</span> <span class='s'>"week"</span>,
-                           values_to <span class='o'>=</span> <span class='s'>"rank"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-              <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>billboard</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>starts_with</span><span class='o'>(</span><span class='s'>"wk"</span><span class='o'>)</span>,
+               names_to <span class='o'>=</span> <span class='s'>"week"</span>,
+               values_to <span class='o'>=</span> <span class='s'>"rank"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 5</span></span>
 <span class='c'>#&gt;   artist track                   date.entered week   rank</span>
@@ -235,15 +247,16 @@ Notice there are columns named 'wk1' through 'wk73' that store the weekly rankin
 
 </div>
 
-This is a start - we've gone from 79 columns to just 6. But we can clean this up a bit more. Notice the values in the new *week* column all include the 'wk' prefix. Since we've labeled the column 'week', it's kind of redundant and unnecessary to have 'wk' at the beginning of each value. We can add the 'names_prefix' argument, which accepts a regular expression (regex). Characters at the beginning of column names that match the regex get removed.
+This is a start - we've gone from 79 columns to just 6. But we can clean this up a bit more. Notice the values in the new *week* column all include the 'wk' prefix. Since we've labeled the column 'week', it's kind of redundant and unnecessary to have 'wk' at the beginning of each value. We can add the 'names\_prefix' argument, which accepts a regular expression (regex). Characters at the beginning of column names that match the regex get removed.
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>billboard</span> <span class='o'>%&gt;%</span> <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>starts_with</span><span class='o'>(</span><span class='s'>"wk"</span><span class='o'>)</span>,
-                           names_to <span class='o'>=</span> <span class='s'>"week"</span>,
-                           values_to <span class='o'>=</span> <span class='s'>"rank"</span>,
-                           names_prefix <span class='o'>=</span> <span class='s'>"wk"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-              <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>billboard</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>starts_with</span><span class='o'>(</span><span class='s'>"wk"</span><span class='o'>)</span>,
+               names_to <span class='o'>=</span> <span class='s'>"week"</span>,
+               values_to <span class='o'>=</span> <span class='s'>"rank"</span>,
+               names_prefix <span class='o'>=</span> <span class='s'>"wk"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 5</span></span>
 <span class='c'>#&gt;   artist track                   date.entered week   rank</span>
@@ -260,7 +273,8 @@ This is a start - we've gone from 79 columns to just 6. But we can clean this up
 
 We haven't dealt with regular expressions in Code Club yet - they'll make a good topic for a future session, but if you're interested in the meantime, I did a couple short videos introducing them as part of [this set of videos on command line computing](https://youtube.com/playlist?list=PLxhIMi78eQeh-1fdS8ta7A29jCIHeZe9Q).
 
-## Breakout Rooms
+Breakout Rooms
+--------------
 
 In the breakout rooms, we'll use a pivot function to analyze a portion of the NHANES dataset. We'll use the data to try to address whether successive blood pressure measurements from the same individual differ in a predictable way.
 
@@ -269,10 +283,6 @@ If you haven't already done it, you can install the NHANES dataset with...
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"NHANES"</span>, repos <span class='o'>=</span> <span class='s'>"http://cran.us.r-project.org"</span><span class='o'>)</span>
-
-<span class='c'>#&gt; </span>
-<span class='c'>#&gt; The downloaded binary packages are in</span>
-<span class='c'>#&gt;   /var/folders/s7/y_mgh3c54h9fjcyw9wqdkb8x4zs_jy/T//RtmpDh1mrD/downloaded_packages</span>
 </code></pre>
 
 </div>
@@ -286,17 +296,15 @@ If you haven't already done it, you can install the NHANES dataset with...
 First let's load and preview the NHANES dataset.
 
 <details>
-<summary>
-Hints (click here)
-</summary>
+
+<summary> Hints (click here) </summary>
 
 <br> Use [`library()`](https://rdrr.io/r/base/library.html) to load the dataset. The functions [`head()`](https://rdrr.io/r/utils/head.html) are `glimpse()` are a couple good options for previewing the data. <br>
 
 </details>
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <br>
 
@@ -403,24 +411,23 @@ Solution (click here)
 
 As you might know, blood pressure consists of two values - systolic and diastolic. Each participant in the NHANES survey had their blood pressure measured three times in succession, giving us the columns: *BPSys1*, *BPDia1*, *BPSys2*, *BPDia2*, *BPSys3*, *BPDia3*. Let's work first with just the three systolic values.
 
-Subset the dataset to get just the columns *BPSys1*, *BPSys2*, and *BPSys3*. Name the new object 'sys_values', then get the dimensions of *sys_values* and preview it.
+Subset the dataset to get just the columns *BPSys1*, *BPSys2*, and *BPSys3*. Name the new object 'sys\_values', then get the dimensions of *sys\_values* and preview it.
 
 <details>
-<summary>
-Hints (click here)
-</summary>
+
+<summary> Hints (click here) </summary>
 
 <br> Use `select()` from *dplyr* to get the three columns we want. [`dim()`](https://rdrr.io/r/base/dim.html) and `glimpse()` can be used to get the dimensions and preview the data, respectively. <br>
 
 </details>
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sys_values</span> <span class='o'>&lt;-</span> <span class='nv'>NHANES</span> <span class='o'>%&gt;%</span> <span class='nf'>select</span><span class='o'>(</span><span class='nf'>matches</span><span class='o'>(</span><span class='s'>"BPSys[123]$"</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sys_values</span> <span class='o'>&lt;-</span> <span class='nv'>NHANES</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nf'>matches</span><span class='o'>(</span><span class='s'>"BPSys[123]$"</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#I used the 'matches' helper along with a regular expression </span>
 <span class='c'>#above, but there are a number of ways you could do this. </span>
 <span class='c'>#One equivalent would be...</span>
@@ -460,24 +467,23 @@ Solution (click here)
 
 <div>
 
-We can see just from the preview in Exercise 2 that the dataset has some missing data - let's remove rows that have NA's. Call the new dataset 'sys_noNA'. Then check the dimensions and preview again.
+We can see just from the preview in Exercise 2 that the dataset has some missing data - let's remove rows that have NA's. Call the new dataset 'sys\_noNA'. Then check the dimensions and preview again.
 
 <details>
-<summary>
-Hints (click here)
-</summary>
+
+<summary> Hints (click here) </summary>
 
 <br> Try the `drop_na` function from *tidyr* to eliminate rows containing missing data. <br>
 
 </details>
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sys_noNA</span> <span class='o'>&lt;-</span> <span class='nv'>sys_values</span> <span class='o'>%&gt;%</span> <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sys_noNA</span> <span class='o'>&lt;-</span> <span class='nv'>sys_values</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>sys_noNA</span><span class='o'>)</span>
 
@@ -512,26 +518,25 @@ Solution (click here)
 
 <div>
 
-We'll explore these data a bit to see if there's any evidence of a trend in systolic blood pressure with respect to the sequence of measurements (differences among measurements 1, 2, and 3). First, lets reshape the data so we end up with just two columns named 'measurement' and 'sys_bp'. Save the new objects as 'sys_long'. Then check the dimensions and preview again.
+We'll explore these data a bit to see if there's any evidence of a trend in systolic blood pressure with respect to the sequence of measurements (differences among measurements 1, 2, and 3). First, lets reshape the data so we end up with just two columns named 'measurement' and 'sys\_bp'. Save the new objects as 'sys\_long'. Then check the dimensions and preview again.
 
 <details>
-<summary>
-Hints (click here)
-</summary>
 
-<br> Use `pivot_longer()` to lengthen the dataset. You'll need to include the arguments "cols", "names_to", and "values_to". <br>
+<summary> Hints (click here) </summary>
+
+<br> Use `pivot_longer()` to lengthen the dataset. You'll need to include the arguments "cols", "names\_to", and "values\_to". <br>
 
 </details>
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sys_long</span> <span class='o'>&lt;-</span> <span class='nv'>sys_noNA</span> <span class='o'>%&gt;%</span> <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>starts_with</span><span class='o'>(</span><span class='s'>"BP"</span><span class='o'>)</span>,
-                                      names_to <span class='o'>=</span> <span class='s'>"measurement"</span>,
-                                      values_to <span class='o'>=</span> <span class='s'>"sys_bp"</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sys_long</span> <span class='o'>&lt;-</span> <span class='nv'>sys_noNA</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>starts_with</span><span class='o'>(</span><span class='s'>"BP"</span><span class='o'>)</span>,
+               names_to <span class='o'>=</span> <span class='s'>"measurement"</span>,
+               values_to <span class='o'>=</span> <span class='s'>"sys_bp"</span><span class='o'>)</span>
 
 <span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>sys_long</span><span class='o'>)</span>
 
@@ -570,22 +575,21 @@ Solution (click here)
 Now let's calculate and compare the mean values for each measurement.
 
 <details>
-<summary>
-Hints (click here)
-</summary>
+
+<summary> Hints (click here) </summary>
 
 <br> Use `group_by()` and `summarize()` to get a mean for each of the three measurements. <br>
 
 </details>
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sys_long</span> <span class='o'>%&gt;%</span> <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>measurement</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
-             <span class='nf'>summarize</span><span class='o'>(</span><span class='s'>"mean_sys"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>sys_bp</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sys_long</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>measurement</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>summarize</span><span class='o'>(</span><span class='s'>"mean_sys"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>sys_bp</span><span class='o'>)</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 
@@ -616,17 +620,15 @@ Solution (click here)
 The `summarise()` functions outputs a tibble. Tibbles are intended to be tidy, and as part of that, they tend to truncate/round numbers to a greater degree than they would be otherwise in R. In this case, we might want a bit more precision in the values. Repeat the above, but convert the tibble containing the means to a data frame, which will by default likely show more significant digits.
 
 <details>
-<summary>
-Hints (click here)
-</summary>
+
+<summary> Hints (click here) </summary>
 
 <br> Use the [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) function to convert the tibble to a data frame. <br>
 
 </details>
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <div class="highlight">
 
@@ -663,29 +665,27 @@ Solution (click here)
 Are those differences statistically significant? A one-way anova might be a good option to test that. Check out the help page for the function [`aov()`](https://rdrr.io/r/stats/aov.html) and try running an ANOVA.
 
 <details>
-<summary>
-Hint 1 (click here)
-</summary>
+
+<summary> Hint 1 (click here) </summary>
 
 <br> R often uses the tilde (\~) to indicate formula notation. So, for example, you can generate a scatterplot in base R by plotting y\~x, assuming y and x are numeric vectors of equal lengths. The [`aov()`](https://rdrr.io/r/stats/aov.html) function requires a formula with the pattern values\~group. You can use the column names in the data frame to define these, but then you need to use the 'data' argument to tell the function the name of the data frame where those columns exist. <br>
 
 </details>
 <details>
-<summary>
-Hint 2 (click here)
-</summary>
+
+<summary> Hint 2 (click here) </summary>
 
 <br> Once you get the [`aov()`](https://rdrr.io/r/stats/aov.html) function to work, you can get a p-value with the `summary` function. See info under the "Value" heading on the help page for [`aov()`](https://rdrr.io/r/stats/aov.html). <br>
 
 </details>
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/stats/aov.html'>aov</a></span><span class='o'>(</span><span class='nv'>sys_bp</span><span class='o'>~</span><span class='nv'>measurement</span>, data <span class='o'>=</span> <span class='nv'>sys_long</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='nf'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='o'>(</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/stats/aov.html'>aov</a></span><span class='o'>(</span><span class='nv'>sys_bp</span><span class='o'>~</span><span class='nv'>measurement</span>, data <span class='o'>=</span> <span class='nv'>sys_long</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='c'>#&gt;                Df  Sum Sq Mean Sq F value   Pr(&gt;F)    </span>
 <span class='c'>#&gt; measurement     2    6977    3489   11.87 7.05e-06 ***</span>
@@ -710,30 +710,29 @@ Solution (click here)
 
 <div>
 
-Repeat all of the above for diastolic blood pressure with a couple of modifications along the way. First, when you reshape/lengthen the data, make the values in the 'measurement' column numeric. For example, in the *sys_long* data frame we created above, the values in the measurement column were characters, and looked like "BPsys1". This time, make them a factor with the levels "1", "2", and "3".
+Repeat all of the above for diastolic blood pressure with a couple of modifications along the way. First, when you reshape/lengthen the data, make the values in the 'measurement' column numeric. For example, in the *sys\_long* data frame we created above, the values in the measurement column were characters, and looked like "BPsys1". This time, make them a factor with the levels "1", "2", and "3".
 
 <details>
-<summary>
-Hint (click here)
-</summary>
 
-<br> Use the `pivot_longer()` arguments "names_prefix" and "names_transform". <br>
+<summary> Hint (click here) </summary>
+
+<br> Use the `pivot_longer()` arguments "names\_prefix" and "names\_transform". <br>
 
 </details>
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dia_data</span> <span class='o'>&lt;-</span> <span class='nv'>NHANES</span> <span class='o'>%&gt;%</span> <span class='nf'>select</span><span class='o'>(</span><span class='nf'>matches</span><span class='o'>(</span><span class='s'>"BPDia[123]$"</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
-            <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-            <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>starts_with</span><span class='o'>(</span><span class='s'>"BP"</span><span class='o'>)</span>,
-                         names_to <span class='o'>=</span> <span class='s'>"measurement"</span>,
-                         values_to <span class='o'>=</span> <span class='s'>"dia_bp"</span>,
-                         names_prefix <span class='o'>=</span> <span class='s'>"BPDia"</span>,
-                         names_transform <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span>measurement <span class='o'>=</span> <span class='s'>"as.factor"</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dia_data</span> <span class='o'>&lt;-</span> <span class='nv'>NHANES</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nf'>matches</span><span class='o'>(</span><span class='s'>"BPDia[123]$"</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>starts_with</span><span class='o'>(</span><span class='s'>"BP"</span><span class='o'>)</span>,
+               names_to <span class='o'>=</span> <span class='s'>"measurement"</span>,
+               values_to <span class='o'>=</span> <span class='s'>"dia_bp"</span>,
+               names_prefix <span class='o'>=</span> <span class='s'>"BPDia"</span>,
+               names_transform <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span>measurement <span class='o'>=</span> <span class='s'>"as.factor"</span><span class='o'>)</span><span class='o'>)</span>
 
 <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>dia_data</span><span class='o'>)</span>
 
@@ -748,9 +747,10 @@ Solution (click here)
 <span class='c'>#&gt; <span style='color: #555555;'>6</span><span> 3               82</span></span>
 
 
-<span class='nv'>dia_data</span> <span class='o'>%&gt;%</span> <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>measurement</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
-             <span class='nf'>summarize</span><span class='o'>(</span><span class='s'>"mean_dia"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>dia_bp</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-             <span class='nf'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='nv'>dia_data</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>measurement</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>summarize</span><span class='o'>(</span><span class='s'>"mean_dia"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>dia_bp</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 
@@ -760,7 +760,8 @@ Solution (click here)
 <span class='c'>#&gt; 3           3 67.06762</span>
 
 
-<span class='nf'><a href='https://rdrr.io/r/stats/aov.html'>aov</a></span><span class='o'>(</span><span class='nv'>dia_bp</span><span class='o'>~</span><span class='nv'>measurement</span>, data <span class='o'>=</span> <span class='nv'>dia_data</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='nf'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/stats/aov.html'>aov</a></span><span class='o'>(</span><span class='nv'>dia_bp</span><span class='o'>~</span><span class='nv'>measurement</span>, data <span class='o'>=</span> <span class='nv'>dia_data</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='c'>#&gt;                Df  Sum Sq Mean Sq F value   Pr(&gt;F)    </span>
 <span class='c'>#&gt; measurement     2    6185  3092.3   14.91 3.38e-07 ***</span>
