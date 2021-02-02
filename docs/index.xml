@@ -5,12 +5,617 @@
     <link>https://biodash.github.io/</link>
       <atom:link href="https://biodash.github.io/index.xml" rel="self" type="application/rss+xml" />
     <description>BioDASH</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 24 Jan 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Tue, 02 Feb 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://biodash.github.io/images/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png</url>
       <title>BioDASH</title>
       <link>https://biodash.github.io/</link>
     </image>
+    
+    <item>
+      <title>Session 8: Reshaping Your Data</title>
+      <link>https://biodash.github.io/codeclub/08_pivoting/</link>
+      <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/08_pivoting/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;session-goals&#34;&gt;Session Goals&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Describe differences in long data vs wide data.&lt;/li&gt;
+&lt;li&gt;Identify scenarios where it might be helpful to have data in one format over another (longer vs. wider).&lt;/li&gt;
+&lt;li&gt;Use the functions pivot_longer() and pivot_wider() to reshape data.&lt;/li&gt;
+&lt;li&gt;Use NHANES data to address whether blood pressure values vary in a predictable way with successive measurements.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;intro-the-shape-of-a-dataset&#34;&gt;Intro: The Shape Of A Dataset&lt;/h2&gt;
+&lt;p&gt;A single set of data can somtimes be stored in different ways, or in other words, it can have different shapes. Below is a small example. It&amp;rsquo;s a hypothetical dataset that stores the number of visitors at each of two parks over a long weekend, and we&amp;rsquo;ll look at two different versions of it&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;wide-format&#34;&gt;Wide Format&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#create the dataset&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;visitors_wide&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;park&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;north_park&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;south_park&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, 
+                   &lt;span class=&#39;s&#39;&gt;&#34;Fri&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;65&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;80&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                   &lt;span class=&#39;s&#39;&gt;&#34;Sat&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;184&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;160&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                   &lt;span class=&#39;s&#39;&gt;&#34;Sun&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;135&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;140&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                   &lt;span class=&#39;s&#39;&gt;&#34;Mon&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;87&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;71&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view the dataset&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;visitors_wide&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;         park Fri Sat Sun Mon&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 north_park  65 184 135  87&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2 south_park  80 160 140  71&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;long-format&#34;&gt;Long Format&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#create the dataset&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;visitors_long&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;park&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/rep.html&#39;&gt;rep&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;north_park&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;south_park&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, 
+                   &lt;span class=&#39;s&#39;&gt;&#34;day&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Fri&#34;&lt;/span&gt;,&lt;span class=&#39;s&#39;&gt;&#34;Fri&#34;&lt;/span&gt;,&lt;span class=&#39;s&#39;&gt;&#34;Sat&#34;&lt;/span&gt;,&lt;span class=&#39;s&#39;&gt;&#34;Sat&#34;&lt;/span&gt;,&lt;span class=&#39;s&#39;&gt;&#34;Sun&#34;&lt;/span&gt;,&lt;span class=&#39;s&#39;&gt;&#34;Sun&#34;&lt;/span&gt;,&lt;span class=&#39;s&#39;&gt;&#34;Mon&#34;&lt;/span&gt;,&lt;span class=&#39;s&#39;&gt;&#34;Mon&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                   &lt;span class=&#39;s&#39;&gt;&#34;visitors&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;65&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;80&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;184&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;160&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;135&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;140&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;87&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;71&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view the dataset&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;visitors_long&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;         park day visitors&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 north_park Fri       65&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2 south_park Fri       80&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3 north_park Sat      184&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4 south_park Sat      160&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5 north_park Sun      135&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6 south_park Sun      140&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 7 north_park Mon       87&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 8 south_park Mon       71&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice that both datasets store the same information - it&amp;rsquo;s just formatted differently. These two datasets can be said to have different shapes. The first has a wider shape - it has more columns, stretching it out from left to right. The second has a longer shape, as it has fewer columns and more rows. Again, importantly, &lt;strong&gt;both datasets store the same information&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;what-shape-should-your-data-be-in&#34;&gt;What Shape Should Your Data Be In?&lt;/h2&gt;
+&lt;p&gt;The best answer to the question of what shape your data &lt;em&gt;should&lt;/em&gt; be in is probably something like &amp;lsquo;Whatever shape makes it easiest to accomplish your goals with the data at any given time&amp;rsquo;. For example, sometimes when you&amp;rsquo;re entering data - say in to a spreadsheet in Excel or a similar program, you might find the data entry process easier if the dataset is in a wider format. Alternatively, if you&amp;rsquo;re trying to generate plots from the data, longer formats are often better. This means that as you work with your data, you might find it helpful or even necessary to reshape the data - possibly multiple times as you continue to work with the same dataset.&lt;/p&gt;
+&lt;h2 id=&#34;how-to-reshape-data&#34;&gt;How To Reshape Data&lt;/h2&gt;
+&lt;p&gt;R offers several approaches for reshaping data. Functions for doing so often come in pairs that transform from wider to longer, and longer to wider, respectively. Pairs of functions include &lt;code&gt;cast()&lt;/code&gt; and &lt;code&gt;melt()&lt;/code&gt;, &lt;code&gt;spread()&lt;/code&gt; and &lt;code&gt;gather()&lt;/code&gt;, and &lt;code&gt;pivot_longer()&lt;/code&gt; and &lt;code&gt;pivot_wider()&lt;/code&gt;. While any of these can be used, we&amp;rsquo;ll focus on the &amp;lsquo;pivot&amp;rsquo; pair, as they were written most recently with a goal of being the most user-friendly of the available functions so far.&lt;/p&gt;
+&lt;h2 id=&#34;pivoting-resources&#34;&gt;Pivoting Resources&lt;/h2&gt;
+&lt;p&gt;If you want to dig in to pivoting a bit more, R offers a very useful 
+&lt;a href=&#34;https://tidyr.tidyverse.org/articles/pivot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vignette on pivoting&lt;/a&gt;, which is worth a look - portions of today&amp;rsquo;s breakout sessions will come from there. 
+&lt;a href=&#34;https://r4ds.had.co.nz/tidy-data.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Chapter 12 of &amp;ldquo;R For Data Science&amp;rdquo;&lt;/a&gt; by Wickham and Grolemund, which covers tidy data, also includes a nice section on pivoting.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;examples&#34;&gt;Examples&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s revisit the park visitors dataset for an example of how &lt;code&gt;pivot_longer()&lt;/code&gt; and &lt;code&gt;pivot_wider()&lt;/code&gt; work in their most basic form. Previously, I created each of the wide and long forms of this dataset by hand. It was manageable to do that, since it&amp;rsquo;s a very small dataset, but for most datasets, you&amp;rsquo;re not going to want to just recreate a data frame from scratch each time you need to reshape the data. Let&amp;rsquo;s start with the data in wide format&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#view the data frame&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;visitors_wide&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;         park Fri Sat Sun Mon&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 north_park  65 184 135  87&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2 south_park  80 160 140  71&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;What if we wanted to plot the total mean number of visitors per day across both parks? To get the mean values, we might think about applying some of the functions we&amp;rsquo;ve been working with in previous sessions like &lt;code&gt;group_by()&lt;/code&gt; and &lt;code&gt;summarize()&lt;/code&gt;. For example, we might want to try grouping by &lt;em&gt;day&lt;/em&gt; and then calculating the means from a column that stores the number of &lt;em&gt;visitors&lt;/em&gt;. However, in it&amp;rsquo;s current wide form, this dataset doesn&amp;rsquo;t have the &lt;em&gt;day&lt;/em&gt; and &lt;em&gt;visitors&lt;/em&gt; columns we need. &lt;code&gt;pivot_longer()&lt;/code&gt; can help us here. The command might look like this&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;visitors_longer&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;visitors_wide&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;pivot_longer&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;park&lt;/span&gt;, 
+                                                  names_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;day&#34;&lt;/span&gt;,
+                                                  values_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;visitors&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;First, we need to point it to the dataset we&amp;rsquo;re interested in reshaping - I&amp;rsquo;m doing that by piping the &lt;code&gt;visitors_wide&lt;/code&gt; data frame to &lt;code&gt;pivot_longer()&lt;/code&gt;. Next, we need to specify what columns to use to lengthen the dataset. This argument recognizes &lt;em&gt;tidy-select&lt;/em&gt; notation, which can really simplify things. Here, I&amp;rsquo;m using &lt;code&gt;-park&lt;/code&gt;, which tells it to use all the column names except &lt;em&gt;park&lt;/em&gt;. Those column names will be transformed to values in a single new column, which needs a name. We&amp;rsquo;ll call it &lt;em&gt;day&lt;/em&gt;, so &lt;code&gt;names_to = &amp;quot;day&amp;quot;&lt;/code&gt;. Finally, the values in the current columns will be stacked in to a single column, and it too needs a name, so &lt;code&gt;values_to = &amp;quot;visitors&amp;quot;&lt;/code&gt;. This lengthens the dataset, taking it from 5 columns down to 3.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#view the data&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;visitors_longer&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 8 x 3&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   park       day   visitors&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;      &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;    &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; north_park Fri         65&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; north_park Sat        184&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; north_park Sun        135&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt; north_park Mon         87&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt; south_park Fri         80&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt; south_park Sat        160&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;7&lt;/span&gt;&lt;span&gt; south_park Sun        140&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;8&lt;/span&gt;&lt;span&gt; south_park Mon         71&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;In this longer format, we&amp;rsquo;re able to apply the &lt;code&gt;group_by()&lt;/code&gt; and &lt;code&gt;summarize()&lt;/code&gt; functions&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;visitors_longer&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;group_by&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;day&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+                    &lt;span class=&#39;nf&#39;&gt;summarise&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mean&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;visitors&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `summarise()` ungrouping output (override with `.groups` argument)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 4 x 2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   day    mean&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; Fri    72.5&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; Mon    79  &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; Sat   172  &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt; Sun   138.&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;And we can go in the opposite direction with &lt;code&gt;pivot_wider()&lt;/code&gt;&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;visitors_longer&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;pivot_wider&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;names_from &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;day&lt;/span&gt;, 
+                                values_from &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;visitors&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 2 x 5&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   park         Fri   Sat   Sun   Mon&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;      &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; north_park    65   184   135    87&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; south_park    80   160   140    71&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The examples above represent the most basic uses of &lt;code&gt;pivot_longer()&lt;/code&gt; and &lt;code&gt;pivot_wider()&lt;/code&gt;. But each of these functions offer additional arguments that can help deal with more complicated situations. The next example is from the 
+&lt;a href=&#34;https://tidyr.tidyverse.org/articles/pivot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;pivoting vignette&lt;/a&gt; I referenced above. It uses the billboard dataset that should already be available in your R session, and that stores weekly rankings of Billboard top 100 songs from the year 2000.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#preview billboard data&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;billboard&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 79&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   artist track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7   wk8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;date&amp;gt;&lt;/span&gt;&lt;span&gt;       &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; 2 Pac  Baby… 2000-02-26      87    82    72    77    87    94    99    &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; 2Ge+h… The … 2000-09-02      91    87    92    &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;    &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;    &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;    &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;    &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; 3 Doo… Kryp… 2000-04-08      81    70    68    67    66    57    54    53&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt; 3 Doo… Loser 2000-10-21      76    76    72    69    67    65    55    59&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt; 504 B… Wobb… 2000-04-15      57    34    25    17    17    31    36    49&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt; 98^0   Give… 2000-08-19      51    39    34    26    26    19     2     2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 68 more variables: wk9 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk10 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk11 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk12 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk13 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk14 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk15 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk16 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk17 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk18 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk19 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk20 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk21 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk22 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk23 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk24 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk25 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk26 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk27 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk28 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk29 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk30 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk31 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk32 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk33 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk34 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk35 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk36 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk37 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk38 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk39 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk40 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk41 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk42 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk43 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk44 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk45 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk46 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk47 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk48 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk49 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk50 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk51 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk52 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk53 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk54 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk55 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk56 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk57 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk58 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk59 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk60 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk61 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk62 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk63 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk64 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk65 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk66 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk67 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk68 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk69 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk70 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk71 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk72 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   wk73 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk74 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk75 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;, wk76 &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice there are columns named &amp;lsquo;wk1&amp;rsquo; through &amp;lsquo;wk73&amp;rsquo; that store the weekly ranking for each song. Week itself is a variable with values that could be represented in a single column. We could do something similar to our above use of &lt;code&gt;pivot_longer()&lt;/code&gt;&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;billboard&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;pivot_longer&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cols &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;starts_with&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;wk&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                           names_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;week&#34;&lt;/span&gt;,
+                           values_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;rank&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+              &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 5&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   artist track                   date.entered week   rank&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;                   &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;date&amp;gt;&lt;/span&gt;&lt;span&gt;       &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk1      87&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk2      82&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk3      72&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk4      77&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk5      87&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   wk6      94&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This is a start - we&amp;rsquo;ve gone from 79 columns to just 6. But we can clean this up a bit more. Notice the values in the new &lt;em&gt;week&lt;/em&gt; column all include the &amp;lsquo;wk&amp;rsquo; prefix. Since we&amp;rsquo;ve labeled the column &amp;lsquo;week&amp;rsquo;, it&amp;rsquo;s kind of redundant and unnecessary to have &amp;lsquo;wk&amp;rsquo; at the beginning of each value. We can add the &amp;lsquo;names_prefix&amp;rsquo; argument, which accepts a regular expression (regex). Characters at the beginning of column names that match the regex get removed.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;billboard&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;pivot_longer&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cols &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;starts_with&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;wk&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                           names_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;week&#34;&lt;/span&gt;,
+                           values_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;rank&#34;&lt;/span&gt;,
+                           names_prefix &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;wk&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+              &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 5&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   artist track                   date.entered week   rank&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;                   &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;date&amp;gt;&lt;/span&gt;&lt;span&gt;       &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   1        87&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   2        82&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   3        72&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   4        77&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   5        87&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt; 2 Pac  Baby Don&#39;t Cry (Keep... 2000-02-26   6        94&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We haven&amp;rsquo;t dealt with regular expressions in Code Club yet - they&amp;rsquo;ll make a good topic for a future session, but if you&amp;rsquo;re interested in the meantime, I did a couple short videos introducing them as part of 
+&lt;a href=&#34;https://youtube.com/playlist?list=PLxhIMi78eQeh-1fdS8ta7A29jCIHeZe9Q&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this set of videos on command line computing&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;breakout-rooms&#34;&gt;Breakout Rooms&lt;/h2&gt;
+&lt;p&gt;In the breakout rooms, we&amp;rsquo;ll use a pivot function to analyze a portion of the NHANES dataset. We&amp;rsquo;ll use the data to try to address whether successive blood pressure measurements from the same individual differ in a predictable way.&lt;/p&gt;
+&lt;p&gt;If you haven&amp;rsquo;t already done it, you can install the NHANES dataset with&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;NHANES&#34;&lt;/span&gt;, repos &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;http://cran.us.r-project.org&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; The downloaded binary packages are in&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   /var/folders/s7/y_mgh3c54h9fjcyw9wqdkb8x4zs_jy/T//RtmpDh1mrD/downloaded_packages&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;First let&amp;rsquo;s load and preview the NHANES dataset.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use 
+&lt;a href=&#34;https://rdrr.io/r/base/library.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library()&lt;/code&gt;&lt;/a&gt; to load the dataset. The functions 
+&lt;a href=&#34;https://rdrr.io/r/utils/head.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;head()&lt;/code&gt;&lt;/a&gt; are &lt;code&gt;glimpse()&lt;/code&gt; are a couple good options for previewing the data. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;NHANES&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;glimpse&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;NHANES&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Rows: 10,000&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Columns: 76&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ ID               &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 51624, 51624, 51624, 51625, 51630, 51638, 51646, 516…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SurveyYr         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; 2009_10, 2009_10, 2009_10, 2009_10, 2009_10, 2009_10…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Gender           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; male, male, male, male, female, male, male, female, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Age              &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 34, 34, 34, 4, 49, 9, 8, 45, 45, 45, 66, 58, 54, 10,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ AgeDecade        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;  30-39,  30-39,  30-39,  0-9,  40-49,  0-9,  0-9,  4…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ AgeMonths        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 409, 409, 409, 49, 596, 115, 101, 541, 541, 541, 795…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Race1            &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; White, White, White, Other, White, White, White, Whi…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Race3            &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Education        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; High School, High School, High School, NA, Some Coll…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ MaritalStatus    &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Married, Married, Married, NA, LivePartner, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ HHIncome         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; 25000-34999, 25000-34999, 25000-34999, 20000-24999, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ HHIncomeMid      &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 30000, 30000, 30000, 22500, 40000, 87500, 60000, 875…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Poverty          &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 1.36, 1.36, 1.36, 1.07, 1.91, 1.84, 2.33, 5.00, 5.00…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ HomeRooms        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 6, 6, 6, 9, 5, 6, 7, 6, 6, 6, 5, 10, 6, 10, 10, 4, 3…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ HomeOwn          &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Own, Own, Own, Own, Rent, Rent, Own, Own, Own, Own, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Work             &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; NotWorking, NotWorking, NotWorking, NA, NotWorking, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Weight           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 87.4, 87.4, 87.4, 17.0, 86.7, 29.8, 35.2, 75.7, 75.7…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Length           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ HeadCirc         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Height           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 164.7, 164.7, 164.7, 105.4, 168.4, 133.1, 130.6, 166…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BMI              &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 32.22, 32.22, 32.22, 15.30, 30.57, 16.82, 20.64, 27.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BMICatUnder20yrs &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BMI_WHO          &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; 30.0_plus, 30.0_plus, 30.0_plus, 12.0_18.5, 30.0_plu…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Pulse            &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 70, 70, 70, NA, 86, 82, 72, 62, 62, 62, 60, 62, 76, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BPSysAve         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 113, 113, 113, NA, 112, 86, 107, 118, 118, 118, 111,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BPDiaAve         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 85, 85, 85, NA, 75, 47, 37, 64, 64, 64, 63, 74, 85, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BPSys1           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 114, 114, 114, NA, 118, 84, 114, 106, 106, 106, 124,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BPDia1           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 88, 88, 88, NA, 82, 50, 46, 62, 62, 62, 64, 76, 86, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BPSys2           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 114, 114, 114, NA, 108, 84, 108, 118, 118, 118, 108,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BPDia2           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 88, 88, 88, NA, 74, 50, 36, 68, 68, 68, 62, 72, 88, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BPSys3           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 112, 112, 112, NA, 116, 88, 106, 118, 118, 118, 114,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ BPDia3           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 82, 82, 82, NA, 76, 44, 38, 60, 60, 60, 64, 76, 82, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Testosterone     &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ DirectChol       &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 1.29, 1.29, 1.29, NA, 1.16, 1.34, 1.55, 2.12, 2.12, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ TotChol          &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 3.49, 3.49, 3.49, NA, 6.70, 4.86, 4.09, 5.82, 5.82, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ UrineVol1        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 352, 352, 352, NA, 77, 123, 238, 106, 106, 106, 113,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ UrineFlow1       &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, 0.094, 1.538, 1.322, 1.116, 1.116, 1…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ UrineVol2        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ UrineFlow2       &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Diabetes         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; No, No, No, No, No, No, No, No, No, No, No, No, No, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ DiabetesAge      &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ HealthGen        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Good, Good, Good, NA, Good, NA, NA, Vgood, Vgood, Vg…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ DaysPhysHlthBad  &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 0, 0, 0, NA, 0, NA, NA, 0, 0, 0, 10, 0, 4, NA, NA, 0…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ DaysMentHlthBad  &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 15, 15, 15, NA, 10, NA, NA, 3, 3, 3, 0, 0, 0, NA, NA…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ LittleInterest   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Most, Most, Most, NA, Several, NA, NA, None, None, N…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Depressed        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Several, Several, Several, NA, Several, NA, NA, None…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ nPregnancies     &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, 2, NA, NA, 1, 1, 1, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ nBabies          &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, 2, NA, NA, NA, NA, NA, NA, NA, NA, N…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Age1stBaby       &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, 27, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SleepHrsNight    &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 4, 4, 4, NA, 8, NA, NA, 8, 8, 8, 7, 5, 4, NA, 5, 7, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SleepTrouble     &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Yes, Yes, Yes, NA, Yes, NA, NA, No, No, No, No, No, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ PhysActive       &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; No, No, No, NA, No, NA, NA, Yes, Yes, Yes, Yes, Yes,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ PhysActiveDays   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, 5, 5, 5, 7, 5, 1, NA, 2,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ TVHrsDay         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ CompHrsDay       &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ TVHrsDayChild    &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, 4, NA, 5, 1, NA, NA, NA, NA, NA, NA, 4, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ CompHrsDayChild  &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, 1, NA, 0, 6, NA, NA, NA, NA, NA, NA, 3, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Alcohol12PlusYr  &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Yes, Yes, Yes, NA, Yes, NA, NA, Yes, Yes, Yes, Yes, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ AlcoholDay       &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, 2, NA, NA, 3, 3, 3, 1, 2, 6, NA, NA,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ AlcoholYear      &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 0, 0, 0, NA, 20, NA, NA, 52, 52, 52, 100, 104, 364, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SmokeNow         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; No, No, No, NA, Yes, NA, NA, NA, NA, NA, No, NA, NA,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Smoke100         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Yes, Yes, Yes, NA, Yes, NA, NA, No, No, No, Yes, No,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Smoke100n        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Smoker, Smoker, Smoker, NA, Smoker, NA, NA, Non-Smok…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SmokeAge         &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 18, 18, 18, NA, 38, NA, NA, NA, NA, NA, 13, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ Marijuana        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Yes, Yes, Yes, NA, Yes, NA, NA, Yes, Yes, Yes, NA, Y…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ AgeFirstMarij    &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 17, 17, 17, NA, 18, NA, NA, 13, 13, 13, NA, 19, 15, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ RegularMarij     &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; No, No, No, NA, No, NA, NA, No, No, No, NA, Yes, Yes…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ AgeRegMarij      &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20, 15, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ HardDrugs        &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Yes, Yes, Yes, NA, Yes, NA, NA, No, No, No, No, Yes,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SexEver          &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Yes, Yes, Yes, NA, Yes, NA, NA, Yes, Yes, Yes, Yes, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SexAge           &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 16, 16, 16, NA, 12, NA, NA, 13, 13, 13, 17, 22, 12, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SexNumPartnLife  &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 8, 8, 8, NA, 10, NA, NA, 20, 20, 20, 15, 7, 100, NA,…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SexNumPartYear   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; 1, 1, 1, NA, 1, NA, NA, 0, 0, 0, NA, 1, 1, NA, NA, 1…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SameSex          &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; No, No, No, NA, Yes, NA, NA, Yes, Yes, Yes, No, No, …&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SexOrientation   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; Heterosexual, Heterosexual, Heterosexual, NA, Hetero…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ PregnantNow      &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;As you might know, blood pressure consists of two values - systolic and diastolic. Each participant in the NHANES survey had their blood pressure measured three times in succession, giving us the columns: &lt;em&gt;BPSys1&lt;/em&gt;, &lt;em&gt;BPDia1&lt;/em&gt;, &lt;em&gt;BPSys2&lt;/em&gt;, &lt;em&gt;BPDia2&lt;/em&gt;, &lt;em&gt;BPSys3&lt;/em&gt;, &lt;em&gt;BPDia3&lt;/em&gt;. Let&amp;rsquo;s work first with just the three systolic values.&lt;/p&gt;
+&lt;p&gt;Subset the dataset to get just the columns &lt;em&gt;BPSys1&lt;/em&gt;, &lt;em&gt;BPSys2&lt;/em&gt;, and &lt;em&gt;BPSys3&lt;/em&gt;. Name the new object &amp;lsquo;sys_values&amp;rsquo;, then get the dimensions of &lt;em&gt;sys_values&lt;/em&gt; and preview it.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use &lt;code&gt;select()&lt;/code&gt; from &lt;em&gt;dplyr&lt;/em&gt; to get the three columns we want. 
+&lt;a href=&#34;https://rdrr.io/r/base/dim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dim()&lt;/code&gt;&lt;/a&gt; and &lt;code&gt;glimpse()&lt;/code&gt; can be used to get the dimensions and preview the data, respectively. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;sys_values&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;NHANES&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;matches&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;BPSys[123]$&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#I used the &#39;matches&#39; helper along with a regular expression &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#above, but there are a number of ways you could do this. &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#One equivalent would be...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# sys_values &amp;lt;- NHANES %&amp;gt;% select(BPSys1, BPSys2, BPSys3)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/dim.html&#39;&gt;dim&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sys_values&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10000     3&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sys_values&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 3&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   BPSys1 BPSys2 BPSys3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt;    114    114    112&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt;    114    114    112&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt;    114    114    112&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt;    118    108    116&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt;     84     84     88&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-3&#34;&gt;Exercise 3&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;We can see just from the preview in Exercise 2 that the dataset has some missing data - let&amp;rsquo;s remove rows that have NA&amp;rsquo;s. Call the new dataset &amp;lsquo;sys_noNA&amp;rsquo;. Then check the dimensions and preview again.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Try the &lt;code&gt;drop_na&lt;/code&gt; function from &lt;em&gt;tidyr&lt;/em&gt; to eliminate rows containing missing data. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;sys_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sys_values&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/dim.html&#39;&gt;dim&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sys_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 7971    3&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sys_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 3&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   BPSys1 BPSys2 BPSys3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt;    114    114    112&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt;    114    114    112&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt;    114    114    112&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt;    118    108    116&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt;     84     84     88&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt;    114    108    106&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-4&#34;&gt;Exercise 4&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;We&amp;rsquo;ll explore these data a bit to see if there&amp;rsquo;s any evidence of a trend in systolic blood pressure with respect to the sequence of measurements (differences among measurements 1, 2, and 3). First, lets reshape the data so we end up with just two columns named &amp;lsquo;measurement&amp;rsquo; and &amp;lsquo;sys_bp&amp;rsquo;. Save the new objects as &amp;lsquo;sys_long&amp;rsquo;. Then check the dimensions and preview again.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use &lt;code&gt;pivot_longer()&lt;/code&gt; to lengthen the dataset. You&amp;rsquo;ll need to include the arguments &amp;ldquo;cols&amp;rdquo;, &amp;ldquo;names_to&amp;rdquo;, and &amp;ldquo;values_to&amp;rdquo;. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;sys_long&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sys_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;pivot_longer&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cols &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;starts_with&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;BP&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                                      names_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;measurement&#34;&lt;/span&gt;,
+                                      values_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;sys_bp&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/dim.html&#39;&gt;dim&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sys_long&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 23913     2&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sys_long&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   measurement sys_bp&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;        &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; BPSys1         114&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; BPSys2         114&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; BPSys3         112&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt; BPSys1         114&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt; BPSys2         114&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt; BPSys3         112&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-5&#34;&gt;Exercise 5&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Now let&amp;rsquo;s calculate and compare the mean values for each measurement.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use &lt;code&gt;group_by()&lt;/code&gt; and &lt;code&gt;summarize()&lt;/code&gt; to get a mean for each of the three measurements. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;sys_long&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;group_by&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;measurement&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+             &lt;span class=&#39;nf&#39;&gt;summarize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mean_sys&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sys_bp&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `summarise()` ungrouping output (override with `.groups` argument)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 x 2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   measurement mean_sys&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;          &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; BPSys1          119.&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; BPSys2          118.&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; BPSys3          118.&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-6&#34;&gt;Exercise 6&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;The &lt;code&gt;summarise()&lt;/code&gt; functions outputs a tibble. Tibbles are intended to be tidy, and as part of that, they tend to truncate/round numbers to a greater degree than they would be otherwise in R. In this case, we might want a bit more precision in the values. Repeat the above, but convert the tibble containing the means to a data frame, which will by default likely show more significant digits.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use the 
+&lt;a href=&#34;https://rdrr.io/r/base/as.data.frame.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;as.data.frame()&lt;/code&gt;&lt;/a&gt; function to convert the tibble to a data frame. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;sys_long&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;group_by&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;measurement&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+             &lt;span class=&#39;nf&#39;&gt;summarize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mean_sys&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sys_bp&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+             &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/as.data.frame.html&#39;&gt;as.data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `summarise()` ungrouping output (override with `.groups` argument)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   measurement mean_sys&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1      BPSys1 119.1682&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2      BPSys2 118.4333&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3      BPSys3 117.8479&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;br&gt;
+&lt;h3 id=&#34;bonus-1&#34;&gt;Bonus 1&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Are those differences statistically significant? A one-way anova might be a good option to test that. Check out the help page for the function 
+&lt;a href=&#34;https://rdrr.io/r/stats/aov.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;aov()&lt;/code&gt;&lt;/a&gt; and try running an ANOVA.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hint 1 (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; R often uses the tilde (~) to indicate formula notation. So, for example, you can generate a scatterplot in base R by plotting y~x, assuming y and x are numeric vectors of equal lengths. The 
+&lt;a href=&#34;https://rdrr.io/r/stats/aov.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;aov()&lt;/code&gt;&lt;/a&gt; function requires a formula with the pattern values~group. You can use the column names in the data frame to define these, but then you need to use the &amp;lsquo;data&amp;rsquo; argument to tell the function the name of the data frame where those columns exist. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hint 2 (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Once you get the 
+&lt;a href=&#34;https://rdrr.io/r/stats/aov.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;aov()&lt;/code&gt;&lt;/a&gt; function to work, you can get a p-value with the &lt;code&gt;summary&lt;/code&gt; function. See info under the &amp;ldquo;Value&amp;rdquo; heading on the help page for 
+&lt;a href=&#34;https://rdrr.io/r/stats/aov.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;aov()&lt;/code&gt;&lt;/a&gt;. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/aov.html&#39;&gt;aov&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sys_bp&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;~&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;measurement&lt;/span&gt;, data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sys_long&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/summary.html&#39;&gt;summary&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                Df  Sum Sq Mean Sq F value   Pr(&amp;gt;F)    &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; measurement     2    6977    3489   11.87 7.05e-06 ***&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Residuals   23910 7028228     294                     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ---&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;bonus-2&#34;&gt;Bonus 2&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Repeat all of the above for diastolic blood pressure with a couple of modifications along the way. First, when you reshape/lengthen the data, make the values in the &amp;lsquo;measurement&amp;rsquo; column numeric. For example, in the &lt;em&gt;sys_long&lt;/em&gt; data frame we created above, the values in the measurement column were characters, and looked like &amp;ldquo;BPsys1&amp;rdquo;. This time, make them a factor with the levels &amp;ldquo;1&amp;rdquo;, &amp;ldquo;2&amp;rdquo;, and &amp;ldquo;3&amp;rdquo;.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hint (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use the &lt;code&gt;pivot_longer()&lt;/code&gt; arguments &amp;ldquo;names_prefix&amp;rdquo; and &amp;ldquo;names_transform&amp;rdquo;. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dia_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;NHANES&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;matches&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;BPDia[123]$&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+            &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+            &lt;span class=&#39;nf&#39;&gt;pivot_longer&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cols &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;starts_with&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;BP&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                         names_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;measurement&#34;&lt;/span&gt;,
+                         values_to &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;dia_bp&#34;&lt;/span&gt;,
+                         names_prefix &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;BPDia&#34;&lt;/span&gt;,
+                         names_transform &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/list.html&#39;&gt;list&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;measurement &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;as.factor&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dia_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   measurement dia_bp&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;        &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; 1               88&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; 2               88&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; 3               82&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt; 1               88&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt; 2               88&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt; 3               82&lt;/span&gt;&lt;/span&gt;
+
+
+&lt;span class=&#39;nv&#39;&gt;dia_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;group_by&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;measurement&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+             &lt;span class=&#39;nf&#39;&gt;summarize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mean_dia&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dia_bp&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+             &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/as.data.frame.html&#39;&gt;as.data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `summarise()` ungrouping output (override with `.groups` argument)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   measurement mean_dia&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1           1 68.28830&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2           2 67.46280&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3           3 67.06762&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/aov.html&#39;&gt;aov&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dia_bp&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;~&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;measurement&lt;/span&gt;, data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;dia_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/summary.html&#39;&gt;summary&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                Df  Sum Sq Mean Sq F value   Pr(&amp;gt;F)    &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; measurement     2    6185  3092.3   14.91 3.38e-07 ***&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Residuals   23910 4958916   207.4                     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ---&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+</description>
+    </item>
     
     <item>
       <title>Session 7: R Markdown</title>
