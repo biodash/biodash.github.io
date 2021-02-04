@@ -67,6 +67,10 @@ name: fastqc-output
 
 ## Module 2: Per-base quality along the read 
 
+- In a FASTQ file, every single base has a quality score.
+  These figures visualize the mean per-base quality score along the length
+  of the read.
+
 .pull-left[
 **Good / OK:**
 
@@ -90,29 +94,9 @@ name: fastqc-output
 
 ---
 
-## Module 3: Per-tile sequence quality
+## Module 3: Per-sequence quality scores
 
-.pull-left[
-**Good:**
-
-<p align="center">
-<img src=img/fastqc_mod03_per-tile_good.png width="100%">
-</p>
-]
-
-.pull-right[
-**Bad:**
-
-<p align="center">
-<img src=img/fastqc_mod03_per-tile_bad.png width="100%">
-</p>
-]
-
-
-
----
-
-## Module 4: Per-sequence quality scores
+- Quality scores averaged over the full sequence.
 
 .pull-left[
 **Good:**
@@ -133,7 +117,7 @@ name: fastqc-output
 
 ---
 
-## Module 5: Per-base sequence content
+## Module 4: Per-base sequence content
 
 .pull-left[
 **Good:**
@@ -156,7 +140,7 @@ name: fastqc-output
 
 ---
 
-## Module 6: Per-sequence GC content
+## Module 5: Per-sequence GC content
 
 .pull-left[
 **Good:**
@@ -174,22 +158,24 @@ name: fastqc-output
 </p>
 ]
 
-<br>
-
 .content-box-info[
-The expected distribution is for whole-genome shotgun sequencing &ndash;
-it is normal for RNA-seq data to have a narrower distribution.
+- An unusual distribution could indicate contamination.
+
+- The expected distribution is for whole-genome shotgun sequencing &ndash;
+  it is normal for RNA-seq data to have a narrower distribution.
 ]
 
 ---
 
-## Module 7: Per-base N content
+## Module 6: Per-base N content
+
+- Quantifies the percentage of uncalled bases (N) across the read.
 
 .pull-left[
 **Good:**
 
 <p align="center">
-<img src=img/fastqc_mod07_N_good.png width="100%">
+<img src=img/fastqc_mod07_N_good.png width="90%">
 </p>
 ]
 
@@ -197,27 +183,49 @@ it is normal for RNA-seq data to have a narrower distribution.
 **Bad:**
 
 <p align="center">
-<img src=img/fastqc_mod07_N_bad.png width="100%">
+<img src=img/fastqc_mod07_N_bad.png width="90%">
 </p>
+]
+
+.content-box-info[
+- Ns may become more common at the end of the read,  
+  and at the start of the read for highly biased libraries.
+  
+- A peak like in the fig. on the right indicates a problem with a specific
+  cycle in the Illumina run.
 ]
 
 ---
 
-## Module 8: Sequence length distribution
+## Module 7: Sequence length distribution
 
-- Will throw a warning as soon as not all sequences are of the same length,
-  but this is quite normal.
+.center[
+**Warning:**
+]
+
+<p align="center">
+<img src=img/fastqc_mod08_seqlen_warning.png width="60%">
+</p>
+
+
+.content-box-info[
+Will throw a warning as soon as not all sequences are of the same length,
+but this is quite normal.
+]
   
 ---
 
-## Module 9: Sequence duplication levels
+## Module 8: Sequence duplication levels
 
+- Checks, *for a subset of sequences*, how many duplicates
+  (= identical sequences) are present.
+  
 .pull-left[
 **Good:**
 
 <figure>
 <p align="center">
-<img src=img/fastqc_mod09_seqdup_good.png width="100%">
+<img src=img/fastqc_mod09_seqdup_good.png width="90%">
 <figcaption><a href="https://rtsf.natsci.msu.edu/sites/_rtsf/assets/File/FastQC_TutorialAndFAQ_080717.pdf">Figure source</a> </figcaption>
 </p>
 </figure>
@@ -227,21 +235,21 @@ it is normal for RNA-seq data to have a narrower distribution.
 **"Bad":**
 
 <p align="center">
-<img src=img/fastqc_mod09_seqdup_bad.png width="100%">
+<img src=img/fastqc_mod09_seqdup_bad.png width="90%">
 </p>
 
 ]
 
-<br>
-
-- Will usually throw a warning for RNA-seq data, which can be ignored:
-  highly expressed transcripts will be present in the dataset many times.
+.content-box-info[
+- Often throws a warning for RNA-seq data, which can be ignored,
+  as these represent highly expressed transcripts.
   
-- Pay attention to the blue line &ndash; the red line can generally be ignored.
+- Pay attention to the blue line (red line can mostly be ignored).
+]
 
 ---
 
-## Module 10: Overrepresented sequences
+## Module 9: Overrepresented sequences
 
 <p align="center">
 <img src=img/fastqc_mod10_overrepresented.png width="100%">
@@ -252,7 +260,9 @@ it is normal for RNA-seq data to have a narrower distribution.
 
 ---
 
-## Module 11: Adapter content
+## Module 10: Adapter content
+
+- Checks for known adapter sequences
 
 .pull-left[
 **Good:**
@@ -273,5 +283,45 @@ it is normal for RNA-seq data to have a narrower distribution.
 </figure>
 ]
 
-- When some of the insert sizes are shorter than the read length,
-  adapters can end up in the sequence and should be remove.
+.content-box-info[
+When some of the insert sizes are shorter than the read length,
+adapters can end up in the sequence &ndash; these should be removed!
+]
+
+---
+
+## Module 11: K-mer content
+
+- Another way to check for duplicated sequences,
+  especially in the presence of sequencing error.
+
+---
+
+## Module 12: Per-tile sequence quality
+
+### What is a tile?
+
+<p align="center">
+<img src=img/tiles.png width="90%">
+</p>
+
+---
+
+## Module 12: Per-tile sequence quality (cont.)
+
+.pull-left[
+**Good:**
+
+<p align="center">
+<img src=img/fastqc_mod03_per-tile_good.png width="100%">
+</p>
+]
+
+.pull-right[
+**Bad:**
+
+<p align="center">
+<img src=img/fastqc_mod03_per-tile_bad.png width="100%">
+</p>
+]
+

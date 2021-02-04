@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>FastQC at OSC</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class:inverse middle center
+
+
+
+# Interpreting FastQC output
+
+----
+
+&lt;br&gt; &lt;br&gt; &lt;br&gt;
+
+### Jelmer Poelstra, MCIC Wooster
+### 2021/02/05 (updated: 2021-02-04)
+
+
+
+---
+class: inverse middle center
+name: fastqc-output
+
+# FastQC output: "module" by module
+
+----
+
+&lt;br&gt;
+
+.left[
+### Two useful sources of information: 
+- ### [FastQC page for each module](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/) (Looks weird but works!)
+- ### [MSU FastQC tutorial and FAQ](https://rtsf.natsci.msu.edu/sites/_rtsf/assets/File/FastQC_TutorialAndFAQ_080717.pdf)
+]
+
+&lt;br&gt; &lt;br&gt;
+
+---
+
+## Summary and overview of modules
+
+&lt;p align="left"&gt;
+&lt;img src=img/fastqc_summary.png width="35%"&gt;
+&lt;/p&gt;
+
+---
+
+## Module 1: Basic statistics 
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod01_basic-stats.png width="100%"&gt;
+&lt;/p&gt;
+
+---
+
+## Module 2: Per-base quality along the read 
+
+- In a FASTQ file, every single base has a quality score.
+  These figures visualize the mean per-base quality score along the length
+  of the read.
+
+.pull-left[
+**Good / OK:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_good.png width="100%"&gt;
+&lt;/p&gt;
+]
+
+.pull-right[
+**Bad:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_bad.png width="100%"&gt;
+&lt;/p&gt;
+]
+
+.content-box-info[
+- A decrease in sequence quality along the reads is normal.
+- R2 (reverse) reads are usually worse than R1 (forward) reads.
+]
+
+---
+
+## Module 3: Per-sequence quality scores
+
+- Quality scores averaged over the full sequence.
+
+.pull-left[
+**Good:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod04_per-seq-qual_good.png width="100%"&gt;
+&lt;/p&gt;
+]
+
+.pull-right[
+**Bad:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod04_per-seq-qual_bad.png width="100%"&gt;
+&lt;/p&gt;
+]
+
+
+---
+
+## Module 4: Per-base sequence content
+
+.pull-left[
+**Good:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod05_per-base-content_good.png width="90%"&gt;
+&lt;/p&gt;
+]
+
+.pull-right[
+**Bad:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod05_per-base-content_bad.png width="90%"&gt;
+&lt;/p&gt;
+]
+
+&gt; It's worth noting that some types of library will always produce biased sequence composition, normally at the start of the read. Libraries produced by priming using random hexamers (including nearly all RNA-Seq libraries) and those which were fragmented using transposases inherit an intrinsic bias in the positions at which reads start. Whilst this is a true technical bias, it isn't something which can be corrected by trimming and in most cases doesn't seem to adversely affect the downstream analysis. It will however produce a warning or error in this module.
+&gt; &amp;mdash; [source](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/4%20Per%20Base%20Sequence%20Content.html)
+
+---
+
+## Module 5: Per-sequence GC content
+
+.pull-left[
+**Good:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod06_GC_good.png width="100%"&gt;
+&lt;/p&gt;
+]
+
+.pull-right[
+**Bad:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod06_GC_bad.png width="100%"&gt;
+&lt;/p&gt;
+]
+
+.content-box-info[
+- An unusual distribution could indicate contamination.
+
+- The expected distribution is for whole-genome shotgun sequencing &amp;ndash;
+  it is normal for RNA-seq data to have a narrower distribution.
+]
+
+---
+
+## Module 6: Per-base N content
+
+- Quantifies the percentage of uncalled bases (N) across the read.
+
+.pull-left[
+**Good:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod07_N_good.png width="90%"&gt;
+&lt;/p&gt;
+]
+
+.pull-right[
+**Bad:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod07_N_bad.png width="90%"&gt;
+&lt;/p&gt;
+]
+
+.content-box-info[
+- Ns may become more common at the end of the read,  
+  and at the start of the read for highly biased libraries.
+  
+- A peak like in the fig. on the right indicates a problem with a specific
+  cycle in the Illumina run.
+]
+
+---
+
+## Module 7: Sequence length distribution
+
+.center[
+**Warning:**
+]
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod08_seqlen_warning.png width="60%"&gt;
+&lt;/p&gt;
+
+
+.content-box-info[
+Will throw a warning as soon as not all sequences are of the same length,
+but this is quite normal.
+]
+  
+---
+
+## Module 8: Sequence duplication levels
+
+- Checks, *for a subset of sequences*, how many duplicates
+  (= identical sequences) are present.
+  
+.pull-left[
+**Good:**
+
+&lt;figure&gt;
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod09_seqdup_good.png width="90%"&gt;
+&lt;figcaption&gt;&lt;a href="https://rtsf.natsci.msu.edu/sites/_rtsf/assets/File/FastQC_TutorialAndFAQ_080717.pdf"&gt;Figure source&lt;/a&gt; &lt;/figcaption&gt;
+&lt;/p&gt;
+&lt;/figure&gt;
+]
+
+.pull-right[
+**"Bad":**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod09_seqdup_bad.png width="90%"&gt;
+&lt;/p&gt;
+
+]
+
+.content-box-info[
+- Often throws a warning for RNA-seq data, which can be ignored,
+  as these represent highly expressed transcripts.
+  
+- Pay attention to the blue line (red line can mostly be ignored).
+]
+
+---
+
+## Module 9: Overrepresented sequences
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod10_overrepresented.png width="100%"&gt;
+&lt;/p&gt;
+
+- Returns a *Warning* if any sequence is &gt;0.1% of total.
+- Returns *Failure* if any sequence is &gt;1% of total.
+
+---
+
+## Module 10: Adapter content
+
+- Checks for known adapter sequences
+
+.pull-left[
+**Good:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod11_adapter_good.png width="100%"&gt;
+&lt;/p&gt;
+]
+
+.pull-right[
+**Bad:**
+
+&lt;figure&gt;
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod11_adapter_bad.png width="100%"&gt;
+&lt;figcaption&gt;&lt;a href="https://rtsf.natsci.msu.edu/sites/_rtsf/assets/File/FastQC_TutorialAndFAQ_080717.pdf"&gt;Figure source&lt;/a&gt; &lt;/figcaption&gt;
+&lt;/p&gt;
+&lt;/figure&gt;
+]
+
+.content-box-info[
+When some of the insert sizes are shorter than the read length,
+adapters can end up in the sequence &amp;ndash; these should be removed!
+]
+
+---
+
+## Module 11: K-mer content
+
+- Another way to check for duplicated sequences,
+  especially in the presence of sequencing error.
+
+---
+
+## Module 12: Per-tile sequence quality
+
+### What is a tile?
+
+&lt;p align="center"&gt;
+&lt;img src=img/tiles.png width="90%"&gt;
+&lt;/p&gt;
+
+---
+
+## Module 12: Per-tile sequence quality (cont.)
+
+.pull-left[
+**Good:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod03_per-tile_good.png width="100%"&gt;
+&lt;/p&gt;
+]
+
+.pull-right[
+**Bad:**
+
+&lt;p align="center"&gt;
+&lt;img src=img/fastqc_mod03_per-tile_bad.png width="100%"&gt;
+&lt;/p&gt;
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "rainbow",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
