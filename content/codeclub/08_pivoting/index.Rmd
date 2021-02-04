@@ -24,14 +24,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 -  Describe differences in long data vs wide data.
 -  Identify scenarios where it might be helpful to have data in one format over another (longer vs. wider). 
--  Use the functions pivot_longer() and pivot_wider() to reshape data.
+-  Use the functions `pivot_longer()` and `pivot_wider()` to reshape data.
 -	 Use NHANES data to address whether blood pressure values vary in a predictable way with successive measurements.
 	
 -----
 
 ## Intro: The Shape Of A Dataset
 
-A single set of data can somtimes be stored in different ways, or in other words, it can have different shapes. Below is a small example. It's a hypothetical dataset that stores the number of visitors at each of two parks over a long weekend, and we'll look at two different versions of it... 
+A single set of data can sometimes be stored in different ways, or in other words, it can have different shapes. Below is a small example. It's a hypothetical dataset that stores the number of visitors at each of two parks over a long weekend, and we'll look at two different versions of it... 
 
 ### Wide Format
 ```{r}
@@ -64,10 +64,10 @@ Notice that both datasets store the same information - it's just formatted diffe
 
 ## What Shape Should Your Data Be In?
 
-The best answer to the question of what shape your data *should* be in is probably something like 'Whatever shape makes it easiest to accomplish your goals with the data at any given time'. For example, sometimes when you're entering data - say in to a spreadsheet in Excel or a similar program, you might find the data entry process easier if the dataset is in a wider format. Alternatively, if you're trying to generate plots from the data, longer formats are often better. This means that as you work with your data, you might find it helpful or even necessary to reshape the data - possibly multiple times as you continue to work with the same dataset.
+The best answer to the question of what shape your data *should* be in is probably something like 'Whatever shape makes it easiest to accomplish your goals with the data at any given time'. For example, sometimes when you're entering data - say in to a spreadsheet in Excel or a similar program, you might find the data entry process easier if the dataset is in a wider format. In contrast, longer formats will generally be better when analyzing your data. This is consistent with the idea of *tidy* data we talked about in [Session 2](https://biodash.github.io/codeclub/02_dplyr-core-verbs/). For example, *tidy* data will be long because a characteristic of *tidy* data is that each variable has its own column. For these reasons, you might find it helpful or even necessary to reshape the data - possibly multiple times as you continue to work with the same dataset.
 
 ## How To Reshape Data
-R offers several approaches for reshaping data. Functions for doing so often come in pairs that transform from wider to longer, and longer to wider, respectively. Pairs of functions include `cast()` and `melt()`, `spread()` and `gather()`, and `pivot_longer()` and `pivot_wider()`. While any of these can be used, we'll focus on the 'pivot' pair, as they were written most recently with a goal of being the most user-friendly of the available functions so far.
+R offers several approaches for reshaping data. Functions for doing so often come in pairs that transform from wider to longer, and longer to wider, respectively. Pairs of functions include `cast()` and `melt()`, `spread()` and `gather()`, and `pivot_longer()` and `pivot_wider()`. While any of these can be used, we'll focus on the 'pivot' pair that come from the package *tidyr*, as they were written most recently with a goal of being the most user-friendly of the available functions so far.
 
 ## Pivoting Resources
 If you want to dig in to pivoting a bit more, R offers a very useful [vignette on pivoting](https://tidyr.tidyverse.org/articles/pivot.html), which is worth a look - portions of today's breakout sessions will come from there. [Chapter 12 of "R For Data Science"](https://r4ds.had.co.nz/tidy-data.html) by Wickham and Grolemund, which covers tidy data, also includes a nice section on pivoting.
@@ -89,9 +89,10 @@ What if we wanted to plot the total mean number of visitors per day across both 
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
-visitors_longer <- visitors_wide %>% pivot_longer(-park, 
-                                                  names_to = "day",
-                                                  values_to = "visitors")
+visitors_longer <- visitors_wide %>% 
+                   pivot_longer(-park, 
+                                names_to = "day",
+                                values_to = "visitors")
 
 ```
 
@@ -105,16 +106,18 @@ visitors_longer
 In this longer format, we're able to apply the `group_by()` and `summarize()` functions...
 
 ```{r}
-visitors_longer %>% group_by(day) %>%
-                    summarise("mean" = mean(visitors))
+visitors_longer %>% 
+    group_by(day) %>%
+    summarise("mean" = mean(visitors))
 
 ```
 
 And we can go in the opposite direction with `pivot_wider()`...
 
 ```{r}
-visitors_longer %>% pivot_wider(names_from = day, 
-                                values_from = visitors)
+visitors_longer %>% 
+  pivot_wider(names_from = day, 
+              values_from = visitors)
 ```
 
 The examples above represent the most basic uses of `pivot_longer()` and `pivot_wider()`. But each of these functions offer additional arguments that can help deal with more complicated situations. The next example is from the [pivoting vignette](https://tidyr.tidyverse.org/articles/pivot.html) I referenced above. It uses the billboard dataset that should already be available in your R session, and that stores weekly rankings of Billboard top 100 songs from the year 2000.
@@ -128,21 +131,23 @@ head(billboard)
 Notice there are columns named 'wk1' through 'wk73' that store the weekly ranking for each song. Week itself is a variable with values that could be represented in a single column. We could do something similar to our above use of `pivot_longer()`...
 
 ```{r}
-billboard %>% pivot_longer(cols = starts_with("wk"),
-                           names_to = "week",
-                           values_to = "rank") %>%
-              head()
+billboard %>% 
+  pivot_longer(cols = starts_with("wk"),
+               names_to = "week",
+               values_to = "rank") %>%
+  head()
 
 ```
 
 This is a start - we've gone from 79 columns to just 6. But we can clean this up a bit more. Notice the values in the new *week* column all include the 'wk' prefix. Since we've labeled the column 'week', it's kind of redundant and unnecessary to have 'wk' at the beginning of each value. We can add the 'names_prefix' argument, which accepts a regular expression (regex). Characters at the beginning of column names that match the regex get removed. 
 
 ```{r}
-billboard %>% pivot_longer(cols = starts_with("wk"),
-                           names_to = "week",
-                           values_to = "rank",
-                           names_prefix = "wk") %>%
-              head()
+billboard %>% 
+  pivot_longer(cols = starts_with("wk"),
+              names_to = "week",
+              values_to = "rank",
+              names_prefix = "wk") %>%
+  head()
 
 ```
 
@@ -205,7 +210,8 @@ Subset the dataset to get just the columns *BPSys1*, *BPSys2*, and *BPSys3*. Nam
 <details> <summary> Solution (click here) </summary>
 
 ```{r}
-sys_values <- NHANES %>% select(matches("BPSys[123]$"))
+sys_values <- NHANES %>% 
+    select(matches("BPSys[123]$"))
 #I used the 'matches' helper along with a regular expression 
 #above, but there are a number of ways you could do this. 
 #One equivalent would be...
@@ -242,7 +248,8 @@ We can see just from the preview in Exercise 2 that the dataset has some missing
 <details> <summary> Solution (click here) </summary>
 
 ```{r}
-sys_noNA <- sys_values %>% drop_na()
+sys_noNA <- sys_values %>% 
+  drop_na()
 
 dim(sys_noNA)
 head(sys_noNA)
@@ -274,9 +281,10 @@ We'll explore these data a bit to see if there's any evidence of a trend in syst
 <details> <summary> Solution (click here) </summary>
 
 ```{r}
-sys_long <- sys_noNA %>% pivot_longer(cols = starts_with("BP"),
-                                      names_to = "measurement",
-                                      values_to = "sys_bp")
+sys_long <- sys_noNA %>% 
+  pivot_longer(cols = starts_with("BP"),
+               names_to = "measurement",
+               values_to = "sys_bp")
 
 dim(sys_long)
 
@@ -309,8 +317,9 @@ Now let's calculate and compare the mean values for each measurement.
 <details> <summary> Solution (click here) </summary>
 
 ```{r}
-sys_long %>% group_by(measurement) %>% 
-             summarize("mean_sys" = mean(sys_bp))
+sys_long %>% 
+  group_by(measurement) %>% 
+  summarize("mean_sys" = mean(sys_bp))
 
 ```
 
@@ -327,20 +336,28 @@ sys_long %>% group_by(measurement) %>%
 <div class="alert puzzle">
 <div>
 
-The `summarise()` functions outputs a tibble. Tibbles are intended to be tidy, and as part of that, they tend to truncate/round numbers to a greater degree than they would be otherwise in R. In this case, we might want a bit more precision in the values. Repeat the above, but convert the tibble containing the means to a data frame, which will by default likely show more significant digits. 
+The `summarise()` functions outputs a tibble. Tibbles are intended to be tidy, and as part of that, by default the values they display tend to be truncated/rounded to a greater degree than they would be otherwise in R. In this case, we might want to see a bit more precision in the values. Try adjusting (increasing) the number of significant figures that are displayed in the tibble that was output in Exercise 5.
 
 <details> <summary> Hints (click here) </summary>
 
-<br> Use the `as.data.frame()` function to convert the tibble to a data frame.  <br>
+<br> This can be done in a couple different ways. One is to convert the tibble to a data frame with `as.data.frame()`, since data frames, by default, will likely show more significant digits. Alternatively, try setting options(pillar.sigfig) to a new value.  <br>
 
 </details>
 
 <details> <summary> Solution (click here) </summary>
 
 ```{r}
-sys_long %>% group_by(measurement) %>% 
-             summarize("mean_sys" = mean(sys_bp)) %>%
-             as.data.frame()
+sys_long %>% 
+  group_by(measurement) %>% 
+  summarize("mean_sys" = mean(sys_bp)) %>%
+  as.data.frame()
+
+#OR
+
+options(pillar.sigfig = 6)
+sys_long %>% 
+  group_by(measurement) %>% 
+  summarize("mean_sys" = mean(sys_bp))
 
 ```
 
@@ -377,7 +394,8 @@ Are those differences statistically significant? A one-way anova might be a good
 <details> <summary> Solution (click here) </summary>
 
 ```{r}
-aov(sys_bp~measurement, data = sys_long) %>% summary()
+aov(sys_bp~measurement, data = sys_long) %>% 
+  summary()
 
 ```
 
@@ -405,21 +423,24 @@ Repeat all of the above for diastolic blood pressure with a couple of modificati
 <details> <summary> Solution (click here) </summary>
 
 ```{r}
-dia_data <- NHANES %>% select(matches("BPDia[123]$")) %>% 
-            drop_na() %>%
-            pivot_longer(cols = starts_with("BP"),
-                         names_to = "measurement",
-                         values_to = "dia_bp",
-                         names_prefix = "BPDia",
-                         names_transform = list(measurement = "as.factor"))
+dia_data <- NHANES %>% 
+  select(matches("BPDia[123]$")) %>% 
+  drop_na() %>%
+  pivot_longer(cols = starts_with("BP"),
+               names_to = "measurement",
+               values_to = "dia_bp",
+               names_prefix = "BPDia",
+               names_transform = list(measurement = "as.factor"))
 
 head(dia_data)
 
-dia_data %>% group_by(measurement) %>% 
-             summarize("mean_dia" = mean(dia_bp)) %>%
-             as.data.frame()
+dia_data %>% 
+  group_by(measurement) %>% 
+  summarize("mean_dia" = mean(dia_bp)) %>%
+  as.data.frame()
 
-aov(dia_bp~measurement, data = dia_data) %>% summary()
+aov(dia_bp~measurement, data = dia_data) %>% 
+  summary()
               
 
 ```
