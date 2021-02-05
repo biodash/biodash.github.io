@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>FastQC at OSC</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class:inverse middle center
+
+
+
+# Running MultiQC at OSC
+
+----
+
+&lt;br&gt; &lt;br&gt; &lt;br&gt;
+
+### Jelmer Poelstra, MCIC Wooster
+### 2021/02/12 (updated: 2021-02-05)
+
+  
+---
+
+## MultiQC
+
+MultiQC is a program that *summarizes multiple FastQC results*  
+into a single nicely formatted HTML page.
+
+&lt;br&gt;
+
+&lt;p align="center"&gt;
+&lt;img src=img/multiqc_front.png width="100%"&gt;
+&lt;/p&gt;
+
+---
+
+## MultiQC
+
+- For instance, this figure shows mean quality scores across 132 samples:
+
+&lt;p align="center"&gt;
+&lt;img src=img/multiqc_qual.png width="100%"&gt;
+&lt;/p&gt;
+
+---
+
+## MultiQC and `conda` at OSC
+
+- MultiQC is *not* available as a module at OSC (i.e., no `module load`).
+
+- The best way to use it is by installing it for yourself
+  with the software manager `conda`.
+  
+  - `conda` can be used without admin rights (which you don't have at OSC),
+    and allows you to create "environments" for software.
+  
+  - In bioinformatics, almost all free software is available through `conda`!
+    
+  - Like the module system, `conda` allows you to easily maintain multiple
+    versions of the same software package, or mutually incompatible software,
+    too: you just create separate environments for each of them.
+
+---
+
+## `conda` at OSC
+
+- To use `conda` at OSC, you first need to load a module:
+
+  ```sh
+  $ module load python/3.6-conda5.2
+  ```
+  
+  .content-box-info[
+  Like with other software, this module needs to be loaded every time you
+  want to use `conda`.
+  ]
+
+---
+
+## One-time `conda` setup
+
+- Next, `conda` can only be used after a setup script is run.
+
+  We can add code to our bash configuration file that will make sure the
+  the setup script is run whenever we log in at OSC.
+  
+  This is unfortunately made more complicated because the two OSC cluster,
+  Owens and Pitzer, have `conda` installed in different locations.
+
+&lt;br&gt;
+
+- The following lines should be added to your `~/.bashrc`:
+
+  ```sh
+  if [ -f /apps/python/3.6-conda5.2/etc/profile.d/conda.sh ]; then
+      source /apps/python/3.6-conda5.2/etc/profile.d/conda.sh
+  elif -f [ /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh ]; then
+      source /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh
+  fi
+  ```
+
+---
+
+## One-time `conda` setup (cont.)
+
+- You can add that code by opening up the file (e.g. `nano ~/.bashrc`)
+  and pasting it in, or by pasting the following directly into the terminal:
+
+  ```sh
+  echo '
+  if [ -f /apps/python/3.6-conda5.2/etc/profile.d/conda.sh ]; then
+      source /apps/python/3.6-conda5.2/etc/profile.d/conda.sh
+  elif -f [ /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh ]; then
+      source /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh
+  fi
+  ' &gt;&gt; ~/.bashrc
+  ```
+
+--
+
+- To also run the setup script now, we *source* the edited bash config file:
+
+  ```sh
+  $ source ~/.bashrc
+  ```
+
+  .content-box-info[
+  The above setup only needs to be run once &amp;ndash; it does not need to be
+  repeated every session.
+  ]
+  
+---
+
+## One-time `conda` setup (cont.)
+
+.content-box-info[
+If you for some reason exclusively use one of the two clusters,  
+you will only need to add one line to your `~/.bashrc`.
+
+For Pitzer:
+
+```sh
+$ echo "source /apps/python/3.6-conda5.2/etc/profile.d/conda.sh" &gt;&gt; ~/.bashrc
+```
+
+For Owens:
+
+```sh
+$ echo "source /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh" &gt;&gt; ~/.bashrc
+```
+]
+
+---
+
+## One-time installation of MultiQC &lt;br&gt; into a `conda` environment
+
+- Now, we are ready to create a new `conda` environment,  
+  and install MultiQC (and the dependency Python) into it:
+  
+  ```sh
+  # Create a new environment
+  # - Confirm with "-y" (avoid being prompted)
+  # - Give the environment an arbitrary name with "--name multiqc"
+  # - Install python version 3.7 into the environment
+  $ conda create -y --name multiqc python=3.7
+  
+  # Activate the environment:
+  $ conda activate multiqc
+  
+  # Also install multiqc into it
+  # - "-c bioconda -c conda-forge" to specify conda "channels"
+  $ conda install -y -c bioconda -c conda-forge multiqc
+  ```
+
+---
+
+## Running MultiQC
+
+- Whenever you want to use a `conda` environment at OSC,
+  you need to first load the module, and then *activate* the `conda` environment
+  that you want:
+
+  ```sh
+  $ module load python/3.6-conda5.2
+  $ conda activate multiqc
+  ```
+
+- Having done that, you should be able to run MultiQC:
+
+  ```sh
+  $ multiqc --help
+  ```
+
+&lt;br&gt;
+
+.content-box-info[
+If you didn't manage to create your own conda environment,  
+you can also use mine:
+
+```sh
+conda activate /users/PAS0471/jelmer/.conda/envs/multiqc
+```
+]
+
+---
+
+## Running MultiQC
+
+Actually running MultiQC is straightforward:
+
+```sh
+# This will put the MultiQC report in the working dir:
+$ multiqc &lt;dir-with-fastqc-reports&gt;
+
+# You can also specify the output dir for the MultiQC report: 
+$ multiqc &lt;dir-with-fastqc-reports&gt; -o &lt;output-dir&gt;
+```
+
+&lt;br&gt;
+
+--
+
+For example, to start an interactive job and run MultiQC there:
+
+```sh
+# Start an interactive job at OSC:
+$ sinteractive -A PAS0471 # No time specified: will be 30 minutes
+
+$ module load python/3.6-conda5.2
+$ conda activate multiqc
+
+$ multiqc results/QC_fastq/ -o results/QC_fastq/
+```
+
+---
+
+## MultiQC script
+
+Alternatively, we could create a script that runs MultiQC (next two slides).
+
+---
+
+## MultiQC script - part 1 of 2
+
+```sh
+#!/bin/bash
+#SBATCH --account=PAS0471
+#SBATCH --time=60
+#SBATCH --out=slurm-multiqc-%j.out
+
+set -e -u -o pipefail
+
+# Save command-line arguments in named variables:
+input_dir="$1"
+output_dir="$2" 
+
+# If necessary, create the output dir:
+mkdir -p "$output_dir"
+
+# Report before starting the pogram:
+echo "Starting MultiQC script..."
+date
+echo "Running MultiQC for dir: $input_dir"
+echo "Output dir: $output_dir"
+echo "Number of files: $(find "$input_dir" -name "*fastqc.html" | wc -l)"
+echo -e "---------\n\n"
+```
+
+---
+
+## MultiQC script - part 2 of 2
+
+```sh
+# Load the conda module and the MultiQC conda environment:
+module load python/3.6-conda5.2
+source /apps/python/3.6-conda5.2/etc/profile.d/conda.sh
+conda activate /users/PAS0471/jelmer/.conda/envs/multiqc
+
+# Run fastqc:
+multiqc "$input_dir" -o "$output_dir"
+
+# Report:
+echo -e "\n---------\nAll done!"
+date
+```
+
+.content-box-warning[
+In the script, it is necessary to always run the `conda` setup script:
+
+```sh
+source /apps/python/3.6-conda5.2/etc/profile.d/conda.sh
+```
+]
+
+- The script is saved at `scripts/QC_fastq/`.
+
+---
+
+## Running our MultiQC script
+
+- Submitting the script as a job:
+  ```sh
+  $ dir=results/QC_fastq/
+  $ sbatch multiqc.sh $dir $dir
+  ```
+
+&lt;br&gt;
+
+- Checking the queue:
+  ```sh
+  $ squeue -u $USER
+  ```
+
+- Checking the output:
+  ```sh
+  $ ls
+  
+  $ less slurm*
+  
+  $ ls $dir/multiqc_report.html
+  ```
+
+---
+class: inverse middle center
+
+# Questions?
+
+----
+
+&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "rainbow",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
