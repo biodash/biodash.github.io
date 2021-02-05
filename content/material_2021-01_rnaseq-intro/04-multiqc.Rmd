@@ -25,67 +25,197 @@ knitr::opts_chunk$set(eval = FALSE)
 <br> <br> <br>
 
 ### Jelmer Poelstra, MCIC Wooster
-### 2021/02/05 (updated: `r Sys.Date()`)
+### 2021/02/12 (updated: `r Sys.Date()`)
 
   
 ---
 
 ## MultiQC
 
-MultiQC is a program that nicely summarizes FastQC results for any number of
-fastq files.
+MultiQC is a program that *summarizes multiple FastQC results*  
+into a single nicely formatted HTML page.
 
-- MultiQC is not available as a module at OSC.
+<br>
 
-  The easiest way to use it at OSC is by installing it via `conda` as follows:
+<p align="center">
+<img src=img/multiqc_front.png width="100%">
+</p>
+
+---
+
+## MultiQC
+
+- For instance, this figure shows mean quality scores across 132 samples:
+
+<p align="center">
+<img src=img/multiqc_qual.png width="100%">
+</p>
+
+---
+
+## MultiQC and `conda` at OSC
+
+- MultiQC is *not* available as a module at OSC (i.e., no `module load`).
+
+- The best way to use it is by installing it for yourself
+  with the software manager `conda`.
+  
+  - `conda` can be used without admin rights (which you don't have at OSC),
+    and allows you to create "environments" for software.
+  
+  - In bioinformatics, almost all free software is available through `conda`!
+    
+  - Like the module system, `conda` allows you to easily maintain multiple
+    versions of the same software package, or mutually incompatible software,
+    too: you just create separate environments for each of them.
+
+---
+
+## `conda` at OSC
+
+- To use `conda` at OSC, you first need to load a module:
 
   ```sh
   $ module load python/3.6-conda5.2
+  ```
   
-  $ conda create --name multiqc python=3.7
-  $ conda activate multiqc
-  $ conda install -c bioconda -c conda-forge multiqc
+  .content-box-info[
+  Like with other software, this module needs to be loaded every time you
+  want to use `conda`.
+  ]
+
+---
+
+## One-time `conda` setup
+
+- Next, `conda` can only be used after a setup script is run.
+
+  We can add code to our bash configuration file that will make sure the
+  the setup script is run whenever we log in at OSC.
+  
+  This is unfortunately made more complicated because the two OSC cluster,
+  Owens and Pitzer, have `conda` installed in different locations.
+
+<br>
+
+- The following lines should be added to your `~/.bashrc`:
+
+  ```sh
+  if [ -f /apps/python/3.6-conda5.2/etc/profile.d/conda.sh ]; then
+      source /apps/python/3.6-conda5.2/etc/profile.d/conda.sh
+  elif -f [ /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh ]; then
+      source /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh
+  fi
   ```
 
 ---
 
-## conda setup
+## One-time `conda` setup (cont.)
 
-- If you haven't used conda before, you can set it up *at Pitzer* as follows:
+- You can add that code by opening up the file (e.g. `nano ~/.bashrc`)
+  and pasting it in, or by pasting the following directly into the terminal:
 
-```sh
-# This will add a line to your bash config file,
-# which runs every time you start a shell,
-# to run the conda setup script:
-$ echo ". /apps/python/3.6-conda5.2/etc/profile.d/conda.sh" >> ~/.bashrc
-
-# Next, we source (run) the config file in our current shell,
-# to also run the conda setup script right now:
-$ source ~/.bashrc
-```
+  ```sh
+  echo '
+  if [ -f /apps/python/3.6-conda5.2/etc/profile.d/conda.sh ]; then
+      source /apps/python/3.6-conda5.2/etc/profile.d/conda.sh
+  elif -f [ /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh ]; then
+      source /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh
+  fi
+  ' >> ~/.bashrc
+  ```
 
 --
 
-- Whenever you want to use a `conda` environment at OSC,
-  you need to first load the module, and then *activate* the conda environment
-  that you want:
+- To also run the setup script now, we *source* the edited bash config file:
+
+  ```sh
+  $ source ~/.bashrc
+  ```
+
+  .content-box-info[
+  The above setup only needs to be run once &ndash; it does not need to be
+  repeated every session.
+  ]
+  
+---
+
+## One-time `conda` setup (cont.)
+
+.content-box-info[
+If you for some reason exclusively use one of the two clusters,  
+you will only need to add one line to your `~/.bashrc`.
+
+For Pitzer:
 
 ```sh
-$ module load python/3.6-conda5.2
-$ conda activate /users/PAS0471/jelmer/.conda/envs/multiqc
+$ echo "source /apps/python/3.6-conda5.2/etc/profile.d/conda.sh" >> ~/.bashrc
 ```
 
-- Having done that, you should be able to run MultiQC:
+For Owens:
 
 ```sh
-$ multiqc --help
+$ echo "source /usr/local/python/3.6-conda5.2/etc/profile.d/conda.sh" >> ~/.bashrc
 ```
+]
+
+---
+
+## One-time installation of MultiQC <br> into a `conda` environment
+
+- Now, we are ready to create a new `conda` environment,  
+  and install MultiQC (and the dependency Python) into it:
+  
+  ```sh
+  # Create a new environment
+  # - Confirm with "-y" (avoid being prompted)
+  # - Give the environment an arbitrary name with "--name multiqc"
+  # - Install python version 3.7 into the environment
+  $ conda create -y --name multiqc python=3.7
+  
+  # Activate the environment:
+  $ conda activate multiqc
+  
+  # Also install multiqc into it
+  # - "-c bioconda -c conda-forge" to specify conda "channels"
+  $ conda install -y -c bioconda -c conda-forge multiqc
+  ```
 
 ---
 
 ## Running MultiQC
 
-Running MultiQC, like FastQC, is straightforward:
+- Whenever you want to use a `conda` environment at OSC,
+  you need to first load the module, and then *activate* the `conda` environment
+  that you want:
+
+  ```sh
+  $ module load python/3.6-conda5.2
+  $ conda activate multiqc
+  ```
+
+- Having done that, you should be able to run MultiQC:
+
+  ```sh
+  $ multiqc --help
+  ```
+
+<br>
+
+.content-box-info[
+If you didn't manage to create your own conda environment,  
+you can also use mine:
+
+```sh
+conda activate /users/PAS0471/jelmer/.conda/envs/multiqc
+```
+]
+
+---
+
+## Running MultiQC
+
+Actually running MultiQC is straightforward:
 
 ```sh
 # This will put the MultiQC report in the working dir:
@@ -95,11 +225,27 @@ $ multiqc <dir-with-fastqc-reports>
 $ multiqc <dir-with-fastqc-reports> -o <output-dir>
 ```
 
-For example:
+<br>
+
+--
+
+For example, to start an interactive job and run MultiQC there:
 
 ```sh
-$ multiqc analysis/QC_fastq -o analysis/QC_fastq/
+# Start an interactive job at OSC:
+$ sinteractive -A PAS0471 # No time specified: will be 30 minutes
+
+$ module load python/3.6-conda5.2
+$ conda activate multiqc
+
+$ multiqc results/QC_fastq/ -o results/QC_fastq/
 ```
+
+---
+
+## MultiQC script
+
+Alternatively, we could create a script that runs MultiQC (next two slides).
 
 ---
 
@@ -147,10 +293,6 @@ echo -e "\n---------\nAll done!"
 date
 ```
 
----
-
-## MultiQC script
-
 .content-box-warning[
 In the script, it is necessary to always run the `conda` setup script:
 
@@ -158,6 +300,34 @@ In the script, it is necessary to always run the `conda` setup script:
 source /apps/python/3.6-conda5.2/etc/profile.d/conda.sh
 ```
 ]
+
+- The script is saved at `scripts/QC_fastq/`.
+
+---
+
+## Running our MultiQC script
+
+- Submitting the script as a job:
+  ```sh
+  $ dir=results/QC_fastq/
+  $ sbatch multiqc.sh $dir $dir
+  ```
+
+<br>
+
+- Checking the queue:
+  ```sh
+  $ squeue -u $USER
+  ```
+
+- Checking the output:
+  ```sh
+  $ ls
+  
+  $ less slurm*
+  
+  $ ls $dir/multiqc_report.html
+  ```
 
 ---
 class: inverse middle center
