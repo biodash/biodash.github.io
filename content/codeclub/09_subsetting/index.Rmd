@@ -97,7 +97,7 @@ vec_chr <- c("a", "b", "c", "d", "e")
 typeof(vec_chr)
 ```
 
-What happens when we perform a basci mathematical operation on a vector?
+What happens when we perform a basic mathematical operation on a vector?
 ```{r}
 2 * vec_int
 ```
@@ -110,7 +110,7 @@ L = [1, 2, 3, 4, 5]
 # [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
 ```
 
-So it's not just that vectors are a basic R data structure, but R is a **vectorised language**. In many cases applying an operation to a vector automagically applies the operation to every element in the vector. This means that much of what you need to use for loops and mapping operations in other languages are redundant in R. In Python we could use a 'list comprehension' (a compact and fast version of a `for` loop):
+So it's not just that vectors are a basic R data structure, but R is a **vectorised language**. In many cases applying an operation to a vector automagically applies the operation to every element in the vector. This means that for many basic operations `for` loops and mapping functions, necessary in Python, are not needed in R (although if you write your own functions you will need these iteration tools). In Python we could use a 'list comprehension' (a compact and fast version of a `for` loop):
 
 ```python
 [2 * i for i in L]
@@ -119,15 +119,13 @@ So it's not just that vectors are a basic R data structure, but R is a **vectori
 
 Or install the `numpy` package that makes vectors and vectorized functions available.
 
-## Subsetting vectors
-
 Vectors have an insanely simple structure:
 
 ```{r}
 str(vec_dbl)
 ```
 
-RStudio displays the result of `str()` in the Values pane, and `str()` also displays the type.
+`str()` also displays the type, and RStudio displays the result of `str()` in the Values pane. 
 
 For such a simple structure, there are a surprisingly large number of ways to subset a vector. We'll use the following example:
 
@@ -156,7 +154,7 @@ x[-c(3, 1)]
 #> [1] 4.2 5.4
 ```
 
-**Logical vectors** select elements where the corresponding logical value is TRUE. 
+**Logical vectors** select elements where the corresponding logical value is TRUE. This is most useful if you can write a **comparison expression** `2 > 3`, `4 == 4`, that returns TRUE (or FALSE) for each element of the vector:
 
 ```{r}
 x[c(TRUE, TRUE, FALSE, FALSE)]
@@ -181,7 +179,7 @@ x[]
 
 This is not useful for (one dimensional) vectors, but is behind the notation for extracting rows and columns from matrices. Keep in mind a "nothing" index returns "everything".
 
-## Subsetting matrices
+## Matrices
 
 A matrix is simply a vector with a **dimensions** attribute. Here we convert a vector to a two-dimensional matrix, with two rows and three columns, with `dim(rows, cols)`.
 
@@ -257,7 +255,7 @@ x1 <- list(c(1, 2), c(3, 4))
 x2 <- list(list(1, 2), list(3, 4))
 x3 <- list(1, list(2, list(3)))
 ```
-![](lists_structure.png)
+![](lists_structure.png){width=75%}
 
 However the printed form provides us a clue on how to extract an individual element from inside a nested list:
 
@@ -278,7 +276,7 @@ a
 str(a)
 ```
 
-![Subsetting a list, visually.](lists_subsetting.png){width=50%}
+![Subsetting a list, visually.](lists_subsetting.png){width=75%}
 
 Here is a recursive pepper shaker, `p`
 
@@ -350,14 +348,161 @@ df_mixed <- data.frame(
 str(df_mixed)
 ```
 
-### Further reading and acknowledgement
+#### Further reading and acknowledgement
 
 For more details on subsetting see [R for Data Science](https://r4ds.had.co.nz/) and [Advanced R](https://adv-r.hadley.nz) both by Hadley Wickham, from which much of the material in this module was borrowed.
 
 
 
 ------------------------------------------------------------------------
+## Exercise 1
 
+:::puzzle
+
+A surprisingly useful operator for extracting elements of a numerical vector is the modulo operator `x %% y`. This returns the remainder when `x` is divided by `y`. It is a vectorized operation, so we can apply it to a list.
+
+```{r}
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+x %% 3
+```
+
+Use this operator to extract every third element of the above vector `x`.
+
+<details> <summary> Hints (click here) </summary>
+
+<br>Check the example in the presentation about selecting elements when the logical comparison is TRUE. What is the logical test we need to identify every third element? 
+<br>
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+x[x %% 3 == 0]
+```
+
+
+<br>
+
+
+</details>
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 2
+
+:::puzzle
+
+Here is a visualization of a list:
+
+![](train_total.jpg){width=75%}
+
+Create a list in R called `train` that captures this structure. Print the list, and also display its structure.
+
+<details> <summary> Hints (click here) </summary>
+
+<br>This list has no nested lists, it's just a list of vectors and individual values.
+<br>
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+train <- list(1:3, "a", 4:6)
+train
+str(train)
+```
+
+
+<br>
+
+
+</details>
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 3
+
+:::puzzle
+
+For each of the following sub-trains/carriages, determine the subsetting expression by eye, and then check that it works by subsetting your `train` list from exercise 1.
+
+![](trains_2.jpg)
+
+
+
+
+
+
+<details> <summary> Hints (click here) </summary>
+<br> There's more than one way to do these; you will have to use both `[ ]` and `[[ ]]` operators. The last two are tricky, experiment with them...
+<br> 
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+```{r}
+train[1]
+```
+```{r}
+train[[1]]
+```
+```{r}
+train[1:2]
+```
+```{r}
+train[-2]
+```
+```{r}
+train[c(1, 1)]
+```
+```{r}
+train[0]
+```
+
+
+</details>
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 4
+
+:::puzzle
+
+A common use of recursive structures in biology is to represent phylogenetic trees. Create a recursive list in R called `tree` which captures the following visual representation
+
+![](tree.jpg)
+
+<details> <summary> Hints (click here) </summary>
+<br>Start at the top and work down. Start with a simpler subtree, then expand terminals. 
+
+Alternatively, start at the bottom with the smallest subtree, then work up, adding sisters into parent nodes.
+
+In either case, check your working with `str()` as you incrementally add structure.
+
+Notice this is a binary branching tree, so the root node of every subtree should contain two elements.
+
+One of the tricks with these nested lists is to keep track of paired parentheses...
+
+**Stay calm and recurse.**
+<br>
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+tree <- list("a", list(list("b", "c"), "d"))
+str(tree)
+```
+
+</details>
+:::
+
+------------------------------------------------------------------------
 
 
 
