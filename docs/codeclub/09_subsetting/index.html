@@ -275,7 +275,7 @@
     
       <meta property="article:published_time" content="2021-02-10T00:00:00&#43;00:00">
     
-    <meta property="article:modified_time" content="2021-02-11T12:01:15-05:00">
+    <meta property="article:modified_time" content="2021-02-11T16:19:28-05:00">
   
 
   
@@ -598,19 +598,18 @@
     <li><a href="#new-to-code-club">New To Code Club?</a></li>
     <li><a href="#session-goals">Session Goals</a></li>
     <li><a href="#intro-what-is-subsetting-anyway">Intro: What is &lsquo;subsetting&rsquo; anyway?</a></li>
-    <li><a href="#vectors">Vectors</a>
+    <li><a href="#vectors">Vectors</a></li>
+    <li><a href="#matrices">Matrices</a></li>
+    <li><a href="#lists">Lists</a></li>
+    <li><a href="#data-frames">Data frames</a>
       <ul>
-        <li><a href="#subsetting-vectors">Subsetting vectors</a></li>
-        <li><a href="#subsetting-matrices">Subsetting matrices</a></li>
-      </ul>
-    </li>
-    <li><a href="#subsetting-lists">Subsetting lists</a></li>
-    <li><a href="#subsetting-data-frames">Subsetting data frames</a>
-      <ul>
-        <li><a href="#further-reading-and-acknowledgement">Further reading and acknowledgement</a></li>
+        <li></li>
       </ul>
     </li>
     <li><a href="#exercise-1">Exercise 1</a></li>
+    <li><a href="#exercise-2">Exercise 2</a></li>
+    <li><a href="#exercise-3">Exercise 3</a></li>
+    <li><a href="#exercise-4">Exercise 4</a></li>
   </ul>
 </nav>
           
@@ -804,22 +803,21 @@
 <span class='c'>#&gt; [1] "character"</span>
 </code></pre>
 </div>
-<p>What happens when we perform a basci mathematical operation on a vector?</p>
+<p>What happens when we perform a basic mathematical operation on a vector?</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='m'>2</span> <span class='o'>*</span> <span class='nv'>vec_int</span>
 
 <span class='c'>#&gt; [1]  2  4  6  8 10</span>
 </code></pre>
 </div>
-<p>This is <em>completely different</em> than what you obtain when multiplying a Python list:</p>
+<p>(This is <em>completely different</em> than what you obtain when multiplying a Python list).</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
 <span class="mi">2</span> <span class="o">*</span> <span class="n">L</span>
 <span class="c1"># [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]</span>
-</code></pre></div><p>So it&rsquo;s not just that vectors are a basic R data structure, but R is a <strong>vectorised language</strong>. In many cases applying an operation to a vector automagically applies the operation to every element in the vector. This means that much of what you need to use for loops and mapping operations in other languages are redundant in R. In Python we could use a &lsquo;list comprehension&rsquo; (a compact and fast version of a <code>for</code> loop):</p>
+</code></pre></div><p>So it&rsquo;s not just that vectors are a basic R data structure, but R is a <strong>vectorised language</strong>. In many cases applying an operation to a vector automagically applies the operation to every element in the vector. This means that for many basic operations <code>for</code> loops and mapping functions, necessary in Python, are not needed in R (although if you write your own functions you will need these iteration tools). In Python we could use a &lsquo;list comprehension&rsquo; (a compact and fast version of a <code>for</code> loop):</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">L</span><span class="p">]</span>
 <span class="c1"># [2, 4, 6, 8, 10]</span>
 </code></pre></div><p>Or install the <code>numpy</code> package that makes vectors and vectorized functions available.</p>
-<h3 id="subsetting-vectors">Subsetting vectors</h3>
 <p>Vectors have an insanely simple structure:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>vec_dbl</span><span class='o'>)</span>
@@ -827,9 +825,9 @@
 <span class='c'>#&gt;  num [1:5] 1 2 3 4 5</span>
 </code></pre>
 </div>
-<p>RStudio displays the result of 
-<a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> in the Values pane, and 
-<a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> also displays the type.</p>
+<p>
+<a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> also displays the type, and RStudio displays the result of 
+<a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> in the Values pane.</p>
 <p>For such a simple structure, there are a surprisingly large number of ways to subset a vector. We&rsquo;ll use the following example:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>x</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>2.1</span>, <span class='m'>4.2</span>, <span class='m'>3.3</span>, <span class='m'>5.4</span><span class='o'>)</span>
@@ -869,7 +867,7 @@
 <span class='c'>#&gt; [1] 4.2 5.4</span>
 </code></pre>
 </div>
-<p><strong>Logical vectors</strong> select elements where the corresponding logical value is TRUE.</p>
+<p><strong>Logical vectors</strong> select elements where the corresponding logical value is TRUE. This is most useful if you can write a <strong>comparison expression</strong> <code>2 &gt; 3</code>, <code>4 == 4</code>, that returns TRUE (or FALSE) for each element of the vector:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>x</span><span class='o'>[</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='kc'>TRUE</span>, <span class='kc'>TRUE</span>, <span class='kc'>FALSE</span>, <span class='kc'>FALSE</span><span class='o'>)</span><span class='o'>]</span>
 
@@ -894,7 +892,7 @@
 <span class='c'>#&gt; 5.4 3.3 2.1</span>
 </code></pre>
 </div>
-<p>Again, Python has no direct equivalent of this, but we can get a similar effect using a <em>dictionary</em> data structure, which explicilty assigns a name to each value.</p>
+<p>(Again, Python has no direct equivalent of this, but we can get a similar effect using a <em>dictionary</em> data structure, which explicilty assigns a name to each value).</p>
 <p><strong>Nothing</strong> returns the entire vector</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>x</span><span class='o'>[</span><span class='o'>]</span>
@@ -903,7 +901,7 @@
 </code></pre>
 </div>
 <p>This is not useful for (one dimensional) vectors, but is behind the notation for extracting rows and columns from matrices. Keep in mind a &ldquo;nothing&rdquo; index returns &ldquo;everything&rdquo;.</p>
-<h3 id="subsetting-matrices">Subsetting matrices</h3>
+<h2 id="matrices">Matrices</h2>
 <p>A matrix is simply a vector with a <strong>dimensions</strong> attribute. Here we convert a vector to a two-dimensional matrix, with two rows and three columns, with 
 <a href="https://rdrr.io/r/base/dim.html" target="_blank" rel="noopener"><code>dim(rows, cols)</code></a>.</p>
 <div class="highlight">
@@ -939,7 +937,7 @@
 <span class='c'>#&gt; [2,]  5.4  1.6</span>
 </code></pre>
 </div>
-<h2 id="subsetting-lists">Subsetting lists</h2>
+<h2 id="lists">Lists</h2>
 <p>There are two main differences between vectors and lists: (i) lists can contain elements of <strong>different types</strong>; and (ii) lists can contain <strong>other lists</strong>. This is why lists are sometimes referred to as <strong>recursive vectors</strong>. We will see examples of these below, but first let&rsquo;s directly compare a <em>list</em> of numbers to a <em>vector</em> of numbers, and examine the structure. Lists are constructed with the 
 <a href="https://rdrr.io/r/base/list.html" target="_blank" rel="noopener"><code>list()</code></a> function.</p>
 <div class="highlight">
@@ -969,11 +967,7 @@
 </div>
 <p>Here we see the appearance of a new subsetting operator <code>[[ ]]</code>. What does it yield?</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/typeof.html'>typeof</a></span><span class='o'>(</span><span class='nv'>l</span><span class='o'>)</span>
-
-<span class='c'>#&gt; [1] "list"</span>
-
-<span class='nv'>ll_2</span> <span class='o'>&lt;-</span> <span class='nv'>l</span><span class='o'>[[</span><span class='m'>2</span><span class='o'>]</span><span class='o'>]</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ll_2</span> <span class='o'>&lt;-</span> <span class='nv'>l</span><span class='o'>[[</span><span class='m'>2</span><span class='o'>]</span><span class='o'>]</span>
 <span class='nv'>ll_2</span>
 
 <span class='c'>#&gt; [1] 4.2</span>
@@ -1046,7 +1040,7 @@
 <span class='nv'>x3</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='m'>2</span>, <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='m'>3</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span>
 </code></pre>
 </div>
-<p><img src="lists_structure.png" alt=""></p>
+<p><img src="lists_structure.png" style="width:75.0%" /></p>
 <p>However the printed form provides us a clue on how to extract an individual element from inside a nested list:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>m</span><span class='o'>[[</span><span class='m'>2</span><span class='o'>]</span><span class='o'>]</span>
@@ -1097,7 +1091,7 @@
 <span class='c'>#&gt;   ..$ : num -5</span>
 </code></pre>
 </div>
-<figure><img src="lists_subsetting.png" style="width:50.0%" alt="Subsetting a list, visually." /><figcaption aria-hidden="true">Subsetting a list, visually.</figcaption></figure>
+<figure><img src="lists_subsetting.png" style="width:75.0%" alt="Subsetting a list, visually." /><figcaption aria-hidden="true">Subsetting a list, visually.</figcaption></figure>
 <p>Here is a recursive pepper shaker, <code>p</code></p>
 <p><img src="shaker.png" style="width:25.0%" /></p>
 <p>Here is the first packet, but still inside the shaker, <code>p[1]</code></p>
@@ -1107,7 +1101,7 @@
 <p>And here is the contents of that packet, <code>p[[1]][[1]]</code></p>
 <p><img src="pepper.png" style="width:25.0%" /></p>
 <p>We&rsquo;ll play with yet another type of visualization in the exercises.</p>
-<h2 id="subsetting-data-frames">Subsetting data frames</h2>
+<h2 id="data-frames">Data frames</h2>
 <p>Let&rsquo;s look at a simple data frame:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>df</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>3</span>, y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"a"</span>, <span class='s'>"b"</span>, <span class='s'>"c"</span><span class='o'>)</span><span class='o'>)</span>
@@ -1180,12 +1174,185 @@
 <span class='c'>#&gt;   ..- attr(*, "class")= chr "AsIs"</span>
 </code></pre>
 </div>
-<h3 id="further-reading-and-acknowledgement">Further reading and acknowledgement</h3>
+<h4 id="further-reading-and-acknowledgement">Further reading and acknowledgement</h4>
 <p>For more details on subsetting see 
 <a href="https://r4ds.had.co.nz/" target="_blank" rel="noopener">R for Data Science</a> and 
 <a href="https://adv-r.hadley.nz" target="_blank" rel="noopener">Advanced R</a> both by Hadley Wickham, from which much of the material in this module was borrowed.</p>
+<hr>
 <h2 id="exercise-1">Exercise 1</h2>
+<div class="puzzle">
+<p>A surprisingly useful operator for extracting elements of a numerical vector is the modulo operator <code>x %% y</code>. This returns the remainder when <code>x</code> is divided by <code>y</code>. It is a vectorized operation, so we can apply it to a list.</p>
 <div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>x</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span>, <span class='m'>5</span>, <span class='m'>6</span>, <span class='m'>7</span>, <span class='m'>8</span>, <span class='m'>9</span>, <span class='m'>10</span><span class='o'>)</span>
+<span class='nv'>x</span> <span class='o'>%%</span> <span class='m'>3</span>
+
+<span class='c'>#&gt;  [1] 1 2 0 1 2 0 1 2 0 1</span>
+</code></pre>
+</div>
+<p>Use this operator to extract every third element of the above vector <code>x</code>.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>Check the example in the presentation about selecting elements when the logical comparison is TRUE. What is the logical test we need to identify every third element? <br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>x</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span>, <span class='m'>5</span>, <span class='m'>6</span>, <span class='m'>7</span>, <span class='m'>8</span>, <span class='m'>9</span>, <span class='m'>10</span><span class='o'>)</span>
+<span class='nv'>x</span><span class='o'>[</span><span class='nv'>x</span> <span class='o'>%%</span> <span class='m'>3</span> <span class='o'>==</span> <span class='m'>0</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1] 3 6 9</span>
+</code></pre>
+</div>
+<br>
+</details>
+</div>
+<hr>
+<h2 id="exercise-2">Exercise 2</h2>
+<div class="puzzle">
+<p>Here is a visualization of a list:</p>
+<p><img src="train_total.jpg" style="width:75.0%" /></p>
+<p>Create a list in R called <code>train</code> that captures this structure. Print the list, and also display its structure.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>This list has no nested lists, it's just a list of vectors and individual values. <br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>train</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>3</span>, <span class='s'>"a"</span>, <span class='m'>4</span><span class='o'>:</span><span class='m'>6</span><span class='o'>)</span>
+<span class='nv'>train</span>
+
+<span class='c'>#&gt; [[1]]</span>
+<span class='c'>#&gt; [1] 1 2 3</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[2]]</span>
+<span class='c'>#&gt; [1] "a"</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[3]]</span>
+<span class='c'>#&gt; [1] 4 5 6</span>
+
+<span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>train</span><span class='o'>)</span>
+
+<span class='c'>#&gt; List of 3</span>
+<span class='c'>#&gt;  $ : int [1:3] 1 2 3</span>
+<span class='c'>#&gt;  $ : chr "a"</span>
+<span class='c'>#&gt;  $ : int [1:3] 4 5 6</span>
+</code></pre>
+</div>
+<br>
+</details>
+</div>
+<hr>
+<h2 id="exercise-3">Exercise 3</h2>
+<div class="puzzle">
+<p>For each of the following sub-trains/carriages, determine the subsetting expression by eye, and then check that it works by subsetting your <code>train</code> list from exercise 1.</p>
+<p><img src="trains_2.jpg" alt=""></p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br> There's more than one way to do these; you will have to use both `[ ]` and `[[ ]]` operators. The last two are tricky, experiment with them... <br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>train</span><span class='o'>[</span><span class='m'>1</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [[1]]</span>
+<span class='c'>#&gt; [1] 1 2 3</span>
+</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>train</span><span class='o'>[[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1] 1 2 3</span>
+</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>train</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>2</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [[1]]</span>
+<span class='c'>#&gt; [1] 1 2 3</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[2]]</span>
+<span class='c'>#&gt; [1] "a"</span>
+</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>train</span><span class='o'>[</span><span class='o'>-</span><span class='m'>2</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [[1]]</span>
+<span class='c'>#&gt; [1] 1 2 3</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[2]]</span>
+<span class='c'>#&gt; [1] 4 5 6</span>
+</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>train</span><span class='o'>[</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>1</span><span class='o'>)</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [[1]]</span>
+<span class='c'>#&gt; [1] 1 2 3</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[2]]</span>
+<span class='c'>#&gt; [1] 1 2 3</span>
+</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>train</span><span class='o'>[</span><span class='m'>0</span><span class='o'>]</span>
+
+<span class='c'>#&gt; list()</span>
+</code></pre>
+</div>
+</details>
+</div>
+<hr>
+<h2 id="exercise-4">Exercise 4</h2>
+<div class="puzzle">
+<p>A common use of recursive structures in biology is to represent phylogenetic trees. Create a recursive list in R called <code>tree</code> which captures the following visual representation</p>
+<p><img src="tree.jpg" alt=""></p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br>Start at the top and work down. Start with a simpler subtree, then expand terminals.</p>
+<p>Alternatively, start at the bottom with the smallest subtree, then work up, adding sisters into parent nodes.</p>
+<p>In either case, check your working with 
+<a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> as you incrementally add structure.</p>
+<p>Notice this is a binary branching tree, so the root node of every subtree should contain two elements.</p>
+<p>One of the tricks with these nested lists is to keep track of paired parentheses&hellip;</p>
+<p><strong>Stay calm and recurse.</strong> <br></p>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tree</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='s'>"a"</span>, <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='s'>"b"</span>, <span class='s'>"c"</span><span class='o'>)</span>, <span class='s'>"d"</span><span class='o'>)</span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>tree</span><span class='o'>)</span>
+
+<span class='c'>#&gt; List of 2</span>
+<span class='c'>#&gt;  $ : chr "a"</span>
+<span class='c'>#&gt;  $ :List of 2</span>
+<span class='c'>#&gt;   ..$ :List of 2</span>
+<span class='c'>#&gt;   .. ..$ : chr "b"</span>
+<span class='c'>#&gt;   .. ..$ : chr "c"</span>
+<span class='c'>#&gt;   ..$ : chr "d"</span>
+</code></pre>
+</div>
+</details>
 </div>
 <hr>
 <p><br> <br> <br> <br></p>
