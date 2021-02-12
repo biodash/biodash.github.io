@@ -13,15 +13,25 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 731779a4ae546d62
+rmd_hash: 5fbc91c136fea19c
 
 ---
 
-<br> <br> <br>
+<figure>
+<p align="center">
+<img src="shaker.png" width="35%">
+<figcaption>
+Image from <a href="https://r4ds.had.co.nz" class="uri">https://r4ds.had.co.nz</a>
+</figcaption>
+</p>
+</figure>
+
+<br>
 
 ------------------------------------------------------------------------
 
-## New To Code Club?
+New To Code Club?
+-----------------
 
 -   First, check out the [Code Club Computer Setup](/codeclub-setup/) instructions, which also has some pointers that might be helpful if you're new to R or RStudio.
 
@@ -29,7 +39,8 @@ rmd_hash: 731779a4ae546d62
 
 ------------------------------------------------------------------------
 
-## Session Goals
+Session Goals
+-------------
 
 -   Learn the uses of R's three basic subsetting operators: `[ ]`, `[[ ]]`, and [`$`](https://rdrr.io/r/base/Extract.html).
 -   Learn how the behavior of these operators varies depending on the **data structure** you are subsetting (vector, matrix, list, or data frame).
@@ -37,7 +48,8 @@ rmd_hash: 731779a4ae546d62
 
 ------------------------------------------------------------------------
 
-## Intro: What is 'subsetting' anyway?
+Intro: What is 'subsetting' anyway?
+-----------------------------------
 
 Subsetting (also known as indexing) is simply a formal way of pulling out specific pieces of a data structure. We've already seen two **dplyr** verbs that perform this kind of operation for tibbles: `filter` (to pull out specific rows) and `select` (to pull out specific columns).
 
@@ -61,7 +73,8 @@ The most important distinction between vectors and lists is that vectors are **h
 
 ------------------------------------------------------------------------
 
-## Vectors
+Vectors
+-------
 
 A vector is absolutely the most basic data structure in R. Every value in a vector must be of the **same type**. Strikingly, this sets R apart from Python. Using this kind of vector in Python requires loading a whole separate package: `numpy`. The most basic data structure in Python is the list.
 
@@ -179,7 +192,7 @@ For such a simple structure, there are a surprisingly large number of ways to su
 
 (Notice that the number after the decimal point indicates the position (index) of the element of the vector.)
 
-**Positive integers** return elements at the specified positions. Any expression that evaluates to a list of positive integers can be used as the index. The index operator is `[]`:
+**Positive integers** return elements at the specified positions. Any expression that evaluates to a vector of positive integers can be used as the index. The index operator is `[]`:
 
 <div class="highlight">
 
@@ -254,9 +267,9 @@ For such a simple structure, there are a surprisingly large number of ways to su
 
 </div>
 
-(Again, Python has no direct equivalent of this, but we can get a similar effect using a *dictionary* data structure, which explicilty assigns a name to each value).
+(Again, Python has no direct equivalent of this, but we can get a similar effect using a *dictionary* data structure, which explicitly assigns a name to each value).
 
-**Nothing** returns the entire vector
+**Nothing** (`[]`) returns the entire vector:
 
 <div class="highlight">
 
@@ -269,7 +282,8 @@ For such a simple structure, there are a surprisingly large number of ways to su
 
 This is not useful for (one dimensional) vectors, but is behind the notation for extracting rows and columns from matrices. Keep in mind a "nothing" index returns "everything".
 
-## Matrices
+Matrices
+--------
 
 A matrix is simply a vector with a **dimensions** attribute. Here we convert a vector to a two-dimensional matrix, with two rows and three columns, with [`dim(rows, cols)`](https://rdrr.io/r/base/dim.html).
 
@@ -321,7 +335,8 @@ And here is a way of selecting a submatrix (every row for all columns except the
 
 </div>
 
-## Lists
+Lists
+-----
 
 There are two main differences between vectors and lists: (i) lists can contain elements of **different types**; and (ii) lists can contain **other lists**. This is why lists are sometimes referred to as **recursive vectors**. We will see examples of these below, but first let's directly compare a *list* of numbers to a *vector* of numbers, and examine the structure. Lists are constructed with the [`list()`](https://rdrr.io/r/base/list.html) function.
 
@@ -393,7 +408,7 @@ Now compare this to the result of using the `[ ]` operator:
 
 The behavior of the `[ ]` operator is very different for lists: it selects the element(s) you request, but *it always returns a subsetted version of the original list*. It 'shrinks' the original list. There is nothing like this in Python; it's quite unique to R. (The reason this is the case will become clear when we examine data frames.) The `[[ ]]` operator on the other hand just returns the object you select.
 
-As mentioned above, it's quite possible that and element of a list might itself be a list:
+As mentioned above, it's quite possible that an element of a list might itself be a list:
 
 <div class="highlight">
 
@@ -454,7 +469,9 @@ However the printed form provides us a clue on how to extract an individual elem
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>m</span><span class='o'>[[</span><span class='m'>2</span><span class='o'>]</span><span class='o'>]</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># m &lt;- list(2.1, list(4.21, 4.22), 3.3, 5.4)</span>
+
+<span class='nv'>m</span><span class='o'>[[</span><span class='m'>2</span><span class='o'>]</span><span class='o'>]</span>
 
 <span class='c'>#&gt; [[1]]</span>
 <span class='c'>#&gt; [1] 4.21</span>
@@ -512,7 +529,7 @@ Here's a visualization of various list subsetting operations:
 
 </div>
 
-<figure><img src="lists_subsetting.png" style="width:75.0%" alt="Subsetting a list, visually." /><figcaption aria-hidden="true">Subsetting a list, visually.</figcaption></figure>
+<figure><img src="lists_subsetting.png" style="width:75.0%" alt="" /><figcaption>Subsetting a list, visually.</figcaption></figure>
 
 Here is a recursive pepper shaker, `p`
 
@@ -532,7 +549,8 @@ And here is the contents of that packet, `p[[1]][[1]]`
 
 We'll play with yet another type of visualization in the exercises.
 
-## Data frames
+Data frames
+-----------
 
 Let's look at a simple data frame:
 
@@ -602,7 +620,7 @@ We can also subset a data frame by name:
 
 </div>
 
-Finally `df$x` is simply a shorthand for `df[["x"]]` without the `[[ ]]` and the `"`:
+Finally `df$x` is simply a shorthand for `df[["x"]]` without the `[[ ]]` and the `" "`:
 
 <div class="highlight">
 
@@ -640,7 +658,8 @@ For more details on subsetting see [R for Data Science](https://r4ds.had.co.nz/)
 
 ------------------------------------------------------------------------
 
-## Exercise 1
+Exercise 1
+----------
 
 <div class="puzzle">
 
@@ -659,15 +678,17 @@ A surprisingly useful operator for extracting elements of a numerical vector is 
 Use this operator to extract every third element of the above vector `x`.
 
 <details>
-<summary>
-Hints (click here)
-</summary>
+
+<summary> Hints (click here) </summary>
+
 <br>Check the example in the presentation about selecting elements when the logical comparison is TRUE. What is the logical test we need to identify every third element? <br>
 </details>
+
+<br>
+
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <div class="highlight">
 
@@ -687,7 +708,8 @@ Solution (click here)
 
 ------------------------------------------------------------------------
 
-## Exercise 2
+Exercise 2
+----------
 
 <div class="puzzle">
 
@@ -698,15 +720,17 @@ Here is a visualization of a list:
 Create a list in R called `train` that captures this structure. Print the list, and also display its structure.
 
 <details>
-<summary>
-Hints (click here)
-</summary>
+
+<summary> Hints (click here) </summary>
+
 <br>This list has no nested lists, it's just a list of vectors and individual values. <br>
 </details>
+
+<br>
+
 <details>
-<summary>
-Solution (click here)
-</summary>
+
+<summary> Solution (click here) </summary>
 
 <div class="highlight">
 
@@ -740,7 +764,8 @@ Solution (click here)
 
 ------------------------------------------------------------------------
 
-## Exercise 3
+Exercise 3
+----------
 
 <div class="puzzle">
 
@@ -749,16 +774,13 @@ For each of the following sub-trains/carriages, determine the subsetting express
 ![](trains_2.jpg)
 
 <details>
-<summary>
-Hints (click here)
-</summary>
-<br> There's more than one way to do these; you will have to use both `[ ]` and `[[ ]]` operators. The last two are tricky, experiment with them... <br>
+<summary> Hints (click here) </summary> <br> There's more than one way to do these; you will have to use both `[ ]` and `[[ ]]` operators. The last two are tricky, experiment with them... <br>
 </details>
-<details>
-<summary>
-Solution (click here)
-</summary>
+
 <br>
+
+<details>
+<summary> Solution (click here) </summary> <br>
 
 <div class="highlight">
 
@@ -833,7 +855,8 @@ Solution (click here)
 
 ------------------------------------------------------------------------
 
-## Exercise 4
+Exercise 4
+----------
 
 <div class="puzzle">
 
@@ -842,11 +865,8 @@ A common use of recursive structures in biology is to represent phylogenetic tre
 ![](tree.jpg)
 
 <details>
-<summary>
-Hints (click here)
-</summary>
 
-<br>Start at the top and work down. Start with a simpler subtree, then expand terminals.
+<summary> Hints (click here) </summary> <br>Start at the top and work down. Start with a simpler subtree, then expand terminals.
 
 Alternatively, start at the bottom with the smallest subtree, then work up, adding sisters into parent nodes.
 
@@ -858,12 +878,12 @@ One of the tricks with these nested lists is to keep track of paired parentheses
 
 **Stay calm and recurse.** <br>
 </details>
-<details>
-<summary>
-Solution (click here)
-</summary>
 
 <br>
+
+<details>
+
+<summary> Solution (click here) </summary> <br>
 
 <div class="highlight">
 
