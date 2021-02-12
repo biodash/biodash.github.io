@@ -10,7 +10,6 @@ toc: true
 
 Here, we will post tutorials, analysis pipelines, instructional videos,
 slidedecks, materials from past workshops, and so on.   
-**Stay tuned!**
 
 - MCIC/MCBL's [Read-the-Docs site](http://mcbl.readthedocs.io/) with tutorials.
 
