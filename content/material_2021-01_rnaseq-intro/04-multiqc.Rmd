@@ -32,13 +32,16 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## MultiQC
 
-MultiQC is a program that *summarizes multiple FastQC results*  
-into a single nicely formatted HTML page.
+MultiQC is a program that *aggregates and summarizes QC log files* into a single
+nicely formatted HTML page.
+
+It is most often used to summarize FastQC results, but can also be used to
+summarize STAR and featureCounts output logs, as we'll do later.
 
 <br>
 
 <p align="center">
-<img src=img/multiqc_front.png width="100%">
+<img src=img/multiqc_front.png width="90%">
 </p>
 
 ---
@@ -58,7 +61,7 @@ into a single nicely formatted HTML page.
 MultiQC is *not* available as a module at OSC (i.e., no `module load`).
 
 The best way to use it is by installing it for yourself
-with the software manager Conda, which:
+**with the software manager Conda**, which:
   
   - Creates *environments* with one (best-practice) or more software packages.
 
@@ -101,7 +104,7 @@ with the software manager Conda, which:
   - `-n multiqc-env` is the name for the new environment, which is arbitrary.
   
   - `python=3.7` is how specify that we want to install Python and specifically,
-     Python 3.7.
+     Python version 3.7.
   
 ---
 
@@ -110,14 +113,14 @@ with the software manager Conda, which:
 - Next, we *activate* the environment and install MultiQC into it:
 
   ```sh
-  $ source activate multiqc
+  $ source activate multiqc-env
   
   $ conda install -y -c bioconda -c conda-forge multiqc
   ```
 
-  - `-c conda-forge multiqc` is how we indicate which so-called
+  - `-c bioconda -c conda-forge` is how we indicate which so-called
     *channels*, i.e. repositories, we want to use.
-    (These sorts of detailed are provided in software installation instructions.)
+    (These sorts of details are provided in software installation instructions.)
 
 ---
 
@@ -128,7 +131,7 @@ with the software manager Conda, which:
   
   ```sh
   $ module load python/3.6-conda5.2
-  $ source activate multiqc
+  $ source activate multiqc-env
   ```
 
 - Having done that, you should be able to run MultiQC:
@@ -174,36 +177,42 @@ $ cd /fs/project/PAS0471/teach/misc/2021-02_rnaseq/$USER
 # Start an interactive job at OSC:
 $ sinteractive -A PAS0471 # No time specified: will be 30 minutes
 
-$ module load python/3.6-conda5.2
-$ source activate multiqc
+$ module load python/3.6-conda5.2  # Load the conda module
+$ source activate multiqc          # Activate the MultiQC env.
 
-$ multiqc results/QC_fastq/ -o results/QC_fastq/
+$ multiqc results/QC_fastq/ -o results/QC_fastq/ # Run MultiQC
+
+$ ls -lh results/QC_fastq/multiqc_report.html    # Main output file
 ```
 
 ---
 
-## MultiQC script
+## MultiQC output
 
-Alternatively, we could create a script that runs MultiQC (next two slides).
+<br>
+
+.content-box-diy[
+Let's take a look at the output file via OnDemand's file browser.
+]
 
 ---
 
 ## MultiQC script
+
+We could also run MultiQC in a script (`scripts/QC_fastq/multiqc.sh`):
 
 ```sh
 #!/bin/bash
 #SBATCH --account=PAS0471
 #SBATCH --time=60
 #SBATCH --out=slurm-multiqc-%j.out
-
 set -e -u -o pipefail
 
 # Save command-line arguments in named variables:
 input_dir="$1"
 output_dir="$2" 
 
-# If necessary, create the output dir:
-mkdir -p "$output_dir"
+mkdir -p "$output_dir" # If necessary, create the output dir
 
 # Report before starting the pogram:
 echo "Running MultiQC for dir: $input_dir"
@@ -216,8 +225,6 @@ source activate /users/PAS0471/jelmer/.conda/envs/multiqc
 # Run fastqc:
 multiqc "$input_dir" -o "$output_dir"
 ```
-
-- The script is saved as `scripts/QC_fastq/multiqc.sh`.
 
 ---
 
