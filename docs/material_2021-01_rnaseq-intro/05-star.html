@@ -70,7 +70,7 @@ Therefore, RNAseq mappers have to be "splice-aware".
 
 ## The STAR aligner
 
-About STAR:
+**About STAR:**
 
 - STAR is an acronym for "Spliced Transcripts Alignment to a Reference".
 
@@ -80,7 +80,7 @@ About STAR:
 - [This page](https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/03_alignment.html)
   has a nice quick, visual explanation of STAR's alignment strategy.
 
-- It's a very fast aligner, but memory-intensive. Luckily we have the OSC!
+- It's a very fast aligner, but memory-intensive. Luckily we have OSC!
 
 --
 
@@ -97,7 +97,7 @@ own way to create a genome dictionary.
 ## STAR at OSC
 
 - STAR is available in a module at OSC. The Owens cluster has a more recent
-  version available, so make sure to log in to the Owens cluster (and not Pitzer).
+  version available, so make sure to log in to the Owens cluster.
 
   ```sh
   $ cd /fs/project/PAS0471/teach/misc/2021-02_rnaseq/$USER
@@ -123,18 +123,12 @@ Some options when generating a genome index with STAR are as follows:
 | `--sjdbOverhang ReadLength-1` | Length of the donor/acceptor sequence &lt;br&gt; on each side of the junctions
 | `--genomeSAindexNbases 14`    | Length of the SA pre-indexing string
 
-According to the documentation, the value of `genomeSAindexNbases` should be
-log2(GenomeLength)/2 - 1) =&gt; log2(782520133)/2 - 1) = 13.77 = 14
 
-.content-box-warning[
-I have not looked into the different options much and am using the same
-options that Matthew specified, here.
+.content-box-info[
+According to the documentation,  
+the value of `genomeSAindexNbases` should be:
 
-Before running this on new data, should be worth looking at the STAR documentation
-to check the options are appropriate.
-
-(E.g. check the `` option referenced
-[here](https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/03_alignment.html).)
+`log2(GenomeLength)/2 - 1)` =&gt; `log2(782520133)/2 - 1)` = 13.77 = 14
 ]
 
 ---
@@ -156,6 +150,8 @@ STAR --runThreadN "$SLURM_CPUS_ON_NODE" \
     --genomeSAindexNbases 13 \
     --sjdbOverhang ReadLength-1
 ```
+
+--
 
 Submit the script:
 
@@ -264,9 +260,10 @@ Some options for aligning reads to the genome using STAR are
 | `--outSAMtype` | Output sorted BAM (default: SAM) &lt;br&gt; `BAM SortedByCoordinate` for sorted BAM
 | `--outSAMunmapped`        | What to do with unmapped reads &lt;br&gt; (default: don't output)
 
+--
 
 .content-box-warning[
-Check out max intron size in GFF
+Check maximum intron size in GFF:
 
 `--alignIntronMin 20` -- minimum intron length
 
@@ -296,6 +293,8 @@ STAR --runThreadN "$SLURM_CPUS_ON_NODE" \
    --outSAMtype BAM SortedByCoordinate
 ```
 
+--
+
 Submit the script:
 
 ```sh
@@ -310,8 +309,21 @@ $ sbatch -o "$slurm_log" scripts/align/star_align.sh \
 ## Check the output
 
 ```sh
-$ cat slurm...
-#&gt; 
+$ cat slurm-align-C6_myb2_V1N_1_S1_L001-12836540.out
+#&gt; Starting script star_align.sh
+#&gt; Thu Feb 11 20:24:21 EST 2021
+#&gt; -------------------
+
+#&gt; R1 input file: data/fastq//X6465_Benitez-PonceM_C6_myb2_V1N_1_S1_L001_R1_001.fastq.gz
+#&gt; R2 input file: data/fastq//X6465_Benitez-PonceM_C6_myb2_V1N_1_S1_L001_R2_001.fastq.gz
+#&gt; Genome index dir: data/ref/Heinz1706_4.00/STAR_index
+#&gt; Genome annotation file: data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+#&gt; Bam (output) directory: results/align/bam
+
+#&gt; Running STAR....
+#&gt; Feb 11 20:24:21 ..... started STAR run
+#&gt; Feb 11 20:24:21 ..... loading genome
+#&gt; Feb 11 20:24:27 ..... started mapping
 ```
 
 ---
@@ -373,6 +385,22 @@ $ ./scripts/align/star_align_loop.sh
 #&gt; ...
 ```
 
+---
+
+## Checking the output
+
+```sh
+$ grep "Uniquely mapped" results/align/bam/star_logs/*Log.final*
+```
+
+---
+
+## Running MultiQC on the logs
+
+```sh
+$ scripts/QC_fastq/multiqc.sh \
+    results/align/bam/star_logs results/align/bam/star_logs
+```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
