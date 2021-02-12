@@ -22,7 +22,7 @@ class:inverse middle center
 &lt;br&gt; &lt;br&gt; &lt;br&gt;
 
 ### Jelmer Poelstra, MCIC Wooster
-### 2021/02/12 (updated: 2021-02-11)
+### 2021/02/12 (updated: 2021-02-12)
   
 ---
 
@@ -37,24 +37,42 @@ class:inverse middle center
 ## Aligning RNAseq reads
 
 The purpose of aligning reads, also known as *mapping*:  
-determine where in the genome each read originates from.
+**determine where in the genome each read originates from.**
   
-This information forms the basis of generate read counts for each gene for
-each sample (`featureCounts` step).
-
-**ADD IMG**
-
----
-
-## Aligning RNAseq reads (cont.)
-
 Aligning RNAseq reads is more challenging than DNA reads:
 due to *splicing*, many reads can't be simply be mapped wholly to the genome.
   
 Moreover, there is often *alternative splicing*,
 such that a single "correct" reference is simply not applicable.
-  
-Therefore, RNAseq mappers have to be "splice-aware".
+
+&lt;figure&gt;
+&lt;p align="center"&gt;
+&lt;img src="img/DNA_alternative_splicing.gif" width="75%"&gt;
+&lt;figcaption&gt;Figure from &lt;a href="https://en.wikipedia.org/wiki/Alternative_splicing#/media/File:DNA_alternative_splicing.gif"&gt;Wikipedia&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/p&gt;
+&lt;/figure&gt;
+
+---
+
+## Aligning RNAseq reads (cont.)
+
+Three different strategies are possible &amp;ndash; but mapping to the genome
+is preferable as long as a reference genome is available:
+
+&lt;br&gt;
+
+&lt;figure&gt;
+&lt;p align="center"&gt;
+&lt;img src="img/mapping-strategies.png" width="85%"&gt;
+&lt;figcaption&gt;Figures from &lt;a href="https://www.nature.com/articles/nmeth1010-793"&gt;Cloonan &amp; Grimmond 2010&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/p&gt;
+&lt;/figure&gt;
+
+---
+
+## Aligning RNAseq reads (cont.)
+
+Therefore, RNAseq mappers have to be "splice-aware":
 
 &lt;br&gt;
 
@@ -65,6 +83,29 @@ Therefore, RNAseq mappers have to be "splice-aware".
 &lt;/p&gt;
 &lt;/figure&gt;
 
+---
+
+## Alignment output: SAM/BAM files
+
+- SAM/BAM files contain the original reads *along with the genomic coordinates
+  to which they were mapped* (and more information).
+
+- We get 1 SAM/BAM file for each sample with both the forward and the reverse
+  reads (not 2 separate files like for FASTQ files).
+
+--
+
+- SAM is an uncompressed text file and BAM is its binary, compressed counterpart.
+  
+  - SAM: Sequence Alignment/Map
+  
+  - BAM: Binary Alignment/Map
+
+  - Most software can work directly with BAM files, and you can use programs
+    like Samtools to view them.
+  
+- For subsequent analyses, BAM files usually also need to be *sorted* by
+  genomic coordinates (e.g. with Samtools but also STAR).
 
 ---
 
@@ -115,7 +156,7 @@ Some options when generating a genome index with STAR are as follows:
 
 | Option                        | Meaning
 |-------------------------------|---------
-| `--runThreadN 16`             | Use 16 cores/threads
+| `--runThreadN 18`             | Use 18 cores/threads
 | `--runMode genomeGenerate`    | The mode to index a genome
 | `--genomeDir mydir`           | Destination dir for index 
 | `--genomeFastaFiles my.fasta` | Path to the genome FASTA file
@@ -139,7 +180,7 @@ the value of `genomeSAindexNbases` should be:
 #!/bin/bash
 #SBATCH --account=PAS0471
 #SBATCH --time=2:00:00
-#SBATCH --cpus-per-task=28
+#SBATCH --cpus-per-task=18
 module load star/2.6.0a
 
 STAR --runThreadN "$SLURM_CPUS_ON_NODE" \
@@ -278,7 +319,7 @@ Check maximum intron size in GFF:
 #!/bin/bash
 #SBATCH --account=PAS0471
 #SBATCH --time=2:00:00
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=18
 module load star/2.6.0a
 
 R1=$(ls "$fastq_dir"/*"$sample"*R1*fastq.gz)
@@ -395,7 +436,7 @@ $ grep "Uniquely mapped" results/align/bam/star_logs/*Log.final*
 
 ---
 
-## Running MultiQC on the logs
+## Running MultiQC on the STAR logs
 
 ```sh
 $ scripts/QC_fastq/multiqc.sh \
