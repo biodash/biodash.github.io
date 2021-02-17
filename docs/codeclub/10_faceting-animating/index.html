@@ -275,7 +275,7 @@
     
       <meta property="article:published_time" content="2021-02-17T00:00:00&#43;00:00">
     
-    <meta property="article:modified_time" content="2021-02-17T16:44:01-05:00">
+    <meta property="article:modified_time" content="2021-02-17T18:29:48-05:00">
   
 
   
@@ -614,14 +614,8 @@
     <li><a href="#6---highlighting-plus-faceting">6 - Highlighting plus faceting</a></li>
     <li><a href="#7---adjusting-scales-while-faceting">7 - Adjusting scales while faceting</a></li>
     <li><a href="#8---multi-panel-plots">8 - Multi-panel plots</a></li>
-    <li><a href="#9---animating">9 - Animating</a>
-      <ul>
-        <li><a href="#10---saving-my-gif">10 - Saving my gif</a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
+    <li><a href="#9---animating">9 - Animating</a></li>
+    <li><a href="#10---breakout-rooms">10 - Breakout rooms</a></li>
     <li><a href="#loading-data-and-get-set-up">Loading data and get set up</a>
       <ul>
         <li><a href="#main-exercises">Main exercises</a></li>
@@ -829,6 +823,7 @@
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"gghighlight"</span>,
                    <span class='s'>"gganimate"</span>,
+                   <span class='s'>"magick"</span>,
                    <span class='s'>"patchwork"</span>,
                    <span class='s'>"ggrepel"</span>,
                    <span class='s'>"gapminder"</span><span class='o'>)</span><span class='o'>)</span></code></pre>
@@ -838,6 +833,7 @@
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/yutannihilation/gghighlight/'>gghighlight</a></span><span class='o'>)</span> <span class='c'># for bringing attention to certain parts of your plot</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://gganimate.com'>gganimate</a></span><span class='o'>)</span> <span class='c'># for animating</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://docs.ropensci.org/magick/'>magick</a></span><span class='o'>)</span> <span class='c'># for rendering gifs and saving them</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://patchwork.data-imaginist.com'>patchwork</a></span><span class='o'>)</span> <span class='c'># for making multi-panel plots</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/slowkow/ggrepel'>ggrepel</a></span><span class='o'>)</span> <span class='c'># for getting labels to not be on top of your points</span>
 
@@ -1131,7 +1127,7 @@
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("transformr") </span>
 <span class='c'># if you are having problems with gganimate you may need to install transformr</span>
 
-<span class='nv'>p</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>gapminder_americas</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>lifeExp</span>, y <span class='o'>=</span> <span class='nv'>pop</span>, fill <span class='o'>=</span> <span class='nv'>country</span>, label <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+<span class='o'>(</span><span class='nv'>p</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>gapminder_americas</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>lifeExp</span>, y <span class='o'>=</span> <span class='nv'>pop</span>, fill <span class='o'>=</span> <span class='nv'>country</span>, label <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>shape <span class='o'>=</span> <span class='m'>21</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'><a href='https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html'>geom_text_repel</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>scale_y_log10</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
@@ -1141,23 +1137,32 @@
        subtitle <span class='o'>=</span> <span class='s'>'Year: &#123;closest_state&#125;'</span>, 
        x <span class='o'>=</span> <span class='s'>"Life Expectancy"</span>, 
        y <span class='o'>=</span> <span class='s'>"Log10 Population"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://gganimate.com/reference/transition_states.html'>transition_states</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span> 
-
-<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>p</span><span class='o'>)</span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-17-1.gif" width="700px" style="display: block; margin: auto;" /></p>
+  <span class='nf'><a href='https://gganimate.com/reference/transition_states.html'>transition_states</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span><span class='o'>)</span></code></pre>
 </div>
+<p align="center">
+<img src=gapminder_gif.gif width="95%">
+</p>
 <p>There are many different ways to transition your data in <code>gganimate</code> - and you can learn more about them 
 <a href="https://gganimate.com/reference/index.html" target="_blank" rel="noopener">here</a>.</p>
-<h3 id="10---saving-my-gif">10 - Saving my gif</h3>
+<p>Saving my gif</p>
 <p>Now I want to save my gif. We can do that simply with the function 
 <a href="https://gganimate.com/reference/anim_save.html" target="_blank" rel="noopener"><code>anim_save()</code></a> which works a lot like <code>ggsave()</code>.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"YOUR FILE PATH HERE"</span>,
-          animation <span class='o'>=</span> <span class='nv'>p</span><span class='o'>)</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># set parameters for your animation</span>
+<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>p</span>, 
+        duration <span class='o'>=</span> <span class='m'>10</span>, 
+        fps <span class='o'>=</span> <span class='m'>10</span>, 
+        width <span class='o'>=</span> <span class='m'>700</span>, 
+        height <span class='o'>=</span> <span class='m'>700</span>,
+        renderer <span class='o'>=</span> <span class='nf'><a href='https://gganimate.com/reference/renderers.html'>magick_renderer</a></span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'># save it</span>
+<span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"gapminder_gif.gif"</span>,
+          animation <span class='o'>=</span> <span class='nf'><a href='https://gganimate.com/reference/last_animation.html'>last_animation</a></span><span class='o'>(</span><span class='o'>)</span>,
+          path <span class='o'>=</span> <span class='s'>"/Users/jessicacooperstoneimac"</span><span class='o'>)</span></code></pre>
 </div>
 <hr>
-<h1 id="10---breakout-rooms">10 - Breakout rooms</h1>
+<h2 id="10---breakout-rooms">10 - Breakout rooms</h2>
 <h2 id="loading-data-and-get-set-up">Loading data and get set up</h2>
 <p>Load the <code>palmerpenguins</code> dataset, look at its structure, and view the beginning of the df.</p>
 <div class="highlight">
@@ -1251,7 +1256,7 @@
 <h4 id="exercise-3">Exercise 3</h4>
 <div class="puzzle">
 <div>
-<p>Take your plot from Exercise 2 and make it prettier. You can do things like change your axis labels, add title, change themes as you see fit. Color your points by sex.</p>
+<p>Take your plot from Exercise 2 and make it prettier. You can do things like change your axis labels, add title, change themes as you see fit. Color your points by <code>sex</code>.</p>
 <details>
 <summary> Hints (click here) </summary>
 <p>Pick a theme you like. <code>theme_classic()</code> is a good place to start, and if you want to download the package <code>hrbrthemes</code>, I really like the 
@@ -1296,7 +1301,7 @@
 <h4 id="exercise-4">Exercise 4</h4>
 <div class="puzzle">
 <div>
-<p>Add a second dimension of faceting by species.</p>
+<p>Add a second dimension of faceting by <code>species</code>.</p>
 <details>
 <summary> Hints (click here) </summary>
 <p>You do this within your <code>facet_wrap()</code> call. You might want to try the formula syntax, which works like this: <code>var1~var2</code>. <br></p>
@@ -1420,10 +1425,11 @@
        y <span class='o'>=</span> <span class='s'>"Flipper Length (mm)"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'><a href='https://gganimate.com/reference/transition_states.html'>transition_states</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> 
 
-<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>flipper_by_BW</span><span class='o'>)</span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-26-1.gif" width="700px" style="display: block; margin: auto;" /></p>
+<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>flipper_by_BW</span><span class='o'>)</span></code></pre>
 </div>
+<p align="center">
+<img src=flippers_by_mass.gif width="95%">
+</p>
 </details>
 <br>
 </div>
@@ -1443,8 +1449,18 @@
 <details>
 <summary> Solutions (click here) </summary>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"YOUR FILE PATH HERE"</span>,
-          animation <span class='o'>=</span> <span class='nv'>flipper_by_BW</span><span class='o'>)</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># set parameters for your animation</span>
+<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>flipper_by_BW</span>, 
+        duration <span class='o'>=</span> <span class='m'>10</span>, 
+        fps <span class='o'>=</span> <span class='m'>10</span>, 
+        width <span class='o'>=</span> <span class='m'>700</span>, 
+        height <span class='o'>=</span> <span class='m'>700</span>,
+        renderer <span class='o'>=</span> <span class='nf'><a href='https://gganimate.com/reference/renderers.html'>magick_renderer</a></span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'># save it</span>
+<span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"flippers_by_mass.gif"</span>,
+          animation <span class='o'>=</span> <span class='nf'><a href='https://gganimate.com/reference/last_animation.html'>last_animation</a></span><span class='o'>(</span><span class='o'>)</span>,
+          path <span class='o'>=</span> <span class='s'>"YOUR_PATH_HERE"</span><span class='o'>)</span></code></pre>
 </div>
 </details>
 <br>
@@ -1469,8 +1485,8 @@
 <details>
 <summary> Solutions (click here) </summary>
 <ul>
-<li><code>title =</code> allows you to set a title</li>
-<li><code>tag_levels =</code> allows you to determine how you want your panels to be tagged.</li>
+<li><code>title</code> allows you to set a title</li>
+<li><code>tag_levels</code> allows you to determine how you want your panels to be tagged.</li>
 </ul>
 <p>Boxplot of <code>body_mass_g</code> by <code>sex</code>.</p>
 <div class="highlight">
