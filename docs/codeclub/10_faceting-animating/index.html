@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Jelmer Poelstra">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="During this tenth session of Code Club, we will be continuing to work on making visualizations using ggplot2, including faceting plots, making multi-panel figures, and animating charts.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/10_faceting-animating/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#3f51b5">
+  
+
+  
+  
+  
+  <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.css">
+
+  
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9F9CQ7P0DX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'G-9F9CQ7P0DX', {});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/images/icon_hucc2cf774636a7e386557c89fa75ff618_191491_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hucc2cf774636a7e386557c89fa75ff618_191491_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="https://biodash.github.io/codeclub/10_faceting-animating/">
+
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="BioDASH">
+  <meta property="og:url" content="https://biodash.github.io/codeclub/10_faceting-animating/">
+  <meta property="og:title" content="Session 10: Faceting, multi-plots, and animating | BioDASH">
+  <meta property="og:description" content="During this tenth session of Code Club, we will be continuing to work on making visualizations using ggplot2, including faceting plots, making multi-panel figures, and animating charts."><meta property="og:image" content="https://biodash.github.io/codeclub/10_faceting-animating/featured.png">
+  <meta property="twitter:image" content="https://biodash.github.io/codeclub/10_faceting-animating/featured.png"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2021-02-17T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2021-02-17T16:44:01-05:00">
+  
+
+  
+
+
+
+  
+
+
+  
+
+
+  <link rel='stylesheet' href='/css/highlight-light.css' title='hl-light'>
+<link rel='stylesheet' href='/css/highlight-dark.css' title='hl-dark' disabled>
+
+
+
+  <title>Session 10: Faceting, multi-plots, and animating | BioDASH</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+  
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/"><img src="/images/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/"><img src="/images/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Code Club</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/codeclub/"><span>- Sessions</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-schedule/"><span>- Schedule</span></a>
+            
+              <a class="dropdown-item" href="/"><span>----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-setup/"><span>- Computer Setup</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-novice/"><span>- Getting Started with R</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-present/"><span>- For Presenters</span></a>
+            
+              <a class="dropdown-item" href="/"><span>-----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-suggest/"><span>- Suggest a Topic</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-about/"><span>- About & Join!</span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/events/"><span>Other Events</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/material/"><span>Material</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/support/"><span>Support</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/suggest/"><span>Suggest...</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="https://github.com/biodash/biodash.github.io" target="_blank" rel="noopener"><i class='fab fa-github'></i><span></span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/index.xml" target="_blank" rel="noopener"><i class='fas fa-rss'></i><span></span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item">
+        <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  
+  <div class="container-fluid docs">
+      <div class="row flex-xl-nowrap">
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+          <ul class="nav toc-top">
+            <li><a href="#" id="back_to_top" class="docs-toc-title">Contents</a></li>
+          </ul>
+          <nav id="TableOfContents">
+  <ul>
+    <li><a href="#prep-homework">Prep homework</a>
+      <ul>
+        <li><a href="#basic-computer-setup">Basic computer setup</a></li>
+        <li><a href="#new-to-ggplot">New to ggplot?</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#rmarkdown-for-todays-session">RMarkdown for today&rsquo;s session</a></li>
+      </ul>
+    </li>
+    <li><a href="#1---how-can-i-do-more-with-my-figures">1 - How can I do more with my figures?</a></li>
+    <li><a href="#2---accessing-our-data">2 - Accessing our data</a></li>
+    <li><a href="#3---life-expectancy-vstime">3 - Life expectancy vs. time</a></li>
+    <li><a href="#4---highlighting">4 - Highlighting</a></li>
+    <li><a href="#5---faceting">5 - Faceting</a></li>
+    <li><a href="#6---highlighting-plus-faceting">6 - Highlighting plus faceting</a></li>
+    <li><a href="#7---adjusting-scales-while-faceting">7 - Adjusting scales while faceting</a></li>
+    <li><a href="#8---multi-panel-plots">8 - Multi-panel plots</a></li>
+    <li><a href="#9---animating">9 - Animating</a>
+      <ul>
+        <li><a href="#10---saving-my-gif">10 - Saving my gif</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#loading-data-and-get-set-up">Loading data and get set up</a>
+      <ul>
+        <li><a href="#main-exercises">Main exercises</a></li>
+        <li><a href="#bonus-exercises">Bonus exercises</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+          
+        </div>
+        <main class="col-12 col-md-0 col-xl-10 py-md-3 pl-md-5 docs-content" role="main">
+  
+
+  <article class="article">
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+
+<div class="article-container pt-3">
+  <h1>Session 10: Faceting, multi-plots, and animating</h1>
+
+  
+  <p class="page-subtitle">Getting up close and personal with our data</p>
+  
+
+  
+
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  
+  <span><a href="/authors/jessica-cooperstone/">Jessica Cooperstone</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+    Feb 17, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 542px;">
+  <div style="position: relative">
+    <img src="/codeclub/10_faceting-animating/featured_hud9c88ba00e94bd4c924fc8e3b6ef5f15_1590886_720x0_resize_lanczos_2.png" alt="" class="featured-image">
+    <span class="article-header-caption">Artwork by @allison_horst</span>
+  </div>
+</div>
+
+
+    
+    <div class="article-container">
+      <div class="article-style">
+        <p><br> <br> <br></p>
+<hr>
+<h2 id="prep-homework">Prep homework</h2>
+<h3 id="basic-computer-setup">Basic computer setup</h3>
+<ul>
+<li>
+<p>If you didn&rsquo;t already do this, please follow the 
+<a href="/codeclub-setup/04_ggplot2/">Code Club Computer Setup</a> instructions, which also has pointers for if you&rsquo;re new to R or RStudio.</p>
+</li>
+<li>
+<p>If you&rsquo;re able to do so, please open RStudio a bit before Code Club starts &ndash; and in case you run into issues, please join the Zoom call early and we&rsquo;ll help you troubleshoot.</p>
+</li>
+</ul>
+<h3 id="new-to-ggplot">New to ggplot?</h3>
+<p>Check out the two Code Club pages for 
+<a href="/codeclub/04_ggplot2/">Session 4</a> and 
+<a href="/codeclub/05_ggplot-round-2/">Session 5</a>.</p>
+<p>If you&rsquo;ve never used <code>ggplot2</code> before (or even if you have), you may find 
+<a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf" target="_blank" rel="noopener">this cheat sheet</a> useful.</p>
+<br>
+<hr>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="rmarkdown-for-todays-session">RMarkdown for today&rsquo;s session</h3>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># directory for Code Club Session 2:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S10"</span><span class='o'>)</span>
+
+<span class='c'># directory for our RMarkdown</span>
+<span class='c'># ("recursive" to create two levels at once.)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S10/Rmd/"</span><span class='o'>)</span>
+
+<span class='c'># save the url location for today's script</span>
+<span class='nv'>todays_R_script</span> <span class='o'>&lt;-</span> 
+  <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/10_faceting-animating/Session10_faceting_animating_multifigs.Rmd'</span>
+
+<span class='c'># indicate the name of the new script file</span>
+<span class='nv'>Session10_Rmd</span> <span class='o'>&lt;-</span> <span class='s'>"S10/Rmd/Session10_faceting_animating_multifigs.Rmd"</span>
+
+<span class='c'># go get that file! </span>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_R_script</span>,
+              destfile <span class='o'>=</span> <span class='nv'>Session10_Rmd</span><span class='o'>)</span></code></pre>
+</div>
+<br>
+<hr>
+<h2 id="1---how-can-i-do-more-with-my-figures">1 - How can I do more with my figures?</h2>
+<p align="center">
+<img src=ggplot2_exploratory.png width="95%" alt="ggplot2 exploratory cartoon">
+</p>
+<p>Artwork by 
+<a href="https://github.com/allisonhorst/stats-illustrations" target="_blank" rel="noopener">Allison Horst</a></p>
+<p>Sometimes we have so much data that it is difficult to make sense of it if we look at it all at once. One way to get around this is to create 
+<a href="https://r4ds.had.co.nz/data-visualisation.html?q=facet#facets" target="_blank" rel="noopener">facets</a> in your data &ndash; small subplots that help you to see different relationships among different variables in your dataset.</p>
+<p>Today we will be using 
+<a href="https://ggplot2.tidyverse.org/" target="_blank" rel="noopener"><code>ggplot2</code></a> to make a series of plots that help us better understand the underlying structure in our dataset.</p>
+<br>
+<div class="alert alert-note">
+<div>
+<p><strong>What will we go over today</strong></p>
+<p>These functions or packages will help you to get better visualize with your data.</p>
+<ul>
+<li>
+<a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" target="_blank" rel="noopener"><code>facet_wrap()</code></a> and 
+<a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" target="_blank" rel="noopener"><code>facet_grid()</code></a>- makes small multiple plots based on some variable.</li>
+<li>set <code>scales</code> to indicate the linked or not-linked nature of your axes in a faceted plot</li>
+<li>
+<a href="https://www.rdocumentation.org/packages/gghighlight/versions/0.1.0" target="_blank" rel="noopener"><code>gghighlight()</code></a> - allows you to direct focus on a particular portion of your data.</li>
+<li>
+<a href="https://patchwork.data-imaginist.com/" target="_blank" rel="noopener"><code>patchwork</code></a> - to compose super easy multi-plot figures</li>
+<li>
+<a href="https://gganimate.com/articles/gganimate.html" target="_blank" rel="noopener"><code>gganimate</code></a> - to make your plots gif!</li>
+</ul>
+<p>I will also go over a few tricks along the way.</p>
+</div>
+</div>
+<br>
+<hr>
+<h2 id="2---accessing-our-data">2 - Accessing our data</h2>
+<p><strong>Let&rsquo;s get set up and grab some data so that we can learn more about this world (and ggplot2)</strong></p>
+<ul>
+<li>You can do this locally, or at OSC. You can find instructions if you are having trouble 
+<a href="/codeclub-setup/">here</a>.</li>
+</ul>
+<p>First load your libraries. We are using a lot of new packages today.</p>
+<p>If you&rsquo;ve never downloaded these packages before, use the chunk below.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"gghighlight"</span>,
+                   <span class='s'>"gganimate"</span>,
+                   <span class='s'>"patchwork"</span>,
+                   <span class='s'>"ggrepel"</span>,
+                   <span class='s'>"gapminder"</span><span class='o'>)</span><span class='o'>)</span></code></pre>
+</div>
+<p>Once you have the packages above downloaded, load your libraries.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/yutannihilation/gghighlight/'>gghighlight</a></span><span class='o'>)</span> <span class='c'># for bringing attention to certain parts of your plot</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://gganimate.com'>gganimate</a></span><span class='o'>)</span> <span class='c'># for animating</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://patchwork.data-imaginist.com'>patchwork</a></span><span class='o'>)</span> <span class='c'># for making multi-panel plots</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/slowkow/ggrepel'>ggrepel</a></span><span class='o'>)</span> <span class='c'># for getting labels to not be on top of your points</span>
+
+<span class='c'># data for today</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/jennybc/gapminder'>gapminder</a></span><span class='o'>)</span></code></pre>
+</div>
+<p>Then let&rsquo;s access the dataset <code>gapminder</code>, which is both the name of the package, and the name of the dataset. It contains a subset of data from 
+<a href="https://www.gapminder.org/" target="_blank" rel="noopener">Gapminder.org</a>, an educational non-profit aimed to fight global misconceptions about statistics of our world.</p>
+<p align="center">
+<img src=mega_gapminder.png width="95%" alt="a big bubble plot showing the relationship between income and health of nations, with bubble size indicated by population size, and colored by region of the world">
+</p>
+<p>From 
+<a href="www.gapminder.org">Gapminder.org</a></p>
+<p>Let&rsquo;s look at the data in <code>gapminder</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># look at the first 6 rows, all columns</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>gapminder</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 6</span></span>
+<span class='c'>#&gt;   country     continent  year lifeExp      pop gdpPercap</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Afghanistan Asia       </span><span style='text-decoration: underline;'>1</span><span>952    28.8  8</span><span style='text-decoration: underline;'>425</span><span>333      779.</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Afghanistan Asia       </span><span style='text-decoration: underline;'>1</span><span>957    30.3  9</span><span style='text-decoration: underline;'>240</span><span>934      821.</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Afghanistan Asia       </span><span style='text-decoration: underline;'>1</span><span>962    32.0 10</span><span style='text-decoration: underline;'>267</span><span>083      853.</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Afghanistan Asia       </span><span style='text-decoration: underline;'>1</span><span>967    34.0 11</span><span style='text-decoration: underline;'>537</span><span>966      836.</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Afghanistan Asia       </span><span style='text-decoration: underline;'>1</span><span>972    36.1 13</span><span style='text-decoration: underline;'>079</span><span>460      740.</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Afghanistan Asia       </span><span style='text-decoration: underline;'>1</span><span>977    38.4 14</span><span style='text-decoration: underline;'>880</span><span>372      786.</span></span>
+
+<span class='c'># check the structure</span>
+<span class='c'># this tell us what is contained within our df</span>
+<span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>gapminder</span><span class='o'>)</span>
+<span class='c'>#&gt; Rows: 1,704</span>
+<span class='c'>#&gt; Columns: 6</span>
+<span class='c'>#&gt; $ country   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Afghanistan, Afghanistan, Afghanistan, Afghanistan, Afghani…</span></span>
+<span class='c'>#&gt; $ continent <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia,…</span></span>
+<span class='c'>#&gt; $ year      <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997,…</span></span>
+<span class='c'>#&gt; $ lifeExp   <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.854, 40.…</span></span>
+<span class='c'>#&gt; $ pop       <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 8425333, 9240934, 10267083, 11537966, 13079460, 14880372, 1…</span></span>
+<span class='c'>#&gt; $ gdpPercap <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 786.1134,…</span></span></code></pre>
+</div>
+<p>This dataset contains the following measurements about the life expectancy, population, and GDP per capita for 142 countries from 1952 to 2007. It includes the following variables:</p>
+<ul>
+<li><code>country</code></li>
+<li><code>continent</code></li>
+<li><code>year</code></li>
+<li><code>lifeExp</code></li>
+<li><code>pop</code></li>
+<li><code>gdpPercap</code></li>
+</ul>
+<p><em>Note, this data is already in tidy-style format</em> meaning:</p>
+<ul>
+<li>Each variable must have its own column.</li>
+<li>Each observation must have its own row.</li>
+<li>Each value must have its own cell.</li>
+</ul>
+<p>Learn more about tidy data 
+<a href="https://r4ds.had.co.nz/tidy-data.html" target="_blank" rel="noopener">here</a>.</p>
+<p>To make things a bit less complex, let&rsquo;s look at data just from the Americas (i.e., North and South America). To do that, we can use 
+<a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> like we learned using <code>dplyr</code> back in 
+<a href="/codeclub/02_dplyr-core-verbs/">Code Club Session 2</a></p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># make a df with data only from the Americas</span>
+<span class='nv'>gapminder_americas</span> <span class='o'>&lt;-</span> <span class='nv'>gapminder</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>continent</span> <span class='o'>==</span> <span class='s'>"Americas"</span><span class='o'>)</span>
+
+<span class='c'># what countries do we have?</span>
+<span class='nf'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='o'>(</span><span class='nv'>gapminder_americas</span><span class='o'>$</span><span class='nv'>country</span><span class='o'>)</span>
+<span class='c'>#&gt;  [1] Argentina           Bolivia             Brazil             </span>
+<span class='c'>#&gt;  [4] Canada              Chile               Colombia           </span>
+<span class='c'>#&gt;  [7] Costa Rica          Cuba                Dominican Republic </span>
+<span class='c'>#&gt; [10] Ecuador             El Salvador         Guatemala          </span>
+<span class='c'>#&gt; [13] Haiti               Honduras            Jamaica            </span>
+<span class='c'>#&gt; [16] Mexico              Nicaragua           Panama             </span>
+<span class='c'>#&gt; [19] Paraguay            Peru                Puerto Rico        </span>
+<span class='c'>#&gt; [22] Trinidad and Tobago United States       Uruguay            </span>
+<span class='c'>#&gt; [25] Venezuela          </span>
+<span class='c'>#&gt; 142 Levels: Afghanistan Albania Algeria Angola Argentina Australia ... Zimbabwe</span></code></pre>
+</div>
+<br>
+<hr>
+<h2 id="3---life-expectancy-vstime">3 - Life expectancy vs. time</h2>
+<p>We will plot the relationship between <code>lifeExp</code> and <code>year</code> with the goal of understanding how life expectancy has changed in the second half of the 20th century. We will use 
+<a href="https://ggplot2.tidyverse.org/reference/geom_path.html#:~:text=geom_line%28%29%20connects%20them%20in,which%20cases%20are%20connected%20together." target="_blank" rel="noopener"><code>geom_line()</code></a> to make a line plot.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>gapminder_americas</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>lifeExp</span>, group <span class='o'>=</span> <span class='nv'>country</span>, color <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_line</span><span class='o'>(</span><span class='o'>)</span> 
+</code></pre>
+<p><img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>This plot has so many countries, and we can only visually distinguish colors so well, that it makes this a bit of a mess. We can do better!</p>
+<br>
+<hr>
+<h2 id="4---highlighting">4 - Highlighting</h2>
+<p>What if we want to highlight one country of interest, with the backdrop of all the data in the Americas? We can do this using 
+<a href="https://www.rdocumentation.org/packages/gghighlight/versions/0.1.0" target="_blank" rel="noopener"><code>gghighlight()</code></a>, which will distinguish our country of interest, from the rest of the countries which will be indicated in gray.</p>
+<p>Let&rsquo;s highlight the United States, and since we are at it, let&rsquo;s also add x and y axis labels, a title, subtitle, and caption with <code>labs()</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>gapminder_americas</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>lifeExp</span>, group <span class='o'>=</span> <span class='nv'>country</span>, color <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_line</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/gghighlight/man/gghighlight.html'>gghighlight</a></span><span class='o'>(</span><span class='nv'>country</span> <span class='o'>==</span> <span class='s'>"United States"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Year"</span>,
+       y <span class='o'>=</span> <span class='s'>"Life Expectancy (years)"</span>,
+       title <span class='o'>=</span> <span class='s'>"Life Expectancy in Countries in the Americas"</span>,
+       subtitle <span class='o'>=</span> <span class='s'>"From 1952 to 2007"</span>,
+       caption <span class='o'>=</span> <span class='s'>"Data from gapminder.org"</span><span class='o'>)</span>
+<span class='c'>#&gt; Warning: Tried to calculate with group_by(), but the calculation failed.</span>
+<span class='c'>#&gt; Falling back to ungrouped filter operation...</span>
+<span class='c'>#&gt; label_key: country</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<br>
+<hr>
+<h2 id="5---faceting">5 - Faceting</h2>
+<p>What if we want to see all the data at once, but just be able to better attribute each line to the correct country? We can use the 
+<a href="https://en.wikipedia.org/wiki/Small_multiple#" target="_blank" rel="noopener">principle of small multiples</a>, popularized by Edward Tufte, to make a series of charts all on the same scale to allow comparison between them easily.</p>
+<p>We can facet using 
+<a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" target="_blank" rel="noopener"><code>facet_wrap</code></a> to create small plots for each country. If you want a certain number of rows or columns you can indicate them by including <code>ncol</code> and <code>nrow</code> in the <code>facet_wrap()</code> statement.</p>
+<p>I have also made the strip text, or the label on top of each of the facets bigger using <code>theme</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>gapminder_americas</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>lifeExp</span>, color <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_line</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>strip.text.x <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>size <span class='o'>=</span> <span class='m'>14</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nf'>vars</span><span class='o'>(</span><span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># facet_wrap(~country) also works</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Year"</span>,
+       y <span class='o'>=</span> <span class='s'>"Life Expectancy (years)"</span>,
+       title <span class='o'>=</span> <span class='s'>"Life Expectancy in Countries in the Americas"</span>,
+       subtitle <span class='o'>=</span> <span class='s'>"From 1952 to 2007"</span>,
+       caption <span class='o'>=</span> <span class='s'>"Data from gapminder.org"</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Now our legend is not necessary, so let&rsquo;s remove it. Let&rsquo;s also remove the gray background since its not really doing much for us. We will also change to <code>theme_minimal()</code> to get rid of the grey background which I don&rsquo;t think we need.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>gapminder_americas</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>lifeExp</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_line</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>color <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span>,
+        strip.text.x <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>size <span class='o'>=</span> <span class='m'>14</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='o'>~</span><span class='nv'>country</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Year"</span>,
+       y <span class='o'>=</span> <span class='s'>"Life Expectancy (years)"</span>,
+       title <span class='o'>=</span> <span class='s'>"Life Expectancy in Countries in the Americas"</span>,
+       subtitle <span class='o'>=</span> <span class='s'>"From 1952 to 2007"</span>,
+       caption <span class='o'>=</span> <span class='s'>"Data from gapminder.org"</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Wow better! But now its a bit hard to contextualize the line for each country to the whole dataset. We can fix this too.</p>
+<br>
+<hr>
+<h2 id="6---highlighting-plus-faceting">6 - Highlighting plus faceting</h2>
+<p>Let&rsquo;s bring the rest of data back in, and highlight in each facet the country of interest. We can do this by just adding 
+<a href="https://rdrr.io/pkg/gghighlight/man/gghighlight.html" target="_blank" rel="noopener"><code>gghighlight()</code></a> to our <code>ggplot</code> call.</p>
+<p>Note: if you want to assign something in R to an object, and then view it, you can put the whole thing in parentheses, without having to call that object back at the end.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>americas_lifeexp</span> <span class='o'>&lt;-</span> <span class='nv'>gapminder_americas</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>lifeExp</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_line</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>color <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/gghighlight/man/gghighlight.html'>gghighlight</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span>,
+        strip.text.x <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>size <span class='o'>=</span> <span class='m'>14</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='o'>~</span><span class='nv'>country</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Year"</span>,
+       y <span class='o'>=</span> <span class='s'>"Life Expectancy (years)"</span>,
+       title <span class='o'>=</span> <span class='s'>"Life Expectancy in Countries in the Americas"</span>,
+       subtitle <span class='o'>=</span> <span class='s'>"From 1952 to 2007"</span>,
+       caption <span class='o'>=</span> <span class='s'>"Data from gapminder.org"</span><span class='o'>)</span><span class='o'>)</span>
+<span class='c'>#&gt; label_key: country</span>
+<span class='c'>#&gt; Too many data series, skip labeling</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Wow, we now have so much more information about our data!</p>
+<br>
+<hr>
+<h2 id="7---adjusting-scales-while-faceting">7 - Adjusting scales while faceting</h2>
+<p>The default in faceting is that the x and y-axes for each plot are all the same. This aids in the interpretation of each small plot in relation to the others, but sometimes you may want freedom to adjust your axes.</p>
+<p>For example, if we wanted to plot population over time, if we used the same scale, it would be really hard to see trends within a country.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>americas_pop</span> <span class='o'>&lt;-</span> <span class='nv'>gapminder_americas</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_line</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>color <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span>,
+        strip.text.x <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>size <span class='o'>=</span> <span class='m'>14</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='o'>~</span><span class='nv'>country</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Year"</span>,
+       y <span class='o'>=</span> <span class='s'>"Population"</span>,
+       title <span class='o'>=</span> <span class='s'>"Population in Countries in the Americas"</span>,
+       subtitle <span class='o'>=</span> <span class='s'>"From 1952 to 2007"</span>,
+       caption <span class='o'>=</span> <span class='s'>"Data from gapminder.org"</span><span class='o'>)</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Let&rsquo;s change the scales so that the y-axis is &ldquo;free&rdquo; - i.e., each plot will have an independent y-axis. Note, when you do this, you aren&rsquo;t really using the principle of small multiples anymore, since the data isn&rsquo;t all on comparable scales.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>gapminder_americas</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_line</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>color <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span>,
+        strip.text.x <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>size <span class='o'>=</span> <span class='m'>14</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='o'>~</span><span class='nv'>country</span>,
+             scales <span class='o'>=</span> <span class='s'>"free_y"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Year"</span>,
+       y <span class='o'>=</span> <span class='s'>"Population"</span>,
+       title <span class='o'>=</span> <span class='s'>"Population of Countries in the Americas"</span>,
+       subtitle <span class='o'>=</span> <span class='s'>"From 1952 to 2007"</span>,
+       caption <span class='o'>=</span> <span class='s'>"Data from gapminder.org"</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>The default for <code>scales</code> is <code>&quot;fixed&quot;</code>, but you can also set to be <code>&quot;free_x&quot;</code>, <code>&quot;free_y&quot;</code>, or <code>&quot;free&quot;</code>, which means both x and y are free.</p>
+<br>
+<hr>
+<h2 id="8---multi-panel-plots">8 - Multi-panel plots</h2>
+<p>What if I take plots I&rsquo;ve already made and assemble them together? You can do that simply with the package 
+<a href="https://patchwork.data-imaginist.com/" target="_blank" rel="noopener"><code>patchwork()</code></a>.</p>
+<p align="center">
+<img src=patchwork_1.jpg width="95%" alt="an illustration of how to use patchwork with cute little monsters">
+</p>
+<p>Artwork by 
+<a href="https://github.com/allisonhorst/stats-illustrations" target="_blank" rel="noopener">Allison Horst</a></p>
+<p>You can use the syntax:</p>
+<ul>
+<li><code>plot1 + plot2</code> to get two plots next to each other</li>
+<li><code>plot1 / plot2</code> to get two plots stacked vertically</li>
+<li><code>plot1 | (plot2 + plot3)</code> to get plot1 in the first row, and plots 2 and 3 in a second row</li>
+</ul>
+<p>You can use 
+<a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" target="_blank" rel="noopener"><code>plot_annotation()</code></a> to indicate your plots with letters or numbers.</p>
+<p>I am going to make some quick plots so we can see how it works. Let&rsquo;s look at some plots of the United States.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># make df with just United States data</span>
+<span class='nv'>gapminder_usa</span> <span class='o'>&lt;-</span> <span class='nv'>gapminder</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>country</span> <span class='o'>==</span> <span class='s'>"United States"</span><span class='o'>)</span>
+
+<span class='c'># make some plots</span>
+<span class='o'>(</span><span class='nv'>usa_lifeexp</span> <span class='o'>&lt;-</span> <span class='nv'>gapminder_usa</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>lifeExp</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>usa_gdppercap</span> <span class='o'>&lt;-</span> <span class='nv'>gapminder_usa</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>gdpPercap</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_line</span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>usa_pop</span> <span class='o'>&lt;-</span> <span class='nv'>gapminder_usa</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Let&rsquo;s make multi-panel plots. If you need to wrap around a line, make sure you don&rsquo;t start your line with the +, it won&rsquo;t work (this is true for all <code>ggplot2</code> syntax).</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>usa_lifeexp</span> <span class='o'>+</span> <span class='nv'>usa_gdppercap</span><span class='o'>)</span> <span class='o'>/</span> <span class='nv'>usa_pop</span> <span class='o'>+</span>
+<span class='nf'><a href='https://patchwork.data-imaginist.com/reference/plot_annotation.html'>plot_annotation</a></span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Some plots about the United States"</span>,
+                  tag_levels <span class='o'>=</span> <span class='s'>"A"</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>You can see how this would be really useful for publications!</p>
+<br>
+<hr>
+<h2 id="9---animating">9 - Animating</h2>
+<p align="center">
+<img src=gganimate_fireworks.png width="95%" alt="an illustration including fireworks showing an application og gganimate to make action plots, also including cute monsters">
+</p>
+<p>Artwork by 
+<a href="https://github.com/allisonhorst/stats-illustrations" target="_blank" rel="noopener">Allison Horst</a></p>
+<p>Since we have time-scale data here, we could also build an animation that would help us look at our data. What if we wanted to look at how life expectancy (<code>lifeExp</code>) and population (<code>pop</code>) change over time? We could animate over the variable <code>year</code>, and do this by using the function 
+<a href="https://gganimate.com/reference/animate.html" target="_blank" rel="noopener"><code>animate()</code></a>, and set 
+<a href="https://gganimate.com/reference/transition_states.html" target="_blank" rel="noopener"><code>transition_states()</code></a> to the variable we are giffing over.</p>
+<p>Note, I have included <code>closest_state</code> in the subtitle so the viewer can see what is the year at any stage of the animation.</p>
+<p>To be able to tell which dot belongs to which country, I added a 
+<a href="https://www.rdocumentation.org/packages/ggrepel/versions/0.9.1/topics/geom_label_repel" target="_blank" rel="noopener"><code>geom_text_repel()</code></a> statement, which labels each point but is smart enough to not let the labels overlap.</p>
+<p>I have also set <code>pop</code> to be on a log10 scale.</p>
+<p>If you want to increase the resolution of your gif, and set the code chunk to <code>cache = TRUE</code> if the chunk runs slowly, so that it doesn&rsquo;t re-run when knitting if nothing has been edited, you can do this in the curly brackets at the top of your chunk, like this:</p>
+<p><code>{r, cache = TRUE, dpi = 600}</code></p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("transformr") </span>
+<span class='c'># if you are having problems with gganimate you may need to install transformr</span>
+
+<span class='nv'>p</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>gapminder_americas</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>lifeExp</span>, y <span class='o'>=</span> <span class='nv'>pop</span>, fill <span class='o'>=</span> <span class='nv'>country</span>, label <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span>shape <span class='o'>=</span> <span class='m'>21</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html'>geom_text_repel</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>scale_y_log10</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>'none'</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Population and Life Expectancy in the Americas"</span>,
+       subtitle <span class='o'>=</span> <span class='s'>'Year: &#123;closest_state&#125;'</span>, 
+       x <span class='o'>=</span> <span class='s'>"Life Expectancy"</span>, 
+       y <span class='o'>=</span> <span class='s'>"Log10 Population"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://gganimate.com/reference/transition_states.html'>transition_states</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span> 
+
+<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>p</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-17-1.gif" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>There are many different ways to transition your data in <code>gganimate</code> - and you can learn more about them 
+<a href="https://gganimate.com/reference/index.html" target="_blank" rel="noopener">here</a>.</p>
+<h3 id="10---saving-my-gif">10 - Saving my gif</h3>
+<p>Now I want to save my gif. We can do that simply with the function 
+<a href="https://gganimate.com/reference/anim_save.html" target="_blank" rel="noopener"><code>anim_save()</code></a> which works a lot like <code>ggsave()</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"YOUR FILE PATH HERE"</span>,
+          animation <span class='o'>=</span> <span class='nv'>p</span><span class='o'>)</span></code></pre>
+</div>
+<hr>
+<h1 id="10---breakout-rooms">10 - Breakout rooms</h1>
+<h2 id="loading-data-and-get-set-up">Loading data and get set up</h2>
+<p>Load the <code>palmerpenguins</code> dataset, look at its structure, and view the beginning of the df.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; tibble [344 × 8] (S3: tbl_df/tbl/data.frame)</span>
+<span class='c'>#&gt;  $ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='c'>#&gt;  $ island           : Factor w/ 3 levels "Biscoe","Dream",..: 3 3 3 3 3 3 3 3 3 3 ...</span>
+<span class='c'>#&gt;  $ bill_length_mm   : num [1:344] 39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...</span>
+<span class='c'>#&gt;  $ bill_depth_mm    : num [1:344] 18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...</span>
+<span class='c'>#&gt;  $ flipper_length_mm: int [1:344] 181 186 195 NA 193 190 181 195 193 190 ...</span>
+<span class='c'>#&gt;  $ body_mass_g      : int [1:344] 3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...</span>
+<span class='c'>#&gt;  $ sex              : Factor w/ 2 levels "female","male": 2 1 1 NA 1 2 1 2 NA NA ...</span>
+<span class='c'>#&gt;  $ year             : int [1:344] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 8</span></span>
+<span class='c'>#&gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torge…           39.1          18.7              181        </span><span style='text-decoration: underline;'>3</span><span>750 male </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torge…           39.5          17.4              186        </span><span style='text-decoration: underline;'>3</span><span>800 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torge…           40.3          18                195        </span><span style='text-decoration: underline;'>3</span><span>250 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torge…           </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>                 </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torge…           36.7          19.3              193        </span><span style='text-decoration: underline;'>3</span><span>450 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torge…           39.3          20.6              190        </span><span style='text-decoration: underline;'>3</span><span>650 male </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 1 more variable: year </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span></code></pre>
+</div>
+<br>
+<hr>
+<h3 id="main-exercises">Main exercises</h3>
+<h4 id="exercise-1">Exercise 1</h4>
+<div class="puzzle">
+<div>
+<p>Like we did in 
+<a href="https://biodash.github.io/codeclub/08_pivoting/" target="_blank" rel="noopener">Code Club 7</a>, convert the two columns about penguin bill dimensions <code>bill_length_mm</code> and <code>bill_depth_mm</code> to two columns called <code>bill_dimension</code> and <code>value</code>. Drop your NAs also. Save this as a new df called <code>penguins_long</code>.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>Use a combination of <code>drop_na()</code> and <code>pivot_longer()</code>, and it&rsquo;s helpful if you also set <code>names_prefix</code> in your <code>pivot_longer()</code> statement but not totally necessary. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_long</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>pivot_longer</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nv'>bill_length_mm</span><span class='o'>:</span><span class='nv'>bill_depth_mm</span>,
+               names_to <span class='o'>=</span> <span class='s'>"bill_dimension"</span>,
+               values_to <span class='o'>=</span> <span class='s'>"value_mm"</span>,
+               names_prefix <span class='o'>=</span> <span class='s'>"bill_"</span><span class='o'>)</span>
+
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins_long</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 8</span></span>
+<span class='c'>#&gt;   species island flipper_length_… body_mass_g sex    year bill_dimension</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torge…              181        </span><span style='text-decoration: underline;'>3</span><span>750 male   </span><span style='text-decoration: underline;'>2</span><span>007 length_mm     </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torge…              181        </span><span style='text-decoration: underline;'>3</span><span>750 male   </span><span style='text-decoration: underline;'>2</span><span>007 depth_mm      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torge…              186        </span><span style='text-decoration: underline;'>3</span><span>800 fema…  </span><span style='text-decoration: underline;'>2</span><span>007 length_mm     </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torge…              186        </span><span style='text-decoration: underline;'>3</span><span>800 fema…  </span><span style='text-decoration: underline;'>2</span><span>007 depth_mm      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torge…              195        </span><span style='text-decoration: underline;'>3</span><span>250 fema…  </span><span style='text-decoration: underline;'>2</span><span>007 length_mm     </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torge…              195        </span><span style='text-decoration: underline;'>3</span><span>250 fema…  </span><span style='text-decoration: underline;'>2</span><span>007 depth_mm      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 1 more variable: value_mm </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span></code></pre>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="exercise-2">Exercise 2</h4>
+<div class="puzzle">
+<div>
+<p>Plot body mass (<code>body_mass_g</code>) as related to bill length and depth.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>Faceting will be useful here. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_long</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>body_mass_g</span>, y <span class='o'>=</span> <span class='nv'>value_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nf'>vars</span><span class='o'>(</span><span class='nv'>bill_dimension</span><span class='o'>)</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="exercise-3">Exercise 3</h4>
+<div class="puzzle">
+<div>
+<p>Take your plot from Exercise 2 and make it prettier. You can do things like change your axis labels, add title, change themes as you see fit. Color your points by sex.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>Pick a theme you like. <code>theme_classic()</code> is a good place to start, and if you want to download the package <code>hrbrthemes</code>, I really like the 
+<a href="https://rdrr.io/pkg/hrbrthemes/man/theme_ipsum_rc.html" target="_blank" rel="noopener"><code>theme_ipsum_rc()</code></a>.<br>
+<br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<p>I&rsquo;ve included some code that let&rsquo;s you re-name the strip text, or the text that is above each of your facets. You do this with the 
+<a href="https://ggplot2.tidyverse.org/reference/labeller.html" target="_blank" rel="noopener"><code>labeller()</code></a> function.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://github.com/hrbrmstr/hrbrthemes'>hrbrthemes</a></span><span class='o'>)</span> <span class='c'># for pretty &amp; easy themes</span>
+
+<span class='c'># formatting facet strip text labels</span>
+<span class='nv'>dim_mm</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"Culman Bill Depth"</span>, <span class='s'>"Culman Bill Length"</span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='o'>(</span><span class='nv'>dim_mm</span><span class='o'>)</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"depth_mm"</span>, <span class='s'>"length_mm"</span><span class='o'>)</span>
+
+<span class='c'># this is just one example</span>
+<span class='nv'>penguins_long</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>body_mass_g</span>, y <span class='o'>=</span> <span class='nv'>value_mm</span>, color <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/hrbrthemes/man/theme_ipsum_rc.html'>theme_ipsum_rc</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>axis.title.x <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>hjust <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span>,
+        axis.title.y <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>hjust <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span>,
+        strip.text <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>hjust <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Body Mass (g)"</span>,
+       y <span class='o'>=</span> <span class='s'>"mm"</span>,
+       title <span class='o'>=</span> <span class='s'>"Bill length and depth vs. body mass in penguins"</span>,
+       color <span class='o'>=</span> <span class='s'>"Sex"</span>,
+       caption <span class='o'>=</span> <span class='s'>"Data from https://allisonhorst.github.io/palmerpenguins/"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nf'>vars</span><span class='o'>(</span><span class='nv'>bill_dimension</span><span class='o'>)</span>,
+             labeller <span class='o'>=</span> <span class='nf'>labeller</span><span class='o'>(</span>bill_dimension <span class='o'>=</span> <span class='nv'>dim_mm</span><span class='o'>)</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="exercise-4">Exercise 4</h4>
+<div class="puzzle">
+<div>
+<p>Add a second dimension of faceting by species.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>You do this within your <code>facet_wrap()</code> call. You might want to try the formula syntax, which works like this: <code>var1~var2</code>. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_long</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>body_mass_g</span>, y <span class='o'>=</span> <span class='nv'>value_mm</span>, color <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/hrbrthemes/man/theme_ipsum_rc.html'>theme_ipsum_rc</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>axis.title.x <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>hjust <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span>,
+        axis.title.y <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>hjust <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span>,
+        strip.text <span class='o'>=</span> <span class='nf'>element_text</span><span class='o'>(</span>hjust <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Body Mass (g)"</span>,
+       y <span class='o'>=</span> <span class='s'>"mm"</span>,
+       title <span class='o'>=</span> <span class='s'>"Bill length and depth vs. body mass in penguins"</span>,
+       color <span class='o'>=</span> <span class='s'>"Sex"</span>,
+       caption <span class='o'>=</span> <span class='s'>"Data from https://allisonhorst.github.io/palmerpenguins/"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nv'>bill_dimension</span><span class='o'>~</span><span class='nv'>species</span>,
+             labeller <span class='o'>=</span> <span class='nf'>labeller</span><span class='o'>(</span>bill_dimension <span class='o'>=</span> <span class='nv'>dim_mm</span><span class='o'>)</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="exercise-5">Exercise 5</h4>
+<div class="puzzle">
+<div>
+<p>Using your plot from Exercise 3, highlight the datapoints coming from Dream Island in purple.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>You can use syntax inside 
+<a href="https://rdrr.io/pkg/gghighlight/man/gghighlight.html" target="_blank" rel="noopener"><code>gghighlight()</code></a> just like you do in 
+<a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a>. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># what are our islands?</span>
+<span class='nf'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='o'>(</span><span class='nv'>penguins_long</span><span class='o'>$</span><span class='nv'>island</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] Torgersen Biscoe    Dream    </span>
+<span class='c'>#&gt; Levels: Biscoe Dream Torgersen</span>
+
+<span class='nv'>penguins_long</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>body_mass_g</span>, y <span class='o'>=</span> <span class='nv'>value_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"purple"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/gghighlight/man/gghighlight.html'>gghighlight</a></span><span class='o'>(</span><span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Dream"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nf'>vars</span><span class='o'>(</span><span class='nv'>bill_dimension</span><span class='o'>)</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="exercise-6">Exercise 6</h4>
+<div class="puzzle">
+<div>
+<p>Using your sample plot for Exercise 3, highlight penguins that have a <code>body_mass_g</code> less than 3500 g, in blue.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>You can use syntax inside 
+<a href="https://rdrr.io/pkg/gghighlight/man/gghighlight.html" target="_blank" rel="noopener"><code>gghighlight()</code></a> just like you do in 
+<a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a>, and you can also use these filter functions like 
+<a href="https://rdrr.io/r/base/Comparison.html" target="_blank" rel="noopener"><code>&lt;</code></a>, 
+<a href="https://rdrr.io/r/base/Comparison.html" target="_blank" rel="noopener"><code>&gt;</code></a>, 
+<a href="https://rdrr.io/r/base/Comparison.html" target="_blank" rel="noopener"><code>&lt;=</code></a>, 
+<a href="https://rdrr.io/r/base/Logic.html" target="_blank" rel="noopener"><code>!</code></a> and <code>AND</code> inside your call. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># what are our islands?</span>
+<span class='nf'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='o'>(</span><span class='nv'>penguins_long</span><span class='o'>$</span><span class='nv'>island</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] Torgersen Biscoe    Dream    </span>
+<span class='c'>#&gt; Levels: Biscoe Dream Torgersen</span>
+
+<span class='nv'>penguins_long</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>body_mass_g</span>, y <span class='o'>=</span> <span class='nv'>value_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"blue"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/gghighlight/man/gghighlight.html'>gghighlight</a></span><span class='o'>(</span><span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Dream"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nf'>vars</span><span class='o'>(</span><span class='nv'>bill_dimension</span><span class='o'>)</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h3 id="bonus-exercises">Bonus exercises</h3>
+<h4 id="bonus-1">Bonus 1</h4>
+<div class="puzzle">
+<div>
+<p>Plot <code>flipper_length_mm</code> vs. <code>body_mass_g</code> and animate the plot to show only one <code>species</code> at a time.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>Try animating over <code>species</code>, using 
+<a href="https://gganimate.com/reference/transition_states.html" target="_blank" rel="noopener"><code>transition_states()</code></a> and set <code>{closest_state}</code> in your title or subtitle so you can tell what you&rsquo;re looking at. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>flipper_by_BW</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>body_mass_g</span>, y <span class='o'>=</span> <span class='nv'>flipper_length_mm</span>, fill <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span>shape <span class='o'>=</span> <span class='m'>21</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>'none'</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Population and Life Expectancy in the Americas"</span>,
+       subtitle <span class='o'>=</span> <span class='s'>'Penguin Species: &#123;closest_state&#125;'</span>, 
+       x <span class='o'>=</span> <span class='s'>"Body Mass (g)"</span>, 
+       y <span class='o'>=</span> <span class='s'>"Flipper Length (mm)"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://gganimate.com/reference/transition_states.html'>transition_states</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> 
+
+<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>flipper_by_BW</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-26-1.gif" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="bonus-2">Bonus 2</h4>
+<div class="puzzle">
+<div>
+<p>You have now made an excellent gif, so save it!</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>Use 
+<a href="https://gganimate.com/reference/anim_save.html" target="_blank" rel="noopener"><code>anim_save()</code></a> to save your animation, which works in a similar way to 
+<a href="https://ggplot2.tidyverse.org/reference/ggsave.html" target="_blank" rel="noopener"><code>ggsave()</code></a>, which is another very useful function. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"YOUR FILE PATH HERE"</span>,
+          animation <span class='o'>=</span> <span class='nv'>flipper_by_BW</span><span class='o'>)</span></code></pre>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="bonus-3">Bonus 3</h4>
+<div class="puzzle">
+<div>
+<p>Let&rsquo;s practice making multi-panel plots. Plot:</p>
+<p>Boxplot of <code>body_mass_g</code> by <code>sex</code></p>
+<p>Histogram of number of observations per <code>island</code></p>
+<p>Distribution of <code>flipper_length_mm</code> by <code>species</code>.</p>
+<p>Tag your plots so each has a lowercase letter associated with it.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>Use the syntax from the package <code>patchwork</code>. You can learn more 
+<a href="https://patchwork.data-imaginist.com/" target="_blank" rel="noopener">here</a>. Also use 
+<a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" target="_blank" rel="noopener"><code>plot_annotation()</code></a>. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<ul>
+<li><code>title =</code> allows you to set a title</li>
+<li><code>tag_levels =</code> allows you to determine how you want your panels to be tagged.</li>
+</ul>
+<p>Boxplot of <code>body_mass_g</code> by <code>sex</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_mass_by_sex</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_long</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sex</span>, y <span class='o'>=</span> <span class='nv'>body_mass_g</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='nv'>penguins_mass_by_sex</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-28-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Histogram of number of observations per <code>island</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_by_island</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_long</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nv'>island</span>, fill <span class='o'>=</span> <span class='nv'>island</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_histogram</span><span class='o'>(</span>stat <span class='o'>=</span> <span class='s'>"count"</span><span class='o'>)</span>
+<span class='c'>#&gt; Warning: Ignoring unknown parameters: binwidth, bins, pad</span>
+
+<span class='nv'>penguins_by_island</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Distribution of <code>flipper_length_mm</code> by <code>species</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_flipper_species</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_long</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>flipper_length_mm</span>, group <span class='o'>=</span> <span class='nv'>species</span>, fill <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_density</span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>scale_fill_viridis_d</span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='nv'>penguins_flipper_species</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_flipper_species</span> <span class='o'>/</span> <span class='o'>(</span><span class='nv'>penguins_mass_by_sex</span> <span class='o'>+</span> <span class='nv'>penguins_by_island</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'><a href='https://patchwork.data-imaginist.com/reference/plot_annotation.html'>plot_annotation</a></span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Looking at penguins..."</span>,
+                  tag_levels <span class='o'>=</span> <span class='s'>"a"</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+
+      </div>
+
+      <br>
+
+      
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/10_faceting-animating/&amp;text=Session%2010:%20Faceting,%20multi-plots,%20and%20animating" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/10_faceting-animating/&amp;t=Session%2010:%20Faceting,%20multi-plots,%20and%20animating" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Session%2010:%20Faceting,%20multi-plots,%20and%20animating&amp;body=https://biodash.github.io/codeclub/10_faceting-animating/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/10_faceting-animating/&amp;title=Session%2010:%20Faceting,%20multi-plots,%20and%20animating" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=Session%2010:%20Faceting,%20multi-plots,%20and%20animating%20https://biodash.github.io/codeclub/10_faceting-animating/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/10_faceting-animating/&amp;title=Session%2010:%20Faceting,%20multi-plots,%20and%20animating" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+
+
+
+
+
+  
+  
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="avatar mr-3 avatar-circle" src="/authors/jessica-cooperstone/avatar_hub3c8c373219f94b7f8251ccae20f3fcb_68385_270x270_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/authors/jessica-cooperstone/">Jessica Cooperstone</a></h5>
+      <h6 class="card-subtitle">Assistant Professor at HCS</h6>
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:cooperstone.1@osu.edu" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/CooperstoneLab" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=d-FkQNQAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/jcooperstone" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://phytochemicals.osu.edu/" target="_blank" rel="noopener">
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+    
+      <br>
+      
+      <hr class="separator">
+
+          <div class="clearfix">
+          
+              
+                  <span class="previous-link">
+                      <a href="https://biodash.github.io/codeclub/09_subsetting/">← Session 9: Subsetting</a>
+                  </span>
+              
+          
+          
+      </div>
+      
+      <hr class="separator">
+
+    </div>
+  
+  </article>
+
+  
+  </main>
+  </div>
+  </div>
+  
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = false;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"No results found","placeholder":"Search...","results":"results found"};
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+      
+    
+    
+    
+    <script src="/js/academic.min.bcd76b45b3121e56162b93ef7b3f1eee.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+    
+    <p class="powered-by">
+      <a href="/license/">LICENSE: CC-BY-SA <br> <i class="fab fa-creative-commons fa-2x"></i><i class="fab fa-creative-commons-by fa-2x"></i><i class="fab fa-creative-commons-sa fa-2x"></i> </a><br>
+    </p>
+    
+</footer>
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
