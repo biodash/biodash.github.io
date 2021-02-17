@@ -13,7 +13,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: 7539a163169c9593
+rmd_hash: 068146305e7d05ad
 
 ---
 
@@ -125,6 +125,7 @@ If you've never downloaded these packages before, use the chunk below.
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"gghighlight"</span>,
                    <span class='s'>"gganimate"</span>,
+                   <span class='s'>"magick"</span>,
                    <span class='s'>"patchwork"</span>,
                    <span class='s'>"ggrepel"</span>,
                    <span class='s'>"gapminder"</span><span class='o'>)</span><span class='o'>)</span></code></pre>
@@ -138,6 +139,7 @@ Once you have the packages above downloaded, load your libraries.
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/yutannihilation/gghighlight/'>gghighlight</a></span><span class='o'>)</span> <span class='c'># for bringing attention to certain parts of your plot</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://gganimate.com'>gganimate</a></span><span class='o'>)</span> <span class='c'># for animating</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://docs.ropensci.org/magick/'>magick</a></span><span class='o'>)</span> <span class='c'># for rendering gifs and saving them</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://patchwork.data-imaginist.com'>patchwork</a></span><span class='o'>)</span> <span class='c'># for making multi-panel plots</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/slowkow/ggrepel'>ggrepel</a></span><span class='o'>)</span> <span class='c'># for getting labels to not be on top of your points</span>
 
@@ -521,7 +523,7 @@ If you want to increase the resolution of your gif, and set the code chunk to `c
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("transformr") </span>
 <span class='c'># if you are having problems with gganimate you may need to install transformr</span>
 
-<span class='nv'>p</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>gapminder_americas</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>lifeExp</span>, y <span class='o'>=</span> <span class='nv'>pop</span>, fill <span class='o'>=</span> <span class='nv'>country</span>, label <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+<span class='o'>(</span><span class='nv'>p</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>gapminder_americas</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>lifeExp</span>, y <span class='o'>=</span> <span class='nv'>pop</span>, fill <span class='o'>=</span> <span class='nv'>country</span>, label <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>shape <span class='o'>=</span> <span class='m'>21</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'><a href='https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html'>geom_text_repel</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>scale_y_log10</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
@@ -531,31 +533,41 @@ If you want to increase the resolution of your gif, and set the code chunk to `c
        subtitle <span class='o'>=</span> <span class='s'>'Year: &#123;closest_state&#125;'</span>, 
        x <span class='o'>=</span> <span class='s'>"Life Expectancy"</span>, 
        y <span class='o'>=</span> <span class='s'>"Log10 Population"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://gganimate.com/reference/transition_states.html'>transition_states</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span> 
-
-<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>p</span><span class='o'>)</span>
-</code></pre>
-<img src="figs/unnamed-chunk-17-1.gif" width="700px" style="display: block; margin: auto;" />
+  <span class='nf'><a href='https://gganimate.com/reference/transition_states.html'>transition_states</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span><span class='o'>)</span></code></pre>
 
 </div>
 
+<p align="center">
+<img src=gapminder_gif.gif width="95%">
+</p>
+
 There are many different ways to transition your data in `gganimate` - and you can learn more about them [here](https://gganimate.com/reference/index.html).
 
-### 10 - Saving my gif
+Saving my gif
 
 Now I want to save my gif. We can do that simply with the function [`anim_save()`](https://gganimate.com/reference/anim_save.html) which works a lot like `ggsave()`.
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"YOUR FILE PATH HERE"</span>,
-          animation <span class='o'>=</span> <span class='nv'>p</span><span class='o'>)</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># set parameters for your animation</span>
+<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>p</span>, 
+        duration <span class='o'>=</span> <span class='m'>10</span>, 
+        fps <span class='o'>=</span> <span class='m'>10</span>, 
+        width <span class='o'>=</span> <span class='m'>700</span>, 
+        height <span class='o'>=</span> <span class='m'>700</span>,
+        renderer <span class='o'>=</span> <span class='nf'><a href='https://gganimate.com/reference/renderers.html'>magick_renderer</a></span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'># save it</span>
+<span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"gapminder_gif.gif"</span>,
+          animation <span class='o'>=</span> <span class='nf'><a href='https://gganimate.com/reference/last_animation.html'>last_animation</a></span><span class='o'>(</span><span class='o'>)</span>,
+          path <span class='o'>=</span> <span class='s'>"/Users/jessicacooperstoneimac"</span><span class='o'>)</span></code></pre>
 
 </div>
 
 ------------------------------------------------------------------------
 
 10 - Breakout rooms
-===================
+-------------------
 
 Loading data and get set up
 ---------------------------
@@ -697,7 +709,7 @@ Faceting will be useful here. <br>
 
 <div>
 
-Take your plot from Exercise 2 and make it prettier. You can do things like change your axis labels, add title, change themes as you see fit. Color your points by sex.
+Take your plot from Exercise 2 and make it prettier. You can do things like change your axis labels, add title, change themes as you see fit. Color your points by `sex`.
 
 <details>
 
@@ -759,7 +771,7 @@ I've included some code that let's you re-name the strip text, or the text that 
 
 <div>
 
-Add a second dimension of faceting by species.
+Add a second dimension of faceting by `species`.
 
 <details>
 
@@ -937,12 +949,13 @@ Try animating over `species`, using [`transition_states()`](https://gganimate.co
        y <span class='o'>=</span> <span class='s'>"Flipper Length (mm)"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'><a href='https://gganimate.com/reference/transition_states.html'>transition_states</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> 
 
-<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>flipper_by_BW</span><span class='o'>)</span>
-</code></pre>
-<img src="figs/unnamed-chunk-26-1.gif" width="700px" style="display: block; margin: auto;" />
+<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>flipper_by_BW</span><span class='o'>)</span></code></pre>
 
 </div>
 
+<p align="center">
+<img src=flippers_by_mass.gif width="95%">
+</p>
 </details>
 
 <br>
@@ -976,8 +989,18 @@ Use [`anim_save()`](https://gganimate.com/reference/anim_save.html) to save your
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"YOUR FILE PATH HERE"</span>,
-          animation <span class='o'>=</span> <span class='nv'>flipper_by_BW</span><span class='o'>)</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># set parameters for your animation</span>
+<span class='nf'><a href='https://gganimate.com/reference/animate.html'>animate</a></span><span class='o'>(</span><span class='nv'>flipper_by_BW</span>, 
+        duration <span class='o'>=</span> <span class='m'>10</span>, 
+        fps <span class='o'>=</span> <span class='m'>10</span>, 
+        width <span class='o'>=</span> <span class='m'>700</span>, 
+        height <span class='o'>=</span> <span class='m'>700</span>,
+        renderer <span class='o'>=</span> <span class='nf'><a href='https://gganimate.com/reference/renderers.html'>magick_renderer</a></span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'># save it</span>
+<span class='nf'><a href='https://gganimate.com/reference/anim_save.html'>anim_save</a></span><span class='o'>(</span>filename <span class='o'>=</span> <span class='s'>"flippers_by_mass.gif"</span>,
+          animation <span class='o'>=</span> <span class='nf'><a href='https://gganimate.com/reference/last_animation.html'>last_animation</a></span><span class='o'>(</span><span class='o'>)</span>,
+          path <span class='o'>=</span> <span class='s'>"YOUR_PATH_HERE"</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -1020,8 +1043,8 @@ Use the syntax from the package `patchwork`. You can learn more [here](https://p
 
 <summary> Solutions (click here) </summary>
 
--   `title =` allows you to set a title
--   `tag_levels =` allows you to determine how you want your panels to be tagged.
+-   `title` allows you to set a title
+-   `tag_levels` allows you to determine how you want your panels to be tagged.
 
 Boxplot of `body_mass_g` by `sex`.
 

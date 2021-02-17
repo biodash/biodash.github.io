@@ -116,6 +116,7 @@ If you've never downloaded these packages before, use the chunk below.
 ```{r, eval = FALSE}
 install.packages(c("gghighlight",
                    "gganimate",
+                   "magick",
                    "patchwork",
                    "ggrepel",
                    "gapminder"))
@@ -126,6 +127,7 @@ Once you have the packages above downloaded, load your libraries.
 library(tidyverse)
 library(gghighlight) # for bringing attention to certain parts of your plot
 library(gganimate) # for animating
+library(magick) # for rendering gifs and saving them
 library(patchwork) # for making multi-panel plots
 library(ggrepel) # for getting labels to not be on top of your points
 
@@ -407,11 +409,11 @@ I have also set `pop` to be on a log10 scale.
 If you want to increase the resolution of your gif, and set the code chunk to `cache = TRUE` if the chunk runs slowly, so that it doesn't re-run when knitting if nothing has been edited, you can do this in the curly brackets at the top of your chunk, like this:
 
 `{r, cache = TRUE, dpi = 600}`
-```{r, cache = TRUE}
+```{r, eval = FALSE}
 # install.packages("transformr") 
 # if you are having problems with gganimate you may need to install transformr
 
-p <- ggplot(gapminder_americas, aes(x = lifeExp, y = pop, fill = country, label = country)) +
+(p <- ggplot(gapminder_americas, aes(x = lifeExp, y = pop, fill = country, label = country)) +
   geom_point(shape = 21, color = "black") +
   geom_text_repel() +
   scale_y_log10() +
@@ -421,25 +423,37 @@ p <- ggplot(gapminder_americas, aes(x = lifeExp, y = pop, fill = country, label 
        subtitle = 'Year: {closest_state}', 
        x = "Life Expectancy", 
        y = "Log10 Population") +
-  transition_states(year) 
-
-animate(p)
+  transition_states(year))
 ```
 
+<p align="center"> 
+<img src=gapminder_gif.gif width="95%">
+</p>
 
 There are many different ways to transition your data in `gganimate` - and you can learn more about them [here](https://gganimate.com/reference/index.html).
 
-### 10 - Saving my gif
+Saving my gif
+
 Now I want to save my gif.  We can do that simply with the function [`anim_save()`](https://gganimate.com/reference/anim_save.html) which works a lot like `ggsave()`.  
 
 ```{r, eval = FALSE}
-anim_save(filename = "YOUR FILE PATH HERE",
-          animation = p)
+# set parameters for your animation
+animate(p, 
+        duration = 10, 
+        fps = 10, 
+        width = 700, 
+        height = 700,
+        renderer = magick_renderer())
+
+# save it
+anim_save(filename = "gapminder_gif.gif",
+          animation = last_animation(),
+          path = "/Users/jessicacooperstoneimac")
 ```
 
 ----
 
-# 10 - Breakout rooms
+## 10 - Breakout rooms
 
 ## Loading data and get set up
 Load the `palmerpenguins` dataset, look at its structure, and view the beginning of the df.
@@ -540,7 +554,7 @@ penguins_long %>%
 
 <div class="puzzle">
 <div>
-Take your plot from Exercise 2 and make it prettier.  You can do things like change your axis labels, add title, change themes as you see fit.  Color your points by sex.
+Take your plot from Exercise 2 and make it prettier.  You can do things like change your axis labels, add title, change themes as you see fit.  Color your points by `sex`.
 
 <details>
   <summary>
@@ -597,7 +611,7 @@ penguins_long %>%
 
 <div class="puzzle">
 <div>
-Add a second dimension of faceting by species.  
+Add a second dimension of faceting by `species`.  
 
 <details>
   <summary>
@@ -752,7 +766,7 @@ Plot `flipper_length_mm` vs. `body_mass_g` and animate the plot to show only one
   Solutions (click here)
   </summary>
 
-```{r, cache = TRUE, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4}
+```{r, eval = FALSE}
 flipper_by_BW <- penguins %>%
   ggplot(aes(x = body_mass_g, y = flipper_length_mm, fill = species)) +
   geom_point(shape = 21, color = "black") +
@@ -766,6 +780,11 @@ flipper_by_BW <- penguins %>%
 
 animate(flipper_by_BW)
 ```
+
+<p align="center"> 
+<img src=flippers_by_mass.gif width="95%">
+</p>
+
 
 </details>
 <br>
@@ -799,8 +818,18 @@ Use [`anim_save()`](https://gganimate.com/reference/anim_save.html) to save your
   </summary>
 
 ```{r, eval = FALSE}
-anim_save(filename = "YOUR FILE PATH HERE",
-          animation = flipper_by_BW)
+# set parameters for your animation
+animate(flipper_by_BW, 
+        duration = 10, 
+        fps = 10, 
+        width = 700, 
+        height = 700,
+        renderer = magick_renderer())
+
+# save it
+anim_save(filename = "flippers_by_mass.gif",
+          animation = last_animation(),
+          path = "YOUR_PATH_HERE")
 ```
 
 </details>
@@ -842,8 +871,8 @@ Tag your plots so each has a lowercase letter associated with it.
   Solutions (click here)
   </summary>
   
-* `title =` allows you to set a title
-* `tag_levels =` allows you to determine how you want your panels to be tagged.
+* `title` allows you to set a title
+* `tag_levels` allows you to determine how you want your panels to be tagged.
 
 Boxplot of `body_mass_g` by `sex`.
 ```{r}
