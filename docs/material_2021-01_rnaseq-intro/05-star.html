@@ -22,7 +22,7 @@ class:inverse middle center
 &lt;br&gt; &lt;br&gt; &lt;br&gt;
 
 ### Jelmer Poelstra, MCIC Wooster
-### 2021/02/12 (updated: 2021-02-12)
+### 2021/02/17 (updated: 2021-02-16)
   
 ---
 
@@ -164,10 +164,10 @@ Some options when generating a genome index with STAR are as follows:
 | `--sjdbOverhang ReadLength-1` | Length of the donor/acceptor sequence &lt;br&gt; on each side of the junctions
 | `--genomeSAindexNbases 14`    | Length of the SA pre-indexing string
 
+--
 
 .content-box-info[
-According to the documentation,  
-the value of `genomeSAindexNbases` should be:
+According to the documentation `genomeSAindexNbases` should be:
 
 `log2(GenomeLength)/2 - 1)` =&gt; `log2(782520133)/2 - 1)` = 13.77 = 14
 ]
@@ -278,14 +278,6 @@ $ wc -l Log.out
   #&gt; -rw-r--r-- 1 jelmer PAS0471 374M Feb 10 14:56 SAindex
   ```
 
-
-- Let's move the log files to an appropriate dir:
-
-  ```sh
-  $ mkdir -p results/align/log
-  $ mv slurm-STAR* out.Log results/align/log/
-  ```
-
 ---
 
 ## STAR options for alignment
@@ -306,9 +298,9 @@ Some options for aligning reads to the genome using STAR are
 .content-box-warning[
 Check maximum intron size in GFF:
 
-`--alignIntronMin 20` -- minimum intron length
+`--alignIntronMin 20` &amp;mdash; minimum intron length
 
-`--alignIntronMax 1000000` -- maximum intron length
+`--alignIntronMax 1000000` &amp;mdash; maximum intron length
 ]
 
 ---
@@ -339,7 +331,8 @@ STAR --runThreadN "$SLURM_CPUS_ON_NODE" \
 Submit the script:
 
 ```sh
-$ sample=C6_myb2_V1N_1_S1_L001
+$ sample=C6_myb2
+$ fastq_dir=data/fastq_concat
 $ bam_dir=results/align/bam
 $ sbatch -o "$slurm_log" scripts/align/star_align.sh \
       "$sample" "$fastq_dir" "$index_dir" "$ref_gff" "$bam_dir"
@@ -350,13 +343,13 @@ $ sbatch -o "$slurm_log" scripts/align/star_align.sh \
 ## Check the output
 
 ```sh
-$ cat slurm-align-C6_myb2_V1N_1_S1_L001-12836540.out
+$ cat slurm-align-C6_myb2-12836540.out
 #&gt; Starting script star_align.sh
 #&gt; Thu Feb 11 20:24:21 EST 2021
 #&gt; -------------------
 
-#&gt; R1 input file: data/fastq//X6465_Benitez-PonceM_C6_myb2_V1N_1_S1_L001_R1_001.fastq.gz
-#&gt; R2 input file: data/fastq//X6465_Benitez-PonceM_C6_myb2_V1N_1_S1_L001_R2_001.fastq.gz
+#&gt; R1 input file: data/fastq_concat/C6_myb2_R1.fastq.gz
+#&gt; R2 input file: data/fastq_concat/C6_myb2_R2.fastq.gz
 #&gt; Genome index dir: data/ref/Heinz1706_4.00/STAR_index
 #&gt; Genome annotation file: data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
 #&gt; Bam (output) directory: results/align/bam
@@ -386,7 +379,7 @@ samples=($(cat "$sample_list"))
 
 for sample in "${samples[@]}"; do
 
-  R1=$(ls "$fastq_dir"/*"$sample"*_R1_*fastq.gz)
+  R1=$(ls "$fastq_dir"/*"$sample"*_R1*fastq.gz)
 
   slurm_log=slurm-align-"$sample"-%j.out 
 
@@ -409,19 +402,19 @@ $ ./scripts/align/star_align_loop.sh
 #&gt; Wed Feb 10 21:03:13 EST 2021
 #&gt; -------------------
 #&gt; 
-#&gt; FASTQ dir: data/fastq/2020-02-18/links
+#&gt; FASTQ dir: data/fastq_concat
 #&gt; Sample list: data/meta/samples.txt
 #&gt; Genome index dir: data/ref/Heinz1706_4.00/STAR_index
 #&gt; Genome annotation file: data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
 #&gt; Bam (output) directory: results/align/bam
 #&gt; 
-#&gt; Submitting star_align.sh for C6_myb2_V1N_1_S1_L001
+#&gt; Submitting star_align.sh for C6_myb2
 #&gt; Submitted batch job 12830287
-#&gt; Submitting star_align.sh for C6_myb2_V1N_1_S1_L002
+#&gt; Submitting star_align.sh for C6_myb2
 #&gt; Submitted batch job 12830289
-#&gt; Submitting star_align.sh for C6_myb3_V1N_1_S2_L001
+#&gt; Submitting star_align.sh for C6_myb3
 #&gt; Submitted batch job 12830291
-#&gt; Submitting star_align.sh for C6_myb3_V1N_1_S2_L002
+#&gt; Submitting star_align.sh for C6_myb3
 #&gt; Submitted batch job 12830293
 #&gt; ...
 ```
@@ -432,6 +425,20 @@ $ ./scripts/align/star_align_loop.sh
 
 ```sh
 $ grep "Uniquely mapped" results/align/bam/star_logs/*Log.final*
+#&gt; C6_myb2_Log.final.out: Uniquely mapped reads % |   76.30%
+#&gt; C6_myb3_Log.final.out: Uniquely mapped reads % |   79.46%
+#&gt; C6_myb4_Log.final.out: Uniquely mapped reads % |   56.44%
+#&gt; cnt_1_Log.final.out:   Uniquely mapped reads % |   71.11%
+#&gt; cnt_2_Log.final.out:   Uniquely mapped reads % |   78.40%
+#&gt; cnt_3_Log.final.out:   Uniquely mapped reads % |   66.60%
+#&gt; CT_05_Log.final.out:   Uniquely mapped reads % |   80.29%
+#&gt; CT_06_Log.final.out:   Uniquely mapped reads % |   81.05%
+#&gt; CT_09_Log.final.out:   Uniquely mapped reads % |   86.46%
+#&gt; myb_1_Log.final.out:   Uniquely mapped reads % |   87.14%
+#&gt; myb_2_Log.final.out:   Uniquely mapped reads % |   86.76%
+#&gt; myb_3_Log.final.out:   Uniquely mapped reads % |   87.18%
+#&gt; T_26_Log.final.out:    Uniquely mapped reads % |   85.01%
+#&gt; T_29_Log.final.out:    Uniquely mapped reads % |   q86.01%
 ```
 
 ---
@@ -439,8 +446,7 @@ $ grep "Uniquely mapped" results/align/bam/star_logs/*Log.final*
 ## Running MultiQC on the STAR logs
 
 ```sh
-$ scripts/QC_fastq/multiqc.sh \
-    results/align/bam/star_logs results/align/bam/star_logs
+$ sbatch scripts/qc/multiqc.sh results/align/bam/star_logs
 ```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
