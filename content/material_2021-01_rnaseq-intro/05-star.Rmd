@@ -312,7 +312,6 @@ Check maximum intron size in GFF:
 
 ```sh
 #!/bin/bash
-#SBATCH --account=PAS0471
 #SBATCH --time=2:00:00
 #SBATCH --cpus-per-task=18
 module load star/2.6.0a
@@ -331,7 +330,7 @@ STAR --runThreadN "$SLURM_CPUS_ON_NODE" \
 
 --
 
-Submit the script:
+**Submit the script:**
 
 ```sh
 $ sample=C6_myb2
@@ -368,7 +367,134 @@ $ cat slurm-align-C6_myb2-12836540.out
 ## Check the output (cont.)
 
 ```sh
-$ ls $bam_dir
+$ du -sh results/align/bam/*bam
+#> 230M    results/align/bam/C6_myb2_Aligned.sortedByCoord.out.bam
+
+
+$ ls $bam_dir/star_logs
+#> results/align/bam/star_logs/C6_myb2_Log.final.out
+#> results/align/bam/star_logs/C6_myb2_Log.out
+#> results/align/bam/star_logs/C6_myb2_Log.progress.out
+#> results/align/bam/star_logs/C6_myb2_SJ.out.tab
+```
+
+---
+
+## Check the output (cont.)
+
+```sh
+$ less results/align/bam/star_logs/C6_myb2_Log.final.out
+# Started job on                            | Feb 15 20:47:51
+# Started mapping on                        | Feb 15 20:47:59
+# Finished on                               | Feb 15 20:50:19
+# Mapping speed, Million of reads per hour  | 65.57
+# Number of input reads                     | 2549920
+# Average input read length                 | 276
+# UNIQUE READS:     
+# Uniquely mapped reads number              | 1945474
+# Uniquely mapped reads %                   | 76.30%
+# Average mapped length                     | 277.75
+# Number of splices: Total                  | 1487782
+# Number of splices: Annotated (sjdb)       | 0
+# Number of splices: GT/AG                  | 1451397
+# Number of splices: GC/AG                  | 14313
+# Number of splices: AT/AC                  | 747
+# Number of splices: Non-canonical          | 21325
+# Mismatch rate per base, %                 | 0.18%
+# Deletion rate per base                    | 0.01%
+# Deletion average length                   | 1.02
+# Insertion rate per base                   | 0.01%
+# Insertion average length                  | 2.63
+```
+
+---
+
+## Check the output (cont.)
+
+```sh
+# [...continuing results/align/bam/star_logs/C6_myb2_Log.final.out]
+# MULTI-MAPPING READS:
+# Number of reads mapped to multiple loci   | 42055
+# % of reads mapped to multiple loci        | 1.65%
+# Number of reads mapped to too many loci   | 1977
+# % of reads mapped to too many loci        | 0.08%
+# UNMAPPED READS:
+# % of reads unmapped: too many mismatches  | 0.31%
+# % of reads unmapped: too short            | 19.12%
+# % of reads unmapped: other                | 2.55%
+# CHIMERIC READS:
+# Number of chimeric reads                  | 0
+# % of chimeric reads                       | 0.00%
+```
+
+---
+
+## Check the output (cont.)
+
+```sh
+$ less results/align/bam/star_logs/C6_myb2_Log.out
+# STAR version=STAR_2.6.0a
+# STAR compilation time,server,dir=Mon Apr 23 13:19:26 EDT 2018 # florence.cshl.edu:/sonas-hs/gingeras/nlsas_norepl/user/dobin/STAR/STAR.master/source
+# ##### DEFAULT parameters:
+# versionSTAR                       20201
+# versionGenome                     20101   20200   
+# parametersFiles                   -   
+# sysShell                          -
+# runMode                           alignReads
+# 
+# ...
+# ...
+# 
+# Loading Genome ... done! state: good=1 eof=0 fail=0 bad=0; loaded 784072704 bytes
+# SA file size: 6455421245 bytes; state: good=1 eof=0 fail=0 bad=0
+# Loading SA ... done! state: good=1 eof=0 fail=0 bad=0; loaded 6455421245 bytes
+# Loading SAindex ... done: 391468491 bytes
+# Finished loading the genome: Mon Feb 15 20:47:59 2021
+# 
+# alignIntronMax=alignMatesGapMax=0, the max intron size will be approximately determined by # (2^winBinNbits)*winAnchorDistNbins=589824
+# Created thread # 1
+# Created thread # 2
+# Created thread # 3
+```
+
+---
+
+## Check the output (cont.)
+
+```sh
+$ cat results/align/bam/star_logs/C6_myb2_Log.progress.out
+
+#           Time    Speed        Read     Read   Mapped   Mapped   Mapped   Mapped Unmapped Unmapped Unmapped Unmapped
+#                    M/hr      number   length   unique   length   MMrate    multi   multi+       MM    short    other
+# Feb 15 20:49:27     48.8     1192672      276    76.3%    277.8     0.2%     1.6%     0.1%     0.3%    19.1%     2.6%
+# ALL DONE!
+```
+
+---
+
+## Check the output (cont.)
+
+```sh
+$ less results/align/bam/star_logs/C6_myb2_SJ.out.tab
+# SL4.0ch00       18299   19023   1       1       0       1       0       12
+# SL4.0ch00       1253757 1264285 2       2       0       0       1       46
+# SL4.0ch00       1259569 1263678 2       2       0       1       0       47
+# SL4.0ch00       1259569 1264285 2       2       0       1       0       26
+# SL4.0ch00       1263726 1264285 2       2       0       2       1       47
+# SL4.0ch00       1376108 1376905 1       5       0       0       1       33
+# SL4.0ch00       1386429 1387446 1       1       0       0       1       55
+# SL4.0ch00       1389552 1390217 0       0       0       0       18      66
+# SL4.0ch00       1457286 1457951 0       0       0       0       18      65
+# SL4.0ch00       1470754 1471439 1       5       0       0       1       64
+# SL4.0ch00       1531568 1532365 1       5       0       0       1       33
+# SL4.0ch00       1541889 1542906 1       1       0       0       1       55
+# SL4.0ch00       1545012 1545677 0       0       0       0       18      66
+# SL4.0ch00       1903425 1905479 2       2       0       0       1       53
+# SL4.0ch00       1903425 1946574 2       2       0       0       1       53
+# SL4.0ch00       2044995 2046903 0       0       0       0       6       32
+# SL4.0ch00       2497375 2498040 0       0       0       0       18      65
+# SL4.0ch00       2510840 2511525 1       5       0       0       1       64
+# SL4.0ch00       2574688 2575704 2       2       0       0       1       55
 ```
 
 ---
@@ -424,7 +550,30 @@ $ ./scripts/align/star_align_loop.sh
 
 ---
 
-## Checking the output
+## Check the output (cont.)
+
+```sh
+$ du -sh $bam_dir/*bam
+#> 230M    results/align/bam/C6_myb2_Aligned.sortedByCoord.out.bam
+#> 270M    results/align/bam/C6_myb3_Aligned.sortedByCoord.out.bam
+#> 183M    results/align/bam/C6_myb4_Aligned.sortedByCoord.out.bam
+#> 237M    results/align/bam/cnt_1_Aligned.sortedByCoord.out.bam
+#> 240M    results/align/bam/cnt_2_Aligned.sortedByCoord.out.bam
+#> 211M    results/align/bam/cnt_3_Aligned.sortedByCoord.out.bam
+#> 274M    results/align/bam/CT_05_Aligned.sortedByCoord.out.bam
+#> 254M    results/align/bam/CT_06_Aligned.sortedByCoord.out.bam
+#> 286M    results/align/bam/CT_09_Aligned.sortedByCoord.out.bam
+#> 275M    results/align/bam/myb_1_Aligned.sortedByCoord.out.bam
+#> 285M    results/align/bam/myb_2_Aligned.sortedByCoord.out.bam
+#> 292M    results/align/bam/myb_3_Aligned.sortedByCoord.out.bam
+#> 251M    results/align/bam/T_26_Aligned.sortedByCoord.out.bam
+#> 284M    results/align/bam/T_29_Aligned.sortedByCoord.out.bam
+#> 0       results/align/bam/T_30_Aligned.sortedByCoord.out.bam
+```
+
+---
+
+## Check the output (cont.)
 
 ```sh
 $ grep "Uniquely mapped" results/align/bam/star_logs/*Log.final*
@@ -441,7 +590,7 @@ $ grep "Uniquely mapped" results/align/bam/star_logs/*Log.final*
 #> myb_2_Log.final.out:   Uniquely mapped reads % |   86.76%
 #> myb_3_Log.final.out:   Uniquely mapped reads % |   87.18%
 #> T_26_Log.final.out:    Uniquely mapped reads % |   85.01%
-#> T_29_Log.final.out:    Uniquely mapped reads % |   q86.01%
+#> T_29_Log.final.out:    Uniquely mapped reads % |   86.01%
 ```
 
 ---
