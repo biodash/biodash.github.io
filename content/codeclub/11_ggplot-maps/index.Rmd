@@ -21,6 +21,37 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 
 <br> <br>
 
+-----
+
+## Prep and setup
+
+### New to Code Club?
+
+- If you didn't already do this, please follow the [Code Club Computer Setup](/codeclub-setup/04_ggplot2/) instructions, which also has pointers for if you're new to R or RStudio.
+
+- If you're able to do so, please open RStudio a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll help you troubleshoot.
+
+### New to *ggplot2*?
+
+Check out the two Code Club pages for [Session 4](/codeclub/04_ggplot2/) and [Session 5](/codeclub/05_ggplot-round-2/).
+
+If you've never used `ggplot2` before (or even if you have), you may find [this cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) useful.
+
+### Download the CSV file on Ohio
+
+```{r, eval = FALSE}
+ohio_csv <- 
+  'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/11_ggplot-maps/Ohio.csv'
+
+download.file(url = ohio_csv, destfile = 'Ohio.csv')
+```
+
+<br>
+
+----
+
+## Creating maps in R 
+
 Today, we will cover the visualization of spatial data in R using the layered grammar of graphics implementation of ggplot2 in conjunction with the contextual information of static maps from world maps in the *maps* package. 
 
 **Before we look at mapping using ggplot2, let us define some terms.**
@@ -50,12 +81,15 @@ using data that directs R to draw the polygon shapes that constitute the map. Th
 *The maps package in R* <br/>
 The "maps" package in R contains a set of maps of the United States and the world drawn using longitude and latitude data. With world map, the USA map with the individual states you can accomplish a lot of the mapping tasks using the maps package. The maps package contains a lot of outlines of continents, countries, states, and counties 
 
-**Making data frames from map outlines by ggplot2** <br/>
-Recall that ggplot2 operates on data frames. Therefore, we need some way to translate the maps data into a data frame format the ggplot can use. The package *ggplot2* provides the `map_data()` function.
+**Making dataframes from map outlines by ggplot2** <br/>
+Recall that ggplot2 operates on dataframes.
+Therefore, we need some way to translate the maps data into a data frame format the ggplot can use.
+The package *ggplot2* provides the `map_data()` function.
 The function turns a series of points along an outline into a data frame of those points.
 The package ggplot2 uses the following syntax: `map_data("name")` where "name" is
 a quoted string of the name of a map in the *maps* package.<br/>
 
+## Our first maps
 Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana,
 and part of Europe using the *maps* package.
 
@@ -68,7 +102,7 @@ library(stringr)
 # Let us get a world map using the "map_data" function 
 world <- map_data("world")
 
-## Let us get a US map including Hawaii, Alaska, and Puerto Rico:
+## Let us get a US map:
 usa <- map_data("usa")
 
 # Let us get the states:
@@ -137,7 +171,7 @@ ggplot(data = a_region,
   coord_fixed(1.3)
 ```
 
-### The structure of the data frame `ohio`.
+## The structure of the dataframe `ohio`.
 
 ```{r}
 head(ohio)
@@ -158,7 +192,7 @@ Look at the variables in *ohio*, note what they refer to: <br/>
 -	`subregion` = string indicator for sub-regions (here the county names) <br/>
 
 
-## Part II: Add information to the maps
+## Add information to the maps
 
 **The second part of mapping in R, is to add information on the map created in the first part.** <br/>
 In drawing the map, the "*maps*" package creates the backbone for visualizations.
@@ -370,10 +404,11 @@ ohio_pop<-inner_join(oh, Ohio, by = "county")
 ohio_pos_pop <- filter(ohio_pop, Perc > 0)
 
 ggplot(data = ohio_pop,
-       mapping = aes(x = long, y= lat, group = group)) +
+       mapping = aes(x = long, y = lat, group = group)) +
   geom_polygon(color = "black", fill = "white") +
   geom_point(data = ohio_pos_pop, color = "red",
-             aes(x = long, y = lat, group = NULL, size = Pop)) + 
+             aes(x = x_1, y = y_1, group = NULL, size = Perc)) +
+  coord_fixed(1.3) +
   guides(size = FALSE)  #  Omit the legend
 ```
 
@@ -397,6 +432,7 @@ ggplot(data = ohio_pop, mapping = aes(x= long, y= lat, group = group))+
   geom_polygon(color="black",fill="white")+
   geom_point(data = ohio_neg_pop, color = "red",
              aes(x = x_1,y = y_1, group = NULL, size = Perc)) +
+  coord_fixed(1.3) +
   guides(size = FALSE) # Omit the legend
 ```
 

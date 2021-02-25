@@ -12,11 +12,47 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: dcc7f658f458113d
+rmd_hash: be0ce2296842e4fb
 
 ---
 
 <br> <br>
+
+------------------------------------------------------------------------
+
+Prep and setup
+--------------
+
+### New to Code Club?
+
+-   If you didn't already do this, please follow the [Code Club Computer Setup](/codeclub-setup/04_ggplot2/) instructions, which also has pointers for if you're new to R or RStudio.
+
+-   If you're able to do so, please open RStudio a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll help you troubleshoot.
+
+### New to *ggplot2*?
+
+Check out the two Code Club pages for [Session 4](/codeclub/04_ggplot2/) and [Session 5](/codeclub/05_ggplot-round-2/).
+
+If you've never used `ggplot2` before (or even if you have), you may find [this cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) useful.
+
+### Download the CSV file on Ohio
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ohio_csv</span> <span class='o'>&lt;-</span> 
+  <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/11_ggplot-maps/Ohio.csv'</span>
+
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>ohio_csv</span>, destfile <span class='o'>=</span> <span class='s'>'Ohio.csv'</span><span class='o'>)</span>
+</code></pre>
+
+</div>
+
+<br>
+
+------------------------------------------------------------------------
+
+Creating maps in R
+------------------
 
 Today, we will cover the visualization of spatial data in R using the layered grammar of graphics implementation of ggplot2 in conjunction with the contextual information of static maps from world maps in the *maps* package.
 
@@ -42,7 +78,10 @@ Since *ggplot2* is an implementation of the layered grammar of graphics, every p
 
 *The maps package in R* <br/> The "maps" package in R contains a set of maps of the United States and the world drawn using longitude and latitude data. With world map, the USA map with the individual states you can accomplish a lot of the mapping tasks using the maps package. The maps package contains a lot of outlines of continents, countries, states, and counties
 
-**Making data frames from map outlines by ggplot2** <br/> Recall that ggplot2 operates on data frames. Therefore, we need some way to translate the maps data into a data frame format the ggplot can use. The package *ggplot2* provides the `map_data()` function. The function turns a series of points along an outline into a data frame of those points. The package ggplot2 uses the following syntax: `map_data("name")` where "name" is a quoted string of the name of a map in the *maps* package.<br/>
+**Making dataframes from map outlines by ggplot2** <br/> Recall that ggplot2 operates on dataframes. Therefore, we need some way to translate the maps data into a data frame format the ggplot can use. The package *ggplot2* provides the `map_data()` function. The function turns a series of points along an outline into a data frame of those points. The package ggplot2 uses the following syntax: `map_data("name")` where "name" is a quoted string of the name of a map in the *maps* package.<br/>
+
+Our first maps
+--------------
 
 Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, and part of Europe using the *maps* package.
 
@@ -56,7 +95,7 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
 <span class='c'># Let us get a world map using the "map_data" function </span>
 <span class='nv'>world</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"world"</span><span class='o'>)</span>
 
-<span class='c'>## Let us get a US map including Hawaii, Alaska, and Puerto Rico:</span>
+<span class='c'>## Let us get a US map:</span>
 <span class='nv'>usa</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"usa"</span><span class='o'>)</span>
 
 <span class='c'># Let us get the states:</span>
@@ -78,7 +117,7 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-2-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-3-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -91,7 +130,7 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-3-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -104,7 +143,7 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"blue"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -117,7 +156,7 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
   <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"green"</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -135,7 +174,7 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
   <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"green"</span> , color <span class='o'>=</span> <span class='s'>"red"</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -152,11 +191,12 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
   <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
-### The structure of the data frame `ohio`.
+The structure of the dataframe `ohio`.
+--------------------------------------
 
 <div class="highlight">
 
@@ -187,8 +227,8 @@ Look at the variables in *ohio*, note what they refer to: <br/>
 
 -   `subregion` = string indicator for sub-regions (here the county names) <br/>
 
-Part II: Add information to the maps
-------------------------------------
+Add information to the maps
+---------------------------
 
 **The second part of mapping in R, is to add information on the map created in the first part.** <br/> In drawing the map, the "*maps*" package creates the backbone for visualizations. Then we add additional information to show colors and shapes. <br/>
 
@@ -205,7 +245,7 @@ Part II: Add information to the maps
  <span class='nf'>guides</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> <span class='c'># Do this to omit the legend</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -253,7 +293,7 @@ Part II: Add information to the maps
             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -269,7 +309,7 @@ Part II: Add information to the maps
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -283,7 +323,7 @@ Part II: Add information to the maps
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -300,7 +340,7 @@ Part II: Add information to the maps
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, color <span class='o'>=</span> <span class='nv'>qual</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -325,7 +365,7 @@ Part II: Add information to the maps
   <span class='nf'>scale_size_continuous</span><span class='o'>(</span>label <span class='o'>=</span> <span class='nv'>comma</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -363,7 +403,7 @@ Part II: Add information to the maps
   <span class='nf'>ggtitle</span><span class='o'>(</span><span class='s'>"Ohio counties"</span><span class='o'>)</span>  
 
 </code></pre>
-<img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -419,7 +459,7 @@ Part II: Add information to the maps
   <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> <span class='c'># Omit the legend</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -467,7 +507,7 @@ Part II: Add information to the maps
   <span class='nf'>labs</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"Population Quantiles"</span><span class='o'>)</span> 
 
 </code></pre>
-<img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -506,14 +546,15 @@ Use the dataset of 2021 Ohio county's population to plot counties with % positiv
 <span class='nv'>ohio_pos_pop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>ohio_pop</span>, <span class='nv'>Perc</span> <span class='o'>&gt;</span> <span class='m'>0</span><span class='o'>)</span>
 
 <span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pop</span>,
-       mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y<span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+       mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_polygon</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"black"</span>, fill <span class='o'>=</span> <span class='s'>"white"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pos_pop</span>, color <span class='o'>=</span> <span class='s'>"red"</span>,
-             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Pop</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> 
+             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x_1</span>, y <span class='o'>=</span> <span class='nv'>y_1</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Perc</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span>  <span class='c'>#  Omit the legend</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -539,10 +580,11 @@ Use the same data to plot counties with % negative population growth with quanti
   <span class='nf'>geom_polygon</span><span class='o'>(</span>color<span class='o'>=</span><span class='s'>"black"</span>,fill<span class='o'>=</span><span class='s'>"white"</span><span class='o'>)</span><span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_neg_pop</span>, color <span class='o'>=</span> <span class='s'>"red"</span>,
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x_1</span>,y <span class='o'>=</span> <span class='nv'>y_1</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Perc</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> <span class='c'># Omit the legend</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -566,7 +608,7 @@ Use the same data to plot counties with % negative population growth with quanti
   <span class='nf'>labs</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"Negative population growth counties"</span><span class='o'>)</span> 
 
 </code></pre>
-<img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -596,7 +638,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
   <span class='nf'>labs</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"France"</span><span class='o'>)</span> 
 
 </code></pre>
-<img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" />
 <pre class='chroma'><code class='language-r' data-lang='r'>
 <span class='c'># The "maps" package has city data</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nf'>maps</span><span class='nf'>::</span><span class='nv'><a href='https://rdrr.io/pkg/maps/man/world.cities.html'>world.cities</a></span><span class='o'>)</span>
@@ -631,7 +673,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-26-2.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-27-2.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -647,7 +689,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span> 
 
 </code></pre>
-<img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-28-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -660,7 +702,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-28-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -678,7 +720,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, color <span class='o'>=</span> <span class='nv'>qual</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -703,7 +745,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
   <span class='nf'>scale_size_continuous</span><span class='o'>(</span>label <span class='o'>=</span> <span class='nv'>comma</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
