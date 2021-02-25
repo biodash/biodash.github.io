@@ -276,7 +276,7 @@
     
       <meta property="article:published_time" content="2021-02-24T00:00:00&#43;00:00">
     
-    <meta property="article:modified_time" content="2021-02-25T12:24:55-05:00">
+    <meta property="article:modified_time" content="2021-02-25T17:59:05-05:00">
   
 
   
@@ -596,12 +596,17 @@
           </ul>
           <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#prep-and-setup">Prep and setup</a>
       <ul>
-        <li><a href="#the-structure-of-the-data-frame-ohio">The structure of the data frame <code>ohio</code>.</a></li>
+        <li><a href="#new-to-code-club">New to Code Club?</a></li>
+        <li><a href="#new-to-ggplot2">New to <em>ggplot2</em>?</a></li>
+        <li><a href="#download-the-csv-file-on-ohio">Download the CSV file on Ohio</a></li>
       </ul>
     </li>
-    <li><a href="#part-ii-add-information-to-the-maps">Part II: Add information to the maps</a></li>
+    <li><a href="#creating-maps-in-r">Creating maps in R</a></li>
+    <li><a href="#our-first-maps">Our first maps</a></li>
+    <li><a href="#the-structure-of-the-dataframe-ohio">The structure of the dataframe <code>ohio</code>.</a></li>
+    <li><a href="#add-information-to-the-maps">Add information to the maps</a></li>
     <li><a href="#breakout-rooms">Breakout rooms</a>
       <ul>
         <li><a href="#exercise-1">Exercise 1</a></li>
@@ -707,6 +712,35 @@
     <div class="article-container">
       <div class="article-style">
         <p><br> <br></p>
+<hr>
+<h2 id="prep-and-setup">Prep and setup</h2>
+<h3 id="new-to-code-club">New to Code Club?</h3>
+<ul>
+<li>
+<p>If you didn&rsquo;t already do this, please follow the 
+<a href="/codeclub-setup/04_ggplot2/">Code Club Computer Setup</a> instructions, which also has pointers for if you&rsquo;re new to R or RStudio.</p>
+</li>
+<li>
+<p>If you&rsquo;re able to do so, please open RStudio a bit before Code Club starts &ndash; and in case you run into issues, please join the Zoom call early and we&rsquo;ll help you troubleshoot.</p>
+</li>
+</ul>
+<h3 id="new-to-ggplot2">New to <em>ggplot2</em>?</h3>
+<p>Check out the two Code Club pages for 
+<a href="/codeclub/04_ggplot2/">Session 4</a> and 
+<a href="/codeclub/05_ggplot-round-2/">Session 5</a>.</p>
+<p>If you&rsquo;ve never used <code>ggplot2</code> before (or even if you have), you may find 
+<a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf" target="_blank" rel="noopener">this cheat sheet</a> useful.</p>
+<h3 id="download-the-csv-file-on-ohio">Download the CSV file on Ohio</h3>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ohio_csv</span> <span class='o'>&lt;-</span> 
+  <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/11_ggplot-maps/Ohio.csv'</span>
+
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>ohio_csv</span>, destfile <span class='o'>=</span> <span class='s'>'Ohio.csv'</span><span class='o'>)</span>
+</code></pre>
+</div>
+<br>
+<hr>
+<h2 id="creating-maps-in-r">Creating maps in R</h2>
 <p>Today, we will cover the visualization of spatial data in R using the layered grammar of graphics implementation of ggplot2 in conjunction with the contextual information of static maps from world maps in the <em>maps</em> package.</p>
 <p><strong>Before we look at mapping using ggplot2, let us define some terms.</strong></p>
 <p><em>Areal data</em> <br/> Areal data is data which corresponds to geographical extents with polygonal boundaries.</p>
@@ -731,7 +765,8 @@
 <p>Since <em>ggplot2</em> is an implementation of the layered grammar of graphics, every plot made with ggplot2 has each of the above elements. Consequently, map plots also have these elements, but certain elements are ﬁxed to map components: the <code>x</code> aesthetic is ﬁxed to longitude, the <code>y</code> aesthetic is ﬁxed to latitude.</p>
 <p><strong>Drawing a map</strong> <br/> Drawing a map in R requires two things. <strong>First</strong>, we have to draw the map using data that directs R to draw the polygon shapes that constitute the map. Then we <strong>add</strong> information to our map to plot color and marks. It&rsquo;s the same basic logic that we have used in ggplot figures. The key thing is to have datasets that link that geographic data with the information that we want to put on the plot.</p>
 <p><em>The maps package in R</em> <br/> The &ldquo;maps&rdquo; package in R contains a set of maps of the United States and the world drawn using longitude and latitude data. With world map, the USA map with the individual states you can accomplish a lot of the mapping tasks using the maps package. The maps package contains a lot of outlines of continents, countries, states, and counties</p>
-<p><strong>Making data frames from map outlines by ggplot2</strong> <br/> Recall that ggplot2 operates on data frames. Therefore, we need some way to translate the maps data into a data frame format the ggplot can use. The package <em>ggplot2</em> provides the <code>map_data()</code> function. The function turns a series of points along an outline into a data frame of those points. The package ggplot2 uses the following syntax: <code>map_data(&quot;name&quot;)</code> where &ldquo;name&rdquo; is a quoted string of the name of a map in the <em>maps</em> package.<br/></p>
+<p><strong>Making dataframes from map outlines by ggplot2</strong> <br/> Recall that ggplot2 operates on dataframes. Therefore, we need some way to translate the maps data into a data frame format the ggplot can use. The package <em>ggplot2</em> provides the <code>map_data()</code> function. The function turns a series of points along an outline into a data frame of those points. The package ggplot2 uses the following syntax: <code>map_data(&quot;name&quot;)</code> where &ldquo;name&rdquo; is a quoted string of the name of a map in the <em>maps</em> package.<br/></p>
+<h2 id="our-first-maps">Our first maps</h2>
 <p>Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, and part of Europe using the <em>maps</em> package.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
@@ -742,7 +777,7 @@
 <span class='c'># Let us get a world map using the "map_data" function </span>
 <span class='nv'>world</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"world"</span><span class='o'>)</span>
 
-<span class='c'>## Let us get a US map including Hawaii, Alaska, and Puerto Rico:</span>
+<span class='c'>## Let us get a US map:</span>
 <span class='nv'>usa</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"usa"</span><span class='o'>)</span>
 
 <span class='c'># Let us get the states:</span>
@@ -762,7 +797,7 @@
  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-2-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-3-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Let us plot a map of the US:</li>
@@ -773,7 +808,7 @@
  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-3-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Let us plot a map of the US with states:</li>
@@ -784,7 +819,7 @@
  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"blue"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Let us plot a map of Ohio:</li>
@@ -795,7 +830,7 @@
   <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"green"</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>We can also plot a map for an arbitrary selection of states:</li>
@@ -811,7 +846,7 @@
   <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"green"</span> , color <span class='o'>=</span> <span class='s'>"red"</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>We can also plot only a specific region by filtering by latitude and longitude:</li>
@@ -826,9 +861,9 @@
   <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<h3 id="the-structure-of-the-data-frame-ohio">The structure of the data frame <code>ohio</code>.</h3>
+<h2 id="the-structure-of-the-dataframe-ohio">The structure of the dataframe <code>ohio</code>.</h2>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>ohio</span><span class='o'>)</span>
 
@@ -862,7 +897,7 @@
 <p><code>subregion</code> = string indicator for sub-regions (here the county names) <br/></p>
 </li>
 </ul>
-<h2 id="part-ii-add-information-to-the-maps">Part II: Add information to the maps</h2>
+<h2 id="add-information-to-the-maps">Add information to the maps</h2>
 <p><strong>The second part of mapping in R, is to add information on the map created in the first part.</strong> <br/> In drawing the map, the &ldquo;<em>maps</em>&rdquo; package creates the backbone for visualizations. Then we add additional information to show colors and shapes. <br/></p>
 <p><em>We will:</em> <br/> - fill a map by region, <br/> - draw a Bubble map using city population, <br/> - make a point for every city, <br/> - vary size of point by city size and vary the color of the dots, and <br/> - add external data to the map. <br/></p>
 <ul>
@@ -876,7 +911,7 @@
  <span class='nf'>guides</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> <span class='c'># Do this to omit the legend</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Let us draw a &ldquo;Bubble map&rdquo;:</li>
@@ -920,7 +955,7 @@
             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Let&rsquo;s pick just the big cities:</li>
@@ -934,7 +969,7 @@
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Vary size of point by city size:</li>
@@ -946,7 +981,7 @@
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Now vary the color of the dots:</li>
@@ -961,7 +996,7 @@
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, color <span class='o'>=</span> <span class='nv'>qual</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Tweak the map:</li>
@@ -984,7 +1019,7 @@
   <span class='nf'>scale_size_continuous</span><span class='o'>(</span>label <span class='o'>=</span> <span class='nv'>comma</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Work with Ohio counties with external data:</li>
@@ -1017,7 +1052,7 @@
   <span class='nf'>ggtitle</span><span class='o'>(</span><span class='s'>"Ohio counties"</span><span class='o'>)</span>  
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Read population data for Ohio counties:</li>
@@ -1067,7 +1102,7 @@
   <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> <span class='c'># Omit the legend</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
 <li>Improve the graph by creating groups of population using quantile.</li>
@@ -1111,7 +1146,7 @@
   <span class='nf'>labs</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"Population Quantiles"</span><span class='o'>)</span> 
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <h2 id="breakout-rooms">Breakout rooms</h2>
 <div class="puzzle">
@@ -1140,14 +1175,15 @@
 <span class='nv'>ohio_pos_pop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>ohio_pop</span>, <span class='nv'>Perc</span> <span class='o'>&gt;</span> <span class='m'>0</span><span class='o'>)</span>
 
 <span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pop</span>,
-       mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y<span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+       mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_polygon</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"black"</span>, fill <span class='o'>=</span> <span class='s'>"white"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pos_pop</span>, color <span class='o'>=</span> <span class='s'>"red"</span>,
-             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Pop</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> 
+             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x_1</span>, y <span class='o'>=</span> <span class='nv'>y_1</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Perc</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span>  <span class='c'>#  Omit the legend</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </details>
 </div>
@@ -1163,10 +1199,11 @@
   <span class='nf'>geom_polygon</span><span class='o'>(</span>color<span class='o'>=</span><span class='s'>"black"</span>,fill<span class='o'>=</span><span class='s'>"white"</span><span class='o'>)</span><span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_neg_pop</span>, color <span class='o'>=</span> <span class='s'>"red"</span>,
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x_1</span>,y <span class='o'>=</span> <span class='nv'>y_1</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Perc</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> <span class='c'># Omit the legend</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ApplyQuintiles_n</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>x</span><span class='o'>)</span> <span class='o'>&#123;</span>
@@ -1187,7 +1224,7 @@
   <span class='nf'>labs</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"Negative population growth counties"</span><span class='o'>)</span> 
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </details>
 </div>
@@ -1207,7 +1244,7 @@
   <span class='nf'>labs</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"France"</span><span class='o'>)</span> 
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" /></p>
 <pre class='chroma'><code class='language-r' data-lang='r'>
 <span class='c'># The "maps" package has city data</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nf'>maps</span><span class='nf'>::</span><span class='nv'><a href='https://rdrr.io/pkg/maps/man/world.cities.html'>world.cities</a></span><span class='o'>)</span>
@@ -1242,7 +1279,7 @@
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-26-2.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-27-2.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Let's pick just the big cities:</span>
@@ -1255,7 +1292,7 @@
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span> 
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-28-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># vary size of point by city size</span>
@@ -1265,7 +1302,7 @@
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-28-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Now vary the color of the dots</span>
@@ -1280,7 +1317,7 @@
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, color <span class='o'>=</span> <span class='nv'>qual</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Do some tweaking:</span>
@@ -1302,7 +1339,7 @@
   <span class='nf'>scale_size_continuous</span><span class='o'>(</span>label <span class='o'>=</span> <span class='nv'>comma</span><span class='o'>)</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </details>
 </div>
