@@ -13,10 +13,10 @@
     </image>
     
     <item>
-      <title>Session 10: Spatial data visualization with ggplot2</title>
-      <link>https://biodash.github.io/codeclub/10_ggplot-maps/</link>
+      <title>Session 11: Spatial data visualization with ggplot2</title>
+      <link>https://biodash.github.io/codeclub/11_ggplot-maps/</link>
       <pubDate>Wed, 24 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>https://biodash.github.io/codeclub/10_ggplot-maps/</guid>
+      <guid>https://biodash.github.io/codeclub/11_ggplot-maps/</guid>
       <description>&lt;p&gt;&lt;br&gt; &lt;br&gt;&lt;/p&gt;
 &lt;p&gt;Today, we will cover the visualization of spatial data in R using the layered grammar of graphics implementation of ggplot2 in conjunction with the contextual information of static maps from world maps in the &lt;em&gt;maps&lt;/em&gt; package.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Before we look at mapping using ggplot2, let us define some terms.&lt;/strong&gt;&lt;/p&gt;
@@ -53,21 +53,23 @@
 &lt;span class=&#39;c&#39;&gt;# Let us get a world map using the &#34;map_data&#34; function &lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;world&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;map_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;world&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;# Let us get a usa map:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;## Let us get a US map including Hawaii, Alaska, and Puerto Rico:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;usa&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;map_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;usa&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;# Let us get the states:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;states&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;map_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;state&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;# Select Ohio using the filter function:&lt;/span&gt;
-&lt;span class=&#39;nv&#39;&gt;ohio&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;states&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;region&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;ohio&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;ohio&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;states&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;region&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;ohio&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;ul&gt;
 &lt;li&gt;Let us plot a world map:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;world&lt;/span&gt;, mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;long&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;lat&lt;/span&gt;, group &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;group&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;world&lt;/span&gt;,
+       mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;long&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;lat&lt;/span&gt;, group &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;group&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
  &lt;span class=&#39;nf&#39;&gt;geom_polygon&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;white&#34;&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;black&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
@@ -77,7 +79,8 @@
 &lt;li&gt;Let us plot a map of the US:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;usa&lt;/span&gt;, mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;long&lt;/span&gt;, y&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;lat&lt;/span&gt;, group &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;group&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;usa&lt;/span&gt;,
+       mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;long&lt;/span&gt;, y&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;lat&lt;/span&gt;, group &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;group&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
  &lt;span class=&#39;nf&#39;&gt;geom_polygon&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;white&#34;&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;black&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
@@ -110,7 +113,8 @@
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# We can select data for two states, for example Ohio and Indiana:&lt;/span&gt;
-&lt;span class=&#39;nv&#39;&gt;ohio_indiana&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;states&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;region&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;ohio&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;region&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;indiana&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;ohio_indiana&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;states&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;region&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;ohio&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;region&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;indiana&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;# Plot the map of Ohio and Indiana:&lt;/span&gt;
 &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;ohio_indiana&lt;/span&gt;,
