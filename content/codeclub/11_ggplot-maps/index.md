@@ -12,7 +12,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: e0e92d8dd048373f
+rmd_hash: dcc7f658f458113d
 
 ---
 
@@ -375,15 +375,15 @@ Part II: Add information to the maps
 <span class='nv'>Ohio</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span><span class='s'>"Ohio.csv"</span><span class='o'>)</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>Ohio</span><span class='o'>)</span>
 
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 3</span></span>
-<span class='c'>#&gt;   county     Pop  Perc</span>
-<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Vinton   </span><span style='text-decoration: underline;'>12</span><span>965 -</span><span style='color: #BB0000;'>3.28</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Monroe   </span><span style='text-decoration: underline;'>13</span><span>388 -</span><span style='color: #BB0000;'>8.36</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Morgan   </span><span style='text-decoration: underline;'>14</span><span>362 -</span><span style='color: #BB0000;'>4.47</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Noble    </span><span style='text-decoration: underline;'>14</span><span>578 -</span><span style='color: #BB0000;'>0.56</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Harrison </span><span style='text-decoration: underline;'>14</span><span>786 -</span><span style='color: #BB0000;'>6.57</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Paulding </span><span style='text-decoration: underline;'>18</span><span>532 -</span><span style='color: #BB0000;'>5.24</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 6</span></span>
+<span class='c'>#&gt;   county       Pop  Perc Town         x_1   y_1</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adams      </span><span style='text-decoration: underline;'>27</span><span>706 -</span><span style='color: #BB0000;'>2.91</span><span> West Union -</span><span style='color: #BB0000;'>83.5</span><span>  38.8</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Allen     </span><span style='text-decoration: underline;'>101</span><span>603 -</span><span style='color: #BB0000;'>4.47</span><span> Lima       -</span><span style='color: #BB0000;'>84.1</span><span>  40.7</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Ashland    </span><span style='text-decoration: underline;'>53</span><span>040 -</span><span style='color: #BB0000;'>0.53</span><span> Ashland    -</span><span style='color: #BB0000;'>82.3</span><span>  40.9</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Ashtabula  </span><span style='text-decoration: underline;'>96</span><span>549 -</span><span style='color: #BB0000;'>4.79</span><span> Jefferson  -</span><span style='color: #BB0000;'>80.8</span><span>  41.7</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Athens     </span><span style='text-decoration: underline;'>64</span><span>943 -</span><span style='color: #BB0000;'>0.35</span><span> Athens     -</span><span style='color: #BB0000;'>82.1</span><span>  39.3</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Auglaize   </span><span style='text-decoration: underline;'>45</span><span>496 -</span><span style='color: #BB0000;'>0.88</span><span> Wapakoneta -</span><span style='color: #BB0000;'>84.2</span><span>  40.6</span></span>
 </code></pre>
 
 </div>
@@ -410,18 +410,20 @@ Part II: Add information to the maps
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pop</span>, mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_polygon</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"black"</span>, fill <span class='o'>=</span> <span class='s'>"white"</span><span class='o'>)</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>###  vary size of point by population size</span>
+<span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pop</span>, mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span><span class='o'>+</span>
+  <span class='nf'>geom_polygon</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"black"</span>, fill <span class='o'>=</span> <span class='s'>"white"</span><span class='o'>)</span><span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_big_pop</span>, color <span class='o'>=</span> <span class='s'>"red"</span>,
-             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Pop</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span>  <span class='c'>#  Do this to omit the legend</span>
+             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x_1</span>, y <span class='o'>=</span> <span class='nv'>y_1</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Pop</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> <span class='c'># Omit the legend</span>
 
 </code></pre>
 <img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
--   The points are plotted on the boundaries of the counties Improve the graph by creating groups of population using quantile.
+-   Improve the graph by creating groups of population using quantile.
 
 <div class="highlight">
 
@@ -434,20 +436,20 @@ Part II: Add information to the maps
 <span class='nv'>ohio_pop</span><span class='o'>$</span><span class='nv'>grouped_pop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='o'>(</span><span class='nv'>ohio_pop</span><span class='o'>$</span><span class='nv'>Pop</span>, <span class='nv'>ApplyQuintiles</span><span class='o'>)</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>ohio_pop</span><span class='o'>)</span>
 
-<span class='c'>#&gt;        long      lat group order region subregion county   Pop  Perc</span>
-<span class='c'>#&gt; 1 -83.66902 39.02989  2012 59960   ohio     adams  Adams 27706 -2.91</span>
-<span class='c'>#&gt; 2 -83.56590 39.02989  2012 59961   ohio     adams  Adams 27706 -2.91</span>
-<span class='c'>#&gt; 3 -83.37109 39.06426  2012 59962   ohio     adams  Adams 27706 -2.91</span>
-<span class='c'>#&gt; 4 -83.30806 39.06426  2012 59963   ohio     adams  Adams 27706 -2.91</span>
-<span class='c'>#&gt; 5 -83.30233 39.05280  2012 59964   ohio     adams  Adams 27706 -2.91</span>
-<span class='c'>#&gt; 6 -83.25649 39.01842  2012 59965   ohio     adams  Adams 27706 -2.91</span>
-<span class='c'>#&gt;   grouped_pop</span>
-<span class='c'>#&gt; 1        0-20</span>
-<span class='c'>#&gt; 2        0-20</span>
-<span class='c'>#&gt; 3        0-20</span>
-<span class='c'>#&gt; 4        0-20</span>
-<span class='c'>#&gt; 5        0-20</span>
-<span class='c'>#&gt; 6        0-20</span>
+<span class='c'>#&gt;        long      lat group order region subregion county   Pop  Perc       Town</span>
+<span class='c'>#&gt; 1 -83.66902 39.02989  2012 59960   ohio     adams  Adams 27706 -2.91 West Union</span>
+<span class='c'>#&gt; 2 -83.56590 39.02989  2012 59961   ohio     adams  Adams 27706 -2.91 West Union</span>
+<span class='c'>#&gt; 3 -83.37109 39.06426  2012 59962   ohio     adams  Adams 27706 -2.91 West Union</span>
+<span class='c'>#&gt; 4 -83.30806 39.06426  2012 59963   ohio     adams  Adams 27706 -2.91 West Union</span>
+<span class='c'>#&gt; 5 -83.30233 39.05280  2012 59964   ohio     adams  Adams 27706 -2.91 West Union</span>
+<span class='c'>#&gt; 6 -83.25649 39.01842  2012 59965   ohio     adams  Adams 27706 -2.91 West Union</span>
+<span class='c'>#&gt;         x_1      y_1 grouped_pop</span>
+<span class='c'>#&gt; 1 -83.54616 38.79483        0-20</span>
+<span class='c'>#&gt; 2 -83.54616 38.79483        0-20</span>
+<span class='c'>#&gt; 3 -83.54616 38.79483        0-20</span>
+<span class='c'>#&gt; 4 -83.54616 38.79483        0-20</span>
+<span class='c'>#&gt; 5 -83.54616 38.79483        0-20</span>
+<span class='c'>#&gt; 6 -83.54616 38.79483        0-20</span>
 </code></pre>
 
 </div>
@@ -461,7 +463,7 @@ Part II: Add information to the maps
                <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span>, fill <span class='o'>=</span> <span class='nv'>grouped_pop</span><span class='o'>)</span>,
                color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span> <span class='o'>+</span> 
   <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>scale_fill_brewer</span><span class='o'>(</span>palette <span class='o'>=</span> <span class='s'>"Set1"</span>, direction <span class='o'>=</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>scale_fill_brewer</span><span class='o'>(</span>palette <span class='o'>=</span> <span class='s'>"Reds"</span>, direction <span class='o'>=</span> <span class='m'>1</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"Population Quantiles"</span><span class='o'>)</span> 
 
 </code></pre>
@@ -484,29 +486,31 @@ Use the dataset of 2021 Ohio county's population to plot counties with % positiv
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># get basic map data for all USA counties </span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Get basic map data for all USA counties:</span>
 <span class='nv'>usa_counties</span> <span class='o'>=</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"county"</span><span class='o'>)</span>    
 
-<span class='c'># subset to counties in Ohio </span>
+<span class='c'># Subset to counties in Ohio:</span>
 <span class='nv'>oh</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='o'>(</span><span class='nv'>usa_counties</span>, <span class='nv'>region</span> <span class='o'>==</span> <span class='s'>"ohio"</span><span class='o'>)</span>  
 
-<span class='c'># read population data</span>
+<span class='c'># Read population data:</span>
 <span class='nv'>Ohio</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span><span class='s'>"Ohio.csv"</span><span class='o'>)</span> 
 
-<span class='c'># Create a new  column called  "county" so that counties start with capital letters using str_to_title function </span>
+<span class='c'># Create a new  column called  "county" so that counties start with capital</span>
+<span class='c'># letters using str_to_title function </span>
 <span class='nv'>oh</span><span class='o'>$</span><span class='nv'>county</span> <span class='o'>=</span> <span class='nf'><a href='https://stringr.tidyverse.org/reference/case.html'>str_to_title</a></span><span class='o'>(</span><span class='nv'>oh</span><span class='o'>$</span><span class='nv'>subregion</span><span class='o'>)</span>
 
-<span class='c'># merge counties with population</span>
+<span class='c'># Merge counties with population:</span>
 <span class='nv'>ohio_pop</span><span class='o'>&lt;-</span><span class='nf'>inner_join</span><span class='o'>(</span><span class='nv'>oh</span>, <span class='nv'>Ohio</span>, by <span class='o'>=</span> <span class='s'>"county"</span><span class='o'>)</span>
 
-<span class='c'># Select counties with % positive population growth</span>
-<span class='nv'>ohio_pos_pop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>ohio_pop</span>, <span class='nv'>Perc</span><span class='o'>&gt;</span><span class='m'>0</span><span class='o'>)</span>
+<span class='c'># Select counties with % positive population growth:</span>
+<span class='nv'>ohio_pos_pop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>ohio_pop</span>, <span class='nv'>Perc</span> <span class='o'>&gt;</span> <span class='m'>0</span><span class='o'>)</span>
+
 <span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pop</span>,
        mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y<span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_polygon</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"black"</span>, fill <span class='o'>=</span> <span class='s'>"white"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pos_pop</span>,
-             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, color <span class='o'>=</span> <span class='s'>"red"</span>, size <span class='o'>=</span> <span class='nv'>Pop</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> 
-  <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span>  <span class='c'>#  do this to leave off the size legend </span>
+  <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pos_pop</span>, color <span class='o'>=</span> <span class='s'>"red"</span>,
+             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Pop</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> 
+  <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span>  <span class='c'>#  Omit the legend</span>
 
 </code></pre>
 <img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
@@ -529,19 +533,22 @@ Use the same data to plot counties with % negative population growth with quanti
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ohio_neg_pop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>ohio_pop</span>, <span class='nv'>Perc</span> <span class='o'>&lt;</span> <span class='m'>0</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ohio_neg_pop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>ohio_pop</span>, <span class='nv'>Perc</span><span class='o'>&lt;</span><span class='m'>0</span><span class='o'>)</span>
 
-<span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pop</span>,
-       mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x<span class='o'>=</span> <span class='nv'>long</span>, y<span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_polygon</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"black"</span>, fill <span class='o'>=</span> <span class='s'>"white"</span><span class='o'>)</span> <span class='o'>+</span>
+<span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_pop</span>, mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x<span class='o'>=</span> <span class='nv'>long</span>, y<span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span><span class='o'>+</span>
+  <span class='nf'>geom_polygon</span><span class='o'>(</span>color<span class='o'>=</span><span class='s'>"black"</span>,fill<span class='o'>=</span><span class='s'>"white"</span><span class='o'>)</span><span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_neg_pop</span>, color <span class='o'>=</span> <span class='s'>"red"</span>,
-             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Perc</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x_1</span>,y <span class='o'>=</span> <span class='nv'>y_1</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>Perc</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>guides</span><span class='o'>(</span>size <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> <span class='c'># Omit the legend</span>
 
 </code></pre>
 <img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" />
-<pre class='chroma'><code class='language-r' data-lang='r'>
-<span class='nv'>ApplyQuintiles_n</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>x</span><span class='o'>)</span> <span class='o'>&#123;</span>
+
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ApplyQuintiles_n</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>x</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nf'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span><span class='o'>(</span><span class='nv'>x</span>, breaks <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='o'>(</span><span class='nv'>ohio_neg_pop</span><span class='o'>$</span><span class='nv'>Perc</span>, probs <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>1</span>, by <span class='o'>=</span> <span class='m'>0.2</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span>,
       labels <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"0-20"</span>, <span class='s'>"20-40"</span>, <span class='s'>"40-60"</span>, <span class='s'>"60-80"</span>, <span class='s'>"80-100"</span><span class='o'>)</span>,
       include.lowest <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
@@ -549,7 +556,7 @@ Use the same data to plot counties with % negative population growth with quanti
 
 <span class='nv'>ohio_neg_pop</span><span class='o'>$</span><span class='nv'>grouped_pop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='o'>(</span><span class='nv'>ohio_neg_pop</span><span class='o'>$</span><span class='nv'>Perc</span>, <span class='nv'>ApplyQuintiles_n</span><span class='o'>)</span>
 
-<span class='c'>#  plot the map</span>
+<span class='c'># Plot the map</span>
 <span class='nf'>ggplot</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_polygon</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_neg_pop</span>,
                <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span>, fill <span class='o'>=</span> <span class='nv'>grouped_pop</span><span class='o'>)</span>,
@@ -559,7 +566,7 @@ Use the same data to plot counties with % negative population growth with quanti
   <span class='nf'>labs</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"Negative population growth counties"</span><span class='o'>)</span> 
 
 </code></pre>
-<img src="figs/unnamed-chunk-24-2.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -589,7 +596,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
   <span class='nf'>labs</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"France"</span><span class='o'>)</span> 
 
 </code></pre>
-<img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" />
 <pre class='chroma'><code class='language-r' data-lang='r'>
 <span class='c'># The "maps" package has city data</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nf'>maps</span><span class='nf'>::</span><span class='nv'><a href='https://rdrr.io/pkg/maps/man/world.cities.html'>world.cities</a></span><span class='o'>)</span>
@@ -624,7 +631,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-25-2.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-26-2.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -640,7 +647,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span><span class='o'>)</span> 
 
 </code></pre>
-<img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -653,7 +660,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-28-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -671,7 +678,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span>, color <span class='o'>=</span> <span class='nv'>qual</span>, size <span class='o'>=</span> <span class='nv'>pop</span><span class='o'>)</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-28-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -696,7 +703,7 @@ Plot the cities of France with population greater than 100,000. Vary size of poi
   <span class='nf'>scale_size_continuous</span><span class='o'>(</span>label <span class='o'>=</span> <span class='nv'>comma</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
