@@ -12,7 +12,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 5026aa62264ab05a
+rmd_hash: e0e92d8dd048373f
 
 ---
 
@@ -147,8 +147,9 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
 <span class='nv'>a_region</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>world</span>, <span class='nv'>long</span> <span class='o'>&gt;</span><span class='o'>-</span> <span class='m'>10</span> <span class='o'>&amp;</span> <span class='nv'>long</span> <span class='o'>&lt;</span> <span class='m'>15.1</span> <span class='o'>&amp;</span> <span class='nv'>lat</span> <span class='o'>&gt;</span> <span class='m'>32</span> <span class='o'>&amp;</span> <span class='nv'>lat</span> <span class='o'>&lt;</span> <span class='m'>55</span><span class='o'>)</span>
 
 <span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>a_region</span>,
-       mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y<span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span>
+       mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span>
 
 </code></pre>
 <img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
