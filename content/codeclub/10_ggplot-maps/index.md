@@ -1,5 +1,5 @@
 ---
-title: "Session 10: Spatial data visualization with ggplot2"
+title: "Session 11: Spatial data visualization with ggplot2"
 summary: "Today, we will be making cool maps in R!"  
 authors: [stephen-opiyo]
 date: "2021-02-24"
@@ -12,7 +12,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 3fb389806c4bc3b1
+rmd_hash: 5026aa62264ab05a
 
 ---
 
@@ -56,14 +56,15 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
 <span class='c'># Let us get a world map using the "map_data" function </span>
 <span class='nv'>world</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"world"</span><span class='o'>)</span>
 
-<span class='c'># Let us get a usa map:</span>
+<span class='c'>## Let us get a US map including Hawaii, Alaska, and Puerto Rico:</span>
 <span class='nv'>usa</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"usa"</span><span class='o'>)</span>
 
 <span class='c'># Let us get the states:</span>
 <span class='nv'>states</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"state"</span><span class='o'>)</span>
 
 <span class='c'># Select Ohio using the filter function:</span>
-<span class='nv'>ohio</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>states</span>, <span class='nv'>region</span> <span class='o'>==</span> <span class='s'>"ohio"</span><span class='o'>)</span>
+<span class='nv'>ohio</span> <span class='o'>&lt;-</span> <span class='nv'>states</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>region</span> <span class='o'>==</span> <span class='s'>"ohio"</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -72,7 +73,8 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>world</span>, mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>world</span>,
+       mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span>
 
 </code></pre>
@@ -84,7 +86,8 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>usa</span>, mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x<span class='o'>=</span> <span class='nv'>long</span>, y<span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>usa</span>,
+       mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y<span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
  <span class='nf'>geom_polygon</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"white"</span>, color <span class='o'>=</span> <span class='s'>"black"</span><span class='o'>)</span>
 
 </code></pre>
@@ -123,7 +126,8 @@ Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana, 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># We can select data for two states, for example Ohio and Indiana:</span>
-<span class='nv'>ohio_indiana</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>states</span>, <span class='nv'>region</span> <span class='o'>==</span> <span class='s'>"ohio"</span> <span class='o'>|</span> <span class='nv'>region</span> <span class='o'>==</span> <span class='s'>"indiana"</span><span class='o'>)</span>
+<span class='nv'>ohio_indiana</span> <span class='o'>&lt;-</span> <span class='nv'>states</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>region</span> <span class='o'>==</span> <span class='s'>"ohio"</span> <span class='o'>|</span> <span class='nv'>region</span> <span class='o'>==</span> <span class='s'>"indiana"</span><span class='o'>)</span>
 
 <span class='c'># Plot the map of Ohio and Indiana:</span>
 <span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>ohio_indiana</span>,

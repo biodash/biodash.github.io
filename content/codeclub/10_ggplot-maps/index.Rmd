@@ -1,5 +1,5 @@
 ---
-title: "Session 10: Spatial data visualization with ggplot2"
+title: "Session 11: Spatial data visualization with ggplot2"
 summary: "Today, we will be making cool maps in R!"  
 authors: [stephen-opiyo]
 date: "2021-02-24"
@@ -68,27 +68,30 @@ library(stringr)
 # Let us get a world map using the "map_data" function 
 world <- map_data("world")
 
-# Let us get a usa map:
+## Let us get a US map including Hawaii, Alaska, and Puerto Rico:
 usa <- map_data("usa")
 
 # Let us get the states:
 states <- map_data("state")
 
 # Select Ohio using the filter function:
-ohio <- filter(states, region == "ohio")
+ohio <- states %>%
+  filter(region == "ohio")
 ```
 
 - Let us plot a world map:
 
 ```{r}
-ggplot(data = world, mapping = aes(x = long, y = lat, group = group)) +
+ggplot(data = world,
+       mapping = aes(x = long, y = lat, group = group)) +
  geom_polygon(fill = "white", color = "black")
 ```
 
 - Let us plot a map of the US:
 
 ```{r}
-ggplot(data = usa, mapping = aes(x= long, y= lat, group = group)) +
+ggplot(data = usa,
+       mapping = aes(x = long, y= lat, group = group)) +
  geom_polygon(fill = "white", color = "black")
 ```
 
@@ -112,7 +115,8 @@ ggplot(data = ohio,
 
 ```{r}
 # We can select data for two states, for example Ohio and Indiana:
-ohio_indiana <- filter(states, region == "ohio" | region == "indiana")
+ohio_indiana <- states %>% 
+  filter(region == "ohio" | region == "indiana")
 
 # Plot the map of Ohio and Indiana:
 ggplot(data = ohio_indiana,
