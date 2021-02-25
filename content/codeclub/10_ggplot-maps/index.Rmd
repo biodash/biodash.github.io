@@ -1,0 +1,503 @@
+---
+title: "Session 10: Spatial data visualization with ggplot2"
+summary: "Today, we will be making cool maps in R!"  
+authors: [stephen-opiyo]
+date: "2021-02-24"
+output: hugodown::md_document
+toc: true
+image: 
+  caption: "Image from https://r4ds.had.co.nz"
+  focal_point: ""
+  preview_only: false
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+<br> <br>
+
+Today, we will cover the visualization of spatial data in R using the layered grammar of graphics implementation of ggplot2 in conjunction with the contextual information of static maps from world maps in the *maps* package. 
+
+**Before we look at mapping using ggplot2, let us define some terms.**
+
+*Areal data* <br/>
+Areal data is data which corresponds to geographical extents with polygonal boundaries. 
+
+*The layered grammar of graphics* <br/>
+By definition, the layered grammar demands that every plot consist of five components: <br/>
+
+-	a default dataset with aesthetic mappings,<br/>
+
+-	one or more layers, each with either a geometric object ("geom"), a statistical transformation ("stat"), etc.<br/>
+
+-	a scale for each aesthetic mapping (which can be automatically generated),<br/>
+
+-	a coordinate system, and <br/>
+
+-	a facet specification. <br/>
+
+Since *ggplot2* is an implementation of the layered grammar of graphics, every plot made with ggplot2 has each of the above elements. Consequently, map plots also have these elements, but certain elements are ﬁxed to map components: the `x` aesthetic is ﬁxed to longitude, the `y` aesthetic is ﬁxed to latitude.
+
+**Drawing a map** <br/>
+Drawing a map in R requires two things. **First**, we have to draw the map
+using data that directs R to draw the polygon shapes that constitute the map. Then we **add** information to our map to plot color and marks. It's the same basic logic that we have used in ggplot figures. The key thing is to have datasets that link that geographic data with the information that we want to put on the plot. 
+
+*The maps package in R* <br/>
+The "maps" package in R contains a set of maps of the United States and the world drawn using longitude and latitude data. With world map, the USA map with the individual states you can accomplish a lot of the mapping tasks using the maps package. The maps package contains a lot of outlines of continents, countries, states, and counties 
+
+**Making data frames from map outlines by ggplot2** <br/>
+Recall that ggplot2 operates on data frames. Therefore, we need some way to translate the maps data into a data frame format the ggplot can use. The package *ggplot2* provides the `map_data()` function.
+The function turns a series of points along an outline into a data frame of those points.
+The package ggplot2 uses the following syntax: `map_data("name")` where "name" is
+a quoted string of the name of a map in the *maps* package.<br/>
+
+Let us start by drawing maps of the World, USA, states, Ohio, Ohio and Indiana,
+and part of Europe using the *maps* package.
+
+```{r}
+library(tidyverse)
+library(maps)
+library(scales)
+library(stringr)
+
+# Let us get a world map using the "map_data" function 
+world <- map_data("world")
+
+# Let us get a usa map:
+usa <- map_data("usa")
+
+# Let us get the states:
+states <- map_data("state")
+
+# Select Ohio using the filter function:
+ohio <- filter(states, region == "ohio")
+```
+
+- Let us plot a world map:
+
+```{r}
+ggplot(data = world, mapping = aes(x = long, y = lat, group = group)) +
+ geom_polygon(fill = "white", color = "black")
+```
+
+- Let us plot a map of the US:
+
+```{r}
+ggplot(data = usa, mapping = aes(x= long, y= lat, group = group)) +
+ geom_polygon(fill = "white", color = "black")
+```
+
+- Let us plot a map of the US with states:
+
+```{r}
+ggplot(data = states,
+       mapping = aes(x = long, y = lat, group = group)) +
+ geom_polygon(fill = "blue", color = "black")
+```
+
+- Let us plot a map of Ohio:
+
+```{r}
+ggplot(data = ohio,
+       mapping=aes(x = long, y = lat, group = group)) + 
+  geom_polygon(fill = "white", color = "green")
+```
+
+- We can also plot a map for an arbitrary selection of states:
+
+```{r}
+# We can select data for two states, for example Ohio and Indiana:
+ohio_indiana <- filter(states, region == "ohio" | region == "indiana")
+
+# Plot the map of Ohio and Indiana:
+ggplot(data = ohio_indiana,
+       mapping = aes(x = long, y = lat, group = group)) + 
+  geom_polygon(fill = "green" , color = "red")
+```
+
+- We can also plot only a specific region by filtering by latitude and
+  longitude:
+
+```{r}
+world <- map_data("world")
+a_region <- filter(world, long >- 10 & long < 15.1 & lat > 32 & lat < 55)
+
+ggplot(data = a_region,
+       mapping = aes(x = long, y= lat, group = group)) +
+  geom_polygon(fill = "white", color = "black")
+```
+
+### The structure of the data frame `ohio`.
+
+```{r}
+head(ohio)
+```
+
+Look at the variables in *ohio*, note what they refer to: <br/>
+
+-	`long` = longitude. Lines of longitude, or meridians, run between the North and South Poles and measure east-west positions. While prime meridian is assigned the value of 0 degrees, and runs through Greenwich (England), meridians to the west of the prime meridian are measured in degrees west (up to 180 degrees) and those to the east of the prime meridian are measured to in degrees east (up to 180 degrees).<br/>
+
+-	`lat` = latitude. Lines of latitude measure north-south position between the poles with the equator defined as 0 degrees, the North Pole defined as 90 degrees north, and the South Pole defined as 90 degrees south. <br/>
+
+-	`group` = an identifier that is unique for each subregion (here the counties). Group is very important! ggplot2's functions can take a group argument which controls (amongst other things) whether adjacent points should be connected by lines. If they are in the same group, then they get connected, but if they are in different groups then they don't. <br/>
+
+-	`order` = an identifier that indicates the order in which the boundary lines should be drawn <br/>
+
+-	`region` = string indicator for regions (here the states) <br/>
+
+-	`subregion` = string indicator for sub-regions (here the county names) <br/>
+
+
+## Part II: Add information to the maps
+
+**The second part of mapping in R, is to add information on the map created in the first part.** <br/>
+In drawing the map, the "*maps*" package creates the backbone for visualizations.
+Then we add additional information to show colors and shapes. <br/>
+
+*We will:* <br/>
+- fill a map by region, <br/>
+- draw a Bubble map using city population, <br/>
+- make a point for every city, <br/>
+- vary size of point by city size and vary the color of the dots, and <br/> 
+- add external data to the map. <br/>
+
+
+- Let us fill by region and make sure the the lines of state borders are white:
+
+```{r}
+ggplot(data = states) + 
+ geom_polygon(aes(x = long, y = lat, fill = region, group = group),
+              color = "white") + 
+ coord_fixed(1.3) +
+ guides(fill = FALSE) # Do this to omit the legend
+```
+
+- Let us draw a "Bubble map":
+
+```{r}
+# The maps package has city data
+head(maps::world.cities)
+
+my_cities <- maps::world.cities
+
+usa_cities <- filter(my_cities,country.etc == "USA")
+
+head(usa_cities)
+```
+
+- Make a point for every city:
+
+```{r}
+ggplot(data = usa,
+       mapping = aes(x = long, y = lat, group = group)) +
+ geom_polygon(color = "black", fill = "white") +
+ geom_point(data = usa_cities, color = "red",
+            aes(x = long, y = lat, group = NULL))
+```
+
+- Let's pick just the big cities:
+
+```{r}
+usa_big_cities <- filter(my_cities, country.etc == "USA" & pop > 500000)
+
+ggplot(data = usa, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = usa_big_cities, color = "red",
+             aes(x = long, y = lat, group = NULL))
+```
+
+- Vary size of point by city size:
+
+```{r}
+ggplot(data = usa, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = usa_big_cities, color = "red",
+             aes(x = long, y = lat, group = NULL, size = pop))
+```
+
+- Now vary the color of the dots:
+
+```{r}
+usa_big_cities$qual <- sample(LETTERS[1:5], nrow(usa_big_cities),
+                              replace = TRUE)
+
+ggplot(data = usa, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = usa_big_cities,
+             aes(x = long, y = lat, group = NULL, color = qual, size = pop))
+```
+
+- Tweak the map:
+
+```{r}
+# No scientific notation in legend r ggplot:
+# scales package adds the "scale_size_continuous" function, and we can set label=comma
+library(scales)
+
+# Change the column name to make the legend nicer"
+usa_big_cities$Population <- usa_big_cities$pop
+usa_big_cities$Qualitative <- usa_big_cities$qual
+
+# Do some additional refining:
+ggplot(data = usa, mapping = aes(x = long, y= lat, group = group)) + 
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = usa_big_cities,
+             aes(x = long, y = lat, group = NULL,
+                 color = Qualitative, size = Population)) +
+  scale_size_continuous(label = comma)
+```
+
+- Work with Ohio counties with external data:
+
+```{r}
+# Get basic map data for all USA counties:
+usa_counties = map_data("county") 
+
+# Subset to counties in Ohio:
+oh = subset(usa_counties, region == "ohio") 
+head(oh)
+```
+
+```{r}
+# Plot ohio counties
+ggplot() +
+  geom_polygon(data = oh,
+               aes(x = long, y = lat, group = group, fill = subregion),
+               color = "black", alpha = 0.3) + 
+  coord_fixed(1.3) +
+  guides(fill = FALSE) +
+  ggtitle("Ohio counties")  
+```
+
+- Read population data for Ohio counties:
+
+```{r}
+# The data of the estimated population of each  county in 2021 and percent change from 2010
+Ohio <- read_csv("Ohio.csv")
+head(Ohio)
+```
+
+- Prepare the data for plotting:
+
+```{r}
+# Create a new  column called  "county" so that counties start with capital letters
+# using str_to_title function 
+oh$county <- str_to_title(oh$subregion)
+
+# Merge population data with counties data by county variable using inner_join
+# function, and named the new object "ohio_pop"
+ohio_pop <- inner_join(oh, Ohio, by = "county")
+
+# Select counties with population greater than 100000
+ohio_big_pop <- filter(ohio_pop, Pop > 100000)
+```
+
+- Create the plot where we vary point size by population size:
+
+```{r}
+ggplot(data = ohio_pop, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = ohio_big_pop, color = "red",
+             aes(x = long, y = lat, group = NULL, size = Pop)) +
+  guides(size = FALSE)  #  Do this to omit the legend
+```
+
+- The points are plotted on the boundaries of the counties
+  Improve the graph by creating groups of population using quantile.
+
+```{r}
+ApplyQuintiles <- function(x) {
+  cut(x, breaks = c(quantile(ohio_pop$Pop, probs = seq(0, 1, by = 0.2))),
+      labels = c("0-20", "20-40", "40-60", "60-80", "80-100"),
+      include.lowest = TRUE)
+}
+
+ohio_pop$grouped_pop <- sapply(ohio_pop$Pop, ApplyQuintiles)
+head(ohio_pop)
+```
+
+- Plot the map:
+
+```{r}
+ggplot() +
+  geom_polygon(data = ohio_pop,
+               aes(x = long, y = lat, group = group, fill = grouped_pop),
+               color = "black") + 
+  coord_fixed(1.3) +
+  scale_fill_brewer(palette = "Set1", direction = -1) +
+  labs(fill = "Population Quantiles") 
+```
+
+## Breakout rooms
+
+:::puzzle
+
+### Exercise 1
+
+Use the dataset of 2021 Ohio county's population to plot counties with % positive population growth. 
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+# get basic map data for all USA counties 
+usa_counties = map_data("county")    
+
+# subset to counties in Ohio 
+oh = subset(usa_counties, region == "ohio")  
+
+# read population data
+Ohio <- read_csv("Ohio.csv") 
+
+# Create a new  column called  "county" so that counties start with capital letters using str_to_title function 
+oh$county = str_to_title(oh$subregion)
+
+# merge counties with population
+ohio_pop<-inner_join(oh, Ohio, by = "county")
+
+# Select counties with % positive population growth
+ohio_pos_pop <- filter(ohio_pop, Perc>0)
+ggplot(data = ohio_pop,
+       mapping = aes(x = long, y= lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = ohio_pos_pop,
+             aes(x = long, y = lat, group = NULL, color = "red", size = Pop)) + 
+  guides(size = FALSE)  #  do this to leave off the size legend 
+```
+
+</details>
+
+:::
+
+
+:::puzzle
+
+### Exercise 2
+Use the same data to plot counties with % negative population growth with quantile
+of 0-20, 20-40, 40-60, 60-80, and 80-100.
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+ohio_neg_pop <- filter(ohio_pop, Perc < 0)
+
+ggplot(data = ohio_pop,
+       mapping = aes(x= long, y= lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = ohio_neg_pop, color = "red",
+             aes(x = long, y = lat, group = NULL, size = Perc)) +
+  guides(size = FALSE) # Omit the legend
+
+ApplyQuintiles_n <- function(x) {
+  cut(x, breaks = c(quantile(ohio_neg_pop$Perc, probs = seq(0, 1, by = 0.2))),
+      labels = c("0-20", "20-40", "40-60", "60-80", "80-100"),
+      include.lowest = TRUE)
+}
+
+ohio_neg_pop$grouped_pop <- sapply(ohio_neg_pop$Perc, ApplyQuintiles_n)
+
+#  plot the map
+ggplot() +
+  geom_polygon(data = ohio_neg_pop,
+               aes(x = long, y = lat, group = group, fill = grouped_pop),
+               color = "black") + 
+  coord_fixed(1.3) +
+  scale_fill_brewer(palette = "Set1", direction = -1) +
+  labs(fill = "Negative population growth counties") 
+```
+</details>
+
+:::
+
+:::puzzle
+
+### Bonus exercise
+Plot the cities of France with population greater than 100,000.
+Vary size of point by city size, and vary the color of the dots. 
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+world <- map_data("world")
+
+france <- filter(world,region == "France")
+
+ggplot(data = france,
+       mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  labs(fill = "France") 
+
+# The "maps" package has city data
+head(maps::world.cities)
+my_cities <-maps::world.cities
+
+france_cities <- filter(my_cities, country.etc == "France")
+
+head(france_cities)
+
+# Make a point for every city:
+ggplot(data = france, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = france_cities, color = "red",
+             aes(x = long, y = lat, group = NULL))
+```
+
+```{r}
+# Let's pick just the big cities:
+france_big_cities <- filter(my_cities,country.etc == "France" & pop > 100000)
+
+ggplot(data = france,
+       mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = france_big_cities, color = "red",
+             aes(x = long, y = lat, group = NULL)) 
+```
+
+```{r}
+# vary size of point by city size
+ggplot(data = france, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = france_big_cities, color = "red",
+             aes(x = long, y = lat, group = NULL, size = pop))
+```
+
+```{r}
+# Now vary the color of the dots
+france_big_cities$qual <- sample(LETTERS[1:5],
+                                 nrow(france_big_cities),
+                                 replace = TRUE)
+
+ggplot(data = france,
+       mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black",fill = "white") +
+  geom_point(data = france_big_cities,
+             aes(x = long, y = lat, group = NULL, color = qual, size = pop))
+```
+
+```{r}
+# Do some tweaking:
+# no scientific notation in legend r ggplot
+# scales package adds the "scale_size_continuous" function to our arsenal, and we can set label=comma
+library(scales)
+
+# Change the column name to make the legend nicer:
+france_big_cities$Population <- france_big_cities$pop
+france_big_cities$Qualitative <- france_big_cities$qual
+
+# Do some additional refining:
+ggplot(data = france,
+       mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = france_big_cities,
+             aes(x = long, y = lat, group = NULL,
+                 color = Qualitative, size = Population)) +
+  scale_size_continuous(label = comma)
+```
+
+</details>
+
+:::
