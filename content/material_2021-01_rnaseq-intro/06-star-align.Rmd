@@ -53,6 +53,7 @@ Some options for aligning reads to the genome using STAR are
 
 ```sh
 #!/bin/bash
+#SBATCH --account=PAS0471
 #SBATCH --time=2:00:00
 #SBATCH --cpus-per-task=18
 module load star/2.6.0a
@@ -66,19 +67,27 @@ STAR --runThreadN "$SLURM_CPUS_ON_NODE" \
    --readFilesIn "$R1" "$R2" \
    --readFilesCommand zcat \
    --outFileNamePrefix "$bam_dir/$sample"_ \
-   --outSAMtype BAM SortedByCoordinate
+   --outSAMtype BAM SortedByCoordinate \
+   --alignIntronMin 5 --alignIntronMax 350000
 ```
 
 ---
 
-## Submit the script:
+## Submit the script for one sample
+
+We run the script for an arbitrary sample to see if it works:
 
 ```sh
+# You should be here:
+# /fs/project/PAS0471/teach/misc/2021-02_rnaseq/$USER/
+
 sample=C6_myb2
+
 fastq_dir=data/fastq_concat_subsample 
-bam_dir=results/align/bam
 index_dir=data/ref/Heinz1706_4.00/STAR_index
 ref_gff=data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+bam_dir=results/align/bam
+
 sbatch scripts/align/star_align.sh \
   "$sample" "$fastq_dir" "$index_dir" "$ref_gff" "$bam_dir"
 ```
@@ -130,7 +139,7 @@ We'll take a closer look at the STAR log files, which our script moved
 to a sub-directory of the output dir:
 
 ```sh
-$ ls $bam_dir/star_logs
+$ ls results/align/bam/star_logs
 #> results/align/bam/star_logs/C6_myb2_Log.final.out
 #> results/align/bam/star_logs/C6_myb2_Log.out
 #> results/align/bam/star_logs/C6_myb2_Log.progress.out
@@ -327,8 +336,11 @@ done
 ## Submit the loop script
 
 ```sh
-$ ./scripts/align/star_align_loop.sh
-    "$sample_list" "$fastq_dir" "$index_dir" "$ref_gff" "$bam_dir"
+# You should still have the other variables ($fastq_dir etc) assigned
+$ sample_list=data/meta/samples.txt
+
+$ bash scripts/align/star_align_loop.sh
+      "$sample_list" "$fastq_dir" "$index_dir" "$ref_gff" "$bam_dir"
     
 #> Starting script star_align_loop.sh
 #> Wed Feb 10 21:03:13 EST 2021
@@ -342,12 +354,8 @@ $ ./scripts/align/star_align_loop.sh
 #> 
 #> Submitting star_align.sh for C6_myb2
 #> Submitted batch job 12830287
-#> Submitting star_align.sh for C6_myb2
-#> Submitted batch job 12830289
 #> Submitting star_align.sh for C6_myb3
 #> Submitted batch job 12830291
-#> Submitting star_align.sh for C6_myb3
-#> Submitted batch job 12830293
 #> ...
 ```
 

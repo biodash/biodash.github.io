@@ -15,7 +15,7 @@ Date  | Topic | Slides
 | 2021-02-12 | **Running MultiQC** | <a href="/material_2021-01_rnaseq-intro/04-multiqc.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
 | 2021-02-17 | **Preprocessing FASTQ files** | <a href="/material_2021-01_rnaseq-intro/02-preprocess-fastq.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
 | 2021-02-17 | **Intro to RNAseq alignment and STAR** | <a href="/material_2021-01_rnaseq-intro/05-star-index.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
-| 2021-02-17 | **RNAseq read alignment with STAR** | <a href="/material_2021-01_rnaseq-intro/06-star-align.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
+| 2021-02-26 | **RNAseq read alignment with STAR** | <a href="/material_2021-01_rnaseq-intro/06-star-align.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
 
 <br/> <br/> <br/>
 
