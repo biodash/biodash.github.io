@@ -18,7 +18,7 @@ options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-# RNAseq read alignment with STAR at OSC
+# RNAseq read alignment with STAR
 
 ----
 
@@ -41,16 +41,11 @@ Some options for aligning reads to the genome using STAR are
 | `--outFilterMultimapNmax` | Max. nr. alignments for a read <br> (default: 10)
 | `--outSAMtype` | Output sorted BAM (default: SAM) <br> `BAM SortedByCoordinate` for sorted BAM
 | `--outSAMunmapped`        | What to do with unmapped reads <br> (default: don't output)
+| `--alignIntronMin 5`      | Minimum intron length* (default: 20)
+|`--alignIntronMax 350000`  | Maximum intron length* (default: 1 M)
 
---
-
-.content-box-warning[
-Check maximum intron size in GFF:
-
-`--alignIntronMin 20` &mdash; minimum intron length
-
-`--alignIntronMax 1000000` &mdash; maximum intron length
-]
+* From [Clark et al. 2019](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6546887/):
+> [Tomato] intron sizes varied from 5 to 313,176 bp with a mean value of 1,352 bp.
 
 ---
 
@@ -382,7 +377,7 @@ $ du -sh $bam_dir/*bam
 ## Check the output (cont.)
 
 ```sh
-$ grep "Uniquely mapped" results/align/bam/star_logs/*Log.final*
+$ grep "Uniquely mapped reads %" results/align/bam/star_logs/*Log.final*
 #> C6_myb2_Log.final.out: Uniquely mapped reads % |   76.30%
 #> C6_myb3_Log.final.out: Uniquely mapped reads % |   79.46%
 #> C6_myb4_Log.final.out: Uniquely mapped reads % |   56.44%
@@ -409,13 +404,31 @@ $ sbatch scripts/qc/multiqc.sh results/align/bam/star_logs
 
 ---
 
-## Other QC and viewing of the alignments
+## Other options for QC and viewing of alignments
 
-- Integrative Genome Viewer (IGV)
-
-- Qualimap
+- **Qualimap**
+  ([website](http://qualimap.conesalab.org/doc_html/index.html),
+  [paper](https://pubmed.ncbi.nlm.nih.gov/26428292/))
+  is an alignment QC tool, which can, for instance:
+  - Compute statistics on the proportions of reads mapping to different genomic
+    feature types such as exons, introns, and intergenic regions.
+  - Quantify 3' and 5' bias.
+  - Analyze splice junctions.
+  
+- Another option for extensive alignment QC is **RseQC**
+  ([website](http://rseqc.sourceforge.net/),
+  [paper](https://academic.oup.com/bioinformatics/article/28/16/2184/325191)).
 
 ---
 
-## More about bamfiles
+## Other options for QC and viewing of alignments
+
+Integrative Genome Viewer (**IGV**):
+
+<figure>
+<p align="center">
+<img src=img/igv.png width="100%">
+<figcaption><a href="https://github.com/griffithlab/rnabio.org/blob/master/assets/lectures/cshl/2020/mini/RNASeq_MiniLecture_02_04_alignmentQC.pdf">Source</a> </figcaption>
+</p>
+</figure>
 
