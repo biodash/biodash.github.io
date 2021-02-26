@@ -265,28 +265,28 @@ $ wc -l Log.out
 
 ## Check the output (cont.)
 
-- Check the actual indexing output:
+Check the actual indexing output files:
   
-  ```sh
-  $ ls -lh data/ref/Heinz1706_4.00/STAR_index
-  
-  #> total 7.2G
-  #> -rw-r--r-- 1 jelmer PAS0471  116 Feb 10 14:53 chrLength.txt
-  #> -rw-r--r-- 1 jelmer PAS0471  246 Feb 10 14:53 chrNameLength.txt
-  #> -rw-r--r-- 1 jelmer PAS0471  130 Feb 10 14:53 chrName.txt
-  #> -rw-r--r-- 1 jelmer PAS0471  130 Feb 10 14:53 chrStart.txt
-  #> -rw-r--r-- 1 jelmer PAS0471 748M Feb 10 14:56 Genome
-  #> -rw-r--r-- 1 jelmer PAS0471  734 Feb 10 14:56 genomeParameters.txt
-  #> -rw-r--r-- 1 jelmer PAS0471 6.1G Feb 10 14:56 SA
-  #> -rw-r--r-- 1 jelmer PAS0471 374M Feb 10 14:56 SAindex
-  ```
+```sh
+$ ls -lh data/ref/Heinz1706_4.00/STAR_index
+
+#> total 7.2G
+#> -rw-r--r-- 1 jelmer PAS0471  116 Feb 10 14:53 chrLength.txt
+#> -rw-r--r-- 1 jelmer PAS0471  246 Feb 10 14:53 chrNameLength.txt
+#> -rw-r--r-- 1 jelmer PAS0471  130 Feb 10 14:53 chrName.txt
+#> -rw-r--r-- 1 jelmer PAS0471  130 Feb 10 14:53 chrStart.txt
+#> -rw-r--r-- 1 jelmer PAS0471 748M Feb 10 14:56 Genome
+#> -rw-r--r-- 1 jelmer PAS0471  734 Feb 10 14:56 genomeParameters.txt
+#> -rw-r--r-- 1 jelmer PAS0471 6.1G Feb 10 14:56 SA
+#> -rw-r--r-- 1 jelmer PAS0471 374M Feb 10 14:56 SAindex
+```
 
 ---
 
 ## STAR options for alignment
 
 Some options for aligning reads to the genome using STAR are  
-(_not showing options also shown for the indexing_):
+(_not showing options that were shown above for indexing_):
 
 | Option                    | Meaning
 |---------------------------|------------
@@ -344,33 +344,49 @@ $ sbatch -o "$slurm_log" scripts/align/star_align.sh \
 
 ## Check the output
 
+First, let's have a look at the SLURM log of our script:
+
 ```sh
 $ cat slurm-align-C6_myb2-12836540.out
 #> Starting script star_align.sh
-#> Thu Feb 11 20:24:21 EST 2021
+#> Mon Feb 15 20:47:51 EST 2021
 #> -------------------
-
-#> R1 input file: data/fastq_concat/C6_myb2_R1.fastq.gz
-#> R2 input file: data/fastq_concat/C6_myb2_R2.fastq.gz
+#> 
+#> R1 input file: data/fastq_concat_subsample/C6_myb2_R1.fastq.gz
+#> R2 input file: data/fastq_concat_subsample/C6_myb2_R2.fastq.gz
 #> Genome index dir: data/ref/Heinz1706_4.00/STAR_index
 #> Genome annotation file: data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
 #> Bam (output) directory: results/align/bam
-
+#> 
 #> Running STAR....
-#> Feb 11 20:24:21 ..... started STAR run
-#> Feb 11 20:24:21 ..... loading genome
-#> Feb 11 20:24:27 ..... started mapping
+#> Feb 15 20:47:51 ..... started STAR run
+#> Feb 15 20:47:52 ..... loading genome
+#> Feb 15 20:47:59 ..... started mapping
+#> Feb 15 20:50:11 ..... started sorting BAM
+#> Feb 15 20:50:19 ..... finished successfully
+#> 
+#> ----------------
+#> Done with script star_align.sh
+#> Mon Feb 15 20:50:19 EST 2021
 ```
 
 ---
 
 ## Check the output (cont.)
 
+Next, let's check if we can see the BAM file and what its size is:
+
 ```sh
 $ du -sh results/align/bam/*bam
 #> 230M    results/align/bam/C6_myb2_Aligned.sortedByCoord.out.bam
+```
 
+<br>
 
+We'll take a closer look at the STAR log files, which our script moved
+to a sub-directory of the output dir:
+
+```sh
 $ ls $bam_dir/star_logs
 #> results/align/bam/star_logs/C6_myb2_Log.final.out
 #> results/align/bam/star_logs/C6_myb2_Log.out
@@ -381,6 +397,88 @@ $ ls $bam_dir/star_logs
 ---
 
 ## Check the output (cont.)
+
+The file `<sample>_Log` has a basic run log:
+
+```sh
+$ less results/align/bam/star_logs/C6_myb2_Log.out
+# STAR version=STAR_2.6.0a
+# STAR compilation time,server,dir=Mon Apr 23 13:19:26 EDT 2018 # florence.cshl.edu:/sonas-hs/gingeras/nlsas_norepl/user/dobin/STAR/STAR.master/source
+# ##### DEFAULT parameters:
+# versionSTAR                       20201
+# versionGenome                     20101   20200   
+# parametersFiles                   -   
+# sysShell                          -
+# runMode                           alignReads
+# 
+# ...
+# 
+# Loading Genome ... done! state: good=1 eof=0 fail=0 bad=0; loaded 784072704 bytes
+# SA file size: 6455421245 bytes; state: good=1 eof=0 fail=0 bad=0
+# Loading SA ... done! state: good=1 eof=0 fail=0 bad=0; loaded 6455421245 bytes
+# Loading SAindex ... done: 391468491 bytes
+# Finished loading the genome: Mon Feb 15 20:47:59 2021
+# 
+# alignIntronMax=alignMatesGapMax=0, the max intron size will be approximately determined by # (2^winBinNbits)*winAnchorDistNbins=589824
+# Created thread # 1
+# Created thread # 2
+```
+
+---
+
+## Check the output (cont.)
+
+The file `<sample>_Log.progress.out` has a log of mapping progress.
+
+The mapping of this file apparently went so fast that only one row is shown,
+but this file can show multiple rows with mappping stats as time progresses.
+
+```sh
+$ cat results/align/bam/star_logs/C6_myb2_Log.progress.out
+
+#           Time    Speed        Read     Read   Mapped   Mapped   Mapped   Mapped Unmapped Unmapped Unmapped Unmapped
+#                    M/hr      number   length   unique   length   MMrate    multi   multi+       MM    short    other
+# Feb 15 20:49:27     48.8     1192672      276    76.3%    277.8     0.2%     1.6%     0.1%     0.3%    19.1%     2.6%
+# ALL DONE!
+```
+
+---
+
+## Check the output (cont.)
+
+The file `<sample>_SJ.out.tab` has a table of high-confidence splice junctions
+(only those supported by *uniquely* mapping reads):
+
+```sh
+$ less results/align/bam/star_logs/C6_myb2_SJ.out.tab
+# SL4.0ch00       18299   19023   1       1       0       1       0       12
+# SL4.0ch00       1253757 1264285 2       2       0       0       1       46
+# SL4.0ch00       1259569 1263678 2       2       0       1       0       47
+# SL4.0ch00       1259569 1264285 2       2       0       1       0       26
+# SL4.0ch00       1263726 1264285 2       2       0       2       1       47
+# SL4.0ch00       1376108 1376905 1       5       0       0       1       33
+# SL4.0ch00       1386429 1387446 1       1       0       0       1       55
+# SL4.0ch00       1389552 1390217 0       0       0       0       18      66
+# SL4.0ch00       1457286 1457951 0       0       0       0       18      65
+# SL4.0ch00       1470754 1471439 1       5       0       0       1       64
+# SL4.0ch00       1531568 1532365 1       5       0       0       1       33
+# SL4.0ch00       1541889 1542906 1       1       0       0       1       55
+# SL4.0ch00       1545012 1545677 0       0       0       0       18      66
+# SL4.0ch00       1903425 1905479 2       2       0       0       1       53
+# SL4.0ch00       1903425 1946574 2       2       0       0       1       53
+# SL4.0ch00       2044995 2046903 0       0       0       0       6       32
+# SL4.0ch00       2497375 2498040 0       0       0       0       18      65
+# SL4.0ch00       2510840 2511525 1       5       0       0       1       64
+# SL4.0ch00       2574688 2575704 2       2       0       0       1       55
+```
+
+---
+
+## Check the output (cont.)
+
+Most useful for now is the file `<sample>_Log.final.out`,
+which has a summary of mapping statistics:
+
 
 ```sh
 $ less results/align/bam/star_logs/C6_myb2_Log.final.out
@@ -411,6 +509,15 @@ $ less results/align/bam/star_logs/C6_myb2_Log.final.out
 
 ## Check the output (cont.)
 
+While 76% of reads mapped uniquely (previous slide),
+among the rest, we can see that "multi-mapped reads" account for a relatively
+small proportion (<2%) while there are a lot (>20%) of unmapped reads.
+
+Among unmapped reads, the vast majority (19% of the total number of reads)
+are "too short". This does not necessarily mean that the read itself was too
+short. More often, it will mean that the alignment that could be made was
+too short.
+
 ```sh
 # [...continuing results/align/bam/star_logs/C6_myb2_Log.final.out]
 # MULTI-MAPPING READS:
@@ -429,73 +536,26 @@ $ less results/align/bam/star_logs/C6_myb2_Log.final.out
 
 ---
 
-## Check the output (cont.)
+## Splice site frequencies in plants
 
-```sh
-$ less results/align/bam/star_logs/C6_myb2_Log.out
-# STAR version=STAR_2.6.0a
-# STAR compilation time,server,dir=Mon Apr 23 13:19:26 EDT 2018 # florence.cshl.edu:/sonas-hs/gingeras/nlsas_norepl/user/dobin/STAR/STAR.master/source
-# ##### DEFAULT parameters:
-# versionSTAR                       20201
-# versionGenome                     20101   20200   
-# parametersFiles                   -   
-# sysShell                          -
-# runMode                           alignReads
-# 
-# ...
-# ...
-# 
-# Loading Genome ... done! state: good=1 eof=0 fail=0 bad=0; loaded 784072704 bytes
-# SA file size: 6455421245 bytes; state: good=1 eof=0 fail=0 bad=0
-# Loading SA ... done! state: good=1 eof=0 fail=0 bad=0; loaded 6455421245 bytes
-# Loading SAindex ... done: 391468491 bytes
-# Finished loading the genome: Mon Feb 15 20:47:59 2021
-# 
-# alignIntronMax=alignMatesGapMax=0, the max intron size will be approximately determined by # (2^winBinNbits)*winAnchorDistNbins=589824
-# Created thread # 1
-# Created thread # 2
-# Created thread # 3
-```
+In the log file, we saw the numbers of different observed splice sites.
+How do those compare to our expectations?
 
 ---
 
-## Check the output (cont.)
-
 ```sh
-$ cat results/align/bam/star_logs/C6_myb2_Log.progress.out
-
-#           Time    Speed        Read     Read   Mapped   Mapped   Mapped   Mapped Unmapped Unmapped Unmapped Unmapped
-#                    M/hr      number   length   unique   length   MMrate    multi   multi+       MM    short    other
-# Feb 15 20:49:27     48.8     1192672      276    76.3%    277.8     0.2%     1.6%     0.1%     0.3%    19.1%     2.6%
-# ALL DONE!
+# Number of splices: GT/AG                  | 1451397
+# Number of splices: GC/AG                  | 14313
+# Number of splices: AT/AC                  | 747
+# Number of splices: Non-canonical          | 21325
 ```
 
----
-
-## Check the output (cont.)
-
-```sh
-$ less results/align/bam/star_logs/C6_myb2_SJ.out.tab
-# SL4.0ch00       18299   19023   1       1       0       1       0       12
-# SL4.0ch00       1253757 1264285 2       2       0       0       1       46
-# SL4.0ch00       1259569 1263678 2       2       0       1       0       47
-# SL4.0ch00       1259569 1264285 2       2       0       1       0       26
-# SL4.0ch00       1263726 1264285 2       2       0       2       1       47
-# SL4.0ch00       1376108 1376905 1       5       0       0       1       33
-# SL4.0ch00       1386429 1387446 1       1       0       0       1       55
-# SL4.0ch00       1389552 1390217 0       0       0       0       18      66
-# SL4.0ch00       1457286 1457951 0       0       0       0       18      65
-# SL4.0ch00       1470754 1471439 1       5       0       0       1       64
-# SL4.0ch00       1531568 1532365 1       5       0       0       1       33
-# SL4.0ch00       1541889 1542906 1       1       0       0       1       55
-# SL4.0ch00       1545012 1545677 0       0       0       0       18      66
-# SL4.0ch00       1903425 1905479 2       2       0       0       1       53
-# SL4.0ch00       1903425 1946574 2       2       0       0       1       53
-# SL4.0ch00       2044995 2046903 0       0       0       0       6       32
-# SL4.0ch00       2497375 2498040 0       0       0       0       18      65
-# SL4.0ch00       2510840 2511525 1       5       0       0       1       64
-# SL4.0ch00       2574688 2575704 2       2       0       0       1       55
-```
+<figure>
+<p align="center">
+<img src=img/splice-sites_PuckerBrockington2018.png width="90%">
+<figcaption><a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-018-5360-z">Pucker & Brockington 2018</a> </figcaption>
+</p>
+</figure>
 
 ---
 
@@ -600,3 +660,16 @@ $ grep "Uniquely mapped" results/align/bam/star_logs/*Log.final*
 ```sh
 $ sbatch scripts/qc/multiqc.sh results/align/bam/star_logs
 ```
+
+---
+
+## Other QC and viewing of the alignments
+
+- Integrative Genome Viewer (IGV)
+
+- Qualimap
+
+---
+
+## More about bamfiles
+
