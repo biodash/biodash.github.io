@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 451aee55eec32e23
+rmd_hash: 49865143292e7b08
 
 ---
 
@@ -563,7 +563,7 @@ Try to fix the coordinates using vectorized operations, and recreate the map to 
 
 <details>
 
-<summary> Solutions (click here) </summary> <br>
+<summary> Solution (click here) </summary> <br>
 
 First we fix the latitude, which was simply negated:
 
@@ -619,7 +619,7 @@ Create the first map with the same code as the example:
 
 <details>
 
-<summary> Solutions (click here) </summary> <br>
+<summary> Solution (click here) </summary> <br>
 
 It looks like North Caroline is submerged in the Atlantic. Let's perform a rescue operation by fixing the longitudes **just for North Carolina**:
 
@@ -670,7 +670,7 @@ Find the 10 most commonly observed bird species in the dataset, and save their E
 Feel free to check out the solution if you're not sure how, because the focus here is on the next step: trying to create a loop.
 
 <details>
-<summary> Top 10 bird solution (click here) </summary>
+<summary> Solution (click here) </summary>
 <p>
 
 <div class="highlight">
@@ -691,7 +691,7 @@ Feel free to check out the solution if you're not sure how, because the focus he
 Next, loop over all the top-10 species to produce a plot for each one of them. Start with the code for the Carolina Chickadee, including the subsetting operation, and modify that.
 
 <details>
-<summary> Loop hints (click here) </summary>
+<summary> Hints (click here) </summary>
 <p>
 
 -   In the subsetting operation where you select the focal species, replace "Carolina Chickadee" with whatever you name the variable (indicating an individual species) that you loop over.
@@ -707,7 +707,7 @@ Next, loop over all the top-10 species to produce a plot for each one of them. S
 
 <details>
 
-<summary>Loop solution (click here)</summary> <br>
+<summary>Solution (click here)</summary> <br>
 
 <div class="highlight">
 
@@ -848,27 +848,6 @@ Then, use an `if` statement to create plots only for those top-50 birds that hav
 
 Going further
 -------------
-
-<div class="alert alert-note">
-
-<div>
-
-#### More complex output in `for` loops
-
-When your output is more complex than a simple vector, or you don't know the final size in advance, you can use a list:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># EXAMPLE</span>
-
-<span class='c'># dplyr::bind_rows(my_list)</span>
-</code></pre>
-
-</div>
-
-</div>
-
-</div>
 
 <div class="alert alert-note">
 
