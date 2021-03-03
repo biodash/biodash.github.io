@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 49865143292e7b08
+rmd_hash: ea313e87bf0c429c
 
 ---
 
@@ -75,7 +75,7 @@ We will talk about the most common type of loop: the `for` loops. (Other types o
 
 #### But first...
 
-Before we talk about loops we should take a step back and explore ***vectorization***. Besides functional programming methods, vectorization is the other reason that loops are not as widely used in R as in other programming languages.
+Before we talk about loops we should take a step back and explore ***vectorization*** a bit more, which was briefly introduced by Michael in [Code Club session 9](https://biodash.github.io/codeclub/09_subsetting/). Besides functional programming methods, vectorization is the other reason that loops are not as widely used in R as in other programming languages.
 
 ------------------------------------------------------------------------
 
