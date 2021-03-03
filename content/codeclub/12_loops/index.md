@@ -2,7 +2,7 @@
 output: hugodown::md_document
 title: "Session 12: Vectorization and loops in R"
 subtitle: "Need for repeat."
-summary: "In this 12th session of Code Club, we will learn about structures for flow control in R, in particular for loops and if statements."
+summary: "This is be the first of several sessions broadly about iterating in order to avoid copying-and-pasting of code, and today we will talk about vectorization and for loops."
 authors: [admin]
 tags: [codeclub, markdown, rmarkdown]
 date: 2021-03-01
@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: e3e50336e630351b
+rmd_hash: 451aee55eec32e23
 
 ---
 
@@ -465,7 +465,7 @@ Learning about how to create your own functions and/or to use functional program
 Breakout rooms!
 ---------------
 
-In the exercises, we will work with a file that you can download as follows:
+For the exercises, you can download an R Markdown file with some code to get set up (I recommend coding in that document to get a nice overview of the plots that you produce):
 
 <div class="highlight">
 
@@ -481,7 +481,7 @@ The following code is already in your R Markdown file, which will download and r
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Download the file with bird data:</span>
-<span class='nv'>birds_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/master/assets/data/birds/backyard-birds_sample_error.tsv'</span>
+<span class='nv'>birds_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_sample_error.tsv'</span>
 <span class='nv'>birds_file</span> <span class='o'>&lt;-</span> <span class='s'>'backyard-birds_sample_error.tsv'</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
 </code></pre>
