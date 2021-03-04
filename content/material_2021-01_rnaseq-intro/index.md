@@ -16,7 +16,7 @@ Date  | Topic | Slides
 | 2021-02-17 | **Preprocessing FASTQ files** | <a href="/material_2021-01_rnaseq-intro/02-preprocess-fastq.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
 | 2021-02-17 | **Intro to RNAseq alignment and STAR** | <a href="/material_2021-01_rnaseq-intro/05-star-index.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
 | 2021-02-26 | **RNAseq read alignment with STAR** | <a href="/material_2021-01_rnaseq-intro/06-star-align.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
-| 2021-02-26 | **More on BAM files** | <a href="/material_2021-01_rnaseq-intro/07-bam.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
+| 2021-03-05 | **Getting to know BAM files** | <a href="/material_2021-01_rnaseq-intro/07-bam.html" target="_blank"><span style="color: #4b5357;"><i class="fas fa-desktop fa-lg"></i></span></a> |
 
 <br/> <br/> <br/>
 
