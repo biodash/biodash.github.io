@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 9215f33f4674db34
+rmd_hash: 264d25e5b2617977
 
 ---
 
@@ -244,7 +244,7 @@ To do so, we make use of R's ability to index a vector with a logical vector:
 <span class='c'>#&gt;  [1]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE</span>
 
 
-<span class='c'># When we the original vector with logical vector,</span>
+<span class='c'># When we index the original vector with a logical vector,</span>
 <span class='c'># we get only those values for which "not_far_enough" is TRUE:</span>
 <span class='nv'>distances_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span>
 
@@ -572,7 +572,7 @@ First we fix the latitude, which was simply negated:
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>lat</span> <span class='o'>&lt;-</span> <span class='o'>-</span><span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>lat</span>
 
 <span class='c'># Or a tidyverse way of doing this:</span>
-<span class='c'># caro_chickadee %&gt;% mutate(lat = -lat)</span>
+<span class='c'># caro_chickadee &lt;- caro_chickadee %&gt;% mutate(lat = -lat)</span>
 </code></pre>
 
 </div>
@@ -797,8 +797,8 @@ Then, use an `if` statement to create plots only for those top-50 birds that hav
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>all_species</span> <span class='o'>&lt;-</span> <span class='nv'>birds</span> <span class='o'>%&gt;%</span>
   <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species_en</span>, sort <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span>n <span class='o'>=</span> <span class='m'>50</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>pull</span><span class='o'>(</span><span class='nv'>species_en</span><span class='o'>)</span>
+  <span class='nf'>pull</span><span class='o'>(</span><span class='nv'>species_en</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span>n <span class='o'>=</span> <span class='m'>50</span><span class='o'>)</span>
 </code></pre>
 
 </div>
