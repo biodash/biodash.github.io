@@ -1,0 +1,391 @@
+---
+title: "More on BAM files"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default", "default-fonts", "slides.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: rainbow
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class:inverse middle center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Getting to know BAM files
+
+----
+
+<br> <br> <br>
+
+### Jelmer Poelstra, MCIC Wooster
+### 2021/03/05 (updated: `r Sys.Date()`)
+
+---
+
+## Recap for SAM/BAM files so far
+
+- SAM/BAM files contain the original sequences *along with the genomic coordinates
+  to which they were mapped* (and more information).
+
+- We get 1 SAM/BAM file for each sample with both the forward and the reverse
+  reads (not 2 separate files like for FASTQ files).
+
+--
+
+- SAM is an uncompressed text file and BAM is its binary, compressed counterpart.
+  
+  - SAM: Sequence Alignment/Map
+  
+  - BAM: Binary Alignment/Map
+
+  - Most software can work directly with BAM files, and you can use programs
+    like Samtools to view them.
+  
+---
+
+## Terminology and concepts
+
+- **Template**: The stretch of DNA covered by a read pair,
+  including the gap, if any, between the two reads.  
+  (E.g. a a 150-bp read pair with a 100-bp gap => 400-bp template.)
+
+- **Mate**: The other read in a read pair (forward and reverse reads).
+
+- **Query**: The read that was aligned.
+
+- "**Mapped**" and "**aligned**" are being used interchangeably.
+
+<br>
+
+--
+
+- Each alignment is on a separate line, and:
+
+  - Each alignment originates from no more than one FASTQ read, but:
+  
+  - One FASTQ read can be split across multiple alignments.
+  
+---
+
+## More about BAM files
+
+- BAM files contain two sections: a **header** with metadata about the file,
+  and the **alignment section**.
+  
+- BAM files are compressed, but we can look at them using *samtools*:
+
+```sh
+# View with header:
+$ samtools view -h in.bam | less  
+
+# View only the header:
+$ samtools view -H in.bam
+
+# View only the alignment section:
+$ samtools view in.bam | less
+```
+
+---
+
+## Header
+
+The header is useful to determine the provenance of the BAM file:
+to which genome were the reads aligned, with which software, and so on.
+
+Consists of several sections, each begins with an `@` followed by a two-letter
+code for the record type. Each section has several key-value pairs:
+
+--
+
+.pull-left[
+- `@HD`: Header line
+  - `VN`: BAM format version
+  - `SO`: Sorting order of alignments
+  
+- `@SQ`: Reference sequence dictionary
+  - `SN`: Reference name
+  - `LN`: Reference length
+  - `SP`: Reference species
+]
+
+.pull-right[
+- `@RG`: Read group
+  - `ID`: Read group identifier
+  - `CN`: Name of sequencing center
+  - `SM`: Sample name
+
+- `@PG`: Program (for alignment)
+  - `PN`: Program name
+  - `VN`: Program version
+]
+
+---
+
+## `r icon::fa("user-edit")` View a BAM header
+
+```sh
+$ cd /fs/project/PAS0471/teach/2021-02_rnaseq/$USER/
+$ cd results/align/bam
+
+$ module load samtools
+$ samtools view -H C6_myb2_Aligned.sortedByCoord.out.bam
+# @HD     VN:1.4  SO:coordinate
+# @SQ     SN:SL4.0ch00    LN:9643250
+# @SQ     SN:SL4.0ch01    LN:90863682
+# @SQ     SN:SL4.0ch02    LN:53473368
+# @SQ     SN:SL4.0ch03    LN:65298490
+# @SQ     SN:SL4.0ch04    LN:64459972
+# @SQ     SN:SL4.0ch05    LN:65269487
+# @SQ     SN:SL4.0ch06    LN:47258699
+# @SQ     SN:SL4.0ch07    LN:67883646
+# @SQ     SN:SL4.0ch08    LN:63995357
+# @SQ     SN:SL4.0ch09    LN:68513564
+# @SQ     SN:SL4.0ch10    LN:64792705
+# @SQ     SN:SL4.0ch11    LN:54379777
+# @SQ     SN:SL4.0ch12    LN:66688036
+# @PG     ID:STAR PN:STAR VN:STAR_2.6.0a  CL:STAR   --runThreadN 12   --genomeDir data/ref/Heinz1706_4.00/STAR_index   --readFilesIn data/fastq_concat_subsample/C6_myb2_R1.fastq.gz   data/fastq_concat_subsample/C6_myb2_R2.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix results/align/bam/C6_myb2_   --outSAMtype BAM   SortedByCoordinate      --alignIntronMin 5   --alignIntronMax 350000   --sjdbGTFtagExonParentTranscript data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+# @PG     ID:samtools     PN:samtools     PP:STAR VN:1.10 CL:samtools view -H C6_myb2_Aligned.sortedByCoord.out.bam
+# @CO     user command line: STAR --runThreadN 12 --genomeDir data/ref/Heinz1706_4.00/STAR_index --sjdbGTFtagExonParentTranscript data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff --readFilesIn data/fastq_concat_subsample/C6_myb2_R1.fastq.gz data/fastq_concat_subsample/C6_myb2_R2.fastq.gz --readFilesCommand zcat --outFileNamePrefix results/align/bam/C6_myb2_ --outSAMtype BAM SortedByCoordinate --alignIntronMin 5 --alignIntronMax 350000
+```
+
+---
+
+## Alignment section: overview
+
+- Alignment information is on a single line per alignment, with columns:
+
+| Col. nr. | Field | Description                 | Example    |
+|----------|-------|-----------------------------|------------|
+| 1        | QNAME | Query (=aligned read) name  | ....
+| **2**    | **FLAG**  | **Bitwise flag**        | 99
+| 3        | RNAME | Reference sequence name     | chr1
+| 4        | POS   | Mapping position (leftmost) | 46317
+| 5        | MAPQ  | Mapping quality (PHRED)     | 255
+| **6**    | **CIGAR** | **CIGAR string**        | 150M
+| 7        | RNEXT | Name of read's mate         | =
+| 8        | PNEXT | Position of read's mate     | 46517
+| 9        | TLEN  | Template length             | 450
+| 10       | SEQ   | Sequence of the read        | AGTTACCGATCCT...
+| 11       | QUAL  | Base quality of the read    | FFFF@HHHHHHHH...
+| *(optional)*  | *TAG*  | *Optional information*      | *SM:i:37*
+
+---
+
+## `r icon::fa("user-edit")` View a BAM alignment section
+
+```sh
+$ samtools view -H C6_myb2_Aligned.sortedByCoord.out.bam | less -S
+
+# A01088:17:HHVG3DRXX:1:2238:4164:16877   163     SL4.0ch00       18287   255     12M725N139M     =       19069   931     CTCAATTATATGGTGTAGACGCACAGTTCGGTGATCCTCCCGCCTAGGATATCTACTCTGCTGATTGGGAGAGCTCCACTGTTCCGGAGCCCAGTCATTTTGGTACATAACTTTTGTGTAGTCTTTTGCTCGTGTATGGGTATGGCGGGGC     FFFFFFFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFF:F:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFF:FFFFFF NH:i:1  HI:i:1  AS:i:298   nM:i:0
+# A01088:17:HHVG3DRXX:1:2238:4164:16877   83      SL4.0ch00       19069   255     149M    =       18287   -931    CTGCTGATTGGGAGAGCTCCACTGTTCCGGAGCCCAGTCATTTTGGTACATAACTTTTGTGTAGTCTTTTGCTCGTGTATGGGTATGGCGGGGCCCTGTCCCGTCGAGTTTCACTAATGTACTCTTAGAGGTCTGTGGACATTATGTGG       FFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFFF   NH:i:1  HI:i:1  AS:i:298        nM:i:0
+# A01088:17:HHVG3DRXX:1:2143:6876:32440   163     SL4.0ch00       19077   255     125M    =       19077   125     TGGGAGAGCTCCACTGTTCCGGAGCCCAGTCATTTTGGTACATAACTTTTGTGTAGTCTTTTGCTCGTGTATGGGTATGGCGGGGCCCTGTCCCGTCGAGTTTCACTAATGTACTCTTAGAGGTC       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,FFFFFFFFFFFF:FFFFFF:FF,FFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:F:FFFFFF,FFFFFF:F   NH:i:1  HI:i:1  AS:i:248        nM:i:0
+# A01088:17:HHVG3DRXX:1:2143:6876:32440   83      SL4.0ch00       19077   255     125M    =       19077   -125    TGGGAGAGCTCCACTGTTCCGGAGCCCAGTCATTTTGGTACATAACTTTTGTGTAGTCTTTTGCTCGTGTATGGGTATGGCGGGGCCCTGTCCCGTCGAGTTTCACTAATGTACTCTTAGAGGTC       :FFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,:FFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF   NH:i:1  HI:i:1  AS:i:248        nM:i:0
+# A01088:17:HHVG3DRXX:1:2205:9435:15953   163     SL4.0ch00       19085   255     132M    =       19085   132     CTCCACTGTTCCGGAGCCCAGTCATTTTGGTACATAACTTTTGGGTAGTCTTTTGCTCGTGTATGGGTATGGCGGGGCCCTGTCCCGTCGAGTTTCACTAATGTACTCTTAGAGGTCTGTGGACATTATGTG        FFFFFFFFFFFFFFFF:FFFF,F:F,F,,FFFFFFFF:FF:FF,FFFFFFFF:FFFFF::F:FF,FFF,FFFFFFFFFFFFFFFFFFFF:F,,FFFFFFFF,:FFFFFFFFF,F,FFFFFF:FFFF,F,FFF    NH:i:1  HI:i:1  AS:i:260        nM:i:1
+# A01088:17:HHVG3DRXX:1:2205:9435:15953   83      SL4.0ch00       19085   255     132M    =       19085   -132    CTCCACTGTTCCGGAGCCCAGTCATTTTGGTACATAACTTTTGTGTAGTCTTTTGCTCGTGTATGGGTATGGCGGGGCCCTGTCCCGTCGAGTTTCACTAATGTACTCTTAGAGGTCTGTGGACATTATGTG        F,:FFFFF:FFF,:FFFF,FFF::FFFF,F,FFF::F:FFFFFFFFFFF,FFFFFFFFFFFFF::FFFF,FFFF,F,:FFFFF:FFFFFFFFFFFFF:FFFF:FFFFFF::FF,F:FFFFF,F:FFFFF,FF    NH:i:1  HI:i:1  AS:i:260        nM:i:1
+# A01088:17:HHVG3DRXX:1:2126:7030:7373    163     SL4.0ch00       19157   255     128M    =       19157   128     CGGGGCCCTGTCCCGTCGAGTTTCACTAATGTACTCTTAGAGGTCTGTGGACATTATGTGGGTAGTATATATATGTTTTGGATAATGGTCTGGACATGGTTTGTTTGGGATGTCTGCTTGTACAGGGG    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFF:FFFFFFFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF        NH:i:1  HI:i:1  AS:i:254        nM:i:0
+# A01088:17:HHVG3DRXX:1:2126:7030:7373    83      SL4.0ch00       19157   255     128M    =       19157   -128    CGGGGCCCTGTCCCGTCGAGTTTCACTAATGTACTCTTAGAGGTCTGTGGACATTATGTGGGTAGTATATATATGTTTTGGATAATGGTCTGGACATGGTTTGTTTGGGATGTCTGCTTGTACAGGGG    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF        NH:i:1  HI:i:1  AS:i:254        nM:i:0
+# A01088:17:HHVG3DRXX:1:2236:27579:10582  163     SL4.0ch00       19224   255     119M    =       19224   119     TATATATGTTTTGGATAATGGTCTGGACATGGTTTGTTTGGGATGTCTGCTTGTACAGGGGCAGCCTTGTCGGCTGTGTACATCATTGTGTATTGAGTAGTGGCAGCCTTGTCGGCTCG     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFF,FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF NH:i:1  HI:i:1  AS:i:236        nM:i:0
+# A01088:17:HHVG3DRXX:1:2236:27579:10582  83      SL4.0ch00       19224   255     119M    =       19224   -119    TATATATGTTTTGGATAATGGTCTGGACATGGTTTGTTTGGGATGTCTGCTTGTACAGGGGCAGCCTTGTCGGCTGTGTACATCATTGTGTATTGAGTAGTGGCAGCCTTGTCGGCTCG     FF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFF,FFFFFFFFFFFFFFFFFFFFF,FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF NH:i:1  HI:i:1  AS:i:236        nM:i:0
+# A01088:17:HHVG3DRXX:1:2103:22245:4633   163     SL4.0ch00       78738   0       151M    =       78767   178     CGGTGATCCTCCTGCCTAGGATATCTACTCTGCTGATTGGGAGAGCTCCACTGTTCCGGAGCCCAGTCGTTTTGGTACATAACTTTTGTGTAGTCTTTTGCTCGTCTATGGGTATGGCGGGGCCCTGTCCCGTCGAGTTTCACTAATGTAC     FFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFF:F:F,F:,FFFF:F:FFF:FFFF,FF:FFFFFFFFF::FFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFF, NH:i:5  HI:i:1  AS:i:298        nM:i:0
+# A01088:17:HHVG3DRXX:1:2103:22245:4633   83      SL4.0ch00       78767   0       149M    =       78738   -178    CTGCTGATTGGGAGAGCTCCACTGTTCCGGAGCCCAGTCGTTTTGGTACATAACTTTTGTGTAGTCTTTTGCTCGTCTATGGGTATGGCGGGGCCCTGTCCCGTCGAGTTTCACTAATGTACTCTTAGAGGTCTGTGGACATTATGTGG       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:F:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFF   NH:i:5  HI:i:1  AS:i:298        nM:i:0
+# A01088:17:HHVG3DRXX:2:2130:24352:8688   99      SL4.0ch00       144408  3       151M    =       144424  167     GGACCTGTCTCATAAGGAGTCATAACCATTCAACCATAACAGCATACGCGAGCCGACAAGGCCGCCACTATTCAAAGCATAATGATGTACGCAGCCGACAAGGCTGCCCCTGTACAAGCGGACATCCCAAACAAACTATGTCCAGACCATT     F:FFF,F,,FFF:FFFFFFFFFFFFF,:FF,FF:FFFFFFFF,FFF:FF:F,,:,FFFF:F,FFF:FFFF::FFFFF,F:FFF:FF,,F,,FF:F:,FFFFF:,F,FF:,F:FFFFF,,FFFFFF:,FFFFFFFFFFF,:FFFF:FF:FF: NH:i:2  HI:i:1  AS:i:298        nM:i:1
+# A01088:17:HHVG3DRXX:2:2130:24352:8688   147     SL4.0ch00       144424  3       151M    =       144408  -167    GAGTCATTACCATTCAACCATAACAGCATACGCGAGCCGACAAGGCCGCCACTATTCAAAGCATAATGATGTACGCAGCCGACAAGGCTGCCCCTGTACAAGCGGACATCCCAAACAAACTATGTCCAGACCATTATCCAAAACATATATA     FFFFFFF,,,:FFFFFF::FFFFFF,FFF:F::FFFF,:FFF,FFFFFFFFFFFFFFFFFFFFFF:FFFFFFF:FFFFFFFFF:FFFFFFF,FFF:FFF,FF:FFFFFFFFFFFF:FFFF:FFFFFFFFFFFFFFFFFFF,F::FF,FFFF NH:i:2  HI:i:1  AS:i:298        nM:i:1
+# A01088:17:HHVG3DRXX:1:2165:7735:13197   99      SL4.0ch00       144554  255     151M    =       144567  164     CCATTATCCAAAACATATATACAACCCACATAATGTCCACAGACCTCTAAGAGTACATTAGTGAAACTCGACGGGACAGGGCCCCGCCATACCCATAGATGAGCAAAAGACTACACAAAAGTTATGTACCAAAACGACTGGGCTCCGGAAT     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF NH:i:1  HI:i:1  AS:i:298        nM:i:1
+```
+
+---
+
+## Bitwise flags
+
+- There are 12 bitwise flags that can be set (true) or not set (false),
+  such as whether a reads was mapped or whether it was mapped to the
+  reverse strand &ndash; i.e., it had to be reverse complemented to be aligned.
+
+---
+
+## Bitwise flags (cont.)
+
+| Bit  | Bit <br> (hexadecimal) | Description                                    |
+|------|:-------------------:|---------------------------------------------------|
+| 1    | 0\*1              | Read is paired                                      |
+| 2    | 0\*2              | Read mapped in proper pair                          |
+| 4    | 0\*4              | Read unmapped                                       |
+| 8    | 0\*8              | Mate unmapped                                       |
+| 16   | 0\*10             | Read mapped on reverse strand                       |
+| 32   | 0\*20             | Mate mapped on reverse strand                       |
+| 64   | 0\*40             | Read is the first in the pair (by mapping position) |
+| 128  | 0\*80             | Read is the second in the pair                      |
+| 256  | 0\*100            | Read is secondary alignment                         |
+| 512  | 0\*200            | Read fails platform/vendor quality checks           |
+| 1024 | 0\*400            | Read is PCR/optical duplicate                       |
+| 2048 | 0\*800            | Supplementary alignment                             |
+
+---
+
+## Bitwise flags (cont.)
+
+- Instead of using 12 columns with `0`/`1` or `false`/`true`,
+  this is cleverly but confusingly summarized in a single number in one column:
+  
+  Each bitwise flag has a value associated with it, and the sum of all these
+  values is the number in the column.
+  **Any individual sum can only represent a single combination of flags.**
+
+- Of course, this is hardly human-readable, so:
+  
+  - To look up individual flags or check what the value should be for a given
+    set of flags, go to [this website](http://broadinstitute.github.io/picard/explain-flags.html).
+    For instance, let's try the value "99".
+    
+  - To get summary statistics for an entire BAM file, run `samtools flagstat`.
+
+---
+
+## Bitwise flags (cont.)
+
+<figure>
+<p align="center">
+<img src=img/explain-sam-flags.png width="85%">
+<figcaption><a href="http://broadinstitute.github.io/picard/explain-flags.html">Screenshot from Picard Explain Flags</a> </figcaption>
+</p>
+</figure>
+
+---
+
+## CIGAR string
+
+CIGAR (Compact Idiosyncratic Gapped Alignment Report) strings succinctly
+summarize alignments by describing the "edits" or "operations" that were needed
+to match the reads the the reference.
+
+The most common operations are:
+
+| operator  | meaning |
+|-----------|---------|
+| M         | Match/mismatch (but no gap/indel)
+| I         | Insertion (present in read but not in ref)
+| D         | Deletion (absent in read but present in ref)
+| N         | Skipped (as deletion, but for splicing)
+
+
+- For instance, a gapped alignment with a CIGAR string of `13M305N137M`:
+
+```sh
+GATCGTCCATTAGCATGCTACAGC[..300bp..]ATCGAGGCATCGAGTCGATCGTCC.. # ref
+      CCATCAGCATGCT                ATCGGGGCATCGAGTCGATCGTCC.. # read
+#     MMMMMMMMMMMMMNNNNN[..NNNNN..]MMMMMMMMMMMMMMMMMMMMMMMM 
+#         *                            *
+```
+
+---
+
+## Examples of other samtools functionality
+
+- BAM files are usually *indexed*, which creates files like `sampleA.bam.bai`
+  for the corresponding BAM file `sampleA.bam` (e.g. with samtools).
+  
+  ```sh
+  $ samtools index in.bam
+  ```
+
+- Select a region:
+
+  ```sh
+  samtools view -b in.bam chr3:200000-500000 > selected.bam
+  ```
+
+--
+
+- Count or retain only reads with a mapping quality of at least 30:
+
+  ```sh
+  samtools view -q 30 -c in.bam
+  samtools view -q 30 -c -b in.bam > filtered.bam
+  ```
+
+- Count or retain only properly-paired (flag `2`) reads:
+
+  ```sh
+  samtools view -f 2 -c in.bam
+  samtools view -f 2 -c -b in.bam > filtered.bam
+  ```
+
+---
+
+## `r icon::fa("user-edit")` samtools flagstat
+
+```sh
+$ samtools flagstat C6_myb2_Aligned.sortedByCoord.out.bam 
+
+# 4145950 + 0 in total (QC-passed reads + QC-failed reads)
+# 172282 + 0 secondary
+# 0 + 0 supplementary
+# 0 + 0 duplicates
+# 4145950 + 0 mapped (100.00% : N/A)
+# 3973668 + 0 paired in sequencing
+# 1986834 + 0 read1
+# 1986834 + 0 read2
+# 3973668 + 0 properly paired (100.00% : N/A)
+# 3973668 + 0 with itself and mate mapped
+# 0 + 0 singletons (0.00% : N/A)
+# 0 + 0 with mate mapped to a different chr
+# 0 + 0 with mate mapped to a different chr (mapQ>=5)
+```
+
+- 4,145,950 (total) - 172,282 (secondary) = 3,973,668 (paired in sequencing)
+
+- These are alignment counts, not read counts!
+
+---
+
+## `r icon::fa("user-edit")` Run samtools flagstat for all files
+
+```sh
+#!/bin/bash
+#SBATCH --account=PAS0471
+#SBATCH --time=60
+#SBATCH --out=slurm-flagstat-%j.out
+set -e -u -o pipefail
+
+module load samtools
+
+input_dir="$1"
+output_dir="$2" 
+
+echo "Running samtools flagstat on a dir of BAM files..."
+echo "Input dir: $input_dir"
+echo "Output dir: $output_dir"
+
+mkdir -p "$output_dir"
+
+for bam_file in "$input_dir"/*bam; do
+  sample_id=$(basename "$bam_file" "_Aligned.sortedByCoord.out.bam")
+  output_file="$output_dir"/"$sample_id".flagstat
+  echo "$sample_id"
+  samtools flagstat "$bam_file" > "$output_file" 
+done
+
+echo -e "\n---------\nAll done!\n"
+```
+
+---
+
+## `r icon::fa("user-edit")` Run samtools flagstat for all files
+
+- Save the script on the previous slide as `scripts/qc/flagstat_dir.sh`.
+
+- Then run it:
+
+  ```sh
+  input_dir=results/align/bam
+  output_dir=results/align/qc
+  
+  sbatch scripts/qc/flagstat_dir.sh $input_dir $output_dir
+  ```
