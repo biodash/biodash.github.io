@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 264d25e5b2617977
+rmd_hash: 233577fd5b80976e
 
 ---
 
@@ -86,7 +86,7 @@ Let's say we have a *vector* (i.e., a collection of values) that consists of dis
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>distances_miles</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>24</span>, <span class='m'>81</span>, <span class='m'>48</span>, <span class='m'>29</span>, <span class='m'>177</span>, <span class='m'>175</span>, <span class='m'>20</span>, <span class='m'>11</span>, <span class='m'>62</span>, <span class='m'>156</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_miles</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>24</span>, <span class='m'>81</span>, <span class='m'>48</span>, <span class='m'>29</span>, <span class='m'>177</span>, <span class='m'>175</span>, <span class='m'>20</span>, <span class='m'>11</span>, <span class='m'>62</span>, <span class='m'>156</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -95,15 +95,15 @@ Of course, we can't science with miles, so we'll have to convert these distances
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>distances_km</span> <span class='o'>&lt;-</span> <span class='nv'>distances_miles</span> <span class='o'>*</span> <span class='m'>1.61</span>
-<span class='nv'>distances_km</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_km</span> <span class='o'>&lt;-</span> <span class='nv'>dists_miles</span> <span class='o'>*</span> <span class='m'>1.61</span>
+<span class='nv'>dists_km</span>
 
 <span class='c'>#&gt;  [1]  38.64 130.41  77.28  46.69 284.97 281.75  32.20  17.71  99.82 251.16</span>
 </code></pre>
 
 </div>
 
-What is happening here is called a ***vectorized operation***: `1.61` is automatically recycled as many times as needed to be multiplied with *each individual value* in the `distance_miles` vector. This is a pretty unique and very useful feature of R!
+What is happening here is called a ***vectorized operation***: `1.61` is automatically recycled as many times as needed to be multiplied with *each individual value* in the `dist_miles` vector. This is a pretty unique and very useful feature of R!
 
 In many other languages, we would need a ***loop*** or a similar construct to iterate over each value in the vector and multiply by 1.61. In fact, under the hood, R *also* uses a loop to do this! So does it even make a difference? Yes -- the advantages of using vectorization in R are:
 
@@ -118,8 +118,8 @@ Above, we saw an example of multiplying a vector by a single number. We can also
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>distances_Mar4</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>17</span>, <span class='m'>93</span>, <span class='m'>56</span>, <span class='m'>19</span>, <span class='m'>175</span>, <span class='m'>40</span>, <span class='m'>69</span>, <span class='m'>267</span>, <span class='m'>4</span>, <span class='m'>91</span><span class='o'>)</span>
-<span class='nv'>distances_Mar5</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>87</span>, <span class='m'>143</span>, <span class='m'>103</span>, <span class='m'>223</span>, <span class='m'>106</span>, <span class='m'>18</span>, <span class='m'>87</span>, <span class='m'>72</span>, <span class='m'>59</span>, <span class='m'>5</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_Mar4</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>17</span>, <span class='m'>93</span>, <span class='m'>56</span>, <span class='m'>19</span>, <span class='m'>175</span>, <span class='m'>40</span>, <span class='m'>69</span>, <span class='m'>267</span>, <span class='m'>4</span>, <span class='m'>91</span><span class='o'>)</span>
+<span class='nv'>dists_Mar5</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>87</span>, <span class='m'>143</span>, <span class='m'>103</span>, <span class='m'>223</span>, <span class='m'>106</span>, <span class='m'>18</span>, <span class='m'>87</span>, <span class='m'>72</span>, <span class='m'>59</span>, <span class='m'>5</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -128,12 +128,14 @@ To get the sum of these values at each position (index) of the two vectors (`17 
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>distances_Mar4</span> <span class='o'>+</span> <span class='nv'>distances_Mar5</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_Mar4</span> <span class='o'>+</span> <span class='nv'>dists_Mar5</span>
 
 <span class='c'>#&gt;  [1] 104 236 159 242 281  58 156 339  63  96</span>
 </code></pre>
 
 </div>
+
+<br>
 
 <div class="alert alert-note">
 
@@ -155,22 +157,24 @@ in the example below, we negate ***every other*** value in a vector:
 
 </div>
 
-This also works for columns of a dataframe -- and let's say we wanted the mean distance this time:
+<br>
+
+This also works for columns of a data frame, which we can extract using the `dataframe_name$column_name` notation (see [Code Club session 9's section on data frames](https://biodash.github.io/codeclub/09_subsetting/#data-frames), and the Base R data frame indexing summary [below](#base-r-data-frame-indexing)). Let's say we wanted the mean distance this time:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>distance_df</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span><span class='nv'>distances_Mar4</span>, <span class='nv'>distances_Mar5</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dist_df</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span><span class='nv'>dists_Mar4</span>, <span class='nv'>dists_Mar5</span><span class='o'>)</span>
 
-<span class='nv'>distance_df</span><span class='o'>$</span><span class='nv'>distances_mean</span> <span class='o'>=</span> <span class='o'>(</span><span class='nv'>distance_df</span><span class='o'>$</span><span class='nv'>distances_Mar4</span> <span class='o'>+</span> <span class='nv'>distance_df</span><span class='o'>$</span><span class='nv'>distances_Mar5</span><span class='o'>)</span> <span class='o'>/</span> <span class='m'>2</span>
-<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>distance_df</span><span class='o'>)</span>
+<span class='nv'>dist_df</span><span class='o'>$</span><span class='nv'>dists_mean</span> <span class='o'>=</span> <span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>$</span><span class='nv'>dists_Mar4</span> <span class='o'>+</span> <span class='nv'>dist_df</span><span class='o'>$</span><span class='nv'>dists_Mar5</span><span class='o'>)</span> <span class='o'>/</span> <span class='m'>2</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>)</span>
 
-<span class='c'>#&gt;   distances_Mar4 distances_Mar5 distances_mean</span>
-<span class='c'>#&gt; 1             17             87           52.0</span>
-<span class='c'>#&gt; 2             93            143          118.0</span>
-<span class='c'>#&gt; 3             56            103           79.5</span>
-<span class='c'>#&gt; 4             19            223          121.0</span>
-<span class='c'>#&gt; 5            175            106          140.5</span>
-<span class='c'>#&gt; 6             40             18           29.0</span>
+<span class='c'>#&gt;   dists_Mar4 dists_Mar5 dists_mean</span>
+<span class='c'>#&gt; 1         17         87       52.0</span>
+<span class='c'>#&gt; 2         93        143      118.0</span>
+<span class='c'>#&gt; 3         56        103       79.5</span>
+<span class='c'>#&gt; 4         19        223      121.0</span>
+<span class='c'>#&gt; 5        175        106      140.5</span>
+<span class='c'>#&gt; 6         40         18       29.0</span>
 </code></pre>
 
 </div>
@@ -183,16 +187,17 @@ Furthermore, we can also perform vectorized operations on *entire matrices*. Wit
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># We use the "sample" function to get 50 random values between 1 and a 100: </span>
-<span class='nv'>mat</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>100</span>, <span class='m'>50</span><span class='o'>)</span>, nrow <span class='o'>=</span> <span class='m'>5</span>, ncol <span class='o'>=</span> <span class='m'>5</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># We use the "sample" function to get 25 random values between 1 and a 100,</span>
+<span class='c'># and put those in a 5*5 matrix:</span>
+<span class='nv'>mat</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>100</span>, <span class='m'>25</span><span class='o'>)</span>, nrow <span class='o'>=</span> <span class='m'>5</span>, ncol <span class='o'>=</span> <span class='m'>5</span><span class='o'>)</span>
 <span class='nv'>mat</span>
 
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]   43   88   60   31    1</span>
-<span class='c'>#&gt; [2,]   25   47    9   89   82</span>
-<span class='c'>#&gt; [3,]   86   99   78   63   73</span>
-<span class='c'>#&gt; [4,]   33   72   85   41   49</span>
-<span class='c'>#&gt; [5,]   44   16   87   64   90</span>
+<span class='c'>#&gt; [1,]   41   16   44   32   69</span>
+<span class='c'>#&gt; [2,]   98   58   90   42   11</span>
+<span class='c'>#&gt; [3,]   20   64    1   46   75</span>
+<span class='c'>#&gt; [4,]   43   94   65   74   89</span>
+<span class='c'>#&gt; [5,]   77    5   38   85   12</span>
 </code></pre>
 
 </div>
@@ -238,7 +243,7 @@ To do so, we make use of R's ability to index a vector with a logical vector:
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># "not_far_enough" will be a vector of logicals:</span>
-<span class='nv'>not_far_enough</span> <span class='o'>&lt;-</span> <span class='nv'>distances_Mar4</span> <span class='o'>&lt;</span> <span class='m'>50</span>
+<span class='nv'>not_far_enough</span> <span class='o'>&lt;-</span> <span class='nv'>dists_Mar4</span> <span class='o'>&lt;</span> <span class='m'>50</span>
 <span class='nv'>not_far_enough</span>
 
 <span class='c'>#&gt;  [1]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE</span>
@@ -246,7 +251,7 @@ To do so, we make use of R's ability to index a vector with a logical vector:
 
 <span class='c'># When we index the original vector with a logical vector,</span>
 <span class='c'># we get only those values for which "not_far_enough" is TRUE:</span>
-<span class='nv'>distances_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span>
+<span class='nv'>dists_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span>
 
 <span class='c'>#&gt; [1] 17 19 40  4</span>
 </code></pre>
@@ -257,8 +262,8 @@ With the following syntax, we can replace just those low distances in our origin
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>distances_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nv'>distances_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span>
-<span class='nv'>distances_Mar4</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nv'>dists_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span>
+<span class='nv'>dists_Mar4</span>
 
 <span class='c'>#&gt;  [1] -17  93  56 -19 175 -40  69 267  -4  91</span>
 </code></pre>
@@ -273,7 +278,7 @@ In a simple case like this, we could also use the vectorized [`ifelse()`](https:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span><span class='nv'>distances_Mar5</span> <span class='o'>&lt;</span> <span class='m'>50</span>, <span class='nv'>distances_Mar5</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span>, <span class='nv'>distances_Mar5</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span><span class='nv'>dists_Mar5</span> <span class='o'>&lt;</span> <span class='m'>50</span>, <span class='nv'>dists_Mar5</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span>, <span class='nv'>dists_Mar5</span><span class='o'>)</span>
 
 <span class='c'>#&gt;  [1]  87 143 103 223 106 -18  87  72  59  -5</span>
 </code></pre>
@@ -416,8 +421,9 @@ For example, you might be inclined to do the following if you wanted to compute 
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>column_medians</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='o'>(</span><span class='o'>)</span>
 
-<span class='kr'>for</span> <span class='o'>(</span><span class='nv'>column_number</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>distance_df</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
-  <span class='nv'>column_median</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='o'>(</span><span class='nv'>distance_df</span><span class='o'>[[</span><span class='nv'>column_number</span><span class='o'>]</span><span class='o'>]</span><span class='o'>)</span>
+<span class='kr'>for</span> <span class='o'>(</span><span class='nv'>column_number</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
+  <span class='c'># We can extract a column using "dataframe_name[[column_number]]":</span>
+  <span class='nv'>column_median</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>[[</span><span class='nv'>column_number</span><span class='o'>]</span><span class='o'>]</span><span class='o'>)</span>
   <span class='nv'>column_medians</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>column_medians</span>, <span class='nv'>column_median</span><span class='o'>)</span>
 <span class='o'>&#125;</span>
 
@@ -428,16 +434,16 @@ For example, you might be inclined to do the following if you wanted to compute 
 
 </div>
 
-Similarly, you may be adding a column (with [`cbind()`](https://rdrr.io/r/base/cbind.html)) or a row (with [`rbind()`](https://rdrr.io/r/base/cbind.html)) to a dataframe in each iteration of the loop. However, the problem with these approaches is that R has to create an entirely new object in each iteration of the loop, because the object's memory requirements keep increasing.
+Similarly, you may be adding a column (with [`cbind()`](https://rdrr.io/r/base/cbind.html)) or a row (with [`rbind()`](https://rdrr.io/r/base/cbind.html)) to a data frame in each iteration of the loop. However, the problem with these approaches is that R has to create an entirely new object in each iteration of the loop, because the object's memory requirements keep increasing.
 
 Instead, you'll want to give the final vector (here, `column_medians`) the appropriate size before you start the loop:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>column_medians</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='o'>(</span>length <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>distance_df</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>column_medians</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='o'>(</span>length <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>)</span><span class='o'>)</span>
 
-<span class='kr'>for</span> <span class='o'>(</span><span class='nv'>column_number</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>distance_df</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
-  <span class='nv'>column_median</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='o'>(</span><span class='nv'>distance_df</span><span class='o'>[[</span><span class='nv'>column_number</span><span class='o'>]</span><span class='o'>]</span><span class='o'>)</span>
+<span class='kr'>for</span> <span class='o'>(</span><span class='nv'>column_number</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
+  <span class='nv'>column_median</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>[[</span><span class='nv'>column_number</span><span class='o'>]</span><span class='o'>]</span><span class='o'>)</span>
   <span class='nv'>column_medians</span><span class='o'>[</span><span class='nv'>column_number</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nv'>column_median</span>
 <span class='o'>&#125;</span>
 </code></pre>
@@ -454,7 +460,7 @@ Note that for very small problems, such as the example above, there will not be 
 -   Don't grow objects inside the loop. Instead, pre-assign an object large enough to contain all output of the loop and fill it in inside the loop.
 -   When you write a loop, avoid doing things *inside* the loop that don't need to be repeated.
 
-Learning about how to create your own functions and/or to use functional programming techniques like *purrr* and the `apply` family of functions (upcoming Code Club sessions!) will likely reduce your reliance on loops. For instance, as we'll see next week, computing the median of each column in a dataframe can be done *much* more succinctly with [`apply()`](https://rdrr.io/r/base/apply.html).
+Learning about how to create your own functions and/or to use functional programming techniques like *purrr* and the `apply` family of functions (upcoming Code Club sessions!) will likely reduce your reliance on loops. For instance, as we'll see next week, computing the median of each column in a data frame can be done *much* more succinctly with [`apply()`](https://rdrr.io/r/base/apply.html).
 
 **Even for more experienced users, loops remain a more viable option when longer blocks of code need to be repeated: we will practice with that in the exercises.**
 
@@ -494,16 +500,16 @@ The following code is already in your R Markdown file, which will download and r
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Read the file with bird data:</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Load the tidyverse:</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+
+<span class='c'>## Read the file with bird data:</span>
 <span class='nv'>birds</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span><span class='nv'>birds_file</span><span class='o'>)</span>
 
 <span class='c'>## Load the maps package and get the state map:</span>
 <span class='c'># install.packages('maps')   # first install if necessary</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'>maps</span><span class='o'>)</span>
 <span class='nv'>states</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"state"</span><span class='o'>)</span>
-
-<span class='c'>## Load the tidyverse:</span>
-<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -516,6 +522,9 @@ Last week, we learned about making maps. If you attended one of the first few Co
 <span class='c'>## (English species name) equals "Carolina Chickadee",</span>
 <span class='c'>## i.e. we are getting just the records for the Carolina Chickadee:</span>
 <span class='nv'>caro_chickadee</span> <span class='o'>&lt;-</span> <span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>species_en</span> <span class='o'>==</span> <span class='s'>'Carolina Chickadee'</span>, <span class='o'>]</span>
+
+<span class='c'># Or in tidyverse-speak:</span>
+<span class='c'># caro_chickadee &lt;- birds %&gt;% filter(species_en == 'Carolina Chickadee')</span>
 
 <span class='c'># Next, we create a map much like we did last week:</span>
 <span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>states</span>,
@@ -550,11 +559,11 @@ Try to fix the coordinates using vectorized operations, and recreate the map to 
 <summary> Hints (click here) </summary>
 <p>
 
--   You can modify the `caro_chickadee` dataframe and keep the plotting code exactly the same.
+-   You can modify the `caro_chickadee` data frame and keep the plotting code exactly the same.
 
--   Prepending the latitude column with a [`-`](https://rdrr.io/r/base/Arithmetic.html) will negate the values.
+-   Simply prepending the latitude column with a minus sign ([`-`](https://rdrr.io/r/base/Arithmetic.html)) will negate the values.
 
--   A base R solution to refer to (and replace) the column with latitudes is `caro_chickadee$lat`.
+-   Equivalent base R ways to refer to (and replace) the column with latitudes are `caro_chickadee$lat` and `caro_chickadee[['lat']]`.
 
 </p>
 </details>
@@ -571,7 +580,10 @@ First we fix the latitude, which was simply negated:
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>lat</span> <span class='o'>&lt;-</span> <span class='o'>-</span><span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>lat</span>
 
-<span class='c'># Or a tidyverse way of doing this:</span>
+<span class='c'>## Or equivalently:</span>
+<span class='c'># caro_chickadee[['lat']] &lt;- -caro_chickadee[['lat']]</span>
+
+<span class='c'>## Or a tidyverse way of doing this:</span>
 <span class='c'># caro_chickadee &lt;- caro_chickadee %&gt;% mutate(lat = -lat)</span>
 </code></pre>
 
@@ -606,11 +618,13 @@ Create the first map with the same code as the example:
 <summary> Hints (click here) </summary>
 <p>
 
+-   The displaced state is North Carolina.
+
 -   The states are in the `stateProvince` column, and North Carolina's name is simply "North Carolina" in that column.
 
--   It may help to first create a logical vector indicating whether the state for each row equals "North Carolina".
+-   It may help to first create a logical vector indicating whether for each row in the `caro_chickadee` data frame, `stateProvincefor` equals "North Carolina".
 
--   Your final map will look nicer if you get rid of the plotting canvas by adding \`+ theme\_void()\` to the code for the plot.
+-   Your final map will look nicer if you get rid of the plotting canvas by adding <code>+ theme\_void()</code> to the code for the plot.
 
 </p>
 </details>
@@ -621,7 +635,7 @@ Create the first map with the same code as the example:
 
 <summary> Solution (click here) </summary> <br>
 
-It looks like North Caroline is submerged in the Atlantic. Let's perform a rescue operation by fixing the longitudes **just for North Carolina**:
+It turns out that North Carolina's chickadees are above the Atlantic. Let's perform a rescue operation by fixing the longitudes, which are offset by 10 degrees, **just for North Carolina**:
 
 <div class="highlight">
 
@@ -665,7 +679,7 @@ Nice!
 
 ### Exercise 2: for loops
 
-Find the 10 most commonly observed bird species in the dataset, and save their English names (found in the `species_en` column) in a vector.
+Find the 10 most commonly observed bird species in the data set, and save their English names (found in the `species_en` column) in a vector.
 
 Feel free to check out the solution if you're not sure how, because the focus here is on the next step: trying to create a loop.
 
@@ -694,7 +708,7 @@ Next, loop over all the top-10 species to produce a plot for each one of them. S
 <summary> Hints (click here) </summary>
 <p>
 
--   In the subsetting operation where you select the focal species, replace "Carolina Chickadee" with whatever you name the variable (indicating an individual species) that you loop over.
+-   In the subsetting operation where you select data for the focal species, replace "Carolina Chickadee" with whatever you name the variable (indicating an individual species) that you loop over.
 
     Because this is a variable name, and not a string like "Carolina Chickadee", don't forget to omit the quotes.
 
@@ -715,6 +729,8 @@ Next, loop over all the top-10 species to produce a plot for each one of them. S
 
 <span class='c'># Select just the data for one species:</span>
 <span class='nv'>one_bird_data</span> <span class='o'>&lt;-</span> <span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>species_en</span> <span class='o'>==</span> <span class='nv'>one_species</span>, <span class='o'>]</span>
+<span class='c'># Or in tidyverse-speak:</span>
+<span class='c'># one_bird_data &lt;- birds %&gt;% filter(species_en == one_species)</span>
 
 <span class='nv'>p</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>states</span>,
             mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
@@ -812,10 +828,10 @@ Then, use an `if` statement to create plots only for those top-50 birds that hav
   <span class='c'># Select the focal species:</span>
   <span class='nv'>one_bird</span> <span class='o'>&lt;-</span> <span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>species_en</span> <span class='o'>==</span> <span class='nv'>one_species</span>, <span class='o'>]</span>
   
-  <span class='c'># Create a dataframe with only records from Ohio:</span>
+  <span class='c'># Create a data frame with only records from Ohio:</span>
   <span class='nv'>one_bird_ohio</span> <span class='o'>&lt;-</span> <span class='nv'>one_bird</span><span class='o'>[</span><span class='nv'>one_bird</span><span class='o'>$</span><span class='nv'>stateProvince</span> <span class='o'>==</span> <span class='s'>'Ohio'</span>, <span class='o'>]</span>
 
-  <span class='c'># Test whether the dataframe with only records from Ohio has any rows.</span>
+  <span class='c'># Test whether the data frame with only records from Ohio has any rows.</span>
   <span class='c'># If it does not, we create the map for the species in question: </span>
   <span class='kr'>if</span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>one_bird_ohio</span><span class='o'>)</span> <span class='o'>==</span> <span class='m'>0</span><span class='o'>)</span> <span class='o'>&#123;</span>
   
@@ -850,6 +866,59 @@ Then, use an `if` statement to create plots only for those top-50 birds that hav
 
 Going further
 -------------
+
+<div class="alert alert-note">
+
+<div>
+
+### Base R data frame indexing
+
+Extract a column *as a vector*:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># By name:</span>
+<span class='nv'>birds</span><span class='o'>$</span><span class='nv'>lat</span>
+<span class='nv'>birds</span><span class='o'>[[</span><span class='s'>'lat'</span><span class='o'>]</span><span class='o'>]</span>   <span class='c'># Equivalent, $ notation is shorthand</span>
+
+<span class='c'># By index (column number):</span>
+<span class='nv'>birds</span><span class='o'>[[</span><span class='m'>8</span><span class='o'>]</span><span class='o'>]</span>
+</code></pre>
+
+</div>
+
+Extract one or more columns *as a data frame* using `[row, column]` notation,  
+with a leading comma (`[, column]`) meaning all rows:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># By name:</span>
+<span class='nv'>birds</span><span class='o'>[</span>, <span class='s'>'lat'</span><span class='o'>]</span>   <span class='c'># dataframe['row_name', 'column_name']</span>
+<span class='nv'>birds</span><span class='o'>[</span>, <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>'lat'</span>, <span class='s'>'long'</span><span class='o'>)</span><span class='o'>]</span>
+
+<span class='c'># By index (column numbers):</span>
+<span class='nv'>birds</span><span class='o'>[</span>, <span class='m'>8</span><span class='o'>]</span>       <span class='c'># dataframe[row_number, column_number]</span>
+<span class='nv'>birds</span><span class='o'>[</span>, <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>8</span>, <span class='m'>9</span><span class='o'>)</span><span class='o'>]</span>
+
+</code></pre>
+
+</div>
+
+Subset rows by a condition, with a trailing comma (`[row, ]`) meaning all columns:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>lat</span> <span class='o'>&gt;</span> <span class='m'>25</span>, <span class='o'>]</span>
+<span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>species_en</span> <span class='o'>==</span> <span class='s'>'Carolina Chickadee'</span>, <span class='o'>]</span>
+</code></pre>
+
+</div>
+
+</div>
+
+</div>
+
+<br>
 
 <div class="alert alert-note">
 

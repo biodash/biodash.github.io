@@ -91,17 +91,17 @@ Besides functional programming methods, vectorization is the other reason that l
 Let's say we have a *vector* (i.e., a collection of values) that consists of distances in miles:
 
 ```{r}
-distances_miles <- c(24, 81, 48, 29, 177, 175, 20, 11, 62, 156)
+dists_miles <- c(24, 81, 48, 29, 177, 175, 20, 11, 62, 156)
 ```
 
 Of course, we can't science with miles, so we'll have to convert these distances to kilometers by multiplying each value in the vector by 1.61. You may or may not know that this can be done *really easily* in R:
 
 ```{r}
-distances_km <- distances_miles * 1.61
-distances_km
+dists_km <- dists_miles * 1.61
+dists_km
 ```
 
-What is happening here is called a ***vectorized operation***: `1.61` is automatically recycled as many times as needed to be multiplied with *each individual value* in the `distance_miles` vector. This is a pretty unique and very useful feature of R!
+What is happening here is called a ***vectorized operation***: `1.61` is automatically recycled as many times as needed to be multiplied with *each individual value* in the `dist_miles` vector. This is a pretty unique and very useful feature of R!
 
 In many other languages, we would need a ***loop*** or a similar construct to iterate over each value in the vector and multiply by 1.61. In fact, under the hood, R *also* uses a loop to do this! So does it even make a difference? Yes -- the advantages of using vectorization in R are:
 
@@ -115,15 +115,17 @@ In many other languages, we would need a ***loop*** or a similar construct to it
 Above, we saw an example of multiplying a vector by a single number. We can also use vectorized operations when both objects contain multiple items. For instance, say we have a vector with corresponding values for two dates:
 
 ```{r}
-distances_Mar4 <- c(17, 93, 56, 19, 175, 40, 69, 267, 4, 91)
-distances_Mar5 <- c(87, 143, 103, 223, 106, 18, 87, 72, 59, 5)
+dists_Mar4 <- c(17, 93, 56, 19, 175, 40, 69, 267, 4, 91)
+dists_Mar5 <- c(87, 143, 103, 223, 106, 18, 87, 72, 59, 5)
 ```
 
 To get the sum of these values at each position (index) of the two vectors (`17 + 87`, `93 + 143`, etc.), we can simply do the following:
 
 ```{r}
-distances_Mar4 + distances_Mar5
+dists_Mar4 + dists_Mar5
 ```
+
+<br>
 
 <div class="alert alert-note"><div>
 The two vectors don't need to be of equal length, either:  
@@ -135,24 +137,31 @@ c(17, 93, 56, 19, 175, 40, 69, 267, 4, 91) * c(-1, 1)
 
 </div></div>
 
-This also works for columns of a dataframe -- and let's say we wanted the mean distance this time:
+<br>
+
+This also works for columns of a data frame, which we can extract using the `dataframe_name$column_name` notation (see [Code Club session 9's section on
+data frames](https://biodash.github.io/codeclub/09_subsetting/#data-frames),
+and the Base R data frame indexing summary [below](#base-r-data-frame-indexing)).
+Let's say we wanted the mean distance this time:
 
 ```{r}
-distance_df <- data.frame(distances_Mar4, distances_Mar5)
+dist_df <- data.frame(dists_Mar4, dists_Mar5)
 
-distance_df$distances_mean = (distance_df$distances_Mar4 + distance_df$distances_Mar5) / 2
-head(distance_df)
+dist_df$dists_mean = (dist_df$dists_Mar4 + dist_df$dists_Mar5) / 2
+head(dist_df)
 ```
 
 <br>
 
 ### Vectorization with matrices
 
-Furthermore, we can also perform vectorized operations on *entire matrices*. With the following matrix:
+Furthermore, we can also perform vectorized operations on *entire matrices*.
+With the following matrix:
 
 ```{r}
-# We use the "sample" function to get 50 random values between 1 and a 100: 
-mat <- matrix(sample(1:100, 50), nrow = 5, ncol = 5)
+# We use the "sample" function to get 25 random values between 1 and a 100,
+# and put those in a 5*5 matrix:
+mat <- matrix(sample(1:100, 25), nrow = 5, ncol = 5)
 mat
 ```
 
@@ -180,27 +189,27 @@ To do so, we make use of R's ability to index a vector with a logical vector:
 
 ```{r}
 # "not_far_enough" will be a vector of logicals:
-not_far_enough <- distances_Mar4 < 50
+not_far_enough <- dists_Mar4 < 50
 not_far_enough
 
 # When we index the original vector with a logical vector,
 # we get only those values for which "not_far_enough" is TRUE:
-distances_Mar4[not_far_enough]
+dists_Mar4[not_far_enough]
 ```
 
 With the following syntax, we can replace just those low distances in our
 original vector:
 
 ```{r}
-distances_Mar4[not_far_enough] <- distances_Mar4[not_far_enough] * -1
-distances_Mar4
+dists_Mar4[not_far_enough] <- dists_Mar4[not_far_enough] * -1
+dists_Mar4
 ```
 
 <div class="alert alert-note"><div>
 In a simple case like this, we could also use the vectorized `ifelse()` function:
 
 ```{r}
-ifelse(distances_Mar5 < 50, distances_Mar5 * -1, distances_Mar5)
+ifelse(dists_Mar5 < 50, dists_Mar5 * -1, dists_Mar5)
 ```
 
 </div></div>
@@ -287,23 +296,24 @@ For example, you might be inclined to do the following if you wanted to compute 
 ```{r}
 column_medians <- vector()
 
-for (column_number in 1:ncol(distance_df)) {
-  column_median <- median(distance_df[[column_number]])
+for (column_number in 1:ncol(dist_df)) {
+  # We can extract a column using "dataframe_name[[column_number]]":
+  column_median <- median(dist_df[[column_number]])
   column_medians <- c(column_medians, column_median)
 }
 
 column_medians
 ```
 
-Similarly, you may be adding a column (with `cbind()`) or a row (with `rbind()`) to a dataframe in each iteration of the loop. However, the problem with these approaches is that R has to create an entirely new object in each iteration of the loop, because the object's memory requirements keep increasing.
+Similarly, you may be adding a column (with `cbind()`) or a row (with `rbind()`) to a data frame in each iteration of the loop. However, the problem with these approaches is that R has to create an entirely new object in each iteration of the loop, because the object's memory requirements keep increasing.
 
 Instead, you'll want to give the final vector (here, `column_medians`) the appropriate size before you start the loop:
 
 ```{r}
-column_medians <- vector(length = ncol(distance_df))
+column_medians <- vector(length = ncol(dist_df))
 
-for (column_number in 1:ncol(distance_df)) {
-  column_median <- median(distance_df[[column_number]])
+for (column_number in 1:ncol(dist_df)) {
+  column_median <- median(dist_df[[column_number]])
   column_medians[column_number] <- column_median
 }
 ```
@@ -318,7 +328,7 @@ Note that for very small problems, such as the example above, there will not be 
 -   Don't grow objects inside the loop. Instead, pre-assign an object large enough to contain all output of the loop and fill it in inside the loop.
 -   When you write a loop, avoid doing things *inside* the loop that don't need to be repeated.
 
-Learning about how to create your own functions and/or to use functional programming techniques like *purrr* and the `apply` family of functions (upcoming Code Club sessions!) will likely reduce your reliance on loops. For instance, as we'll see next week, computing the median of each column in a dataframe can be done *much* more succinctly with `apply()`.
+Learning about how to create your own functions and/or to use functional programming techniques like *purrr* and the `apply` family of functions (upcoming Code Club sessions!) will likely reduce your reliance on loops. For instance, as we'll see next week, computing the median of each column in a data frame can be done *much* more succinctly with `apply()`.
 
 **Even for more experienced users, loops remain a more viable option when longer blocks of code need to be repeated: we will practice with that in the exercises.** 
 
@@ -353,6 +363,9 @@ birds_file <- 'backyard-birds_sample_error.tsv'
 ```
 
 ```{r}
+## Load the tidyverse:
+library(tidyverse)
+
 ## Read the file with bird data:
 birds <- read_tsv(birds_file)
 
@@ -360,9 +373,6 @@ birds <- read_tsv(birds_file)
 # install.packages('maps')   # first install if necessary
 library(maps)
 states <- map_data("state")
-
-## Load the tidyverse:
-library(tidyverse)
 ```
 
 Last week, we learned about making maps. If you attended one of the first few Code Club sessions, you'll recall our Great Backyard Birdcount dataset. Here, we'll use a country-wide random subset of this data (the full file is over 4 GB) to see where Carolina Chickadees were seen:  
@@ -372,6 +382,9 @@ Last week, we learned about making maps. If you attended one of the first few Co
 ## (English species name) equals "Carolina Chickadee",
 ## i.e. we are getting just the records for the Carolina Chickadee:
 caro_chickadee <- birds[birds$species_en == 'Carolina Chickadee', ]
+
+# Or in tidyverse-speak:
+# caro_chickadee <- birds %>% filter(species_en == 'Carolina Chickadee')
 
 # Next, we create a map much like we did last week:
 ggplot(data = states,
@@ -405,13 +418,13 @@ Hints (click here)
 </summary>
 <p>
 
-- You can modify the `caro_chickadee` dataframe and keep the plotting code
+- You can modify the `caro_chickadee` data frame and keep the plotting code
   exactly the same.
 
-- Prepending the latitude column with a `-` will negate the values.
+- Simply prepending the latitude column with a minus sign (`-`) will negate the values.
 
-- A base R solution to refer to (and replace) the column with latitudes
-  is `caro_chickadee$lat`.
+- Equivalent base R ways to refer to (and replace) the column with latitudes
+  are `caro_chickadee$lat` and `caro_chickadee[['lat']]`.
 
 </p>
 </details>
@@ -429,7 +442,10 @@ First we fix the latitude, which was simply negated:
 ```{r}
 caro_chickadee$lat <- -caro_chickadee$lat
 
-# Or a tidyverse way of doing this:
+## Or equivalently:
+# caro_chickadee[['lat']] <- -caro_chickadee[['lat']]
+
+## Or a tidyverse way of doing this:
 # caro_chickadee <- caro_chickadee %>% mutate(lat = -lat)
 ```
 
@@ -460,14 +476,16 @@ Hints (click here)
 </summary>
 <p>
 
+- The displaced state is North Carolina.
+
 - The states are in the `stateProvince` column, and North Carolina's name is
   simply "North Carolina" in that column.
   
-- It may help to first create a logical vector indicating whether the state
-  for each row equals "North Carolina".
+- It may help to first create a logical vector indicating whether for each row
+  in the `caro_chickadee` data frame, `stateProvincefor` equals "North Carolina".
 
 - Your final map will look nicer if you get rid of the plotting canvas by
-  adding `+ theme_void()` to the code for the plot.
+  adding <code>+ theme_void()</code> to the code for the plot.
 
 </p>
 </details>
@@ -480,8 +498,9 @@ Solution (click here)
 </summary>
 <br>
 
-It looks like North Caroline is submerged in the Atlantic.
-Let's perform a rescue operation by fixing the longitudes **just for North Carolina**:
+It turns out that North Carolina's chickadees are above the Atlantic.
+Let's perform a rescue operation by fixing the longitudes,
+which are offset by 10 degrees, **just for North Carolina**:
 
 ```{r}
 NC_rows <- caro_chickadee$stateProvince == "North Carolina"
@@ -513,7 +532,7 @@ Nice!
 
 ### Exercise 2: for loops
 
-Find the 10 most commonly observed bird species in the dataset,
+Find the 10 most commonly observed bird species in the data set,
 and save their English names (found in the `species_en` column) in a vector.
 
 Feel free to check out the solution if you're not sure how,
@@ -548,7 +567,7 @@ Hints (click here)
 </summary>
 <p>
 
-- In the subsetting operation where you select the focal species,
+- In the subsetting operation where you select data for the focal species,
   replace "Carolina Chickadee" with whatever you name the variable
   (indicating an individual species) that you loop over.
   
@@ -571,6 +590,8 @@ for (one_species in top10) {
 
 # Select just the data for one species:
 one_bird_data <- birds[birds$species_en == one_species, ]
+# Or in tidyverse-speak:
+# one_bird_data <- birds %>% filter(species_en == one_species)
 
 p <- ggplot(data = states,
             mapping = aes(x = long, y = lat, group = group)) +
@@ -665,10 +686,10 @@ for (one_species in all_species) {
   # Select the focal species:
   one_bird <- birds[birds$species_en == one_species, ]
   
-  # Create a dataframe with only records from Ohio:
+  # Create a data frame with only records from Ohio:
   one_bird_ohio <- one_bird[one_bird$stateProvince == 'Ohio', ]
 
-  # Test whether the dataframe with only records from Ohio has any rows.
+  # Test whether the data frame with only records from Ohio has any rows.
   # If it does not, we create the map for the species in question: 
   if(nrow(one_bird_ohio) == 0) {
   
@@ -696,6 +717,46 @@ for (one_species in all_species) {
 ------------------------------------------------------------------------
 
 ## Going further
+
+<div class="alert alert-note"><div>
+
+### Base R data frame indexing
+
+Extract a column *as a vector*:
+
+```{r, eval=FALSE}
+# By name:
+birds$lat
+birds[['lat']]   # Equivalent, $ notation is shorthand
+
+# By index (column number):
+birds[[8]]
+```
+
+Extract one or more columns *as a data frame* using `[row, column]` notation,  
+with a leading comma (`[, column]`) meaning all rows:
+
+```{r, eval=FALSE}
+# By name:
+birds[, 'lat']   # dataframe['row_name', 'column_name']
+birds[, c('lat', 'long')]
+
+# By index (column numbers):
+birds[, 8]       # dataframe[row_number, column_number]
+birds[, c(8, 9)]
+
+```
+
+Subset rows by a condition, with a trailing comma (`[row, ]`) meaning all columns:
+
+```{r, eval=FALSE}
+birds[birds$lat > 25, ]
+birds[birds$species_en == 'Carolina Chickadee', ]
+```
+
+</div></div>
+
+<br>
 
 <div class="alert alert-note"><div>
 
