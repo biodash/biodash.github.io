@@ -74,15 +74,18 @@ Your first instinct may be to copy-and-paste the block of code, and make the nec
 ***Loops*** are the most universal iteration tool and the one we will focus on today.
 However, R has "functional programming" iteration methods that are less verbose and that can also be quicker to execute. These are the `apply` family of functions, and a more recent *tidyverse* approach implemented in the *purrr* package: we will learn more about those in the two upcoming Code Club sessions.
 
-Loops are still a very good place to start using iteration because they they make the iteration explicit and are therefore more intuitive. Moreover, they can easily accommodate longer blocks of code without the need to *also* write your own function.
+Loops are still a very good place to start using iteration because they make the iteration explicit and are therefore more intuitive than functional alternatives. In addition, they can easily accommodate longer blocks of code without the need to *also* write your own function.
 
-We will talk about the most common type of loop: the `for` loops. (Other types of loops in R are `while` loops and `repeat` loops.)
+Today, we will talk about the most common type of loop: the `for` loops.
+(Other types of loops in R are `while` loops and `repeat` loops.
+Related to loops are `if` statements, see the [bonus exercise](#bonus-exercise-if-statements)
+for some basics.)
 
 #### But first...
 
-Before we talk about loops we should take a step back and explore ***vectorization*** a bit more,
+Before we tackle loops we should take a step back and explore ***vectorization*** a bit more,
 which was briefly introduced by Michael in [Code Club session 9](https://biodash.github.io/codeclub/09_subsetting/).
-Besides functional programming methods, vectorization is the other reason that loops are not as widely used in R as in other programming languages.
+Besides functional programming methods, *vectorization is the other reason that loops are not as widely used in R as in other programming languages*.
 
 ------------------------------------------------------------------------
 
@@ -106,7 +109,8 @@ What is happening here is called a ***vectorized operation***: `1.61` is automat
 In many other languages, we would need a ***loop*** or a similar construct to iterate over each value in the vector and multiply by 1.61. In fact, under the hood, R *also* uses a loop to do this! So does it even make a difference? Yes -- the advantages of using vectorization in R are:
 
 -   You don't have to write the loop, saving you a fair bit of typing and making the code clearer.
--   The under-the-hood-loop is being executed *much* faster than a loop that you would write. This is because it is written in `C`/`C++` code which only has to be called once rather than at least as many times as there are iterations in our loop.
+
+-   The under-the-hood-loop is being executed *much* faster than a loop that you would write. This is because it is written in `C`/`C++` code which only has to be called once (instead of at least as many times as there are iterations in our loop).
 
 <br>
 
@@ -132,7 +136,7 @@ The two vectors don't need to be of equal length, either:
 in the example below, we negate **_every other_** value in a vector:
 
 ```{r}
-c(17, 93, 56, 19, 175, 40, 69, 267, 4, 91) * c(-1, 1)
+c(17, 93, 56, 19, 175, 40, 69, 267, 4, 91) * c(1, -1)
 ```
 
 </div></div>
@@ -159,8 +163,8 @@ Furthermore, we can also perform vectorized operations on *entire matrices*.
 With the following matrix:
 
 ```{r}
-# We use the "sample" function to get 25 random values between 1 and a 100,
-# and put those in a 5*5 matrix:
+## We use the "sample" function to get 25 random values between 1 and a 100,
+## and put those in a 5*5 matrix:
 mat <- matrix(sample(1:100, 25), nrow = 5, ncol = 5)
 mat
 ```
@@ -183,17 +187,18 @@ We can also use vectorized solutions when we want to operate only on elements
 that satisfy a certain condition.
 
 Let's say we consider any distance in one of our vectors that is below 50 to be
-insufficient, and we want to turn those values into negatives.
+insufficient, and we want to turn those values into negatives
+(a little harsh maybe, but we go with it).
 
 To do so, we make use of R's ability to index a vector with a logical vector:
 
 ```{r}
-# "not_far_enough" will be a vector of logicals:
+## "not_far_enough" will be a vector of logicals:
 not_far_enough <- dists_Mar4 < 50
 not_far_enough
 
-# When we index the original vector with a logical vector,
-# we get only those values for which "not_far_enough" is TRUE:
+## When we index the original vector with a logical vector,
+## we get only those values for which "not_far_enough" is TRUE:
 dists_Mar4[not_far_enough]
 ```
 
@@ -226,18 +231,19 @@ The basic syntax is as follows:
 
 ``` r
 for (variable_name in collection_name) {
-  #...do things with variable_name...
+  #...do things for each item (variable_name) in the collection, one at a time...
 }
 ```
 
-On the first line, you initialize the `for` loop, telling it to assign each value in the collection to a variable (here, `variable_name`) **one at a time**.
+On the first line, you initialize the `for` loop, telling it to assign each item
+in the collection to a variable (here, `variable_name`) **one at a time**.
 
 The *variable name* is arbitrary, and the *collection* is whatever you want to loop over. However, `for`, the parentheses `()`, `in`, and the curly braces `{}` are all fixed elements of `for` loops. A simple example will help to understand the synax:
 
 ```{r}
-# A loop to print negated values:
-for (one_number in c(1, 2, 3, 4)) {
-  print(one_number * -1)
+## A loop to print negated values:
+for (one_number in c(1, 2, 3, 4)) {  # We iterate over 1, 2, 3, 4
+  print(one_number * -1)             # Multiply each number by -1
 }
 ```
 
@@ -245,21 +251,19 @@ Note that we don't *have to* use the variable that we are looping over: we could
 
 ```{r}
 for (dummy in c(1, 2, 3, 4)) {
-  print("Yes!")
+  print("Yes!")                     # Print "Yes!" in each of our four iterations 
 }
 ```
 
 As mentioned, the **variable name** that we assign is arbitrary: we could use anything, as long as we reference it with the same name inside the loop:
 
 ```{r}
-# Example 1 with a different variable name: "positive_number"
+## Example 1 with a different variable name: "positive_number"
 for (positive_number in c(1, 2, 3, 4)) {
   print(positive_number * -1)
 }
-```
 
-```{r}
-# Example 2 with a different variable name: "i"
+## Example 2 with a different variable name: "i"
 for (i in c(1, 2, 3, 4)) {
   print(i * -1)
 }
@@ -294,18 +298,23 @@ Similarly, if we want the output to be saved in an object of some kind, we need 
 For example, you might be inclined to do the following if you wanted to compute the median of each column in a data frame:
 
 ```{r}
+## We initialize a vector in which we collect the column medians:
 column_medians <- vector()
 
 for (column_number in 1:ncol(dist_df)) {
-  # We can extract a column using "dataframe_name[[column_number]]":
+  
+  ## We extract one column using "dataframe_name[[column_number]]":
   column_median <- median(dist_df[[column_number]])
+  
+  ## We add the single-column median to our vector of medians:
   column_medians <- c(column_medians, column_median)
 }
 
 column_medians
 ```
 
-Similarly, you may be adding a column (with `cbind()`) or a row (with `rbind()`) to a data frame in each iteration of the loop. However, the problem with these approaches is that R has to create an entirely new object in each iteration of the loop, because the object's memory requirements keep increasing.
+Similarly, you may be tempted to add a column (with `cbind()`) or a row (with `rbind()`) to a data frame in each iteration of the loop.
+However, the problem with these approaches is that **R has to create an entirely new object in each iteration of the loop**, because the object's memory requirements keep increasing.
 
 Instead, you'll want to give the final vector (here, `column_medians`) the appropriate size before you start the loop:
 
@@ -322,7 +331,7 @@ Note that for very small problems, such as the example above, there will not be 
 
 <br>
 
-### Summary guidelines
+### Summary guidelines (when speed is an issue)
 
 -   Don't use a loop when you can instead use vectorized operations.
 -   Don't grow objects inside the loop. Instead, pre-assign an object large enough to contain all output of the loop and fill it in inside the loop.
@@ -340,7 +349,7 @@ Learning about how to create your own functions and/or to use functional program
 
 For the exercises, you can download an R Markdown file with some code to get
 set up (I recommend coding in that document to get a nice overview of the
-plots that you produce):
+maps that you will make):
 
 ```{r, eval=FALSE}
 dir.create('S12')
@@ -375,7 +384,9 @@ library(maps)
 states <- map_data("state")
 ```
 
-Last week, we learned about making maps. If you attended one of the first few Code Club sessions, you'll recall our Great Backyard Birdcount dataset. Here, we'll use a country-wide random subset of this data (the full file is over 4 GB) to see where Carolina Chickadees were seen:  
+Last week, we learned about making maps. If you attended one of the first few Code Club sessions, you'll recall our **Great Backyard Birdcount data set**.
+Here, we'll use a country-wide random subset of this data (the full file is over 4 GB)
+to see where Carolina Chickadees were seen:  
 
 ```{r}
 ## With this line, we select only the rows where the column "species_en"
@@ -383,22 +394,23 @@ Last week, we learned about making maps. If you attended one of the first few Co
 ## i.e. we are getting just the records for the Carolina Chickadee:
 caro_chickadee <- birds[birds$species_en == 'Carolina Chickadee', ]
 
-# Or in tidyverse-speak:
+## Or in tidyverse-speak:
 # caro_chickadee <- birds %>% filter(species_en == 'Carolina Chickadee')
 
 # Next, we create a map much like we did last week:
-ggplot(data = states,
+ggplot(data = states,                               # Use "states" for underlying map
        mapping = aes(x = long, y = lat, group = group)) +
-  geom_polygon(color = "black", fill = "white") +
-  geom_point(data = caro_chickadee,
+  geom_polygon(color = "black", fill = "white") +   # Black state outlines, white fill
+  geom_point(data = caro_chickadee,                 # Plot points from bird data set
              aes(x = long, y = lat, group = NULL),
-             color = "green4", alpha = 0.5) +
-  coord_fixed(1.3) +
+             color = "green4", alpha = 0.5) +       # Green points, somewhat transparent
+  coord_fixed(1.3) +                                # Fix projection
   labs(title = 'Carolina Chickadee')
 ```
 
 Uh-oh! Something appears to have gone wrong.
-In the first exercise, you'll use vectorization to fix the coordinates.
+In the first exercise, you'll use vectorization to fix the coordinates in the
+bird data set.
 
 In the second exercise, you'll use a loop to quickly produce similar plots for several other species.
 
@@ -418,12 +430,12 @@ Hints (click here)
 </summary>
 <p>
 
-- You can modify the `caro_chickadee` data frame and keep the plotting code
-  exactly the same.
+- You'll need to modify the `caro_chickadee` data frame,
+  while you can keep the plotting code exactly the same.
 
 - Simply prepending the latitude column with a minus sign (`-`) will negate the values.
 
-- Equivalent base R ways to refer to (and replace) the column with latitudes
+- Equivalent base R ways to refer to the column with latitudes
   are `caro_chickadee$lat` and `caro_chickadee[['lat']]`.
 
 </p>
@@ -467,7 +479,7 @@ ggplot(data = states,
 
 <br>
 
-- Once you have fixed the latitude, you should notice that for one state,
+- Once you have fixed the latitude, you should notice that *for one state*,
   there is a problem with the **longitude** (the offset is 10 decimal degrees).
 
 <details>
@@ -478,14 +490,14 @@ Hints (click here)
 
 - The displaced state is North Carolina.
 
-- The states are in the `stateProvince` column, and North Carolina's name is
-  simply "North Carolina" in that column.
+- The state of each sighting is in the `stateProvince` column,
+  and North Carolina's name is simply "North Carolina" in that column.
   
 - It may help to first create a logical vector indicating whether for each row
   in the `caro_chickadee` data frame, `stateProvincefor` equals "North Carolina".
 
-- Your final map will look nicer if you get rid of the plotting canvas by
-  adding <code>+ theme_void()</code> to the code for the plot.
+- Your final map will look nicer if you get rid of the plotting canvas by adding   
+  <code>+ theme_void()</code> to the code for the plot.
 
 </p>
 </details>
@@ -503,8 +515,13 @@ Let's perform a rescue operation by fixing the longitudes,
 which are offset by 10 degrees, **just for North Carolina**:
 
 ```{r}
+## Get a vector of logicals, indicating which rows are from North Carolina:
 NC_rows <- caro_chickadee$stateProvince == "North Carolina"
+
+## Only for North Carolina rows, change the longitude:
 caro_chickadee$long[NC_rows] <- caro_chickadee$long[NC_rows] - 10
+## Or:
+#caro_chickadee[NC_rows, 'long'] <- caro_chickadee[NC_rows, 'long'] - 10
 ```
 
 And we create the final map:
@@ -557,7 +574,7 @@ top10 <- birds %>%
 
 <br>
 
-Next, loop over all the top-10 species to produce a plot for each one of them.
+Next, loop over the top-10 species to produce a plot for each one of them.  
 Start with the code for the Carolina Chickadee, including the subsetting operation,
 and modify that.
 
@@ -588,9 +605,9 @@ Hints (click here)
 ```{r}
 for (one_species in top10) {
 
-# Select just the data for one species:
+## Select just the data for one species:
 one_bird_data <- birds[birds$species_en == one_species, ]
-# Or in tidyverse-speak:
+## Or in tidyverse-speak:
 # one_bird_data <- birds %>% filter(species_en == one_species)
 
 p <- ggplot(data = states,
@@ -614,9 +631,9 @@ print(p)
 ### Bonus exercise: if statements
 
 `if` statements are similar in syntax to `for` loops, and are also considered
-a "flow control" structure. But their purpose is different from loops:
-instead of iterating, they do something once and they *only* do it when a condition
-is fulfilled.
+a "control flow" structure. But their purpose is different from loops:
+instead of iterating,
+**`if` statements do something once and they *only* do it when a condition is fulfilled.**
 
 For instance, we may want to check in a script whether a certain directory (folder)
 exists on our computer, and if it doesn't, then we create the directory:
@@ -648,7 +665,7 @@ for (one_number in 1:10) {
 In the example above, `one number > 7` will only be `TRUE` for numbers larger than 7.
 This example is quite contrived, as it would have been easier (and faster!)
 to remove these items from the vector before the loop, but it hopefully gets the
-point across.
+point across of how an `if` statement works. 
 
 <div class="puzzle"><div>
 
@@ -683,14 +700,14 @@ all_species <- birds %>%
 ```{r}
 for (one_species in all_species) {
 
-  # Select the focal species:
+  ## Select the focal species:
   one_bird <- birds[birds$species_en == one_species, ]
   
-  # Create a data frame with only records from Ohio:
+  ## Create a data frame with only records from Ohio:
   one_bird_ohio <- one_bird[one_bird$stateProvince == 'Ohio', ]
 
-  # Test whether the data frame with only records from Ohio has any rows.
-  # If it does not, we create the map for the species in question: 
+  ## Test whether the data frame with only records from Ohio has any rows.
+  ## If it does not, we create the map for the species in question: 
   if(nrow(one_bird_ohio) == 0) {
   
     p <- ggplot(data = states,
@@ -725,11 +742,11 @@ for (one_species in all_species) {
 Extract a column *as a vector*:
 
 ```{r, eval=FALSE}
-# By name:
+## By name:
 birds$lat
 birds[['lat']]   # Equivalent, $ notation is shorthand
 
-# By index (column number):
+## By index (column number):
 birds[[8]]
 ```
 
@@ -737,11 +754,11 @@ Extract one or more columns *as a data frame* using `[row, column]` notation,
 with a leading comma (`[, column]`) meaning all rows:
 
 ```{r, eval=FALSE}
-# By name:
+## By name:
 birds[, 'lat']   # dataframe['row_name', 'column_name']
 birds[, c('lat', 'long')]
 
-# By index (column numbers):
+## By index (column numbers):
 birds[, 8]       # dataframe[row_number, column_number]
 birds[, c(8, 9)]
 
@@ -773,7 +790,9 @@ seq_along(birds)
 ```
 
 The advantage of `seq_along()` is thtat it will behave better when your vector
-accidentally has length 0.
+accidentally has length 0
+(because `1:length()` will have `1` and `0` when the length is 0,
+and you'll get odd-seeming errors).
 
 </div></div>
 

@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 233577fd5b80976e
+rmd_hash: 53113410eb446d26
 
 ---
 
@@ -69,13 +69,13 @@ Your first instinct may be to copy-and-paste the block of code, and make the nec
 
 ***Loops*** are the most universal iteration tool and the one we will focus on today. However, R has "functional programming" iteration methods that are less verbose and that can also be quicker to execute. These are the `apply` family of functions, and a more recent *tidyverse* approach implemented in the *purrr* package: we will learn more about those in the two upcoming Code Club sessions.
 
-Loops are still a very good place to start using iteration because they they make the iteration explicit and are therefore more intuitive. Moreover, they can easily accommodate longer blocks of code without the need to *also* write your own function.
+Loops are still a very good place to start using iteration because they make the iteration explicit and are therefore more intuitive than functional alternatives. In addition, they can easily accommodate longer blocks of code without the need to *also* write your own function.
 
-We will talk about the most common type of loop: the `for` loops. (Other types of loops in R are `while` loops and `repeat` loops.)
+Today, we will talk about the most common type of loop: the `for` loops. (Other types of loops in R are `while` loops and `repeat` loops. Related to loops are `if` statements, see the [bonus exercise](#bonus-exercise-if-statements) for some basics.)
 
 #### But first...
 
-Before we talk about loops we should take a step back and explore ***vectorization*** a bit more, which was briefly introduced by Michael in [Code Club session 9](https://biodash.github.io/codeclub/09_subsetting/). Besides functional programming methods, vectorization is the other reason that loops are not as widely used in R as in other programming languages.
+Before we tackle loops we should take a step back and explore ***vectorization*** a bit more, which was briefly introduced by Michael in [Code Club session 9](https://biodash.github.io/codeclub/09_subsetting/). Besides functional programming methods, *vectorization is the other reason that loops are not as widely used in R as in other programming languages*.
 
 ------------------------------------------------------------------------
 
@@ -108,7 +108,8 @@ What is happening here is called a ***vectorized operation***: `1.61` is automat
 In many other languages, we would need a ***loop*** or a similar construct to iterate over each value in the vector and multiply by 1.61. In fact, under the hood, R *also* uses a loop to do this! So does it even make a difference? Yes -- the advantages of using vectorization in R are:
 
 -   You don't have to write the loop, saving you a fair bit of typing and making the code clearer.
--   The under-the-hood-loop is being executed *much* faster than a loop that you would write. This is because it is written in `C`/`C++` code which only has to be called once rather than at least as many times as there are iterations in our loop.
+
+-   The under-the-hood-loop is being executed *much* faster than a loop that you would write. This is because it is written in `C`/`C++` code which only has to be called once (instead of at least as many times as there are iterations in our loop).
 
 <br>
 
@@ -146,9 +147,9 @@ in the example below, we negate ***every other*** value in a vector:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>17</span>, <span class='m'>93</span>, <span class='m'>56</span>, <span class='m'>19</span>, <span class='m'>175</span>, <span class='m'>40</span>, <span class='m'>69</span>, <span class='m'>267</span>, <span class='m'>4</span>, <span class='m'>91</span><span class='o'>)</span> <span class='o'>*</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='o'>-</span><span class='m'>1</span>, <span class='m'>1</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>17</span>, <span class='m'>93</span>, <span class='m'>56</span>, <span class='m'>19</span>, <span class='m'>175</span>, <span class='m'>40</span>, <span class='m'>69</span>, <span class='m'>267</span>, <span class='m'>4</span>, <span class='m'>91</span><span class='o'>)</span> <span class='o'>*</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
 
-<span class='c'>#&gt;  [1]  -17   93  -56   19 -175   40  -69  267   -4   91</span>
+<span class='c'>#&gt;  [1]   17  -93   56  -19  175  -40   69 -267    4  -91</span>
 </code></pre>
 
 </div>
@@ -187,17 +188,17 @@ Furthermore, we can also perform vectorized operations on *entire matrices*. Wit
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># We use the "sample" function to get 25 random values between 1 and a 100,</span>
-<span class='c'># and put those in a 5*5 matrix:</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## We use the "sample" function to get 25 random values between 1 and a 100,</span>
+<span class='c'>## and put those in a 5*5 matrix:</span>
 <span class='nv'>mat</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>100</span>, <span class='m'>25</span><span class='o'>)</span>, nrow <span class='o'>=</span> <span class='m'>5</span>, ncol <span class='o'>=</span> <span class='m'>5</span><span class='o'>)</span>
 <span class='nv'>mat</span>
 
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]   41   16   44   32   69</span>
-<span class='c'>#&gt; [2,]   98   58   90   42   11</span>
-<span class='c'>#&gt; [3,]   20   64    1   46   75</span>
-<span class='c'>#&gt; [4,]   43   94   65   74   89</span>
-<span class='c'>#&gt; [5,]   77    5   38   85   12</span>
+<span class='c'>#&gt; [1,]   28    2   34   82   47</span>
+<span class='c'>#&gt; [2,]   92   96   18   93   73</span>
+<span class='c'>#&gt; [3,]   65   41   50    4   22</span>
+<span class='c'>#&gt; [4,]   19   36   86   24   75</span>
+<span class='c'>#&gt; [5,]    6    5   44   16   39</span>
 </code></pre>
 
 </div>
@@ -236,21 +237,21 @@ Furthermore, we can also perform vectorized operations on *entire matrices*. Wit
 
 We can also use vectorized solutions when we want to operate only on elements that satisfy a certain condition.
 
-Let's say we consider any distance in one of our vectors that is below 50 to be insufficient, and we want to turn those values into negatives.
+Let's say we consider any distance in one of our vectors that is below 50 to be insufficient, and we want to turn those values into negatives (a little harsh maybe, but we go with it).
 
 To do so, we make use of R's ability to index a vector with a logical vector:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># "not_far_enough" will be a vector of logicals:</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## "not_far_enough" will be a vector of logicals:</span>
 <span class='nv'>not_far_enough</span> <span class='o'>&lt;-</span> <span class='nv'>dists_Mar4</span> <span class='o'>&lt;</span> <span class='m'>50</span>
 <span class='nv'>not_far_enough</span>
 
 <span class='c'>#&gt;  [1]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE</span>
 
 
-<span class='c'># When we index the original vector with a logical vector,</span>
-<span class='c'># we get only those values for which "not_far_enough" is TRUE:</span>
+<span class='c'>## When we index the original vector with a logical vector,</span>
+<span class='c'>## we get only those values for which "not_far_enough" is TRUE:</span>
 <span class='nv'>dists_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span>
 
 <span class='c'>#&gt; [1] 17 19 40  4</span>
@@ -302,19 +303,19 @@ The basic syntax is as follows:
 
 ``` r
 for (variable_name in collection_name) {
-  #...do things with variable_name...
+  #...do things for each item (variable_name) in the collection, one at a time...
 }
 ```
 
-On the first line, you initialize the `for` loop, telling it to assign each value in the collection to a variable (here, `variable_name`) **one at a time**.
+On the first line, you initialize the `for` loop, telling it to assign each item in the collection to a variable (here, `variable_name`) **one at a time**.
 
 The *variable name* is arbitrary, and the *collection* is whatever you want to loop over. However, `for`, the parentheses `()`, `in`, and the curly braces `{}` are all fixed elements of `for` loops. A simple example will help to understand the synax:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># A loop to print negated values:</span>
-<span class='kr'>for</span> <span class='o'>(</span><span class='nv'>one_number</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
-  <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>one_number</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## A loop to print negated values:</span>
+<span class='kr'>for</span> <span class='o'>(</span><span class='nv'>one_number</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>  <span class='c'># We iterate over 1, 2, 3, 4</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>one_number</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>             <span class='c'># Multiply each number by -1</span>
 <span class='o'>&#125;</span>
 
 <span class='c'>#&gt; [1] -1</span>
@@ -330,7 +331,7 @@ Note that we don't *have to* use the variable that we are looping over: we could
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>dummy</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
-  <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='s'>"Yes!"</span><span class='o'>)</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='s'>"Yes!"</span><span class='o'>)</span>                     <span class='c'># Print "Yes!" in each of our four iterations </span>
 <span class='o'>&#125;</span>
 
 <span class='c'>#&gt; [1] "Yes!"</span>
@@ -345,7 +346,7 @@ As mentioned, the **variable name** that we assign is arbitrary: we could use an
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Example 1 with a different variable name: "positive_number"</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Example 1 with a different variable name: "positive_number"</span>
 <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>positive_number</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>positive_number</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
 <span class='o'>&#125;</span>
@@ -354,13 +355,9 @@ As mentioned, the **variable name** that we assign is arbitrary: we could use an
 <span class='c'>#&gt; [1] -2</span>
 <span class='c'>#&gt; [1] -3</span>
 <span class='c'>#&gt; [1] -4</span>
-</code></pre>
 
-</div>
 
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Example 2 with a different variable name: "i"</span>
+<span class='c'>## Example 2 with a different variable name: "i"</span>
 <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>i</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>i</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
 <span class='o'>&#125;</span>
@@ -419,11 +416,15 @@ For example, you might be inclined to do the following if you wanted to compute 
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>column_medians</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='o'>(</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## We initialize a vector in which we collect the column medians:</span>
+<span class='nv'>column_medians</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>column_number</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
-  <span class='c'># We can extract a column using "dataframe_name[[column_number]]":</span>
+  
+  <span class='c'>## We extract one column using "dataframe_name[[column_number]]":</span>
   <span class='nv'>column_median</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>[[</span><span class='nv'>column_number</span><span class='o'>]</span><span class='o'>]</span><span class='o'>)</span>
+  
+  <span class='c'>## We add the single-column median to our vector of medians:</span>
   <span class='nv'>column_medians</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>column_medians</span>, <span class='nv'>column_median</span><span class='o'>)</span>
 <span class='o'>&#125;</span>
 
@@ -434,7 +435,7 @@ For example, you might be inclined to do the following if you wanted to compute 
 
 </div>
 
-Similarly, you may be adding a column (with [`cbind()`](https://rdrr.io/r/base/cbind.html)) or a row (with [`rbind()`](https://rdrr.io/r/base/cbind.html)) to a data frame in each iteration of the loop. However, the problem with these approaches is that R has to create an entirely new object in each iteration of the loop, because the object's memory requirements keep increasing.
+Similarly, you may be tempted to add a column (with [`cbind()`](https://rdrr.io/r/base/cbind.html)) or a row (with [`rbind()`](https://rdrr.io/r/base/cbind.html)) to a data frame in each iteration of the loop. However, the problem with these approaches is that **R has to create an entirely new object in each iteration of the loop**, because the object's memory requirements keep increasing.
 
 Instead, you'll want to give the final vector (here, `column_medians`) the appropriate size before you start the loop:
 
@@ -454,7 +455,7 @@ Note that for very small problems, such as the example above, there will not be 
 
 <br>
 
-### Summary guidelines
+### Summary guidelines (when speed is an issue)
 
 -   Don't use a loop when you can instead use vectorized operations.
 -   Don't grow objects inside the loop. Instead, pre-assign an object large enough to contain all output of the loop and fill it in inside the loop.
@@ -471,7 +472,7 @@ Learning about how to create your own functions and/or to use functional program
 Breakout rooms!
 ---------------
 
-For the exercises, you can download an R Markdown file with some code to get set up (I recommend coding in that document to get a nice overview of the plots that you produce):
+For the exercises, you can download an R Markdown file with some code to get set up (I recommend coding in that document to get a nice overview of the maps that you will make):
 
 <div class="highlight">
 
@@ -514,7 +515,7 @@ The following code is already in your R Markdown file, which will download and r
 
 </div>
 
-Last week, we learned about making maps. If you attended one of the first few Code Club sessions, you'll recall our Great Backyard Birdcount dataset. Here, we'll use a country-wide random subset of this data (the full file is over 4 GB) to see where Carolina Chickadees were seen:
+Last week, we learned about making maps. If you attended one of the first few Code Club sessions, you'll recall our **Great Backyard Birdcount data set**. Here, we'll use a country-wide random subset of this data (the full file is over 4 GB) to see where Carolina Chickadees were seen:
 
 <div class="highlight">
 
@@ -523,25 +524,25 @@ Last week, we learned about making maps. If you attended one of the first few Co
 <span class='c'>## i.e. we are getting just the records for the Carolina Chickadee:</span>
 <span class='nv'>caro_chickadee</span> <span class='o'>&lt;-</span> <span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>species_en</span> <span class='o'>==</span> <span class='s'>'Carolina Chickadee'</span>, <span class='o'>]</span>
 
-<span class='c'># Or in tidyverse-speak:</span>
+<span class='c'>## Or in tidyverse-speak:</span>
 <span class='c'># caro_chickadee &lt;- birds %&gt;% filter(species_en == 'Carolina Chickadee')</span>
 
 <span class='c'># Next, we create a map much like we did last week:</span>
-<span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>states</span>,
+<span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>states</span>,                               <span class='c'># Use "states" for underlying map</span>
        mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='nv'>group</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_polygon</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"black"</span>, fill <span class='o'>=</span> <span class='s'>"white"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>caro_chickadee</span>,
+  <span class='nf'>geom_polygon</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"black"</span>, fill <span class='o'>=</span> <span class='s'>"white"</span><span class='o'>)</span> <span class='o'>+</span>   <span class='c'># Black state outlines, white fill</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>caro_chickadee</span>,                 <span class='c'># Plot points from bird data set</span>
              <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>long</span>, y <span class='o'>=</span> <span class='nv'>lat</span>, group <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span>,
-             color <span class='o'>=</span> <span class='s'>"green4"</span>, alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>
+             color <span class='o'>=</span> <span class='s'>"green4"</span>, alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span> <span class='o'>+</span>       <span class='c'># Green points, somewhat transparent</span>
+  <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>                                <span class='c'># Fix projection</span>
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>'Carolina Chickadee'</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
-Uh-oh! Something appears to have gone wrong. In the first exercise, you'll use vectorization to fix the coordinates.
+Uh-oh! Something appears to have gone wrong. In the first exercise, you'll use vectorization to fix the coordinates in the bird data set.
 
 In the second exercise, you'll use a loop to quickly produce similar plots for several other species.
 
@@ -559,11 +560,11 @@ Try to fix the coordinates using vectorized operations, and recreate the map to 
 <summary> Hints (click here) </summary>
 <p>
 
--   You can modify the `caro_chickadee` data frame and keep the plotting code exactly the same.
+-   You'll need to modify the `caro_chickadee` data frame, while you can keep the plotting code exactly the same.
 
 -   Simply prepending the latitude column with a minus sign ([`-`](https://rdrr.io/r/base/Arithmetic.html)) will negate the values.
 
--   Equivalent base R ways to refer to (and replace) the column with latitudes are `caro_chickadee$lat` and `caro_chickadee[['lat']]`.
+-   Equivalent base R ways to refer to the column with latitudes are `caro_chickadee$lat` and `caro_chickadee[['lat']]`.
 
 </p>
 </details>
@@ -603,7 +604,7 @@ Create the first map with the same code as the example:
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>'Carolina Chickadee'</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -612,7 +613,7 @@ Create the first map with the same code as the example:
 
 <br>
 
--   Once you have fixed the latitude, you should notice that for one state, there is a problem with the **longitude** (the offset is 10 decimal degrees).
+-   Once you have fixed the latitude, you should notice that *for one state*, there is a problem with the **longitude** (the offset is 10 decimal degrees).
 
 <details>
 <summary> Hints (click here) </summary>
@@ -620,11 +621,12 @@ Create the first map with the same code as the example:
 
 -   The displaced state is North Carolina.
 
--   The states are in the `stateProvince` column, and North Carolina's name is simply "North Carolina" in that column.
+-   The state of each sighting is in the `stateProvince` column, and North Carolina's name is simply "North Carolina" in that column.
 
 -   It may help to first create a logical vector indicating whether for each row in the `caro_chickadee` data frame, `stateProvincefor` equals "North Carolina".
 
--   Your final map will look nicer if you get rid of the plotting canvas by adding <code>+ theme\_void()</code> to the code for the plot.
+-   Your final map will look nicer if you get rid of the plotting canvas by adding  
+    <code>+ theme\_void()</code> to the code for the plot.
 
 </p>
 </details>
@@ -639,8 +641,13 @@ It turns out that North Carolina's chickadees are above the Atlantic. Let's perf
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>NC_rows</span> <span class='o'>&lt;-</span> <span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>stateProvince</span> <span class='o'>==</span> <span class='s'>"North Carolina"</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Get a vector of logicals, indicating which rows are from North Carolina:</span>
+<span class='nv'>NC_rows</span> <span class='o'>&lt;-</span> <span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>stateProvince</span> <span class='o'>==</span> <span class='s'>"North Carolina"</span>
+
+<span class='c'>## Only for North Carolina rows, change the longitude:</span>
 <span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>long</span><span class='o'>[</span><span class='nv'>NC_rows</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>long</span><span class='o'>[</span><span class='nv'>NC_rows</span><span class='o'>]</span> <span class='o'>-</span> <span class='m'>10</span>
+<span class='c'>## Or:</span>
+<span class='c'>#caro_chickadee[NC_rows, 'long'] &lt;- caro_chickadee[NC_rows, 'long'] - 10</span>
 </code></pre>
 
 </div>
@@ -660,7 +667,7 @@ And we create the final map:
   <span class='nf'>theme_void</span><span class='o'>(</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-28-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -702,7 +709,8 @@ Feel free to check out the solution if you're not sure how, because the focus he
 
 <br>
 
-Next, loop over all the top-10 species to produce a plot for each one of them. Start with the code for the Carolina Chickadee, including the subsetting operation, and modify that.
+Next, loop over the top-10 species to produce a plot for each one of them.  
+Start with the code for the Carolina Chickadee, including the subsetting operation, and modify that.
 
 <details>
 <summary> Hints (click here) </summary>
@@ -727,9 +735,9 @@ Next, loop over all the top-10 species to produce a plot for each one of them. S
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>one_species</span> <span class='kr'>in</span> <span class='nv'>top10</span><span class='o'>)</span> <span class='o'>&#123;</span>
 
-<span class='c'># Select just the data for one species:</span>
+<span class='c'>## Select just the data for one species:</span>
 <span class='nv'>one_bird_data</span> <span class='o'>&lt;-</span> <span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>species_en</span> <span class='o'>==</span> <span class='nv'>one_species</span>, <span class='o'>]</span>
-<span class='c'># Or in tidyverse-speak:</span>
+<span class='c'>## Or in tidyverse-speak:</span>
 <span class='c'># one_bird_data &lt;- birds %&gt;% filter(species_en == one_species)</span>
 
 <span class='nv'>p</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>states</span>,
@@ -745,7 +753,7 @@ Next, loop over all the top-10 species to produce a plot for each one of them. S
 <span class='o'>&#125;</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-31-2.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-31-3.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-31-4.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-31-5.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-31-6.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-31-7.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-31-8.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-31-9.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-31-10.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-2.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-3.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-4.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-5.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-6.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-7.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-8.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-9.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-10.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -758,7 +766,7 @@ Next, loop over all the top-10 species to produce a plot for each one of them. S
 
 ### Bonus exercise: if statements
 
-`if` statements are similar in syntax to `for` loops, and are also considered a "flow control" structure. But their purpose is different from loops: instead of iterating, they do something once and they *only* do it when a condition is fulfilled.
+`if` statements are similar in syntax to `for` loops, and are also considered a "control flow" structure. But their purpose is different from loops: instead of iterating, **`if` statements do something once and they *only* do it when a condition is fulfilled.**
 
 For instance, we may want to check in a script whether a certain directory (folder) exists on our computer, and if it doesn't, then we create the directory:
 
@@ -791,7 +799,7 @@ Inside the parentheses `()` after `if` should be a statement that evaluates to e
 
 </div>
 
-In the example above, `one number > 7` will only be `TRUE` for numbers larger than 7. This example is quite contrived, as it would have been easier (and faster!) to remove these items from the vector before the loop, but it hopefully gets the point across.
+In the example above, `one number > 7` will only be `TRUE` for numbers larger than 7. This example is quite contrived, as it would have been easier (and faster!) to remove these items from the vector before the loop, but it hopefully gets the point across of how an `if` statement works.
 
 <div class="puzzle">
 
@@ -825,14 +833,14 @@ Then, use an `if` statement to create plots only for those top-50 birds that hav
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>one_species</span> <span class='kr'>in</span> <span class='nv'>all_species</span><span class='o'>)</span> <span class='o'>&#123;</span>
 
-  <span class='c'># Select the focal species:</span>
+  <span class='c'>## Select the focal species:</span>
   <span class='nv'>one_bird</span> <span class='o'>&lt;-</span> <span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>species_en</span> <span class='o'>==</span> <span class='nv'>one_species</span>, <span class='o'>]</span>
   
-  <span class='c'># Create a data frame with only records from Ohio:</span>
+  <span class='c'>## Create a data frame with only records from Ohio:</span>
   <span class='nv'>one_bird_ohio</span> <span class='o'>&lt;-</span> <span class='nv'>one_bird</span><span class='o'>[</span><span class='nv'>one_bird</span><span class='o'>$</span><span class='nv'>stateProvince</span> <span class='o'>==</span> <span class='s'>'Ohio'</span>, <span class='o'>]</span>
 
-  <span class='c'># Test whether the data frame with only records from Ohio has any rows.</span>
-  <span class='c'># If it does not, we create the map for the species in question: </span>
+  <span class='c'>## Test whether the data frame with only records from Ohio has any rows.</span>
+  <span class='c'>## If it does not, we create the map for the species in question: </span>
   <span class='kr'>if</span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>one_bird_ohio</span><span class='o'>)</span> <span class='o'>==</span> <span class='m'>0</span><span class='o'>)</span> <span class='o'>&#123;</span>
   
     <span class='nv'>p</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>states</span>,
@@ -849,7 +857,7 @@ Then, use an `if` statement to create plots only for those top-50 birds that hav
 <span class='o'>&#125;</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-35-1.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-35-2.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-35-3.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-34-1.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-34-2.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-34-3.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -877,11 +885,11 @@ Extract a column *as a vector*:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># By name:</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## By name:</span>
 <span class='nv'>birds</span><span class='o'>$</span><span class='nv'>lat</span>
 <span class='nv'>birds</span><span class='o'>[[</span><span class='s'>'lat'</span><span class='o'>]</span><span class='o'>]</span>   <span class='c'># Equivalent, $ notation is shorthand</span>
 
-<span class='c'># By index (column number):</span>
+<span class='c'>## By index (column number):</span>
 <span class='nv'>birds</span><span class='o'>[[</span><span class='m'>8</span><span class='o'>]</span><span class='o'>]</span>
 </code></pre>
 
@@ -892,11 +900,11 @@ with a leading comma (`[, column]`) meaning all rows:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># By name:</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## By name:</span>
 <span class='nv'>birds</span><span class='o'>[</span>, <span class='s'>'lat'</span><span class='o'>]</span>   <span class='c'># dataframe['row_name', 'column_name']</span>
 <span class='nv'>birds</span><span class='o'>[</span>, <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>'lat'</span>, <span class='s'>'long'</span><span class='o'>)</span><span class='o'>]</span>
 
-<span class='c'># By index (column numbers):</span>
+<span class='c'>## By index (column numbers):</span>
 <span class='nv'>birds</span><span class='o'>[</span>, <span class='m'>8</span><span class='o'>]</span>       <span class='c'># dataframe[row_number, column_number]</span>
 <span class='nv'>birds</span><span class='o'>[</span>, <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>8</span>, <span class='m'>9</span><span class='o'>)</span><span class='o'>]</span>
 
@@ -940,7 +948,7 @@ However, an alternative is [`seq_along()`](https://rdrr.io/r/base/seq.html), whi
 
 </div>
 
-The advantage of [`seq_along()`](https://rdrr.io/r/base/seq.html) is thtat it will behave better when your vector accidentally has length 0.
+The advantage of [`seq_along()`](https://rdrr.io/r/base/seq.html) is thtat it will behave better when your vector accidentally has length 0 (because `1:length()` will have `1` and `0` when the length is 0, and you'll get odd-seeming errors).
 
 </div>
 
