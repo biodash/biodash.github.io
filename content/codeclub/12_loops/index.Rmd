@@ -26,7 +26,7 @@ projects: []
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, cache=TRUE)
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, cache=FALSE)
 ```
 
 <br> <br> <br>
@@ -520,8 +520,15 @@ NC_rows <- caro_chickadee$stateProvince == "North Carolina"
 
 ## Only for North Carolina rows, change the longitude:
 caro_chickadee$long[NC_rows] <- caro_chickadee$long[NC_rows] - 10
-## Or:
-#caro_chickadee[NC_rows, 'long'] <- caro_chickadee[NC_rows, 'long'] - 10
+
+## Or with ifelse in one line:
+# caro_chickadee$long <- ifelse(caro_chickadee$stateProvince == "North Carolina",
+#                               caro_chickadee$long - 10,
+#                               caro_chickadee$long)
+
+## Or with mutate and ifelse:
+# caro_chickadee %>%
+#   mutate(long = ifelse(stateProvince == "North Carolina", long - 10, long))
 ```
 
 And we create the final map:

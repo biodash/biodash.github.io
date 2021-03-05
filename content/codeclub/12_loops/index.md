@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 53113410eb446d26
+rmd_hash: 4974ead950d4d20e
 
 ---
 
@@ -194,11 +194,11 @@ Furthermore, we can also perform vectorized operations on *entire matrices*. Wit
 <span class='nv'>mat</span>
 
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]   28    2   34   82   47</span>
-<span class='c'>#&gt; [2,]   92   96   18   93   73</span>
-<span class='c'>#&gt; [3,]   65   41   50    4   22</span>
-<span class='c'>#&gt; [4,]   19   36   86   24   75</span>
-<span class='c'>#&gt; [5,]    6    5   44   16   39</span>
+<span class='c'>#&gt; [1,]   92   79   64    3   23</span>
+<span class='c'>#&gt; [2,]   33   14   11   22   80</span>
+<span class='c'>#&gt; [3,]   50   47   91   10   58</span>
+<span class='c'>#&gt; [4,]   43   59   32   60   16</span>
+<span class='c'>#&gt; [5,]   35   88   24   28   62</span>
 </code></pre>
 
 </div>
@@ -211,22 +211,22 @@ Furthermore, we can also perform vectorized operations on *entire matrices*. Wit
 <span class='nv'>mat_more</span>
 
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]  430  880  600  310   10</span>
-<span class='c'>#&gt; [2,]  250  470   90  890  820</span>
-<span class='c'>#&gt; [3,]  860  990  780  630  730</span>
-<span class='c'>#&gt; [4,]  330  720  850  410  490</span>
-<span class='c'>#&gt; [5,]  440  160  870  640  900</span>
+<span class='c'>#&gt; [1,]  920  790  640   30  230</span>
+<span class='c'>#&gt; [2,]  330  140  110  220  800</span>
+<span class='c'>#&gt; [3,]  500  470  910  100  580</span>
+<span class='c'>#&gt; [4,]  430  590  320  600  160</span>
+<span class='c'>#&gt; [5,]  350  880  240  280  620</span>
 
 
 <span class='nv'>mat_squared</span> <span class='o'>&lt;-</span> <span class='nv'>mat</span> <span class='o'>*</span> <span class='nv'>mat</span>
 <span class='nv'>mat_squared</span>
 
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,] 1849 7744 3600  961    1</span>
-<span class='c'>#&gt; [2,]  625 2209   81 7921 6724</span>
-<span class='c'>#&gt; [3,] 7396 9801 6084 3969 5329</span>
-<span class='c'>#&gt; [4,] 1089 5184 7225 1681 2401</span>
-<span class='c'>#&gt; [5,] 1936  256 7569 4096 8100</span>
+<span class='c'>#&gt; [1,] 8464 6241 4096    9  529</span>
+<span class='c'>#&gt; [2,] 1089  196  121  484 6400</span>
+<span class='c'>#&gt; [3,] 2500 2209 8281  100 3364</span>
+<span class='c'>#&gt; [4,] 1849 3481 1024 3600  256</span>
+<span class='c'>#&gt; [5,] 1225 7744  576  784 3844</span>
 </code></pre>
 
 </div>
@@ -646,8 +646,15 @@ It turns out that North Carolina's chickadees are above the Atlantic. Let's perf
 
 <span class='c'>## Only for North Carolina rows, change the longitude:</span>
 <span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>long</span><span class='o'>[</span><span class='nv'>NC_rows</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nv'>caro_chickadee</span><span class='o'>$</span><span class='nv'>long</span><span class='o'>[</span><span class='nv'>NC_rows</span><span class='o'>]</span> <span class='o'>-</span> <span class='m'>10</span>
-<span class='c'>## Or:</span>
-<span class='c'>#caro_chickadee[NC_rows, 'long'] &lt;- caro_chickadee[NC_rows, 'long'] - 10</span>
+
+<span class='c'>## Or with ifelse in one line:</span>
+<span class='c'># caro_chickadee$long &lt;- ifelse(caro_chickadee$stateProvince == "North Carolina",</span>
+<span class='c'>#                               caro_chickadee$long - 10,</span>
+<span class='c'>#                               caro_chickadee$long)</span>
+
+<span class='c'>## Or with mutate and ifelse:</span>
+<span class='c'># caro_chickadee %&gt;%</span>
+<span class='c'>#   mutate(long = ifelse(stateProvince == "North Carolina", long - 10, long))</span>
 </code></pre>
 
 </div>
