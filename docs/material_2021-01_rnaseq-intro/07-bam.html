@@ -114,14 +114,14 @@ code for the record type. Each section has several key-value pairs:
 ]
 
 .pull-right[
-- `@RG`: Read group
-  - `ID`: Read group identifier
-  - `CN`: Name of sequencing center
-  - `SM`: Sample name
-
 - `@PG`: Program (for alignment)
   - `PN`: Program name
   - `VN`: Program version
+
+- `@CO`: Comment
+
+- `@RG`: Read group information
+  *(Not output by STAR by default.)*
 ]
 
 ---
@@ -165,7 +165,7 @@ $ samtools view -H C6_myb2_Aligned.sortedByCoord.out.bam
 | **2**    | **FLAG**  | **Bitwise flag**        | 99
 | 3        | RNAME | Reference sequence name     | chr1
 | 4        | POS   | Mapping position (leftmost) | 46317
-| 5        | MAPQ  | Mapping quality (PHRED)     | 255
+| **5**        | **MAPQ**  |**Mapping quality**  | 255
 | **6**    | **CIGAR** | **CIGAR string**        | 150M
 | 7        | RNEXT | Name of read's mate         | =
 | 8        | PNEXT | Position of read's mate     | 46517
@@ -197,6 +197,25 @@ $ samtools view -H C6_myb2_Aligned.sortedByCoord.out.bam | less -S
 # A01088:17:HHVG3DRXX:2:2130:24352:8688   147     SL4.0ch00       144424  3       151M    =       144408  -167    GAGTCATTACCATTCAACCATAACAGCATACGCGAGCCGACAAGGCCGCCACTATTCAAAGCATAATGATGTACGCAGCCGACAAGGCTGCCCCTGTACAAGCGGACATCCCAAACAAACTATGTCCAGACCATTATCCAAAACATATATA     FFFFFFF,,,:FFFFFF::FFFFFF,FFF:F::FFFF,:FFF,FFFFFFFFFFFFFFFFFFFFFF:FFFFFFF:FFFFFFFFF:FFFFFFF,FFF:FFF,FF:FFFFFFFFFFFF:FFFF:FFFFFFFFFFFFFFFFFFF,F::FF,FFFF NH:i:2  HI:i:1  AS:i:298        nM:i:1
 # A01088:17:HHVG3DRXX:1:2165:7735:13197   99      SL4.0ch00       144554  255     151M    =       144567  164     CCATTATCCAAAACATATATACAACCCACATAATGTCCACAGACCTCTAAGAGTACATTAGTGAAACTCGACGGGACAGGGCCCCGCCATACCCATAGATGAGCAAAAGACTACACAAAAGTTATGTACCAAAACGACTGGGCTCCGGAAT     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF NH:i:1  HI:i:1  AS:i:298        nM:i:1
 ```
+
+---
+
+## Mapping Quality
+
+From the STAR manual:
+
+&gt; The mapping quality MAPQ (column 5) is 255 for uniquely mapping reads,
+&gt; and int(-10*log10(1-1/Nmap)) for multi-mapping reads.
+
+Therefore:
+
+| Mapping quality | interpretation
+|-----------------|--------------------------|
+| 255             | Mapped uniquely
+| 3               | Mapped to 2 locations
+| 2               | Mapped to 3 locations
+| 1               | Mapped to 4-9 locations
+| 0               | Mapped to 10 or more locations
 
 ---
 
@@ -369,7 +388,6 @@ for bam_file in "$input_dir"/*bam; do
   echo "$sample_id"
   samtools flagstat "$bam_file" &gt; "$output_file" 
 done
-
 echo -e "\n---------\nAll done!\n"
 ```
 
