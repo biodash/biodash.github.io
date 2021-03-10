@@ -5,12 +5,488 @@
     <link>https://biodash.github.io/</link>
       <atom:link href="https://biodash.github.io/index.xml" rel="self" type="application/rss+xml" />
     <description>BioDASH</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Mon, 01 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Tue, 09 Mar 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://biodash.github.io/images/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png</url>
       <title>BioDASH</title>
       <link>https://biodash.github.io/</link>
     </image>
+    
+    <item>
+      <title>Session 13: Applying The Apply Functions</title>
+      <link>https://biodash.github.io/codeclub/13_apply/</link>
+      <pubDate>Tue, 09 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/13_apply/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;session-goals&#34;&gt;Session Goals&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;List the functions in the 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; family of functions from base R.&lt;/li&gt;
+&lt;li&gt;Describe how the 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; functions relate to loops in R.&lt;/li&gt;
+&lt;li&gt;Identify the input and output formats associated with different 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; functions.&lt;/li&gt;
+&lt;li&gt;Identify appropriate 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; functions for different scenarios.&lt;/li&gt;
+&lt;li&gt;Use 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; functions to explore some US state temperature data.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;intro-the-apply-functions&#34;&gt;Intro: The &lt;code&gt;apply()&lt;/code&gt; Functions&lt;/h2&gt;
+&lt;p&gt;R is sometimes referred to as a functional programming language, and the 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; family of functions from base R is an example of this functional programming. Let&amp;rsquo;s first take a look at some available functions - they include&amp;hellip;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;lapply()&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;sapply()&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://rdrr.io/r/base/tapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tapply()&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&#34;https://rdrr.io/r/base/mapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mapply()&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Last week in 
+&lt;a href=&#34;https://biodash.github.io/codeclub/12_loops/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;session 12&lt;/a&gt;, Jelmer introduced for loops as one method for iterating over some set of things in R. Let&amp;rsquo;s briefly revisit one of his examples. First, we&amp;rsquo;ll recreate his distance dataset&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#distance data (km) for two dates&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;17&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;93&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;56&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;19&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;175&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;69&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;267&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;91&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;87&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;143&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;103&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;223&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;106&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;18&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;87&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;72&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;59&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view the data frame&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    dists_Mar4 dists_Mar5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1          17         87&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2          93        143&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3          56        103&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4          19        223&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5         175        106&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6          40         18&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 7          69         87&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 8         267         72&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 9           4         59&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 10         91          5&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;As he showed, one way to get the median distance traveled for each day (column) is to iterate over each column with a for loop, applying the 
+&lt;a href=&#34;https://rdrr.io/r/stats/median.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;median()&lt;/code&gt;&lt;/a&gt; function to each one&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#create object to store the loop output&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/vector.html&#39;&gt;vector&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;length &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/nrow.html&#39;&gt;ncol&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#for loop to calculate median for each column&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/nrow.html&#39;&gt;ncol&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## We extract one column using &#34;dataframe_name[[column_number]]&#34;:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;column_median&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/median.html&#39;&gt;median&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## We add the single-column median to its associated position&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## in the vector:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;column_median&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view the result&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 62.5 87.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Let&amp;rsquo;s think of this loop as the &amp;ldquo;programming&amp;rdquo; part of the functional programming I mentioned earlier - we&amp;rsquo;ve written, or programmed, some code the computer will execute for us.&lt;/p&gt;
+&lt;p&gt;Unless you&amp;rsquo;re brand new to R, you&amp;rsquo;ve probably realized by now that there are a few data structures you find yourself working with pretty frequently. These include data frames, matrices, and lists. Not only do these get used a lot, but there are also certain operations that get performed pretty frequently on each of those types of objects. For example, doing something like iterating over either the rows or columns of a data frame and applying some function to each, like we did with the median function in the data frame above, is pretty common. That means lots of people would end up independently writing for loops that would look a lot like the one in our example. This is where the &amp;ldquo;functional&amp;rdquo; part of &amp;ldquo;functional programming&amp;rdquo; comes in. Instead of everyone independently writing that same basic loop over and over, it can be written one time in a general form and packaged into a function that can be called instead. And this is what the 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; functions do. Let&amp;rsquo;s take a look at some examples.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;examples&#34;&gt;Examples&lt;/h2&gt;
+&lt;h3 id=&#34;apply&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;We&amp;rsquo;ll start with the 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; function. It allows us to iterativey apply some function to the margins (rows or columns) of an object that has row x column structure. There are three arguments that have to be passed to 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; - the object containing the data, the margin the function will be applied to (rows are designated with &amp;lsquo;1&amp;rsquo;, columns with &amp;lsquo;2&amp;rsquo;), and the function of interest.&lt;/p&gt;
+&lt;p&gt;In the example above, we used a loop to apply the 
+&lt;a href=&#34;https://rdrr.io/r/stats/median.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;median()&lt;/code&gt;&lt;/a&gt; function to each column of the data frame. Here, we&amp;rsquo;ll do the same thing with 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt;&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;apply_out&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/apply.html&#39;&gt;apply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;median&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view the result&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;apply_out&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; dists_Mar4 dists_Mar5 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;       62.5       87.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice how much less code it required here to do the same thing we did with the for loop above!&lt;/p&gt;
+&lt;p&gt;Notice too that the output here is a vector (specifically, a named numeric vector). The 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; function determined this was most appropriate in this case, since the output of each iteration consisted of a single value. Here&amp;rsquo;s another scenario&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;apply_out_quantiles&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/apply.html&#39;&gt;apply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;, 
+                             &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, 
+                             &lt;span class=&#39;nv&#39;&gt;quantile&lt;/span&gt;, probs &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;0.25&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;0.5&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;0.75&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view the result&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;apply_out_quantiles&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;      dists_Mar4 dists_Mar5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 25%       24.25      62.25&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 50%       62.50      87.00&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 75%       92.50     105.25&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 100%     267.00     223.00&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This time, the function output consisted of 4 values for each iteration, or column of the data frame. In this case, the output from apply is a matrix.&lt;/p&gt;
+&lt;p&gt;So, what about the other types of 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; functions? Well, the different types are designed for different types of input. For example&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;lapply&#34;&gt;&lt;code&gt;lapply()&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Remember that 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; requires you to define whether you&amp;rsquo;ll apply the function in a row-wise or column-wise manner. But lists aren&amp;rsquo;t set up as rows and columns. So, if we want to iterate over the elements of a list, 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; won&amp;rsquo;t work. An alternative is 
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;lapply()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In the next example, we&amp;rsquo;ll add some new distance data in for two additional dates. The number of observations are different this time though, so the data can&amp;rsquo;t be combined in a data frame (you might remember that a data frame is a special kind of list where each of the list elements are the same length). Since we have different lengths here, we&amp;rsquo;ll store the data as a list&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#create a list that includes the new distance data&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;dists_Mar11&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;45&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;34&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;29&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;88&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;84&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;102&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;dists_Mar12&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;90&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;50&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;19&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;123&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;77&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;13&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;70&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;dist_ls&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/list.html&#39;&gt;list&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;dists_Mar11&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;dists_Mar12&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view the list&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;dist_ls&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [[1]]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  17  93  56  19 175  40  69 267   4  91&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [[2]]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  87 143 103 223 106  18  87  72  59   5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [[3]]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]  45  34 100  40  29  88  84 102&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [[4]]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]  90  50  19 123  77  13  70&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Now we&amp;rsquo;ll apply the 
+&lt;a href=&#34;https://rdrr.io/r/stats/median.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;median()&lt;/code&gt;&lt;/a&gt; function to each element of the list. Again, we could write a for loop to iterate over each list element, but 
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;lapply()&lt;/code&gt;&lt;/a&gt; will do the same thing with much less code to write&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;lapply_out&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/lapply.html&#39;&gt;lapply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_ls&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;median&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view the output&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;lapply_out&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [[1]]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 62.5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [[2]]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 87&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [[3]]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 64.5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [[4]]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 70&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This time, the output is a list - 
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;lapply()&lt;/code&gt;&lt;/a&gt; always gives output in list format. But in this specific case, the output could just as easily (and maybe more simply) be stored as a vector of four values - one for each list element. 
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;sapply()&lt;/code&gt;&lt;/a&gt; is an alternative to 
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;lapply()&lt;/code&gt;&lt;/a&gt; that, like 
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;lapply()&lt;/code&gt;&lt;/a&gt; still works on list input, but that attempts to simplify the output where possible&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;sapply&#34;&gt;&lt;code&gt;sapply()&lt;/code&gt;&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;sapply_out&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/lapply.html&#39;&gt;sapply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_ls&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;median&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view the output&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;sapply_out&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 62.5 87.0 64.5 70.0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Those three: 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt;, 
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;lapply()&lt;/code&gt;&lt;/a&gt;, and 
+&lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;sapply()&lt;/code&gt;&lt;/a&gt; are the apply functions you&amp;rsquo;ll likely encounter most frequently, but there are others that apply in more specific cases - we&amp;rsquo;ll take a look at at least one more later in the Bonus section.&lt;/p&gt;
+&lt;br&gt;
+&lt;h2 id=&#34;breakout-rooms&#34;&gt;Breakout Rooms&lt;/h2&gt;
+&lt;p&gt;We&amp;rsquo;ll work with a new temperature dataset for the Breakout Room Exercises. I&amp;rsquo;ve filtered and cleaned these data from the original dataset that&amp;rsquo;s available from 
+&lt;a href=&#34;ftp://ftp.ncdc.noaa.gov/pub/data/cirs/climdiv/&#34;&gt;climate.gov&lt;/a&gt; They consist of maximum average temperature values for three states - Colorado, Ohio, and Virginia, with years in rows and months in columns. You can download the data with this code&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: replacing previous import &#39;vctrs::data_frame&#39; by &#39;tibble::data_frame&#39; when loading &#39;dplyr&#39;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching packages&lt;/span&gt;&lt;span&gt; ─────────────────────────────────────── tidyverse 1.3.0 ──&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;ggplot2&lt;/span&gt;&lt;span&gt; 3.3.2     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;purrr  &lt;/span&gt;&lt;span&gt; 0.3.4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;tibble &lt;/span&gt;&lt;span&gt; 3.0.4     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr  &lt;/span&gt;&lt;span&gt; 1.0.0&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;tidyr  &lt;/span&gt;&lt;span&gt; 1.1.0     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;stringr&lt;/span&gt;&lt;span&gt; 1.4.0&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;readr  &lt;/span&gt;&lt;span&gt; 1.3.1     &lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;forcats&lt;/span&gt;&lt;span&gt; 0.5.0&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: package &#39;ggplot2&#39; was built under R version 3.6.2&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: package &#39;tibble&#39; was built under R version 3.6.2&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: package &#39;tidyr&#39; was built under R version 3.6.2&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: package &#39;purrr&#39; was built under R version 3.6.2&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: package &#39;dplyr&#39; was built under R version 3.6.2&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Conflicts&lt;/span&gt;&lt;span&gt; ────────────────────────────────────────── tidyverse_conflicts() ──&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;&lt;span&gt;::&lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;filter()&lt;/span&gt;&lt;span&gt; masks &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;&lt;span&gt;::filter()&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;&lt;span&gt;::&lt;/span&gt;&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;&lt;span&gt;    masks &lt;/span&gt;&lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;&lt;span&gt;::lag()&lt;/span&gt;&lt;/span&gt;
+
+
+&lt;span class=&#39;nv&#39;&gt;temp_url&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/temperature/co_oh_va_max_temp.txt&#39;&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;temp_file&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;state_max_temps.tsv&#39;&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;temp_url&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;temp_file&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;First let&amp;rsquo;s load the dataset and assign it to an object named &amp;lsquo;maxtemps&amp;rsquo;. Then preview the dataset and determine its dimensions (number of rows and columns). As the &amp;lsquo;.tsv&amp;rsquo; extension on the file suggests, this is a tab delimited file.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use &lt;code&gt;read_tsv()&lt;/code&gt; to load the dataset. The functions 
+&lt;a href=&#34;https://rdrr.io/r/utils/head.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;head()&lt;/code&gt;&lt;/a&gt; and &lt;code&gt;glimpse()&lt;/code&gt; are a couple good options for previewing the data. If you don&amp;rsquo;t get the dimensions from the function you preview the data with, the 
+&lt;a href=&#34;https://rdrr.io/r/base/dim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dim()&lt;/code&gt;&lt;/a&gt; function will provide this info. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;read_tsv&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;state_max_temps.tsv&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Parsed with column specification:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; cols(&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   STATE = &lt;span style=&#39;color: #BB0000;&#39;&gt;col_character()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   YEAR = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   JAN = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   FEB = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   MAR = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   APR = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   MAY = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   JUN = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   JUL = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   AUG = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   SEP = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   OCT = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   NOV = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   DEC = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; )&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;glimpse&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Rows: 378&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Columns: 14&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ STATE &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt; &#34;CO&#34;, &#34;CO&#34;, &#34;CO&#34;, &#34;CO&#34;, &#34;CO&#34;, &#34;CO&#34;, &#34;CO&#34;, &#34;CO&#34;, &#34;CO&#34;, &#34;CO&#34;, &#34;CO…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ YEAR  &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 190…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ JAN   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 33.6, 41.2, 34.2, 32.6, 34.0, 40.8, 39.4, 38.4, 37.5, 36.6, 33.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ FEB   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 33.3, 41.3, 36.8, 43.4, 29.4, 39.1, 37.9, 43.2, 28.3, 47.3, 33.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ MAR   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 46.1, 44.8, 42.8, 43.5, 43.7, 51.9, 46.0, 44.3, 44.1, 51.4, 48.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ APR   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 60.8, 58.3, 55.8, 59.0, 58.7, 52.4, 55.5, 59.0, 55.6, 58.3, 53.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ MAY   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 66.5, 68.0, 70.5, 61.8, 66.5, 68.1, 67.6, 68.7, 63.8, 65.5, 61.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ JUN   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 74.0, 80.2, 77.4, 76.6, 77.2, 80.1, 76.8, 78.8, 69.8, 71.7, 77.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ JUL   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 77.7, 80.9, 82.0, 81.9, 80.2, 82.9, 86.7, 80.3, 80.9, 79.0, 79.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ AUG   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 80.0, 81.2, 79.6, 82.0, 79.8, 81.9, 80.7, 80.8, 80.3, 77.8, 81.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ SEP   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 75.7, 70.1, 75.2, 72.2, 74.9, 70.2, 72.7, 72.3, 70.0, 72.2, 73.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ OCT   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 60.3, 59.2, 59.8, 57.7, 58.0, 62.9, 63.1, 61.8, 62.4, 60.2, 57.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ NOV   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 42.3, 42.8, 48.5, 43.0, 50.5, 49.3, 52.9, 46.7, 49.7, 53.0, 48.…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ DEC   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; 33.9, 43.1, 33.4, 30.9, 35.0, 41.5, 38.6, 36.4, 41.8, 39.8, 35.…&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/dim.html&#39;&gt;dim&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 378  14&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;The dataset is currently in tibble form. This is the default object type created by the &lt;code&gt;read_tsv()&lt;/code&gt; command (tidy). The apply functions are not associated with the tidyverse, and it turns out they sometimes don&amp;rsquo;t work well with tibbles. So, before we go any further, let&amp;rsquo;s convert the tibble to a data frame.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Use the 
+&lt;a href=&#34;https://rdrr.io/r/base/as.data.frame.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;as.data.frame()&lt;/code&gt;&lt;/a&gt; function to convert the tibble to a data frame.&lt;/p&gt;
+&lt;br&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/as.data.frame.html&#39;&gt;as.data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;data.frame&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-3&#34;&gt;Exercise 3&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Calculate the average temperature for each month across the whole dataset (using the data for all three states together).&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Choose the appropriate function from the 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; family of functions and use the 
+&lt;a href=&#34;https://rdrr.io/r/base/mean.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mean()&lt;/code&gt;&lt;/a&gt; function to calculate the mean value for each column of temperatures in the dataset (cols 3 through 14). Remember that when you&amp;rsquo;re designating the margin to apply the function to, &amp;lsquo;1&amp;rsquo; means rows and &amp;lsquo;2&amp;rsquo; means columns. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;mean_monthly&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/apply.html&#39;&gt;apply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;14&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;mean&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#view results&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;mean_monthly&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;      JAN      FEB      MAR      APR      MAY      JUN      JUL      AUG &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 38.89206 41.93598 50.73148 61.35608 71.26111 79.95503 84.17460 82.23571 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;      SEP      OCT      NOV      DEC &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 75.92857 64.56296 51.49921 41.11508&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-4&#34;&gt;Exercise 4&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Now let&amp;rsquo;s get the average annual (max) temperatures for Ohio for all the years available in the dataset (1895-2020). Then view the temperatures for the first 5 years of the dataset (1895-1899).&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use the same 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; and 
+&lt;a href=&#34;https://rdrr.io/r/base/mean.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mean()&lt;/code&gt;&lt;/a&gt; functions as above, but this time, filter the dataset for just the &amp;ldquo;OH&amp;rdquo; entries, and also apply the function by rows. Remember that a two-dimensional object like a data frame or matrix is indexed with the form [rows, columns]. Alternatively, you can use tidy notation (i.e. filter, select). Then index the resulting vector with the square bracket notation 
+&lt;a href=&#34;https://biodash.github.io/codeclub/09_subsetting/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;(Session 9)&lt;/a&gt; to get the first five items.&lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#base R indexing...&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;mean_annual_oh&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/apply.html&#39;&gt;apply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;STATE&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;OH&#34;&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;14&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;mean&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#OR &lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#a more tidy approach (actually a hybrid approach here - the apply function is still base R)...&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;mean_annual_oh&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+                  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;STATE&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;OH&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+                  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;14&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+                  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/apply.html&#39;&gt;apply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;mean&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#get first 5 items&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;mean_annual_oh&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 60.23333 60.74167 61.20833 61.42500 61.59167&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;bonus-1&#34;&gt;Bonus 1&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;What if we wanted to compare the mean max July temperatures for each of the three states? Use an appropriate 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; function to calculate the mean values for July separately for CO, OH, and VA.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; 
+&lt;a href=&#34;https://rdrr.io/r/base/tapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tapply()&lt;/code&gt;&lt;/a&gt; allows you to apply a function to subsets of a vector that are defined by a set of grouping variables (factors). Check the help page for 
+&lt;a href=&#34;https://rdrr.io/r/base/tapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tapply()&lt;/code&gt;&lt;/a&gt; and use the &amp;ldquo;STATE&amp;rdquo; column as the grouping factor. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/tapply.html&#39;&gt;tapply&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;,&lt;span class=&#39;s&#39;&gt;&#34;JUL&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;STATE&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;mean&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;       CO       OH       VA &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 82.25238 84.53810 85.73333&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;bonus-2&#34;&gt;Bonus 2&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Now, instead of focusing on just July, let&amp;rsquo;s try to get the average max temperatures for each month for each of the three states separately.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hint 1 (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; The 
+&lt;a href=&#34;https://rdrr.io/r/base/tapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tapply()&lt;/code&gt;&lt;/a&gt; function we used in Exercise 4 only works when the input is a single vector. Look toward the end of the 
+&lt;a href=&#34;https://rdrr.io/r/base/tapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tapply()&lt;/code&gt;&lt;/a&gt; documentation for a suggested related function that might apply here. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hint 2 (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Give the 
+&lt;a href=&#34;https://rdrr.io/r/stats/aggregate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;aggregate()&lt;/code&gt;&lt;/a&gt; function a try. Notice that the grouping variable (the &amp;ldquo;by&amp;rdquo; argument in the function) has to be provided in the form of a list. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/aggregate.html&#39;&gt;aggregate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;14&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;, by &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/list.html&#39;&gt;list&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maxtemps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;STATE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;mean&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   Group.1      JAN      FEB      MAR      APR      MAY      JUN      JUL&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1      CO 36.85238 40.45952 47.44444 56.49762 66.00952 76.75238 82.25238&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2      OH 35.15476 37.99444 48.45238 61.05714 72.28571 80.70000 84.53810&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3      VA 44.66905 47.35397 56.29762 66.51349 75.48810 82.41270 85.73333&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;        AUG      SEP      OCT      NOV      DEC&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 79.99286 72.51508 60.87381 47.09365 37.73333&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2 82.60952 76.72619 64.47778 50.32698 38.54365&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3 84.10476 78.54444 68.33730 57.07698 47.06825&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;purr-an-alternative-tidy-approach-to-apply-functions&#34;&gt;Purr: An Alternative (Tidy) Approach To &lt;code&gt;apply()&lt;/code&gt; Functions&lt;/h2&gt;
+&lt;p&gt;In the second exercise, we converted back from a tibble to a data frame, as the 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; functions we&amp;rsquo;ve worked with here are part of base R, and some aren&amp;rsquo;t compatible with tibbles. It&amp;rsquo;s worth mentioning that there are &lt;em&gt;tidy&lt;/em&gt; alternatives to the apply functions - they&amp;rsquo;re part of the &lt;em&gt;purr&lt;/em&gt; package, which might be the topic of a future code club session. We decided to go with 
+&lt;a href=&#34;https://rdrr.io/r/base/apply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;apply()&lt;/code&gt;&lt;/a&gt; in this session since there were a couple requests for it, and it still does get used enough that you&amp;rsquo;re likely to at least run across it, even if you don&amp;rsquo;t use it yourself. For now though, if you want more details on &lt;em&gt;purr&lt;/em&gt; you can find them 
+&lt;a href=&#34;https://purrr.tidyverse.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
+</description>
+    </item>
     
     <item>
       <title>Session 12: Vectorization and loops in R</title>
