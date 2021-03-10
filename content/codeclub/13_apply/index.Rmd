@@ -1,0 +1,377 @@
+---
+title: "Session 13: Applying The Apply Functions"
+subtitle: "Using the `apply()` functions of base R as an alternative to loops."
+summary: "In this session of Code Club, we'll consider the `apply()` family of functions, which can often be used as efficient alternatives to writing some of the loops we worked with in the previous session."  
+authors: [mike-sovic]
+date: "2021-03-09"
+output: hugodown::md_document
+toc: true
+
+image: 
+  caption: "Image by ?"
+  focal_point: ""
+  preview_only: false
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+------------------------------------------------------------------------
+
+## Session Goals
+
+-  List the functions in the `apply()` family of functions from base R.
+-  Describe how the `apply()` functions relate to loops in R. 
+-  Identify the input and output formats associated with different `apply()` functions. 
+-  Identify appropriate `apply()` functions for different scenarios.
+-	 Use `apply()` functions to explore some US state temperature data.
+	
+-----
+
+## Intro: The `apply()` Functions
+
+R is sometimes referred to as a functional programming language, and the `apply()` family of functions from base R is an example of this functional programming. Let's first take a look at some available functions - they include...
+
+-  `apply()`
+-  `lapply()`
+-  `sapply()`
+-  `tapply()`
+-  `mapply()`
+
+Last week in [session 12](https://biodash.github.io/codeclub/12_loops/), Jelmer introduced for loops as one method for iterating over some set of things in R. Let's briefly revisit one of his examples. First, we'll recreate his distance dataset...
+
+```{r}
+#distance data (km) for two dates
+dists_Mar4 <- c(17, 93, 56, 19, 175, 40, 69, 267, 4, 91)
+dists_Mar5 <- c(87, 143, 103, 223, 106, 18, 87, 72, 59, 5)
+
+dist_df <- data.frame(dists_Mar4, dists_Mar5)
+
+#view the data frame
+dist_df
+
+```
+
+As he showed, one way to get the median distance traveled for each day (column) is to iterate over each column with a for loop, applying the `median()` function to each one...
+
+```{r}
+#create object to store the loop output
+column_medians <- vector(length = ncol(dist_df))
+
+#for loop to calculate median for each column
+for (column_number in 1:ncol(dist_df)) {
+  
+  ## We extract one column using "dataframe_name[[column_number]]":
+  column_median <- median(dist_df[[column_number]])
+  
+  ## We add the single-column median to its associated position
+  ## in the vector:
+  column_medians[column_number] <- column_median
+}
+
+#view the result
+column_medians
+
+```
+
+Let's think of this loop as the "programming" part of the functional programming I mentioned earlier - we've written, or programmed, some code the computer will execute for us. 
+
+Unless you're brand new to R, you've probably realized by now that there are a few data structures you find yourself working with pretty frequently. These include data frames, matrices, and lists. Not only do these get used a lot, but there are also certain operations that get performed pretty frequently on each of those types of objects. For example, doing something like iterating over either the rows or columns of a data frame and applying some function to each, like we did with the median function in the data frame above, is pretty common. That means lots of people would end up independently writing for loops that would look a lot like the one in our example. This is where the "functional" part of "functional programming" comes in. Instead of everyone independently writing that same basic loop over and over, it can be written one time in a general form and packaged into a function that can be called instead. And this is what the `apply()` functions do. Let's take a look at some examples.
+
+<br>
+
+------------------------------------------------------------------------
+
+## Examples
+
+### `apply()`
+
+We'll start with the `apply()` function. It allows us to iterativey apply some function to the margins (rows or columns) of an object that has row x column structure. There are three arguments that have to be passed to `apply()` - the object containing the data, the margin the function will be applied to (rows are designated with '1', columns with '2'), and the function of interest.
+
+In the example above, we used a loop to apply the `median()` function to each column of the data frame. Here, we'll do the same thing with `apply()`...
+
+```{r}
+apply_out <- apply(dist_df, 2, median)
+
+#view the result
+apply_out
+```
+
+Notice how much less code it required here to do the same thing we did with the for loop above!
+
+Notice too that the output here is a vector (specifically, a named numeric vector). The `apply()` function determined this was most appropriate in this case, since the output of each iteration consisted of a single value. Here's another scenario...
+
+```{r}
+apply_out_quantiles <- apply(dist_df, 
+                             2, 
+                             quantile, probs = c(0.25, 0.5, 0.75, 1))
+
+#view the result
+apply_out_quantiles
+
+```
+
+This time, the function output consisted of 4 values for each iteration, or column of the data frame. In this case, the output from apply is a matrix.
+
+So, what about the other types of `apply()` functions? Well, the different types are designed for different types of input. For example...
+
+
+### `lapply()`
+
+Remember that `apply()` requires you to define whether you'll apply the function in a row-wise or column-wise manner. But lists aren't set up as rows and columns. So, if we want to iterate over the elements of a list, `apply()` won't work. An alternative is `lapply()`. 
+
+In the next example, we'll add some new distance data in for two additional dates. The number of observations are different this time though, so the data can't be combined in a data frame (you might remember that a data frame is a special kind of list where each of the list elements are the same length). Since we have different lengths here, we'll store the data as a list... 
+
+```{r}
+#create a list that includes the new distance data
+
+dists_Mar11 <- c(45, 34, 100, 40, 29, 88, 84, 102)
+dists_Mar12 <- c(90, 50, 19, 123, 77, 13, 70)
+
+dist_ls <- list(dists_Mar4, dists_Mar5, dists_Mar11, dists_Mar12)
+
+#view the list
+dist_ls
+```
+
+Now we'll apply the `median()` function to each element of the list. Again, we could write a for loop to iterate over each list element, but `lapply()` will do the same thing with much less code to write...
+
+```{r}
+lapply_out <- lapply(dist_ls, median)
+
+#view the output
+lapply_out
+```
+This time, the output is a list - `lapply()` always gives output in list format. But in this specific case, the output could just as easily (and maybe more simply) be stored as a vector of four values - one for each list element. `sapply()` is an alternative to `lapply()` that, like `lapply()` still works on list input, but that attempts to simplify the output where possible...
+
+### `sapply()`
+
+```{r}
+sapply_out <- sapply(dist_ls, median)
+
+#view the output
+sapply_out
+
+```
+
+Those three: `apply()`, `lapply()`, and `sapply()` are the apply functions you'll likely encounter most frequently, but there are others that apply in more specific cases - we'll take a look at at least one more later in the Bonus section.
+
+<br>
+
+## Breakout Rooms
+
+We'll work with a new temperature dataset for the Breakout Room Exercises. I've filtered and cleaned these data from the original dataset that's available from [climate.gov](ftp://ftp.ncdc.noaa.gov/pub/data/cirs/climdiv/) They consist of maximum average temperature values for three states - Colorado, Ohio, and Virginia, with years in rows and months in columns. You can download the data with this code...
+
+```{r}
+library(tidyverse)
+
+temp_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/temperature/co_oh_va_max_temp.txt'
+temp_file <- 'state_max_temps.tsv'
+download.file(url = temp_url, destfile = temp_file)
+
+```
+
+### Exercise 1
+
+<div class="alert puzzle">
+<div>
+
+First let's load the dataset and assign it to an object named 'maxtemps'. Then preview the dataset and determine its dimensions (number of rows and columns). As the '.tsv' extension on the file suggests, this is a tab delimited file. 
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Use `read_tsv()` to load the dataset. The functions `head()` and `glimpse()` are a couple good options for previewing the data. If you don't get the dimensions from the function you preview the data with, the `dim()` function will provide this info. 
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+<br>
+
+```{r}
+maxtemps <- read_tsv("state_max_temps.tsv")
+glimpse(maxtemps)
+dim(maxtemps)
+```    
+</details>
+
+</div>
+</div>
+------------------------------------------------------------------------
+
+### Exercise 2
+
+<div class="alert puzzle">
+<div>
+
+The dataset is currently in tibble form. This is the default object type created by the `read_tsv()` command (tidy). The apply functions are not associated with the tidyverse, and it turns out they sometimes don't work well with tibbles. So, before we go any further, let's convert the tibble to a data frame.
+
+<details> <summary> Hints (click here) </summary>
+
+<br> 
+
+Use the `as.data.frame()` function to convert the tibble to a data frame.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+maxtemps <- as.data.frame(maxtemps)
+class(maxtemps)
+```
+
+</details>
+
+
+
+</div>
+</div>
+
+------------------------------------------------------------------------
+
+### Exercise 3
+
+<div class="alert puzzle">
+<div>
+
+Calculate the average temperature for each month across the whole dataset (using the data for all three states together). 
+
+<details> <summary> Hints (click here) </summary>
+
+<br> 
+Choose the appropriate function from the `apply()` family of functions and use the `mean()` function to calculate the mean value for each column of temperatures in the dataset (cols 3 through 14). Remember that when you're designating the margin to apply the function to, '1' means rows and '2' means columns.
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+mean_monthly <- apply(maxtemps[,3:14], 2, mean)
+
+#view results
+mean_monthly
+```
+
+</details>
+
+
+
+</div>
+</div>
+
+------------------------------------------------------------------------
+
+### Exercise 4
+
+<div class="alert puzzle">
+<div>
+
+Now let's get the average annual (max) temperatures for Ohio for all the years available in the dataset (1895-2020). Then view the temperatures for the first 5 years of the dataset (1895-1899).
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Use the same `apply()` and `mean()` functions as above, but this time, filter the dataset for just the "OH" entries, and also apply the function by rows. Remember that a two-dimensional object like a data frame or matrix is indexed with the form [rows, columns]. Alternatively, you can use tidy notation (i.e. filter, select). Then index the resulting vector with the square bracket notation [(Session 9)](https://biodash.github.io/codeclub/09_subsetting/) to get the first five items.<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+#base R indexing...
+mean_annual_oh <- apply(maxtemps[maxtemps$STATE == "OH", 3:14], 1, mean)
+
+#OR 
+
+#a more tidy approach (actually a hybrid approach here - the apply function is still base R)...
+mean_annual_oh <- maxtemps %>% 
+                  filter(STATE == "OH") %>% 
+                  select(3:14) %>% 
+                  apply(1, mean)
+
+#get first 5 items
+mean_annual_oh[1:5]
+```
+
+</details>
+
+
+
+</div>
+</div>
+
+------------------------------------------------------------------------
+
+### Bonus 1
+
+<div class="alert puzzle">
+<div>
+
+What if we wanted to compare the mean max July temperatures for each of the three states? Use an appropriate `apply()` function to calculate the mean values for July separately for CO, OH, and VA.
+
+<details> <summary> Hints (click here) </summary>
+
+<br> `tapply()` allows you to apply a function to subsets of a vector that are defined by a set of grouping variables (factors). Check the help page for `tapply()` and use the "STATE" column as the grouping factor.    <br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+tapply(maxtemps[,"JUL"], maxtemps$STATE, mean)
+
+```
+
+</details>
+
+
+
+</div>
+</div>
+
+------------------------------------------------------------------------
+
+### Bonus 2
+
+<div class="alert puzzle">
+<div>
+
+Now, instead of focusing on just July, let's try to get the average max temperatures for each month for each of the three states separately.
+
+<details> <summary> Hint 1 (click here) </summary>
+
+<br> The `tapply()` function we used in Exercise 4 only works when the input is a single vector. Look toward the end of the `tapply()` documentation for a suggested related function that might apply here.  <br>
+
+</details>
+
+<details> <summary> Hint 2 (click here) </summary>
+
+<br> Give the `aggregate()` function a try. Notice that the grouping variable (the "by" argument in the function) has to be provided in the form of a list.  <br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+aggregate(maxtemps[,3:14], by = list(maxtemps$STATE), mean)
+
+```
+
+</details>
+
+</div>
+</div>
+
+------------------------------------------------------------------------
+
+## Purr: An Alternative (Tidy) Approach To `apply()` Functions
+
+In the second exercise, we converted back from a tibble to a data frame, as the `apply()` functions we've worked with here are part of base R, and some aren't compatible with tibbles. It's worth mentioning that there are *tidy* alternatives to the apply functions - they're part of the *purr* package, which might be the topic of a future code club session. We decided to go with `apply()` in this session since there were a couple requests for it, and it still does get used enough that you're likely to at least run across it, even if you don't use it yourself. For now though, if you want more details on *purr* you can find them [here](https://purrr.tidyverse.org/). 
+
+------------------------------------------------------------------------
