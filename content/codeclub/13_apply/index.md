@@ -12,7 +12,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: 8e91edf80966a1ff
+rmd_hash: 39b75218e7019252
 
 ---
 
@@ -92,9 +92,9 @@ As he showed, one way to get the median distance traveled for each day (column) 
 
 </div>
 
-Let's think of this loop as the "programming" part of the functional programming I mentioned earlier - we've written, or programmed, some code the computer will execute for us.
+Let's think of this loop as the "programming" part of the functional programming I mentioned earlier - we've written, or programmed, some code the computer will execute for us - we'll get to the "functional" part of functional programming shortly.
 
-Unless you're brand new to R, you've probably realized by now that there are a few data structures you find yourself working with pretty frequently. These include data frames, matrices, and lists. Not only do these get used a lot, but there are also certain operations that get performed pretty frequently on each of those types of objects. For example, doing something like iterating over either the rows or columns of a data frame and applying some function to each, like we did with the median function in the data frame above, is pretty common. That means lots of people would end up independently writing for loops that would look a lot like the one in our example. This is where the "functional" part of "functional programming" comes in. Instead of everyone independently writing that same basic loop over and over, it can be written one time in a general form and packaged into a function that can be called instead. And this is what the [`apply()`](https://rdrr.io/r/base/apply.html) functions do. Let's take a look at some examples.
+Unless you're brand new to R, you've probably realized by now that there are a few data structures you find yourself working with pretty frequently. These include data frames, matrices, and lists. Not only do these get used a lot, but there are also certain operations that get performed pretty frequently on each of those types of objects. For example, doing something like iterating over either the rows or columns of a data frame and applying some function to each, like we did with the median function in the data frame above, is pretty common. That means lots of people would end up independently writing for loops that would look a lot like the one in our example. This is where the "functional" part of "functional programming" starts to come in. Instead of everyone independently writing that same basic loop over and over, it can be written one time in a general form and packaged into a function that can be called instead. And this is what the [`apply()`](https://rdrr.io/r/base/apply.html) functions do. Then, going one step further, functional programming allows us to pass individual functions as arguments to other functions, as we're going to see shortly. Let's take a look at some examples.
 
 <br>
 
@@ -104,9 +104,9 @@ Unless you're brand new to R, you've probably realized by now that there are a f
 
 ### `apply()`
 
-We'll start with the [`apply()`](https://rdrr.io/r/base/apply.html) function. It allows us to iterativey apply some function to the margins (rows or columns) of an object that has row x column structure. There are three arguments that have to be passed to [`apply()`](https://rdrr.io/r/base/apply.html) - the object containing the data, the margin the function will be applied to (rows are designated with '1', columns with '2'), and the function of interest.
+We'll start with the [`apply()`](https://rdrr.io/r/base/apply.html) function, which we can use to iterativey apply some function to the margins (rows or columns) of an object that has "row by column"\" structure. There are three arguments that have to be passed to [`apply()`](https://rdrr.io/r/base/apply.html) - the object containing the data, the margin the function will be applied to (rows are designated with '1', columns with '2'), and the function of interest.
 
-In the example above, we used a loop to apply the [`median()`](https://rdrr.io/r/stats/median.html) function to each column of the data frame. Here, we'll do the same thing with [`apply()`](https://rdrr.io/r/base/apply.html)...
+In the example above, we used a loop to apply the [`median()`](https://rdrr.io/r/stats/median.html) function to each column of the data frame. Here, we'll do the same thing with [`apply()`](https://rdrr.io/r/base/apply.html), by passing the [`median()`](https://rdrr.io/r/stats/median.html) function as an argument to [`apply()`](https://rdrr.io/r/base/apply.html)...
 
 <div class="highlight">
 
@@ -129,21 +129,35 @@ Notice too that the output here is a vector (specifically, a named numeric vecto
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>apply_out_quantiles</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='o'>(</span><span class='nv'>dist_df</span>, 
                              <span class='m'>2</span>, 
-                             <span class='nv'>quantile</span>, probs <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0.25</span>, <span class='m'>0.5</span>, <span class='m'>0.75</span>, <span class='m'>1</span><span class='o'>)</span><span class='o'>)</span>
+                             <span class='nv'>quantile</span>, 
+                             probs <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0.25</span>, <span class='m'>0.5</span>, <span class='m'>0.75</span><span class='o'>)</span><span class='o'>)</span>
 
 <span class='c'>#view the result</span>
 <span class='nv'>apply_out_quantiles</span>
 
-<span class='c'>#&gt;      dists_Mar4 dists_Mar5</span>
-<span class='c'>#&gt; 25%       24.25      62.25</span>
-<span class='c'>#&gt; 50%       62.50      87.00</span>
-<span class='c'>#&gt; 75%       92.50     105.25</span>
-<span class='c'>#&gt; 100%     267.00     223.00</span>
+<span class='c'>#&gt;     dists_Mar4 dists_Mar5</span>
+<span class='c'>#&gt; 25%      24.25      62.25</span>
+<span class='c'>#&gt; 50%      62.50      87.00</span>
+<span class='c'>#&gt; 75%      92.50     105.25</span>
 </code></pre>
 
 </div>
 
-This time, the function output consisted of 4 values for each iteration, or column of the data frame. In this case, the output from apply is a matrix.
+This time, the function output consisted of 3 values for each iteration, or column of the data frame. In this case, the output from apply is a matrix.
+
+A quick additional note about how the function above is structured. In it, we applied the [`quantile()`](https://rdrr.io/r/stats/quantile.html) function to each column, passing the *probs* argument to it to define the specific quantiles we wanted it to return. If we were running [`quantile()`](https://rdrr.io/r/stats/quantile.html) by itself (not in the context of [`apply()`](https://rdrr.io/r/base/apply.html)), it might look like this...
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='o'>(</span><span class='nv'>dists_Mar4</span>, probs <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0.25</span>, <span class='m'>0.50</span>, <span class='m'>0.75</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'>#&gt;   25%   50%   75% </span>
+<span class='c'>#&gt; 24.25 62.50 92.50</span>
+</code></pre>
+
+</div>
+
+Notice the slight difference in how the *probs* argument is passed to the [`quantile()`](https://rdrr.io/r/stats/quantile.html) function here versus inside the [`apply()`](https://rdrr.io/r/base/apply.html) function above. Here, *probs* is inside a set of parentheses associated with the function. But inside the [`apply()`](https://rdrr.io/r/base/apply.html) function, any arguments associated with the function get passed as a separate argument (separated from the function by a comma). If you check out the [`apply()`](https://rdrr.io/r/base/apply.html) documentation, this is indicated with the "..." argument, which is described as "optional arguments to FUN". You'll see this kind of thing show up in other functions too.
 
 So, what about the other types of [`apply()`](https://rdrr.io/r/base/apply.html) functions? Well, the different types are designed for different types of input. For example...
 
@@ -231,30 +245,6 @@ We'll work with a new temperature dataset for the Breakout Room Exercises. I've 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
-
-<span class='c'>#&gt; Warning: replacing previous import 'vctrs::data_frame' by 'tibble::data_frame' when loading 'dplyr'</span>
-
-<span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span><span> ─────────────────────────────────────── tidyverse 1.3.0 ──</span></span>
-
-<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>ggplot2</span><span> 3.3.2     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>purrr  </span><span> 0.3.4</span></span>
-<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>tibble </span><span> 3.0.4     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>dplyr  </span><span> 1.0.0</span></span>
-<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>tidyr  </span><span> 1.1.0     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>stringr</span><span> 1.4.0</span></span>
-<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>readr  </span><span> 1.3.1     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>forcats</span><span> 0.5.0</span></span>
-
-<span class='c'>#&gt; Warning: package 'ggplot2' was built under R version 3.6.2</span>
-
-<span class='c'>#&gt; Warning: package 'tibble' was built under R version 3.6.2</span>
-
-<span class='c'>#&gt; Warning: package 'tidyr' was built under R version 3.6.2</span>
-
-<span class='c'>#&gt; Warning: package 'purrr' was built under R version 3.6.2</span>
-
-<span class='c'>#&gt; Warning: package 'dplyr' was built under R version 3.6.2</span>
-
-<span class='c'>#&gt; ── <span style='font-weight: bold;'>Conflicts</span><span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
-<span class='c'>#&gt; <span style='color: #BB0000;'>✖</span><span> </span><span style='color: #0000BB;'>dplyr</span><span>::</span><span style='color: #00BB00;'>filter()</span><span> masks </span><span style='color: #0000BB;'>stats</span><span>::filter()</span></span>
-<span class='c'>#&gt; <span style='color: #BB0000;'>✖</span><span> </span><span style='color: #0000BB;'>dplyr</span><span>::</span><span style='color: #00BB00;'>lag()</span><span>    masks </span><span style='color: #0000BB;'>stats</span><span>::lag()</span></span>
-
 
 <span class='nv'>temp_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/temperature/co_oh_va_max_temp.txt'</span>
 <span class='nv'>temp_file</span> <span class='o'>&lt;-</span> <span class='s'>'state_max_temps.tsv'</span>
@@ -348,7 +338,7 @@ Solution (click here)
 
 <div>
 
-The dataset is currently in tibble form. This is the default object type created by the `read_tsv()` command (tidy). The apply functions are not associated with the tidyverse, and it turns out they sometimes don't work well with tibbles. So, before we go any further, let's convert the tibble to a data frame.
+The dataset is currently in tibble form. This is the default object type created by the `read_tsv()` command from *readr* (common in tidy workflows). The apply functions are not associated with the tidyverse, and it turns out they sometimes don't work well with tibbles. So, before we go any further, let's convert the tibble to a data frame.
 
 <details>
 <summary>
@@ -398,7 +388,7 @@ Calculate the average temperature for each month across the whole dataset (using
 Hints (click here)
 </summary>
 
-<br> Choose the appropriate function from the [`apply()`](https://rdrr.io/r/base/apply.html) family of functions and use the [`mean()`](https://rdrr.io/r/base/mean.html) function to calculate the mean value for each column of temperatures in the dataset (cols 3 through 14). Remember that when you're designating the margin to apply the function to, '1' means rows and '2' means columns. <br>
+<br> Choose an appropriate function from the [`apply()`](https://rdrr.io/r/base/apply.html) family of functions and use the [`mean()`](https://rdrr.io/r/base/mean.html) function to calculate the mean value for each column of temperatures in the dataset (cols 3 through 14). Remember that when you're designating the margin to apply the function to, '1' means rows and '2' means columns. <br>
 
 </details>
 <details>
@@ -409,6 +399,12 @@ Solution (click here)
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>mean_monthly</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='o'>(</span><span class='nv'>maxtemps</span><span class='o'>[</span>,<span class='m'>3</span><span class='o'>:</span><span class='m'>14</span><span class='o'>]</span>, <span class='m'>2</span>, <span class='nv'>mean</span><span class='o'>)</span>
+
+<span class='c'>#OR</span>
+
+<span class='nv'>mean_monthly</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='o'>(</span><span class='nv'>maxtemps</span><span class='o'>[</span>,<span class='m'>3</span><span class='o'>:</span><span class='m'>14</span><span class='o'>]</span>, <span class='nv'>mean</span><span class='o'>)</span>
+
+<span class='c'>#Remember that a data frame is just a special case of a list (one that's structured in rows and columns), so either `apply()` or `sapply()` will work here</span>
 
 <span class='c'>#view results</span>
 <span class='nv'>mean_monthly</span>
@@ -435,7 +431,7 @@ Solution (click here)
 
 <div>
 
-Now let's get the average annual (max) temperatures for Ohio for all the years available in the dataset (1895-2020). Then view the temperatures for the first 5 years of the dataset (1895-1899).
+Now let's get the average annual (max) temperatures for Ohio for all the years available in the dataset (1895-2020) and view the temperatures for the first 5 years of the dataset (1895-1899). Since it's not really obvious what each of these values correspond to, try converting this vector to a named vector with the years serving as the names.
 
 <details>
 <summary>
@@ -460,13 +456,23 @@ Solution (click here)
 <span class='c'>#a more tidy approach (actually a hybrid approach here - the apply function is still base R)...</span>
 <span class='nv'>mean_annual_oh</span> <span class='o'>&lt;-</span> <span class='nv'>maxtemps</span> <span class='o'>%&gt;%</span> 
                   <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>STATE</span> <span class='o'>==</span> <span class='s'>"OH"</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
-                  <span class='nf'>select</span><span class='o'>(</span><span class='m'>3</span><span class='o'>:</span><span class='m'>14</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
+                  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>JAN</span><span class='o'>:</span><span class='nv'>DEC</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
                   <span class='nf'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='nv'>mean</span><span class='o'>)</span>
 
-<span class='c'>#get first 5 items</span>
+<span class='c'>#view first 5 items</span>
 <span class='nv'>mean_annual_oh</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>5</span><span class='o'>]</span>
 
 <span class='c'>#&gt; [1] 60.23333 60.74167 61.20833 61.42500 61.59167</span>
+
+
+<span class='c'>#add names to the vector</span>
+<span class='nf'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='o'>(</span><span class='nv'>mean_annual_oh</span><span class='o'>)</span> <span class='o'>&lt;-</span> <span class='m'>1895</span><span class='o'>:</span><span class='m'>2020</span>
+
+<span class='c'>#view first 5 items</span>
+<span class='nv'>mean_annual_oh</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>5</span><span class='o'>]</span>
+
+<span class='c'>#&gt;     1895     1896     1897     1898     1899 </span>
+<span class='c'>#&gt; 60.23333 60.74167 61.20833 61.42500 61.59167</span>
 </code></pre>
 
 </div>
@@ -571,9 +577,9 @@ Solution (click here)
 
 ------------------------------------------------------------------------
 
-## Purr: An Alternative (Tidy) Approach To `apply()` Functions
+## Purrr: An Alternative (Tidy) Approach To `apply()` Functions
 
-In the second exercise, we converted back from a tibble to a data frame, as the [`apply()`](https://rdrr.io/r/base/apply.html) functions we've worked with here are part of base R, and some aren't compatible with tibbles. It's worth mentioning that there are *tidy* alternatives to the apply functions - they're part of the *purr* package, which might be the topic of a future code club session. We decided to go with [`apply()`](https://rdrr.io/r/base/apply.html) in this session since there were a couple requests for it, and it still does get used enough that you're likely to at least run across it, even if you don't use it yourself. For now though, if you want more details on *purr* you can find them [here](https://purrr.tidyverse.org/).
+In the second exercise, we converted back from a tibble to a data frame, as the [`apply()`](https://rdrr.io/r/base/apply.html) functions we've worked with here are part of base R, and some aren't compatible with tibbles. It's worth mentioning that there are *tidy* alternatives to the apply functions - they're part of the *purrr* package, which might be the topic of a future code club session. We decided to go with [`apply()`](https://rdrr.io/r/base/apply.html) in this session since there were a couple requests for it, and it still does get used enough that you're likely to at least run across it, even if you don't use it yourself. For now though, if you want more details on *purrr* you can find them [here](https://purrr.tidyverse.org/).
 
 ------------------------------------------------------------------------
 
