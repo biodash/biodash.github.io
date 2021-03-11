@@ -12,7 +12,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: 39b75218e7019252
+rmd_hash: 480264d60197d626
 
 ---
 
@@ -438,7 +438,7 @@ Now let's get the average annual (max) temperatures for Ohio for all the years a
 Hints (click here)
 </summary>
 
-<br> Use the same [`apply()`](https://rdrr.io/r/base/apply.html) and [`mean()`](https://rdrr.io/r/base/mean.html) functions as above, but this time, filter the dataset for just the "OH" entries, and also apply the function by rows. Remember that a two-dimensional object like a data frame or matrix is indexed with the form \[rows, columns\]. Alternatively, you can use tidy notation (i.e. filter, select). Then index the resulting vector with the square bracket notation [(Session 9)](https://biodash.github.io/codeclub/09_subsetting/) to get the first five items.<br>
+<br> Use the same [`apply()`](https://rdrr.io/r/base/apply.html) and [`mean()`](https://rdrr.io/r/base/mean.html) functions as above, but this time, filter the dataset for just the "OH" entries, and also apply the function by rows. Remember that a two-dimensional object like a data frame or matrix is indexed with the form \[rows, columns\]. Alternatively, you can use tidy notation (i.e. filter, select). Then index the resulting vector with the square bracket notation [(Session 9)](https://biodash.github.io/codeclub/09_subsetting/) to get the first five items. The [`names()`](https://rdrr.io/r/base/names.html) function will allow you to add names to the vector elements.<br>
 
 </details>
 <details>
