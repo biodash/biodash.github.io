@@ -76,9 +76,9 @@ column_medians
 
 ```
 
-Let's think of this loop as the "programming" part of the functional programming I mentioned earlier - we've written, or programmed, some code the computer will execute for us. 
+Let's think of this loop as the "programming" part of the functional programming I mentioned earlier - we've written, or programmed, some code the computer will execute for us - we'll get to the "functional" part of functional programming shortly. 
 
-Unless you're brand new to R, you've probably realized by now that there are a few data structures you find yourself working with pretty frequently. These include data frames, matrices, and lists. Not only do these get used a lot, but there are also certain operations that get performed pretty frequently on each of those types of objects. For example, doing something like iterating over either the rows or columns of a data frame and applying some function to each, like we did with the median function in the data frame above, is pretty common. That means lots of people would end up independently writing for loops that would look a lot like the one in our example. This is where the "functional" part of "functional programming" comes in. Instead of everyone independently writing that same basic loop over and over, it can be written one time in a general form and packaged into a function that can be called instead. And this is what the `apply()` functions do. Let's take a look at some examples.
+Unless you're brand new to R, you've probably realized by now that there are a few data structures you find yourself working with pretty frequently. These include data frames, matrices, and lists. Not only do these get used a lot, but there are also certain operations that get performed pretty frequently on each of those types of objects. For example, doing something like iterating over either the rows or columns of a data frame and applying some function to each, like we did with the median function in the data frame above, is pretty common. That means lots of people would end up independently writing for loops that would look a lot like the one in our example. This is where the "functional" part of "functional programming" starts to come in. Instead of everyone independently writing that same basic loop over and over, it can be written one time in a general form and packaged into a function that can be called instead. And this is what the `apply()` functions do. Then, going one step further, functional programming allows us to pass individual functions as arguments to other functions, as we're going to see shortly. Let's take a look at some examples.
 
 <br>
 
@@ -88,9 +88,9 @@ Unless you're brand new to R, you've probably realized by now that there are a f
 
 ### `apply()`
 
-We'll start with the `apply()` function. It allows us to iterativey apply some function to the margins (rows or columns) of an object that has row x column structure. There are three arguments that have to be passed to `apply()` - the object containing the data, the margin the function will be applied to (rows are designated with '1', columns with '2'), and the function of interest.
+We'll start with the `apply()` function, which we can use to iterativey apply some function to the margins (rows or columns) of an object that has "row by column"" structure. There are three arguments that have to be passed to `apply()` - the object containing the data, the margin the function will be applied to (rows are designated with '1', columns with '2'), and the function of interest.
 
-In the example above, we used a loop to apply the `median()` function to each column of the data frame. Here, we'll do the same thing with `apply()`...
+In the example above, we used a loop to apply the `median()` function to each column of the data frame. Here, we'll do the same thing with `apply()`, by passing the `median()` function as an argument to `apply()`...
 
 ```{r}
 apply_out <- apply(dist_df, 2, median)
@@ -106,14 +106,23 @@ Notice too that the output here is a vector (specifically, a named numeric vecto
 ```{r}
 apply_out_quantiles <- apply(dist_df, 
                              2, 
-                             quantile, probs = c(0.25, 0.5, 0.75, 1))
+                             quantile, 
+                             probs = c(0.25, 0.5, 0.75))
 
 #view the result
 apply_out_quantiles
 
 ```
 
-This time, the function output consisted of 4 values for each iteration, or column of the data frame. In this case, the output from apply is a matrix.
+This time, the function output consisted of 3 values for each iteration, or column of the data frame. In this case, the output from apply is a matrix.
+
+A quick additional note about how the function above is structured. In it, we applied the `quantile()` function to each column, passing the *probs* argument to it to define the specific quantiles we wanted it to return. If we were running `quantile()` by itself (not in the context of `apply()`), it might look like this...
+
+```{r}
+quantile(dists_Mar4, probs = c(0.25, 0.50, 0.75))
+```
+Notice the slight difference in how the *probs* argument is passed to the `quantile()` function here versus inside the `apply()` function above. Here, *probs* is inside a set of parentheses associated with the function. But inside the `apply()` function, any arguments associated with the function get passed as a separate argument (separated from the function by a comma). If you check out the `apply()` documentation, this is indicated with the "..." argument, which is described as "optional arguments to FUN". You'll see this kind of thing show up in other functions too.  
+
 
 So, what about the other types of `apply()` functions? Well, the different types are designed for different types of input. For example...
 
@@ -164,7 +173,7 @@ Those three: `apply()`, `lapply()`, and `sapply()` are the apply functions you'l
 
 We'll work with a new temperature dataset for the Breakout Room Exercises. I've filtered and cleaned these data from the original dataset that's available from [climate.gov](ftp://ftp.ncdc.noaa.gov/pub/data/cirs/climdiv/) They consist of maximum average temperature values for three states - Colorado, Ohio, and Virginia, with years in rows and months in columns. You can download the data with this code...
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 
 temp_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/temperature/co_oh_va_max_temp.txt'
@@ -207,7 +216,7 @@ dim(maxtemps)
 <div class="alert puzzle">
 <div>
 
-The dataset is currently in tibble form. This is the default object type created by the `read_tsv()` command (tidy). The apply functions are not associated with the tidyverse, and it turns out they sometimes don't work well with tibbles. So, before we go any further, let's convert the tibble to a data frame.
+The dataset is currently in tibble form. This is the default object type created by the `read_tsv()` command from *readr* (common in tidy workflows). The apply functions are not associated with the tidyverse, and it turns out they sometimes don't work well with tibbles. So, before we go any further, let's convert the tibble to a data frame.
 
 <details> <summary> Hints (click here) </summary>
 
@@ -245,7 +254,7 @@ Calculate the average temperature for each month across the whole dataset (using
 <details> <summary> Hints (click here) </summary>
 
 <br> 
-Choose the appropriate function from the `apply()` family of functions and use the `mean()` function to calculate the mean value for each column of temperatures in the dataset (cols 3 through 14). Remember that when you're designating the margin to apply the function to, '1' means rows and '2' means columns.
+Choose an appropriate function from the `apply()` family of functions and use the `mean()` function to calculate the mean value for each column of temperatures in the dataset (cols 3 through 14). Remember that when you're designating the margin to apply the function to, '1' means rows and '2' means columns.
 <br>
 
 </details>
@@ -254,6 +263,12 @@ Choose the appropriate function from the `apply()` family of functions and use t
 
 ```{r}
 mean_monthly <- apply(maxtemps[,3:14], 2, mean)
+
+#OR
+
+mean_monthly <- sapply(maxtemps[,3:14], mean)
+
+#Remember that a data frame is just a special case of a list (one that's structured in rows and columns), so either `apply()` or `sapply()` will work here
 
 #view results
 mean_monthly
@@ -273,11 +288,11 @@ mean_monthly
 <div class="alert puzzle">
 <div>
 
-Now let's get the average annual (max) temperatures for Ohio for all the years available in the dataset (1895-2020). Then view the temperatures for the first 5 years of the dataset (1895-1899).
+Now let's get the average annual (max) temperatures for Ohio for all the years available in the dataset (1895-2020) and view the temperatures for the first 5 years of the dataset (1895-1899). Since it's not really obvious what each of these values correspond to, try converting this vector to a named vector with the years serving as the names.
 
 <details> <summary> Hints (click here) </summary>
 
-<br> Use the same `apply()` and `mean()` functions as above, but this time, filter the dataset for just the "OH" entries, and also apply the function by rows. Remember that a two-dimensional object like a data frame or matrix is indexed with the form [rows, columns]. Alternatively, you can use tidy notation (i.e. filter, select). Then index the resulting vector with the square bracket notation [(Session 9)](https://biodash.github.io/codeclub/09_subsetting/) to get the first five items.<br>
+<br> Use the same `apply()` and `mean()` functions as above, but this time, filter the dataset for just the "OH" entries, and also apply the function by rows. Remember that a two-dimensional object like a data frame or matrix is indexed with the form [rows, columns]. Alternatively, you can use tidy notation (i.e. filter, select). Then index the resulting vector with the square bracket notation [(Session 9)](https://biodash.github.io/codeclub/09_subsetting/) to get the first five items. The `names()` function will allow you to add  names to the vector elements.<br>
 
 </details>
 
@@ -292,11 +307,18 @@ mean_annual_oh <- apply(maxtemps[maxtemps$STATE == "OH", 3:14], 1, mean)
 #a more tidy approach (actually a hybrid approach here - the apply function is still base R)...
 mean_annual_oh <- maxtemps %>% 
                   filter(STATE == "OH") %>% 
-                  select(3:14) %>% 
+                  select(JAN:DEC) %>% 
                   apply(1, mean)
 
-#get first 5 items
+#view first 5 items
 mean_annual_oh[1:5]
+
+#add names to the vector
+names(mean_annual_oh) <- 1895:2020
+
+#view first 5 items
+mean_annual_oh[1:5]
+
 ```
 
 </details>
@@ -370,8 +392,8 @@ aggregate(maxtemps[,3:14], by = list(maxtemps$STATE), mean)
 
 ------------------------------------------------------------------------
 
-## Purr: An Alternative (Tidy) Approach To `apply()` Functions
+## Purrr: An Alternative (Tidy) Approach To `apply()` Functions
 
-In the second exercise, we converted back from a tibble to a data frame, as the `apply()` functions we've worked with here are part of base R, and some aren't compatible with tibbles. It's worth mentioning that there are *tidy* alternatives to the apply functions - they're part of the *purr* package, which might be the topic of a future code club session. We decided to go with `apply()` in this session since there were a couple requests for it, and it still does get used enough that you're likely to at least run across it, even if you don't use it yourself. For now though, if you want more details on *purr* you can find them [here](https://purrr.tidyverse.org/). 
+In the second exercise, we converted back from a tibble to a data frame, as the `apply()` functions we've worked with here are part of base R, and some aren't compatible with tibbles. It's worth mentioning that there are *tidy* alternatives to the apply functions - they're part of the *purrr* package, which might be the topic of a future code club session. We decided to go with `apply()` in this session since there were a couple requests for it, and it still does get used enough that you're likely to at least run across it, even if you don't use it yourself. For now though, if you want more details on *purrr* you can find them [here](https://purrr.tidyverse.org/). 
 
 ------------------------------------------------------------------------
