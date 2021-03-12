@@ -1,0 +1,378 @@
+---
+title: "8: Tabulating reads with featureCounts"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default", "default-fonts", "slides.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: rainbow
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class:inverse middle center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+```{r xaringan-extra, echo=FALSE, eval=TRUE}
+xaringanExtra::use_scribble()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_search(show_icon = TRUE)
+```
+
+# Tabulating reads with featureCounts
+
+----
+
+<br> <br> <br>
+
+### Jelmer Poelstra, MCIC Wooster
+### 2021/03/12 (updated: `r Sys.Date()`)
+
+---
+
+## Overview of the analysis pipeline
+
+<p align="center">
+<img src=img/pipeline-overview2.png width="90%">
+</p>
+
+---
+
+## Overview so far: files
+
+<p align="center">
+<img src=img/pipeline-files.svg width="90%">
+</p>
+
+---
+
+## Counting genes (and other genomic features)
+
+- Now that we have our alignments, we need to count how many reads align to
+  each gene for each sample.
+
+- A genomic "feature" is an annotated elements in the genome such as a
+  gene, exon, intron, or UTR.
+
+  Therefore, counting "features" is the more general name for this,
+  since we could just as well be counting exons.
+
+--
+
+<br> <br> <br>
+
+.content-box-info[
+Counting *transcripts* (i.e. distinguishing the products of alternative splicing
+within a gene) is a lot trickier than gene- or exon-counting,
+since transcripts will share a lot of features.
+
+We will not count transcripts now, and the software we will use is also not 
+designed for that.
+]
+
+---
+
+## Features are referenced using GFF annotation files
+
+While genome *sequences* are stored in FASTA files,
+**annotation information** is stored in files like GFF (or GTF).
+
+- These files contain coordinates for **_genomic features_**
+  (genes, transcripts, exons, etc.) &ndash; **one per row**.
+
+- They also contain lots of additional information for each feature.
+
+Let's have a look at the GFF file we are working with.
+
+---
+
+## GFF file for the tomato ITAG4.1 annotation
+
+- First, we have a header, whose lines start with a `#` (comment),
+  and which has information about the different chromosomes/scaffold:
+
+```sh
+less -S data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+
+##gff-version 3
+##sequence-regionSL4.0ch00      1       9643250
+##sequence-regionSL4.0ch01      1       90863682
+##sequence-regionSL4.0ch02      1       53473368
+##sequence-regionSL4.0ch03      1       65298490
+##sequence-regionSL4.0ch04      1       64459972
+##sequence-regionSL4.0ch05      1       65269487
+##sequence-regionSL4.0ch06      1       47258699
+##sequence-regionSL4.0ch07      1       67883646
+##sequence-regionSL4.0ch08      1       63995357
+##sequence-regionSL4.0ch09      1       68513564
+##sequence-regionSL4.0ch10      1       64792705
+##sequence-regionSL4.0ch11      1       54379777
+##sequence-regionSL4.0ch12      1       66688036
+```
+
+---
+
+## GFF file for the tomato ITAG4.1 annotation (cont.)
+
+The main part of the file is tabular:
+
+```sh
+less -S data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+
+# chrom            source  feature start   end     score   strand  frame   attribute
+
+#> SL4.0ch00       maker   gene    83863   84177   .       +       .       ID=gene:Solyc00g160260.1;Name=Solyc00g160260.1
+#> SL4.0ch00       maker   mRNA    83863   84177   .       +       .       #> ID=mRNA:Solyc00g160260.1.1;Parent=gene:Solyc00g160260.1;Name=Solyc00g160260.1.1;_aed=0.30;_eaed=0.59;_qi=0|0|0|1|0|0|2#> |0|100;Note=Homeobox leucine-zipper protein (AHRD V3.11 *-* tr|Q8H963|Q8H963_ZINVI)
+#> SL4.0ch00       maker   exon    83863   84043   .       +       .       #> ID=exon:Solyc00g160260.1.1.1;Parent=mRNA:Solyc00g160260.1.1
+#> SL4.0ch00       maker   CDS     83863   84043   .       +       0       #> ID=CDS:Solyc00g160260.1.1.1;Parent=mRNA:Solyc00g160260.1.1
+#> SL4.0ch00       maker   exon    84056   84177   .       +       .       #> ID=exon:Solyc00g160260.1.1.2;Parent=mRNA:Solyc00g160260.1.1
+#> SL4.0ch00       maker   CDS     84056   84177   .       +       2       #> ID=CDS:Solyc00g160260.1.1.2;Parent=mRNA:Solyc00g160260.1.1
+#> ###
+#> SL4.0ch00       maker   gene    166754  167268  .       -       .       ID=gene:Solyc00g160270.1;Name=Solyc00g160270.1
+#> SL4.0ch00       maker   mRNA    166754  167268  .       -       .       #> ID=mRNA:Solyc00g160270.1.1;Parent=gene:Solyc00g160270.1;Name=Solyc00g160270.1.1;_aed=0.25;_eaed=0.44;_qi=0|0|0|1|0|0|2#> |0|166;Note=Glucuronoxylan 4-O-methyltransferase-like protein (DUF579) (AHRD V3.11 *-
+#> SL4.0ch00       maker   exon    166754  167102  .       -       .       #> ID=exon:Solyc00g160270.1.1.1;Parent=mRNA:Solyc00g160270.1.1
+#> SL4.0ch00       maker   CDS     166754  167102  .       -       1       #> ID=CDS:Solyc00g160270.1.1.1;Parent=mRNA:Solyc00g160270.1.1
+#> SL4.0ch00       maker   exon    167117  167268  .       -       .       #> ID=exon:Solyc00g160270.1.1.2;Parent=mRNA:Solyc00g160270.1.1
+#> SL4.0ch00       maker   CDS     167117  167268  .       -       0       ID=CDS:Solyc00g160270.1.1.2;Parent=mRNA:Solyc00g160270.1.1
+#> ###
+```
+
+---
+
+## Counting features
+
+<figure>
+<p align="center">
+<img src=img/featurecounts_counting.png width="90%">
+<figcaption><a href="https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/05_counting_reads.html">Figure from hbctraining.github.io</a> </figcaption>
+</p>
+</figure>
+
+---
+
+
+## The result: a table with counts per gene per sample
+
+<figure>
+<p align="center">
+<img src=img/featurecounts_matrix.png width="65%">
+<figcaption><a href="https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/05_counting_reads.html">Figure from hbctraining.github.io</a> </figcaption>
+</p>
+</figure>
+
+---
+
+## featureCounts
+
+As always, there are several programs available to do this,
+but we will use *featureCounts*, a very widely used tool that is part of the
+*Subread* package.
+
+- As mentioned, we will be counting a the **gene level**.
+
+- *featureCounts* will produce **raw counts**.
+
+  That is, a count of 10 for `gene_x` and `sample_a` literally means that in the
+  BAM file for `sample_a`, 10 qualifying reads (or read pairs) mapped to `gene_x`.
+  
+- We will do some normalization prior to differential expression (DE) analysis,
+  but don't need to transform data to relative counts like FPKM or TPM.
+  
+  This is because we are interested in comparing expression levels *between samples*
+  but *within genes*.
+
+---
+
+## How featureCounts counts
+
+<figure>
+<p align="center">
+<img src=img/featurecounts_counting2.png width="50%">
+<figcaption><a href="https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/05_counting_reads.html">Figure from hbctraining.github.io</a> </figcaption>
+</p>
+</figure>
+
+---
+
+## Creating a *Conda* environment with *Subread*
+
+At OSC, run the following to create a *Conda* environment with the *Subread*
+package installed:
+
+```sh
+module load python/3.6-conda5.2
+conda create -n subread-env -c bioconda subread
+```
+
+Check whether it worked:
+```sh
+source activate subread-env
+featureCounts --help
+```
+
+<br> <br>
+
+.content-box-info[
+From now on, to load the Conda module to run *featureCounts*:
+
+```sh
+module load python/3.6-conda5.2
+source activate subread-env
+```
+]
+
+---
+
+## Running featureCounts
+
+We will use *featureCounts* with the following options:
+
+```sh
+featureCounts \
+    -s 2 \               # Reverse-stranded library
+    -p \                 # Count fragments, not reads (paired-end)
+    -B \                 # Require both of pair to be aligned
+    -C \                 # Don't count pairs with discordant mates
+    -t gene \            # Feature type to count (e.g. exon or gene)
+    -g Name \            # Name of feature type in annotation file
+    -T 12 \              # Number of threads
+    -a "$gff_file" \     # Annotation file
+    -o "$output_file" \  # Main output file (count matrix)
+    "$bam_dir"/*bam      # Any number of BAM files
+```
+
+
+    
+---
+
+## Some other options and defaults
+
+| Option   | Details
+|----------|----------
+| -0       | Assign reads that overlap with multiple features <br> (default: not assigned)
+| -M       | Include multi-mapping reads (default: not included)
+| --minOverlap | Minimum number of overlapping bases required for <br> read assignment (default: 1)
+| -s       | Strand-specific read counting: <br> 0=unstranded, 1=stranded, 2=reversely stranded
+
+
+<br>
+
+Also of note,
+[featureCounts will](https://bioconductor.org/packages/release/bioc/vignettes/Rsubread/inst/doc/SubreadUsersGuide.pdf):
+>Automatically sort paired-end reads. Users can provide either location-sorted or namesorted bams files to featureCounts. Read sorting is implemented on the fly and it only
+incurs minimal time cost.
+
+---
+
+## Key parts of a script to run featureCounts
+
+```sh
+#!/bin/bash
+#SBATCH --account=PAS0471
+#SBATCH --time=4:00:00
+#SBATCH --cpus-per-task=12
+#SBATCH --out=slurm-featureCounts-%j.out
+set -e -u -o pipefail
+
+module load python/3.6-conda5.2
+source activate subread-env
+
+bam_dir=$1
+output_dir=$2
+gff_file=$3
+
+mkdir -p "$output_dir"
+output_file="$output_dir"/counts.txt
+
+featureCounts -p -B -C -t gene -g Name \
+    -T "$SLURM_CPUS_ON_NODE" \
+    -a "$gff_file" \
+    -o "$output_file" \
+    "$bam_dir"/*bam
+```
+
+---
+
+## Run the script
+
+Remove the failed alignment (or *featureCounts* will complain):
+```sh
+rm results/align/bam/T_30_Aligned.sortedByCoord.out.bam
+```
+
+```sh
+cd /fs/project/PAS0471/teach/misc/2021-02_rnaseq/$USER/
+
+bam_dir=results/align/bam
+output_dir=results/count
+gff_file=data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+
+sbatch scripts/count/featureCounts.sh $bam_dir $output_dir $gff_file
+```
+
+---
+
+## featureCounts output: `.summary` file
+
+```sh
+less results/count/counts.txt.summary
+
+# Status  results/align/bam/C6_myb2_Aligned.sortedByCoord.out.bam # results/align/bam/C6_myb3_Aligned.sortedByCoord.out.bam # results/align/bam/C6_myb4_Aligned.sortedByCoord.out.bam # results/align/bam/cnt_1_Aligned.sortedByCoord.out.bam   # results/align/bam/cnt_2_Aligned.sortedByCoord.out.bam   # results/align/bam/cnt_3_Aligned.sortedByCoord.out.bam   # results/align/bam/CT_05_Aligned.sortedByCoord.out.bam   # results/align/bam/CT_06_Aligned.sortedByCoord.out.bam   # results/align/bam/CT_09_Aligned.sortedByCoord.out.bam   # results/align/bam/myb_1_Aligned.sortedByCoord.out.bam   # results/align/bam/myb_2_Aligned.sortedByCoord.out.bam   # results/align/bam/myb_3_Aligned.sortedByCoord.out.bam   # results/align/bam/T_26_Aligned.sortedByCoord.out.bam    # results/align/bam/T_29_Aligned.sortedByCoord.out.bam
+# Assigned                       1782267  2149116  1346560  1857113  1860672  1646598  # 2177472  2026202  2228740  2147773  2215221  2262312  1926824  2294866
+# Unassigned_Unmapped            0        0        0        0        0        0        # 0        0        0        0        0        0        0        0
+# Unassigned_Read_Type           0        0        0        0        0        0        # 0        0        0        0        0        0        0        0
+# Unassigned_Singleton           0        3        1        1        0        2        # 0        1        0        0        2        1        0        1
+# Unassigned_MappingQuality      0        0        0        0        0        0        # 0        0        0        0        0        0        0        0
+# Unassigned_Chimera             0        0        0        0        0        0        # 0        0        0        0        0        0        0        0
+# Unassigned_FragmentLength      0        0        0        0        0        0        # 0        0        0        0        0        0        0        0
+# Unassigned_Duplicate           0        0        0        0        0        0        # 0        0        0        0        0        0        0        0
+# Unassigned_MultiMapping        128327   144273   119209   153962   174780   144870   # 138855   138661   141028   127180   154870   140478   117774   142431
+# Unassigned_Secondary           0        0        0        0        0        0        # 0        0        0        0        0        0        0        0
+# Unassigned_NonSplit            0        0        0        0        0        0        # 0        0        0        0        0        0        0        0
+# Unassigned_NoFeatures          151678   195102   182434   213739   200924   192799   # 191260   179008   186799   166075   171115   173195   157256   182054
+# Unassigned_Overlapping_Length  0        0        0        0        0        0        # 0        0        0        0        0        0        0        0
+# Unassigned_Ambiguity           10703    12905    8101     12647    12128    10852    # 12899    11531    12289    13778    12647    13605    11158    13119
+```
+
+---
+
+## featureCounts output: count table
+
+```sh
+# # Program:featureCounts v2.0.1; Command:"featureCounts" "-s" "2" "-p" "-B" "-t" # "gene" "-g" "Name" "-T" "4" "-a" "data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff" # "-o" "results/count/counts.txt" # "results/align/bam/C6_myb2_Aligned.sortedByCoord.out.bam" # "results/align/bam/C6_myb3_Aligned.sortedByCoord.out.bam" # "results/align/bam/C6_myb4_Aligned.sortedByCoord.out.bam" # "results/align/bam/cnt_1_Aligned.sortedByCoord.out.bam" # "results/align/bam/cnt_2_Aligned.sortedByCoord.out.bam" # "results/align/bam/cnt_3_Aligned.sortedByCoord.out.bam" # "results/align/bam/CT_05_Aligned.sortedByCoord.out.bam" # "results/align/bam/CT_06_Aligned.sortedByCoord.out.bam" # "results/align/bam/CT_09_Aligned.sortedByCoord.out.bam" # "results/align/bam/myb_1_Aligned.sortedByCoord.out.bam" # "results/align/bam/myb_2_Aligned.sortedByCoord.out.bam" # "results/align/bam/myb_3_Aligned.sortedByCoord.out.bam" # "results/align/bam/T_26_Aligned.sortedByCoord.out.bam" # "results/align/bam/T_29_Aligned.sortedByCoord.out.bam" 
+# Geneid  Chr     Start   End     Strand  Length  # results/align/bam/C6_myb2_Aligned.sortedByCoord.out.bam # results/align/bam/C6_myb3_Aligned.sortedByCoord.out.bam # results/align/bam/C6_myb4_Aligned.sortedByCoord.out.bam # results/align/bam/cnt_1_Aligned.sortedByCoord.out.bam   # results/align/bam/cnt_2_Aligned.sortedByCoord.out.bam   # results/align/bam/cnt_3_Aligned.sortedByCoord.out.bam   # results/align/bam/CT_05_Aligned.sortedByCoord.out.bam   # results/align/bam/CT_06_Aligned.sortedByCoord.out.bam   # results/align/bam/CT_09_Aligned.sortedByCoord.out.bam # results/align/bam/myb_1_Aligned.sortedByCoord.out.bam   # results/align/bam/myb_2_Aligned.sortedByCoord.out.bam   # results/align/bam/myb_3_Aligned.sortedByCoord.out.bam   # results/align/bam/T_26_Aligned.sortedByCoord.out.bam    # results/align/bam/T_29_Aligned.sortedByCoord.out.bam
+# Solyc00g160260.1        SL4.0ch00       83863   84177   +       315     0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g160270.1        SL4.0ch00       166754  167268  -       515     0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500003.1        SL4.0ch00       311496  382066  -       70571   1       0    #    0       0       3       0       0       1       1       3       1       1       0 #       2
+# Solyc00g500004.1        SL4.0ch00       417592  418482  +       891     0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500005.1        SL4.0ch00       478389  478640  +       252     0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500006.1        SL4.0ch00       481288  483182  -       1895    0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500007.1        SL4.0ch00       497941  498614  +       674     0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500008.1        SL4.0ch00       531008  531682  +       675     0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500009.1        SL4.0ch00       531761  537711  +       5951    0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500010.1        SL4.0ch00       544694  545489  +       796     0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500011.1        SL4.0ch00       549361  586470  +       37110   0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500013.1        SL4.0ch00       589339  596916  +       7578    0       0       0       0       0       0       0       0       0       0       0       0       0       0
+# Solyc00g500014.1        SL4.0ch00       628120  644283  +       16164   0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500015.1        SL4.0ch00       701546  719208  +       17663   0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc02g010630.2        SL4.0ch00       900015  902268  +       2254    0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc02g010600.2        SL4.0ch00       903917  904413  -       497     0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500016.1        SL4.0ch00       914971  916182  -       1212    0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500017.1        SL4.0ch00       994894  998273  +       3380    0       0    #    0       0       0       0       0       0       0       0       0       0       0 #       0
+# Solyc00g500018.1        SL4.0ch00       1000060 1003182 -       3123    0       0       0       0       0       0       0       0       0       0       0       0       0       0
+```
+
+---
+
+## Running MultiQC
+
+```sh
+module load python/3.6-conda5.2
+source activate multiqc-env
+
+multiqc results/
+```
