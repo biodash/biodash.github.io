@@ -36,7 +36,7 @@ class:inverse middle center
 &lt;br&gt; &lt;br&gt; &lt;br&gt;
 
 ### Jelmer Poelstra, MCIC Wooster
-### 2021/03/12 (updated: 2021-03-11)
+### 2021/03/12 (updated: 2021-03-12)
 
 ---
 
@@ -303,12 +303,27 @@ featureCounts -p -B -C -t gene -g Name \
 
 ---
 
-## Run the script
+## Prepare to run the featureCounts script
 
-Remove the failed alignment (or *featureCounts* will complain):
+We will first clean up the SLURM log files a bit:
+
+```sh
+mkdir logs          # Create a dir for the log files
+mv slurm-* logs/    # Move all SLURM logs
+```
+
+&lt;br&gt;
+
+Next, we have to remove the empty BAM file for the sample for which alignment
+failed &amp;ndash; otherwise, *featureCounts* will complain:
+
 ```sh
 rm results/align/bam/T_30_Aligned.sortedByCoord.out.bam
 ```
+
+---
+
+## Run the featureCounts script
 
 ```sh
 cd /fs/project/PAS0471/teach/misc/2021-02_rnaseq/$USER/
@@ -374,13 +389,39 @@ less results/count/counts.txt.summary
 
 ---
 
-## Running MultiQC
+## Preparing to run MultiQC for all our results so far
+
+Because we switched FASTQ files after running FastQC,
+we first need to run FastQC again:
 
 ```sh
+# Remove the old FastQC results:
+rm -r results/QC_fastq/*
+```
+
+```sh
+# Rerun FastQC:
+fastq_dir=data/fastq_concat_subsample
+fastq_dir=results/QC_fastq
+scripts/qc/fastqc_dir.sh "$fastq_dir" "$fastqc_dir"
+```
+
+---
+
+## Running MultiQC for all our results so far
+
+```sh
+mkdir results/multiqc
+
 module load python/3.6-conda5.2
 source activate multiqc-env
 
-multiqc results/
+multiqc results/ -o results/multiqc
+```
+
+```sh
+ls results/multiqc
+#&gt; multiqc_report.html multiqc_data
 ```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
