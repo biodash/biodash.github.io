@@ -1,0 +1,63 @@
+---
+title: "Code Club Week 12: Vectorization and for loops"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE)
+```
+
+## Setup
+
+```{r}
+## Download the file with bird data:
+birds_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_sample_error.tsv'
+birds_file <- 'backyard-birds_sample_error.tsv'
+download.file(url = birds_url, destfile = birds_file)
+```
+
+```{r}
+## Load the tidyverse:
+library(tidyverse)
+
+## Load the maps package and get the state map:
+# install.packages('maps')   # first install if necessary
+library(maps)
+states <- map_data("state")
+
+## Read the file with bird data:
+birds <- read_tsv(birds_file)
+```
+
+## A messed up map to start with
+
+```{r}
+## With this line, we select only the rows where the column "species_en"
+## (English species name) equals "Carolina Chickadee",
+## i.e. we are getting just the records for the Carolina Chickadee:
+caro_chickadee <- birds[birds$species_en == 'Carolina Chickadee', ]
+
+# Next, we create a map much like we did last week:
+ggplot(data = states,
+       mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +
+  geom_point(data = caro_chickadee,
+             aes(x = long, y = lat, group = NULL),
+             color = "green4", alpha = 0.5) +
+  coord_fixed(1.3) +
+  labs(title = 'Carolina Chickadee')
+```
+
+## Exercise 1
+
+
+## Exercise 2
+
+
+## Bonus exercise

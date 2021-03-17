@@ -1,0 +1,424 @@
+---
+title: "Faceting, animating, and multi-panel figures"
+author: "You!"
+date: "2/12/2021"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    theme: flatly
+    code_download: true
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+## Install packages, load libraries
+We are going to be using a bunch of packages today.
+
+To install all those except tidyverse which you probably already have.
+```{r, eval = FALSE}
+install.packages(c("gghighlight",
+                   "gganimate",
+                   "magick",
+                   "patchwork",
+                   "ggrepel",
+                   "gapminder"))
+```
+
+```{r}
+library(tidyverse)
+library(gghighlight) # for bringing attention to certain parts of your plot
+library(gganimate) # for animating
+library(magick) # for rendering the gifs
+library(patchwork) # for making multi-panel plots
+library(ggrepel) # for getting labels to not be on top of your points
+
+# data for today
+library(gapminder)
+```
+
+## Investigate data
+
+```{r}
+# look at structure
+glimpse(gapminder)
+head(gapminder)
+
+# what continents do we have?
+unique(gapminder$continent)
+```
+
+*Note, our data is already in tidy-style format.*  
+
+We will look here just at data from the Americas (North and South America)
+```{r}
+# make a df with data only from the Americas
+gapminder_americas <- gapminder %>%
+  filter(continent == "Americas")
+
+# what countries do we have?
+unique(gapminder_americas$country)
+```
+
+## Plot life expectancy over time, for each country
+```{r}
+gapminder_americas %>%
+  ggplot(aes(x = year, y = lifeExp, group = country, color = country)) +
+  geom_line() 
+```
+
+Too crowded to interpret easily.
+
+What if we want to highlight one particular country of interest?  Let's try the United States.  
+
+While we are at it, I will add x and y axis labels, a title, subtitle, and caption with [`labs()`](https://ggplot2.tidyverse.org/reference/labs.html).  
+```{r}
+gapminder_americas %>%
+  ggplot(aes(x = year, y = lifeExp, group = country, color = country)) +
+  geom_line() +
+  gghighlight(country == "United States") +
+  labs(x = "Year",
+       y = "Life Expectancy (years)",
+       title = "Life Expectancy in Countries in the Americas",
+       subtitle = "From 1952 to 2007",
+       caption = "Data from gapminder.org")
+```
+
+## Faceting
+What if we want to see all the data at once, but just be able to better attribute each line to the correct country?  We can use the [principle of small multiples](https://en.wikipedia.org/wiki/Small_multiple#), popularized by Edward Tufte, to make a series of charts all on the same scale to allow comparison between them easily. 
+
+We can facet using [`facet_wrap`](https://ggplot2.tidyverse.org/reference/facet_wrap.html) to create small plots for each country.  If you want a certain number of rows or columns you can indicate them by including `ncol` and `nrow` in the `facet_wrap()` statement.
+
+```{r, fig.width = 14, fig.height = 8}
+gapminder_americas %>%
+  ggplot(aes(x = year, y = lifeExp, color = country)) +
+  geom_line() +
+  facet_wrap(vars(country)) + # facet_wrap(~country) also works
+  labs(x = "Year",
+       y = "Life Expectancy (years)",
+       title = "Life Expectancy in Countries in the Americas",
+       subtitle = "From 1952 to 2007",
+       caption = "Data from gapminder.org")
+```
+
+Now our legend is not necessary, so let's remove it.  Let's also remove the gray background since its not really doing much for us.  We will also change to `theme_minimal()` to get rid of the grey background which I don't think we need.
+```{r, fig.width = 14, fig.height = 8}
+gapminder_americas %>%
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_line(aes(color = country)) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  facet_wrap(~country) +
+  labs(x = "Year",
+       y = "Life Expectancy (years)",
+       title = "Life Expectancy in Countries in the Americas",
+       subtitle = "From 1952 to 2007",
+       caption = "Data from gapminder.org")
+```
+
+Wow better!  But now its a bit hard to contextualize the line for each country to the whole dataset.  
+
+## gghighlight
+Let's bring the rest of data back in, and highlight in each facet the country of interest.  We can do this by just adding `gghighlight()` to our `ggplot` call.
+
+Note: if you want to assign something in R to an object, and then view it, you can put the whole thing in parentheses, without having to call that object back at the end.
+```{r, fig.width = 14, fig.height = 8}
+(americas_lifeexp <- gapminder_americas %>%
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_line(aes(color = country)) +
+  gghighlight() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  facet_wrap(~country) +
+  labs(x = "Year",
+       y = "Life Expectancy (years)",
+       title = "Life Expectancy in Countries in the Americas",
+       subtitle = "From 1952 to 2007",
+       caption = "Data from gapminder.org"))
+```
+
+## Adjusting scales in `facet_*`
+The default in faceting is that the x and y-axes for each plot are all the same.  This aids in the interpretation of each small plot in relation to the others, but sometimes you may want freedom to adjust your axes.
+
+For example, if we wanted to plot population over time, if we used the same scale, it would be really hard to see trends within a country.
+
+```{r}
+(americas_pop <- gapminder_americas %>%
+  ggplot(aes(x = year, y = pop)) +
+  geom_line(aes(color = country)) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  facet_wrap(~country) +
+  labs(x = "Year",
+       y = "Population",
+       title = "Population in Countries in the Americas",
+       subtitle = "From 1952 to 2007",
+       caption = "Data from gapminder.org"))
+```
+
+Let's change the scales so that the y-axis is "free" - i.e., each plot will have an independent y-axis.  Note, when you do this, you aren't really using the principle of small multiples anymore, since the data isn't all on comparable scales.
+```{r, fig.width = 14, fig.height = 8}
+gapminder_americas %>%
+  ggplot(aes(x = year, y = pop)) +
+  geom_line(aes(color = country)) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  facet_wrap(~country,
+             scales = "free_y") +
+  labs(x = "Year",
+       y = "Population",
+       title = "Population of Countries in the Americas",
+       subtitle = "From 1952 to 2007",
+       caption = "Data from gapminder.org")
+```
+
+The default for `scales` is `"fixed"`, but you can also set to be `"free_x"`, `"free_y"`, or `"free"`, which means both x and y are free.
+
+## Multi-panel plots
+What if I take plots I've already made and assemble them together?  You can do that simply with the package [`patchwork()`](https://patchwork.data-imaginist.com/).
+
+You can use the syntax:
+* `plot1 + plot2` to get two plots next to each other
+* `plot1 / plot2` to get two plots stacked vertically
+* `plot1 | (plot2 + plot3)` to get plot1 in the first row, and plots 2 and 3 in a second row
+
+You can use [`plot_annotation()`](https://patchwork.data-imaginist.com/reference/plot_annotation.html) to indicate your plots with letters or numbers.
+
+I am going to make some quick plots so we can see how it works.  Let's look at some plots of the United States.
+
+```{r}
+# make df with just United States data
+gapminder_usa <- gapminder %>%
+  filter(country == "United States")
+
+# make some plots
+(usa_lifeexp <- gapminder_usa %>%
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_point())
+
+(usa_gdppercap <- gapminder_usa %>%
+  ggplot(aes(x = year, y = gdpPercap)) +
+  geom_line())
+
+(usa_pop <- gapminder_usa %>%
+  ggplot(aes(x = year, y = pop)) +
+  geom_col())
+```
+
+Make multi-panel plots.  If you need to wrap around a line, make sure you don't start your line with the +, it won't work.
+```{r}
+(usa_lifeexp + usa_gdppercap) / usa_pop +
+plot_annotation(title = "Some plots about the United States",
+                  tag_levels = "A")
+```
+
+You can see how this would be really useful for publications!
+
+## Animating
+Since we have time-scale data here, we could also build an animation that would help us look at our data.  What if we wanted to look at how life expectancy (`lifeExp`) and population (`pop`) change over time?  We could animate over the variable `year`, and do this by using the function [`animate()`](https://gganimate.com/reference/animate.html), and set [`transition_states()`](https://gganimate.com/reference/transition_states.html) to the variable we are giffing over.  
+
+Note, I have included `closest_state` in the subtitle so the viewer can see what is the year at any stage of the animation.
+
+To be able to tell which dot belongs to which country, I added a [`geom_text_repel()`](https://www.rdocumentation.org/packages/ggrepel/versions/0.9.1/topics/geom_label_repel) statement, which labels each point but is smart enough to not let the labels overlap.
+
+I have also set `pop` to be on a log10 scale.
+
+Note I've increased the resolution of the gif by putting it in the curly brackets for this code chunk.
+
+```{r, cache = TRUE, dpi = 600}
+# install.packages("transformr") 
+# if you are having problems with gganimate you may need to install transformr
+
+p <- ggplot(gapminder_americas, aes(x = lifeExp, y = pop, fill = country, label = country)) +
+  geom_point(shape = 21, color = "black") +
+  geom_text_repel() +
+  scale_y_log10() +
+  theme_classic() +
+  theme(legend.position = 'none') +
+  labs(title = "Population and Life Expectancy in the Americas",
+       subtitle = 'Year: {closest_state}', 
+       x = "Life Expectancy", 
+       y = "Log10 Population") +
+  transition_states(year) 
+
+animate(p)
+```
+
+There are many different ways to transition your data in `gganimate` - and you can learn more about them [here](https://gganimate.com/reference/index.html).
+
+### Saving my gif
+Now I want to save my gif.  We can do that simply with the function [`anim_save()`](https://gganimate.com/reference/anim_save.html) which works a lot like `ggsave()`.  
+
+```{r, eval = FALSE}
+anim_save(filename = "YOUR FILE PATH HERE",
+          animation = p)
+```
+
+# Breakout room exercises
+
+## Loading data and get set up
+Load the `palmerpenguins` dataset, look at its structure, and view the beginning of the df.
+```{r}
+library(palmerpenguins)
+str(penguins)
+head(penguins)
+```
+
+## 1. Convert bill data from wide to long
+Like we did in [Code Club 7](https://biodash.github.io/codeclub/08_pivoting/), convert the two columns about penguin bill dimensions `bill_length_mm` and `bill_depth_mm` to two columns called `bill_dimension` and `value`.  Drop your NAs also.  Save this as a new df called `penguins_long`.
+```{r}
+penguins_long <- penguins %>%
+  drop_na() %>%
+  pivot_longer(cols = bill_length_mm:bill_depth_mm,
+               names_to = "bill_dimension",
+               values_to = "value_mm",
+               names_prefix = "bill_")
+
+head(penguins_long)
+```
+
+## 2. Plot body mass as related to bill length and depth
+```{r}
+penguins_long %>%
+  ggplot(aes(x = body_mass_g, y = value_mm)) +
+  geom_point() +
+  facet_wrap(vars(bill_dimension))
+```
+
+## 3. Pretty up your plot
+You can do things like change your axis labels, add title, change themes as you see fit.  Color your points by sex.
+```{r}
+library(hrbrthemes) # for pretty & easy themes
+
+# formatting facet strip text labels
+dim_mm <- c("Culman Bill Depth", "Culman Bill Length")
+names(dim_mm) <- c("depth_mm", "length_mm")
+
+# this is just one example
+penguins_long %>%
+  ggplot(aes(x = body_mass_g, y = value_mm, color = sex)) +
+  geom_point() +
+  theme_ipsum_rc() +
+  theme(axis.title.x = element_text(hjust = 0.5),
+        axis.title.y = element_text(hjust = 0.5),
+        strip.text = element_text(hjust = 0.5)) +
+  labs(x = "Body Mass (g)",
+       y = "mm",
+       title = "Bill length and depth vs. body mass in penguins",
+       color = "Sex",
+       caption = "Data from https://allisonhorst.github.io/palmerpenguins/") +
+  facet_wrap(vars(bill_dimension),
+             labeller = labeller(bill_dimension = dim_mm))
+```
+
+## 4. Add a second dimension of faceting by species
+```{r}
+penguins_long %>%
+  ggplot(aes(x = body_mass_g, y = value_mm, color = sex)) +
+  geom_point() +
+  theme_ipsum_rc() +
+  theme(axis.title.x = element_text(hjust = 0.5),
+        axis.title.y = element_text(hjust = 0.5),
+        strip.text = element_text(hjust = 0.5)) +
+  labs(x = "Body Mass (g)",
+       y = "mm",
+       title = "Bill length and depth vs. body mass in penguins",
+       color = "Sex",
+       caption = "Data from https://allisonhorst.github.io/palmerpenguins/") +
+  facet_wrap(bill_dimension~species,
+             labeller = labeller(bill_dimension = dim_mm))
+```
+
+## 5. Take your plot from 3 and highlight
+Using your plot from Exercise 3, highlight the datapoints coming from Dream Island in purple.
+```{r}
+unique(penguins_long$island)
+
+penguins_long %>%
+  ggplot(aes(x = body_mass_g, y = value_mm)) +
+  geom_point(color = "purple") +
+  gghighlight(island == "Dream") +
+  facet_wrap(vars(bill_dimension))
+```
+
+## 7. Highlight little penguins
+Using your sample plot for Exercise 3, highlight penguins that have a `body_mass_g` less than 3500 g, in blue. 
+```{r}
+penguins_long %>%
+  ggplot(aes(x = body_mass_g, y = value_mm)) +
+  geom_point(color = "blue") +
+  gghighlight(body_mass_g < 3500) +
+  facet_wrap(vars(bill_dimension))
+```
+
+# Bonus exercises
+## 1. Animating
+Plot `flipper_length_mm` vs. `body_mass_g` and animate the plot to show only one `species` at a time.
+```{r, cache = TRUE, message = FALSE, warning = FALSE}
+flipper_by_BW <- penguins %>%
+  ggplot(aes(x = body_mass_g, y = flipper_length_mm, fill = species)) +
+  geom_point(shape = 21, color = "black") +
+  theme_classic() +
+  theme(legend.position = 'none') +
+  labs(title = "Population and Life Expectancy in the Americas",
+       subtitle = 'Penguin Species: {closest_state}', 
+       x = "Body Mass (g)", 
+       y = "Flipper Length (mm)") +
+  transition_states(species) 
+
+animate(flipper_by_BW)
+```
+
+## 2. Save your gif
+```{r, eval = FALSE}
+anim_save(filename = "YOUR FILE PATH HERE",
+          animation = flipper_by_BW)
+```
+
+## 3. Multi-panel plots
+We are making a few plots to assemble a multi-panel plot.  Let's remember what data we're working for.
+```{r}
+head(penguins_long)
+```
+
+Boxplot of `body_mass_g` by `sex`.
+```{r}
+penguins_mass_by_sex <- penguins_long %>%
+  ggplot(aes(x = sex, y = body_mass_g)) +
+  geom_boxplot()
+
+penguins_mass_by_sex
+```
+
+Histogram of number of observations per `island`.
+```{r}
+penguins_by_island <- penguins_long %>%
+  ggplot(aes(y = island, fill = island)) +
+  geom_histogram(stat = "count")
+
+penguins_by_island
+```
+
+Distribution of `flipper_length_mm` by `species`.
+```{r}
+penguins_flipper_species <- penguins_long %>%
+  ggplot(aes(x = flipper_length_mm, group = species, fill = species)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_viridis_d()
+
+penguins_flipper_species
+```
+
+Assemble multi-plot figure using the plots you just made.
+```{r}
+penguins_flipper_species / (penguins_mass_by_sex + penguins_by_island) +
+  plot_annotation(title = "Looking at penguins...",
+                  tag_levels = "a")
+```
+
