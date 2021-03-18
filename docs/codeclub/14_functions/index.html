@@ -268,14 +268,14 @@
   
   <meta property="og:site_name" content="BioDASH">
   <meta property="og:url" content="https://biodash.github.io/codeclub/14_functions/">
-  <meta property="og:title" content="Session 14: Writing your own functions | BioDASH">
+  <meta property="og:title" content="Session 14: Writing your own Functions | BioDASH">
   <meta property="og:description" content="In this session of Code Club, we&#39;ll look at how to avoid repetition in another way by writing your own functions."><meta property="og:image" content="https://biodash.github.io/codeclub/14_functions/featured.jpg">
   <meta property="twitter:image" content="https://biodash.github.io/codeclub/14_functions/featured.jpg"><meta property="og:locale" content="en-us">
   
     
       <meta property="article:published_time" content="2021-03-16T00:00:00&#43;00:00">
     
-    <meta property="article:modified_time" content="2021-03-17T13:05:04-04:00">
+    <meta property="article:modified_time" content="2021-03-18T15:25:17-04:00">
   
 
   
@@ -293,7 +293,7 @@
 
 
 
-  <title>Session 14: Writing your own functions | BioDASH</title>
+  <title>Session 14: Writing your own Functions | BioDASH</title>
 
 </head>
 
@@ -597,16 +597,26 @@
   <ul>
     <li><a href="#new-to-code-club">New To Code Club?</a></li>
     <li><a href="#session-goals">Session Goals</a></li>
-    <li><a href="#writing-your-own-functions">Writing your own functions</a>
+    <li><a href="#why-write-functions">Why write functions?</a>
       <ul>
+        <li><a href="#copying-your-code-is-not-good">Copying your code is <em>not good</em></a></li>
+        <li><a href="#encapsulation-of-code-in-a-function">Encapsulation of code in a function</a></li>
+        <li><a href="#default-values-for-arguments">Default values for arguments</a></li>
         <li><a href="#functions-in-for-loops">Functions in <code>for</code> loops</a></li>
       </ul>
     </li>
     <li><a href="#functional-programming-with-your-own-functions">Functional programming with your own functions</a>
       <ul>
         <li><a href="#lapply"><code>lapply()</code></a></li>
-        <li><a href="#map"><code>map()</code></a></li>
+        <li><a href="#purrrmap"><code>purrr::map()</code></a></li>
         <li><a href="#advantages-of-using-functions">Advantages of using functions</a></li>
+      </ul>
+    </li>
+    <li><a href="#breakout-rooms">Breakout rooms</a>
+      <ul>
+        <li><a href="#exercise-1">Exercise 1</a></li>
+        <li><a href="#exercise-2">Exercise 2</a></li>
+        <li><a href="#exercise-3">Exercise 3</a></li>
       </ul>
     </li>
   </ul>
@@ -646,7 +656,7 @@
 
 
 <div class="article-container pt-3">
-  <h1>Session 14: Writing your own functions</h1>
+  <h1>Session 14: Writing your own Functions</h1>
 
   
 
@@ -673,7 +683,7 @@
   <span class="article-date">
     
     
-    Mar 17, 2021
+    Mar 18, 2021
   </span>
   
 
@@ -738,10 +748,12 @@
 <ul>
 <li>Learn another way to avoid repetition in your code by creating your own functions.</li>
 <li>Learn the basic <strong>template</strong> of a function in R.</li>
-<li>Learn to incorporate your own functions into <code>for</code> loops and functionals.</li>
-<li>Learn all the advantages of using functions instead of code blocks.</li>
+<li>Learn to incorporate your own functions into <code>for</code> loops and functionals like 
+<a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> and <code>map()</code>.</li>
+<li>Learn all the advantages of using functions instead of copied code blocks.</li>
 </ul>
 <hr>
+<p>We&rsquo;ll be using <code>tibble()</code> and <code>map()</code> from the tidyverse packages, so we need to load that first.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 
@@ -757,7 +769,8 @@
 <span class='c'>#&gt; <span style='color: #BB0000;'>✖</span><span> </span><span style='color: #0000BB;'>dplyr</span><span>::</span><span style='color: #00BB00;'>lag()</span><span>    masks </span><span style='color: #0000BB;'>stats</span><span>::lag()</span></span>
 </code></pre>
 </div>
-<h2 id="writing-your-own-functions">Writing your own functions</h2>
+<h2 id="why-write-functions">Why write functions?</h2>
+<h3 id="copying-your-code-is-not-good">Copying your code is <em>not good</em></h3>
 <p>The first motivation for writing a function is when you find yourself cut-and-pasting code blocks with slight alterations each time.</p>
 <p>Say we have the following toy tidyverse data frame, where each column is a vector of 10 random numbers from a normal distribution, with <code>mean = 0</code> and <code>sd = 1</code> (the defaults for <code>rnorm</code>):</p>
 <div class="highlight">
@@ -771,26 +784,26 @@
 <span class='nv'>df</span>
 
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 10 x 4</span></span>
-<span class='c'>#&gt;          a      b       c         d</span>
-<span class='c'>#&gt;      <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>  1.43    1.84  -</span><span style='color: #BB0000;'>1.06</span><span>    0.190   </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>  1.55    0.596  0.295  -</span><span style='color: #BB0000;'>0.000</span><span style='color: #BB0000;text-decoration: underline;'>830</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span> -</span><span style='color: #BB0000;'>0.388</span><span>   0.357 -</span><span style='color: #BB0000;'>1.63</span><span>   -</span><span style='color: #BB0000;'>1.60</span><span>    </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span>  0.868  -</span><span style='color: #BB0000;'>1.12</span><span>   0.098</span><span style='text-decoration: underline;'>9</span><span>  0.870   </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span> -</span><span style='color: #BB0000;'>0.071</span><span style='color: #BB0000;text-decoration: underline;'>9</span><span> -</span><span style='color: #BB0000;'>0.665</span><span>  0.310  -</span><span style='color: #BB0000;'>0.341</span><span>   </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span>  0.617  -</span><span style='color: #BB0000;'>0.469</span><span>  0.073</span><span style='text-decoration: underline;'>8</span><span> -</span><span style='color: #BB0000;'>0.235</span><span>   </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span> -</span><span style='color: #BB0000;'>0.228</span><span>   0.412  0.165  -</span><span style='color: #BB0000;'>0.209</span><span>   </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>  1.18   -</span><span style='color: #BB0000;'>0.470</span><span> -</span><span style='color: #BB0000;'>0.175</span><span>   0.086</span><span style='text-decoration: underline;'>1</span><span>  </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>  1.38    0.176  0.847  -</span><span style='color: #BB0000;'>0.480</span><span>   </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>10</span><span> -</span><span style='color: #BB0000;'>0.164</span><span>   1.91   0.593  -</span><span style='color: #BB0000;'>0.606</span></span>
+<span class='c'>#&gt;         a      b       c       d</span>
+<span class='c'>#&gt;     <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>  0.388  0.736  2.26   -</span><span style='color: #BB0000;'>0.302</span><span> </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>  1.19  -</span><span style='color: #BB0000;'>0.131</span><span> -</span><span style='color: #BB0000;'>2.17</span><span>   -</span><span style='color: #BB0000;'>0.053</span><span style='color: #BB0000;text-decoration: underline;'>7</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span>  0.971  0.919  0.032</span><span style='text-decoration: underline;'>9</span><span> -</span><span style='color: #BB0000;'>0.227</span><span> </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span> -</span><span style='color: #BB0000;'>0.147</span><span> -</span><span style='color: #BB0000;'>1.43</span><span>   1.15   -</span><span style='color: #BB0000;'>2.09</span><span>  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span>  1.87   0.566 -</span><span style='color: #BB0000;'>0.935</span><span>   0.601 </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span> -</span><span style='color: #BB0000;'>1.07</span><span>   0.941  1.56   -</span><span style='color: #BB0000;'>0.413</span><span> </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span>  1.22   0.637  1.62    0.976 </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> -</span><span style='color: #BB0000;'>0.142</span><span>  1.02   1.98    1.22  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> -</span><span style='color: #BB0000;'>2.02</span><span>   0.499 -</span><span style='color: #BB0000;'>1.93</span><span>   -</span><span style='color: #BB0000;'>0.091</span><span style='color: #BB0000;text-decoration: underline;'>7</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span><span>  0.177  0.347  1.79    1.55</span></span>
 </code></pre>
 </div>
-<p>In previous CodeClubs we&rsquo;ve seen how you can apply a built-in function like <code>median</code> to each column using a <code>for</code> loop or <code>apply</code>. But say we wanted to do something a bit fancier that is not part of core R. For example, we can <em>normalize</em> the values in a column so they range from 0 to 1 using the following code block:</p>
+<p>In previous Code Clubs we&rsquo;ve seen how you can apply a built-in function like <code>median</code> to each column using a <code>for</code> loop or <code>lapply</code>. But say we wanted to do something a bit fancier that is not part of core R. For example, we can <em>normalize</em> the values in a column so they range from 0 to 1 using the following code block:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>df</span><span class='o'>$</span><span class='nv'>a</span> <span class='o'>-</span> <span class='nf'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='o'>(</span><span class='nv'>df</span><span class='o'>$</span><span class='nv'>a</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>/</span> <span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='o'>(</span><span class='nv'>df</span><span class='o'>$</span><span class='nv'>a</span><span class='o'>)</span> <span class='o'>-</span> <span class='nf'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='o'>(</span><span class='nv'>df</span><span class='o'>$</span><span class='nv'>a</span><span class='o'>)</span><span class='o'>)</span>
 
-<span class='c'>#&gt;  [1] 0.93448575 1.00000000 0.00000000 0.64688077 0.16273539 0.51751818</span>
-<span class='c'>#&gt;  [7] 0.08218327 0.80535546 0.91235476 0.11515570</span>
+<span class='c'>#&gt;  [1] 0.6193844 0.8252053 0.7693140 0.4817556 1.0000000 0.2453463 0.8345409</span>
+<span class='c'>#&gt;  [8] 0.4828838 0.0000000 0.5650749</span>
 </code></pre>
 </div>
 <p>This code is a literal translation of the mathematical formula for normalization:</p>
@@ -804,18 +817,18 @@
 <span class='nv'>df</span>
 
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 10 x 4</span></span>
-<span class='c'>#&gt;         a       b     c     d</span>
-<span class='c'>#&gt;     <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span> 0.934   0.610  0.229 0.724</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span> 1       0.197  0.777 0.647</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span> 0       0.118  0     0    </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span> 0.647  -</span><span style='color: #BB0000;'>0.370</span><span>  0.698 1    </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span> 0.163  -</span><span style='color: #BB0000;'>0.220</span><span>  0.783 0.509</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span> 0.518  -</span><span style='color: #BB0000;'>0.155</span><span>  0.688 0.552</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span> 0.082</span><span style='text-decoration: underline;'>2</span><span>  0.136  0.724 0.563</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> 0.805  -</span><span style='color: #BB0000;'>0.155</span><span>  0.587 0.682</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> 0.912   0.058</span><span style='text-decoration: underline;'>1</span><span> 1     0.453</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>10</span><span> 0.115   0.630  0.897 0.402</span></span>
+<span class='c'>#&gt;        a       b      c     d</span>
+<span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span> 0.619  0.301  1      0.491</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span> 0.825 -</span><span style='color: #BB0000;'>0.053</span><span style='color: #BB0000;text-decoration: underline;'>5</span><span> 0      0.559</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span> 0.769  0.376  0.497  0.512</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span> 0.482 -</span><span style='color: #BB0000;'>0.582</span><span>  0.749  0    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span> 1      0.231  0.278  0.739</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span> 0.245  0.384  0.843  0.461</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span> 0.835  0.260  0.855  0.842</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> 0.483  0.418  0.938  0.910</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> 0      0.204  0.053</span><span style='text-decoration: underline;'>2</span><span> 0.549</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span><span> 0.565  0.142  0.895  1</span></span>
 </code></pre>
 </div>
 <p>This works, but it caused me mental anguish to type it out. Even with cut and paste! All those manual textual substitutions!! And manual data entry is prone to mistakes, especially repetitive tasks like this. And say you had 1,000 columns&hellip;</p>
@@ -826,7 +839,7 @@
 </code></pre>
 </div>
 <p>The result is a vector something like 
-<a href="https://rdrr.io/r/base/c.html" target="_blank" rel="noopener"><code>c(-1.2129504, 2.1011248)</code></a> (it varies run to run, since the columns values are random) which we can index, and we so we only do the min/max computation once for each column, instead of three times, so we get the following block of code for each column:</p>
+<a href="https://rdrr.io/r/base/c.html" target="_blank" rel="noopener"><code>c(-1.2129504, 2.1011248)</code></a> (it varies run to run, since the columns values are random) which we can index, and so we only do the min/max computation once for each column, instead of three times, so we get the following block of code for each column:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>rng</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/range.html'>range</a></span><span class='o'>(</span><span class='nv'>df</span><span class='o'>$</span><span class='nv'>a</span><span class='o'>)</span>
 <span class='o'>(</span><span class='nv'>df</span><span class='o'>$</span><span class='nv'>a</span> <span class='o'>-</span> <span class='nv'>rng</span><span class='o'>[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>)</span> <span class='o'>/</span> <span class='o'>(</span><span class='nv'>rng</span><span class='o'>[</span><span class='m'>2</span><span class='o'>]</span> <span class='o'>-</span> <span class='nv'>rng</span><span class='o'>[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>)</span>
@@ -849,11 +862,12 @@
 </div>
 <p>Still pretty horrible, and arguably worse since we add a line for each column.</p>
 <p>How can we distill this into a function to avoid all that repetition?</p>
+<h3 id="encapsulation-of-code-in-a-function">Encapsulation of code in a function</h3>
 <p>The secret to function writing is abstracting the <em>constant</em> from the <em>variable</em>. (Using the <code>range</code> function does throw into sharper relief what is constant and what is varying at least.) The constant part is the <strong>body</strong> of the function: the template or boiler-plate you use over and over again. The variable parts are the <strong>arguments</strong> of the function. We also need to give the function a <strong>name</strong>, so we can call it and reuse it. The template for a function is then:</p>
 <div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="n">name</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2...</span><span class="p">)</span> <span class="p">{</span>
   <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span> <span class="c1"># do something with arg1, arg2</span>
 <span class="p">}</span>
-</code></pre></div><p>The body is the block of code you want to reuse, and it&rsquo;s contained in curly brackets <code>{...}</code>.</p>
+</code></pre></div><p>The arguments go inside <code>(...)</code>. The body is the block of code you want to reuse, and it&rsquo;s contained in curly brackets <code>{...}</code>.</p>
 <p>Here&rsquo;s what it looks like in this case:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>normalize</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>x</span><span class='o'>)</span> <span class='o'>&#123;</span>
@@ -864,7 +878,8 @@
 </div>
 <p>Pretty cool, right? Here <code>normalize</code> is the descriptive name we give the function.</p>
 <p>We <strong>assign</strong> the function to the name using 
-<a href="https://rdrr.io/r/base/assignOps.html" target="_blank" rel="noopener"><code>&lt;-</code></a> just like any other value. This means that now <code>normalize</code> is a function object, just like you create vector objects, or list or data frame objects, when you assigned them names. This is what is meant when people say &ldquo;functions are first-class citizens&rdquo; in R. Notice too that in RStudio they appear in the Global Environment in a special section, and clicking on them shows the code. This means that if you have a large file of code with many functions defined, you don&rsquo;t have to go back searching for the function definition in the code itself.</p>
+<a href="https://rdrr.io/r/base/assignOps.html" target="_blank" rel="noopener"><code>&lt;-</code></a> just like any other value. This means that now <code>normalize</code> is a function object, just like you create vector objects, or list or data frame objects, when you assigned them to names. Notice too that in RStudio they appear in the Global Environment in a special section, and clicking on them shows the code. This means that if you have a large file of code with many functions defined, you don&rsquo;t have to go back searching for the function definition in the code itself.</p>
+<p><img src="environment_pane.jpg" alt=""></p>
 <p><code>x</code> is the <strong>argument</strong> of the function. In the current case this is a data frame column vector, but we can potentially use this function on <em>any</em> vector, so let&rsquo;s not be too specific. The more generally you can write your function, the more useful it will be.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>test_vec</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>3</span>, <span class='m'>7</span>, <span class='nv'>pi</span>, <span class='m'>8.657</span>, <span class='m'>80</span><span class='o'>)</span>
@@ -878,8 +893,8 @@
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>df</span> <span class='o'>&lt;-</span> <span class='nf'>tibble</span><span class='o'>(</span>a <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='o'>(</span><span class='m'>10</span><span class='o'>)</span><span class='o'>)</span>
 <span class='nf'>normalize</span><span class='o'>(</span><span class='nv'>df</span><span class='o'>$</span><span class='nv'>a</span><span class='o'>)</span>
 
-<span class='c'>#&gt;  [1] 0.2178530 0.0000000 0.1413015 0.5403319 0.5080280 0.2213932 0.6130305</span>
-<span class='c'>#&gt;  [8] 0.5878434 0.7390673 1.0000000</span>
+<span class='c'>#&gt;  [1] 0.8726863 1.0000000 0.8764474 0.5618469 0.6111361 0.4147958 0.2889830</span>
+<span class='c'>#&gt;  [8] 0.2683500 0.7181709 0.0000000</span>
 </code></pre>
 </div>
 <p>A couple of things to note:</p>
@@ -888,7 +903,11 @@
 <p>Including that extra line <code>rng &lt;- range(x)</code> is no longer a problem, since we just type it once. If you are typing things out over and over you might prefer brevity. <em>When you write a function, you should prefer clarity.</em> It&rsquo;s good practice to break the the function down into logical steps, and name them properly. It&rsquo;s much easier for others to &lsquo;read&rsquo; your function, and much easier for you when you come back to it in a couple of years. This is the principle of making your code &lsquo;self-annotated&rsquo;.</p>
 </li>
 <li>
-<p>There&rsquo;s something very important but rather subtle about this use of the argument. As noted in a CodeClub 12, once a <code>for</code> loop completes, the variable you&rsquo;re using <em>keeps the value it had</em> at the last iteration of the loop, which persists in the global environment. Below we&rsquo;ll compare that behavior to what happens with the function&rsquo;s <code>x</code> argument.</p>
+<p>Functions should be simple, clear, and do <em>one thing well</em>. You create programs by combining simple functions in a modular manner.</p>
+</li>
+<li>
+<p>There&rsquo;s something very important but rather subtle about this use of the argument. As noted in 
+<a href="https://biodash.github.io/codeclub/12_loops/" target="_blank" rel="noopener">CodeClub 12</a>, once a <code>for</code> loop completes, the variable you&rsquo;re using <em>keeps the value it had</em> at the last iteration of the loop, which persists in the global environment. Below we&rsquo;ll compare that behavior to what happens with the function&rsquo;s <code>x</code> argument.</p>
 </li>
 </ul>
 <p>Our original horrible code can now be rewritten as:</p>
@@ -899,14 +918,14 @@
 <span class='nv'>df</span><span class='o'>$</span><span class='nv'>d</span> <span class='o'>&lt;-</span> <span class='nf'>normalize</span><span class='o'>(</span><span class='nv'>df</span><span class='o'>$</span><span class='nv'>d</span><span class='o'>)</span>
 </code></pre>
 </div>
-<p>Which is an improvement, but the real power comes from the fact that we can use our own new function in <code>for</code> loops and <code>apply</code> statements. Here is the data from the previous couple of Clubs:</p>
+<p>Which is an improvement, but the real power comes from the fact that we can use our new function in <code>for</code> loops and <code>apply</code> statements. Here is the data from the previous couple of Clubs:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_Mar4</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>17</span>, <span class='m'>93</span>, <span class='m'>56</span>, <span class='m'>19</span>, <span class='m'>175</span>, <span class='m'>40</span>, <span class='m'>69</span>, <span class='m'>267</span>, <span class='m'>4</span>, <span class='m'>91</span><span class='o'>)</span>
 <span class='nv'>dists_Mar5</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>87</span>, <span class='m'>143</span>, <span class='m'>103</span>, <span class='m'>223</span>, <span class='m'>106</span>, <span class='m'>18</span>, <span class='m'>87</span>, <span class='m'>72</span>, <span class='m'>59</span>, <span class='m'>5</span><span class='o'>)</span>
 <span class='nv'>dist_df</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span><span class='nv'>dists_Mar4</span>, <span class='nv'>dists_Mar5</span><span class='o'>)</span>
 </code></pre>
 </div>
-<p>Let&rsquo;s first check that our new function behaves sensibly on these vectors, as a sanity check:</p>
+<p>Let&rsquo;s first sanity check that our new function behaves sensibly on these vectors:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>normalize</span><span class='o'>(</span><span class='nv'>dists_Mar4</span><span class='o'>)</span>
 
@@ -921,7 +940,7 @@
 <span class='c'>#&gt;  [7] 0.37614679 0.30733945 0.24770642 0.00000000</span>
 </code></pre>
 </div>
-<p>And while we&rsquo;re here, let&rsquo;s circle back to the assignment of the <code>x</code> argument outside and inside the function. Below we first assign a value to <code>x</code> outside the function; pass in a value to <code>x</code> inside the function; then reevaluate <code>x</code> outside the function call, to see what happened:</p>
+<p>And while we&rsquo;re here, let&rsquo;s circle back to the assignment of the <code>x</code> argument outside and inside the function. Below we first assign a value to <code>x</code> outside the function; pass in a value to <code>x</code> inside the function; then reevaluate <code>x</code> outside the function call, to see what happens:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>x</span> <span class='o'>=</span> <span class='nv'>pi</span>
 <span class='nv'>x</span>
@@ -939,8 +958,36 @@
 </code></pre>
 </div>
 <p>Whatever value <code>x</code> has outside the function does not affect, and is not affected by, the value of <code>x</code> inside the function. In computer science terms we say the variable(s) used inside the function are <strong>local</strong> to the function. They are freshly minted inside it, and safely destroyed before you leave it. So there is no chance of weird or unexpected conflicts with whatever variable values are set outside. In contrast, the variable in the for loop is <strong>global</strong>. It &lsquo;leaks out&rsquo; from where you actually used it, with perhaps unforeseen consequences. This is extremely important when you start embedding your own functions in larger programs.</p>
+<h3 id="default-values-for-arguments">Default values for arguments</h3>
+<p>In R, we can assign a default value for an argument using 
+<a href="https://rdrr.io/r/base/assignOps.html" target="_blank" rel="noopener"><code>=</code></a> assignment. This means the argument will be called automatically, but can be overridden if explicitly called. First we create a function in the usual way:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>variable_power</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>x</span>, <span class='nv'>p</span><span class='o'>)</span><span class='o'>&#123;</span>  
+  <span class='nv'>x</span><span class='o'>**</span><span class='nv'>p</span>               <span class='c'># raises x to the power p</span>
+<span class='o'>&#125;</span>
+
+<span class='nf'>variable_power</span><span class='o'>(</span><span class='m'>2</span>, <span class='m'>3</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 8</span>
+</code></pre>
+</div>
+<p>And now we create a version with a default value for the power:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>variable_power_2</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>x</span>, <span class='nv'>p</span> <span class='o'>=</span> <span class='m'>2</span><span class='o'>)</span><span class='o'>&#123;</span>
+  <span class='nv'>x</span><span class='o'>**</span><span class='nv'>p</span>
+<span class='o'>&#125;</span>
+
+<span class='nf'>variable_power_2</span><span class='o'>(</span><span class='m'>2</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 4</span>
+
+<span class='nf'>variable_power_2</span><span class='o'>(</span><span class='m'>2</span>, <span class='m'>3</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 8</span>
+</code></pre>
+</div>
 <h3 id="functions-in-for-loops">Functions in <code>for</code> loops</h3>
-<p>Here is how we can use our new function in a <code>for</code> loop over a data frame. In our previous examples of <code>for</code> loops <code>median</code> was a summary statistic and we return a single value for each column, so we created an empty vector of the desired length to hold the values for each column. Here we want to modify the original data frame with the same dimensions and column names. The following code copies the original data frame (so we don&rsquo;t destroy it) and then modifies it &lsquo;in place&rsquo;:</p>
+<p>Here is how we can use our new function in a <code>for</code> loop over a data frame. In our previous examples of <code>for</code> loops <code>median</code> was a summary statistic and we return a single value for each column, so we created an empty vector of the desired length to hold the values for each column. Here we want to modify the original data frame with the same dimensions and column names. The following code copies the original data frame (so we don&rsquo;t destroy it) and then modifies the copy &lsquo;in place&rsquo;:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dist_df_norm</span> <span class='o'>&lt;-</span> <span class='nv'>dist_df</span>
 <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>column_number</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>)</span><span class='o'>)</span><span class='o'>&#123;</span>
@@ -961,7 +1008,7 @@
 <span class='c'>#&gt; 10 0.33079848 0.00000000</span>
 </code></pre>
 </div>
-<p>Copying an entire data frame so we can operate on it <em>could</em> take a lot of time. So we can also create an empty data frame (of the same dimensions) and populate it:</p>
+<p>Copying an entire data frame <em>could</em> take a lot of time. So we can also create an empty data frame (of the same dimensions) and populate it:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>empty_vec</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='o'>(</span>length <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>)</span><span class='o'>)</span>
 <span class='nv'>dist_df_norm_2</span> <span class='o'>&lt;-</span> <span class='nf'>tibble</span><span class='o'>(</span>norm_Mar4 <span class='o'>=</span> <span class='nv'>empty_vec</span>, norm_Mar5 <span class='o'>=</span> <span class='nv'>empty_vec</span><span class='o'>)</span>
@@ -988,13 +1035,16 @@
 </div>
 <p>By writing our own function, we&rsquo;ve effectively extended what R can do. And this is all that packages are: libraries of new functions that extend the capabilities of base R. In fact, if there are functions you design for your particular subject area and find yourself using all the time, you can make your own package and load it, and all your favorite functions will be right there (but that&rsquo;s for another day&hellip;)</p>
 <h2 id="functional-programming-with-your-own-functions">Functional programming with your own functions</h2>
-<p>We saw above that you assign the function object to a name, just as you would a vector, list or data frame. In R, functions are &lsquo;first class citizens&rsquo;, which means you can <strong>pass them as an arguments to another function</strong>. This is a very powerful idea, and the part of the program of <strong>functional programming</strong>.</p>
+<p>We saw above that you assign the function object to a name, just as you would a vector, list or data frame. In R, functions are &lsquo;first class citizens&rsquo;, which means you can <strong>pass them as arguments to another function</strong>. This is a very powerful idea, and part of the program of <strong>functional programming</strong> (we introduced this idea in 
+<a href="https://biodash.github.io/codeclub/13_apply/" target="_blank" rel="noopener">Session 13</a>):</p>
 <blockquote>
 <p>In functional programming, functions are treated as first-class citizens, meaning that they can be bound to names&hellip;, passed as arguments, and returned from other functions, just as any other data type can.</p>
 </blockquote>
-<p>Functions that can take other functions arguments are sometimes referred to as <strong>functionals</strong>.</p>
+<p>Functions that take other functions as arguments are sometimes referred to as <strong>functionals</strong>.</p>
+<p>In the previous session we showed how to use built-in functions like <code>median</code> as arguments to functionals. The functions you write yourself can also be used in exactly the same way.</p>
 <h3 id="lapply"><code>lapply()</code></h3>
-<p>We saw this functional in the previous CodeClub: it always returns a list:</p>
+<p>We introduced this functional in 
+<a href="https://biodash.github.io/codeclub/13_apply/" target="_blank" rel="noopener">Session 13</a>: it always returns a list:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>lapply_norm</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='o'>(</span><span class='nv'>dist_df</span>, <span class='nv'>normalize</span><span class='o'>)</span>
 <span class='nv'>lapply_norm</span>
@@ -1019,7 +1069,7 @@
 </code></pre>
 </div>
 <p>
-<a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>sapply()</code></a> attempts to simplify the outputs. Here both lists are of type <code>num</code>, and the same length, so we could simplify to a matrix data structure of a single type:</p>
+<a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>sapply()</code></a> attempts to simplify the outputs. Here both lists are of type <code>num</code>, and the same length, so in this case R simplifies to a <strong>matrix</strong> data structure with a single type:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sapply_norm</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='o'>(</span><span class='nv'>dist_df</span>, <span class='nv'>normalize</span><span class='o'>)</span>
 <span class='nv'>sapply_norm</span>
@@ -1052,10 +1102,12 @@
 <span class='c'>#&gt;   ..$ : chr [1:2] "dists_Mar4" "dists_Mar5"</span>
 </code></pre>
 </div>
-<p>The first is a named list, the second a named matrix.</p>
-<h3 id="map"><code>map()</code></h3>
+<p>
+<a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> yields a named list, 
+<a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>sapply()</code></a> yields a named matrix.</p>
+<h3 id="purrrmap"><code>purrr::map()</code></h3>
 <p>The functional <code>map()</code> from the <strong>purrr</strong> package behaves the same as 
-<a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a>, it always returns a list:</p>
+<a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a>, it always returns a list (purrr is automatically loaded as part of the tidyverse):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>map_norm</span> <span class='o'>&lt;-</span> <span class='nf'>map</span><span class='o'>(</span><span class='nv'>dist_df</span>, <span class='nv'>normalize</span><span class='o'>)</span>
 <span class='nv'>map_norm</span>
@@ -1080,7 +1132,7 @@
 </code></pre>
 </div>
 <p>Notice another advantage of both 
-<a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> and <code>map()</code> <em>we don&rsquo;t need to explicitly preallocate any kind of data structure to collect the results</em>. The allocation is done behind the scenes as part of the implementation of 
+<a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> and <code>map()</code>: <em>we don&rsquo;t need to explicitly preallocate any kind of data structure to collect the results</em>. The allocation is done behind the scenes as part of the implementation of 
 <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> and <code>map()</code>, which makes sure they run efficiently. In fact, R implements these functionals as a <code>for</code> loop behind the scenes, and in <code>map()</code> that <code>for</code> loop is implemented in C, so it optimizes performance.</p>
 <p>If we want the output to be a data frame to match the input, we can simply <strong>coerce</strong> it:</p>
 <div class="highlight">
@@ -1102,6 +1154,143 @@
 <li>let you modify code in a single place, not multiple places</li>
 <li>lets you reuse code, since a single function can often be used on multiple inputs (vectors, lists and data frames), and can be imported from a package, instead of copy and paste.</li>
 </ul>
+<h2 id="breakout-rooms">Breakout rooms</h2>
+<h3 id="exercise-1">Exercise 1</h3>
+<div class="puzzle">
+<p>R does not have a built-in function for calculating the 
+<a href="https://en.m.wikipedia.org/wiki/Coefficient_of_variation" target="_blank" rel="noopener">coefficient of variation</a>, aka the <strong>RSD</strong> (relative standard deviation). This is defined as <em>the ratio of the standard deviation to the mean</em>.</p>
+<p>Create a function that computes this, and test it on a couple of vectors.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>The relevant R built-ins are <code>sd()</code> and <code>mean()</code>. The function should have one argument, which is assumed to be a vector. <br>
+</details>
+<br>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>cv</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>v</span><span class='o'>)</span><span class='o'>&#123;</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='o'>(</span><span class='nv'>v</span><span class='o'>)</span><span class='o'>/</span><span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>v</span><span class='o'>)</span>
+<span class='o'>&#125;</span>
+
+<span class='nf'>cv</span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>200</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 0.5759123</span>
+</code></pre>
+</div>
+<br>
+</details>
+</div>
+<hr>
+<h3 id="exercise-2">Exercise 2</h3>
+<div class="puzzle">
+<p>Write a function <code>equalish()</code> which compares two numbers <code>a</code> and <code>b</code>, and checks if they are &lsquo;equal enough&rsquo; according to some threshold <code>epsilon</code>. Set a <strong>default</strong> threshold of 0.000001. The function should return TRUE if the absolute value of the difference is inside this threshold.</p>
+<p>Check that it works on a couple of test numbers.</p>
+<p>Now pass in a couple of test vectors. Is this new function vectorized?</p>
+<p>Now call the function explicitly with a different threshold.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>You'll need to use the absolute value function <code>abs()</code>, and the logical comparison operator for "less than". <br>
+</details>
+<br>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>equalish</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>a</span>, <span class='nv'>b</span>, <span class='nv'>epsilon</span> <span class='o'>=</span> <span class='m'>0.000001</span><span class='o'>)</span><span class='o'>&#123;</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span><span class='o'>(</span><span class='nv'>a</span> <span class='o'>-</span> <span class='nv'>b</span><span class='o'>)</span> <span class='o'>&lt;</span> <span class='nv'>epsilon</span>
+<span class='o'>&#125;</span>
+</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>equalish</span><span class='o'>(</span><span class='m'>4.0</span>, <span class='m'>4.01</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] FALSE</span>
+
+<span class='nf'>equalish</span><span class='o'>(</span><span class='m'>4.0</span>, <span class='m'>4.000000001</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] TRUE</span>
+</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>v1</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>4.000000001</span>, <span class='m'>2</span><span class='o'>)</span>
+<span class='nv'>v2</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>4.0</span>, <span class='m'>7</span><span class='o'>)</span>
+
+<span class='nf'>equalish</span><span class='o'>(</span><span class='nv'>v1</span>, <span class='nv'>v2</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1]  TRUE FALSE</span>
+</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>equalish</span><span class='o'>(</span><span class='nv'>v1</span>, <span class='nv'>v2</span>, <span class='m'>0.000000000000001</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] FALSE FALSE</span>
+</code></pre>
+</div>
+<br>
+</details>
+</div>
+<hr>
+<h3 id="exercise-3">Exercise 3</h3>
+<div class="puzzle">
+<p>The 
+<a href="https://en.m.wikipedia.org/wiki/FASTQ_format" target="_blank" rel="noopener">fastq</a> file format for DNA sequencing uses a letter/punctuation code for the quality of the base called at each position (the fourth line below) which is in one-to-one relationship to the bases in the second line:</p>
+<pre><code>@SIM:1:FCX:1:15:6329:1045 1:N:0:2
+TCGCACTCAACGCCCTGCATATGACAAGACAGAATC
++
+&lt;&gt;;##=&gt;&lt;9=AAAAAAAAAA9#:&lt;#&lt;;&lt;&lt;&lt;????#=
+</code></pre>
+<p>To translate a letter code into a numerical 
+<a href="https://en.m.wikipedia.org/wiki/Phred_quality_score" target="_blank" rel="noopener">phred quality score</a> we have to do two things: (i) translate the <strong>character</strong> to an <strong>integer</strong> using the 
+<a href="http://www.asciitable.com" target="_blank" rel="noopener">ASCII code</a> look up table (ii) subtract 33 from that value (!).</p>
+<p>For the first step, R has a function that converts a character into an integer according to that table, for example:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/utf8Conversion.html'>utf8ToInt</a></span><span class='o'>(</span><span class='s'>"!"</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 33</span>
+</code></pre>
+</div>
+<p>Write a function <code>phred_score()</code> that computes the phred score for any character. Check that it returns 0 for &ldquo;!&rdquo;.</p>
+<p>Apply your function to our example string</p>
+<p><code>&lt;&gt;;##=&gt;&lt;9=AAAAAAAAAA9#:&lt;#&lt;;&lt;&lt;&lt;????#=</code></p>
+<p>to convert it to phred quality scores.</p>
+<p>Mini Bonus: Why is &ldquo;33&rdquo; the magic number?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br>Remember when you pass the value to the function it has to be an R character string.</p>
+<p>Mini Bonus: look at the <strong>position</strong> of &ldquo;!&rdquo; in the ASCII table linked above and its raw ASCII integer value. <br></p>
+</details>
+<br>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>phred_score</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>character</span><span class='o'>)</span><span class='o'>&#123;</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/utf8Conversion.html'>utf8ToInt</a></span><span class='o'>(</span><span class='nv'>character</span><span class='o'>)</span> <span class='o'>-</span> <span class='m'>33</span>
+<span class='o'>&#125;</span>
+
+<span class='nf'>phred_score</span><span class='o'>(</span><span class='s'>"&lt;&gt;;##=&gt;&lt;9=AAAAAAAAAA9#:&lt;#&lt;;&lt;&lt;&lt;????#="</span><span class='o'>)</span>
+
+<span class='c'>#&gt;  [1] 27 29 26  2  2 28 29 27 24 28 32 32 32 32 32 32 32 32 32 32 24  2 25 27  2</span>
+<span class='c'>#&gt; [26] 27 26 27 27 27 30 30 30 30  2 28</span>
+</code></pre>
+</div>
+<p>&ldquo;!&rdquo; is the first <strong>printing character</strong> in the ASCII table. The previous characters were used historically to control the behavior of teleprinters: &ldquo;the original ASCII specification included 33 non-printing control codes which originated with Teletype machines; most of these are now obsolete&rdquo;. If the ASCII table started with &ldquo;!&rdquo; we wouldn&rsquo;t need the correction (!). <br></p>
+</details>
+</div>
+<hr>
 
       </div>
 
@@ -1126,7 +1315,7 @@
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/14_functions/&amp;text=Session%2014:%20Writing%20your%20own%20functions" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/14_functions/&amp;text=Session%2014:%20Writing%20your%20own%20Functions" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -1139,7 +1328,7 @@
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/14_functions/&amp;t=Session%2014:%20Writing%20your%20own%20functions" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/14_functions/&amp;t=Session%2014:%20Writing%20your%20own%20Functions" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -1152,7 +1341,7 @@
       
       
       <li>
-        <a href="mailto:?subject=Session%2014:%20Writing%20your%20own%20functions&amp;body=https://biodash.github.io/codeclub/14_functions/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Session%2014:%20Writing%20your%20own%20Functions&amp;body=https://biodash.github.io/codeclub/14_functions/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -1165,7 +1354,7 @@
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/14_functions/&amp;title=Session%2014:%20Writing%20your%20own%20functions" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/14_functions/&amp;title=Session%2014:%20Writing%20your%20own%20Functions" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -1178,7 +1367,7 @@
       
       
       <li>
-        <a href="https://web.whatsapp.com/send?text=Session%2014:%20Writing%20your%20own%20functions%20https://biodash.github.io/codeclub/14_functions/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="https://web.whatsapp.com/send?text=Session%2014:%20Writing%20your%20own%20Functions%20https://biodash.github.io/codeclub/14_functions/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -1191,7 +1380,7 @@
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/14_functions/&amp;title=Session%2014:%20Writing%20your%20own%20functions" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/14_functions/&amp;title=Session%2014:%20Writing%20your%20own%20Functions" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
