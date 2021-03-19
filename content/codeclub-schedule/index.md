@@ -10,9 +10,11 @@ toc: true
 ## Upcoming sessions
 
 Session nr.  | Fri 3 pm   | Presenter    | Topic (+ link)  |
--------------|-----------|--------------|------------------|
-
-**TBA!**
+-------------|------------|--------------|------------------|
+**15**       | Mar 26     | Jessica      | Interactive plots with *Plotly*
+**16**       | Apr 02     | Stephen      | Working with dates with *lubridate*
+**17**       | Apr 09     | Jelmer       | [Tentative: Getting started with regular expressions]
+**17**       | Apr 16     | Mike         | [Tentative: regex with stringr]
 
 See also the [BioDASH calendar](/events/#calendar) for an overview.
 
@@ -36,10 +38,9 @@ Session nr.  | Date        | Presenter   | Topic (+ link)                   | Ot
 **10**       | Feb 19    | Jessica      | **[Faceting, animating, and combining plots](/codeclub/10_faceting-animating/)**
 **11**       | Feb 26    | Stephen      | **[Making maps with *ggmap*](/codeclub/11_gglot-maps/)**
 **12**       | Mar 5     | Jelmer       | **[Vectorization and loops](/codeclub/12_loops/)**
-**13**       | Mar 12    | Michael      | **[The apply family of functions](/codeclub/13_apply)**
-**14**       | Mar 19    | Mike         | **[Writing your own functions](/codeclub/14_functions/)**
+**13**       | Mar 12    | Mike      | **[The apply family of functions](/codeclub/13_apply)**
+**14**       | Mar 19    | Michael         | **[Writing your own functions](/codeclub/14_functions/)**
 
 <br/> <br/> <br/> <br/>
 
 ----
-
