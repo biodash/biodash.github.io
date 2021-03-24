@@ -1,10 +1,10 @@
 ---
 # Display name
-name: Michael Broe
+title: Michael Broe
 
 # Username (this should match the folder name)
 authors:
-- michael-broe
+  - michael-broe
 
 # Is this the primary user of the site?
 superuser: true
@@ -14,8 +14,8 @@ role: Bioinformatician at EEOB
 
 # Organizations/Affiliations
 organizations:
-- name: Department of Evolution, Ecology, and Organismal Biology, OSU
-  url: "https://eeob.osu.edu/"
+  - name: Department of Evolution, Ecology, and Organismal Biology, OSU
+    url: "https://eeob.osu.edu/"
 
 # Short bio (displayed in user profile at end of posts)
 #bio: My research interests include distributed robotics, mobile computing and programmable matter.
@@ -42,18 +42,18 @@ organizations:
 #   For an email link, use "fas" icon pack, "envelope" icon, and a link in the
 #   form "mailto:your-email@example.com" or "#contact" for contact widget.
 social:
-- icon: envelope
-  icon_pack: fas
-  link: 'mailto:broe.1@osu.edu'  # For a direct email link, use "mailto:test@example.org".
-#- icon: twitter
-#  icon_pack: fab
-#  link: https://twitter.com/GeorgeCushen
-#- icon: google-scholar
-#  icon_pack: ai
-#  link: https://scholar.google.com/citations?user=h_a6S0cAAAAJ
-- icon: github
-  icon_pack: fab
-  link: https://github.com/michaelbroe
+  - icon: envelope
+    icon_pack: fas
+    link: "mailto:broe.1@osu.edu" # For a direct email link, use "mailto:test@example.org".
+  #- icon: twitter
+  #  icon_pack: fab
+  #  link: https://twitter.com/GeorgeCushen
+  #- icon: google-scholar
+  #  icon_pack: ai
+  #  link: https://scholar.google.com/citations?user=h_a6S0cAAAAJ
+  - icon: github
+    icon_pack: fab
+    link: https://github.com/michaelbroe
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # - icon: cv
@@ -66,8 +66,8 @@ email: ""
 # Organizational groups that you belong to (for People widget)
 #   Set this to `[]` or comment out if you are not using People widget.
 user_groups:
-- Bioinformaticians
+  - Bioinformaticians
 ---
 
-Michael Broe is a Bioinformatics Research Scientist at the Department of 
+Michael Broe is a Bioinformatics Research Scientist at the Department of
 Evolution, Ecology, and Organismal Biology.
