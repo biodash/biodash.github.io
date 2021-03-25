@@ -1,0 +1,822 @@
+---
+title: "Session 15: Plotly"
+subtitle: "Making our plots interactive"
+summary: "During this fifteenth session of Code Club, we will learn to make interactive plots using ggplotly."  
+authors: [jessica-cooperstone]
+date: "2021-03-24"
+output: hugodown::md_document
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+-----
+
+## Prep homework 
+
+### Basic computer setup
+
+- If you didn't already do this, please follow the [Code Club Computer Setup](/codeclub-setup/04_ggplot2/) instructions, which also has pointers for if you're new to R or RStudio.
+
+- If you're able to do so, please open RStudio a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll help you troubleshoot.
+
+### New to ggplot?
+
+Check out the three Code Club pages for [Session 4](/codeclub/04_ggplot2/), [Session 5](/codeclub/05_ggplot-round-2/) and [Session 10](/codeclub/10_faceting-animating/) which are all about `ggplot2`.
+
+If you've never used `ggplot2` before (or even if you have), you may find [this cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) useful.
+
+<br>
+
+## Getting Started
+
+### RMarkdown for today's session
+```{r, eval = FALSE}
+# directory for Code Club Session 15:
+dir.create("S15")
+
+# directory for our RMarkdown
+# ("recursive" to create two levels at once.)
+dir.create("S15/Rmd/")
+
+# save the url location for today's script
+todays_R_script <- 
+  'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/15_plotly/Plotly-without-answers.Rmd'
+
+# indicate the name of the new Rmd
+Session15_Rmd <- "S15/Rmd/Session15_plotly.Rmd"
+
+# go get that file! 
+download.file(url = todays_R_script,
+              destfile = Session15_Rmd)
+```
+
+<br>
+
+----
+
+
+## 1 - What is plotly?
+
+Today we are going to talk about making interactive plots using [Plotly](https://plotly.com/).  Plotly exists in a variety of programming languages, but today we will be just talking about using it in [R](https://plotly.com/r/).  All of the plotly documentation can be found [here](https://cran.r-project.org/web/packages/plotly/plotly.pdf).  
+
+If you have never used `plotly` before, install it with the code below. 
+```{r, eval = FALSE}
+install.packages("plotly")
+```
+
+Here are some useful links to find info about using `ggplotly`.
+
+* [Basic ggplot2 charts](https://plotly.com/ggplot2/#layout-options)
+* [Plotly R library fundamentals](https://plotly.com/r/plotly-fundamentals/)
+* [Intro to `ggplotly()`](https://plotly-r.com/overview.html#intro-ggplotly)
+* [Using `layout()`](https://plotly.com/r/reference/layout/#)
+* [`ggplotly()` tooltips](https://plotly-r.com/controlling-tooltips.html#tooltip-text-ggplotly)
+
+Before we start, there are two basic ways to use plot in R using plotly:
+
+* Using [`ggplotly()`](https://www.rdocumentation.org/packages/plotly/versions/4.9.3/topics/ggplotly) - this is what we will go over today because it has the same syntax as `ggplot()` which we have already learned
+* Using [`plot_ly()`](https://www.rdocumentation.org/packages/plotly/versions/4.9.3/topics/plot_ly) - there is slightly more functionality in this function, but the syntax is all new, so I'd suggest if you can do what you want with `ggplotly()`, do that.  The syntax is not particularly hard so don't be scared to use it if interactive plots are something you're very interested in.
+
+When you are googling about using plotly, you will find a combination of `ggplotly()` and `plot_ly()` approaches, and some parts of the code are interchangable.  The easiesy way to see which parts are, is to try.
+
+Also note, Google gets a bit confused when googling "ggplotly" and often returns information about just ggplot, so read extra carefully when problem solving.
+
+This is an example of work from my group where we have found plotly to be particularly useful.
+
+```{{< chart data="apples" >}}``` 
+Data from [Bilbrey et al., bioRxiv 2021](https://www.biorxiv.org/content/10.1101/2021.02.18.431481v1)
+
+----
+
+## 2 - Load libraries, get data
+Lets load the libraries we are using for today.
+```{r, message = FALSE}
+library(tidyverse)
+library(plotly) # for making interactive plots
+library(htmlwidgets) # for saving html files
+library(palmerpenguins) # for our penguins data
+```
+
+Let's look at `penguins_raw` this time, a df that has a bit more data than the `penguins` df.
+```{r}
+head(penguins_raw)
+head(penguins)
+```
+
+## 3 - Create base ggplot object
+Using the `penguins_raw` dataset and make a scatter plot with Culmen Length on the y, and Culmen Depth on the x.
+```{r}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`)) +
+  geom_point()
+
+bill_depth_length
+```
+
+## 4 - Make it interactive with `ggplotly()`
+You can learn more about the `ggplotly()` function, including its arguments  [here](https://www.rdocumentation.org/packages/plotly/versions/4.9.3/topics/ggplotly).
+
+```{r, eval = FALSE}
+ggplotly(bill_depth_length)
+```
+
+
+```{r, echo = FALSE}
+to_plot <- ggplotly(bill_depth_length)
+
+json <- plotly_json(to_plot, FALSE)
+write(json, 'penguins1.json')
+```
+
+```{{< chart data="penguins1" >}}``` 
+
+Wow that was easy!
+
+Let's add a title and change the theme to make our plot a little prettier before we progress.
+```{r, eval = FALSE}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+ggplotly(bill_depth_length)
+```
+
+
+```{r, echo = FALSE}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+to_plot <- ggplotly(bill_depth_length)
+json <- plotly_json(to_plot, FALSE)
+write(json, 'penguins2.json')
+```
+
+```{{< chart data="penguins2" >}}``` 
+
+## 5 - Using tooltip
+Using tooltip helps you to indicate what appears when you hover over different parts of your plot.  You can learn more about controlling `tooltip` [here](https://plotly-r.com/controlling-tooltips.html).
+
+What if we want to hover over each point and be able to tell which `Island` the penguin was found on?
+
+To do this, we indicate what we want to hover with using `text =` in our aesthetic mappings.  Then, we indicate `tooltip = "text"` to tell `ggplotly()` what we want to hover.
+```{r, eval = FALSE}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             text = Island)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+ggplotly(bill_depth_length,
+         tooltip = "text")
+```
+
+```{r, echo = FALSE}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             text = Island)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+to_plot <- ggplotly(bill_depth_length,
+                    tooltip = "text")
+json <- plotly_json(to_plot, FALSE)
+write(json, 'penguins3.json')
+```
+
+```{{< chart data="penguins3" >}}``` 
+
+You can play around a lot with tooltip to get it to be exactly how you want, and you can include multiple things in your hover text.
+
+You can also indicate to hover with data that is not inherently in your plot by mapping it to a `group` aesthetic.
+```{r, eval = FALSE}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             text = Island, group = `Individual ID`)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+ggplotly(bill_depth_length,
+         tooltip = c("text", "Individual ID")) # hover test will be in this order
+```
+
+```{r, echo = FALSE}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             text = Island, group = `Individual ID`)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+to_plot <- ggplotly(bill_depth_length,
+                    tooltip = c("text", "Individual ID"))
+json <- plotly_json(to_plot, FALSE)
+write(json, 'penguins4.json')
+```
+
+```{{< chart data="penguins4" >}}``` 
+
+You may also want to paste in some text to your hover info to provide additional clarity on what you are showing.
+
+You can use `paste` to add some information you'd like to see in each of the hover texts, here, we are indicating Island: `Island`.  You can also add multiple variables within text, and it will populate in the hover text in the way you indicate.  There is an example of how to do this in Bonus 1.
+
+```{r, eval = FALSE}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             text = paste("Island:", Island))) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+ggplotly(bill_depth_length,
+         tooltip = "text")
+```
+
+```{r, echo = FALSE}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             text = paste("Island:", Island))) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+to_plot <- ggplotly(bill_depth_length,
+                    tooltip = "text")
+json <- plotly_json(to_plot, FALSE)
+write(json, 'penguins5.json')
+```
+
+```{{< chart data="penguins5" >}}``` 
+
+
+## 6 - Hover label aesthetics
+You might not like the default hover text aesthetics, and can change them!  You can do this using `style` and `layout` and adding these functions using the pipe `%>%`.
+
+```{r, eval = FALSE}
+# setting fonts for the plot
+font <- list(
+  family = "Roboto Condensed",
+  size = 15,
+  color = "white")
+
+# setting hover label specs
+label <- list(
+  bgcolor = "#FF0000",
+  bordercolor = "transparent",
+  font = font) # we can do this bc we already set font
+
+# plotting like normal
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             text = paste("Island:", Island))) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "A Deep Dive (ha) Into \nUnderstanding Penguin Bill Dimensions")
+# use\n to bring your text to another line
+
+# amending our ggplotly call to include new fonts and hover label specs
+ggplotly(bill_depth_length, tooltip = "text") %>%
+  style(hoverlabel = label) %>%
+  layout(font = font)
+```
+
+```{r, echo = FALSE}
+# setting fonts for the plot
+font <- list(
+  family = "Roboto Condensed",
+  size = 15,
+  color = "white")
+
+# setting hover label specs
+label <- list(
+  bgcolor = "#FF0000",
+  bordercolor = "transparent",
+  font = font) # we can do this bc we already set font
+
+# plotting like normal
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             text = paste("Island:", Island))) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "A Deep Dive (ha) Into \nUnderstanding Penguin Bill Dimensions")
+# use\n to bring your text to another line
+
+to_plot <- ggplotly(bill_depth_length, tooltip = "text") %>%
+                    style(hoverlabel = label) %>%
+                    layout(font = font)
+json <- plotly_json(to_plot, FALSE)
+write(json, 'penguins6.json')
+```
+
+```{{< chart data="penguins6" >}}``` 
+
+## 7 - Dynamic ticks
+Keep your axis labels so when you zoom, you can see where you are on your plot.  Remember, you can zoom and pan around your plot!
+```{r, eval = FALSE}
+ggplotly(bill_depth_length,
+         tooltip = "text",
+         dynamicTicks = TRUE)
+```
+
+```{r, echo = FALSE}
+to_plot <- ggplotly(bill_depth_length,
+                    tooltip = "text",
+                    dynamicTicks = TRUE)
+json <- plotly_json(to_plot, FALSE)
+write(json, 'penguins7.json')
+```
+
+```{{< chart data="penguins7" >}}``` 
+
+## 8 - Animating
+Add `frame` in your aesthetics mapping to tell plotly what column to animate over.  You can then play your animation, or toggle from one view to another.
+```{r, eval = FALSE}
+# add frame
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             frame = Island, text = `Individual ID`)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+ggplotly(bill_depth_length,
+         tooltip = "text")
+```
+
+```{r, echo = FALSE}
+bill_depth_length <- penguins_raw %>%
+  ggplot(aes(x = `Culmen Length (mm)`, y = `Culmen Depth (mm)`,
+             frame = Island, text = `Individual ID`)) +
+  geom_point() +
+  theme_minimal() +
+  labs(title = "Understanding Penguin Bill Dimensions")
+
+to_plot <- ggplotly(bill_depth_length,
+                    tooltip = "text")
+json <- plotly_json(to_plot, FALSE)
+write(json, 'penguins8.json')
+```
+
+```{{< chart data="penguins8" >}}``` 
+
+
+## 9 - Everything you know about ggplot still applies!
+Don't forget you can use things like faceting, that we have gone over previously in [Session 10](https://biodash.github.io/codeclub/10_faceting-animating/).
+```{r, eval = FALSE}
+bill_depth_length <- penguins %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species,
+             text = paste("Island:", island))) +
+  geom_point() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(title = "Understanding Penguin Bill Dimensions",
+       x = "Culmen Bill Length (mm)",
+       y = "Culmen Bill Depth (mm)") +
+  facet_wrap(~species)
+
+ggplotly(bill_depth_length,
+         tooltip = "text")
+```
+
+```{r, echo = FALSE}
+bill_depth_length <- penguins %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species,
+             text = paste("Island:", island))) +
+  geom_point() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(title = "Understanding Penguin Bill Dimensions",
+       x = "Culmen Bill Length (mm)",
+       y = "Culmen Bill Depth (mm)") +
+  facet_wrap(~species)
+
+to_plot <- ggplotly(bill_depth_length,
+                    tooltip = "text")
+json <- plotly_json(to_plot, FALSE)
+write(json, 'penguins9.json')
+```
+
+```{{< chart data="penguins9" >}}``` 
+
+## 10 - Saving your plots
+Now that you've made a beautiful interactive plot, you probably want to save it.
+
+Assign the plot you want to save to an object, and use the function `saveWidget()` to save it.  You can find the documentation [here](https://www.rdocumentation.org/packages/htmlwidgets/versions/1.5.3/topics/saveWidget).
+```{r, eval = FALSE}
+# assign ggplotly plot to an object
+ggplotly_to_save <- ggplotly(bill_depth_length,
+                             tooltip = "text")
+
+# save
+saveWidget(widget = ggplotly_to_save,
+           file = "ggplotlying.html")
+```
+
+## Breakout rooms
+We are going to use the birds dataset from previous weeks, and gapminder data for the bonus.
+
+Let's grab the birds data.
+```{r, eval = FALSE}
+# create directory for data to go
+dir.create('data/birds/', recursive = TRUE)
+
+# preparing to download
+# denote bird file url
+birds_url <-
+'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv'
+# denote file name
+birds_file <- 'data/birds/backyard-birds_Ohio.tsv'
+
+# get file
+download.file(url = birds_url, 
+              destfile = birds_file)
+```
+
+Read in data.
+```{r}
+# read in birds data
+birds <- read_tsv(file = 'data/birds/backyard-birds_Ohio.tsv')
+```
+
+Look at your new df.
+```{r}
+head(birds)
+```
+
+## Exercises
+### Exercise 1
+
+<div class="puzzle">
+<div>
+Filter your new `birds` df to only inclue Blue Jays.  Check to see how many Blue Jay sightings there were in Ohio.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+
+
+  Try using a `filter()`, and consider filtering based on `species_en`
+<br>
+</details>
+
+<br>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+
+```{r}
+bald_eagle <- birds %>%
+  filter(species_en == "Bald Eagle")
+
+# what do we have?
+head(bald_eagle)
+
+# check our df dimensions
+dim(bald_eagle)
+```
+
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+### Exercise 2
+
+<div class="puzzle">
+<div>
+Create a map that plots all the Blue Jays found around Ohio.  Color the points blue.  Make sure the aspect ratio of Ohio looks reasonable to you.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+
+
+  Go back to Sessions [11](https://biodash.github.io/codeclub/11_ggplot-maps/) and [12](https://biodash.github.io/codeclub/12_loops/) to re-remember how maps work.  Don't forget to call `library(maps)`.
+<br>
+</details>
+
+<br>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+  
+```{r}
+library(maps)
+
+# get map of the states
+states <- map_data("state")
+
+# filter states to only include ohio
+ohio <- states %>%
+  filter(region == "ohio")
+
+# plot
+ggplot(data = ohio,
+       aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +   
+  geom_point(data = bald_eagle,                 
+             aes(x = decimalLongitude, y = decimalLatitude, group = NULL),
+             color = "blue", alpha = 0.2) +
+  coord_fixed(1.2) +
+  labs(title = 'Bald Eagles Around Ohio')
+```
+
+
+
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+### Exercise 3
+
+<div class="puzzle">
+<div>
+Make your plot interactive so you can hover and and see the locality of each bald eagle observation.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+
+
+  You may want to call `text` within `geom_point()`.
+<br>
+</details>
+
+<br>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+  
+```{r, eval = FALSE}
+bald_eagles_ohio <- 
+  ggplot(data = ohio,
+         aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +   
+  geom_point(data = bald_eagle,                 
+             aes(x = decimalLongitude, y = decimalLatitude, group = NULL,
+                 text = locality),
+             color = "blue", alpha = 0.2) +
+  coord_fixed(1.2) +
+  labs(title = 'Bald Eagles Around Ohio')
+
+ggplotly(bald_eagles_ohio,
+         tooltip = "text")
+```
+
+```{r, echo = FALSE, warning = FALSE}
+bald_eagles_ohio <- 
+  ggplot(data = ohio,
+         aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +   
+  geom_point(data = bald_eagle,                 
+             aes(x = decimalLongitude, y = decimalLatitude, group = NULL,
+                 text = locality),
+             color = "blue", alpha = 0.2) +
+  coord_fixed(1.2) +
+  labs(title = 'Bald Eagles Around Ohio')
+
+to_plot <- ggplotly(bald_eagles_ohio,
+         tooltip = "text")
+json <- plotly_json(to_plot, FALSE)
+write(json, 'ohio1.json')
+```
+
+```{{< chart data="ohio1" >}}``` 
+
+
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+### Exercise 4
+
+<div class="puzzle">
+<div>
+Change the hover text so that the background color is red, clean up your axis labels, and make all the fonts for the plot Arial.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+
+
+  You can set fonts either within your `ggplot()` call, or setting `font` within `layout()`.  You can customize the hover label with `style()`.
+<br>
+</details>
+
+<br>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+  
+```{r, eval = FALSE}
+# setting fonts for the plot
+eagle_font <- list(
+  family = "Arial",
+  size = 15,
+  color = "white")
+
+# setting hover label specs
+eagle_label <- list(
+  bgcolor = "red",
+  bordercolor = "transparent",
+  font = eagle_font) # we can do this bc we already set font
+
+bald_eagles_ohio <- 
+  ggplot(data = ohio,
+         aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +   
+  geom_point(data = bald_eagle,                 
+             aes(x = decimalLongitude, y = decimalLatitude, group = NULL,
+                 text = locality),
+             color = "blue", alpha = 0.2) +
+  coord_fixed(1.2) +
+  labs(title = 'Bald Eagles Around Ohio',
+       x = "Latitude",
+       y = "Longitude")
+
+# amending our ggplotly call to include new fonts and hover label specs
+ggplotly(bald_eagles_ohio, tooltip = "text") %>%
+  style(hoverlabel = eagle_label) %>%
+  layout(font = eagle_font)
+```
+
+```{r, echo = FALSE, warning = FALSE}
+# setting fonts for the plot
+eagle_font <- list(
+  family = "Arial",
+  size = 15,
+  color = "white")
+
+# setting hover label specs
+eagle_label <- list(
+  bgcolor = "red",
+  bordercolor = "transparent",
+  font = eagle_font) # we can do this bc we already set font
+
+bald_eagles_ohio <- 
+  ggplot(data = ohio,
+         aes(x = long, y = lat, group = group)) +
+  geom_polygon(color = "black", fill = "white") +   
+  geom_point(data = bald_eagle,                 
+             aes(x = decimalLongitude, y = decimalLatitude, group = NULL,
+                 text = locality),
+             color = "blue", alpha = 0.2) +
+  coord_fixed(1.2) +
+  labs(title = 'Bald Eagles Around Ohio',
+       x = "Latitude",
+       y = "Longitude")
+
+# amending our ggplotly call to include new fonts and hover label specs
+to_plot <- ggplotly(bald_eagles_ohio, tooltip = "text") %>%
+              style(hoverlabel = eagle_label) %>%
+              layout(font = eagle_font)
+json <- plotly_json(to_plot, FALSE)
+write(json, 'ohio2.json')
+```
+
+```{{< chart data="ohio2" >}}``` 
+
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
+
+## Bonus
+### Bonus 1
+
+<div class="puzzle">
+<div>
+Let's go back to the Gapminder data we looked at in the instructional part of [Session 10](https://biodash.github.io/codeclub/10_faceting-animating/) on faceting, animating, and multi-plotting.
+
+Make a bubble-style plot that shows the life expectancy vs. GDP per capita over 1952 to 2007 for all countries.  Color by continent, and indicate population by size.  Use your knowledge of making plots to alter it such that you think it is descriptive and aesthetic.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+
+
+  Set `text` to what you want to hover (try adding multiple variables in there!), play around with `theme` and scaling, change fonts and aesthetics until you are pleased.  You can download the `gapminder` data like this:
+```{r}
+# install.packages("gapminder") # if you weren't at Session 10
+library(gapminder)
+head(gapminder)
+```
+  
+<br>
+</details>
+
+<br>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+  
+```{r, eval = FALSE}
+gapminder_font <- list(
+  family = "Roboto Condensed")
+
+gapminder_bubble <- gapminder %>%
+  ggplot(aes(x = gdpPercap, y = lifeExp, 
+             fill = continent, size = pop, 
+             text = paste(
+               "Country:", country,
+               "\nLife expectancy:", round(lifeExp,1),
+               "\nGDP per capita:", round(gdpPercap,0)))) +
+  geom_point(aes(frame = year), color = "black", shape = 21, stroke = 0.2) +
+  scale_x_log10() +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 18)) +
+  labs(title = "Changing Life Expectancy and GDP Per Capita Worldwide \nFrom 1952 to 2007",
+       x = "GDP per capita (in International Dollars)",
+       y = "Life Expectancy (years)",
+       fill = "",
+       size = "")
+
+ggplotly(gapminder_bubble, 
+         tooltip = c("text")) %>%
+  layout(font = gapminder_font)
+```
+
+```{r, echo = FALSE, warning = FALSE}
+gapminder_font <- list(
+  family = "Roboto Condensed")
+
+gapminder_bubble <- gapminder %>%
+  ggplot(aes(x = gdpPercap, y = lifeExp, 
+             fill = continent, size = pop, 
+             text = paste(
+               "Country:", country,
+               "\nLife expectancy:", round(lifeExp,1),
+               "\nGDP per capita:", round(gdpPercap,0)))) +
+  geom_point(aes(frame = year), color = "black", shape = 21, stroke = 0.2) +
+  scale_x_log10() +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 18)) +
+  labs(title = "Changing Life Expectancy and GDP Per Capita Worldwide \nFrom 1952 to 2007",
+       x = "GDP per capita (in International Dollars)",
+       y = "Life Expectancy (years)",
+       fill = "",
+       size = "")
+
+# amending our ggplotly call to include new fonts and hover label specs
+to_plot <- ggplotly(gapminder_bubble, 
+                    tooltip = c("text")) %>%
+            layout(font = gapminder_font)
+json <- plotly_json(to_plot, FALSE)
+write(json, 'gapminder.json')
+```
+
+```{{< chart data="gapminder" >}}``` 
+
+</details>
+<br>
+
+</div>
+</div>
+
+
+----
