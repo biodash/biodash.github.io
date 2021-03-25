@@ -6,7 +6,7 @@ authors: [jessica-cooperstone]
 date: "2021-03-24"
 output: hugodown::md_document
 toc: true
-rmd_hash: 3aeca625bfa84e95
+rmd_hash: ef13fdb5a7d758b6
 
 ---
 
@@ -352,7 +352,8 @@ Add `frame` in your aesthetics mapping to tell plotly what column to animate ove
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Understanding Penguin Bill Dimensions"</span><span class='o'>)</span>
 
 <span class='nf'><a href='https://docs.ropensci.org/plotly/reference/ggplotly.html'>ggplotly</a></span><span class='o'>(</span><span class='nv'>bill_depth_length</span>,
-         tooltip <span class='o'>=</span> <span class='s'>"text"</span><span class='o'>)</span></code></pre>
+         tooltip <span class='o'>=</span> <span class='s'>"text"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://docs.ropensci.org/plotly/reference/animation.html'>animation_opts</a></span><span class='o'>(</span><span class='o'>)</span></code></pre>
 
 </div>
 
