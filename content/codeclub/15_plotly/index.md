@@ -6,7 +6,7 @@ authors: [jessica-cooperstone]
 date: "2021-03-24"
 output: hugodown::md_document
 toc: true
-rmd_hash: 9f879dd6224fbb24
+rmd_hash: a0c0ae3067a337f3
 
 ---
 
@@ -490,7 +490,7 @@ Exercises
 
 <div>
 
-Filter your new `birds` df to only inclue Blue Jays. Check to see how many Blue Jay sightings there were in Ohio.
+Filter your new `birds` df to only include bald eagles. Check to see how many bald eagle sightings there were in Ohio.
 
 <details>
 
@@ -546,7 +546,7 @@ Try using a [`filter()`](https://dplyr.tidyverse.org/reference/filter.html), and
 
 <div>
 
-Create a map that plots all the Blue Jays found around Ohio. Color the points blue. Make sure the aspect ratio of Ohio looks reasonable to you.
+Create a map that plots all the bald eagles found around Ohio. Color the points blue. Make sure the aspect ratio of Ohio looks reasonable to you.
 
 <details>
 
