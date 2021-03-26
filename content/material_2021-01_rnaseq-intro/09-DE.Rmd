@@ -1,0 +1,359 @@
+---
+title: "Differential expression analysis with DESeq2"
+author: "Jelmer Poelstra"
+date: "3/25/2021"
+output:
+  html_document:
+    code_download: true
+    toc_depth: 2
+    toc: true
+    toc_float: true
+    theme: cerulean
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      eval=FALSE)
+```
+
+## Getting set up
+
+### Create an RStudio Project
+
+```{r}
+# Get your user name (by running a shell command via the `system()` function:
+me <- system("echo $USER", intern = TRUE)
+
+# Build the path to the target dir:
+proj_dir <- file.path('/fs/project/PAS0471/teach/misc/XXX', me) #TODO
+
+# Create the Project:
+library(usethis)
+create_project(path = proj_dir)
+```
+
+
+### Load the necessary packages
+
+```{r}
+library(DESeq2)     # Differential expression analysis
+library(tidyverse)  # Misc. data manipulation and plotting
+library(here)       # Managing file paths
+library(pheatmap)   # Heatmap plot
+
+theme_set(theme_bw()) # Set ggplot theme
+```
+
+### Input and output dirs and files
+
+```{r}
+library(here)
+here()
+```
+
+```{r}
+count_table_file <- here("results/count/gene_counts.txt")
+outdir <- here("results/DE/")
+plotdir <- here("results/DE/fig/")
+if (!dir.exists(plotdir)) dir.create(plotdir, recursive = TRUE)
+```
+
+### Load input data
+
+- Load the count table from *featureCounts*:
+
+```{r}
+raw_counts <- read.table(count_table_file,
+                         sep = "\t", header = TRUE, skip = 1)
+```
+
+- Load the metadata information:
+
+```{r}
+coldata <- read.table("metadata/metadata.txt", header = TRUE)
+```
+
+## Prepare the data
+
+- Change the column names, which are very long:
+
+```{r}
+my_regex <- ".+PonceM_(.+)_V1N.+"
+colnames(raw_counts) <- sub(my_regex, "\\1", colnames(raw_counts))
+```
+
+- Remove unnecessary columns:
+
+```{r}
+cts <- raw_counts[, 7:ncol(raw_counts)]
+rownames(cts) <- raw_counts$Geneid
+```
+
+- Merge technical replicates:
+  (Could also use `DESeq2::collapseReplicates()`)
+
+```{r}
+cts.t <- t(cts)
+rownames(cts.t) <- names(raw_counts)[7:36]
+sums <- rowsum(cts.t, group = rownames(cts.t))
+cts <- t(sums)
+```
+
+### Check sample IDs
+
+DESeq2 assumes countData and colData samples are provided in the same order.
+
+Sort both alphabetically:
+
+```{r}
+coldata <- coldata %>% arrange(SampleID)
+cts <- cts[, order(colnames(cts))]
+```
+
+Check if names are the same:
+
+```{r}
+matching_names <- identical(as.character(coldata$SampleID), colnames(cts))
+if(matching_names == FALSE) stop("Sample ID in metadata and count matrix do not match!")
+```
+
+### Create the DESeq2 object
+
+~1 specifies no design - we will change this before DE analysis.
+
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = cts,
+                              colData = coldata,
+                              design = ~ 1)
+```
+
+## Explore the count data
+
+- What are dimensions of the fragment count matrix?
+
+```{r}
+dim(cts)
+```
+
+- How many genes (rows) with non-zero counts??
+
+```{r}
+dim(cts[rowSums(cts) > 0, ])
+
+```
+
+- How many genes with total counts < 10?
+
+```{r}
+dim(cts[rowSums(cts) >= 10, ])
+```
+
+- How are fragment counts distributed across samples?
+
+```{r}
+apply(cts, 2, sum)
+
+```
+
+## Principal Component Analysis (PCA) 
+
+### Run the PCA and prepare for plotting
+
+- First, transform count data to have even sampling across samples
+  (with respect to library size) and approx. constant variance:
+
+```{r}
+vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
+```
+
+
+- Run the PCA and retrieve the data to plot with *ggplot2*:
+
+```{r}
+pcaData <- plotPCA(vsd,
+                   ntop = 500,
+                   intgroup = c("AMF", "Treatment"),
+                   returnData = TRUE)
+```
+
+- Get the percentage of variance explained by different principal components:
+
+```{r}
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+```
+
+- Create a plot title:
+
+```{r}
+plot_title <-
+  expression("PCA of " * italic(Glycine ~ max) * " transcript count data")
+```
+
+### First plot -- with points/icons for each sample
+
+```{r}
+pca_plot1 <- ggplot(pcaData,
+                    aes(PC1, PC2, color = AMF, shape = Treatment)) +
+  geom_point(size = 6) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  ggtitle(plot_title)
+```
+
+- Save the plot to file:
+
+```{r}
+pca_file1 <- file.path(plotdir, 'PCA_points.png')
+ggsave(pca_file1, pca_plot1)
+```
+
+### Second plot -- with sample names
+
+```{r}
+pca_plot2 <- ggplot(pcaData,
+              aes(PC1, PC2, color = AMF, shape = Treatment)) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  geom_text(aes(label = name)) +
+  ggtitle(plot_title)
+```
+
+- Save the plot to file:
+
+```{r}
+pca_file2 <- file.path(plotdir, 'PCA_samplenames.png')
+ggsave(pca_file2, pca_plot2)
+```
+
+## Differential expression (DE) analysis -- full dataset
+
+My design has two factors.
+Rather than fit a multivariate model, I decided to merger these to a single factor
+(called 'group') and fit a univariate model with this factor.
+
+```{r}
+dds$group <- factor(paste(dds$AMF, dds$Treatment, sep = "_"))
+```
+
+- Setting reference to the double negative control (empty substrate, no Agrobacteria).
+
+```{r}
+dds$group <- relevel(dds$group, ref = "control_mock")
+```
+
+- Set the analysis design:
+
+```{r}
+design(dds) <- formula( ~ group)
+```
+
+- Perform the differential expression analysis:
+
+```{r}
+dds <- DESeq(dds)
+```
+
+The `DESeq()` function above performs three steps consecutively,
+which could also be called separately
+(as could be useful if wanting to change defaults):
+  
+  - `estimateSizeFactors()` -- "Normalization" by library size.
+    *DESeq2* doesn’t actually normalize the counts,
+    it uses raw counts and includes the size factors in the modeling. 
+  
+  - `estimateDispersions()` -- Estimate gene-wise dispersion.
+  
+  - `nbinomWaldTest(ddsObj)` -- Fit negative Binomial GLM and calculate
+    Wald statistics.
+
+`NA`s: You will notice that some of the adjusted p-values (padj) are NA. Remember in Session 2 we said that there is no need to pre-filter the genes as DESeq2 will do this through a process it calls ‘independent filtering’. The genes with NA are the ones DESeq2 has filtered out.
+
+```{r}
+resultsNames(dds)
+```
+
+
+## DE analysis -- contrast two groups
+
+```{r}
+my_contrast <- c("Ri_Agrobacterium_myb", "Ri_Agrobacterium_noexp")
+```
+
+```{r}
+res <- results(dds,
+               contrast = c("group", my_contrast))
+```
+
+- How many adjusted p-values were less than 0.1?
+
+```{r}
+sum(res$padj < 0.1, na.rm = TRUE)
+```
+
+## Exploring the results
+
+### MA-plot:
+
+```{r}
+plotMA(res, ylim = c(-2, 2))
+# May also want to do this after shrinkage
+# resLFC <- lfcShrink(dds, coef="condition_treated_vs_untreated", type="apeglm")
+```
+
+### Plot specific genes:
+
+```{r}
+d <- plotCounts(dds,
+                gene = which.min(res$padj),
+                intgroup = "group",
+                returnData = TRUE)
+
+p <- ggplot(d, aes(x = group, y = count)) +
+  geom_point(position = position_jitter(w = 0.1, h = 0)) +
+  scale_y_log10(breaks = c(25, 100, 400))
+
+geneplot_file <- 'results/DE/gene.png'
+ggsave(geneplot_file, p, width = 7, height = 5)
+```
+
+### Heatmap:
+
+```{r}
+ntd <- normTransform(dds)
+select <- order(rowMeans(counts(dds, normalized = TRUE)),
+                decreasing = TRUE)[1:20]
+ntd_sel <- assay(ntd)[select, ]
+df_meta <- as.data.frame(colData(dds)[, c("AMF", "Treatment")])
+```
+
+```{r}
+pheatmap(ntd_sel,
+         cluster_rows = FALSE,
+         cluster_cols = FALSE,
+         show_rownames = FALSE,
+         annotation_col = df_meta)
+```
+
+### Export the results
+
+...
+
+## DE analysis -- with two factors
+
+```{r}
+design <- as.formula(~ AMF + Treatment)
+ddsObj.raw <- DESeqDataSetFromMatrix(countData = cts,
+                                     colData = coldata,
+                                     design = design)
+ddsObj <- DESeq(ddsObj.raw)
+```
+
+
+```{r}
+# MISC ------------------------------------------------------------------------
+# Note on p-values set to NA: some values in the results table can be set to NA for one of the following reasons:
+# If within a row, all samples have zero counts, the baseMean column will be zero, and the log2 fold change estimates, p value and adjusted p value will all be set to NA.
+# If a row contains a sample with an extreme count outlier then the p value and adjusted p value will be set to NA. These outlier counts are detected by Cook’s distance. Customization of this outlier filtering and description of functionality for replacement of outlier counts and refitting is described below
+# If a row is filtered by automatic independent filtering, for having a low mean normalized count, then only the adjusted p value will be set to NA. Description and customization of independent filtering is described below
+```
