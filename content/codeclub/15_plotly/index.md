@@ -6,7 +6,7 @@ authors: [jessica-cooperstone]
 date: "2021-03-24"
 output: hugodown::md_document
 toc: true
-rmd_hash: ef13fdb5a7d758b6
+rmd_hash: 9f879dd6224fbb24
 
 ---
 
@@ -44,14 +44,14 @@ Getting Started
 <span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S15/Rmd/"</span><span class='o'>)</span>
 
 <span class='c'># save the url location for today's script</span>
-<span class='nv'>todays_R_script</span> <span class='o'>&lt;-</span> 
-  <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/15_plotly/Plotly-without-answers.Rmd'</span>
+<span class='nv'>todays_Rmd</span> <span class='o'>&lt;-</span> 
+  <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/15_plotly/Plotly-withOUT-answers.Rmd'</span>
 
 <span class='c'># indicate the name of the new Rmd</span>
 <span class='nv'>Session15_Rmd</span> <span class='o'>&lt;-</span> <span class='s'>"S15/Rmd/Session15_plotly.Rmd"</span>
 
 <span class='c'># go get that file! </span>
-<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_R_script</span>,
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_Rmd</span>,
               destfile <span class='o'>=</span> <span class='nv'>Session15_Rmd</span><span class='o'>)</span></code></pre>
 
 </div>
@@ -352,8 +352,7 @@ Add `frame` in your aesthetics mapping to tell plotly what column to animate ove
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Understanding Penguin Bill Dimensions"</span><span class='o'>)</span>
 
 <span class='nf'><a href='https://docs.ropensci.org/plotly/reference/ggplotly.html'>ggplotly</a></span><span class='o'>(</span><span class='nv'>bill_depth_length</span>,
-         tooltip <span class='o'>=</span> <span class='s'>"text"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-  <span class='nf'><a href='https://docs.ropensci.org/plotly/reference/animation.html'>animation_opts</a></span><span class='o'>(</span><span class='o'>)</span></code></pre>
+         tooltip <span class='o'>=</span> <span class='s'>"text"</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -362,6 +361,8 @@ Add `frame` in your aesthetics mapping to tell plotly what column to animate ove
 </div>
 
 `{{< chart data="penguins8" >}}`
+
+**Note:** I know this plot isn't animating, this is just because of how this website is formatting and I couldn't figure out how to fix it. But, if you do this in R, you will find the code works.
 
 9 - Everything you know about ggplot still applies!
 ---------------------------------------------------
@@ -804,6 +805,8 @@ Set `text` to what you want to hover (try adding multiple variables in there!), 
 </div>
 
 `{{< chart data="gapminder" >}}`
+
+**Note:** I know this plot isn't animating, this is just because of how this website is formatting and I couldn't figure out how to fix it. But, if you do this in R, you will find the code works.
 
 </details>
 
