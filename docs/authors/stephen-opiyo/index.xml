@@ -13,6 +13,346 @@
     </image>
     
     <item>
+      <title>Session 16: lubridate</title>
+      <link>https://biodash.github.io/codeclub/16_lubridate/</link>
+      <pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/16_lubridate/</guid>
+      <description>&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;new-to-code-club&#34;&gt;New to Code Club?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;If you didn&amp;rsquo;t already do this, please follow the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/04_ggplot2/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has pointers for if you&amp;rsquo;re new to R or RStudio.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;If you&amp;rsquo;re able to do so, please open RStudio a bit before Code Club starts &amp;ndash; and in case you run into issues, please join the Zoom call early and we&amp;rsquo;ll help you troubleshoot.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-getting-set-up&#34;&gt;1. Getting set up&lt;/h2&gt;
+&lt;p&gt;R has a range of functions that allow you to work with dates and times. However, today we will discuss how to work with dates and times in R using the package &amp;ldquo;&lt;em&gt;lubridate&lt;/em&gt;&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;While &lt;em&gt;lubridate&lt;/em&gt; is &lt;em&gt;tidyverse&lt;/em&gt;-style, it is not part of the core &lt;em&gt;tidyverse&lt;/em&gt;, so we need to install it.&lt;/p&gt;
+&lt;p&gt;We are also going to use the bird data that was first discussed in Code Club session 1, and we will need to download that.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# If needed, install the lubridate package:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# install.packages(&#34;lubridate&#34;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# Load the tidyverse and lubridate:&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://lubridate.tidyverse.org&#39;&gt;lubridate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# Create a dir for our bird data (&#34;recursive&#34; to create two levels at once):&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/files2.html&#39;&gt;dir.create&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;data/birds/&#34;&lt;/span&gt;, recursive &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# The URL to our file:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;birds_file_url&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_Ohio.tsv&#34;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# The path to the file that we want to download the data to:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;birds_file&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;data/birds/backyard-birds_Ohio.tsv&#34;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# Download:&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;birds_file_url&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;birds_file&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# Read the data:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;read_tsv&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;file &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;birds_file&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-what-is-lubridate&#34;&gt;2. What is &lt;em&gt;lubridate&lt;/em&gt;?&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;lubridate&lt;/em&gt; provides tools that make it easier to parse and manipulate dates.&lt;/p&gt;
+&lt;p&gt;We will discuss the common use of lubridate under the following themes:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Parsing dates&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Manipulating dates&lt;br&gt;
+a) &lt;em&gt;Instants&lt;/em&gt;: Rounding dates, time zones&lt;br&gt;
+b) &lt;em&gt;Time spans&lt;/em&gt;: Durations, periods, intervals&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3-parsing-dates&#34;&gt;3. Parsing dates&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;lubridate&lt;/em&gt;&amp;rsquo;s parsing functions read strings into R as &amp;ldquo;date-time&amp;rdquo; objects. Year is represented by &lt;code&gt;y&lt;/code&gt;, month by &lt;code&gt;m&lt;/code&gt;, and day by &lt;code&gt;d&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Strings can be parsed using the following functions: &lt;a href=&#34;http://lubridate.tidyverse.org/reference/ymd.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dmy()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/ymd.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;myd()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/ymd.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ymd()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/ymd.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ydm()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/ymd.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dym()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/ymd.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mdy()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/ymd_hms.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ymd_hms()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Let us look at some examples&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# parsing by year, month, day&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/ymd.html&#39;&gt;ymd&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;20170131&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2017-01-31&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# parsing by month, day, year&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/ymd.html&#39;&gt;mdy&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;December 1st, 2020&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2020-12-01&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# parsing by day, month, year&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/ymd.html&#39;&gt;dmy&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;01-Dec-2020&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2020-12-01&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/ymd.html&#39;&gt;dmy&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;01/Dec/2020&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2020-12-01&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/ymd.html&#39;&gt;dmy&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;01Dec2020&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2020-12-01&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# parsing by year, month, day, hour, minutes, and seconds&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/ymd_hms.html&#39;&gt;ymd_hms&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;2020-01-31 20:11:59&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2020-01-31 20:11:59 UTC&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4-manipulating-dates-instants&#34;&gt;4. Manipulating dates: Instants&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;lubridate&lt;/em&gt; distinguishes between &lt;em&gt;moments&lt;/em&gt; in time (instants) and &lt;em&gt;spans&lt;/em&gt; of time (time spans).&lt;/p&gt;
+&lt;p&gt;Instants are specific moments of time. They are a combination of measurements on different units (i.e, years, months, days, etc.).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://lubridate.tidyverse.org/reference/now.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;now()&lt;/code&gt;&lt;/a&gt; returns the current system time.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://lubridate.tidyverse.org/reference/now.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;today()&lt;/code&gt;&lt;/a&gt; returns the current system date.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The individual values for &lt;a href=&#34;http://lubridate.tidyverse.org/reference/now.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;now()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://lubridate.tidyverse.org/reference/now.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;today()&lt;/code&gt;&lt;/a&gt; units can be extracted from an instant and set with the accessor functions &lt;a href=&#34;http://lubridate.tidyverse.org/reference/second.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;second()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/minute.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;minute()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/hour.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;hour()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/day.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;day()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/day.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;yday()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/day.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mday()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/day.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;wday()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/week.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;week()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/month.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;month()&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;http://lubridate.tidyverse.org/reference/year.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;year()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Let us look at some examples&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# Find the current system date using function today ()&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/now.html&#39;&gt;today&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2021-03-31&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# Find the current system time using function now ()&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/now.html&#39;&gt;now&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2021-03-31 17:26:48 EDT&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# Extract the day of the month from an object Now using function mday ()&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/day.html&#39;&gt;mday&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 31&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# Extract the day of the week from an object Now using function wday()&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/day.html&#39;&gt;wday&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 4&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# Extract the week of the year from an object Now using function week ()&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/week.html&#39;&gt;week&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 13&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# Extract the month from an object Now using function month ()&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/month.html&#39;&gt;month&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 3&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# Extract the year from an object Now using function year ()&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/year.html&#39;&gt;year&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 2021&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;rounding-instants&#34;&gt;Rounding instants&lt;/h3&gt;
+&lt;p&gt;Instants can be &lt;em&gt;rounded&lt;/em&gt; to a convenient unit using the functions &lt;a href=&#34;http://lubridate.tidyverse.org/reference/round_date.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ceiling_date()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/round_date.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;floor_date()&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;http://lubridate.tidyverse.org/reference/round_date.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;round_date()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;http://lubridate.tidyverse.org/reference/round_date.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ceiling_date()&lt;/code&gt;&lt;/a&gt; takes a date-time object and rounds it up to the nearest boundary of the specified time unit.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;http://lubridate.tidyverse.org/reference/round_date.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;round_date()&lt;/code&gt;&lt;/a&gt; takes a date-time object and time unit, and rounds it to the nearest value of the specified time unit.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;http://lubridate.tidyverse.org/reference/round_date.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;floor_date()&lt;/code&gt;&lt;/a&gt; takes a date-time object and rounds it down to the nearest boundary of the specified time unit.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;Let us look at some examples&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/round_date.html&#39;&gt;ceiling_date&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt;, unit &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;minute&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2021-03-31 17:27:00 EDT&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/round_date.html&#39;&gt;round_date&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt;, unit &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;minute&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2021-03-31 17:27:00 EDT&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/round_date.html&#39;&gt;floor_date&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Now&lt;/span&gt;, unit &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;minute&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;2021-03-31 17:26:00 EDT&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;time-zones&#34;&gt;Time zones&lt;/h3&gt;
+&lt;p&gt;Naming time zones is challenging because everyday names of time zones tend to be ambiguous. For example, USA has EST, or Eastern Standard Time. However, both Australia and Canada also have EST!&lt;/p&gt;
+&lt;p&gt;To avoid confusion, R uses the international standard IANA time zones. These use a consistent naming scheme &amp;ldquo;/&amp;rdquo;, typically in the form &lt;code&gt;&amp;lt;continent&amp;gt;/&amp;lt;city&amp;gt;&lt;/code&gt; (there are a few exceptions because not every country lies on a continent). Examples include &lt;code&gt;America/New_York&lt;/code&gt;, &lt;code&gt;Europe/Paris&lt;/code&gt;, and &lt;code&gt;Pacific/Auckland&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Unless otherwise specified, &lt;em&gt;lubridate&lt;/em&gt; always uses UTC. UTC (Coordinated Universal Time) is the standard time zone used by the scientific community and roughly equivalent to its predecessor GMT (Greenwich Mean Time).&lt;/p&gt;
+&lt;p&gt;Example: &lt;a href=&#34;http://lubridate.tidyverse.org/reference/ymd_hms.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ymd_hms(&amp;quot;2021-03-27 11:54:54 EDT&amp;quot;, tz=&amp;quot;America/New_York&amp;quot;)&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4-manipulating-dates-time-spans&#34;&gt;4. Manipulating dates: Time spans&lt;/h2&gt;
+&lt;p&gt;A timespan is a length of time that may or may not be connected to a particular instant. For example, two months is a timespan. &lt;em&gt;lubridate&lt;/em&gt; has three timespan classes: Durations, Periods and Intervals.&lt;/p&gt;
+&lt;h3 id=&#34;durations&#34;&gt;Durations&lt;/h3&gt;
+&lt;p&gt;Durations measure the exact amount of time that occurs between two instants.&lt;/p&gt;
+&lt;p&gt;Functions for working with durations include &lt;a href=&#34;http://lubridate.tidyverse.org/reference/duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;is.duration()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/as.duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;as.duration()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://lubridate.tidyverse.org/reference/duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;duration()&lt;/code&gt;&lt;/a&gt;. For specific lengths, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dseconds()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dminutes()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dhours()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ddays()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dweeks()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://lubridate.tidyverse.org/reference/duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dyears()&lt;/code&gt;&lt;/a&gt; convenient lengths.&lt;/p&gt;
+&lt;h3 id=&#34;periods&#34;&gt;Periods&lt;/h3&gt;
+&lt;p&gt;Periods measure the change in clock time that occurs between two instants.&lt;/p&gt;
+&lt;p&gt;Functions for working with periods include &lt;a href=&#34;http://lubridate.tidyverse.org/reference/period.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;is.period()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/as.period.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;as.period()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://lubridate.tidyverse.org/reference/period.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;period()&lt;/code&gt;&lt;/a&gt;. &lt;a href=&#34;http://lubridate.tidyverse.org/reference/period.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;seconds()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/period.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;minutes()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/period.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;hours()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/period.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;days()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/period.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;weeks()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;https://rdrr.io/r/base/weekday.POSIXt.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;months()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://lubridate.tidyverse.org/reference/period.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;years()&lt;/code&gt;&lt;/a&gt; quickly create periods of convenient lengths.&lt;/p&gt;
+&lt;h3 id=&#34;intervals&#34;&gt;Intervals&lt;/h3&gt;
+&lt;p&gt;Intervals are timespans that begin at a specific instant and end at a specific instant. Intervals retain complete information about a timespan. They provide the only reliable way to convert between periods and durations.&lt;/p&gt;
+&lt;p&gt;Functions for working with intervals include &lt;a href=&#34;http://lubridate.tidyverse.org/reference/interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;is.interval()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/as.interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;as.interval()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;interval()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;int_shift()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;int_flip()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;int_aligns()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;int_overlaps()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Let us look at an example&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# John was born on 19841014. How old is John&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;h_age&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/now.html&#39;&gt;today&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/ymd.html&#39;&gt;ymd&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;19841014&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;h_age&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Time difference of 13317 days&lt;/span&gt;
+
+
+&lt;span class=&#39;c&#39;&gt;# Time difference in days&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/as.duration.html&#39;&gt;as.duration&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;h_age&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;1150588800s (~36.46 years)&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5-plotting-the-bird-data&#34;&gt;5. Plotting the bird data&lt;/h2&gt;
+&lt;p&gt;We will plot the bird data using &lt;em&gt;ggplot2&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;First, we plot a bar graph of days of the week:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;Wday &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/day.html&#39;&gt;wday&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;eventDate&lt;/span&gt;, label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Wday&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_bar&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-8-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Second, we&amp;rsquo;ll plot the relative relative abundance of different bird orders by day of the week:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;Wday &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/day.html&#39;&gt;wday&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;eventDate&lt;/span&gt;, label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Wday&lt;/span&gt;, fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;order&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_bar&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-9-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;6-breakout-rooms&#34;&gt;6. Breakout rooms!&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;p&gt;Jane was born on January 31st, 1992. How old is Jane today?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use the functions &lt;a href=&#34;http://lubridate.tidyverse.org/reference/now.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;today()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;http://lubridate.tidyverse.org/reference/ymd.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mdy()&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;http://lubridate.tidyverse.org/reference/as.duration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;as.duration()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;Jane_age&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/now.html&#39;&gt;today&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/ymd.html&#39;&gt;mdy&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;January 31st, 1992&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/as.duration.html&#39;&gt;as.duration&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Jane_age&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;920332800s (~29.16 years)&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;p&gt;Plot a horizontal bar chart of bird orders.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use the &lt;code&gt;coord_flip()&lt;/code&gt; function.&lt;/p&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;order&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_bar&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;#f68034&#34;&lt;/span&gt;, alpha &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.6&lt;/span&gt;, width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;coord_flip&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; 
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-11-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;bonus-exercise&#34;&gt;Bonus exercise&lt;/h3&gt;
+&lt;p&gt;Remove the order &amp;ldquo;Passeriformes&amp;rdquo; from the bird data, and plot relative abundance of order based on days of the week.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use the functions &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; and &lt;code&gt;mutate()&lt;/code&gt;.&lt;/p&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# Remove Passeriformes:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;birds_a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;order&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;!=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Passeriformes&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# Create the plot:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;birds_a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;Wday &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;http://lubridate.tidyverse.org/reference/day.html&#39;&gt;wday&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;eventDate&lt;/span&gt;, label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Wday&lt;/span&gt;, fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;order&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_bar&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-12-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Session 11: Spatial data visualization with ggplot2</title>
       <link>https://biodash.github.io/codeclub/11_ggplot-maps/</link>
       <pubDate>Wed, 24 Feb 2021 00:00:00 +0000</pubDate>
