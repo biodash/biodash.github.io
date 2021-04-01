@@ -10,7 +10,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: 9b797fa51275aca4
+rmd_hash: 9389c4854bdb5a2c
 
 ---
 
@@ -167,7 +167,7 @@ The individual values for [`now()`](http://lubridate.tidyverse.org/reference/now
 <span class='nv'>Now</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='o'>(</span><span class='o'>)</span>
 <span class='nv'>Now</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 17:26:48 EDT"</span>
+<span class='c'>#&gt; [1] "2021-03-31 20:02:08 EDT"</span>
 
 
 <span class='c'># Extract the day of the month from an object Now using function mday ()</span>
@@ -218,17 +218,17 @@ Instants can be *rounded* to a convenient unit using the functions [`ceiling_dat
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>ceiling_date</a></span><span class='o'>(</span><span class='nv'>Now</span>, unit <span class='o'>=</span> <span class='s'>"minute"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 17:27:00 EDT"</span>
+<span class='c'>#&gt; [1] "2021-03-31 20:03:00 EDT"</span>
 
 
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>round_date</a></span><span class='o'>(</span><span class='nv'>Now</span>, unit <span class='o'>=</span> <span class='s'>"minute"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 17:27:00 EDT"</span>
+<span class='c'>#&gt; [1] "2021-03-31 20:02:00 EDT"</span>
 
 
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>floor_date</a></span><span class='o'>(</span><span class='nv'>Now</span>, unit <span class='o'>=</span> <span class='s'>"minute"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 17:26:00 EDT"</span>
+<span class='c'>#&gt; [1] "2021-03-31 20:02:00 EDT"</span>
 </code></pre>
 
 </div>
@@ -242,6 +242,56 @@ To avoid confusion, R uses the international standard IANA time zones. These use
 Unless otherwise specified, *lubridate* always uses UTC. UTC (Coordinated Universal Time) is the standard time zone used by the scientific community and roughly equivalent to its predecessor GMT (Greenwich Mean Time).
 
 Example: [`ymd_hms("2021-03-27 11:54:54 EDT", tz="America/New_York")`](http://lubridate.tidyverse.org/reference/ymd_hms.html)
+
+To find your current time zone, use the [`Sys.timezone()`](https://rdrr.io/r/base/timezones.html) function:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/timezones.html'>Sys.timezone</a></span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "America/New_York"</span>
+</code></pre>
+
+</div>
+
+To see the complete list of all time zone names, use [`OlsonNames()`](https://rdrr.io/r/base/timezones.html):
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># See the first four countries in the list of the time zone</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/timezones.html'>OlsonNames</a></span><span class='o'>(</span><span class='o'>)</span>, <span class='m'>4</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "Africa/Abidjan"     "Africa/Accra"       "Africa/Addis_Ababa"</span>
+<span class='c'>#&gt; [4] "Africa/Algiers"</span>
+</code></pre>
+
+</div>
+
+*lubridate* has two functions for working with time zones:
+
+-   [`with_tz()`](http://lubridate.tidyverse.org/reference/with_tz.html): Changes the time zone in which an instant is displayed. The clock time displayed for the instant changes, but the moment of time described remains the same.
+
+-   [`force_tz()`](http://lubridate.tidyverse.org/reference/force_tz.html): Changes only the time zone element of an instant. The clock time displayed remains the same, but the resulting instant describes a new moment of time.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>x1</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='c'># An example using with_tz()</span>
+<span class='nv'>x1a</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/with_tz.html'>with_tz</a></span><span class='o'>(</span><span class='nv'>x1</span>, tzone <span class='o'>=</span> <span class='s'>"Australia/Lord_Howe"</span><span class='o'>)</span>
+<span class='nv'>x1</span> <span class='o'>-</span> <span class='nv'>x1a</span>
+
+<span class='c'>#&gt; Time difference of 0 secs</span>
+
+
+<span class='c'># Now use force_tz()</span>
+<span class='nv'>x1b</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/force_tz.html'>force_tz</a></span><span class='o'>(</span><span class='nv'>x1</span>, tzone <span class='o'>=</span> <span class='s'>"Australia/Lord_Howe"</span><span class='o'>)</span>
+<span class='nv'>x1</span> <span class='o'>-</span> <span class='nv'>x1b</span>
+
+<span class='c'>#&gt; Time difference of 15 hours</span>
+</code></pre>
+
+</div>
 
 <br>
 
@@ -306,7 +356,7 @@ First, we plot a bar graph of days of the week:
   <span class='nf'>geom_bar</span><span class='o'>(</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -320,7 +370,7 @@ Second, we'll plot the relative relative abundance of different bird orders by d
   <span class='nf'>geom_bar</span><span class='o'>(</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -377,14 +427,14 @@ Solution (click here)
 
 ### Exercise 2
 
-Plot a horizontal bar chart of bird orders.
+Calculate the time differences between the last four countries in the time zone lists with the current time.
 
 <details>
 <summary>
 Hints (click here)
 </summary>
 
-<br> Use the `coord_flip()` function.
+<br> Use the [`force_tz()`](http://lubridate.tidyverse.org/reference/force_tz.html) function.
 
 </details>
 
@@ -398,13 +448,58 @@ Solution (click here)
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>order</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_bar</span><span class='o'>(</span>fill <span class='o'>=</span> <span class='s'>"#f68034"</span>, alpha <span class='o'>=</span> <span class='m'>0.6</span>, width <span class='o'>=</span> <span class='m'>0.4</span><span class='o'>)</span> <span class='o'>+</span>
-<span class='nf'>coord_flip</span><span class='o'>(</span><span class='o'>)</span> 
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Current time </span>
+<span class='nv'>C_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='o'>(</span><span class='o'>)</span>
 
+<span class='c'># Time zones of of the last four countries</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/timezones.html'>OlsonNames</a></span><span class='o'>(</span><span class='o'>)</span>, <span class='m'>4</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "UTC"  "W-SU" "WET"  "Zulu"</span>
+
+
+<span class='c'># Calculate time for UTC time zone </span>
+<span class='nv'>UTC_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/force_tz.html'>force_tz</a></span><span class='o'>(</span><span class='nv'>C_time</span>, tzone <span class='o'>=</span> <span class='s'>"UTC"</span><span class='o'>)</span>
+
+<span class='c'># Calculate time difference</span>
+<span class='nv'>C_time</span> <span class='o'>-</span> <span class='nv'>UTC_time</span>
+
+<span class='c'>#&gt; Time difference of 4 hours</span>
+
+
+<span class='c'># Calculate time for W-SU time zone </span>
+<span class='nv'>WSU_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/force_tz.html'>force_tz</a></span><span class='o'>(</span><span class='nv'>C_time</span>, tzone <span class='o'>=</span> <span class='s'>"W-SU"</span><span class='o'>)</span>
+<span class='nv'>WSU_time</span>
+
+<span class='c'>#&gt; [1] "2021-03-31 20:02:10 MSK"</span>
+
+
+<span class='c'># Calculate time difference</span>
+<span class='nv'>C_time</span> <span class='o'>-</span> <span class='nv'>WSU_time</span>
+
+<span class='c'>#&gt; Time difference of 7 hours</span>
+
+<span class='nv'>C_time</span>
+
+<span class='c'>#&gt; [1] "2021-03-31 20:02:10 EDT"</span>
+
+
+<span class='c'># Calculate time for WET time zone </span>
+<span class='nv'>WET_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/force_tz.html'>force_tz</a></span><span class='o'>(</span><span class='nv'>C_time</span>, tzone <span class='o'>=</span> <span class='s'>"WET"</span><span class='o'>)</span>
+
+<span class='c'># Calculate time difference</span>
+<span class='nv'>C_time</span> <span class='o'>-</span> <span class='nv'>WET_time</span>
+
+<span class='c'>#&gt; Time difference of 5 hours</span>
+
+
+<span class='c'># Calculate time for Zulu time zone </span>
+<span class='nv'>Zulu_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/force_tz.html'>force_tz</a></span><span class='o'>(</span><span class='nv'>C_time</span>, tzone <span class='o'>=</span> <span class='s'>"Zulu"</span><span class='o'>)</span>
+
+<span class='c'># Calculate time difference</span>
+<span class='nv'>C_time</span> <span class='o'>-</span> <span class='nv'>Zulu_time</span>
+
+<span class='c'>#&gt; Time difference of 4 hours</span>
 </code></pre>
-<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -451,7 +546,7 @@ Solution (click here)
   <span class='nf'>geom_bar</span><span class='o'>(</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
