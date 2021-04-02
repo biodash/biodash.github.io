@@ -10,7 +10,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: 9389c4854bdb5a2c
+rmd_hash: f8609e0e440fb241
 
 ---
 
@@ -160,38 +160,38 @@ The individual values for [`now()`](http://lubridate.tidyverse.org/reference/now
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Find the current system date using function today ()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>today</a></span><span class='o'>(</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-03-31"</span>
+<span class='c'>#&gt; [1] "2021-04-02"</span>
 
 
 <span class='c'># Find the current system time using function now ()</span>
 <span class='nv'>Now</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='o'>(</span><span class='o'>)</span>
 <span class='nv'>Now</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 20:02:08 EDT"</span>
+<span class='c'>#&gt; [1] "2021-04-02 12:08:07 EDT"</span>
 
 
 <span class='c'># Extract the day of the month from an object Now using function mday ()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/day.html'>mday</a></span><span class='o'>(</span><span class='nv'>Now</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 31</span>
+<span class='c'>#&gt; [1] 2</span>
 
 
 <span class='c'># Extract the day of the week from an object Now using function wday()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/day.html'>wday</a></span><span class='o'>(</span><span class='nv'>Now</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 4</span>
+<span class='c'>#&gt; [1] 6</span>
 
 
 <span class='c'># Extract the week of the year from an object Now using function week ()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/week.html'>week</a></span><span class='o'>(</span><span class='nv'>Now</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 13</span>
+<span class='c'>#&gt; [1] 14</span>
 
 
 <span class='c'># Extract the month from an object Now using function month ()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/month.html'>month</a></span><span class='o'>(</span><span class='nv'>Now</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 3</span>
+<span class='c'>#&gt; [1] 4</span>
 
 
 <span class='c'># Extract the year from an object Now using function year ()</span>
@@ -218,17 +218,17 @@ Instants can be *rounded* to a convenient unit using the functions [`ceiling_dat
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>ceiling_date</a></span><span class='o'>(</span><span class='nv'>Now</span>, unit <span class='o'>=</span> <span class='s'>"minute"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 20:03:00 EDT"</span>
+<span class='c'>#&gt; [1] "2021-04-02 12:09:00 EDT"</span>
 
 
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>round_date</a></span><span class='o'>(</span><span class='nv'>Now</span>, unit <span class='o'>=</span> <span class='s'>"minute"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 20:02:00 EDT"</span>
+<span class='c'>#&gt; [1] "2021-04-02 12:08:00 EDT"</span>
 
 
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>floor_date</a></span><span class='o'>(</span><span class='nv'>Now</span>, unit <span class='o'>=</span> <span class='s'>"minute"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 20:02:00 EDT"</span>
+<span class='c'>#&gt; [1] "2021-04-02 12:08:00 EDT"</span>
 </code></pre>
 
 </div>
@@ -258,7 +258,7 @@ To see the complete list of all time zone names, use [`OlsonNames()`](https://rd
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># See the first four countries in the list of the time zone</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># See the first four time zones in the list of the time zone</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/timezones.html'>OlsonNames</a></span><span class='o'>(</span><span class='o'>)</span>, <span class='m'>4</span><span class='o'>)</span>
 
 <span class='c'>#&gt; [1] "Africa/Abidjan"     "Africa/Accra"       "Africa/Addis_Ababa"</span>
@@ -327,13 +327,13 @@ Functions for working with intervals include [`is.interval()`](http://lubridate.
 <span class='nv'>h_age</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>today</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span><span class='o'>(</span><span class='m'>19841014</span><span class='o'>)</span>
 <span class='nv'>h_age</span>
 
-<span class='c'>#&gt; Time difference of 13317 days</span>
+<span class='c'>#&gt; Time difference of 13319 days</span>
 
 
-<span class='c'># Time difference in days</span>
+<span class='c'># Time difference in years</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/as.duration.html'>as.duration</a></span><span class='o'>(</span><span class='nv'>h_age</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "1150588800s (~36.46 years)"</span>
+<span class='c'>#&gt; [1] "1150761600s (~36.47 years)"</span>
 </code></pre>
 
 </div>
@@ -360,7 +360,7 @@ First, we plot a bar graph of days of the week:
 
 </div>
 
-Second, we'll plot the relative relative abundance of different bird orders by day of the week:
+Second, we'll plot the relative abundance of different bird orders by day of the week:
 
 <div class="highlight">
 
@@ -410,7 +410,7 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>Jane_age</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>today</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>mdy</a></span><span class='o'>(</span><span class='s'>"January 31st, 1992"</span><span class='o'>)</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/as.duration.html'>as.duration</a></span><span class='o'>(</span><span class='nv'>Jane_age</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "920332800s (~29.16 years)"</span>
+<span class='c'>#&gt; [1] "920505600s (~29.17 years)"</span>
 </code></pre>
 
 </div>
@@ -427,14 +427,18 @@ Solution (click here)
 
 ### Exercise 2
 
-Calculate the time differences between the last four countries in the time zone lists with the current time.
+Calculate the time differences between the last four time zones with the current time.
 
 <details>
 <summary>
 Hints (click here)
 </summary>
 
-<br> Use the [`force_tz()`](http://lubridate.tidyverse.org/reference/force_tz.html) function.
+<br>
+
+-   You can get the last four time zones using the [`tail()`](https://rdrr.io/r/utils/head.html) function in combination with the [`OlsonNames()`](https://rdrr.io/r/base/timezones.html) functions.
+
+-   Then, you can compare the current time ([`now()`](http://lubridate.tidyverse.org/reference/now.html)) with times in different time zones using the [`force_tz()`](http://lubridate.tidyverse.org/reference/force_tz.html) function.
 
 </details>
 
@@ -451,7 +455,7 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Current time </span>
 <span class='nv'>C_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='o'>(</span><span class='o'>)</span>
 
-<span class='c'># Time zones of of the last four countries</span>
+<span class='c'># Last four time zones</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/timezones.html'>OlsonNames</a></span><span class='o'>(</span><span class='o'>)</span>, <span class='m'>4</span><span class='o'>)</span>
 
 <span class='c'>#&gt; [1] "UTC"  "W-SU" "WET"  "Zulu"</span>
@@ -470,7 +474,7 @@ Solution (click here)
 <span class='nv'>WSU_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/force_tz.html'>force_tz</a></span><span class='o'>(</span><span class='nv'>C_time</span>, tzone <span class='o'>=</span> <span class='s'>"W-SU"</span><span class='o'>)</span>
 <span class='nv'>WSU_time</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 20:02:10 MSK"</span>
+<span class='c'>#&gt; [1] "2021-04-02 12:08:09 MSK"</span>
 
 
 <span class='c'># Calculate time difference</span>
@@ -480,7 +484,7 @@ Solution (click here)
 
 <span class='nv'>C_time</span>
 
-<span class='c'>#&gt; [1] "2021-03-31 20:02:10 EDT"</span>
+<span class='c'>#&gt; [1] "2021-04-02 12:08:09 EDT"</span>
 
 
 <span class='c'># Calculate time for WET time zone </span>
