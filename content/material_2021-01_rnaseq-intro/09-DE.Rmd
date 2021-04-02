@@ -34,7 +34,9 @@ knitr::opts_chunk$set(
 
 ## Getting set up
 
-### Start an RStudio session
+### Start an RStudio session at OSC
+
+<details><summary>Show instructions</summary>
 
 - Login to OSC at <https://ondemand.osc.edu>.
 
@@ -60,7 +62,11 @@ knitr::opts_chunk$set(
 
 - Click `Connect to RStudio Server` at the bottom of the box, and an RStudio Server instance will open. You're ready to go!
 
+</details>
+
 ### Create an RStudio Project
+
+<details><summary>Show instructions</summary>
 
 ```{r, eval=FALSE}
 basedir <- '/fs/project/PAS0471/teach/misc/2021-02_rnaseq/'
@@ -84,8 +90,9 @@ If you get the pop-up below, click `Don't Save` (do this whenever you get that p
 <img src=img/rdata-popup.png width="350">
 </p>
 
+</details>
 
-### Copy the files
+### Copy the count data and the metadata files
 
 Go the `Terminal` tab next to the R `Console` in the bottom left of the RStudio
 window:
@@ -100,10 +107,13 @@ cp ../master/results/count/gene_counts_all.txt results/count
 ### Load the necessary packages
 
 ```{r, warning=FALSE, message=FALSE}
-library(DESeq2)        # Differential expression analysis
-library(tidyverse)     # Misc. data manipulation and plotting
-library(here)          # Managing file paths
-library(pheatmap)      # Heatmap plot
+if(! 'pacman' %in% installed.packages()) install.packages('pacman')
+
+packages <- c('DESeq2',          # Differential expression analysis
+              'tidyverse',       # Misc. data manipulation and plotting
+              'here',            # Managing file paths
+              'pheatmap')        # Heatmap plot
+pacman::p_load(char = packages)
 
 theme_set(theme_bw())  # Set ggplot theme
 ```
@@ -120,10 +130,9 @@ plotdir <- "results/DE/fig/"
 
 Input files:
 
-- Gene counts table,
-  which is the file exactly as it was written by *featureCounts*.
+- **Gene counts table** -- the file exactly as it was written by *featureCounts*.
   
-- Metadata table, so we can group our samples and make comparisons between
+- **Metadata table** -- so we can group our samples and make comparisons between
   these groups.
 
 ```{r, eval=FALSE}
@@ -177,11 +186,15 @@ colnames(raw_counts) <- sub(my_regex, "\\1", colnames(raw_counts))
 colnames(raw_counts)
 ```
 
-Remove unnecessary columns with feature metadata:
+Besides the counts, there are columns with metadata for each gene:
 
 ```{r}
 raw_counts[1:5, 1:8]
+```
 
+Let's remove those:
+
+```{r}
 counts <- raw_counts[, 7:ncol(raw_counts)]
 rownames(counts) <- raw_counts$Geneid
 ```
@@ -193,7 +206,7 @@ each library was sequenced on two lanes.
 Recall that in our workflow, we had merged these FASTQ files prior to mapping,
 but here we are using the table based on the full dataset produced by Matthew.
 
-So, we will go ahead and merge replicates now, by simply summing the counts:
+So, we will go ahead and merge these replicates now, by simply summing the counts:
 
 ```{r}
 counts.t <- t(counts)
@@ -207,11 +220,16 @@ counts <- t(sums)
 
 ### Check sample IDs
 
+For differential expression analysis, we will be using the popular**DESeq2**
+R/Bioconductor package
+([paper](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8),
+[website](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)).
+
 We will load both the count table and the metadata into *DESeq2*.
 When doing so, *DESeq2* assumes that sample IDs in both tables match and 
 are provided in the same order. Let's make sure this is indeed the case.
 
-Sort both alphabetically:
+Sort both data frames alphabetically:
 
 ```{r}
 metadata <- metadata[order(metadata$SampleID), ]
@@ -226,6 +244,7 @@ metadata$SampleID
 colnames(counts)
 
 matching_names <- identical(metadata$SampleID, colnames(counts))
+matching_names
 if(matching_names == FALSE) stop("Sample ID in metadata and count matrix do not match!")
 ```
 
@@ -234,10 +253,10 @@ if(matching_names == FALSE) stop("Sample ID in metadata and count matrix do not 
 We will create the DESeq2 object using the function `DESeqDataSetFromMatrix()`,
 which we will provide with three pieces of information:
 
-- The count data (argument `countData`)
-- The metadata (argument `colData`)
-- The model design for the DE analysis (argument `design`):
-  for now we specify `~1`, which means "no design" --
+- The count data with argument `countData`.
+- The metadata with argument `colData`.
+- The model design for the DE analysis -- argument `design`.  
+  For now, we will specify `~1`, which means "no design" --
   we will change this before the actual DE analysis.
 
 ```{r}
@@ -252,28 +271,32 @@ dds <- DESeqDataSetFromMatrix(countData = counts,
 
 ## Explore the count data
 
-What are dimensions of the count matrix?
+What are number of rows and columns of the count matrix?
 
 ```{r}
 dim(counts)
 ```
 
-How many genes (rows) with non-zero counts??
+How many genes have non-zero counts?
 
 ```{r}
 dim(counts[rowSums(counts) > 0, ])
 
 ```
 
-How many genes with total counts of at least 10?
+How many genes have total counts of at least 10?
 
 ```{r}
 dim(counts[rowSums(counts) >= 10, ])
 ```
 
+### Histogram of gene counts
+
 Let's plot a histogram of gene counts:
 
 ```{r}
+theme_set(theme_bw())
+
 summed_gene_counts <- data.frame(gene_count = rowSums(counts)) %>%
   rownames_to_column('gene_id')
 
@@ -282,6 +305,9 @@ ggplot(data = summed_gene_counts) +
   scale_y_log10(expand = c(0, 0)) +
   scale_x_continuous(expand = c(0,0))
 ```
+
+Zoom in a bit:
+
 ```{r}
 ggplot(data = summed_gene_counts) +
   geom_histogram(aes(x = gene_count), binwidth = 1000) +
@@ -330,31 +356,31 @@ percentVar <- round(100 * attr(pcaData, "percentVar"))
 We create a plot title with some italic text using the `expression()` function: 
 
 ```{r}
-plot_title <-
-  expression("PCA of " * italic(Glycine ~ max) * " transcript count data")
+plot_title <- expression("PCA of " * italic(Glycine ~ max) * " transcript count data")
 ```
 
-### First plot -- with points/icons for each sample
+### Plot the PCA results
 
 ```{r}
-pca_plot1 <- ggplot(pcaData,
-                    aes(PC1, PC2, color = AMF, shape = Treatment)) +
+ggplot(pcaData,
+       aes(PC1, PC2, color = AMF, shape = Treatment)) +
   geom_point(size = 6) +
-  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
-  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  xlab(paste0("PC1: ", percentVar[1], "% of variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% of variance")) +
   ggtitle(plot_title)
-
-print(pca_plot1)
 ```
 
-### Second plot -- with sample names
+### Plot again -- with sample names
 
 ```{r}
+library(ggrepel)
+
 pca_plot2 <- ggplot(pcaData,
               aes(PC1, PC2, color = AMF, shape = Treatment)) +
-  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
-  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
-  geom_text(aes(label = name)) +
+  geom_point(size = 3) +
+  geom_label_repel(aes(label = name)) +
+  xlab(paste0("PC1: ", percentVar[1], "% of variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% of variance")) +
   ggtitle(plot_title)
 
 print(pca_plot2)
@@ -366,63 +392,123 @@ print(pca_plot2)
 
 ## DE analysis -- full dataset
 
-My design has two factors.
-Rather than fit a multivariate model, I decided to merger these to a single factor
-(called 'group') and fit a univariate model with this factor.
+The design has two factors: `AMF` and `Treatment`.
+Rather than fit a multivariate model, we can start by merging the two into a
+single factor called `group`, and fit a univariate model with this factor.
 
-```{r, eval=FALSE}
+```{r}
 dds$group <- factor(paste(dds$AMF, dds$Treatment, sep = "_"))
+table(dds$group)
 ```
 
-Setting reference to the double negative control (empty substrate, no Agrobacteria).
+We will set the "reference" level of the factor to be the double negative control
+(empty substrate, no Agrobacteria):
 
-```{r, eval=FALSE}
+```{r}
 dds$group <- relevel(dds$group, ref = "control_mock")
+dds$group
 ```
 
 Set the analysis design:
 
-```{r, eval=FALSE}
-design(dds) <- formula( ~ group)
+```{r}
+design(dds) <- formula(~ group)
 ```
 
 Perform the differential expression analysis:
 
-```{r, eval=FALSE}
+```{r}
 dds <- DESeq(dds)
 ```
 
 The `DESeq()` function above performs three steps consecutively,
 which could also be called separately
-(as could be useful if wanting to change defaults):
+(which could be useful if you'd want to be able to change more defaults):
   
   - `estimateSizeFactors()` -- "Normalization" by library size.
-    *DESeq2* doesn’t actually normalize the counts,
+    Note that *DESeq2* doesn’t actually normalize the counts,
     it uses raw counts and includes the size factors in the modeling. 
   
-  - `estimateDispersions()` -- Estimate gene-wise dispersion.
+  - `estimateDispersions()` -- Estimate gene-wise dispersions.
   
-  - `nbinomWaldTest(ddsObj)` -- Fit negative Binomial GLM and calculate
+  - `nbinomWaldTest(ddsObj)` -- Fit the negative Binomial GLM and calculate
     Wald statistics.
 
-### Adjusted p-values set to `NA`
+### The results table
 
-Some values in the results table can be set to NA for one of the following reasons:
+```{r}
+results(dds)
+```
+
+By default, the results table prints statistics comparing the last level of the
+factor with the first level: that is, log-fold change and p-values describe
+differences between these two levels specifically.
+However, we can easily extract equivalent statistics for any pairwise comparison
+among our factor levels, which we will see later.
+
+For now, we will explore the different columns in this table:
+
+- The `baseMean` column contains the mean expression level across all samples.
+
+- The `log2FoldChange` column contains the log2-fold change of gene counts
+  between the compared levels, that is, it represents the *effect size*.
+  A log2-fold change of 1 indicates that the expression in the reference level
+  is 2 times lower than that of the other level, a log2-fold change of 2 indicates
+  a four-fold difference, a log2-fold change of 3 indicates an eight-fold difference,
+  and so on. Similarly, negative log2-fold change values indicate an change
+  in gene counts in the other direction.
+  
+- The `lfcSE` column indicates the uncertainty in terms of the standard error
+  (SE) of the log2-fold change estimate.
+  
+- The `stat` column indicates the value for the Wald test's test statistic.
+
+- The `pvalue` column reported the *uncorrected* p-value from the Wald test.
+
+- Because we are testing significance for *many* genes,
+  we need to correct for multiple testing.
+  DESeq2 uses the Benjamini-Hochberg False Discovery Rate (FDR) correction,
+  and these values are reported in the column `padj` (i.e., adjusted p-value).
+
+### `NA` values in the results table
+
+Some values in the results table can be set to `NA` for one of the following reasons:
 
 - If within a row, all samples have zero counts,
-  the `baseMean` column will be zero, and the log2 fold change estimates,
+  the `baseMean` column will be zero, and the log2-fold change estimates,
   p-value and adjusted p-value will all be set to `NA`.
 
-- If a row contains a sample with an extreme count outlier,
-  then the p-value and adjusted p-value will be set to `NA`.
-  These outlier counts are detected by Cook’s distance.
+- DESeq2 performs outlier detection using Cook's distance.
+  If a gene contains a sample with an count outlier,
+  both the p-value and adjusted p-value will be set to `NA`.
 
-- If a row is filtered by automatic independent filtering,
-  for having a low mean normalized count,
-  then only the adjusted p-value will be set to `NA`.
+- DESeq2 also automatically filters low mean count genes in the sense that it
+  does not include them in the multiple testing correction.
+  Therefore, in such cases, the p-value will not be `NA`, but the adjusted p-value
+  will be.
+  
+  Because we have very low power to detect differential expression for such
+  low-count genes, it is beneficial to remove them prior to the multiple testing
+  correction, so this correction becomes less severe for the remaining genes.
 
-```{r, eval=FALSE}
-resultsNames(dds)
+Let's see how many genes have `NA` p-values:
+
+```{r}
+# Number of genes with NA p-value:
+sum(is.na(results(dds)$pvalue))
+
+# As a proportion of the total number of genes in the test:
+sum(is.na(results(dds)$pvalue)) / nrow(results(dds))
+```
+
+And `NA` adjusted p-values:
+
+```{r}
+# Number of genes with NA p-value:
+sum(is.na(results(dds)$padj))
+
+# As a proportion of the total number of genes in the test:
+sum(is.na(results(dds)$padj)) / nrow(results(dds))
 ```
 
 <br>
@@ -430,6 +516,10 @@ resultsNames(dds)
 ----
 
 ## DE analysis -- contrast two groups
+
+```{r, eval=FALSE}
+resultsNames(dds)
+```
 
 ```{r, eval=FALSE}
 my_contrast <- c("Ri_Agrobacterium_myb", "Ri_Agrobacterium_noexp")
