@@ -5,12 +5,784 @@
     <link>https://biodash.github.io/</link>
       <atom:link href="https://biodash.github.io/index.xml" rel="self" type="application/rss+xml" />
     <description>BioDASH</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Wed, 31 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Tue, 06 Apr 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png</url>
       <title>BioDASH</title>
       <link>https://biodash.github.io/</link>
     </image>
+    
+    <item>
+      <title>Session 17: Introduction to regular expressions</title>
+      <link>https://biodash.github.io/codeclub/17_regex/</link>
+      <pubDate>Tue, 06 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/17_regex/</guid>
+      <description>&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;new-to-code-club&#34;&gt;New to Code Club?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;If you didn&amp;rsquo;t already do this, please follow the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has pointers for if you&amp;rsquo;re new to R or RStudio.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;If you&amp;rsquo;re able to do so, please open RStudio a bit before Code Club starts &amp;ndash; and in case you run into issues, please join the Zoom call early and we&amp;rsquo;ll help you troubleshoot.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-getting-set-up&#34;&gt;1. Getting set up&lt;/h2&gt;
+&lt;p&gt;While base R also has functions to work with regular expressions (such as &lt;a href=&#34;https://rdrr.io/r/base/grep.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;grep()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://rdrr.io/r/base/regex.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;regexp()&lt;/code&gt;&lt;/a&gt;), we will work with the &lt;em&gt;stringr&lt;/em&gt; package, one of the core &lt;em&gt;tidyverse&lt;/em&gt; packages.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## If needed, install the tidyverse:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# install.packages(&#34;tidyverse&#34;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## Load the tidyverse -- this will include loading &#34;stringr&#34;. &lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;To get access to some strings that we can match with regular expressions, we will use the &lt;em&gt;bakeoff&lt;/em&gt; data package:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## If needed, first install the &#34;remotes&#34; package:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# install.packages(&#34;remotes&#34;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;remotes&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://remotes.r-lib.org/reference/install_github.html&#39;&gt;install_github&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;apreshill/bakeoff&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://bakeoff.netlify.com&#39;&gt;bakeoff&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-regular-expressions-what-and-why&#34;&gt;2. Regular expressions: what and why?&lt;/h2&gt;
+&lt;p&gt;You would probably have no trouble recognizing internet and email addresses, most phone numbers, or a DNA sequence embedded in a piece of text. And you would do so even if these were presented without context, and even though you may have never seen that &lt;em&gt;specific&lt;/em&gt; email address, DNA sequence, and so on.&lt;/p&gt;
+&lt;p&gt;We can recognize these things because they adhere to certain patterns: a DNA sequence, for instance, typically consists of a sequence of capital As, Cs, Gs, and Ts.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Regular expressions provide a way to describe and match text that contains specific patterns to computers&lt;/strong&gt;, with expressions that convey things like &lt;em&gt;&amp;ldquo;any digit&amp;rdquo;&lt;/em&gt; and &lt;em&gt;&amp;ldquo;one or more or the previous character or character type&amp;rdquo;&lt;/em&gt;. For example, &lt;strong&gt;&lt;code&gt;\d{5}&lt;/code&gt;&lt;/strong&gt; is a regular expression that matches at least five consecutive digits and would be a good start to finding all US ZIP codes embedded in a piece of text.&lt;/p&gt;
+&lt;p&gt;Regular expressions are extremely useful for a couple of related purposes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Finding and extracting information that adheres to patterns&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Finding addresses, citations, or identifiers such as accession numbers.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Finding degenerate primers (or the DNA sequence between them) or transcription factor binding sites, in which certain positions may vary.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Finding DNA repeats: you know that something is repeated, but not what is.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;While we often &lt;em&gt;generalize&lt;/em&gt; and &lt;em&gt;constrain&lt;/em&gt; matches at the same time, we could also merely constrain them:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Only find instances of &amp;ldquo;&lt;em&gt;chocolate&lt;/em&gt;&amp;rdquo; if it is the first or last word of a line/sentence/string.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Only find instances of &amp;ldquo;&lt;em&gt;chocolate&lt;/em&gt;&amp;rdquo; which are followed by &amp;ldquo;cake&amp;rdquo;, &amp;ldquo;tart&amp;rdquo;, or &amp;ldquo;croissant&amp;rdquo;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Sophisticated find-and-replace&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Replace multiple variations of the same thing at once:&lt;br&gt;
+e.g. change all DNA repeats to lowercase letters or Ns.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Change GPS coordinates in degrees/minutes/seconds format to decimal degrees,&lt;br&gt;
+or a date format from &lt;code&gt;M/DD/YY&lt;/code&gt; to &lt;code&gt;YYYY-MM-DD&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Rename files: switch sample ID and treatment ID separated by underscores,&lt;br&gt;
+or pad numbers (&lt;code&gt;1&lt;/code&gt;-&lt;code&gt;100&lt;/code&gt; =&amp;gt; &lt;code&gt;001&lt;/code&gt;-&lt;code&gt;100&lt;/code&gt; for proper ordering).&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Finally, regular expressions can be used to &lt;strong&gt;parse and convert file formats&lt;/strong&gt;, though you generally don&amp;rsquo;t have to do this yourself unless you are dealing with highly custom file types.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Regular expressions are used in nearly all programming languages. They are also widely used in text editors and therefore provide a first taste of programming for many people.&lt;/strong&gt;&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-str_view-and-strings&#34;&gt;2. &lt;code&gt;str_view()&lt;/code&gt; and strings&lt;/h2&gt;
+&lt;p&gt;Today, to get to know regular expressions, we will just use the &lt;code&gt;str_view()&lt;/code&gt; function from the &lt;em&gt;stringr&lt;/em&gt; package. Next week, we&amp;rsquo;ll get introduced to other &lt;em&gt;stringr&lt;/em&gt; functions to search and also to replace strings.&lt;/p&gt;
+&lt;p&gt;The basic syntax is &lt;code&gt;str_view(&amp;lt;target-string(s)&amp;gt;, &amp;lt;search-pattern&amp;gt;)&lt;/code&gt;, for example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;chocolate&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;cola&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/cola.png&#34; width=&#34;15%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;str_view()&lt;/code&gt; shows us which part of the target string was matched in the &lt;code&gt;Viewer&lt;/code&gt; pane of RStudio. This particular match is rather obvious because we searched for a &amp;ldquo;literal string&amp;rdquo; without any special meaning. However, the visual representation will become useful when we start using special characters in our regular expressions: then, we know what &lt;em&gt;pattern&lt;/em&gt; we should be matching, but not what &lt;em&gt;exact string&lt;/em&gt; we actually matched.&lt;/p&gt;
+&lt;p&gt;If we want to see all matches, and not just the first one, we have to use &lt;code&gt;str_view_all&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;chocolate&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;o&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/one_o.png&#34; width=&#34;15%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;chocolate&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;o&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/two_o.png&#34; width=&#34;15%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;stringr&lt;/em&gt; functions are vectorized, so we can use them not just to match a single string but also to match a vector of strings:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;desserts&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;plum pudding&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;chocolate cake&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;sticky toffee pudding&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;desserts&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;pudding&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/vector1.png&#34; width=&#34;30%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Note that the non-matching string &amp;ldquo;&lt;em&gt;chocolate cake&lt;/em&gt;&amp;rdquo; was displayed despite the lack of a match. If we only want to see strings that matched, we can set the &lt;code&gt;match&lt;/code&gt; argument to &lt;code&gt;TRUE&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;desserts&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;pudding&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/vector2.png&#34; width=&#34;30%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    &lt;p&gt;&lt;strong&gt;Strings in R&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;A &amp;ldquo;string&amp;rdquo; or &amp;ldquo;character string&amp;rdquo; is a contiguous sequence of characters. To indicate that something is a string in R, we put quotes around it: &lt;code&gt;&amp;quot;Hello&amp;quot;&lt;/code&gt; and &lt;code&gt;&amp;quot;9&amp;quot;&lt;/code&gt;. If you forget the quotes, R would interpret &lt;code&gt;&amp;quot;Hello&amp;quot;&lt;/code&gt; as an &lt;em&gt;object&lt;/em&gt; (because it starts with a letter) and &lt;code&gt;&amp;quot;9&amp;quot;&lt;/code&gt; as a &lt;em&gt;number&lt;/em&gt; (because it starts with a digit).&lt;/p&gt;
+&lt;p&gt;There is &lt;em&gt;no difference&lt;/em&gt; between single quotes (&lt;code&gt;&#39;Hello&#39;&lt;/code&gt;) and double quotes (&lt;code&gt;&amp;quot;Hello&amp;quot;&lt;/code&gt;), but double quotes are generally recommended.&lt;/p&gt;
+&lt;p&gt;If your string is itself supposed to contain a quote symbol of some kind, it is convenient to use the &lt;em&gt;other type&lt;/em&gt; of quote to define the string:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# The string contains a single quote, so we use double quotes to define it:&lt;/span&gt;
+&lt;span class=&#39;s&#39;&gt;&#34;This cake&#39;s 7th layer is particularly good.&#34;&lt;/span&gt;
+&lt;p&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &amp;ldquo;This cake&amp;rsquo;s 7th layer is particularly good.&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Alternatively, a quote can be &lt;strong&gt;escaped&lt;/strong&gt; using a backslash &lt;strong&gt;&lt;code&gt;\&lt;/code&gt;&lt;/strong&gt; to indicate that it does &lt;em&gt;not end the string&lt;/em&gt; but represents a literal quote &lt;em&gt;inside the string&lt;/em&gt;, which may be necessary if a string contains both single and double quotes:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;s&#39;&gt;&#34;This cake is only 2&#39;4\&#34; tall - do better!&#34;&lt;/span&gt;
+&lt;p&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &amp;ldquo;This cake is only 2&#39;4&amp;quot; tall - do better!&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-special-characters&#34;&gt;2. Special characters&lt;/h2&gt;
+&lt;p&gt;Unfortunately, we have to wade through some potentially confusing territory before we can start using regular expressions.&lt;/p&gt;
+&lt;h4 id=&#34;special-characters-and-escaping-them&#34;&gt;Special characters and escaping them&lt;/h4&gt;
+&lt;p&gt;In regular expressions (regex), we need a way to succinctly convey descriptions such as &amp;ldquo;any character&amp;rdquo; or &amp;ldquo;any digit&amp;rdquo;. &lt;em&gt;However, there are no characters exclusive to regular expressions:&lt;/em&gt; &lt;em&gt;instead, we re-use normal characters.&lt;/em&gt; For instance:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;&lt;strong&gt;Any character&lt;/strong&gt;&amp;rdquo; is represented by a period, &lt;strong&gt;&lt;code&gt;.&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;&lt;strong&gt;Any digit&lt;/strong&gt;&amp;rdquo; is represented by &lt;strong&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/strong&gt;, with the &lt;strong&gt;&lt;code&gt;\&lt;/code&gt;&lt;/strong&gt; basically preventing the &lt;strong&gt;&lt;code&gt;d&lt;/code&gt;&lt;/strong&gt; from being interpreted literally.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You may already see the problems that arise here: how, then, do we indicate a literal &lt;strong&gt;&lt;code&gt;.&lt;/code&gt;&lt;/strong&gt; or &lt;strong&gt;&lt;code&gt;\&lt;/code&gt;&lt;/strong&gt; in a regular expression? The solution is to &lt;strong&gt;escape&lt;/strong&gt; the special character with a(nother) backslash:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;\.&lt;/code&gt;&lt;/strong&gt; matches a &lt;strong&gt;&lt;code&gt;.&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;\\&lt;/code&gt;&lt;/strong&gt; matches a &lt;strong&gt;&lt;code&gt;\&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Okay, that&amp;rsquo;s inconvenient but manageable. However, it gets worse than that!&lt;/p&gt;
+&lt;br&gt;
+&lt;h4 id=&#34;escape-sequences-in-regular-strings&#34;&gt;Escape sequences in regular strings&lt;/h4&gt;
+&lt;p&gt;Outside of regular expressions, R also uses backslashes &lt;strong&gt;&lt;code&gt;\&lt;/code&gt;&lt;/strong&gt; to form so-called &amp;ldquo;escape sequences&amp;rdquo;. This works similarly to how the regular expression &lt;strong&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/strong&gt; means &amp;ldquo;any digit&amp;rdquo; &amp;ndash; for example, when we use &lt;strong&gt;&lt;code&gt;\n&lt;/code&gt;&lt;/strong&gt; &lt;em&gt;in any string&lt;/em&gt;, it will be interpreted as a newline:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/cat.html&#39;&gt;cat&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;cho\nco&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; cho&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; co&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;In fact, a single backslash &lt;strong&gt;&lt;code&gt;\&lt;/code&gt;&lt;/strong&gt; is &lt;strong&gt;never taken literally&lt;/strong&gt; in any regular R string:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;cat(&#34;cho\dco&#34;)
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Error: &#39;\d&#39; is an unrecognized escape in character string starting &#34;&#34;cho\d&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Because this is &lt;em&gt;not&lt;/em&gt; a regular expression, and &lt;strong&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/strong&gt; does not happen to be an escape sequence like &lt;strong&gt;&lt;code&gt;\n&lt;/code&gt;&lt;/strong&gt; was earlier, &lt;strong&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/strong&gt; doesn&amp;rsquo;t mean anything to R. But instead of assuming that the backslash is therefore a literal backslash, R throws an error, demonstrating that a backslash is always interpreted as the first character in an escape sequence.&lt;/p&gt;
+&lt;p&gt;How can we include a backslash in a string, then? Same as before: we &amp;ldquo;escape&amp;rdquo; it with another backslash:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/cat.html&#39;&gt;cat&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;bla\\dbla&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; bla\dbla&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;h4 id=&#34;the-backslash-plague&#34;&gt;The backslash plague&lt;/h4&gt;
+&lt;p&gt;We saw that the regular expression &lt;strong&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/strong&gt; matches a digit, but also that using string &lt;strong&gt;&lt;code&gt;&amp;quot;\d&amp;quot;&lt;/code&gt;&lt;/strong&gt; will merely throw an error!&lt;/p&gt;
+&lt;p&gt;Therefore, to actually define a regular expression that contains &lt;strong&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/strong&gt;, we need to use the string &lt;strong&gt;&lt;code&gt;&amp;quot;\\d&amp;quot;&lt;/code&gt;&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;str_view(&#34;The cake has 8 layers&#34;, &#34;\d&#34;)
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Error: &#39;\d&#39; is an unrecognized escape in character string starting &#34;&#34;\d&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;The cake has 8 layers&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;\\d&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/digit1.png&#34; width=&#34;30%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;So, to define any regular expression symbol that contains a backslash,&lt;/strong&gt; &lt;strong&gt;we need to always use two backslashes!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;What if we want to match a backslash? We need the regular expression &lt;strong&gt;&lt;code&gt;\\&lt;/code&gt;&lt;/strong&gt;, but to define that regex as a string, we have to escape each of the two backslashes &amp;ndash; only to end up with four backslashes!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;C:\\Windows&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;\\&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Error in stri_locate_first_regex(string, pattern, opts_regex = opts(pattern)): Unrecognized backslash escape sequence in pattern. (U_REGEX_BAD_ESCAPE_SEQUENCE, context=`\`)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;C:\\Windows&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;\\\\&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/windows.png&#34; width=&#34;15%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Welcome to the backslash plague!&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3-the-great-british-bake-off&#34;&gt;3. The Great British Bake Off&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s take a look at some of the data in the &lt;em&gt;bakeoff&lt;/em&gt; package.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;challenge_results&lt;/code&gt; dataframe contains &amp;ldquo;signature&amp;rdquo; and &amp;ldquo;showstopper&amp;rdquo; cakes made by each participant in each episode:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;challenge_results&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 7&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   series episode baker  result signature        technical showstopper           &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt;   &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;                &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;                 &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt;      1       1 Annet… IN     Light Jamaican …         2 Red, White &amp;amp; Blue Cho…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt;      1       1 David  IN     Chocolate Orang…         3 Black Forest Floor Ga…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt;      1       1 Edd    IN     Caramel Cinnamo…         1 &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;                    &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt;      1       1 Jasmi… IN     Fresh Mango and…        &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;                    &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt;      1       1 Jonat… IN     Carrot Cake wit…         9 Three Tiered White an…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt;      1       1 Louise IN     Carrot and Oran…        &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt; Never Fail Chocolate …&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The &lt;code&gt;bakers&lt;/code&gt; dataframe contains some information about each participant (baker) in the show:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   series baker_full   baker    age occupation   hometown  baker_last baker_first&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;        &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;  &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;        &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;      &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;      &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; 1      &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;&#34;&lt;/span&gt;&lt;span&gt;Annetha Mi… Annet…    30 Midwife      Essex     Mills      Annetha    &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; 1      &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;&#34;&lt;/span&gt;&lt;span&gt;David Cham… David     31 Entrepreneur Milton K… Chambers   David      &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; 1      &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;&#34;&lt;/span&gt;&lt;span&gt;Edward \&#34;E… Edd       24 Debt collec… Bradford  Kimber     Edward     &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt; 1      &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;&#34;&lt;/span&gt;&lt;span&gt;Jasminder … Jasmi…    45 Assistant C… Birmingh… Randhawa   Jasminder  &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt; 1      &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;&#34;&lt;/span&gt;&lt;span&gt;Jonathan S… Jonat…    25 Research An… St Albans Shepherd   Jonathan   &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt; 1      &lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;&#34;&lt;/span&gt;&lt;span&gt;Lea Harris&lt;/span&gt;&lt;span style=&#39;color: #555555;&#39;&gt;&#34;&lt;/span&gt;&lt;span&gt; Lea       51 Retired      Midlothi… Harris     Lea&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Let&amp;rsquo;s save the &amp;ldquo;signature&amp;rdquo; cakes in a vector for easy access later on:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;challenge_results&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signature&lt;/span&gt;     &lt;span class=&#39;c&#39;&gt;# Assign the column to a vector&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/NA.html&#39;&gt;is.na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;  &lt;span class=&#39;c&#39;&gt;# Remove NAs&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;20&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;                              &lt;span class=&#39;c&#39;&gt;# Look at the first 20 items&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] &#34;Light Jamaican Black Cakewith Strawberries and Cream&#34;                       &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [2] &#34;Chocolate Orange Cake&#34;                                                      &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [3] &#34;Caramel Cinnamon and Banana Cake&#34;                                           &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [4] &#34;Fresh Mango and Passion Fruit Hummingbird Cake&#34;                             &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [5] &#34;Carrot Cake with Lime and Cream Cheese Icing&#34;                               &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [6] &#34;Carrot and Orange Cake&#34;                                                     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [7] &#34;Triple Layered Brownie Meringue Cake\nwith Raspberry Cream&#34;                 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] &#34;Three Tiered Lemon Drizzle Cakewith Fresh Cream and freshly made Lemon Curd&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [9] &#34;Cranberry and Pistachio Cakewith Orange Flower Water Icing&#34;                 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [10] &#34;Sticky Marmalade Tea Loaf&#34;                                                  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [11] &#34;Cheddar Cheese and Fresh Rosemary Biscuits&#34;                                 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [12] &#34;Oatmeal Raisin Cookie&#34;                                                      &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [13] &#34;Millionaires&#39; Shortbread&#34;                                                   &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [14] &#34;Honey and Candied Ginger Cookies&#34;                                           &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [15] &#34;Fresh Vanilla Biscuits with Royal Icing&#34;                                    &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [16] &#34;Peanut Shortbread withSalted Peanut Caramel&#34;                                &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [17] &#34;Rose Petal Shortbread&#34;                                                      &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [18] &#34;Stained Glass Window Shortbread&#34;                                            &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [19] &#34;Chilli Bread&#34;                                                               &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [20] &#34;Olive Bread&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4-components-of-regular-expressions&#34;&gt;4. Components of regular expressions&lt;/h2&gt;
+&lt;h3 id=&#34;literal-characters&#34;&gt;Literal characters&lt;/h3&gt;
+&lt;p&gt;Literal characters can be a part of regular expressions. In fact, as we saw in the first example, our entire search pattern for &lt;code&gt;str_view()&lt;/code&gt; can perfectly well consist of &lt;em&gt;only&lt;/em&gt; literal characters.&lt;/p&gt;
+&lt;p&gt;But the power of regular expressions comes with special characters, and below, we&amp;rsquo;ll go through several different categories of these.&lt;/p&gt;
+&lt;h3 id=&#34;metacharacters&#34;&gt;Metacharacters&lt;/h3&gt;
+&lt;p&gt;Above, we already learned that &lt;strong&gt;&lt;code&gt;.&lt;/code&gt;&lt;/strong&gt; matches any single character. Other metacharacters, that is, characters that represent a single instance of &lt;strong&gt;a character type&lt;/strong&gt;, are actually character combinations starting with a &lt;strong&gt;&lt;code&gt;\&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Symbol&lt;/th&gt;
+&lt;th&gt;Negation&lt;/th&gt;
+&lt;th&gt;Matches&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;.&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Any single character.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;\D&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Any / anything but a digit.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;\s&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;\S&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Any / anything but white space: space, tab, newline, carriage return.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;\w&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;\W&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Any / anything but a word character: alphanumeric and underscore.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;\n&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;A newline.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;\t&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;A tab.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;(These include &lt;strong&gt;&lt;code&gt;\n&lt;/code&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;code&gt;\t&lt;/code&gt;&lt;/strong&gt;, which mean the same in non-regex escape sequences in R.)&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Some examples:&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Are there any digits (&lt;strong&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/strong&gt;) in the cake names?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;\\d&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/digit2.png&#34; width=&#34;27%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;What about periods? Note that we need to escape the period with two &lt;strong&gt;&lt;code&gt;\\&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;\\.&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/period.png&#34; width=&#34;50%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Let&amp;rsquo;s match 5-character strings that start with &amp;ldquo;&lt;em&gt;Ma&lt;/em&gt;&amp;quot;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Ma...&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/ma.png&#34; width=&#34;90%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Note that the only constraint we are setting with &lt;strong&gt;&lt;code&gt;...&lt;/code&gt;&lt;/strong&gt; is that at least three characters should follow &lt;strong&gt;&lt;code&gt;Ma&lt;/code&gt;&lt;/strong&gt; &amp;ndash; we are &lt;em&gt;not&lt;/em&gt; restricting matches to five-character words, or something along those lines.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Let&amp;rsquo;s find the bakers whose (first or last) names contain at least 11 word characters &lt;strong&gt;&lt;code&gt;\w&lt;/code&gt;&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_full&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w&#39;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/11letternames.png&#34; width=&#34;25%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;It&amp;rsquo;s not very convenient to have to repeat &lt;code&gt;\\w&lt;/code&gt; so many times!&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Or let&amp;rsquo;s say we wanted to get all three-part names: names that contain three sets of one or more word characters separated by non-word characters. How could we describe such a pattern? &amp;ldquo;Quantifiers&amp;rdquo; to the rescue!&lt;/p&gt;
+&lt;h3 id=&#34;quantifiers&#34;&gt;Quantifiers&lt;/h3&gt;
+&lt;p&gt;Quantifiers describe how many consecutive instances of the &lt;strong&gt;preceding&lt;/strong&gt; character should be matched:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Quantifier&lt;/th&gt;
+&lt;th&gt;Matches&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Arithmetic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;*&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Preceding character &lt;em&gt;any number of times&lt;/em&gt; (0 or more).&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Arithmetic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;+&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Preceding character &lt;em&gt;at least&lt;/em&gt; once (1 or more).&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/utils/Question.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;?&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Preceding character &lt;em&gt;at most&lt;/em&gt; once (0 or 1).&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;{n}&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Preceding character &lt;em&gt;exactly &lt;code&gt;n&lt;/code&gt; times&lt;/em&gt;.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;{n,}&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Preceding character &lt;em&gt;at least &lt;code&gt;n&lt;/code&gt; times&lt;/em&gt;.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;{n,m}&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Preceding character &lt;em&gt;at least &lt;code&gt;n&lt;/code&gt; and at most &lt;code&gt;m&lt;/code&gt; times&lt;/em&gt;.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;em&gt;Some examples:&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Names with at least 11 (&lt;strong&gt;&lt;code&gt;{11,}&lt;/code&gt;&lt;/strong&gt;) characters &amp;ndash; note that this matches the entire word:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_full&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;\\w&amp;#123;11,&amp;#125;&#39;&lt;/span&gt;, match&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;&lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/11letternames2.png&#34; width=&#34;25%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Match the entire string (full names &amp;ndash; by flanking the pattern with &lt;strong&gt;&lt;code&gt;.*&lt;/code&gt;&lt;/strong&gt;) of names with 2 to 3 (&lt;strong&gt;&lt;code&gt;{2,3}&lt;/code&gt;&lt;/strong&gt;) consecutive &amp;ldquo;&lt;em&gt;e&lt;/em&gt;&amp;rdquo; characters:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_full&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;.*e&amp;#123;2,3&amp;#125;.*&#39;&lt;/span&gt;, match&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;&lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/2or3es_fullmatch.png&#34; width=&#34;17%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Account for different spelling options with &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/utils/Question.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;?&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; &amp;ndash; match &amp;ldquo;&lt;em&gt;flavor&lt;/em&gt;&amp;rdquo; or &amp;ldquo;&lt;em&gt;flavour&lt;/em&gt;&amp;quot;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;flavou?r&#34;&lt;/span&gt;, match&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;&lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/flavor.png&#34; width=&#34;65%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Match all three-part names &amp;ndash; one or more word characters (&lt;strong&gt;&lt;code&gt;\w+&lt;/code&gt;&lt;/strong&gt;) separated by a non-word character (&lt;strong&gt;&lt;code&gt;\W&lt;/code&gt;&lt;/strong&gt;) at least two consecutive times:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_full&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;\\w+\\W\\w+\\W\\w+&#39;&lt;/span&gt;, match&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;&lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/3partnames.png&#34; width=&#34;30%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Match all three-letter names by looking for non-word characters (&lt;strong&gt;&lt;code&gt;\W&lt;/code&gt;&lt;/strong&gt;) surrounding three word characters (&lt;strong&gt;&lt;code&gt;\w{3}&lt;/code&gt;&lt;/strong&gt;)?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_full&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;\\W\\w&amp;#123;3&amp;#125;\\W&#39;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/3letternames1.png&#34; width=&#34;30%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;That last attempt didn&amp;rsquo;t really work &amp;ndash; note that we only got three-letter &lt;em&gt;middle names&lt;/em&gt;, since we required our three-letter names to be flanked by non-word characters.&lt;/p&gt;
+&lt;p&gt;To get &lt;em&gt;all&lt;/em&gt; three-letter names, we need to be able to &amp;ldquo;anchor&amp;rdquo; our regular expressions, e.g. demand that a pattern starts at the beginning of the string.&lt;/p&gt;
+&lt;h3 id=&#34;anchors&#34;&gt;Anchors&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Anchor&lt;/th&gt;
+&lt;th&gt;Matches&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://rdrr.io/r/base/Arithmetic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;^&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;Beginning of the string/line&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://rdrr.io/r/base/Extract.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;$&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;End of the string/line&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;\b&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;A word &lt;em&gt;boundary&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;em&gt;Some examples:&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Match all three-letter &lt;em&gt;first&lt;/em&gt; names, by anchoring the three word characters (&lt;strong&gt;&lt;code&gt;\w{3}&lt;/code&gt;&lt;/strong&gt;) to the beginning of the string with &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Arithmetic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;^&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;, and including a space at the end:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_full&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;^\\w&amp;#123;3&amp;#125; &#39;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/3letterfirstnames.png&#34; width=&#34;23%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Match all three-letter names &amp;ndash;first or last&amp;ndash; by matching three word-characters (&lt;strong&gt;&lt;code&gt;\w&lt;/code&gt;&lt;/strong&gt;) surrounded by word-boundaries (&lt;strong&gt;&lt;code&gt;\b&lt;/code&gt;&lt;/strong&gt;):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_full&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;\\b\\w&amp;#123;3&amp;#125;\\b&#39;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/3letternames2.png&#34; width=&#34;23%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;regex-components-for-next-week&#34;&gt;Regex components for next week&lt;/h4&gt;
+&lt;p&gt;Next week, we&amp;rsquo;ll talk about:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Character classes&lt;/li&gt;
+&lt;li&gt;Alternation&lt;/li&gt;
+&lt;li&gt;Grouping&lt;/li&gt;
+&lt;li&gt;Backreferences&lt;/li&gt;
+&lt;li&gt;Making quantifiers non-greedy&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    &lt;p&gt;&lt;strong&gt;Regular expressions vs globbing&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Do not confuse regular expressions with &lt;em&gt;globbing&lt;/em&gt;!&lt;/p&gt;
+&lt;p&gt;If you have worked in a terminal before, you may know that you can match file names using &lt;em&gt;shell wildcards&lt;/em&gt;, which is known as &amp;ldquo;globbing&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;There are only a few characters used in shell wildcards, but their meanings differ from regular expressions in two instances!&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Shell wildcard&lt;/th&gt;
+&lt;th&gt;Equivalent regex&lt;/th&gt;
+&lt;th&gt;Meaning&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/utils/Question.html&#34;&gt;&lt;code&gt;?&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;.&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Any single character&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Arithmetic.html&#34;&gt;&lt;code&gt;*&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;.*&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Any number of any character&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;&lt;code&gt;[]&lt;/code&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;code&gt;[^]&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;same!&lt;/td&gt;
+&lt;td&gt;Match/negate match of &lt;em&gt;character class&lt;/em&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;Note also that &lt;strong&gt;&lt;code&gt;.&lt;/code&gt;&lt;/strong&gt; is interpreted as a literal period in globbing.&lt;/li&gt;
+&lt;li&gt;We will talk about &amp;ldquo;character classes&amp;rdquo; next week.&lt;/li&gt;
+&lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;breakout-rooms&#34;&gt;Breakout rooms&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;p&gt;Find all participant names in &lt;code&gt;bakers$baker_full&lt;/code&gt; that contain at least 4 lowercase &amp;ldquo;&lt;em&gt;e&lt;/em&gt;&amp;rdquo; characters. (That, the &amp;ldquo;&lt;em&gt;e&lt;/em&gt;&amp;ldquo;s don&amp;rsquo;t need to be consecutive, but you should not disallow consecutive &amp;ldquo;&lt;em&gt;e&lt;/em&gt;&amp;ldquo;s either.)&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;p&gt;Use &lt;code&gt;.*&lt;/code&gt; to allow for &lt;em&gt;optional&lt;/em&gt; characters in between the &amp;ldquo;e&amp;quot;s.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_full&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;e.*e.*e.*e&#39;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/ex1.png&#34; width=&#34;30%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;p&gt;In the &lt;code&gt;signatures&lt;/code&gt; vector, match words of exactly five characters that start with &amp;ldquo;&lt;em&gt;Ta&lt;/em&gt;&amp;rdquo;.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;To describe the five-letter word you should include three word characters after &amp;ldquo;&lt;em&gt;Ta&lt;/em&gt;&amp;rdquo;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;To exclusively match five-letter words, you should use the &amp;ldquo;word boundary&amp;rdquo; anchor before and after the part that should match the word.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;\\bTa\\w&amp;#123;3&amp;#125;\\b&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/ex2.png&#34; width=&#34;75%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-3&#34;&gt;Exercise 3&lt;/h3&gt;
+&lt;p&gt;Match &amp;ldquo;&lt;em&gt;Donut&lt;/em&gt;&amp;rdquo; as well as &amp;ldquo;&lt;em&gt;Doughnut&lt;/em&gt;&amp;rdquo; in the &lt;code&gt;signatures&lt;/code&gt; vector.&lt;/p&gt;
+&lt;p&gt;Unfortunately, &lt;code&gt;signatures&lt;/code&gt; only contains the spelling &amp;ldquo;Doughnut&amp;rdquo;. Therefore, you should separately test whether your regex would actually match &amp;ldquo;Donut&amp;rdquo;.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;p&gt;Since &amp;ldquo;&lt;em&gt;donut&lt;/em&gt;&amp;rdquo; is contained within &amp;ldquo;&lt;em&gt;doughnut&lt;/em&gt;&amp;rdquo;, you can build a single regex and use &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/utils/Question.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;?&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; to indicate optional characters.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Dou?g?h?nut&#34;&lt;/span&gt;, match&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;&lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/ex3_1.png&#34; width=&#34;90%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;Donut&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Dou?g?h?nut&#34;&lt;/span&gt;, match&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;&lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/ex3_2.png&#34; width=&#34;90%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-4&#34;&gt;Exercise 4&lt;/h3&gt;
+&lt;p&gt;Match both dates in the string: &amp;ldquo;&lt;em&gt;The best cakes were baked between 2016-03-10 and 2017-08-31.&lt;/em&gt;&amp;rdquo;.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;p&gt;Make sure you use &lt;code&gt;str_view_all()&lt;/code&gt; and not &lt;code&gt;str_view()&lt;/code&gt;!&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;mystring&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;The best cakes were baked between 2016-03-10 and 2017-08-31.&#34;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mystring&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;\\d&amp;#123;4&amp;#125;-\\d&amp;#123;2&amp;#125;-\\d&amp;#123;2&amp;#125;&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/ex4.png&#34; width=&#34;80%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;bonus-exercise&#34;&gt;Bonus exercise&lt;/h3&gt;
+&lt;p&gt;You can use the &lt;a href=&#34;https://rdrr.io/r/base/list.files.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;list.files()&lt;/code&gt;&lt;/a&gt; function in R to list files on your computer. &lt;a href=&#34;https://rdrr.io/r/base/list.files.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;list.files()&lt;/code&gt;&lt;/a&gt; takes an argument &lt;code&gt;pattern&lt;/code&gt; to which you can specify a regular expression in order to narrow down the results.&lt;/p&gt;
+&lt;p&gt;For example, the code below would find all files with &amp;ldquo;&lt;em&gt;codeclub&lt;/em&gt;&amp;rdquo; in the name, from your current working directory (the default for the &lt;code&gt;path&lt;/code&gt; argument) and downwards (due to &lt;code&gt;recursive = TRUE&lt;/code&gt;):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/list.files.html&#39;&gt;list.files&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;pattern &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;codeclub&#34;&lt;/span&gt;, recursive &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You can also specify a path &amp;ndash; for instance, the code below would search your home or (on Windows) Documents directory and nothing below it:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/list.files.html&#39;&gt;list.files&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;path &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;~&#39;&lt;/span&gt;, pattern &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;codeclub&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# &#39;~&#39; is your home dir&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/list.files.html&#39;&gt;list.files&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;path &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;C:/Users/myname/Documents&#39;&lt;/span&gt;, pattern &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;codeclub&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Use this function to list only R scripts, i.e. files &lt;em&gt;ending in&lt;/em&gt; &lt;code&gt;.R&lt;/code&gt;,&lt;/strong&gt; &lt;strong&gt;in a directory of your choice.&lt;/strong&gt;&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;p&gt;Make sure to use the &amp;ldquo;end of string&amp;rdquo; anchor.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;p&gt;Here we are searching the the home dir and everything below it &amp;ndash; could take a while, but then you know how many R scripts you actually have!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/list.files.html&#39;&gt;list.files&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;path &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;~&#39;&lt;/span&gt;, pattern &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;\\.R$&#34;&lt;/span&gt;, recursive &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;further-resources&#34;&gt;Further resources&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://r4ds.had.co.nz/strings.html#strings&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;The chapter on strings&lt;/a&gt; in Hadley Wickham&amp;rsquo;s R for Data Science (freely abailable online!).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;RStudio regex cheatsheet&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=NvHjYOilOf8&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;A course video by Roger Peng introducing regular expressions&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.garrickadenbuie.com/project/regexplain&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;RegExplain&lt;/a&gt;, an RStudio add-in to visualize regex matches and help build regular expressions.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Session 16: lubridate</title>
@@ -516,7 +1288,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-971526843&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-649573812&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -526,7 +1298,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-971526843&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-649573812&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -602,7 +1374,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-152893674&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-723596418&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -612,7 +1384,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-152893674&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-723596418&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -633,7 +1405,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-173984265&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-789643521&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -643,7 +1415,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-173984265&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-789643521&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -670,7 +1442,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-216583947&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-398265174&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -680,7 +1452,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-216583947&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-398265174&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -707,7 +1479,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-653947218&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-917284635&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -717,7 +1489,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-653947218&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-917284635&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -740,7 +1512,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-365278491&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-547298613&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -750,7 +1522,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-365278491&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-547298613&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -791,7 +1563,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-238569417&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-275413869&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -801,7 +1573,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-238569417&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-275413869&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -820,7 +1592,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-459362718&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-674891532&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -830,7 +1602,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-459362718&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-674891532&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -856,7 +1628,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-625841973&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-931758264&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -866,7 +1638,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-625841973&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-931758264&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -896,7 +1668,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-194573628&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-129548376&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -906,7 +1678,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-194573628&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-129548376&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1120,7 +1892,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-493217586&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-527184693&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1130,7 +1902,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-493217586&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-527184693&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1191,7 +1963,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-437561892&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-894652713&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1201,7 +1973,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-437561892&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-894652713&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1276,7 +2048,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-397685142&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-927853461&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1286,7 +2058,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-397685142&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-927853461&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
