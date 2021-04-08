@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: daaef2374c061d78
+rmd_hash: a9890a2def864161
 
 ---
 
@@ -345,7 +345,7 @@ What if we want to match a backslash? We need the regular expression **`\\`**, b
 
 </div>
 
-Welcome to the backslash plague!
+Welcome to the backslash plague! [^1]
 
 <br>
 
@@ -353,28 +353,9 @@ Welcome to the backslash plague!
 
 ## 3. The Great British Bake Off
 
-Let's take a look at some of the data in the *bakeoff* package.
+Let's take a look at some of the data in the *bakeoff* package, which are about The Great British Bake Off (GBBO) television show.
 
-The `challenge_results` dataframe contains "signature" and "showstopper" cakes made by each participant in each episode:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>challenge_results</span><span class='o'>)</span>
-
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 7</span></span>
-<span class='c'>#&gt;   series episode baker  result signature        technical showstopper           </span>
-<span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                 </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span><span>      1       1 Annet… IN     Light Jamaican …         2 Red, White &amp; Blue Cho…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>2</span><span>      1       1 David  IN     Chocolate Orang…         3 Black Forest Floor Ga…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>3</span><span>      1       1 Edd    IN     Caramel Cinnamo…         1 </span><span style='color: #BB0000;'>NA</span><span>                    </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>4</span><span>      1       1 Jasmi… IN     Fresh Mango and…        </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>                    </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>5</span><span>      1       1 Jonat… IN     Carrot Cake wit…         9 Three Tiered White an…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>6</span><span>      1       1 Louise IN     Carrot and Oran…        </span><span style='color: #BB0000;'>NA</span><span> Never Fail Chocolate …</span></span>
-</code></pre>
-
-</div>
-
-The `bakers` dataframe contains some information about each participant (baker) in the show:
+The `bakers` dataframe contains some information about each participant (baker) in the show, and we will be matching names from the `baker_full` column:
 
 <div class="highlight">
 
@@ -393,7 +374,26 @@ The `bakers` dataframe contains some information about each participant (baker) 
 
 </div>
 
-Let's save the "signature" cakes in a vector for easy access later on:
+The `challenge_results` dataframe contains "signature" and "showstopper" bakes made by each participant in each episode:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>challenge_results</span><span class='o'>)</span>
+
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 7</span></span>
+<span class='c'>#&gt;   series episode baker  result signature        technical showstopper           </span>
+<span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                 </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span>      1       1 Annet… IN     Light Jamaican …         2 Red, White &amp; Blue Cho…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span>      1       1 David  IN     Chocolate Orang…         3 Black Forest Floor Ga…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span>      1       1 Edd    IN     Caramel Cinnamo…         1 </span><span style='color: #BB0000;'>NA</span><span>                    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span>      1       1 Jasmi… IN     Fresh Mango and…        </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>                    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span>      1       1 Jonat… IN     Carrot Cake wit…         9 Three Tiered White an…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span>      1       1 Louise IN     Carrot and Oran…        </span><span style='color: #BB0000;'>NA</span><span> Never Fail Chocolate …</span></span>
+</code></pre>
+
+</div>
+
+The "signature" bakes are the first bakes presented in each GBBO episode, so we'll also start try to matching them with regular expressions. Let's save them in a vector for easy access later on:
 
 <div class="highlight">
 
@@ -455,7 +455,7 @@ Above, we already learned that **`.`** matches any single character. Other metac
 
 *Some examples:*
 
--   Are there any digits (**`\d`**) in the cake names?
+-   Are there any digits (**`\d`**) in the bake names?
 
     <div class="highlight">
 
@@ -512,7 +512,7 @@ Above, we already learned that **`.`** matches any single character. Other metac
 
     <div class="highlight">
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>'\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w'</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>"\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
     </code></pre>
 
     </div>
@@ -546,7 +546,7 @@ Quantifiers describe how many consecutive instances of the **preceding** charact
 
     <div class="highlight">
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>'\\w&#123;11,&#125;'</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>"\\w&#123;11,&#125;"</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
     </code></pre>
 
     </div>
@@ -563,7 +563,7 @@ Quantifiers describe how many consecutive instances of the **preceding** charact
 
     <div class="highlight">
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>'.*e&#123;2,3&#125;.*'</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>".*e&#123;2,3&#125;.*"</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
     </code></pre>
 
     </div>
@@ -597,7 +597,7 @@ Quantifiers describe how many consecutive instances of the **preceding** charact
 
     <div class="highlight">
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>'\\w+\\W\\w+\\W\\w+'</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>"\\w+\\W\\w+\\W\\w+"</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
     </code></pre>
 
     </div>
@@ -614,7 +614,7 @@ Quantifiers describe how many consecutive instances of the **preceding** charact
 
     <div class="highlight">
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>'\\W\\w&#123;3&#125;\\W'</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>"\\W\\w&#123;3&#125;\\W"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
     </code></pre>
 
     </div>
@@ -643,7 +643,7 @@ To get *all* three-letter names, we need to be able to "anchor" our regular expr
 
     <div class="highlight">
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>'^\\w&#123;3&#125; '</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>"^\\w&#123;3&#125; "</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
     </code></pre>
 
     </div>
@@ -658,7 +658,7 @@ To get *all* three-letter names, we need to be able to "anchor" our regular expr
 
     <div class="highlight">
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>'\\b\\w&#123;3&#125;\\b'</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>"\\b\\w&#123;3&#125;\\b"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
     </code></pre>
 
     </div>
@@ -729,7 +729,7 @@ Solution
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>'e.*e.*e.*e'</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>"e.*e.*e.*e"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -826,7 +826,7 @@ Solution
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>'Donut'</span><span class='o'>)</span>, <span class='s'>"Dou?g?h?nut"</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"Donut"</span><span class='o'>)</span>, <span class='s'>"Dou?g?h?nut"</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -868,7 +868,7 @@ Solution
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>mystring</span> <span class='o'>&lt;-</span> <span class='s'>"The best cakes were baked between 2016-03-10 and 2017-08-31."</span>
 
-<span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>mystring</span>, <span class='s'>'\\d&#123;4&#125;-\\d&#123;2&#125;-\\d&#123;2&#125;'</span><span class='o'>)</span>
+<span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>mystring</span>, <span class='s'>"\\d&#123;4&#125;-\\d&#123;2&#125;-\\d&#123;2&#125;"</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -906,8 +906,8 @@ You can also specify a path -- for instance, the code below would search your ho
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='o'>(</span>path <span class='o'>=</span> <span class='s'>'~'</span>, pattern <span class='o'>=</span> <span class='s'>"codeclub"</span><span class='o'>)</span> <span class='c'># '~' is your home dir</span>
-<span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='o'>(</span>path <span class='o'>=</span> <span class='s'>'C:/Users/myname/Documents'</span>, pattern <span class='o'>=</span> <span class='s'>"codeclub"</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='o'>(</span>path <span class='o'>=</span> <span class='s'>"~"</span>, pattern <span class='o'>=</span> <span class='s'>"codeclub"</span><span class='o'>)</span> <span class='c'># "~" is your home dir</span>
+<span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='o'>(</span>path <span class='o'>=</span> <span class='s'>"C:/Users/myname/Documents"</span>, pattern <span class='o'>=</span> <span class='s'>"codeclub"</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -931,7 +931,7 @@ Here we are searching the the home dir and everything below it -- could take a w
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='o'>(</span>path <span class='o'>=</span> <span class='s'>'~'</span>, pattern <span class='o'>=</span> <span class='s'>"\\.R$"</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='o'>(</span>path <span class='o'>=</span> <span class='s'>"~"</span>, pattern <span class='o'>=</span> <span class='s'>"\\.R$"</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -955,4 +955,6 @@ Here we are searching the the home dir and everything below it -- could take a w
 -   [A course video by Roger Peng introducing regular expressions](https://www.youtube.com/watch?v=NvHjYOilOf8).
 
 -   [RegExplain](https://www.garrickadenbuie.com/project/regexplain), an RStudio add-in to visualize regex matches and help build regular expressions.
+
+[^1]: Since R 4.0, which was released last year, there is also a "raw string" or "raw character constant" construct, which circumvents some of these problems -- see [this blogpost](https://mpopov.com/blog/2020/05/22/strings-in-r-4.x/) that summarizes this new syntax. Because many are not yet using R 4.x, and most current examples, vignettes, and tutorials on the internet don't use this, we will stick to being stuck with all the backslashes for now.
 

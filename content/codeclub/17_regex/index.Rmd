@@ -146,8 +146,8 @@ The basic syntax is `str_view(<target-string(s)>, <search-pattern>)`, for exampl
 str_view("chocolate", "cola")
 ```
 
-```{r, echo=FALSE, results='show', out.width="15%", fig.align='left'}
-knitr::include_graphics('img/cola.png')
+```{r, echo=FALSE, results="show", out.width="15%", fig.align="left"}
+knitr::include_graphics("img/cola.png")
 ```
 
 `str_view()` shows us which part of the target string was matched in the
@@ -166,16 +166,16 @@ If we want to see all matches, and not just the first one, we have to use
 str_view("chocolate", "o")
 ```
 
-```{r, echo=FALSE, results='show', out.width="15%", fig.align='left'}
-knitr::include_graphics('img/one_o.png')
+```{r, echo=FALSE, results="show", out.width="15%", fig.align="left"}
+knitr::include_graphics("img/one_o.png")
 ```
 
 ```{r, eval=FALSE}
 str_view_all("chocolate", "o")
 ```
 
-```{r, echo=FALSE, results='show', out.width="15%", fig.align='left'}
-knitr::include_graphics('img/two_o.png')
+```{r, echo=FALSE, results="show", out.width="15%", fig.align="left"}
+knitr::include_graphics("img/two_o.png")
 ```
 
 *stringr* functions are vectorized, so we can use them not just to match a single
@@ -186,8 +186,8 @@ desserts <- c("plum pudding", "chocolate cake", "sticky toffee pudding")
 str_view(desserts, "pudding")
 ```
 
-```{r, echo=FALSE, results='show', out.width="30%", fig.align='left'}
-knitr::include_graphics('img/vector1.png')
+```{r, echo=FALSE, results="show", out.width="30%", fig.align="left"}
+knitr::include_graphics("img/vector1.png")
 ```
 
 Note that the non-matching string "*chocolate cake*" was displayed despite the
@@ -203,8 +203,8 @@ desserts <- c("plum pudding", "chocolate cake", "sticky toffee pudding")
 str_view(desserts, "pudding", match = TRUE)
 ```
 
-```{r, echo=FALSE, results='show', out.width="30%", fig.align='left'}
-knitr::include_graphics('img/vector2.png')
+```{r, echo=FALSE, results="show", out.width="30%", fig.align="left"}
+knitr::include_graphics("img/vector2.png")
 ```
 
 {{% callout note %}}
@@ -318,8 +318,8 @@ str_view("The cake has 8 layers", "\d")
 str_view("The cake has 8 layers", "\\d")
 ```
 
-```{r, echo=FALSE, results='show', out.width="30%", fig.align='left'}
-knitr::include_graphics('img/digit1.png')
+```{r, echo=FALSE, results="show", out.width="30%", fig.align="left"}
+knitr::include_graphics("img/digit1.png")
 ```
 
 **So, to define any regular expression symbol that contains a backslash,**
@@ -339,11 +339,16 @@ str_view("C:\\Windows", "\\")
 str_view("C:\\Windows", "\\\\")
 ```
 
-```{r, echo=FALSE, results='show', out.width="15%", fig.align='left'}
-knitr::include_graphics('img/windows.png')
+```{r, echo=FALSE, results="show", out.width="15%", fig.align="left"}
+knitr::include_graphics("img/windows.png")
 ```
 
-Welcome to the backslash plague!
+Welcome to the backslash plague! ^[Since R 4.0, which was released last year,
+there is also a "raw string" or "raw character constant" construct,
+which circumvents some of these problems --
+see [this blogpost](https://mpopov.com/blog/2020/05/22/strings-in-r-4.x/) that summarizes this new syntax. Because many are not yet using R 4.x, and most current examples,
+vignettes, and tutorials on the internet don't use this,
+we will stick to being stuck with all the backslashes for now.]
 
 <br>
 
@@ -351,23 +356,26 @@ Welcome to the backslash plague!
 
 ## 3. The Great British Bake Off
 
-Let's take a look at some of the data in the *bakeoff* package.
+Let's take a look at some of the data in the *bakeoff* package,
+which are about The Great British Bake Off (GBBO) television show.
 
-The `challenge_results` dataframe contains "signature" and "showstopper" cakes
+The `bakers` dataframe contains some information about each participant (baker)
+in the show, and we will be matching names from the `baker_full` column:
+
+```{r}
+head(bakers)
+```
+
+The `challenge_results` dataframe contains "signature" and "showstopper" bakes
 made by each participant in each episode:
 
 ```{r}
 head(challenge_results)
 ```
 
-The `bakers` dataframe contains some information about each participant (baker)
-in the show:
-
-```{r}
-head(bakers)
-```
-
-Let's save the "signature" cakes in a vector for easy access later on:
+The "signature" bakes are the first bakes presented in each GBBO episode,
+so we'll also start try to matching them with regular expressions.
+Let's save them in a vector for easy access later on:
 
 ```{r}
 signatures <- challenge_results$signature     # Assign the column to a vector
@@ -411,14 +419,14 @@ which mean the same in non-regex escape sequences in R.)
 
 *Some examples:*
 
-- Are there any digits (**`\d`**) in the cake names?
+- Are there any digits (**`\d`**) in the bake names?
 
   ```{r, eval=FALSE}
   str_view_all(signatures, "\\d", match = TRUE)
   ```
 
-  ```{r, echo=FALSE, results='show', out.width="27%", fig.align='left'}
-  knitr::include_graphics('img/digit2.png')
+  ```{r, echo=FALSE, results="show", out.width="27%", fig.align="left"}
+  knitr::include_graphics("img/digit2.png")
   ```
 
 <br>
@@ -429,8 +437,8 @@ which mean the same in non-regex escape sequences in R.)
   str_view_all(signatures, "\\.", match = TRUE)
   ```
 
-  ```{r, echo=FALSE, results='show', out.width="50%", fig.align='left'}
-  knitr::include_graphics('img/period.png')
+  ```{r, echo=FALSE, results="show", out.width="50%", fig.align="left"}
+  knitr::include_graphics("img/period.png")
   ```
 
 <br>
@@ -441,8 +449,8 @@ which mean the same in non-regex escape sequences in R.)
   str_view_all(signatures, "Ma...", match = TRUE)
   ```
 
-  ```{r, echo=FALSE, results='show', out.width="90%", fig.align='left'}
-  knitr::include_graphics('img/ma.png')
+  ```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+  knitr::include_graphics("img/ma.png")
   ```
   
   Note that the only constraint we are setting with **`...`** is that
@@ -456,11 +464,11 @@ which mean the same in non-regex escape sequences in R.)
   word characters **`\w`**:
 
   ```{r, eval=FALSE}
-  str_view_all(bakers$baker_full, '\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w', match = TRUE)
+  str_view_all(bakers$baker_full, "\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w", match = TRUE)
   ```
   
-  ```{r, echo=FALSE, results='show', out.width="25%", fig.align='left'}
-  knitr::include_graphics('img/11letternames.png')
+  ```{r, echo=FALSE, results="show", out.width="25%", fig.align="left"}
+  knitr::include_graphics("img/11letternames.png")
   ```
 
   It's not very convenient to have to repeat `\\w` so many times!
@@ -490,11 +498,11 @@ character should be matched:
   note that this matches the entire word:
 
   ```{r, eval=FALSE}
-  str_view(bakers$baker_full, '\\w{11,}', match=TRUE)
+  str_view(bakers$baker_full, "\\w{11,}", match=TRUE)
   ```
 
-  ```{r, echo=FALSE, results='show', out.width="25%", fig.align='left'}
-  knitr::include_graphics('img/11letternames2.png')
+  ```{r, echo=FALSE, results="show", out.width="25%", fig.align="left"}
+  knitr::include_graphics("img/11letternames2.png")
   ```
 
 <br>
@@ -503,11 +511,11 @@ character should be matched:
   of names with 2 to 3 (**`{2,3}`**) consecutive "*e*" characters:
 
   ```{r, eval=FALSE}
-  str_view(bakers$baker_full, '.*e{2,3}.*', match=TRUE)
+  str_view(bakers$baker_full, ".*e{2,3}.*", match=TRUE)
   ```
   
-  ```{r, echo=FALSE, results='show', out.width="17%", fig.align='left'}
-  knitr::include_graphics('img/2or3es_fullmatch.png')
+  ```{r, echo=FALSE, results="show", out.width="17%", fig.align="left"}
+  knitr::include_graphics("img/2or3es_fullmatch.png")
   ```
 
 <br>
@@ -519,8 +527,8 @@ character should be matched:
   str_view_all(signatures, "flavou?r", match=TRUE)
   ```
   
-  ```{r, echo=FALSE, results='show', out.width="65%", fig.align='left'}
-  knitr::include_graphics('img/flavor.png')
+  ```{r, echo=FALSE, results="show", out.width="65%", fig.align="left"}
+  knitr::include_graphics("img/flavor.png")
   ```
 
 <br>
@@ -529,11 +537,11 @@ character should be matched:
   separated by a non-word character (**`\W`**) at least two consecutive times:
 
   ```{r, eval=FALSE}
-  str_view(bakers$baker_full, '\\w+\\W\\w+\\W\\w+', match=TRUE)
+  str_view(bakers$baker_full, "\\w+\\W\\w+\\W\\w+", match=TRUE)
   ```
 
-  ```{r, echo=FALSE, results='show', out.width="30%", fig.align='left'}
-  knitr::include_graphics('img/3partnames.png')
+  ```{r, echo=FALSE, results="show", out.width="30%", fig.align="left"}
+  knitr::include_graphics("img/3partnames.png")
   ```
 
 <br>
@@ -542,10 +550,10 @@ character should be matched:
   surrounding three word characters (**`\w{3}`**)?
 
   ```{r, eval=FALSE}
-  str_view_all(bakers$baker_full, '\\W\\w{3}\\W', match = TRUE)
+  str_view_all(bakers$baker_full, "\\W\\w{3}\\W", match = TRUE)
   ```
-  ```{r, echo=FALSE, results='show', out.width="30%", fig.align='left'}
-  knitr::include_graphics('img/3letternames1.png')
+  ```{r, echo=FALSE, results="show", out.width="30%", fig.align="left"}
+  knitr::include_graphics("img/3letternames1.png")
   ```
 
 That last attempt didn't really work --
@@ -570,11 +578,11 @@ Anchor       | Matches
   to the beginning of the string with **`^`**, and including a space at the end:
 
   ```{r, eval=FALSE}
-  str_view(bakers$baker_full, '^\\w{3} ', match = TRUE)
+  str_view(bakers$baker_full, "^\\w{3} ", match = TRUE)
   ```
   
-  ```{r, echo=FALSE, results='show', out.width="23%", fig.align='left'}
-  knitr::include_graphics('img/3letterfirstnames.png')
+  ```{r, echo=FALSE, results="show", out.width="23%", fig.align="left"}
+  knitr::include_graphics("img/3letterfirstnames.png")
   ```
 
 - Match all three-letter names --first or last--
@@ -582,11 +590,11 @@ Anchor       | Matches
   (**`\b`**):
 
   ```{r, eval=FALSE}
-  str_view_all(bakers$baker_full, '\\b\\w{3}\\b', match = TRUE)
+  str_view_all(bakers$baker_full, "\\b\\w{3}\\b", match = TRUE)
   ```
 
-  ```{r, echo=FALSE, results='show', out.width="23%", fig.align='left'}
-  knitr::include_graphics('img/3letternames2.png')
+  ```{r, echo=FALSE, results="show", out.width="23%", fig.align="left"}
+  knitr::include_graphics("img/3letternames2.png")
   ```
 
 #### Regex components for next week
@@ -649,11 +657,11 @@ Use `.*` to allow for *optional* characters in between the "e"s.
 <details><summary>Solution</summary>
 
 ```{r, eval=FALSE}
-str_view(bakers$baker_full, 'e.*e.*e.*e', match = TRUE)
+str_view(bakers$baker_full, "e.*e.*e.*e", match = TRUE)
 ```
 
-```{r, echo=FALSE, results='show', out.width="30%", fig.align='left'}
-knitr::include_graphics('img/ex1.png')
+```{r, echo=FALSE, results="show", out.width="30%", fig.align="left"}
+knitr::include_graphics("img/ex1.png")
 ```
 
 </details>
@@ -684,8 +692,8 @@ with "*Ta*".
 str_view_all(signatures, "\\bTa\\w{3}\\b", match = TRUE)
 ```
 
-```{r, echo=FALSE, results='show', out.width="75%", fig.align='left'}
-knitr::include_graphics('img/ex2.png')
+```{r, echo=FALSE, results="show", out.width="75%", fig.align="left"}
+knitr::include_graphics("img/ex2.png")
 ```
 
 </details>
@@ -716,16 +724,16 @@ regex and use **`?`** to indicate optional characters.
 str_view_all(signatures, "Dou?g?h?nut", match=TRUE)
 ```
 
-```{r, echo=FALSE, results='show', out.width="90%", fig.align='left'}
-knitr::include_graphics('img/ex3_1.png')
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/ex3_1.png")
 ```
 
 ```{r, eval=FALSE}
-str_view_all(c(signatures, 'Donut'), "Dou?g?h?nut", match=TRUE)
+str_view_all(c(signatures, "Donut"), "Dou?g?h?nut", match=TRUE)
 ```
 
-```{r, echo=FALSE, results='show', out.width="90%", fig.align='left'}
-knitr::include_graphics('img/ex3_2.png')
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/ex3_2.png")
 ```
 </details>
 
@@ -750,11 +758,11 @@ Make sure you use `str_view_all()` and not `str_view()`!
 ```{r, eval=FALSE}
 mystring <- "The best cakes were baked between 2016-03-10 and 2017-08-31."
 
-str_view_all(mystring, '\\d{4}-\\d{2}-\\d{2}')
+str_view_all(mystring, "\\d{4}-\\d{2}-\\d{2}")
 ```
 
-```{r, echo=FALSE, results='show', out.width="80%", fig.align='left'}
-knitr::include_graphics('img/ex4.png')
+```{r, echo=FALSE, results="show", out.width="80%", fig.align="left"}
+knitr::include_graphics("img/ex4.png")
 ```
 
 </details>
@@ -782,8 +790,8 @@ You can also specify a path -- for instance, the code below would search your
 home or (on Windows) Documents directory and nothing below it:
 
 ```{r, eval=FALSE}
-list.files(path = '~', pattern = "codeclub") # '~' is your home dir
-list.files(path = 'C:/Users/myname/Documents', pattern = "codeclub")
+list.files(path = "~", pattern = "codeclub") # "~" is your home dir
+list.files(path = "C:/Users/myname/Documents", pattern = "codeclub")
 ```
 
 **Use this function to list only R scripts, i.e. files *ending in* `.R`,**
@@ -801,7 +809,7 @@ Here we are searching the the home dir and everything below it --
 could take a while, but then you know how many R scripts you actually have!
 
 ```{r, eval=FALSE}
-list.files(path = '~', pattern = "\\.R$", recursive = TRUE)
+list.files(path = "~", pattern = "\\.R$", recursive = TRUE)
 ```
 
 </details>
