@@ -317,9 +317,13 @@ ggplot(data = summed_gene_counts) +
 ```
 
 How are counts distributed across samples?
+That is, we would like a sum of counts for each column.
+To get this, we use the `apply()` function, which can apply a function
+(in our case `sum()`) to all columns (hence `MARGIN = 2` -- for rows, use `1`)
+of our `counts` dataframe:
 
 ```{r}
-apply(counts, 2, sum)
+apply(X = counts, MARGIN = 2, FUN = sum)
 ```
 
 <br>
@@ -351,9 +355,11 @@ so we can later add this information to the plot:
 
 ```{r}
 percentVar <- round(100 * attr(pcaData, "percentVar"))
+percentVar
 ```
 
-We create a plot title with some italic text using the `expression()` function: 
+We create a plot title with the species name in italic using the
+somewhat bizarre `expression()` function: 
 
 ```{r}
 plot_title <- expression("PCA of " * italic(Glycine ~ max) * " transcript count data")
@@ -363,7 +369,7 @@ plot_title <- expression("PCA of " * italic(Glycine ~ max) * " transcript count 
 
 ```{r}
 ggplot(pcaData,
-       aes(PC1, PC2, color = AMF, shape = Treatment)) +
+       aes(x = PC1, y = PC2, color = AMF, shape = Treatment)) +
   geom_point(size = 6) +
   xlab(paste0("PC1: ", percentVar[1], "% of variance")) +
   ylab(paste0("PC2: ", percentVar[2], "% of variance")) +
@@ -409,21 +415,20 @@ dds$group <- relevel(dds$group, ref = "control_mock")
 dds$group
 ```
 
-Set the analysis design:
+Next, we set the analysis design:
 
 ```{r}
 design(dds) <- formula(~ group)
 ```
 
-Perform the differential expression analysis:
+And finally, we perform the differential expression analysis with the `DEseq()`
+function:
 
 ```{r}
 dds <- DESeq(dds)
 ```
 
-The `DESeq()` function above performs three steps consecutively,
-which could also be called separately
-(which could be useful if you'd want to be able to change more defaults):
+The `DESeq()` function above performs three steps consecutively:
   
   - `estimateSizeFactors()` -- "Normalization" by library size.
     Note that *DESeq2* doesn’t actually normalize the counts,
@@ -433,6 +438,9 @@ which could also be called separately
   
   - `nbinomWaldTest(ddsObj)` -- Fit the negative Binomial GLM and calculate
     Wald statistics.
+
+These functions could also be called separately,
+which would be useful if you want to be able to change more defaults.
 
 ### The results table
 
