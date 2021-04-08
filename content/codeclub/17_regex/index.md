@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: a9890a2def864161
+rmd_hash: 784ea84f1e967e5b
 
 ---
 
@@ -112,7 +112,7 @@ Finally, regular expressions can be used to **parse and convert file formats**, 
 
 ------------------------------------------------------------------------
 
-## 2. `str_view()` and strings
+## 3. `str_view()` and strings
 
 Today, to get to know regular expressions, we will just use the `str_view()` function from the *stringr* package. Next week, we'll get introduced to other *stringr* functions to search and also to replace strings.
 
@@ -231,9 +231,7 @@ Alternatively, a quote can be **escaped** using a backslash **`\`** to indicate 
 
 ------------------------------------------------------------------------
 
-## 2. Special characters
-
-Unfortunately, we have to wade through some potentially confusing territory before we can start using regular expressions.
+## 4. Special characters
 
 #### Special characters and escaping them
 
@@ -242,12 +240,20 @@ In regular expressions (regex), we need a way to succinctly convey descriptions 
 -   "**Any character**" is represented by a period, **`.`**
 -   "**Any digit**" is represented by **`\d`**, with the **`\`** basically preventing the **`d`** from being interpreted literally.
 
-You may already see the problems that arise here: how, then, do we indicate a literal **`.`** or **`\`** in a regular expression? The solution is to **escape** the special character with a(nother) backslash:
+But how, then, do we indicate a literal **`.`** or **`\`** in a regular expression? The solution is to **escape** the special character with a backslash: the regular expression **`\.`** matches a **`.`**.
 
--   **`\.`** matches a **`.`**
--   **`\\`** matches a **`\`**
+{{% callout note %}}
 
-Okay, that's inconvenient but manageable. However, it gets worse than that!
+#### TLDR for the rest of this section
+
+**When writing regular expressions as strings in R,** **we always need to add an extra backslash:**
+
+-   The regex **`\d`** matches a digit --- and we write it as **`"\\d"`** in R.
+-   The regex **`\.`** matches a period --- and we write it as **`"\\."`** in R.
+
+{{% /callout %}}
+
+The "escaping" described above also applies to backslashes, such that the regex **`\\`** matches a **`\`**.
 
 <br>
 
@@ -321,7 +327,22 @@ Therefore, to actually define a regular expression that contains **`\d`**, we ne
 
 **So, to define any regular expression symbol that contains a backslash,** **we need to always use two backslashes!**
 
-What if we want to match a backslash? We need the regular expression **`\\`**, but to define that regex as a string, we have to escape each of the two backslashes -- only to end up with four backslashes!
+This also applies when we want to match a literal character. For example, **to match a literal period, we need the regex `\.`,** **which we have to write as `\\.` in an R string:**
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='s'>"The cake has 8.5 layers"</span>, <span class='s'>"\\."</span><span class='o'>)</span>
+</code></pre>
+
+</div>
+
+<div class="highlight">
+
+<img src="img/period2.png" width="30%" style="display: block; margin: auto auto auto 0;" />
+
+</div>
+
+Now to the worst case: what if we want to match a backslash? We need the regular expression **`\\`**, but to define that regex as a string, we have to escape each of the two backslashes -- only to end up with four backslashes!
 
 <div class="highlight">
 
@@ -351,9 +372,13 @@ Welcome to the backslash plague! [^1]
 
 ------------------------------------------------------------------------
 
-## 3. The Great British Bake Off
+## 5. The Great British Bake Off
 
-Let's take a look at some of the data in the *bakeoff* package, which are about The Great British Bake Off (GBBO) television show.
+<p align="center">
+<img src=img/bakeoff.jpg width=60%>
+</p>
+
+Let's take a look at some of the data in the *bakeoff* package, which is about "The Great British Bake Off" (GBBO) television show.
 
 The `bakers` dataframe contains some information about each participant (baker) in the show, and we will be matching names from the `baker_full` column:
 
@@ -430,7 +455,7 @@ The "signature" bakes are the first bakes presented in each GBBO episode, so we'
 
 ------------------------------------------------------------------------
 
-## 4. Components of regular expressions
+## 6. Components of regular expressions
 
 ### Literal characters
 
@@ -704,7 +729,7 @@ There are only a few characters used in shell wildcards, but their meanings diff
 
 ------------------------------------------------------------------------
 
-## Breakout rooms
+## 7. Breakout rooms
 
 <div class="puzzle">
 
@@ -946,7 +971,7 @@ Here we are searching the the home dir and everything below it -- could take a w
 
 ------------------------------------------------------------------------
 
-## Further resources
+## 8. Further resources
 
 -   [The chapter on strings](https://r4ds.had.co.nz/strings.html#strings) in Hadley Wickham's R for Data Science (freely abailable online!).
 

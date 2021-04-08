@@ -133,7 +133,7 @@ programming for many people.**
 
 ----
 
-## 2. `str_view()` and strings
+## 3. `str_view()` and strings
 
 Today, to get to know regular expressions, we will just use the `str_view()` function
 from the *stringr* package.
@@ -242,10 +242,7 @@ which may be necessary if a string contains both single and double quotes:
 
 ----
 
-## 2. Special characters
-
-Unfortunately, we have to wade through some potentially confusing territory
-before we can start using regular expressions.
+## 4. Special characters
 
 #### Special characters and escaping them
 
@@ -258,14 +255,24 @@ such as "any character" or "any digit".
 - "**Any digit**" is represented by **`\d`**, with the **`\`** basically
   preventing the **`d`** from being interpreted literally.
 
-You may already see the problems that arise here:
-how, then, do we indicate a literal **`.`** or **`\`** in a regular expression?
-The solution is to **escape** the special character with a(nother) backslash:
+But how, then, do we indicate a literal **`.`** or **`\`** in a regular expression?
+The solution is to **escape** the special character with a backslash:
+the regular expression **`\.`** matches a **`.`**.
 
-- **`\.`** matches a **`.`**
-- **`\\`** matches a **`\`**
+{{% callout note %}}
 
-Okay, that's inconvenient but manageable. However, it gets worse than that!
+#### TLDR for the rest of this section
+
+**When writing regular expressions as strings in R,**
+**we always need to add an extra backslash:**
+
+- The regex **`\d`** matches a digit &mdash; and we write it as **`"\\d"`** in R.
+- The regex **`\.`** matches a period &mdash; and we write it as **`"\\."`** in R.
+
+{{% /callout %}}
+
+The "escaping" described above also applies to backslashes, such that the
+regex **`\\`** matches a **`\`**.
 
 <br>
 
@@ -325,7 +332,19 @@ knitr::include_graphics("img/digit1.png")
 **So, to define any regular expression symbol that contains a backslash,**
 **we need to always use two backslashes!**
 
-What if we want to match a backslash?
+This also applies when we want to match a literal character.
+For example, **to match a literal period, we need the regex `\.`,**
+**which we have to write as `\\.` in an R string:**
+
+```{r, eval=FALSE}
+str_view("The cake has 8.5 layers", "\\.")
+```
+
+```{r, echo=FALSE, results="show", out.width="30%", fig.align="left"}
+knitr::include_graphics("img/period2.png")
+```
+
+Now to the worst case: what if we want to match a backslash?
 We need the regular expression **`\\`**,
 but to define that regex as a string,
 we have to escape each of the two backslashes --
@@ -354,10 +373,14 @@ we will stick to being stuck with all the backslashes for now.]
 
 ----
 
-## 3. The Great British Bake Off
+## 5. The Great British Bake Off
+
+<p align="center">
+<img src=img/bakeoff.jpg width=60%>
+</p>
 
 Let's take a look at some of the data in the *bakeoff* package,
-which are about The Great British Bake Off (GBBO) television show.
+which is about "The Great British Bake Off" (GBBO) television show.
 
 The `bakers` dataframe contains some information about each participant (baker)
 in the show, and we will be matching names from the `baker_full` column:
@@ -388,7 +411,7 @@ signatures[1:20]                              # Look at the first 20 items
 
 ----
 
-## 4. Components of regular expressions
+## 6. Components of regular expressions
 
 ### Literal characters
 
@@ -636,7 +659,7 @@ but their meanings differ from regular expressions in two instances!
 
 ----
 
-## Breakout rooms
+## 7. Breakout rooms
 
 <div class="puzzle">
 <div>
@@ -820,7 +843,7 @@ list.files(path = "~", pattern = "\\.R$", recursive = TRUE)
 
 ----
 
-## Further resources
+## 8. Further resources
 
 - [The chapter on strings](https://r4ds.had.co.nz/strings.html#strings) in Hadley Wickham's R for Data Science (freely abailable online!).
 
