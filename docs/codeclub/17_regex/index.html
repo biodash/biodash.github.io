@@ -341,7 +341,7 @@
         content="2021-04-06T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-04-08T10:12:44-04:00">
+    <meta property="article:modified_time" content="2021-04-08T15:20:47-04:00">
   
 
   
@@ -775,14 +775,14 @@
     <li><a href="#new-to-code-club">New to Code Club?</a></li>
     <li><a href="#1-getting-set-up">1. Getting set up</a></li>
     <li><a href="#2-regular-expressions-what-and-why">2. Regular expressions: what and why?</a></li>
-    <li><a href="#2-str_view-and-strings">2. <code>str_view()</code> and strings</a></li>
-    <li><a href="#2-special-characters">2. Special characters</a>
+    <li><a href="#3-str_view-and-strings">3. <code>str_view()</code> and strings</a></li>
+    <li><a href="#4-special-characters">4. Special characters</a>
       <ul>
         <li></li>
       </ul>
     </li>
-    <li><a href="#3-the-great-british-bake-off">3. The Great British Bake Off</a></li>
-    <li><a href="#4-components-of-regular-expressions">4. Components of regular expressions</a>
+    <li><a href="#5-the-great-british-bake-off">5. The Great British Bake Off</a></li>
+    <li><a href="#6-components-of-regular-expressions">6. Components of regular expressions</a>
       <ul>
         <li><a href="#literal-characters">Literal characters</a></li>
         <li><a href="#metacharacters">Metacharacters</a></li>
@@ -790,7 +790,7 @@
         <li><a href="#anchors">Anchors</a></li>
       </ul>
     </li>
-    <li><a href="#breakout-rooms">Breakout rooms</a>
+    <li><a href="#7-breakout-rooms">7. Breakout rooms</a>
       <ul>
         <li><a href="#exercise-1">Exercise 1</a></li>
         <li><a href="#exercise-2">Exercise 2</a></li>
@@ -799,7 +799,7 @@
         <li><a href="#bonus-exercise">Bonus exercise</a></li>
       </ul>
     </li>
-    <li><a href="#further-resources">Further resources</a></li>
+    <li><a href="#8-further-resources">8. Further resources</a></li>
   </ul>
 </nav>
         </div>
@@ -997,7 +997,7 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <p><strong>Regular expressions are used in nearly all programming languages. They are also widely used in text editors and therefore provide a first taste of programming for many people.</strong></p>
 <br>
 <hr>
-<h2 id="2-str_view-and-strings">2. <code>str_view()</code> and strings</h2>
+<h2 id="3-str_view-and-strings">3. <code>str_view()</code> and strings</h2>
 <p>Today, to get to know regular expressions, we will just use the <code>str_view()</code> function from the <em>stringr</em> package. Next week, we&rsquo;ll get introduced to other <em>stringr</em> functions to search and also to replace strings.</p>
 <p>The basic syntax is <code>str_view(&lt;target-string(s)&gt;, &lt;search-pattern&gt;)</code>, for example:</p>
 <div class="highlight">
@@ -1064,20 +1064,25 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 </div>
 <br>
 <hr>
-<h2 id="2-special-characters">2. Special characters</h2>
-<p>Unfortunately, we have to wade through some potentially confusing territory before we can start using regular expressions.</p>
+<h2 id="4-special-characters">4. Special characters</h2>
 <h4 id="special-characters-and-escaping-them">Special characters and escaping them</h4>
 <p>In regular expressions (regex), we need a way to succinctly convey descriptions such as &ldquo;any character&rdquo; or &ldquo;any digit&rdquo;. <em>However, there are no characters exclusive to regular expressions:</em> <em>instead, we re-use normal characters.</em> For instance:</p>
 <ul>
 <li>&ldquo;<strong>Any character</strong>&rdquo; is represented by a period, <strong><code>.</code></strong></li>
 <li>&ldquo;<strong>Any digit</strong>&rdquo; is represented by <strong><code>\d</code></strong>, with the <strong><code>\</code></strong> basically preventing the <strong><code>d</code></strong> from being interpreted literally.</li>
 </ul>
-<p>You may already see the problems that arise here: how, then, do we indicate a literal <strong><code>.</code></strong> or <strong><code>\</code></strong> in a regular expression? The solution is to <strong>escape</strong> the special character with a(nother) backslash:</p>
+<p>But how, then, do we indicate a literal <strong><code>.</code></strong> or <strong><code>\</code></strong> in a regular expression? The solution is to <strong>escape</strong> the special character with a backslash: the regular expression <strong><code>\.</code></strong> matches a <strong><code>.</code></strong>.</p>
+<div class="alert alert-note">
+  <div>
+    <h4 id="tldr-for-the-rest-of-this-section">TLDR for the rest of this section</h4>
+<p><strong>When writing regular expressions as strings in R,</strong> <strong>we always need to add an extra backslash:</strong></p>
 <ul>
-<li><strong><code>\.</code></strong> matches a <strong><code>.</code></strong></li>
-<li><strong><code>\\</code></strong> matches a <strong><code>\</code></strong></li>
+<li>The regex <strong><code>\d</code></strong> matches a digit &mdash; and we write it as <strong><code>&quot;\\d&quot;</code></strong> in R.</li>
+<li>The regex <strong><code>\.</code></strong> matches a period &mdash; and we write it as <strong><code>&quot;\\.&quot;</code></strong> in R.</li>
 </ul>
-<p>Okay, that&rsquo;s inconvenient but manageable. However, it gets worse than that!</p>
+  </div>
+</div>
+<p>The &ldquo;escaping&rdquo; described above also applies to backslashes, such that the regex <strong><code>\\</code></strong> matches a <strong><code>\</code></strong>.</p>
 <br>
 <h4 id="escape-sequences-in-regular-strings">Escape sequences in regular strings</h4>
 <p>Outside of regular expressions, R also uses backslashes <strong><code>\</code></strong> to form so-called &ldquo;escape sequences&rdquo;. This works similarly to how the regular expression <strong><code>\d</code></strong> means &ldquo;any digit&rdquo; &ndash; for example, when we use <strong><code>\n</code></strong> <em>in any string</em>, it will be interpreted as a newline:</p>
@@ -1121,7 +1126,15 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <p><img src="img/digit1.png" width="30%" style="display: block; margin: auto auto auto 0;" /></p>
 </div>
 <p><strong>So, to define any regular expression symbol that contains a backslash,</strong> <strong>we need to always use two backslashes!</strong></p>
-<p>What if we want to match a backslash? We need the regular expression <strong><code>\\</code></strong>, but to define that regex as a string, we have to escape each of the two backslashes &ndash; only to end up with four backslashes!</p>
+<p>This also applies when we want to match a literal character. For example, <strong>to match a literal period, we need the regex <code>\.</code>,</strong> <strong>which we have to write as <code>\\.</code> in an R string:</strong></p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='s'>"The cake has 8.5 layers"</span>, <span class='s'>"\\."</span><span class='o'>)</span>
+</code></pre>
+</div>
+<div class="highlight">
+<p><img src="img/period2.png" width="30%" style="display: block; margin: auto auto auto 0;" /></p>
+</div>
+<p>Now to the worst case: what if we want to match a backslash? We need the regular expression <strong><code>\\</code></strong>, but to define that regex as a string, we have to escape each of the two backslashes &ndash; only to end up with four backslashes!</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='s'>"C:\\Windows"</span>, <span class='s'>"\\"</span><span class='o'>)</span>
 
@@ -1138,8 +1151,11 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <p>Welcome to the backslash plague! <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
 <br>
 <hr>
-<h2 id="3-the-great-british-bake-off">3. The Great British Bake Off</h2>
-<p>Let&rsquo;s take a look at some of the data in the <em>bakeoff</em> package, which are about The Great British Bake Off (GBBO) television show.</p>
+<h2 id="5-the-great-british-bake-off">5. The Great British Bake Off</h2>
+<p align="center">
+<img src=img/bakeoff.jpg width=60%>
+</p>
+<p>Let&rsquo;s take a look at some of the data in the <em>bakeoff</em> package, which is about &ldquo;The Great British Bake Off&rdquo; (GBBO) television show.</p>
 <p>The <code>bakers</code> dataframe contains some information about each participant (baker) in the show, and we will be matching names from the <code>baker_full</code> column:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>)</span>
@@ -1201,7 +1217,7 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 </div>
 <br>
 <hr>
-<h2 id="4-components-of-regular-expressions">4. Components of regular expressions</h2>
+<h2 id="6-components-of-regular-expressions">6. Components of regular expressions</h2>
 <h3 id="literal-characters">Literal characters</h3>
 <p>Literal characters can be a part of regular expressions. In fact, as we saw in the first example, our entire search pattern for <code>str_view()</code> can perfectly well consist of <em>only</em> literal characters.</p>
 <p>But the power of regular expressions comes with special characters, and below, we&rsquo;ll go through several different categories of these.</p>
@@ -1503,7 +1519,7 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 </div>
 <br>
 <hr>
-<h2 id="breakout-rooms">Breakout rooms</h2>
+<h2 id="7-breakout-rooms">7. Breakout rooms</h2>
 <div class="puzzle">
 <div>
 <h3 id="exercise-1">Exercise 1</h3>
@@ -1653,7 +1669,7 @@ Solution
 </div>
 <br>
 <hr>
-<h2 id="further-resources">Further resources</h2>
+<h2 id="8-further-resources">8. Further resources</h2>
 <ul>
 <li>
 <p><a href="https://r4ds.had.co.nz/strings.html#strings" target="_blank" rel="noopener">The chapter on strings</a> in Hadley Wickham&rsquo;s R for Data Science (freely abailable online!).</p>
