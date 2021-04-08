@@ -20,11 +20,11 @@ editor_options:
 knitr::opts_chunk$set(
   echo=TRUE, eval=TRUE, cache=TRUE,
   warning=FALSE, message=FALSE,
-  class.source = 'r_code',
-  class.output = 'r_output',
-  class.warning = 'r_warning',
-  class.message = 'r_warning',
-  class.error = 'r_error'
+  class.source = "r_code",
+  class.output = "r_output",
+  class.warning = "r_warning",
+  class.message = "r_warning",
+  class.error = "r_error"
   )
 ```
 
@@ -69,7 +69,7 @@ knitr::opts_chunk$set(
 <details><summary>Show instructions</summary>
 
 ```{r, eval=FALSE}
-basedir <- '/fs/project/PAS0471/teach/misc/2021-02_rnaseq/'
+basedir <- "/fs/project/PAS0471/teach/misc/2021-02_rnaseq/"
 
 # Get your user name (by running a shell command via the `system()` function:
 me <- system("echo $USER", intern = TRUE)
@@ -107,12 +107,13 @@ cp ../master/results/count/gene_counts_all.txt results/count
 ### Load the necessary packages
 
 ```{r, warning=FALSE, message=FALSE}
-if(! 'pacman' %in% installed.packages()) install.packages('pacman')
+if(! "pacman" %in% installed.packages()) install.packages("pacman")
 
-packages <- c('DESeq2',          # Differential expression analysis
-              'tidyverse',       # Misc. data manipulation and plotting
-              'here',            # Managing file paths
-              'pheatmap')        # Heatmap plot
+packages <- c("DESeq2",          # Differential expression analysis
+              "tidyverse",       # Misc. data manipulation and plotting
+              "here",            # Managing file paths
+              "pheatmap",        # Heatmap plot
+              "apeglm")          # For LFC shrinkage
 pacman::p_load(char = packages)
 
 theme_set(theme_bw())  # Set ggplot theme
@@ -166,6 +167,18 @@ metadata <- read.table(metadata_file, header = TRUE)
 
 head(metadata)
 ```
+
+The `Treatment` column currently has the values `Agrobacterium_noexp`,
+`Agrobacterium_myb`, and `mock`.
+
+To shorten this a bit, we'll get rid of "Agrobacterium_":
+
+```{r}
+metadata$Treatment <- sub("Agrobacterium_", "", metadata$Treatment)
+
+unique(metadata$Treatment)
+```
+
 
 <br>
 
@@ -260,9 +273,9 @@ which we will provide with three pieces of information:
   we will change this before the actual DE analysis.
 
 ```{r}
-dds <- DESeqDataSetFromMatrix(countData = counts,
-                              colData = metadata,
-                              design = ~ 1)
+dds_raw <- DESeqDataSetFromMatrix(countData = counts,
+                                  colData = metadata,
+                                  design = ~ 1)
 ```
 
 <br>
@@ -298,7 +311,7 @@ Let's plot a histogram of gene counts:
 theme_set(theme_bw())
 
 summed_gene_counts <- data.frame(gene_count = rowSums(counts)) %>%
-  rownames_to_column('gene_id')
+  rownames_to_column("gene_id")
 
 ggplot(data = summed_gene_counts) +
   geom_histogram(aes(x = gene_count), binwidth = 10000) +
@@ -338,7 +351,7 @@ First, we normalize the count data to have even sampling across samples
 (with respect to library size) and approximately even variance:
 
 ```{r}
-vsd <- varianceStabilizingTransformation(dds, blind = TRUE)
+vsd <- varianceStabilizingTransformation(dds_raw, blind = TRUE)
 ```
 
 Next, we run the PCA and retrieve the data to plot with *ggplot2*:
@@ -403,29 +416,29 @@ Rather than fit a multivariate model, we can start by merging the two into a
 single factor called `group`, and fit a univariate model with this factor.
 
 ```{r}
-dds$group <- factor(paste(dds$AMF, dds$Treatment, sep = "_"))
-table(dds$group)
+dds_raw$group <- factor(paste(dds_raw$AMF, dds_raw$Treatment, sep = "_"))
+table(dds_raw$group)
 ```
 
 We will set the "reference" level of the factor to be the double negative control
 (empty substrate, no Agrobacteria):
 
 ```{r}
-dds$group <- relevel(dds$group, ref = "control_mock")
-dds$group
+dds_raw$group <- relevel(dds_raw$group, ref = "control_mock")
+dds_raw$group
 ```
 
 Next, we set the analysis design:
 
 ```{r}
-design(dds) <- formula(~ group)
+design(dds_raw) <- formula(~ group)
 ```
 
 And finally, we perform the differential expression analysis with the `DEseq()`
 function:
 
 ```{r}
-dds <- DESeq(dds)
+dds <- DESeq(dds_raw)
 ```
 
 The `DESeq()` function above performs three steps consecutively:
@@ -445,16 +458,18 @@ which would be useful if you want to be able to change more defaults.
 ### The results table
 
 ```{r}
-results(dds)
+res <- results(dds)
+res
 ```
 
-By default, the results table prints statistics comparing the last level of the
-factor with the first level: that is, log-fold change and p-values describe
+By default, the results table prints statistics
+**comparing the last level of the factor with the first level**:
+that is, log-fold change and p-values describe
 differences between these two levels specifically.
 However, we can easily extract equivalent statistics for any pairwise comparison
 among our factor levels, which we will see later.
 
-For now, we will explore the different columns in this table:
+For now, we will explore what each column in this table means:
 
 - The `baseMean` column contains the mean expression level across all samples.
 
@@ -477,6 +492,13 @@ For now, we will explore the different columns in this table:
   we need to correct for multiple testing.
   DESeq2 uses the Benjamini-Hochberg False Discovery Rate (FDR) correction,
   and these values are reported in the column `padj` (i.e., adjusted p-value).
+
+A summary of this information about each column can be seen by running the
+`mcols()` function:
+
+```{r}
+mcols(res)
+```
 
 ### `NA` values in the results table
 
@@ -503,46 +525,71 @@ Let's see how many genes have `NA` p-values:
 
 ```{r}
 # Number of genes with NA p-value:
-sum(is.na(results(dds)$pvalue))
+sum(is.na(res$pvalue))
 
 # As a proportion of the total number of genes in the test:
-sum(is.na(results(dds)$pvalue)) / nrow(results(dds))
+sum(is.na(res$pvalue)) / nrow(res)
 ```
 
 And `NA` adjusted p-values:
 
 ```{r}
 # Number of genes with NA p-value:
-sum(is.na(results(dds)$padj))
+sum(is.na(res$padj))
 
 # As a proportion of the total number of genes in the test:
-sum(is.na(results(dds)$padj)) / nrow(results(dds))
+sum(is.na(res$padj)) / nrow(res)
 ```
 
 <br>
 
 ----
 
-## DE analysis -- contrast two groups
+## DE analysis -- contrast two custom groups
 
-```{r, eval=FALSE}
+Although not displayed in a particularly readable ways,
+we can see which pairwise contrasts between different levels of the factor
+are available:
+
+```{r}
 resultsNames(dds)
 ```
 
-```{r, eval=FALSE}
-my_contrast <- c("Ri_Agrobacterium_myb", "Ri_Agrobacterium_noexp")
-```
+Not all pairwise contrasts between the 5 levels in our `group` factor are available:
+instead, `control_mock`, which we set as the reference level, is being compared
+with all 4 other levels.
 
-```{r, eval=FALSE}
+Above, we looked at the results (p-values and so on) for the last of these
+comparisons, which is what DESeq2 will show by default.
+To see the results table for one of the other 3 comparisons,
+we pass a vector to the `contrast` argument of the `results()` function with
+the factor (`group`) and the two levels to be contrasted:
+
+```{r}
+my_contrast <- c("Ri_mock", "control_mock")
+
 res <- results(dds,
                contrast = c("group", my_contrast))
 ```
 
-- How many adjusted p-values were less than 0.1?
+How many adjusted p-values were less than 0.1?
 
-```{r, eval=FALSE}
+```{r}
 sum(res$padj < 0.1, na.rm = TRUE)
 ```
+
+We'll also create an object with adjusted (shrunken) LFC estimates which will
+be useful for visualization and ranking of genes by LFC.
+
+```{r}
+my_coef <- paste0("group_", paste0(my_contrast, collapse = "_vs_"))
+my_coef
+res_LFC <- lfcShrink(dds, coef = my_coef, type = "apeglm", lfcThreshold = 1)
+```
+
+Note that here, we had to provide the contrast ("coefficient") in the format
+given by `resultsNames(dds)`, which looks confusing because it uses underscores
+as a separator, and our factor levels also contain underscores.
 
 <br>
 
@@ -552,40 +599,114 @@ sum(res$padj < 0.1, na.rm = TRUE)
 
 ### MA-plot:
 
-```{r, eval=FALSE}
-plotMA(res, ylim = c(-2, 2))
+For a nice overview of the results, we can plot a so-called "MA plot",
+which plots, for each gene,
+count differences (as LFC) between two groups on the y-axis,
+and mean counts across both groups on the x-axis.
+
+We can create an MA plot using DESeq2's `plotMA` function,
+with significantly differentially expressed genes (using alpha = 0.1) in blue:
+
+```{r}
+plotMA(res, ylim = c(-5, 5))
 ```
 
-```{r, echo=FALSE}
-# May also want to do this after shrinkage
-# resLFC <- lfcShrink(dds, coef="condition_treated_vs_untreated", type="apeglm")
+To be able to customize the plot,
+we'll use `returnData = TRUE` like we have done with previous plots,
+and then plot the resulting dataframe with *ggplot2*:
+
+```{r}
+d <- plotMA(res, returnData = TRUE)
+
+ggplot(d, aes(x = mean, y = lfc, color = isDE)) +
+  geom_point(size = 0.5) +
+  scale_x_log10() +
+  scale_y_continuous(limits = c(-10, 10)) +
+  scale_color_manual(values = c('grey50', 'blue')) +
+  guides(color = FALSE) +
+  labs(x = "Mean of normalized counts",
+       y = "LFC")
 ```
 
-### Plot specific genes:
+We can see that lowly-expressed genes tend to deviate from an LFC of 0
+(same mean expression levels in the two groups) much more than 0.
+However, this is an artifact of noise overpowering signal with such low
+expression values. We can also see that genes are never significantly expressed
+in the same far left part of the plot due to this lack of power.
 
-```{r, eval=FALSE}
+DESeq2 provides several methods to adjust LFC estimates for the low-expression
+bias, one of which we used above to produce the `res_LFC` object.
+Let's create another MA plot for these adjusted estimates:
+
+```{r}
+d <- plotMA(res_LFC, ylim = c(-5, 5), returnData = TRUE)
+
+ggplot(d, aes(x = mean, y = lfc, color = isDE)) +
+  geom_point(size = 0.5) +
+  scale_x_log10() +
+  scale_color_manual(values = c('grey50', 'blue')) +
+  guides(color = FALSE) +
+  labs(x = "Mean of normalized counts",
+       y = "Shrunken LFC")
+```
+
+TODO: Add Plotly plot
+
+### Plot specific genes
+
+We can also create plot of expression levels in individual genes,
+which will be especially interesting for genes with highly significant differential
+expression.
+
+Let's plot the top-5 most significantly differentially expressed genes:
+
+```{r, eval=TRUE}
+top5 <- row.names(res[order(res$padj), ][1:5, ])
+
+for(fgene in top5) {
+  
+  d <- plotCounts(dds,
+                  gene = fgene,
+                  intgroup = "group",
+                  returnData = TRUE)
+
+  p <- ggplot(d, aes(x = group, y = count)) +
+          geom_point(position = position_jitter(w = 0.1, h = 0)) +
+          labs(title = fgene) +
+          theme_bw()
+  
+  print(p)
+}
+
+```
+
+```{r, eval=FALSE, echo=FALSE}
+# "Solyc02g069430.4" "Solyc06g050590.3" "Solyc01g111220.3" "Solyc10g047030.3" "Solyc04g079330.2"
 d <- plotCounts(dds,
-                gene = which.min(res$padj),
+                gene = "Solyc02g069430.4",
                 intgroup = "group",
                 returnData = TRUE)
 
-p <- ggplot(d, aes(x = group, y = count)) +
+ggplot(d, aes(x = group, y = count)) +
   geom_point(position = position_jitter(w = 0.1, h = 0)) +
-  scale_y_log10(breaks = c(25, 100, 400))
-
+  labs(title = fgene) +
+  theme_bw()
 ```
 
-### Heatmap:
+### Heatmap
 
-```{r, eval=FALSE}
+We can create heatmaps with the `pheatmap` function --
+for instance, for the 20 most highly expressed genes:
+
+```{r, eval=TRUE}
 ntd <- normTransform(dds)
-select <- order(rowMeans(counts(dds, normalized = TRUE)),
-                decreasing = TRUE)[1:20]
-ntd_sel <- assay(ntd)[select, ]
+selection <- order(rowMeans(counts(dds, normalized = TRUE)),
+                   decreasing = TRUE)[1:20]
+ntd_sel <- assay(ntd)[selection, ]
 df_meta <- as.data.frame(colData(dds)[, c("AMF", "Treatment")])
 ```
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 pheatmap(ntd_sel,
          cluster_rows = FALSE,
          cluster_cols = FALSE,
@@ -606,11 +727,17 @@ TBA
 TBA
 
 ```{r, eval=FALSE, echo=FALSE}
-design <- as.formula(~ AMF + Treatment)
-ddsObj.raw <- DESeqDataSetFromMatrix(countData = counts,
-                                     colData = metadata,
-                                     design = design)
-ddsObj <- DESeq(ddsObj.raw)
+dds_2f_raw <- dds_raw
+
+# AMF + Treatment: Test for the effect of Treatment (the last factor),
+# ...controlling for the effect of AMF (the first factor).
+design(dds_2f_raw) <- formula(~ AMF + Treatment)
+
+# Or use interaction term: ∼ AMF + Treatment + AMF:Treatment
 ```
 
+```{r, eval=FALSE, echo=FALSE}
+# Run DESeq with the new design:
+dds_2f <- DESeq(dds_2f_raw)
+```
 
