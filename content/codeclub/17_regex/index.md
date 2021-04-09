@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: 784ea84f1e967e5b
+rmd_hash: e776414e9edf5016
 
 ---
 
@@ -98,8 +98,7 @@ Regular expressions are extremely useful for a couple of related purposes:
     -   Replace multiple variations of the same thing at once:  
         e.g. change all DNA repeats to lowercase letters or Ns.
 
-    -   Change GPS coordinates in degrees/minutes/seconds format to decimal degrees,  
-        or a date format from `M/DD/YY` to `YYYY-MM-DD`.
+    -   Change a date format from `M/DD/YY` to `YYYY-MM-DD`, or GPS coordinates in degrees/minutes/seconds format to decimal degrees (note that this needs a bit of conversion too).
 
     -   Rename files: switch sample ID and treatment ID separated by underscores,  
         or pad numbers (`1`-`100` =\> `001`-`100` for proper ordering).
@@ -418,7 +417,7 @@ The `challenge_results` dataframe contains "signature" and "showstopper" bakes m
 
 </div>
 
-The "signature" bakes are the first bakes presented in each GBBO episode, so we'll also start try to matching them with regular expressions. Let's save them in a vector for easy access later on:
+The "signature" bakes are the first bakes presented in each GBBO episode, so we'll start trying to match these bakes with regular expressions. Let's save them in a vector for easy access later on:
 
 <div class="highlight">
 
@@ -467,16 +466,16 @@ But the power of regular expressions comes with special characters, and below, w
 
 Above, we already learned that **`.`** matches any single character. Other metacharacters, that is, characters that represent a single instance of **a character type**, are actually character combinations starting with a **`\`**.
 
-| Symbol   | Negation | Matches                                                               |
-|----------|----------|-----------------------------------------------------------------------|
-| **`.`**  |          | Any single character.                                                 |
-| **`\d`** | **`\D`** | Any / anything but a digit.                                           |
-| **`\s`** | **`\S`** | Any / anything but white space: space, tab, newline, carriage return. |
-| **`\w`** | **`\W`** | Any / anything but a word character: alphanumeric and underscore.     |
-| **`\n`** |          | A newline.                                                            |
-| **`\t`** |          | A tab.                                                                |
+| Symbol   | Matches                                                | Negation ("anything but") |
+|----------|--------------------------------------------------------|---------------------------|
+| **`.`**  | Any single character.                                  |                           |
+| **`\d`** | Any digit.                                             | **`\D`**                  |
+| **`\s`** | Any white space: space, tab, newline, carriage return. | **`\S`**                  |
+| **`\w`** | Any word character: alphanumeric and underscore.       | **`\W`**                  |
+| **`\n`** | A newline.                                             |                           |
+| **`\t`** | A tab.                                                 |                           |
 
-(These include **`\n`** and **`\t`**, which mean the same in non-regex escape sequences in R.)
+Negated metacharacters match anything except that character type: **`\D`** matches anything except a digit.
 
 *Some examples:*
 
