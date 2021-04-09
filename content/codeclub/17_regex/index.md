@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: e776414e9edf5016
+rmd_hash: 113180e741b10e99
 
 ---
 
@@ -73,7 +73,7 @@ You would probably have no trouble recognizing internet and email addresses, mos
 
 We can recognize these things because they adhere to certain patterns: a DNA sequence, for instance, typically consists of a sequence of capital As, Cs, Gs, and Ts.
 
-**Regular expressions provide a way to describe and match text that contains specific patterns to computers**, with expressions that convey things like *"any digit"* and *"one or more or the previous character or character type"*. For example, **`\d{5}`** is a regular expression that matches at least five consecutive digits and would be a good start to finding all US ZIP codes embedded in a piece of text.
+**Regular expressions provide a way to describe and match text that contains specific patterns to computers**, with expressions that convey things like *"any digit"* and *"one or more or the previous character or character type"*. For example, **`\d{5}`** is a regular expression that matches at least five consecutive digits and would be a good start to finding all US ZIP codes contained in some text.
 
 Regular expressions are extremely useful for a couple of related purposes:
 
@@ -164,8 +164,8 @@ If we want to see all matches, and not just the first one, we have to use `str_v
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>desserts</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"plum pudding"</span>, <span class='s'>"chocolate cake"</span>, <span class='s'>"sticky toffee pudding"</span><span class='o'>)</span>
-<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>desserts</span>, <span class='s'>"pudding"</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bakes</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"plum pudding"</span>, <span class='s'>"chocolate cake"</span>, <span class='s'>"sticky toffee pudding"</span><span class='o'>)</span>
+<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakes</span>, <span class='s'>"pudding"</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -184,7 +184,7 @@ Note that the non-matching string "*chocolate cake*" was displayed despite the l
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>desserts</span>, <span class='s'>"pudding"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakes</span>, <span class='s'>"pudding"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 </code></pre>
 
 </div>
@@ -236,10 +236,10 @@ Alternatively, a quote can be **escaped** using a backslash **`\`** to indicate 
 
 In regular expressions (regex), we need a way to succinctly convey descriptions such as "any character" or "any digit". *However, there are no characters exclusive to regular expressions:* *instead, we re-use normal characters.* For instance:
 
--   "**Any character**" is represented by a period, **`.`**
 -   "**Any digit**" is represented by **`\d`**, with the **`\`** basically preventing the **`d`** from being interpreted literally.
+-   "**Any character**" is represented by a period, **`.`**
 
-But how, then, do we indicate a literal **`.`** or **`\`** in a regular expression? The solution is to **escape** the special character with a backslash: the regular expression **`\.`** matches a **`.`**.
+How, then, do we indicate a literal period **`.`** in a regular expression? The solution is to **escape** it with a backslash: the regular expression **`\.`** matches a period **`.`**.
 
 {{% callout note %}}
 
@@ -464,7 +464,9 @@ But the power of regular expressions comes with special characters, and below, w
 
 ### Metacharacters
 
-Above, we already learned that **`.`** matches any single character. Other metacharacters, that is, characters that represent a single instance of **a character type**, are actually character combinations starting with a **`\`**.
+Metacharacters often represent a single instance of **a character type**: above, we already learned that **`.`** matches *any single character*.
+
+Other metacharacters are actually character combinations starting with a **`\`**:
 
 | Symbol   | Matches                                                | Negation ("anything but") |
 |----------|--------------------------------------------------------|---------------------------|
@@ -496,23 +498,6 @@ Negated metacharacters match anything except that character type: **`\D`** match
 
 <br>
 
--   What about periods? Note that we need to escape the period with two **`\\`**.
-
-    <div class="highlight">
-
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"\\."</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
-    </code></pre>
-
-    </div>
-
-    <div class="highlight">
-
-    <img src="img/period.png" width="50%" style="display: block; margin: auto auto auto 0;" />
-
-    </div>
-
-<br>
-
 -   Let's match 5-character strings that start with "*Ma*":
 
     <div class="highlight">
@@ -528,7 +513,7 @@ Negated metacharacters match anything except that character type: **`\D`** match
 
     </div>
 
-    Note that the only constraint we are setting with **`...`** is that at least three characters should follow **`Ma`** -- we are *not* restricting matches to five-character words, or something along those lines.
+    Note that the only constraint we are setting with **`...`** is that at least three characters should follow **`Ma`** -- we are *not* restricting matches to five-character words.
 
 <br>
 
@@ -583,7 +568,7 @@ Quantifiers describe how many consecutive instances of the **preceding** charact
 
 <br>
 
--   Match the entire string (full names -- by flanking the pattern with **`.*`**) of names with 2 to 3 (**`{2,3}`**) consecutive "*e*" characters:
+-   Match names with 2 to 3 (**`{2,3}`**) consecutive "*e*" characters. Note that this match encompasses the full string (name), because we flank the pattern with **`.*`**.
 
     <div class="highlight">
 
@@ -678,7 +663,7 @@ To get *all* three-letter names, we need to be able to "anchor" our regular expr
 
     </div>
 
--   Match all three-letter names --first or last-- by matching three word-characters (**`\w`**) surrounded by word-boundaries (**`\b`**):
+-   Match all three-letter names --whether first, middle, or last-- using three word-characters (**`\w`**) surrounded by word-boundaries (**`\b`**):
 
     <div class="highlight">
 

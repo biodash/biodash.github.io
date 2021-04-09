@@ -85,7 +85,7 @@ with expressions that convey things like *"any digit"* and
 *"one or more or the previous character or character type"*.
 For example, **`\d{5}`** is a regular expression that matches at least five
 consecutive digits and would be a good start to finding all US ZIP codes
-embedded in a piece of text.
+contained in some text.
 
 Regular expressions are extremely useful for a couple of related purposes:
 
@@ -183,8 +183,8 @@ knitr::include_graphics("img/two_o.png")
 string but also to match a vector of strings:
 
 ```{r, eval=FALSE}
-desserts <- c("plum pudding", "chocolate cake", "sticky toffee pudding")
-str_view(desserts, "pudding")
+bakes <- c("plum pudding", "chocolate cake", "sticky toffee pudding")
+str_view(bakes, "pudding")
 ```
 
 ```{r, echo=FALSE, results="show", out.width="30%", fig.align="left"}
@@ -197,11 +197,11 @@ If we only want to see strings that matched,
 we can set the `match` argument to `TRUE`:
 
 ```{r, eval=TRUE, echo=FALSE}
-desserts <- c("plum pudding", "chocolate cake", "sticky toffee pudding")
+bakes <- c("plum pudding", "chocolate cake", "sticky toffee pudding")
 ```
 
 ```{r, eval=FALSE}
-str_view(desserts, "pudding", match = TRUE)
+str_view(bakes, "pudding", match = TRUE)
 ```
 
 ```{r, echo=FALSE, results="show", out.width="30%", fig.align="left"}
@@ -252,13 +252,13 @@ such as "any character" or "any digit".
 *However, there are no characters exclusive to regular expressions:*
 *instead, we re-use normal characters.* For instance:
 
-- "**Any character**" is represented by a period, **`.`**
 - "**Any digit**" is represented by **`\d`**, with the **`\`** basically
   preventing the **`d`** from being interpreted literally.
+- "**Any character**" is represented by a period, **`.`**
 
-But how, then, do we indicate a literal **`.`** or **`\`** in a regular expression?
-The solution is to **escape** the special character with a backslash:
-the regular expression **`\.`** matches a **`.`**.
+How, then, do we indicate a literal period **`.`** in a regular expression?
+The solution is to **escape** it with a backslash:
+the regular expression **`\.`** matches a period **`.`**.
 
 {{% callout note %}}
 
@@ -425,9 +425,10 @@ and below, we'll go through several different categories of these.
 
 ### Metacharacters
 
-Above, we already learned that **`.`** matches any single character.
-Other metacharacters, that is, characters that represent a single instance of
-**a character type**, are actually character combinations starting with a **`\`**.
+Metacharacters often represent a single instance of **a character type**:
+above, we already learned that **`.`** matches *any single character*.
+
+Other metacharacters are actually character combinations starting with a **`\`**:
 
 | Symbol      | Matches                                                | Negation ("anything but")
 |-------------|--------------------------------------------------------|---------------------------
@@ -455,18 +456,6 @@ Negated metacharacters match anything except that character type:
 
 <br>
 
-- What about periods? Note that we need to escape the period with two **`\\`**.
-
-  ```{r, eval=FALSE}
-  str_view_all(signatures, "\\.", match = TRUE)
-  ```
-
-  ```{r, echo=FALSE, results="show", out.width="50%", fig.align="left"}
-  knitr::include_graphics("img/period.png")
-  ```
-
-<br>
-
 - Let's match 5-character strings that start with "*Ma*":
 
   ```{r, eval=FALSE}
@@ -479,9 +468,8 @@ Negated metacharacters match anything except that character type:
   
   Note that the only constraint we are setting with **`...`** is that
   at least three characters should follow **`Ma`** --
-  we are *not* restricting matches to five-character words,
-  or something along those lines.
-
+  we are *not* restricting matches to five-character words.
+  
 <br>
 
 - Let's find the bakers whose (first or last) names contain at least 11
@@ -531,8 +519,9 @@ character should be matched:
 
 <br>
 
-- Match the entire string (full names -- by flanking the pattern with **`.*`**)
-  of names with 2 to 3 (**`{2,3}`**) consecutive "*e*" characters:
+- Match names with 2 to 3 (**`{2,3}`**) consecutive "*e*" characters.
+  Note that this match encompasses the full string (name),
+  because we flank the pattern with **`.*`**.
 
   ```{r, eval=FALSE}
   str_view(bakers$baker_full, ".*e{2,3}.*", match=TRUE)
@@ -609,8 +598,8 @@ Anchor       | Matches
   knitr::include_graphics("img/3letterfirstnames.png")
   ```
 
-- Match all three-letter names --first or last--
-  by matching three word-characters (**`\w`**) surrounded by word-boundaries
+- Match all three-letter names --whether first, middle, or last--
+  using three word-characters (**`\w`**) surrounded by word-boundaries
   (**`\b`**):
 
   ```{r, eval=FALSE}
