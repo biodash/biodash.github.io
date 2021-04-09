@@ -96,8 +96,7 @@
 e.g. change all DNA repeats to lowercase letters or Ns.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Change GPS coordinates in degrees/minutes/seconds format to decimal degrees,&lt;br&gt;
-or a date format from &lt;code&gt;M/DD/YY&lt;/code&gt; to &lt;code&gt;YYYY-MM-DD&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Change a date format from &lt;code&gt;M/DD/YY&lt;/code&gt; to &lt;code&gt;YYYY-MM-DD&lt;/code&gt;, or GPS coordinates in degrees/minutes/seconds format to decimal degrees (note that this needs a bit of conversion too).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Rename files: switch sample ID and treatment ID separated by underscores,&lt;br&gt;
@@ -299,7 +298,7 @@ or pad numbers (&lt;code&gt;1&lt;/code&gt;-&lt;code&gt;100&lt;/code&gt; =&amp;gt
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt;      1       1 Louise IN     Carrot and Oran…        &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt; Never Fail Chocolate …&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;The &amp;ldquo;signature&amp;rdquo; bakes are the first bakes presented in each GBBO episode, so we&amp;rsquo;ll also start try to matching them with regular expressions. Let&amp;rsquo;s save them in a vector for easy access later on:&lt;/p&gt;
+&lt;p&gt;The &amp;ldquo;signature&amp;rdquo; bakes are the first bakes presented in each GBBO episode, so we&amp;rsquo;ll start trying to match these bakes with regular expressions. Let&amp;rsquo;s save them in a vector for easy access later on:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;challenge_results&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signature&lt;/span&gt;     &lt;span class=&#39;c&#39;&gt;# Assign the column to a vector&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/NA.html&#39;&gt;is.na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signatures&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;  &lt;span class=&#39;c&#39;&gt;# Remove NAs&lt;/span&gt;
@@ -340,44 +339,44 @@ or pad numbers (&lt;code&gt;1&lt;/code&gt;-&lt;code&gt;100&lt;/code&gt; =&amp;gt
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Symbol&lt;/th&gt;
-&lt;th&gt;Negation&lt;/th&gt;
 &lt;th&gt;Matches&lt;/th&gt;
+&lt;th&gt;Negation (&amp;ldquo;anything but&amp;rdquo;)&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;&lt;code&gt;.&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
 &lt;td&gt;Any single character.&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;&lt;code&gt;\d&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Any digit.&lt;/td&gt;
 &lt;td&gt;&lt;strong&gt;&lt;code&gt;\D&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Any / anything but a digit.&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;&lt;code&gt;\s&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Any white space: space, tab, newline, carriage return.&lt;/td&gt;
 &lt;td&gt;&lt;strong&gt;&lt;code&gt;\S&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Any / anything but white space: space, tab, newline, carriage return.&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;&lt;code&gt;\w&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Any word character: alphanumeric and underscore.&lt;/td&gt;
 &lt;td&gt;&lt;strong&gt;&lt;code&gt;\W&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Any / anything but a word character: alphanumeric and underscore.&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;&lt;code&gt;\n&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
 &lt;td&gt;A newline.&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;&lt;code&gt;\t&lt;/code&gt;&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
 &lt;td&gt;A tab.&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;(These include &lt;strong&gt;&lt;code&gt;\n&lt;/code&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;code&gt;\t&lt;/code&gt;&lt;/strong&gt;, which mean the same in non-regex escape sequences in R.)&lt;/p&gt;
+&lt;p&gt;Negated metacharacters match anything except that character type: &lt;strong&gt;&lt;code&gt;\D&lt;/code&gt;&lt;/strong&gt; matches anything except a digit.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Some examples:&lt;/em&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -1312,7 +1311,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-689712534&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-183296745&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1322,7 +1321,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-689712534&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-183296745&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1398,7 +1397,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-913675482&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-783125469&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1408,7 +1407,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-913675482&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-783125469&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1429,7 +1428,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-865937214&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-392654871&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1439,7 +1438,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-865937214&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-392654871&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1466,7 +1465,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-975321648&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-589612734&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1476,7 +1475,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-975321648&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-589612734&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1503,7 +1502,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-749832516&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-597438612&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1513,7 +1512,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-749832516&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-597438612&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1536,7 +1535,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-341759826&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-965132487&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1546,7 +1545,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-341759826&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-965132487&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1587,7 +1586,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-783564129&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-213986475&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1597,7 +1596,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-783564129&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-213986475&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1616,7 +1615,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-823794165&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-463915287&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1626,7 +1625,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-823794165&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-463915287&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1652,7 +1651,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-691427538&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-579481326&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1662,7 +1661,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-691427538&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-579481326&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1692,7 +1691,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-637518492&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-372946158&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1702,7 +1701,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-637518492&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-372946158&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1916,7 +1915,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-193456827&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-831674259&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1926,7 +1925,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-193456827&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-831674259&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1987,7 +1986,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-234716958&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-568943172&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1997,7 +1996,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-234716958&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-568943172&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2072,7 +2071,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-275693841&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-745816392&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2082,7 +2081,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-275693841&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-745816392&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();

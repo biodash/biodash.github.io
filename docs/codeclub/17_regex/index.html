@@ -341,7 +341,7 @@
         content="2021-04-06T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-04-08T15:20:47-04:00">
+    <meta property="article:modified_time" content="2021-04-09T12:25:30-04:00">
   
 
   
@@ -865,7 +865,7 @@
   <span class="article-date">
     
     
-    Apr 8, 2021
+    Apr 9, 2021
   </span>
   
 
@@ -983,8 +983,7 @@
 e.g. change all DNA repeats to lowercase letters or Ns.</p>
 </li>
 <li>
-<p>Change GPS coordinates in degrees/minutes/seconds format to decimal degrees,<br>
-or a date format from <code>M/DD/YY</code> to <code>YYYY-MM-DD</code>.</p>
+<p>Change a date format from <code>M/DD/YY</code> to <code>YYYY-MM-DD</code>, or GPS coordinates in degrees/minutes/seconds format to decimal degrees (note that this needs a bit of conversion too).</p>
 </li>
 <li>
 <p>Rename files: switch sample ID and treatment ID separated by underscores,<br>
@@ -1186,7 +1185,7 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <span class='c'>#&gt; <span style='color: #555555;'>6</span><span>      1       1 Louise IN     Carrot and Oran…        </span><span style='color: #BB0000;'>NA</span><span> Never Fail Chocolate …</span></span>
 </code></pre>
 </div>
-<p>The &ldquo;signature&rdquo; bakes are the first bakes presented in each GBBO episode, so we&rsquo;ll also start try to matching them with regular expressions. Let&rsquo;s save them in a vector for easy access later on:</p>
+<p>The &ldquo;signature&rdquo; bakes are the first bakes presented in each GBBO episode, so we&rsquo;ll start trying to match these bakes with regular expressions. Let&rsquo;s save them in a vector for easy access later on:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>signatures</span> <span class='o'>&lt;-</span> <span class='nv'>challenge_results</span><span class='o'>$</span><span class='nv'>signature</span>     <span class='c'># Assign the column to a vector</span>
 <span class='nv'>signatures</span> <span class='o'>&lt;-</span> <span class='nv'>signatures</span><span class='o'>[</span><span class='o'>!</span><span class='nf'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='o'>(</span><span class='nv'>signatures</span><span class='o'>)</span><span class='o'>]</span>  <span class='c'># Remove NAs</span>
@@ -1227,44 +1226,44 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <thead>
 <tr>
 <th>Symbol</th>
-<th>Negation</th>
 <th>Matches</th>
+<th>Negation (&ldquo;anything but&rdquo;)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong><code>.</code></strong></td>
-<td></td>
 <td>Any single character.</td>
+<td></td>
 </tr>
 <tr>
 <td><strong><code>\d</code></strong></td>
+<td>Any digit.</td>
 <td><strong><code>\D</code></strong></td>
-<td>Any / anything but a digit.</td>
 </tr>
 <tr>
 <td><strong><code>\s</code></strong></td>
+<td>Any white space: space, tab, newline, carriage return.</td>
 <td><strong><code>\S</code></strong></td>
-<td>Any / anything but white space: space, tab, newline, carriage return.</td>
 </tr>
 <tr>
 <td><strong><code>\w</code></strong></td>
+<td>Any word character: alphanumeric and underscore.</td>
 <td><strong><code>\W</code></strong></td>
-<td>Any / anything but a word character: alphanumeric and underscore.</td>
 </tr>
 <tr>
 <td><strong><code>\n</code></strong></td>
-<td></td>
 <td>A newline.</td>
+<td></td>
 </tr>
 <tr>
 <td><strong><code>\t</code></strong></td>
-<td></td>
 <td>A tab.</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<p>(These include <strong><code>\n</code></strong> and <strong><code>\t</code></strong>, which mean the same in non-regex escape sequences in R.)</p>
+<p>Negated metacharacters match anything except that character type: <strong><code>\D</code></strong> matches anything except a digit.</p>
 <p><em>Some examples:</em></p>
 <ul>
 <li>
