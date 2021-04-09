@@ -650,7 +650,25 @@ ggplot(d, aes(x = mean, y = lfc, color = isDE)) +
        y = "Shrunken LFC")
 ```
 
-TODO: Add Plotly plot
+We can also make this plot interactive with Plotly, so we can see the identity
+of each gene by hovering over the point:
+
+```{r}
+library(plotly)
+
+d$gene <- rownames(d)
+
+p_ma <- ggplot(d,
+               aes(x = mean, y = lfc, color = isDE, text = gene)) +
+  geom_point(size = 0.5) +
+  scale_x_log10() +
+  scale_color_manual(values = c('grey50', 'blue')) +
+  guides(color = FALSE) +
+  labs(x = "Mean of normalized counts",
+       y = "Shrunken LFC")
+
+ggplotly(p_ma, tooltip = "text")
+```
 
 ### Plot specific genes
 
