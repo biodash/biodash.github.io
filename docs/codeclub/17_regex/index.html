@@ -341,7 +341,7 @@
         content="2021-04-06T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-04-09T12:25:30-04:00">
+    <meta property="article:modified_time" content="2021-04-09T13:38:24-04:00">
   
 
   
@@ -944,7 +944,7 @@
 <h2 id="2-regular-expressions-what-and-why">2. Regular expressions: what and why?</h2>
 <p>You would probably have no trouble recognizing internet and email addresses, most phone numbers, or a DNA sequence embedded in a piece of text. And you would do so even if these were presented without context, and even though you may have never seen that <em>specific</em> email address, DNA sequence, and so on.</p>
 <p>We can recognize these things because they adhere to certain patterns: a DNA sequence, for instance, typically consists of a sequence of capital As, Cs, Gs, and Ts.</p>
-<p><strong>Regular expressions provide a way to describe and match text that contains specific patterns to computers</strong>, with expressions that convey things like <em>&ldquo;any digit&rdquo;</em> and <em>&ldquo;one or more or the previous character or character type&rdquo;</em>. For example, <strong><code>\d{5}</code></strong> is a regular expression that matches at least five consecutive digits and would be a good start to finding all US ZIP codes embedded in a piece of text.</p>
+<p><strong>Regular expressions provide a way to describe and match text that contains specific patterns to computers</strong>, with expressions that convey things like <em>&ldquo;any digit&rdquo;</em> and <em>&ldquo;one or more or the previous character or character type&rdquo;</em>. For example, <strong><code>\d{5}</code></strong> is a regular expression that matches at least five consecutive digits and would be a good start to finding all US ZIP codes contained in some text.</p>
 <p>Regular expressions are extremely useful for a couple of related purposes:</p>
 <ul>
 <li>
@@ -1024,8 +1024,8 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 </div>
 <p><em>stringr</em> functions are vectorized, so we can use them not just to match a single string but also to match a vector of strings:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>desserts</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"plum pudding"</span>, <span class='s'>"chocolate cake"</span>, <span class='s'>"sticky toffee pudding"</span><span class='o'>)</span>
-<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>desserts</span>, <span class='s'>"pudding"</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bakes</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"plum pudding"</span>, <span class='s'>"chocolate cake"</span>, <span class='s'>"sticky toffee pudding"</span><span class='o'>)</span>
+<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakes</span>, <span class='s'>"pudding"</span><span class='o'>)</span>
 </code></pre>
 </div>
 <div class="highlight">
@@ -1035,7 +1035,7 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <div class="highlight">
 </div>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>desserts</span>, <span class='s'>"pudding"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakes</span>, <span class='s'>"pudding"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 </code></pre>
 </div>
 <div class="highlight">
@@ -1067,10 +1067,10 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <h4 id="special-characters-and-escaping-them">Special characters and escaping them</h4>
 <p>In regular expressions (regex), we need a way to succinctly convey descriptions such as &ldquo;any character&rdquo; or &ldquo;any digit&rdquo;. <em>However, there are no characters exclusive to regular expressions:</em> <em>instead, we re-use normal characters.</em> For instance:</p>
 <ul>
-<li>&ldquo;<strong>Any character</strong>&rdquo; is represented by a period, <strong><code>.</code></strong></li>
 <li>&ldquo;<strong>Any digit</strong>&rdquo; is represented by <strong><code>\d</code></strong>, with the <strong><code>\</code></strong> basically preventing the <strong><code>d</code></strong> from being interpreted literally.</li>
+<li>&ldquo;<strong>Any character</strong>&rdquo; is represented by a period, <strong><code>.</code></strong></li>
 </ul>
-<p>But how, then, do we indicate a literal <strong><code>.</code></strong> or <strong><code>\</code></strong> in a regular expression? The solution is to <strong>escape</strong> the special character with a backslash: the regular expression <strong><code>\.</code></strong> matches a <strong><code>.</code></strong>.</p>
+<p>How, then, do we indicate a literal period <strong><code>.</code></strong> in a regular expression? The solution is to <strong>escape</strong> it with a backslash: the regular expression <strong><code>\.</code></strong> matches a period <strong><code>.</code></strong>.</p>
 <div class="alert alert-note">
   <div>
     <h4 id="tldr-for-the-rest-of-this-section">TLDR for the rest of this section</h4>
@@ -1221,7 +1221,8 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <p>Literal characters can be a part of regular expressions. In fact, as we saw in the first example, our entire search pattern for <code>str_view()</code> can perfectly well consist of <em>only</em> literal characters.</p>
 <p>But the power of regular expressions comes with special characters, and below, we&rsquo;ll go through several different categories of these.</p>
 <h3 id="metacharacters">Metacharacters</h3>
-<p>Above, we already learned that <strong><code>.</code></strong> matches any single character. Other metacharacters, that is, characters that represent a single instance of <strong>a character type</strong>, are actually character combinations starting with a <strong><code>\</code></strong>.</p>
+<p>Metacharacters often represent a single instance of <strong>a character type</strong>: above, we already learned that <strong><code>.</code></strong> matches <em>any single character</em>.</p>
+<p>Other metacharacters are actually character combinations starting with a <strong><code>\</code></strong>:</p>
 <table>
 <thead>
 <tr>
@@ -1280,19 +1281,6 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <br>
 <ul>
 <li>
-<p>What about periods? Note that we need to escape the period with two <strong><code>\\</code></strong>.</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"\\."</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
-</code></pre>
-</div>
-<div class="highlight">
-<p><img src="img/period.png" width="50%" style="display: block; margin: auto auto auto 0;" /></p>
-</div>
-</li>
-</ul>
-<br>
-<ul>
-<li>
 <p>Let&rsquo;s match 5-character strings that start with &ldquo;<em>Ma</em>&quot;:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"Ma..."</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
@@ -1301,7 +1289,7 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <div class="highlight">
 <p><img src="img/ma.png" width="90%" style="display: block; margin: auto auto auto 0;" /></p>
 </div>
-<p>Note that the only constraint we are setting with <strong><code>...</code></strong> is that at least three characters should follow <strong><code>Ma</code></strong> &ndash; we are <em>not</em> restricting matches to five-character words, or something along those lines.</p>
+<p>Note that the only constraint we are setting with <strong><code>...</code></strong> is that at least three characters should follow <strong><code>Ma</code></strong> &ndash; we are <em>not</em> restricting matches to five-character words.</p>
 </li>
 </ul>
 <br>
@@ -1371,7 +1359,7 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 <br>
 <ul>
 <li>
-<p>Match the entire string (full names &ndash; by flanking the pattern with <strong><code>.*</code></strong>) of names with 2 to 3 (<strong><code>{2,3}</code></strong>) consecutive &ldquo;<em>e</em>&rdquo; characters:</p>
+<p>Match names with 2 to 3 (<strong><code>{2,3}</code></strong>) consecutive &ldquo;<em>e</em>&rdquo; characters. Note that this match encompasses the full string (name), because we flank the pattern with <strong><code>.*</code></strong>.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>".*e&#123;2,3&#125;.*"</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
 </code></pre>
@@ -1458,7 +1446,7 @@ or pad numbers (<code>1</code>-<code>100</code> =&gt; <code>001</code>-<code>100
 </div>
 </li>
 <li>
-<p>Match all three-letter names &ndash;first or last&ndash; by matching three word-characters (<strong><code>\w</code></strong>) surrounded by word-boundaries (<strong><code>\b</code></strong>):</p>
+<p>Match all three-letter names &ndash;whether first, middle, or last&ndash; using three word-characters (<strong><code>\w</code></strong>) surrounded by word-boundaries (<strong><code>\b</code></strong>):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>, <span class='s'>"\\b\\w&#123;3&#125;\\b"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 </code></pre>
