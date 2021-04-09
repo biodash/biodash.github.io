@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: 113180e741b10e99
+rmd_hash: b981779c3197a037
 
 ---
 
@@ -640,11 +640,11 @@ To get *all* three-letter names, we need to be able to "anchor" our regular expr
 
 ### Anchors
 
-| Anchor | Matches                      |
-|--------|------------------------------|
-| [`^`](https://rdrr.io/r/base/Arithmetic.html)    | Beginning of the string/line |
-| [`$`](https://rdrr.io/r/base/Extract.html)    | End of the string/line       |
-| `\b`   | A word *boundary*            |
+| Anchor | Matches                              |
+|--------|--------------------------------------|
+| [`^`](https://rdrr.io/r/base/Arithmetic.html)    | Beginning of the string/line         |
+| [`$`](https://rdrr.io/r/base/Extract.html)    | End of the string/line               |
+| `\b`   | A word *boundary* (beginning or end) |
 
 *Some examples:*
 
