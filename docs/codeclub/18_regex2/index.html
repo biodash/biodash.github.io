@@ -1,0 +1,1646 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.0.0-beta.3 for Hugo" />
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Jelmer Poelstra" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Building on last week, we&#39;ll take regular expressions to a second level." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/18_regex2/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#3f51b5" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+      
+    
+
+    
+    
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.80f9a276c6100914c616a06e45ba8d09.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9F9CQ7P0DX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'G-9F9CQ7P0DX', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="https://biodash.github.io/codeclub/18_regex2/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="BioDASH" />
+  <meta property="og:url" content="https://biodash.github.io/codeclub/18_regex2/" />
+  <meta property="og:title" content="Session 18: Regular Expressions: Part II | BioDASH" />
+  <meta property="og:description" content="Building on last week, we&#39;ll take regular expressions to a second level." /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
+    <meta property="twitter:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-04-12T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-04-14T15:13:27-04:00">
+  
+
+  
+
+
+
+  
+
+  
+
+  <link rel='stylesheet' href='/css/highlight-light.css' title='hl-light'>
+<link rel='stylesheet' href='/css/highlight-dark.css' title='hl-dark' disabled>
+
+  <script src="htmlwidgets-1.5.1/htmlwidgets.js"></script>
+
+  <link href="str_view-0.1.0/str_view.css" rel="stylesheet" />
+
+  <script src="str_view-binding-1.4.0/str_view.js"></script>
+
+
+
+  <title>Session 18: Regular Expressions: Part II | BioDASH</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="a85a2a284ea62b5cc185c9c5e88d0488" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.7a224883d792570fd34d30c7134eace3.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Code Club</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/codeclub/"><span>- Sessions</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-schedule/"><span>- Schedule</span></a>
+            
+              <a class="dropdown-item" href="/"><span>----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-setup/"><span>- Computer Setup</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-novice/"><span>- Getting Started with R</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-present/"><span>- For Presenters</span></a>
+            
+              <a class="dropdown-item" href="/"><span>-----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-suggest/"><span>- Suggest a Topic</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-about/"><span>- About & Join!</span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/events/"><span>Other Events</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/material/"><span>Material</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/support/"><span>Support</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/suggest/"><span>Suggest...</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="https://github.com/biodash/biodash.github.io" target="_blank" rel="noopener"><i class='fab fa-github'></i><span></span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/index.xml" target="_blank" rel="noopener"><i class='fas fa-rss'></i><span></span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    
+<div class="container-fluid docs">
+    <div class="row flex-xl-nowrap">
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+            <ul class="nav toc-top">
+                <li><a href="#" id="back_to_top" class="docs-toc-title">Contents</a></li>
+            </ul>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#new-to-code-club">New to Code Club?</a></li>
+    <li><a href="#1-getting-set-up">1. Getting set up</a></li>
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#session-goals">Session Goals</a>
+      <ul>
+        <li><a href="#character-classesbracket-expressions">Character Classes/Bracket Expressions</a></li>
+        <li><a href="#alternation">Alternation</a></li>
+        <li><a href="#grouping">Grouping</a></li>
+        <li><a href="#backreferences">Backreferences</a></li>
+        <li><a href="#greediness">Greediness</a></li>
+      </ul>
+    </li>
+    <li><a href="#breakout-rooms">Breakout rooms</a>
+      <ul>
+        <li><a href="#exercise-1">Exercise 1</a></li>
+        <li><a href="#exercise-2">Exercise 2</a></li>
+        <li><a href="#exercise-3">Exercise 3</a></li>
+        <li><a href="#exercise-4">Exercise 4</a></li>
+        <li><a href="#bonus-1">Bonus 1</a></li>
+        <li><a href="#bonus-2">Bonus 2</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+        <main class="col-12 col-md-0 col-xl-10 py-md-3 pl-md-5 docs-content" role="main">
+            
+
+            <article class="article">
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Session 18: Regular Expressions: Part II</h1>
+
+  
+  <p class="page-subtitle">With help (again) from The Great British Bake Off</p>
+  
+
+  
+    
+
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span >
+      <a href="/authors/mike-sovic/">Mike Sovic</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+    Apr 14, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+                <div class="article-container">
+                    <div class="article-style">
+                        <p><br> <br> <br></p>
+<hr>
+<h2 id="new-to-code-club">New to Code Club?</h2>
+<ul>
+<li>
+<p>If you didn&rsquo;t already do this, please follow the <a href="/codeclub-setup/">Code Club Computer Setup</a> instructions, which also has pointers for if you&rsquo;re new to R or RStudio.</p>
+</li>
+<li>
+<p>If you&rsquo;re able to do so, please open RStudio a bit before Code Club starts. If you run into issues, please join the Zoom call early and we&rsquo;ll help you troubleshoot.</p>
+</li>
+</ul>
+<br>
+<hr>
+<h2 id="1-getting-set-up">1. Getting set up</h2>
+<p>Like last week, we&rsquo;re going to be working with functions from the <em>stringr</em> package, which is one of the core <em>tidyverse</em> packages, so let&rsquo;s get that loaded first&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## If needed, install the tidyverse:</span>
+<span class='c'># install.packages("tidyverse")</span>
+
+<span class='c'>## Load the tidyverse -- this will include loading "stringr". </span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+</code></pre>
+</div>
+<p><em>stringr</em> has lots of useful functions for working with strings. Our focus here is on regular expressions, though, which represent just one component of working with strings. So, we&rsquo;ll limit the number of <em>stringr</em> functions we work with to try to focus more on the regular expressions themselves. In the previous session, we worked primarily with the <code>str_view_all()</code> function. We&rsquo;ll see a lot of that one again this week, and maybe a couple more as needed. Maybe we&rsquo;ll do a <em>stringr</em>-focused session down the road to see more of what it offers, but in the meantime, you can check out the <em>stringr</em> cheatsheet <a href="https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf" target="_blank" rel="noopener">here</a>, which also includes some useful info on regular expressions, if you&rsquo;re interested.</p>
+<h2 id="intro">Intro</h2>
+<p>In case you missed last week, or could use a refresher, here&rsquo;s a quick summary&hellip;</p>
+<ul>
+<li>Regular expressions allow you to match specific patterns in text. These can be simple patterns, like matching &lsquo;choco&rsquo; in &lsquo;chocolate&rsquo;, or more complicated patterns, like matching only lines that end with any three or four digits.</li>
+<li>More complicated matches are possible because there are characters, or in some cases, combinations of characters, that have special meaning. These include the metacharacters, anchors, and quantifiers we saw last week, and they help us define more complicated patterns in text.</li>
+<li>Sometimes you want to turn the &ldquo;special meaning&rdquo; of things like metacharacters, anchors, and quantifiers off to instead interpret the characters literally. The backslash helps us in those cases, and in R, you typically need two of them.</li>
+</ul>
+<h2 id="session-goals">Session Goals</h2>
+<p>If regular expressions were new to you last week, it might have felt like a lot to digest. And this week we&rsquo;re just going to add more. But don&rsquo;t worry &ndash; the idea really isn&rsquo;t that you remember all of the special characters (metacharacters) and rules for matching patterns. Personally, I use regular expressions fairly often, and still don&rsquo;t remember all of them all the time &ndash; it&rsquo;s easy enough to grab a cheat sheet and look up what you need to know. The more important thing for now is to just get a sense of the types of things regular expressions allow you to do. With that in mind, this week we&rsquo;ll consider the following additional features/uses of regular expressions&hellip;</p>
+<ul>
+<li>Character classes/Bracket expressions</li>
+<li>Alternation</li>
+<li>Grouping</li>
+<li>Backreferences</li>
+<li>Greediness/Non-Greediness</li>
+</ul>
+<p>As we go through these, we&rsquo;ll use the following string that contains made-up counts of 100 peoples' favorite ice cream flavor to see some examples of how they work&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>our_string</span> <span class='o'>&lt;-</span> <span class='s'>"Chocolate-48,Vanilla-27,Strawberry-25"</span>
+</code></pre>
+</div>
+<h3 id="character-classesbracket-expressions">Character Classes/Bracket Expressions</h3>
+<p>Regular expressions allow you to match certain classes of characters &ndash; uppercase, lowercase, digits, alphanumeric, punctuation, etc. We actually saw some examples of character classes last week &ndash; we just didn&rsquo;t call them that. For example, the ' metacharacter that matched any digit, and the'' that matched any word character each represented character classes. Another way of defining character classes/sets is with bracket expressions. These can work in several ways. Basically, any characters defined inside square brackets are matched. So, if you wanted to match any digit, you could use&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[01234556789]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-c00834e284f70d86c69e" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c00834e284f70d86c69e">{"x":{"html":"<ul>\n  <li>Chocolate-<span class='match'>4<\/span><span class='match'>8<\/span>,Vanilla-<span class='match'>2<\/span><span class='match'>7<\/span>,Strawberry-<span class='match'>2<\/span><span class='match'>5<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<p>Ranges can also be defined inside the square brackets with a dash, so this would be equivalent to the expression above&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[0-9]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-c9733cb7735b5d7a96c5" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c9733cb7735b5d7a96c5">{"x":{"html":"<ul>\n  <li>Chocolate-<span class='match'>4<\/span><span class='match'>8<\/span>,Vanilla-<span class='match'>2<\/span><span class='match'>7<\/span>,Strawberry-<span class='match'>2<\/span><span class='match'>5<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<p>And if you want to match the dash, put it at the beginning&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[-0-9]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-097a9a1ce46b09e60b55" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-097a9a1ce46b09e60b55">{"x":{"html":"<ul>\n  <li>Chocolate<span class='match'>-<\/span><span class='match'>4<\/span><span class='match'>8<\/span>,Vanilla<span class='match'>-<\/span><span class='match'>2<\/span><span class='match'>7<\/span>,Strawberry<span class='match'>-<\/span><span class='match'>2<\/span><span class='match'>5<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<p>Many character classes have a descriptive term that can also be used if it&rsquo;s bracketed by a colon on each side inside the brackets&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[:digit:]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-c77e124f5ee9b46fbfe7" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c77e124f5ee9b46fbfe7">{"x":{"html":"<ul>\n  <li>Chocolate-<span class='match'>4<\/span><span class='match'>8<\/span>,Vanilla-<span class='match'>2<\/span><span class='match'>7<\/span>,Strawberry-<span class='match'>2<\/span><span class='match'>5<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<p>Finally, the &lsquo;^&rsquo; can be used inside the brackets to negate the match. Notice the difference in how this character is interpreted here as compared to when we previously used it as an anchor (outside of the square brackets) &ndash; CONTEXT MATTERS!&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[^0-9]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-393033a92b69fcadddf4" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-393033a92b69fcadddf4">{"x":{"html":"<ul>\n  <li><span class='match'>C<\/span><span class='match'>h<\/span><span class='match'>o<\/span><span class='match'>c<\/span><span class='match'>o<\/span><span class='match'>l<\/span><span class='match'>a<\/span><span class='match'>t<\/span><span class='match'>e<\/span><span class='match'>-<\/span>48<span class='match'>,<\/span><span class='match'>V<\/span><span class='match'>a<\/span><span class='match'>n<\/span><span class='match'>i<\/span><span class='match'>l<\/span><span class='match'>l<\/span><span class='match'>a<\/span><span class='match'>-<\/span>27<span class='match'>,<\/span><span class='match'>S<\/span><span class='match'>t<\/span><span class='match'>r<\/span><span class='match'>a<\/span><span class='match'>w<\/span><span class='match'>b<\/span><span class='match'>e<\/span><span class='match'>r<\/span><span class='match'>r<\/span><span class='match'>y<\/span><span class='match'>-<\/span>25<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<h3 id="alternation">Alternation</h3>
+<p>Alternation allows you to search for any of two or more patterns. This is achieved with the pipe symbol/vertical bar <a href="https://rdrr.io/r/base/Logic.html" target="_blank" rel="noopener"><code>|</code></a>, which is usually just above the Return key. Within regular expressions, it can be read as &ldquo;or&rdquo;. So, the expression &ldquo;Chocolate|Vanilla&rdquo; finds matches to either of these flavors&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"Chocolate|Vanilla"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-9d0e1837febf989d5055" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9d0e1837febf989d5055">{"x":{"html":"<ul>\n  <li><span class='match'>Chocolate<\/span>-48,<span class='match'>Vanilla<\/span>-27,Strawberry-25<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<p>And you can chain more than two of these together, as in &ldquo;Chocolate|Vanilla|Strawberry&rdquo;&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"Chocolate|Vanilla|Strawberry"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-3ac935fbf7286350470d" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3ac935fbf7286350470d">{"x":{"html":"<ul>\n  <li><span class='match'>Chocolate<\/span>-48,<span class='match'>Vanilla<\/span>-27,<span class='match'>Strawberry<\/span>-25<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<h3 id="grouping">Grouping</h3>
+<p>Grouping serves a couple main purposes in regular expressions. We&rsquo;ll consider one here, and then a second in the context of backreferences in the next section. The quantifiers Jelmer introduced last week define the number of times the preceding character must occur. But what if you want to match a set of characters a specific number of times? They can be grouped by wrapping them in parentheses, so the quantifier applies to the entire set. We&rsquo;ll use a new example string for this one - one from the DNA world. Sometimes strings of DNA contain short sequences of repeats, like the &lsquo;ATC&rsquo; repeat in the middle of this string&hellip; GTACGGG<strong>ATCATCATCATCATC</strong>GGATCCCAGT</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dna_string</span> <span class='o'>&lt;-</span> <span class='s'>"GTACGGGATCATCATCATCATCGGATCCCAGT"</span>
+</code></pre>
+</div>
+<p>What if we wanted to find places where &ldquo;ATC&rdquo; was repeated at least 3 times in sequence?</p>
+<p>This doesn&rsquo;t give us what we want, since the quantifier is only being applied to the &lsquo;C&rsquo;&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>dna_string</span>, <span class='s'>"ATC&#123;3,&#125;"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-f4c8f5dbfa4cf45712b4" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f4c8f5dbfa4cf45712b4">{"x":{"html":"<ul>\n  <li>GTACGGGATCATCATCATCATCGG<span class='match'>ATCCC<\/span>AGT<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<p>Instead, we can group the &lsquo;ATC&rsquo; with a set of parentheses to get the result we want&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>dna_string</span>, <span class='s'>"(ATC)&#123;3,&#125;"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-441f181eeedff9749f96" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-441f181eeedff9749f96">{"x":{"html":"<ul>\n  <li>GTACGGG<span class='match'>ATCATCATCATCATC<\/span>GGATCCCAGT<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<h3 id="backreferences">Backreferences</h3>
+<p>Another place grouping comes in handy is with backreferences. But before we get to those, let&rsquo;s get comfortable with a new function from <em>stringr</em>. So far, we&rsquo;ve focused on using regular expressions just to search for patterns. But sometimes we want to not only find a pattern, but then replace it with something else. The <code>str_replace()</code> function can be thought of as an extension of <code>str_view()</code> that takes a third argument - the string that will be used to replace any match identified. So, say we had a mistake in the data, and &ldquo;strawberry&rdquo; was actually supposed to be &ldquo;caramel&rdquo;&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_replace</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"strawberry"</span>, <span class='s'>"caramel"</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "Chocolate-48,Vanilla-27,Strawberry-25"</span>
+</code></pre>
+</div>
+<p>Backreferences allow us to use the matches to (grouped) regex patterns as replacements. The characters matching each grouped regex pattern are temporarily assigned to variables (sequential numbers - i.e. the first matched group is assigned as 1, the second as 2, and so on), and can then be recalled with those numbers. Let&rsquo;s go back to our ice cream string and use backreferences to reverse the order of the flavors in the string&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#view the current string</span>
+<span class='nv'>our_string</span>
+
+<span class='c'>#&gt; [1] "Chocolate-48,Vanilla-27,Strawberry-25"</span>
+
+
+<span class='nf'>str_replace</span><span class='o'>(</span><span class='nv'>our_string</span>, 
+            <span class='s'>"(Chocolate-48),(Vanilla-27),(Strawberry-25)"</span>, 
+            <span class='s'>"\\3,\\2,\\1"</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "Strawberry-25,Vanilla-27,Chocolate-48"</span>
+</code></pre>
+</div>
+<p>The first grouped match (Chocolate-48) got assigned to the variable &lsquo;1&rsquo;, the second (Vanilla-27) to &lsquo;2&rsquo;, and the third (Strawberry-25) to &lsquo;3&rsquo;. For the replacement, we just called these variables in reverse order. The notation to call these variables (backreferences) is often the combination of a single backslash and the number, but as Jelmer pointed out last week, in R, we need two backslashes.</p>
+<p>We could also use metacharacters to do it like this (or many other ways for that matter)&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_replace</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"(C*),(V*),(S*)"</span>, <span class='s'>"\\3,\\1,\\2"</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "Chocolate-48,Vanilla-27,Strawberry-25"</span>
+</code></pre>
+</div>
+<h3 id="greediness">Greediness</h3>
+<p>By default, regular expression matches will be greedy, as in this example&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"C.+\\d\\d"</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-afe569b9e9fb3c8b6d1a" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-afe569b9e9fb3c8b6d1a">{"x":{"html":"<ul>\n  <li><span class='match'>Chocolate-48,Vanilla-27,Strawberry-25<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<p>Notice there are three possible valid matches to the search pattern here &ndash; &ldquo;Chocolate-48&rdquo;, &ldquo;Chocolate-48,Vanilla-27&rdquo;, and the full string which is actually what gets matched. This is called greedy behavior - the longest valid match will be identified by default. You can add the &lsquo;?&rsquo; after a quantifier to make the match non-greedy&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"C.+?\\d\\d"</span><span class='o'>)</span>
+
+<!--html_preserve--><div id="htmlwidget-a08fd268a617de2aec59" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a08fd268a617de2aec59">{"x":{"html":"<ul>\n  <li><span class='match'>Chocolate-48<\/span>,Vanilla-27,Strawberry-25<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+<p>So, in summary for today,</p>
+<ul>
+<li>Bracket expressions (square brackets) allow you to match anything inside them. Ranges can be defined with a dash. Notation is also available to define and match character classes &ndash; things like digits, lowercase letters, punctuation, etc.</li>
+<li>The <a href="https://rdrr.io/r/base/Logic.html" target="_blank" rel="noopener"><code>|</code></a> means &ldquo;or&rdquo; &ndash; use it to match one of two or more patterns.</li>
+<li>Parentheses can be used to group a set of characters/metacharacters into a single regex pattern.</li>
+<li>When grouped patterns match, they are assigned to a temporary numeric variable that can be used to recall the match, usually to use it in a replacement.</li>
+<li>If there is more than one valid match to a regex search pattern, the longest one will be returned by default. This &ldquo;greedy&rdquo; behavior can be reversed by adding a &lsquo;?&rsquo; after the relevant quantifier.</li>
+</ul>
+<p>Like last week, we&rsquo;ll use data from the Great British Bakeoff to practice with some of these things. If you didn&rsquo;t install that dataset last week, you can get it with the following code&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## If needed, first install the "remotes" package:</span>
+<span class='c'># install.packages("remotes")</span>
+
+<span class='nf'>remotes</span><span class='nf'>::</span><span class='nf'><a href='https://remotes.r-lib.org/reference/install_github.html'>install_github</a></span><span class='o'>(</span><span class='s'>"apreshill/bakeoff"</span><span class='o'>)</span>
+</code></pre>
+</div>
+<p>Then (everybody), load it&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://bakeoff.netlify.com'>bakeoff</a></span><span class='o'>)</span>
+</code></pre>
+</div>
+<br>
+<hr>
+<h2 id="breakout-rooms">Breakout rooms</h2>
+<div class="puzzle">
+<div>
+<h3 id="exercise-1">Exercise 1</h3>
+<p>For the first few exercises, we&rsquo;re going to work with the signature bakes found in the &ldquo;signature&rdquo; column of the &ldquo;bakes&rdquo; data frame. Assign the data from this column to an object names &ldquo;sigs&rdquo;. Preview it by viewing its first 3 items and getting its length.</p>
+<details>
+<summary>
+Hints
+</summary>
+<p>Use the &lsquo;$&rsquo; notation to pull out the single column from the data frame, or alternatively a combination of <em>dplyr</em>&rsquo;s <code>select()</code> followed by <a href="https://rdrr.io/r/base/unlist.html" target="_blank" rel="noopener"><code>unlist()</code></a>. Use square brackets to index the vector, and the <a href="https://rdrr.io/r/base/length.html" target="_blank" rel="noopener"><code>length()</code></a> function to get its length.</p>
+</details>
+<details>
+<summary>
+Solution
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>sigs</span> <span class='o'>&lt;-</span> <span class='nv'>bakes</span><span class='o'>$</span><span class='nv'>signature</span>
+
+<span class='nv'>sigs</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>3</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1] "Light Jamaican Black Cakewith Strawberries and Cream"</span>
+<span class='c'>#&gt; [2] "Chocolate Orange Cake"                               </span>
+<span class='c'>#&gt; [3] "Caramel Cinnamon and Banana Cake"</span>
+
+
+<span class='nf'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='o'>(</span><span class='nv'>sigs</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 548</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="puzzle">
+<div>
+<h3 id="exercise-2">Exercise 2</h3>
+<p>Find all signature bakes that contain either raspberries or blueberries. Make sure to try to cover all the ways those ingredients might be reflected in the names.</p>
+<details>
+<summary>
+Hints
+</summary>
+<ul>
+<li>
+<p>Use the pipe symbol for alternation (OR)</p>
+</li>
+<li>
+<p>Include possible variants such as raspberry, raspberries, Raspberry, etc.</p>
+</li>
+</ul>
+</details>
+<details>
+<summary>
+Solution
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>sigs</span>, <span class='s'>"[Rr]aspberr.+|[Bb]lueberr.+"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
+</div>
+<div class="highlight">
+<p><img src="img/ex2.png" width="700px" style="display: block; margin: auto auto auto 0;" /></p>
+</div>
+</details>
+</div>
+</div>
+<div class="puzzle">
+<div>
+<h3 id="exercise-3">Exercise 3</h3>
+<p>Even if you&rsquo;re not a millionaire, you&rsquo;d like to try to eat like one. First, find all signature bakes that have &ldquo;Millionaire&rdquo; in the name. Then do a second search and limit the results to just those that start with &ldquo;Millionaire&rdquo;.</p>
+<details>
+<summary>
+Hints
+</summary>
+<ul>
+<li>Use the appropriate anchor to limit results to those with &ldquo;Millionaire&rdquo; at the beginning of the name.</li>
+</ul>
+</details>
+<details>
+<summary>
+Solution
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>sigs</span>, <span class='s'>"Millionaire"</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
+</div>
+<div class="highlight">
+<p><img src="img/ex3a.png" width="90%" style="display: block; margin: auto auto auto 0;" /></p>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>sigs</span>, <span class='s'>"^Millionaire"</span>, match<span class='o'>=</span><span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
+</div>
+<div class="highlight">
+<p><img src="img/ex3b.png" width="90%" style="display: block; margin: auto auto auto 0;" /></p>
+</div>
+</details>
+</div>
+</div>
+<div class="puzzle">
+<div>
+<h3 id="exercise-4">Exercise 4</h3>
+<p>You tried each of the three signature bakes that start with &ldquo;Millionaire&rdquo;, and weren&rsquo;t that impressed. Save these three bakes' names in the object &lsquo;not_good&rsquo; and then change the names of each of the three by replacing &ldquo;Millionaire&rdquo; with &ldquo;Poor Man&rdquo;. Assign the three new names to the object &lsquo;renamed&rsquo;. Note you&rsquo;ll need a new <em>stringr</em> function for this exercise.</p>
+<details>
+<summary>
+Hints
+</summary>
+<p>Use the <code>str_subset()</code> function to pull out the matching strings. Then use the <code>str_replace()</code> function we used in the examples for the replacement.</p>
+</details>
+<details>
+<summary>
+Solution
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>not_good</span> <span class='o'>&lt;-</span> <span class='nf'>str_subset</span><span class='o'>(</span><span class='nv'>sigs</span>, <span class='s'>"^Millionaire"</span><span class='o'>)</span>
+<span class='nv'>not_good</span>
+
+<span class='c'>#&gt; [1] "Millionaires' Shortbread"   "Millionaire Banoffee Bonus"</span>
+<span class='c'>#&gt; [3] "Millionaire's Roulade"</span>
+
+
+<span class='nv'>renamed</span> <span class='o'>&lt;-</span> <span class='nf'>str_replace_all</span><span class='o'>(</span><span class='nv'>not_good</span>, <span class='s'>"Millionaire"</span>,
+                           <span class='s'>"Poor Man"</span><span class='o'>)</span>
+
+<span class='nv'>renamed</span>
+
+<span class='c'>#&gt; [1] "Poor Mans' Shortbread"   "Poor Man Banoffee Bonus"</span>
+<span class='c'>#&gt; [3] "Poor Man's Roulade"</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="puzzle">
+<div>
+<h3 id="bonus-1">Bonus 1</h3>
+<p>For the bonus, let&rsquo;s work with a different part of the dataset. The &lsquo;bakers&rsquo; data frame includes a column named &lsquo;baker_full&rsquo; that has the full name of each baker. First, extract that column and save it as the object &lsquo;baker_names&rsquo;. Then preview the first 5 names in this vector.</p>
+<details>
+<summary>
+Hints
+</summary>
+<p>Use the &lsquo;$&rsquo; and [ ] notations.</p>
+</details>
+<details>
+<summary>
+Solution
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>baker_names</span> <span class='o'>&lt;-</span> <span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span>
+
+<span class='nv'>baker_names</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>5</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1] "Annetha Mills"         "David Chambers"        "Edward \"Edd\" Kimber"</span>
+<span class='c'>#&gt; [4] "Jasminder Randhawa"    "Jonathan Shepherd"</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="puzzle">
+<div>
+<h3 id="bonus-2">Bonus 2</h3>
+<p>Notice from the first 5 entries of &lsquo;baker_names&rsquo; that the names are ordered as first name then last name, with potentially a middle name, or nickname, in between. Try reordering the names so they read last name, comma, first (and middle, if applicable). Assign the new names to &lsquo;baker_names_rev&rsquo;.</p>
+<details>
+<summary>
+Hints
+</summary>
+<p>Use grouping and backreferences.</p>
+</details>
+<details>
+<summary>
+Solution
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>baker_names_rev</span> <span class='o'>&lt;-</span> <span class='nf'>str_replace</span><span class='o'>(</span><span class='nv'>baker_names</span>, 
+                               <span class='s'>"(.+)(\\s[:alpha:]+)"</span>,
+                               <span class='s'>"\\2, \\1"</span><span class='o'>)</span>
+
+<span class='nv'>baker_names_rev</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>5</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1] " Mills, Annetha"         " Chambers, David"       </span>
+<span class='c'>#&gt; [3] " Kimber, Edward \"Edd\"" " Randhawa, Jasminder"   </span>
+<span class='c'>#&gt; [5] " Shepherd, Jonathan"</span>
+</code></pre>
+</div>
+</div>
+</div>
+<br>
+<hr>
+
+                    </div>
+
+                    <br>
+
+                    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/18_regex2/&amp;text=Session%2018:%20Regular%20Expressions:%20Part%20II" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/18_regex2/&amp;t=Session%2018:%20Regular%20Expressions:%20Part%20II" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Session%2018:%20Regular%20Expressions:%20Part%20II&amp;body=https://biodash.github.io/codeclub/18_regex2/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/18_regex2/&amp;title=Session%2018:%20Regular%20Expressions:%20Part%20II" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Session%2018:%20Regular%20Expressions:%20Part%20II%20https://biodash.github.io/codeclub/18_regex2/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/18_regex2/&amp;title=Session%2018:%20Regular%20Expressions:%20Part%20II" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="/authors/mike-sovic/"><img class="avatar mr-3 avatar-circle" src="/authors/mike-sovic/avatar_hu1ab2c0735ccc2e414b344a1bc08b8162_24652_270x270_fill_q90_lanczos_center.jpg" alt="Mike Sovic"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/authors/mike-sovic/">Mike Sovic</a></h5>
+      <h6 class="card-subtitle">Bioinformatician at CAPS</h6>
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:sovic.1@osu.edu" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/mikesovic" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.youtube.com/channel/UC2dB6jDTbqzlTM6edzfBSGQ" target="_blank" rel="noopener">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <br>
+
+                    <hr class="separator">
+
+                    <div class="clearfix">
+                        
+                        
+                        <span class="previous-link">
+                            <a href="https://biodash.github.io/codeclub/17_regex/">← Session 17: Introduction to regular expressions</a>
+                        </span>
+                        
+                        
+                        
+                    </div>
+
+                    <hr class="separator">
+
+                </div>
+
+            </article>
+
+            
+        </main>
+    </div>
+</div>
+
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+    
+    <p class="powered-by">
+      <a href="/license/">LICENSE: CC-BY-SA <br> <i class="fab fa-creative-commons fa-2x"></i><i class="fab fa-creative-commons-by fa-2x"></i><i class="fab fa-creative-commons-sa fa-2x"></i> </a><br>
+    </p>
+    
+</footer>
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key="></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.25/gmaps.min.js" integrity="sha256-7vjlAeb8OaTrCXZkCNun9djzuB2owUsaO72kXaFDBJs=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+      
+    
+    <script src="/en/js/wowchemy.min.2f16af175a3ec51b41b36bb4934b1cf7.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>

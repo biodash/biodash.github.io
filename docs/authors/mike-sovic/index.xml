@@ -13,6 +13,387 @@
     </image>
     
     <item>
+      <title>Session 18: Regular Expressions: Part II</title>
+      <link>https://biodash.github.io/codeclub/18_regex2/</link>
+      <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/18_regex2/</guid>
+      <description>&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;new-to-code-club&#34;&gt;New to Code Club?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;If you didn&amp;rsquo;t already do this, please follow the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has pointers for if you&amp;rsquo;re new to R or RStudio.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;If you&amp;rsquo;re able to do so, please open RStudio a bit before Code Club starts. If you run into issues, please join the Zoom call early and we&amp;rsquo;ll help you troubleshoot.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-getting-set-up&#34;&gt;1. Getting set up&lt;/h2&gt;
+&lt;p&gt;Like last week, we&amp;rsquo;re going to be working with functions from the &lt;em&gt;stringr&lt;/em&gt; package, which is one of the core &lt;em&gt;tidyverse&lt;/em&gt; packages, so let&amp;rsquo;s get that loaded first&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## If needed, install the tidyverse:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# install.packages(&#34;tidyverse&#34;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## Load the tidyverse -- this will include loading &#34;stringr&#34;. &lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;stringr&lt;/em&gt; has lots of useful functions for working with strings. Our focus here is on regular expressions, though, which represent just one component of working with strings. So, we&amp;rsquo;ll limit the number of &lt;em&gt;stringr&lt;/em&gt; functions we work with to try to focus more on the regular expressions themselves. In the previous session, we worked primarily with the &lt;code&gt;str_view_all()&lt;/code&gt; function. We&amp;rsquo;ll see a lot of that one again this week, and maybe a couple more as needed. Maybe we&amp;rsquo;ll do a &lt;em&gt;stringr&lt;/em&gt;-focused session down the road to see more of what it offers, but in the meantime, you can check out the &lt;em&gt;stringr&lt;/em&gt; cheatsheet &lt;a href=&#34;https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_strings.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;, which also includes some useful info on regular expressions, if you&amp;rsquo;re interested.&lt;/p&gt;
+&lt;h2 id=&#34;intro&#34;&gt;Intro&lt;/h2&gt;
+&lt;p&gt;In case you missed last week, or could use a refresher, here&amp;rsquo;s a quick summary&amp;hellip;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Regular expressions allow you to match specific patterns in text. These can be simple patterns, like matching &amp;lsquo;choco&amp;rsquo; in &amp;lsquo;chocolate&amp;rsquo;, or more complicated patterns, like matching only lines that end with any three or four digits.&lt;/li&gt;
+&lt;li&gt;More complicated matches are possible because there are characters, or in some cases, combinations of characters, that have special meaning. These include the metacharacters, anchors, and quantifiers we saw last week, and they help us define more complicated patterns in text.&lt;/li&gt;
+&lt;li&gt;Sometimes you want to turn the &amp;ldquo;special meaning&amp;rdquo; of things like metacharacters, anchors, and quantifiers off to instead interpret the characters literally. The backslash helps us in those cases, and in R, you typically need two of them.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;session-goals&#34;&gt;Session Goals&lt;/h2&gt;
+&lt;p&gt;If regular expressions were new to you last week, it might have felt like a lot to digest. And this week we&amp;rsquo;re just going to add more. But don&amp;rsquo;t worry &amp;ndash; the idea really isn&amp;rsquo;t that you remember all of the special characters (metacharacters) and rules for matching patterns. Personally, I use regular expressions fairly often, and still don&amp;rsquo;t remember all of them all the time &amp;ndash; it&amp;rsquo;s easy enough to grab a cheat sheet and look up what you need to know. The more important thing for now is to just get a sense of the types of things regular expressions allow you to do. With that in mind, this week we&amp;rsquo;ll consider the following additional features/uses of regular expressions&amp;hellip;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Character classes/Bracket expressions&lt;/li&gt;
+&lt;li&gt;Alternation&lt;/li&gt;
+&lt;li&gt;Grouping&lt;/li&gt;
+&lt;li&gt;Backreferences&lt;/li&gt;
+&lt;li&gt;Greediness/Non-Greediness&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As we go through these, we&amp;rsquo;ll use the following string that contains made-up counts of 100 peoples&#39; favorite ice cream flavor to see some examples of how they work&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Chocolate-48,Vanilla-27,Strawberry-25&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;character-classesbracket-expressions&#34;&gt;Character Classes/Bracket Expressions&lt;/h3&gt;
+&lt;p&gt;Regular expressions allow you to match certain classes of characters &amp;ndash; uppercase, lowercase, digits, alphanumeric, punctuation, etc. We actually saw some examples of character classes last week &amp;ndash; we just didn&amp;rsquo;t call them that. For example, the &#39; metacharacter that matched any digit, and the&#39;&#39; that matched any word character each represented character classes. Another way of defining character classes/sets is with bracket expressions. These can work in several ways. Basically, any characters defined inside square brackets are matched. So, if you wanted to match any digit, you could use&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;[01234556789]&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-c00834e284f70d86c69e&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-c00834e284f70d86c69e&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;Chocolate-&lt;span class=&#39;match&#39;&gt;4&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;8&lt;\/span&gt;,Vanilla-&lt;span class=&#39;match&#39;&gt;2&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;7&lt;\/span&gt;,Strawberry-&lt;span class=&#39;match&#39;&gt;2&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;5&lt;\/span&gt;&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Ranges can also be defined inside the square brackets with a dash, so this would be equivalent to the expression above&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;[0-9]&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-c9733cb7735b5d7a96c5&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-c9733cb7735b5d7a96c5&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;Chocolate-&lt;span class=&#39;match&#39;&gt;4&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;8&lt;\/span&gt;,Vanilla-&lt;span class=&#39;match&#39;&gt;2&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;7&lt;\/span&gt;,Strawberry-&lt;span class=&#39;match&#39;&gt;2&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;5&lt;\/span&gt;&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;And if you want to match the dash, put it at the beginning&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;[-0-9]&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-097a9a1ce46b09e60b55&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-097a9a1ce46b09e60b55&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;Chocolate&lt;span class=&#39;match&#39;&gt;-&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;4&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;8&lt;\/span&gt;,Vanilla&lt;span class=&#39;match&#39;&gt;-&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;2&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;7&lt;\/span&gt;,Strawberry&lt;span class=&#39;match&#39;&gt;-&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;2&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;5&lt;\/span&gt;&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Many character classes have a descriptive term that can also be used if it&amp;rsquo;s bracketed by a colon on each side inside the brackets&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;[:digit:]&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-c77e124f5ee9b46fbfe7&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-c77e124f5ee9b46fbfe7&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;Chocolate-&lt;span class=&#39;match&#39;&gt;4&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;8&lt;\/span&gt;,Vanilla-&lt;span class=&#39;match&#39;&gt;2&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;7&lt;\/span&gt;,Strawberry-&lt;span class=&#39;match&#39;&gt;2&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;5&lt;\/span&gt;&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Finally, the &amp;lsquo;^&amp;rsquo; can be used inside the brackets to negate the match. Notice the difference in how this character is interpreted here as compared to when we previously used it as an anchor (outside of the square brackets) &amp;ndash; CONTEXT MATTERS!&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;[^0-9]&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-393033a92b69fcadddf4&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-393033a92b69fcadddf4&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;&lt;span class=&#39;match&#39;&gt;C&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;h&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;o&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;c&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;o&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;l&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;a&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;t&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;e&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;-&lt;\/span&gt;48&lt;span class=&#39;match&#39;&gt;,&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;V&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;a&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;n&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;i&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;l&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;l&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;a&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;-&lt;\/span&gt;27&lt;span class=&#39;match&#39;&gt;,&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;S&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;t&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;r&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;a&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;w&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;b&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;e&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;r&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;r&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;y&lt;\/span&gt;&lt;span class=&#39;match&#39;&gt;-&lt;\/span&gt;25&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;alternation&#34;&gt;Alternation&lt;/h3&gt;
+&lt;p&gt;Alternation allows you to search for any of two or more patterns. This is achieved with the pipe symbol/vertical bar &lt;a href=&#34;https://rdrr.io/r/base/Logic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;|&lt;/code&gt;&lt;/a&gt;, which is usually just above the Return key. Within regular expressions, it can be read as &amp;ldquo;or&amp;rdquo;. So, the expression &amp;ldquo;Chocolate|Vanilla&amp;rdquo; finds matches to either of these flavors&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Chocolate|Vanilla&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-9d0e1837febf989d5055&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-9d0e1837febf989d5055&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;&lt;span class=&#39;match&#39;&gt;Chocolate&lt;\/span&gt;-48,&lt;span class=&#39;match&#39;&gt;Vanilla&lt;\/span&gt;-27,Strawberry-25&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;And you can chain more than two of these together, as in &amp;ldquo;Chocolate|Vanilla|Strawberry&amp;rdquo;&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Chocolate|Vanilla|Strawberry&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-3ac935fbf7286350470d&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-3ac935fbf7286350470d&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;&lt;span class=&#39;match&#39;&gt;Chocolate&lt;\/span&gt;-48,&lt;span class=&#39;match&#39;&gt;Vanilla&lt;\/span&gt;-27,&lt;span class=&#39;match&#39;&gt;Strawberry&lt;\/span&gt;-25&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;grouping&#34;&gt;Grouping&lt;/h3&gt;
+&lt;p&gt;Grouping serves a couple main purposes in regular expressions. We&amp;rsquo;ll consider one here, and then a second in the context of backreferences in the next section. The quantifiers Jelmer introduced last week define the number of times the preceding character must occur. But what if you want to match a set of characters a specific number of times? They can be grouped by wrapping them in parentheses, so the quantifier applies to the entire set. We&amp;rsquo;ll use a new example string for this one - one from the DNA world. Sometimes strings of DNA contain short sequences of repeats, like the &amp;lsquo;ATC&amp;rsquo; repeat in the middle of this string&amp;hellip; GTACGGG&lt;strong&gt;ATCATCATCATCATC&lt;/strong&gt;GGATCCCAGT&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dna_string&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;GTACGGGATCATCATCATCATCGGATCCCAGT&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;What if we wanted to find places where &amp;ldquo;ATC&amp;rdquo; was repeated at least 3 times in sequence?&lt;/p&gt;
+&lt;p&gt;This doesn&amp;rsquo;t give us what we want, since the quantifier is only being applied to the &amp;lsquo;C&amp;rsquo;&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dna_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;ATC&amp;#123;3,&amp;#125;&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-f4c8f5dbfa4cf45712b4&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-f4c8f5dbfa4cf45712b4&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;GTACGGGATCATCATCATCATCGG&lt;span class=&#39;match&#39;&gt;ATCCC&lt;\/span&gt;AGT&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Instead, we can group the &amp;lsquo;ATC&amp;rsquo; with a set of parentheses to get the result we want&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dna_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;(ATC)&amp;#123;3,&amp;#125;&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-441f181eeedff9749f96&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-441f181eeedff9749f96&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;GTACGGG&lt;span class=&#39;match&#39;&gt;ATCATCATCATCATC&lt;\/span&gt;GGATCCCAGT&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;backreferences&#34;&gt;Backreferences&lt;/h3&gt;
+&lt;p&gt;Another place grouping comes in handy is with backreferences. But before we get to those, let&amp;rsquo;s get comfortable with a new function from &lt;em&gt;stringr&lt;/em&gt;. So far, we&amp;rsquo;ve focused on using regular expressions just to search for patterns. But sometimes we want to not only find a pattern, but then replace it with something else. The &lt;code&gt;str_replace()&lt;/code&gt; function can be thought of as an extension of &lt;code&gt;str_view()&lt;/code&gt; that takes a third argument - the string that will be used to replace any match identified. So, say we had a mistake in the data, and &amp;ldquo;strawberry&amp;rdquo; was actually supposed to be &amp;ldquo;caramel&amp;rdquo;&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_replace&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;strawberry&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;caramel&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Chocolate-48,Vanilla-27,Strawberry-25&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Backreferences allow us to use the matches to (grouped) regex patterns as replacements. The characters matching each grouped regex pattern are temporarily assigned to variables (sequential numbers - i.e. the first matched group is assigned as 1, the second as 2, and so on), and can then be recalled with those numbers. Let&amp;rsquo;s go back to our ice cream string and use backreferences to reverse the order of the flavors in the string&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#view the current string&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Chocolate-48,Vanilla-27,Strawberry-25&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;str_replace&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, 
+            &lt;span class=&#39;s&#39;&gt;&#34;(Chocolate-48),(Vanilla-27),(Strawberry-25)&#34;&lt;/span&gt;, 
+            &lt;span class=&#39;s&#39;&gt;&#34;\\3,\\2,\\1&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Strawberry-25,Vanilla-27,Chocolate-48&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The first grouped match (Chocolate-48) got assigned to the variable &amp;lsquo;1&amp;rsquo;, the second (Vanilla-27) to &amp;lsquo;2&amp;rsquo;, and the third (Strawberry-25) to &amp;lsquo;3&amp;rsquo;. For the replacement, we just called these variables in reverse order. The notation to call these variables (backreferences) is often the combination of a single backslash and the number, but as Jelmer pointed out last week, in R, we need two backslashes.&lt;/p&gt;
+&lt;p&gt;We could also use metacharacters to do it like this (or many other ways for that matter)&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_replace&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;(C*),(V*),(S*)&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;\\3,\\1,\\2&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Chocolate-48,Vanilla-27,Strawberry-25&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;greediness&#34;&gt;Greediness&lt;/h3&gt;
+&lt;p&gt;By default, regular expression matches will be greedy, as in this example&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;C.+\\d\\d&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-afe569b9e9fb3c8b6d1a&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-afe569b9e9fb3c8b6d1a&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;&lt;span class=&#39;match&#39;&gt;Chocolate-48,Vanilla-27,Strawberry-25&lt;\/span&gt;&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice there are three possible valid matches to the search pattern here &amp;ndash; &amp;ldquo;Chocolate-48&amp;rdquo;, &amp;ldquo;Chocolate-48,Vanilla-27&amp;rdquo;, and the full string which is actually what gets matched. This is called greedy behavior - the longest valid match will be identified by default. You can add the &amp;lsquo;?&amp;rsquo; after a quantifier to make the match non-greedy&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;our_string&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;C.+?\\d\\d&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;!--html_preserve--&gt;&lt;div id=&#34;htmlwidget-a08fd268a617de2aec59&#34; style=&#34;width:960px;height:100%;&#34; class=&#34;str_view html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-a08fd268a617de2aec59&#34;&gt;{&#34;x&#34;:{&#34;html&#34;:&#34;&lt;ul&gt;\n  &lt;li&gt;&lt;span class=&#39;match&#39;&gt;Chocolate-48&lt;\/span&gt;,Vanilla-27,Strawberry-25&lt;\/li&gt;\n&lt;\/ul&gt;&#34;},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;&lt;!--/html_preserve--&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;So, in summary for today,&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Bracket expressions (square brackets) allow you to match anything inside them. Ranges can be defined with a dash. Notation is also available to define and match character classes &amp;ndash; things like digits, lowercase letters, punctuation, etc.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&#34;https://rdrr.io/r/base/Logic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;|&lt;/code&gt;&lt;/a&gt; means &amp;ldquo;or&amp;rdquo; &amp;ndash; use it to match one of two or more patterns.&lt;/li&gt;
+&lt;li&gt;Parentheses can be used to group a set of characters/metacharacters into a single regex pattern.&lt;/li&gt;
+&lt;li&gt;When grouped patterns match, they are assigned to a temporary numeric variable that can be used to recall the match, usually to use it in a replacement.&lt;/li&gt;
+&lt;li&gt;If there is more than one valid match to a regex search pattern, the longest one will be returned by default. This &amp;ldquo;greedy&amp;rdquo; behavior can be reversed by adding a &amp;lsquo;?&amp;rsquo; after the relevant quantifier.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Like last week, we&amp;rsquo;ll use data from the Great British Bakeoff to practice with some of these things. If you didn&amp;rsquo;t install that dataset last week, you can get it with the following code&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## If needed, first install the &#34;remotes&#34; package:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# install.packages(&#34;remotes&#34;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;remotes&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://remotes.r-lib.org/reference/install_github.html&#39;&gt;install_github&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;apreshill/bakeoff&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Then (everybody), load it&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://bakeoff.netlify.com&#39;&gt;bakeoff&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;breakout-rooms&#34;&gt;Breakout rooms&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;p&gt;For the first few exercises, we&amp;rsquo;re going to work with the signature bakes found in the &amp;ldquo;signature&amp;rdquo; column of the &amp;ldquo;bakes&amp;rdquo; data frame. Assign the data from this column to an object names &amp;ldquo;sigs&amp;rdquo;. Preview it by viewing its first 3 items and getting its length.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;p&gt;Use the &amp;lsquo;$&amp;rsquo; notation to pull out the single column from the data frame, or alternatively a combination of &lt;em&gt;dplyr&lt;/em&gt;&amp;rsquo;s &lt;code&gt;select()&lt;/code&gt; followed by &lt;a href=&#34;https://rdrr.io/r/base/unlist.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;unlist()&lt;/code&gt;&lt;/a&gt;. Use square brackets to index the vector, and the &lt;a href=&#34;https://rdrr.io/r/base/length.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;length()&lt;/code&gt;&lt;/a&gt; function to get its length.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;sigs&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bakes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;signature&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;sigs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Light Jamaican Black Cakewith Strawberries and Cream&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2] &#34;Chocolate Orange Cake&#34;                               &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3] &#34;Caramel Cinnamon and Banana Cake&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/length.html&#39;&gt;length&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sigs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 548&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;p&gt;Find all signature bakes that contain either raspberries or blueberries. Make sure to try to cover all the ways those ingredients might be reflected in the names.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Use the pipe symbol for alternation (OR)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Include possible variants such as raspberry, raspberries, Raspberry, etc.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sigs&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;[Rr]aspberr.+|[Bb]lueberr.+&#34;&lt;/span&gt;, match &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/ex2.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-3&#34;&gt;Exercise 3&lt;/h3&gt;
+&lt;p&gt;Even if you&amp;rsquo;re not a millionaire, you&amp;rsquo;d like to try to eat like one. First, find all signature bakes that have &amp;ldquo;Millionaire&amp;rdquo; in the name. Then do a second search and limit the results to just those that start with &amp;ldquo;Millionaire&amp;rdquo;.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;ul&gt;
+&lt;li&gt;Use the appropriate anchor to limit results to those with &amp;ldquo;Millionaire&amp;rdquo; at the beginning of the name.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sigs&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Millionaire&#34;&lt;/span&gt;, match&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;&lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/ex3a.png&#34; width=&#34;90%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;str_view_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sigs&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;^Millionaire&#34;&lt;/span&gt;, match&lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;&lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;img/ex3b.png&#34; width=&#34;90%&#34; style=&#34;display: block; margin: auto auto auto 0;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-4&#34;&gt;Exercise 4&lt;/h3&gt;
+&lt;p&gt;You tried each of the three signature bakes that start with &amp;ldquo;Millionaire&amp;rdquo;, and weren&amp;rsquo;t that impressed. Save these three bakes&#39; names in the object &amp;lsquo;not_good&amp;rsquo; and then change the names of each of the three by replacing &amp;ldquo;Millionaire&amp;rdquo; with &amp;ldquo;Poor Man&amp;rdquo;. Assign the three new names to the object &amp;lsquo;renamed&amp;rsquo;. Note you&amp;rsquo;ll need a new &lt;em&gt;stringr&lt;/em&gt; function for this exercise.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;p&gt;Use the &lt;code&gt;str_subset()&lt;/code&gt; function to pull out the matching strings. Then use the &lt;code&gt;str_replace()&lt;/code&gt; function we used in the examples for the replacement.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;not_good&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;str_subset&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sigs&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;^Millionaire&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;not_good&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Millionaires&#39; Shortbread&#34;   &#34;Millionaire Banoffee Bonus&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3] &#34;Millionaire&#39;s Roulade&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;nv&#39;&gt;renamed&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;str_replace_all&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;not_good&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Millionaire&#34;&lt;/span&gt;,
+                           &lt;span class=&#39;s&#39;&gt;&#34;Poor Man&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;renamed&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Poor Mans&#39; Shortbread&#34;   &#34;Poor Man Banoffee Bonus&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3] &#34;Poor Man&#39;s Roulade&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;bonus-1&#34;&gt;Bonus 1&lt;/h3&gt;
+&lt;p&gt;For the bonus, let&amp;rsquo;s work with a different part of the dataset. The &amp;lsquo;bakers&amp;rsquo; data frame includes a column named &amp;lsquo;baker_full&amp;rsquo; that has the full name of each baker. First, extract that column and save it as the object &amp;lsquo;baker_names&amp;rsquo;. Then preview the first 5 names in this vector.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;p&gt;Use the &amp;lsquo;$&amp;rsquo; and [ ] notations.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;baker_names&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bakers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_full&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;baker_names&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Annetha Mills&#34;         &#34;David Chambers&#34;        &#34;Edward \&#34;Edd\&#34; Kimber&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4] &#34;Jasminder Randhawa&#34;    &#34;Jonathan Shepherd&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;bonus-2&#34;&gt;Bonus 2&lt;/h3&gt;
+&lt;p&gt;Notice from the first 5 entries of &amp;lsquo;baker_names&amp;rsquo; that the names are ordered as first name then last name, with potentially a middle name, or nickname, in between. Try reordering the names so they read last name, comma, first (and middle, if applicable). Assign the new names to &amp;lsquo;baker_names_rev&amp;rsquo;.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints
+&lt;/summary&gt;
+&lt;p&gt;Use grouping and backreferences.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;baker_names_rev&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;str_replace&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;baker_names&lt;/span&gt;, 
+                               &lt;span class=&#39;s&#39;&gt;&#34;(.+)(\\s[:alpha:]+)&#34;&lt;/span&gt;,
+                               &lt;span class=&#39;s&#39;&gt;&#34;\\2, \\1&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;baker_names_rev&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34; Mills, Annetha&#34;         &#34; Chambers, David&#34;       &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3] &#34; Kimber, Edward \&#34;Edd\&#34;&#34; &#34; Randhawa, Jasminder&#34;   &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5] &#34; Shepherd, Jonathan&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Session 13: Applying The Apply Functions</title>
       <link>https://biodash.github.io/codeclub/13_apply/</link>
       <pubDate>Tue, 09 Mar 2021 00:00:00 +0000</pubDate>
