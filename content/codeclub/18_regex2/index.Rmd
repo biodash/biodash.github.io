@@ -35,7 +35,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 -----
 
-## 1. Getting set up
+## Getting Set Up
 
 Like last week, we're going to be working with functions from the *stringr* package, which is one of the core
 *tidyverse* packages, so let's get that loaded first...
@@ -79,48 +79,66 @@ our_string <- "Chocolate-48,Vanilla-27,Strawberry-25"
 
 Regular expressions allow you to match certain classes of characters – uppercase, lowercase, digits, alphanumeric, punctuation, etc. We actually saw some examples of character classes last week – we just didn’t call them that. For example, the '\\d' metacharacter that matched any digit, and the '\\w' that matched any word character each represented character classes. Another way of defining character classes/sets is with bracket expressions. These can work in several ways. Basically, any characters defined inside square brackets are matched. So, if you wanted to match any digit, you could use…
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(our_string, "[01234556789]", match = TRUE)
+```
+
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp1_2b.png")
 ```
 
 Ranges can also be defined inside the square brackets with a dash, so this would be equivalent to the expression above…
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(our_string, "[0-9]", match = TRUE)
+```
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp1_2b.png")
 ```
 
 And if you want to match the dash, put it at the beginning…
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(our_string, "[-0-9]", match = TRUE)
 ```
-
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp3.png")
+```
 Many character classes have a descriptive term that can also be used if it’s bracketed by a colon on each side inside the brackets…
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(our_string, "[:digit:]", match = TRUE)
 ```
-
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp1_2.png")
+```
 Finally, the ‘^’ can be used inside the brackets to negate the match. Notice the difference in how this character is interpreted here as compared to when we previously used it as an anchor (outside of the square brackets) – CONTEXT MATTERS!…
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(our_string, "[^0-9]", match = TRUE)
+```
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp4.png")
 ```
 
 ### Alternation
 
 Alternation allows you to search for any of two or more patterns. This is achieved with the pipe symbol/vertical bar `|`, which is usually just above the Return key. Within regular expressions, it can be read as “or”. So, the expression “Chocolate|Vanilla” finds matches to either of these flavors…
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(our_string, "Chocolate|Vanilla", match = TRUE)
 ```
-
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp5.png")
+```
 And you can chain more than two of these together, as in “Chocolate|Vanilla|Strawberry”…
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(our_string, "Chocolate|Vanilla|Strawberry", match = TRUE)
 ```
-
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp6.png")
+```
 ### Grouping
 
 Grouping serves a couple main purposes in regular expressions. We’ll consider one here, and then a second in the context of backreferences in the next section. The quantifiers Jelmer introduced last week define the number of times the preceding character must occur. But what if you want to match a set of characters a specific number of times? They can be grouped by wrapping them in parentheses, so the quantifier applies to the entire set. We’ll use a new example string for this one - one from the DNA world. Sometimes strings of DNA contain short sequences of repeats, like the ‘ATC’ repeat in the middle of this string…
@@ -134,14 +152,19 @@ What if we wanted to find places where “ATC” was repeated at least 3 times i
 
 This doesn’t give us what we want, since the quantifier is only being applied to the 'C'…
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(dna_string, "ATC{3,}", match = TRUE)
 ```
-
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp7.png")
+```
 Instead, we can group the 'ATC' with a set of parentheses to get the result we want...
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(dna_string, "(ATC){3,}", match = TRUE)
+```
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp8.png")
 ```
 
 ### Backreferences
@@ -170,21 +193,27 @@ The first grouped match (Chocolate-48) got assigned to the variable ‘1’, the
 We could also use metacharacters to do it like this (or many other ways for that matter)…
 
 ```{r}
-str_replace(our_string, "(C*),(V*),(S*)", "\\3,\\1,\\2")
+str_replace(our_string, "(C.*),(V.*),(S.*)", "\\3,\\1,\\2")
 ```
 
 ### Greediness
 
 By default, regular expression matches will be greedy, as in this example…
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(our_string, "C.+\\d\\d")
+```
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp9.png")
 ```
 
 Notice there are three possible valid matches to the search pattern here – "Chocolate-48", "Chocolate-48,Vanilla-27", and the full string which is actually what gets matched. This is called greedy behavior - the longest valid match will be identified by default. You can add the ‘?’ after a quantifier to make the match non-greedy...
 
-```{r}
+```{r, eval = FALSE}
 str_view_all(our_string, "C.+?\\d\\d")
+```
+```{r, echo=FALSE, results="show", out.width="90%", fig.align="left"}
+knitr::include_graphics("img/exmp10.png")
 ```
 
 So, in summary for today,

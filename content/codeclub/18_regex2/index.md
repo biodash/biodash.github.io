@@ -11,11 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: ebe40c7f0798b6ac
-html_dependencies:
-- <script src="htmlwidgets-1.5.1/htmlwidgets.js"></script>
-- <link href="str_view-0.1.0/str_view.css" rel="stylesheet" />
-- <script src="str_view-binding-1.4.0/str_view.js"></script>
+rmd_hash: 272a0358ad535afb
 
 ---
 
@@ -33,7 +29,7 @@ html_dependencies:
 
 ------------------------------------------------------------------------
 
-## 1. Getting set up
+## Getting Set Up
 
 Like last week, we're going to be working with functions from the *stringr* package, which is one of the core *tidyverse* packages, so let's get that loaded first...
 
@@ -84,9 +80,13 @@ Regular expressions allow you to match certain classes of characters -- uppercas
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[01234556789]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-811c3da291d252e50751" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-811c3da291d252e50751">{"x":{"html":"<ul>\n  <li>Chocolate-<span class='match'>4<\/span><span class='match'>8<\/span>,Vanilla-<span class='match'>2<\/span><span class='match'>7<\/span>,Strawberry-<span class='match'>2<\/span><span class='match'>5<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp1_2b.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -95,9 +95,13 @@ Ranges can also be defined inside the square brackets with a dash, so this would
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[0-9]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-aed593ced4fdf3e2cc3b" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-aed593ced4fdf3e2cc3b">{"x":{"html":"<ul>\n  <li>Chocolate-<span class='match'>4<\/span><span class='match'>8<\/span>,Vanilla-<span class='match'>2<\/span><span class='match'>7<\/span>,Strawberry-<span class='match'>2<\/span><span class='match'>5<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp1_2b.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -106,9 +110,13 @@ And if you want to match the dash, put it at the beginning...
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[-0-9]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-950c46371d50bb66f3eb" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-950c46371d50bb66f3eb">{"x":{"html":"<ul>\n  <li>Chocolate<span class='match'>-<\/span><span class='match'>4<\/span><span class='match'>8<\/span>,Vanilla<span class='match'>-<\/span><span class='match'>2<\/span><span class='match'>7<\/span>,Strawberry<span class='match'>-<\/span><span class='match'>2<\/span><span class='match'>5<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp3.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -117,9 +125,13 @@ Many character classes have a descriptive term that can also be used if it's bra
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[:digit:]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-05db9fb32c233da7c61a" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-05db9fb32c233da7c61a">{"x":{"html":"<ul>\n  <li>Chocolate-<span class='match'>4<\/span><span class='match'>8<\/span>,Vanilla-<span class='match'>2<\/span><span class='match'>7<\/span>,Strawberry-<span class='match'>2<\/span><span class='match'>5<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp1_2.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -128,9 +140,13 @@ Finally, the '^' can be used inside the brackets to negate the match. Notice the
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"[^0-9]"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-5cc5da8f3d411d212b1a" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5cc5da8f3d411d212b1a">{"x":{"html":"<ul>\n  <li><span class='match'>C<\/span><span class='match'>h<\/span><span class='match'>o<\/span><span class='match'>c<\/span><span class='match'>o<\/span><span class='match'>l<\/span><span class='match'>a<\/span><span class='match'>t<\/span><span class='match'>e<\/span><span class='match'>-<\/span>48<span class='match'>,<\/span><span class='match'>V<\/span><span class='match'>a<\/span><span class='match'>n<\/span><span class='match'>i<\/span><span class='match'>l<\/span><span class='match'>l<\/span><span class='match'>a<\/span><span class='match'>-<\/span>27<span class='match'>,<\/span><span class='match'>S<\/span><span class='match'>t<\/span><span class='match'>r<\/span><span class='match'>a<\/span><span class='match'>w<\/span><span class='match'>b<\/span><span class='match'>e<\/span><span class='match'>r<\/span><span class='match'>r<\/span><span class='match'>y<\/span><span class='match'>-<\/span>25<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp4.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -141,9 +157,13 @@ Alternation allows you to search for any of two or more patterns. This is achiev
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"Chocolate|Vanilla"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-085b343b2315b9211d18" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-085b343b2315b9211d18">{"x":{"html":"<ul>\n  <li><span class='match'>Chocolate<\/span>-48,<span class='match'>Vanilla<\/span>-27,Strawberry-25<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp5.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -152,9 +172,13 @@ And you can chain more than two of these together, as in "Chocolate\|Vanilla\|St
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"Chocolate|Vanilla|Strawberry"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-cdd6a583fa0f2cd0d814" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cdd6a583fa0f2cd0d814">{"x":{"html":"<ul>\n  <li><span class='match'>Chocolate<\/span>-48,<span class='match'>Vanilla<\/span>-27,<span class='match'>Strawberry<\/span>-25<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp6.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -176,9 +200,13 @@ This doesn't give us what we want, since the quantifier is only being applied to
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>dna_string</span>, <span class='s'>"ATC&#123;3,&#125;"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-ada0c35ea4a67a561189" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ada0c35ea4a67a561189">{"x":{"html":"<ul>\n  <li>GTACGGGATCATCATCATCATCGG<span class='match'>ATCCC<\/span>AGT<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp7.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -187,9 +215,13 @@ Instead, we can group the 'ATC' with a set of parentheses to get the result we w
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>dna_string</span>, <span class='s'>"(ATC)&#123;3,&#125;"</span>, match <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-d2db40201f9c950b1bae" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d2db40201f9c950b1bae">{"x":{"html":"<ul>\n  <li>GTACGGG<span class='match'>ATCATCATCATCATC<\/span>GGATCCCAGT<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp8.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -236,9 +268,9 @@ We could also use metacharacters to do it like this (or many other ways for that
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_replace</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"(C*),(V*),(S*)"</span>, <span class='s'>"\\3,\\1,\\2"</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_replace</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"(C.*),(V.*),(S.*)"</span>, <span class='s'>"\\3,\\1,\\2"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "Chocolate-48,Vanilla-27,Strawberry-25"</span>
+<span class='c'>#&gt; [1] "Strawberry-25,Chocolate-48,Vanilla-27"</span>
 </code></pre>
 
 </div>
@@ -250,9 +282,13 @@ By default, regular expression matches will be greedy, as in this example...
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"C.+\\d\\d"</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-cde4b1ad511319df78ec" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cde4b1ad511319df78ec">{"x":{"html":"<ul>\n  <li><span class='match'>Chocolate-48,Vanilla-27,Strawberry-25<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp9.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
@@ -261,9 +297,13 @@ Notice there are three possible valid matches to the search pattern here -- "Cho
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>our_string</span>, <span class='s'>"C.+?\\d\\d"</span><span class='o'>)</span>
+</code></pre>
 
-<!--html_preserve--><div id="htmlwidget-ce9abc0f392626e0e10e" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ce9abc0f392626e0e10e">{"x":{"html":"<ul>\n  <li><span class='match'>Chocolate-48<\/span>,Vanilla-27,Strawberry-25<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script><!--/html_preserve--></code></pre>
+</div>
+
+<div class="highlight">
+
+<img src="img/exmp10.png" width="90%" style="display: block; margin: auto auto auto 0;" />
 
 </div>
 
