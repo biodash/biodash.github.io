@@ -278,6 +278,16 @@ dds_raw <- DESeqDataSetFromMatrix(countData = counts,
                                   design = ~ 1)
 ```
 
+### Remove the `Ri_noexp` group
+
+```{r}
+#dds_raw <- dds_raw[, -which(dds_raw@colData$group == "Ri_noexp")]
+#dds_raw@colData$group <- droplevels(dds_raw@colData$group)
+
+dds_raw <- dds_raw[, -which(dds_raw@colData$Treatment == "noexp")]
+#dds_raw@colData$group <- droplevels(dds_raw@colData$group)
+```
+
 <br>
 
 ----
@@ -471,27 +481,30 @@ among our factor levels, which we will see later.
 
 For now, we will explore what each column in this table means:
 
-- The `baseMean` column contains the mean expression level across all samples.
+- The **`baseMean`** column contains the mean expression level across all samples.
 
-- The `log2FoldChange` column contains the log2-fold change of gene counts
+- The **`log2FoldChange`** column contains the log2-fold change of gene counts
   between the compared levels, that is, it represents the *effect size*.
+  
   A log2-fold change of 1 indicates that the expression in the reference level
-  is 2 times lower than that of the other level, a log2-fold change of 2 indicates
-  a four-fold difference, a log2-fold change of 3 indicates an eight-fold difference,
-  and so on. Similarly, negative log2-fold change values indicate an change
-  in gene counts in the other direction.
+  is two-fold *lower* than that of the other level,
+  a log2-fold change of 2 indicates a four-fold difference,
+  a log2-fold change of 3 indicates an eight-fold difference, and so on.
+  
+  Similarly, *negative log2-fold* values indicate a change in gene counts in the
+  other direction: the reference level is *higher* than the other level.
   
 - The `lfcSE` column indicates the uncertainty in terms of the standard error
   (SE) of the log2-fold change estimate.
   
-- The `stat` column indicates the value for the Wald test's test statistic.
+- The **`stat`** column indicates the value for the Wald test's test statistic.
 
-- The `pvalue` column reported the *uncorrected* p-value from the Wald test.
+- The **`pvalue`** column reported the *uncorrected* p-value from the Wald test.
 
 - Because we are testing significance for *many* genes,
   we need to correct for multiple testing.
   DESeq2 uses the Benjamini-Hochberg False Discovery Rate (FDR) correction,
-  and these values are reported in the column `padj` (i.e., adjusted p-value).
+  and these values are reported in the column **`padj`** (i.e., adjusted p-value).
 
 A summary of this information about each column can be seen by running the
 `mcols()` function:
@@ -504,22 +517,23 @@ mcols(res)
 
 Some values in the results table can be set to `NA` for one of the following reasons:
 
-- If within a row, all samples have zero counts,
-  the `baseMean` column will be zero, and the log2-fold change estimates,
+- If a gene contains a sample with a count **outlier**,
+  both the p-value and adjusted p-value will be set to `NA`.
+  (DESeq2 performs outlier detection using Cook's distance.)
+  
+- If all samples have **zero counts** for a given gene,
+  the `baseMean` column will be zero,
+  and the log2-fold change estimates,
   p-value and adjusted p-value will all be set to `NA`.
 
-- DESeq2 performs outlier detection using Cook's distance.
-  If a gene contains a sample with an count outlier,
-  both the p-value and adjusted p-value will be set to `NA`.
-
-- DESeq2 also automatically filters low mean count genes in the sense that it
-  does not include them in the multiple testing correction.
-  Therefore, in such cases, the p-value will not be `NA`, but the adjusted p-value
-  will be.
+- DESeq2 also automatically filters genes with a **low mean count**
+  in the sense that it does not include them in the multiple testing correction.
+  Therefore, in such cases, the p-value will not be `NA`,
+  but the *adjusted* p-value will be.
   
   Because we have very low power to detect differential expression for such
   low-count genes, it is beneficial to remove them prior to the multiple testing
-  correction, so this correction becomes less severe for the remaining genes.
+  correction: that way, the correction becomes less severe for the remaining genes.
 
 Let's see how many genes have `NA` p-values:
 
@@ -547,17 +561,17 @@ sum(is.na(res$padj)) / nrow(res)
 
 ## DE analysis -- contrast two custom groups
 
-Although not displayed in a particularly readable ways,
-we can see which pairwise contrasts between different levels of the factor
-are available:
+Using the `resultsNames` function,
+we can see which pairwise contrasts between different levels of the factor are
+available (though it is not displayed in a particularly readable fashion):
 
 ```{r}
 resultsNames(dds)
 ```
 
-Not all pairwise contrasts between the 5 levels in our `group` factor are available:
-instead, `control_mock`, which we set as the reference level, is being compared
-with all 4 other levels.
+Not all pairwise contrasts between the 5 levels in our `group` factor are available
+here: instead, `control_mock`, which we set as the reference level, is being compared
+with all 4 other levels. (However, we can still compare other levels too.)
 
 Above, we looked at the results (p-values and so on) for the last of these
 comparisons, which is what DESeq2 will show by default.
@@ -578,8 +592,8 @@ How many adjusted p-values were less than 0.1?
 sum(res$padj < 0.1, na.rm = TRUE)
 ```
 
-We'll also create an object with adjusted (shrunken) LFC estimates which will
-be useful for visualization and ranking of genes by LFC.
+We'll also create an object with adjusted (shrunken) LFC estimates,
+which will be useful for visualization and ranking of genes by LFC:
 
 ```{r}
 my_coef <- paste0("group_", paste0(my_contrast, collapse = "_vs_"))
@@ -588,8 +602,9 @@ res_LFC <- lfcShrink(dds, coef = my_coef, type = "apeglm", lfcThreshold = 1)
 ```
 
 Note that here, we had to provide the contrast ("coefficient") in the format
-given by `resultsNames(dds)`, which looks confusing because it uses underscores
-as a separator, and our factor levels also contain underscores.
+given by `resultsNames(dds)`
+(that looks a bit confusing because this format uses underscores to separate levels,
+while our factor levels themselves also contain underscores).
 
 <br>
 
@@ -599,13 +614,13 @@ as a separator, and our factor levels also contain underscores.
 
 ### MA-plot:
 
-For a nice overview of the results, we can plot a so-called "MA plot",
-which plots, for each gene,
-count differences (as LFC) between two groups on the y-axis,
-and mean counts across both groups on the x-axis.
+For a nice overview of the results, we can plot a so-called "MA plot".
+An MA plot shows, for each gene:
+- Count differences in terms of LFC between two groups, on the y-axis
+- Mean counts across both groups, on the x-axis.
 
 We can create an MA plot using DESeq2's `plotMA` function,
-with significantly differentially expressed genes (using alpha = 0.1) in blue:
+with significantly differentially expressed genes displayed in blue:
 
 ```{r}
 plotMA(res, ylim = c(-5, 5))
@@ -629,14 +644,17 @@ ggplot(d, aes(x = mean, y = lfc, color = isDE)) +
 ```
 
 We can see that lowly-expressed genes tend to deviate from an LFC of 0
-(same mean expression levels in the two groups) much more than 0.
-However, this is an artifact of noise overpowering signal with such low
-expression values. We can also see that genes are never significantly expressed
-in the same far left part of the plot due to this lack of power.
+(same mean expression levels in the two groups) much more than
+highly-expressed genes do.
+However, this is an artifact of noise overpowering the signal when
+expression values are low.
+We can also see that no genes in the far left part of the plot are
+differentially expressed: this is due to this same lack of power.
 
-DESeq2 provides several methods to adjust LFC estimates for the low-expression
-bias, one of which we used above to produce the `res_LFC` object.
-Let's create another MA plot for these adjusted estimates:
+DESeq2 provides several methods to adjust LFC estimates for this low-expression
+bias.
+We used one of those (`lfcShrink()`) above to produce the `res_LFC` object.
+Let's create another MA plot with these adjusted LFC estimates:
 
 ```{r}
 d <- plotMA(res_LFC, ylim = c(-5, 5), returnData = TRUE)
@@ -650,14 +668,21 @@ ggplot(d, aes(x = mean, y = lfc, color = isDE)) +
        y = "Shrunken LFC")
 ```
 
-We can also make this plot interactive with Plotly, so we can see the identity
-of each gene by hovering over the point:
+Finally, for a plot like this it could be useful to be able to identify individual
+genes. There are way too many to print the gene names on the plot, though.
+Instead, we can also make the plot **interactive with Plotly**,
+so we can see the identity of each gene *when we hover over the point*:
 
 ```{r}
 library(plotly)
 
+# To show the gene name, we need to have a column with gene names.
+# Currently, the gene names are row names but ggplot2 (and other tidyverse
+# applications) don't like that, so we create a column with gene names:
 d$gene <- rownames(d)
 
+# First we create a very similar ggplot to what we did above,
+# but we assign gene names to "text":
 p_ma <- ggplot(d,
                aes(x = mean, y = lfc, color = isDE, text = gene)) +
   geom_point(size = 0.5) +
@@ -667,20 +692,24 @@ p_ma <- ggplot(d,
   labs(x = "Mean of normalized counts",
        y = "Shrunken LFC")
 
+# Finally, we make the plot interactive and tell Plotly that it should show
+# the "text" (i.e. gene names) as the "tooltip", meaning upon hovering:
 ggplotly(p_ma, tooltip = "text")
 ```
 
 ### Plot specific genes
 
-We can also create plot of expression levels in individual genes,
-which will be especially interesting for genes with highly significant differential
+We can also create plot of expression levels for individual genes.
+That is especially interesting for genes with highly significant differential
 expression.
 
 Let's plot the top-5 most significantly differentially expressed genes:
 
 ```{r, eval=TRUE}
+# First, we select the 5 genes with the lowest adjusted p-value:
 top5 <- row.names(res[order(res$padj), ][1:5, ])
 
+# Then we loop over these genes, creating a plot for each one:
 for(fgene in top5) {
   
   d <- plotCounts(dds,
@@ -696,19 +725,6 @@ for(fgene in top5) {
   print(p)
 }
 
-```
-
-```{r, eval=FALSE, echo=FALSE}
-# "Solyc02g069430.4" "Solyc06g050590.3" "Solyc01g111220.3" "Solyc10g047030.3" "Solyc04g079330.2"
-d <- plotCounts(dds,
-                gene = "Solyc02g069430.4",
-                intgroup = "group",
-                returnData = TRUE)
-
-ggplot(d, aes(x = group, y = count)) +
-  geom_point(position = position_jitter(w = 0.1, h = 0)) +
-  labs(title = fgene) +
-  theme_bw()
 ```
 
 ### Heatmap
@@ -734,9 +750,53 @@ pheatmap(ntd_sel,
 
 ### Export the results
 
-TBA
+Let's save the results dataframe to file.
+
+Note that it will only contain the results for one comparison.
+Also, if we write the results dataframe to file,
+we won't be able to tell from the file what the comparison is, so let's store
+that in two columns:
+
+```{r}
+my_contrast
+
+my_contrast_pasted <- paste0(my_contrast, collapse = "_vs_")
+my_contrast_pasted
+```
+
+```{r}
+res$level1 <- my_contrast[1]
+res$level2 <- my_contrast[2]
+head(res)
+```
+
+Now we can write `res` to file:
+
+```{r, eval=FALSE}
+res_file <- file.path(outdir, paste0(my_contrast_pasted, '_all-res.txt'))
+
+write.table(res, res_file,
+            sep = '\t', row.names = TRUE, quote = FALSE)
+```
+
+We may also want to save a separate table with only significant results:
+
+```{r, eval=FALSE}
+res_sig_file <- file.path(outdir, paste0(my_contrast_pasted, '_sig-res.txt'))
+
+res_sig <- res[res$padj < 0.1, ]
+
+write.table(res_sig, res_sig_file,
+            sep = '\t', row.names = TRUE, quote = FALSE)
+```
 
 <br>
+
+----
+
+## DE analysis -- all pairwise comparisons
+
+TBA
 
 ----
 
