@@ -453,14 +453,21 @@ dds <- DESeq(dds_raw)
 
 The `DESeq()` function above performs three steps consecutively:
   
-  - `estimateSizeFactors()` -- "Normalization" by library size.
-    Note that *DESeq2* doesn’t actually normalize the counts,
-    it uses raw counts and includes the size factors in the modeling. 
+- `estimateSizeFactors()` -- "Normalization" by library size and composition.
   
-  - `estimateDispersions()` -- Estimate gene-wise dispersions.
+  Note that *DESeq2* doesn’t actually normalize the counts in the sense that
+  it produces a matrix with adjusted counts.
+  Instead it uses raw counts and includes the size factors in the modeling.
   
-  - `nbinomWaldTest(ddsObj)` -- Fit the negative Binomial GLM and calculate
-    Wald statistics.
+  To learn more about gene count normalization, see
+  [this video](https://www.youtube.com/watch?v=UFB993xufUU) and
+  [this page](https://hbctraining.github.io/DGE_workshop/lessons/02_DGE_count_normalization.html).
+  
+- `estimateDispersions()` -- Estimate gene-wise dispersion (variance in counts).
+  
+- `nbinomWaldTest(ddsObj)` -- Fit the negative binomial GLM and calculate
+  Wald statistics, which is the test statistic underlying the p-value
+  for whether a gene is differentially expressed.
 
 These functions could also be called separately,
 which would be useful if you want to be able to change more defaults.
