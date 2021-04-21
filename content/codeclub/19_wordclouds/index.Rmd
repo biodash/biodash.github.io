@@ -1,0 +1,294 @@
+---
+title: "Session 19: Word Clouds via Tidytext"
+summary: "Visualizing text frequency distributions"
+authors: [michael-broe]
+date: "2021-04-21"
+output: hugodown::md_document
+toc: true
+image: 
+  caption: ""
+  focal_point: ""
+  preview_only: false
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+<br> <br> <br>
+
+------------------------------------------------------------------------
+
+## New To Code Club?
+
+-   First, check out the [Code Club Computer Setup](/codeclub-setup/)
+    instructions, which also has some pointers that might be helpful if
+    you're new to R or RStudio.
+
+-   Please open RStudio before Code Club to test things out -- if you
+    run into issues, join the Zoom call early and we'll troubleshoot.
+
+------------------------------------------------------------------------
+
+## Session Goals
+
+-   Learn the fundamentals of **text mining**.
+-   Learn how to do text mining in a tidyverse setting.
+-   Reuse some of our dplyr and ggplot skills on text.
+-   Learn how to very simply create word cloud visualizations.
+
+------------------------------------------------------------------------
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Setup
+
+This is another in our current series on text processing. We'll be using the following previously used packages which you should load first (install them if you haven't already):
+
+```{r, message=FALSE}
+library(tidyverse)
+library(bakeoff)
+```
+
+We'll also be using the following packages, which you should install and load:
+
+```{r, message=FALSE}
+# Uncomment the following line to install:
+# install.packages(c("tidytext", "gutenbergr", "wordcloud"))
+                 
+library(tidytext)
+library(gutenbergr)
+library(wordcloud)
+```
+
+## Introduction
+
+In this CodeClub session we'll see how to create word clouds (also known as tag clouds) from text, using the **tidytext** and **wordcloud** packages. A word cloud is a visualization of word frequencies, graphically highlighting the most common words.
+
+We need to get some text from somewhere, so first let's do it in the simplest possible way. 
+Here we manually enter a quote, line by line, as a vector of five character strings. This is the first stanza from Robert Lowell's [Skunk Hour](https://www.poetryfoundation.org/poems/47694/skunk-hour):
+
+```{r}
+lowell <- c("Nautilus Island's hermit",
+          "heiress still lives through winter in her Spartan cottage;",
+          "her sheep still graze above the sea.",
+          "Her son's a bishop. Her farmer is first selectman in our village;",
+          "she's in her dotage.")
+```
+
+In textual analysis we distinguish between word **types**, and word **tokens**. For example there are two tokens of the word-type "still" in this stanza. And slightly more abstractly there are four tokens of "her", modulo capitalization. Formally, it's the *token frequency* of the *word types* we are ultimately interested in capturing. So: two tasks, extract the word tokens, and count them! Done!
+
+The reason this is tricky is that natural language text is messy: the task of extracting a clean set of tokens to count is termed **text mining** or **tokenization**. We would also like to get the output into a tidyverse compliant data frame, so we can use familiar dplyr and ggplot functions to analyze it.
+
+We could imagine attacking this using stingr functions:
+
+```{r}
+lowell_tokens <- lowell %>% 
+    str_to_lower() %>%               # get rid of upper case; returns a character vector.
+    str_extract_all("[a-z]+") %>%    # get rid of punctuation; returns a list.
+    unlist() %>%                     # flatten that list
+    as_tibble()                      # stick it in a data frame
+
+print(lowell_tokens, n = 38)
+```
+
+This is a good start: it gets rid of the capitalization issue, and also gets rid of the punctuation. But there's a problem. The grep pattern doesn't recognize *possessives* or *contractions*: it just strips anything that's not a letter, so it messes up with `Island's`, `son's`, and `she's`: welcome to the subtleties of processing natural language text algorithmically! Exceptions, exceptions!! 
+
+We could fiddle about with our grep expression, but... *there's a package for that!* This kind of text mining is exactly what the [tidytext](https://www.tidytextmining.com) package was built for. It will simultaneously strip punctuation intelligently and 'unnest' lines into word tokens.
+
+Tidytext functions need a dataframe to operate on. So first we need to get the poem into a data frame by tibbling it; here we'll use the column name "text".
+
+```{r}
+lowell_df <- tibble(text = lowell)
+
+lowell_df
+```
+
+Each string in the character vector becomes a single row in the data frame.
+
+Again we want one word-token per row, to 'tidy' our data. This is what `tidytext::unnest_tokens()` does.  We're going to unnest words in this case (we can unnest other things, like characters, sentences, regexes, even tweets) and we need to specify the variable in the dataframe we are unnesting (in this case just `text`). This will create a new, *tidy*, word token data frame, and we'll name the variable in the new column `word`. This is important (see later on stop words). 
+
+```{r}
+lowell_tidy <- lowell_df %>%
+    unnest_tokens(word, text)
+
+print(lowell_tidy, n = 35)
+```
+
+Punctuation has been stripped and all words are lower case, but possessives and contractions are preserved (fancy usage of str_ grep functions under the hood...).
+
+## Bakeoff!
+
+Now that we have the basic idea, let's look at a more interesting dataset, from the `bakeoff` package. 
+
+First we'll create a data frame with just the `signature` column from the `bakes` data set:
+
+```{r}
+signature_df <- select(bakes, signature)
+
+signature_df
+```
+
+Next we tokenize by word on the signature column:
+
+```{r}
+signature_tidy <- signature_df %>%
+    unnest_tokens(word, signature)
+
+signature_tidy
+```
+
+
+Now we want to count those tokens: i.e. we want to collapse all duplicate word tokens into a single word type, with the corresponding frequency. Since we now have tidy data, dplyr to the rescue!
+
+> dplyr `count()` lets you quickly count the unique values of one or more variables. 
+The option `sort`, if TRUE, will show the largest groups at the top.
+
+```{r}
+signature_count <- signature_tidy %>% 
+    count(word, sort = TRUE)
+
+signature_count
+```
+
+We're way more interested in `cake` than `and`: this is an example of a **stop word**:
+
+> In computing, stop words are words which are filtered out before or after processing of natural language data (text). "stop words" usually refers to the most common words in a language.
+
+> One of our major performance (search) optimizations... is removing the top 10,000 most common English dictionary words (as determined by Google search). It’s shocking how little is left of most posts once you remove the top 10k English dictionary words...
+
+The tidytext package has a database of just over a thousand of these words, including 'and':
+
+```{r}
+print(stop_words, n = 30)
+```
+
+Note that the name of the stop word column is `word`, and the name we used in our tokenized column is `word` (now you will see why we used that name) so we can use dplyr's `anti_join` to filter the word tokens!
+
+> `anti_join()` returns all rows from x without a match in y (where x are the word tokens, and y are the stop words)
+
+```{r}
+signature_count <- signature_tidy %>% 
+    count(word, sort = TRUE) %>% 
+    anti_join(stop_words)
+
+signature_count
+```
+
+Since we are in the tidyverse, we can pipe our results into ggplot. First we filter on counts above a certain threshold (here 12, just for visualization purposes):
+
+```{r}
+signature_count %>%
+    filter(n > 12) %>%
+    ggplot(aes(n, word)) +
+    geom_col() +
+    theme_minimal() +
+    labs(y = NULL)
+```
+
+This is ordered alphabetically by default, bottom to top; but we can reorder by count (n) using dplyr `mutate()`:
+
+```{r}
+signature_count %>%
+    filter(n > 12) %>%
+    mutate(word = reorder(word, n)) %>%
+    ggplot(aes(n, word)) +
+    geom_col() +
+    theme_minimal() +
+    labs(y = NULL)
+```
+
+We now have everything we need for a word cloud: word types and their token frequencies:
+
+The only **obligatory** arguments to `wordcloud()` are the first two: the rest just let you tweak the graphic:
+
+```{r}
+wordcloud(words = signature_count$word, 
+          freq = signature_count$n, 
+          min.freq = 12, 
+          random.order=FALSE, 
+          rot.per=0.3, 
+          colors=brewer.pal(8, "Dark2"))
+```
+
+`min.freq` lets you filter on a frequency threshold. `random.order=FALSE` plots words in decreasing frequency (highest most central); `rot.per` is the proportion of words with 90 degree rotation; `colors=brewer.pal(8, "Dark2"))` lets you choose an [RColorBrewer](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html) color palette of your choice.
+
+## The `gutenbergr` package
+
+Say we wanted to do a word cloud for a more substantive text like Darwin's "Origin of Species".
+
+[Project Gutenberg](https://www.gutenberg.org) is a volunteer effort to digitize and archive cultural works and is the oldest digital library. It has over 60,000 books in the public domain (including Darwin's works).
+
+The [gutenbergr](https://cran.r-project.org/web/packages/gutenbergr/vignettes/intro.html) package allows you to download any of these works **directly into a data frame** using just the Project Gutenberg ID. This is then perfect input for tidytext. The package provides all the metadata to search for author and work IDs inside R (you can also just find the ID by searching on the Project Gutenberg website):
+
+```{r}
+darwins_works <- gutenberg_metadata %>%
+    filter(author == "Darwin, Charles")
+
+darwins_works
+```
+
+An inspection of the results of 'Origin of Species' on the website reveals that the latest edition is ID 2009. We grab it, tidy it, and count it:
+
+```{r}
+OoS <- gutenberg_download(2009)
+
+OoS_tidy <- OoS %>%
+    unnest_tokens(word, text)
+
+OoS_count <- OoS_tidy %>% 
+    count(word, sort = TRUE)
+
+OoS_count
+```
+
+Look at all those stop words! Stop them!!
+
+```{r}
+OoS_count <- OoS_tidy %>%
+    count(word, sort = TRUE) %>% 
+    anti_join(stop_words)
+
+OoS_count
+```
+
+It's kind of incredible how much grunt work has been done for us here, and so fast: punctuation, gone; stop words, gone; capitalization, normalized. It's not perfect by any means: but we don't need it to be! We haven't gotten rid of everything, but what remains is mostly just low frequency noise, and we'll be filtering that out of the word cloud anyway.
+
+Here's the visualization of frequencies using ggplot, just as we did above:
+
+```{r}
+OoS_count %>%
+    filter(n > 200) %>%
+    mutate(word = reorder(word, n)) %>%
+    ggplot(aes(n, word)) +
+    geom_col() +
+    theme_minimal() +
+    labs(y = NULL)
+```
+
+The origin of what now? What was your point Mr. Darwin? 
+
+Plants beat animals! Birds a distant third...
+
+#### Digression: lemmas
+
+Notice that this plot includes both "form" and the plural "forms". Again, arguably, these are the same word type, just grammatical variations. And no doubt 'plant', 'animal', 'organ', etc. are somewhere in this list as well. And 'genus'. Properly collapsing these into a single type is called **lemmatization**: a very difficult problem which would take us far afield into the **morphology of words**. Perhaps you would also consider the inflectional forms `run, runs, ran, running` as the same type. How do you reduce those algorithmically? And if you consider inflectional forms as the same "dictionary word", how would you tackle Ancient Greek, which has **hundreds** of inflected forms for the same verb? Here are just a few, there are pages and pages of them... 
+
+![](greek.jpg)
+
+Currently machine learning has been unleashed on this problem, with limited success. The computational linguists' algorithms are still winning...
+
+#### End Digression
+
+On to the word cloud:
+
+```{r}
+wordcloud(words = OoS_count$word, 
+          freq = OoS_count$n, 
+          min.freq = 100, 
+          random.order=FALSE, 
+          rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+```
+
