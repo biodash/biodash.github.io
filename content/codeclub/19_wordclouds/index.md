@@ -5,14 +5,14 @@ authors: [michael-broe]
 date: "2021-04-21"
 output: hugodown::md_document
 toc: true
-image: 
+image:
   caption: ""
   focal_point: ""
   preview_only: false
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 7679b9c6e4e537da
+rmd_hash: 8f0609528dd37c42
 
 ---
 
@@ -77,19 +77,35 @@ We need to get some text from somewhere, so first let's do it in the simplest po
 
 </div>
 
-In textual analysis we distinguish between word **types**, and word **tokens**. For example there are two tokens of the word-type "still" in this stanza. And slightly more abstractly there are four tokens of "her", modulo capitalization. Formally, it's the *token frequency* of the *word types* we are ultimately interested in capturing. So: two tasks, extract the word tokens, and count them! Done!
+In textual analysis we distinguish between word **types**, and word **tokens** (multiple instances of those words in text). For example there are two tokens of the word-type "still" in this stanza:
 
-The reason this is tricky is that natural language text is messy: the task of extracting a clean set of tokens to count is termed **text mining** or **tokenization**. We would also like to get the output into a tidyverse compliant data frame, so we can use familiar dplyr and ggplot functions to analyze it.
+> heiress `still` lives through winter  
+> her sheep `still` graze above the sea
 
-We could imagine attacking this using stingr functions:
+And slightly more abstractly there are four tokens of "her", modulo capitalization:
+
+> `her` Spartan cottage  
+> `her` sheep still graze  
+> `Her` son's a bishop.  
+> `Her` farmer
+
+Formally, it's the *token frequency* of the *word types* we are ultimately interested in capturing. So: two tasks, extract the word tokens, and count them! Done!
+
+The reason this is tricky is that natural language text is messy: the task of extracting a clean set of tokens to count is termed **text mining** or **tokenization**. We would also like to get the output into a tidyverse compliant data frame, so we can use familiar **dplyr** and **ggplot** functions to analyze it.
+
+We could imagine attacking this using **stingr** functions:
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>lowell_tokens</span> <span class='o'>&lt;-</span> <span class='nv'>lowell</span> <span class='o'>%&gt;%</span> 
-    <span class='nf'>str_to_lower</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>               <span class='c'># get rid of upper case; returns a character vector.</span>
-    <span class='nf'>str_extract_all</span><span class='o'>(</span><span class='s'>"[a-z]+"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>    <span class='c'># get rid of punctuation; returns a list.</span>
-    <span class='nf'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>                     <span class='c'># flatten that list</span>
-    <span class='nf'>as_tibble</span><span class='o'>(</span><span class='o'>)</span>                      <span class='c'># stick it in a data frame</span>
+  <span class='c'># convert upper to lower case; returns a character vector.</span>
+  <span class='nf'>str_to_lower</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='c'># remove punctuation with a character class; returns a list.</span>
+  <span class='nf'>str_extract_all</span><span class='o'>(</span><span class='s'>"[a-z]+"</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
+  <span class='c'># flatten that list</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='c'># stick it in a data frame</span>
+  <span class='nf'>as_tibble</span><span class='o'>(</span><span class='o'>)</span>                      
 
 <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>lowell_tokens</span>, n <span class='o'>=</span> <span class='m'>38</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 38 x 1</span></span>
@@ -136,11 +152,11 @@ We could imagine attacking this using stingr functions:
 
 </div>
 
-This is a good start: it gets rid of the capitalization issue, and also gets rid of the punctuation. But there's a problem. The grep pattern doesn't recognize *possessives* or *contractions*: it just strips anything that's not a letter, so it messes up with `Island's`, `son's`, and `she's`: welcome to the subtleties of processing natural language text algorithmically! Exceptions, exceptions!!
+This is a good start: it gets rid of the capitalization issue, and also gets rid of the punctuation. But there's a problem. The regular expression pattern `[a-z]+` doesn't recognize *possessives* or *contractions*: it just strips anything that's not a letter, so it messes up with `Island's`, `son's`, and `she's`: welcome to the subtleties of processing natural language text algorithmically! Exceptions, exceptions!!
 
-We could fiddle about with our grep expression, but... *there's a package for that!* This kind of text mining is exactly what the [tidytext](https://www.tidytextmining.com) package was built for. It will simultaneously strip punctuation intelligently and 'unnest' lines into word tokens.
+We could fiddle about with our regex, but... *there's a package for that!* This kind of text mining is exactly what the [tidytext](https://www.tidytextmining.com) package was built for. It will simultaneously strip punctuation intelligently and 'unnest' lines into word tokens.
 
-Tidytext functions need a dataframe to operate on. So first we need to get the poem into a data frame by tibbling it; here we'll use the column name "text".
+Tidytext functions need a dataframe to operate on. So first we need to get the poem into a data frame; here we'll use the column name `text`.
 
 <div class="highlight">
 
@@ -160,7 +176,7 @@ Tidytext functions need a dataframe to operate on. So first we need to get the p
 
 Each string in the character vector becomes a single row in the data frame.
 
-Again we want one word-token per row, to 'tidy' our data. This is what [`tidytext::unnest_tokens()`](https://rdrr.io/pkg/tidytext/man/unnest_tokens.html) does. We're going to unnest words in this case (we can unnest other things, like characters, sentences, regexes, even tweets) and we need to specify the variable in the dataframe we are unnesting (in this case just `text`). This will create a new, *tidy*, word token data frame, and we'll name the variable in the new column `word`. This is important (see later on stop words).
+Again we want one word-token per row, to 'tidy' our data. This is what [`tidytext::unnest_tokens()`](https://rdrr.io/pkg/tidytext/man/unnest_tokens.html) does. We're going to unnest words in this case (we can unnest other things, like characters, sentences, regexes, even tweets) and we need to specify the variable in the dataframe we are unnesting (in this case just `text`). This will create a new word-token data frame, and we'll name the variable in the data frame `word`. This is important (see later on stop words).
 
 <div class="highlight">
 
@@ -209,11 +225,11 @@ Again we want one word-token per row, to 'tidy' our data. This is what [`tidytex
 
 </div>
 
-Punctuation has been stripped and all words are lower case, but possessives and contractions are preserved (fancy usage of str\_ grep functions under the hood...).
+Punctuation has been stripped and all words are lower case, but possessives and contractions are preserved (fancy usage of `str_` regular expression functions under the hood...).
 
 ## Bakeoff!
 
-Now that we have the basic idea, let's look at a more interesting dataset, from the `bakeoff` package.
+Now that we have the basic idea, let's look at a more interesting data set, from the `bakeoff` package.
 
 First we'll create a data frame with just the `signature` column from the `bakes` data set:
 
@@ -339,7 +355,7 @@ The tidytext package has a database of just over a thousand of these words, incl
 
 </div>
 
-Note that the name of the stop word column is `word`, and the name we used in our tokenized column is `word` (now you will see why we used that name) so we can use dplyr's `anti_join` to filter the word tokens!
+Note that the name of the stop word column is `word`, and the name we used in our tokenized column is `word` (now you will see why we used that name) so we can use dplyr's `anti_join()` to filter the word tokens!
 
 > `anti_join()` returns all rows from x without a match in y (where x are the word tokens, and y are the stop words)
 
@@ -416,11 +432,25 @@ The only **obligatory** arguments to [`wordcloud()`](https://rdrr.io/pkg/wordclo
 
 </div>
 
-`min.freq` lets you filter on a frequency threshold. `random.order=FALSE` plots words in decreasing frequency (highest most central); `rot.per` is the proportion of words with 90 degree rotation; `colors=brewer.pal(8, "Dark2"))` lets you choose an [RColorBrewer](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html) color palette of your choice.
+`min.freq` lets you filter on a frequency threshold. `random.order=FALSE` plots words in decreasing frequency (highest most central); `rot.per` is the proportion of words with 90 degree rotation; `colors=brewer.pal(8, "Dark2")` lets you choose an [RColorBrewer](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html) color palette of your choice.
+
+{{% callout note %}}
+
+Lemmatization
+
+If you create a count data frame of `signature_tidy` without the `sort = TRUE` option, the words are sorted alphabetically. And if you look through that table you will see many instances such as `apple, apples;  apricot, apricots; cake, cakes` etc. Arguably, these are the same word type (think "dictionary word") just grammatical variations. Properly collapsing these into a single type is called **lemmatization**: a very difficult problem which would take us far afield into the **morphology of words**. Again in general there are many exceptions, only partly due to English borrowing so many words from other languages: besides `apple, apples` there is `mouse, mice; self, selves; bacillus, bacilli; basis, bases`. etc. These are known as [irregular plurals](https://www.thoughtco.com/irregular-plural-nouns-in-english-1692634).
+
+Verbs are worse! Perhaps you would also consider the inflectional forms `run, runs, ran, running` as the same type, just as a dictionary does. How do you reduce those algorithmically? And if you consider inflectional forms as the same dictionary word, how would you tackle Ancient Greek, which has **hundreds** of inflected forms for the same verb? Here are just a few, there are pages and pages of them...
+
+![](greek.jpg)
+
+Currently machine learning has been unleashed on this problem, with limited success. The traditional computational linguists' algorithms are still winning...
+
+{{% /callout %}}
 
 ## The `gutenbergr` package
 
-Say we wanted to do a word cloud for a more substantive text like Darwin's "Origin of Species".
+Say we wanted to do a word cloud for a more substantive text like Darwin's *Origin of Species*.
 
 [Project Gutenberg](https://www.gutenberg.org) is a volunteer effort to digitize and archive cultural works and is the oldest digital library. It has over 60,000 books in the public domain (including Darwin's works).
 
@@ -449,18 +479,130 @@ The [gutenbergr](https://cran.r-project.org/web/packages/gutenbergr/vignettes/in
 
 </div>
 
-An inspection of the results of 'Origin of Species' on the website reveals that the latest edition is ID 2009. We grab it, tidy it, and count it:
+An inspection of the results of *Origin of Species* on the website reveals that the latest edition is ID 2009. Let's grab it:
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>OoS</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html'>gutenberg_download</a></span><span class='o'>(</span><span class='m'>2009</span><span class='o'>)</span>
 <span class='c'>#&gt; Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest</span>
-<span class='c'>#&gt; Using mirror http://aleph.gutenberg.org</span>
+<span class='c'>#&gt; Using mirror http://aleph.gutenberg.org</span></code></pre>
 
-<span class='nv'>OoS_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>OoS</span> <span class='o'>%&gt;%</span>
+</div>
+
+In the breakout rooms, we'll work through inspecting the frequencies and creating a word cloud for this text.
+
+The `gutenbergr` package is extremely useful, but as long as you can read a document into R, you can then convert it to a data frame as we did in the very first example above, and then the tidytext pipeline will work. The [readtext](https://cran.r-project.org/web/packages/readtext/vignettes/readtext_vignette.html) package can import a variety of formats, including PDFs and Microsoft Word documents.
+
+## Breakout rooms
+
+### Exercise 1
+
+<div class="puzzle">
+
+Run the command:
+
+``` r
+OoS <- gutenberg_download(2009)
+```
+
+and inspect the data frame. Identify the name of the column you want to tokenize.
+
+Then use the [`unnest_tokens()`](https://rdrr.io/pkg/tidytext/man/unnest_tokens.html) command to create a data frame of word tokens.
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>It's the <code>text</code> column you want. <code>gutenbergr</code> includes the <code>gutenberg_ID</code> in case you download multiple texts into the same data frame. Remember to name the column in the new data frame <code>word</code> so we can filter any stop words later on. <br>
+</details>
+
+<br>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>OoS</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html'>gutenberg_download</a></span><span class='o'>(</span><span class='m'>2009</span><span class='o'>)</span>
+
+<span class='nv'>OoS</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 21,462 x 2</span></span>
+<span class='c'>#&gt;    gutenberg_id text                                                            </span>
+<span class='c'>#&gt;           <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                                           </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>1228    1859, First Edition</span><span style='color: #555555;'>"</span><span>                                   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>22764   1860, Second Edition</span><span style='color: #555555;'>"</span><span>                                  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>2009    1872, Sixth Edition, considered the definitive edition…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>""</span><span>                                                              </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>""</span><span>                                                              </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>""</span><span>                                                              </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>""</span><span>                                                              </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>On the Origin of Species</span><span style='color: #555555;'>"</span><span>                                      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>""</span><span>                                                              </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>BY MEANS OF NATURAL SELECTION,</span><span style='color: #555555;'>"</span><span>                                </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 21,452 more rows</span></span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>OoS_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>OoS</span> <span class='o'>%&gt;%</span>
     <span class='nf'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='o'>(</span><span class='nv'>word</span>, <span class='nv'>text</span><span class='o'>)</span>
+    
+<span class='nv'>OoS_tidy</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 209,050 x 2</span></span>
+<span class='c'>#&gt;    gutenberg_id word   </span>
+<span class='c'>#&gt;           <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 1228   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 1859   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 first  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 edition</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 22764  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 1860   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 second </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 edition</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 2009   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 1872   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 209,040 more rows</span></span></code></pre>
 
-<span class='nv'>OoS_count</span> <span class='o'>&lt;-</span> <span class='nv'>OoS_tidy</span> <span class='o'>%&gt;%</span> 
+</div>
+
+<br>
+
+</details>
+
+</div>
+
+------------------------------------------------------------------------
+
+### Exercise 2
+
+<div class="puzzle">
+
+Count and sort the tokens into a new data frame. Inspect the output. Are there any stop words?
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br> Pipe the <code>word</code> column of the data frame into the dplyr <code>count()</code> function with the <code>sort = TRUE</code> option. <br>
+</details>
+
+<br>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>OoS_count</span> <span class='o'>&lt;-</span> <span class='nv'>OoS_tidy</span> <span class='o'>%&gt;%</span> 
     <span class='nf'>count</span><span class='o'>(</span><span class='nv'>word</span>, sort <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 
 <span class='nv'>OoS_count</span>
@@ -481,7 +623,35 @@ An inspection of the results of 'Origin of Species' on the website reveals that 
 
 </div>
 
-Look at all those stop words! Stop them!!
+<br>
+
+</details>
+
+</div>
+
+------------------------------------------------------------------------
+
+### Exercise 3
+
+<div class="puzzle">
+
+Remove the stop words from the output and inspect the results.
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br> Use <code>antijoin()</code> with the tidytext <code>stop_words</code> data frame: <br>
+</details>
+
+<br>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
 
 <div class="highlight">
 
@@ -508,9 +678,37 @@ Look at all those stop words! Stop them!!
 
 </div>
 
-It's kind of incredible how much grunt work has been done for us here, and so fast: punctuation, gone; stop words, gone; capitalization, normalized. It's not perfect by any means: but we don't need it to be! We haven't gotten rid of everything, but what remains is mostly just low frequency noise, and we'll be filtering that out of the word cloud anyway.
+<br>
 
-Here's the visualization of frequencies using ggplot, just as we did above:
+</details>
+
+</div>
+
+------------------------------------------------------------------------
+
+### Exercise 4
+
+<div class="puzzle">
+
+Visualize the counts using `ggplot()`, from highest frequency to lowest, using a frequency cutoff of 200. Does any one word stand out in any way?
+
+Does the tidytext package perform lemmatization? Are there any irregular plurals in this result?
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br> Use a dplyr <code>filter()</code> command on the <code>n</code> column, and, well just look at the examples in the presentation for the details of piping it into <code>ggplot()</code>! <br>
+</details>
+
+<br>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
 
 <div class="highlight">
 
@@ -522,36 +720,60 @@ Here's the visualization of frequencies using ggplot, just as we did above:
     <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
     <span class='nf'>labs</span><span class='o'>(</span>y <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
-The origin of what now? What was your point Mr. Darwin?
+<br>
 
-Plants beat animals! Birds a distant third...
+tidytext does not lemmatize. There are many plurals in this list, so undoubtedly there are corresponding singulars of lower frequency. Indeed we see both `forms` and `form`. And of course the irregular `genera` is the plural of `genus`.
 
-#### Digression: lemmas
+</details>
 
-Notice that this plot includes both "form" and the plural "forms". Again, arguably, these are the same word type, just grammatical variations. And no doubt 'plant', 'animal', 'organ', etc. are somewhere in this list as well. And 'genus'. Properly collapsing these into a single type is called **lemmatization**: a very difficult problem which would take us far afield into the **morphology of words**. Perhaps you would also consider the inflectional forms `run, runs, ran, running` as the same type. How do you reduce those algorithmically? And if you consider inflectional forms as the same "dictionary word", how would you tackle Ancient Greek, which has **hundreds** of inflected forms for the same verb? Here are just a few, there are pages and pages of them...
+</div>
 
-![](greek.jpg)
+------------------------------------------------------------------------
 
-Currently machine learning has been unleashed on this problem, with limited success. The computational linguists' algorithms are still winning...
+### Exercise 5
 
-#### End Digression
+<div class="puzzle">
 
-On to the word cloud:
+Create a word cloud of this data frame, with the same frequency cut off as the `ggplot()` (200). Otherwise use the same settings as in the presentation. Tweak those settings, especially the frequency threshold and rotation proportion. See what happens when you set `random.order=TRUE`.
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>The option for the the frequency threshold is <code>min.freq = 200</code>. <br>
+</details>
+
+<br>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/wordcloud/man/wordcloud.html'>wordcloud</a></span><span class='o'>(</span>words <span class='o'>=</span> <span class='nv'>OoS_count</span><span class='o'>$</span><span class='nv'>word</span>, 
           freq <span class='o'>=</span> <span class='nv'>OoS_count</span><span class='o'>$</span><span class='nv'>n</span>, 
-          min.freq <span class='o'>=</span> <span class='m'>100</span>, 
+          min.freq <span class='o'>=</span> <span class='m'>200</span>, 
           random.order<span class='o'>=</span><span class='kc'>FALSE</span>, 
           rot.per<span class='o'>=</span><span class='m'>0.35</span>, 
           colors<span class='o'>=</span><span class='nf'>brewer.pal</span><span class='o'>(</span><span class='m'>8</span>, <span class='s'>"Dark2"</span><span class='o'>)</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
+
+<br>
+
+</details>
+
+</div>
+
+------------------------------------------------------------------------
 

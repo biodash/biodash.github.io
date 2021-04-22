@@ -5,7 +5,7 @@ authors: [michael-broe]
 date: "2021-04-21"
 output: hugodown::md_document
 toc: true
-image: 
+image:
   caption: ""
   focal_point: ""
   preview_only: false
@@ -77,27 +77,43 @@ lowell <- c("Nautilus Island's hermit",
           "she's in her dotage.")
 ```
 
-In textual analysis we distinguish between word **types**, and word **tokens**. For example there are two tokens of the word-type "still" in this stanza. And slightly more abstractly there are four tokens of "her", modulo capitalization. Formally, it's the *token frequency* of the *word types* we are ultimately interested in capturing. So: two tasks, extract the word tokens, and count them! Done!
+In textual analysis we distinguish between word **types**, and word **tokens** (multiple instances of those words in text). For example there are two tokens of the word-type "still" in this stanza:
 
-The reason this is tricky is that natural language text is messy: the task of extracting a clean set of tokens to count is termed **text mining** or **tokenization**. We would also like to get the output into a tidyverse compliant data frame, so we can use familiar dplyr and ggplot functions to analyze it.
+> heiress `still` lives through winter  
+her sheep `still` graze above the sea
 
-We could imagine attacking this using stingr functions:
+And slightly more abstractly there are four tokens of "her", modulo capitalization:
+
+> `her` Spartan cottage   
+`her` sheep still graze   
+`Her` son's a bishop.  
+`Her` farmer
+
+Formally, it's the *token frequency* of the *word types* we are ultimately interested in capturing. So: two tasks, extract the word tokens, and count them! Done!
+
+The reason this is tricky is that natural language text is messy: the task of extracting a clean set of tokens to count is termed **text mining** or **tokenization**. We would also like to get the output into a tidyverse compliant data frame, so we can use familiar **dplyr** and **ggplot** functions to analyze it.
+
+We could imagine attacking this using **stingr** functions:
 
 ```{r}
 lowell_tokens <- lowell %>% 
-    str_to_lower() %>%               # get rid of upper case; returns a character vector.
-    str_extract_all("[a-z]+") %>%    # get rid of punctuation; returns a list.
-    unlist() %>%                     # flatten that list
-    as_tibble()                      # stick it in a data frame
+  # convert upper to lower case; returns a character vector.
+  str_to_lower() %>%
+  # remove punctuation with a character class; returns a list.
+  str_extract_all("[a-z]+") %>% 
+  # flatten that list
+  unlist() %>%
+  # stick it in a data frame
+  as_tibble()                      
 
 print(lowell_tokens, n = 38)
 ```
 
-This is a good start: it gets rid of the capitalization issue, and also gets rid of the punctuation. But there's a problem. The grep pattern doesn't recognize *possessives* or *contractions*: it just strips anything that's not a letter, so it messes up with `Island's`, `son's`, and `she's`: welcome to the subtleties of processing natural language text algorithmically! Exceptions, exceptions!! 
+This is a good start: it gets rid of the capitalization issue, and also gets rid of the punctuation. But there's a problem. The regular expression pattern `[a-z]+` doesn't recognize *possessives* or *contractions*: it just strips anything that's not a letter, so it messes up with `Island's`, `son's`, and `she's`: welcome to the subtleties of processing natural language text algorithmically! Exceptions, exceptions!! 
 
-We could fiddle about with our grep expression, but... *there's a package for that!* This kind of text mining is exactly what the [tidytext](https://www.tidytextmining.com) package was built for. It will simultaneously strip punctuation intelligently and 'unnest' lines into word tokens.
+We could fiddle about with our regex, but... *there's a package for that!* This kind of text mining is exactly what the [tidytext](https://www.tidytextmining.com) package was built for. It will simultaneously strip punctuation intelligently and 'unnest' lines into word tokens.
 
-Tidytext functions need a dataframe to operate on. So first we need to get the poem into a data frame by tibbling it; here we'll use the column name "text".
+Tidytext functions need a dataframe to operate on. So first we need to get the poem into a data frame; here we'll use the column name `text`.
 
 ```{r}
 lowell_df <- tibble(text = lowell)
@@ -107,7 +123,7 @@ lowell_df
 
 Each string in the character vector becomes a single row in the data frame.
 
-Again we want one word-token per row, to 'tidy' our data. This is what `tidytext::unnest_tokens()` does.  We're going to unnest words in this case (we can unnest other things, like characters, sentences, regexes, even tweets) and we need to specify the variable in the dataframe we are unnesting (in this case just `text`). This will create a new, *tidy*, word token data frame, and we'll name the variable in the new column `word`. This is important (see later on stop words). 
+Again we want one word-token per row, to 'tidy' our data. This is what `tidytext::unnest_tokens()` does.  We're going to unnest words in this case (we can unnest other things, like characters, sentences, regexes, even tweets) and we need to specify the variable in the dataframe we are unnesting (in this case just `text`). This will create a new word-token data frame, and we'll name the variable in the data frame `word`. This is important (see later on stop words). 
 
 ```{r}
 lowell_tidy <- lowell_df %>%
@@ -116,11 +132,11 @@ lowell_tidy <- lowell_df %>%
 print(lowell_tidy, n = 35)
 ```
 
-Punctuation has been stripped and all words are lower case, but possessives and contractions are preserved (fancy usage of str_ grep functions under the hood...).
+Punctuation has been stripped and all words are lower case, but possessives and contractions are preserved (fancy usage of `str_` regular expression functions under the hood...).
 
 ## Bakeoff!
 
-Now that we have the basic idea, let's look at a more interesting dataset, from the `bakeoff` package. 
+Now that we have the basic idea, let's look at a more interesting data set, from the `bakeoff` package. 
 
 First we'll create a data frame with just the `signature` column from the `bakes` data set:
 
@@ -138,7 +154,6 @@ signature_tidy <- signature_df %>%
 
 signature_tidy
 ```
-
 
 Now we want to count those tokens: i.e. we want to collapse all duplicate word tokens into a single word type, with the corresponding frequency. Since we now have tidy data, dplyr to the rescue!
 
@@ -164,7 +179,7 @@ The tidytext package has a database of just over a thousand of these words, incl
 print(stop_words, n = 30)
 ```
 
-Note that the name of the stop word column is `word`, and the name we used in our tokenized column is `word` (now you will see why we used that name) so we can use dplyr's `anti_join` to filter the word tokens!
+Note that the name of the stop word column is `word`, and the name we used in our tokenized column is `word` (now you will see why we used that name) so we can use dplyr's `anti_join()` to filter the word tokens!
 
 > `anti_join()` returns all rows from x without a match in y (where x are the word tokens, and y are the stop words)
 
@@ -212,11 +227,25 @@ wordcloud(words = signature_count$word,
           colors=brewer.pal(8, "Dark2"))
 ```
 
-`min.freq` lets you filter on a frequency threshold. `random.order=FALSE` plots words in decreasing frequency (highest most central); `rot.per` is the proportion of words with 90 degree rotation; `colors=brewer.pal(8, "Dark2"))` lets you choose an [RColorBrewer](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html) color palette of your choice.
+`min.freq` lets you filter on a frequency threshold. `random.order=FALSE` plots words in decreasing frequency (highest most central); `rot.per` is the proportion of words with 90 degree rotation; `colors=brewer.pal(8, "Dark2")` lets you choose an [RColorBrewer](https://www.r-graph-gallery.com/38-rcolorbrewers-palettes.html) color palette of your choice.
+
+{{% callout note %}}
+
+Lemmatization
+
+If you create a count data frame of `signature_tidy` without the `sort = TRUE` option, the words are sorted alphabetically. And if you look through that table you will see many instances such as `apple, apples;  apricot, apricots; cake, cakes` etc. Arguably, these are the same word type (think "dictionary word") just grammatical variations.  Properly collapsing these into a single type is called **lemmatization**: a very difficult problem which would take us far afield into the **morphology of words**. Again in general there are many exceptions, only partly due to English borrowing so many words from other languages: besides `apple, apples` there is `mouse, mice; self, selves; bacillus, bacilli; basis, bases`. etc. These are known as [irregular plurals](https://www.thoughtco.com/irregular-plural-nouns-in-english-1692634). 
+
+Verbs are worse! Perhaps you would also consider the inflectional forms `run, runs, ran, running` as the same type, just as a dictionary does. How do you reduce those algorithmically? And if you consider inflectional forms as the same dictionary word, how would you tackle Ancient Greek, which has **hundreds** of inflected forms for the same verb? Here are just a few, there are pages and pages of them... 
+
+![](greek.jpg)
+
+Currently machine learning has been unleashed on this problem, with limited success. The traditional computational linguists' algorithms are still winning...
+
+{{% /callout %}}
 
 ## The `gutenbergr` package
 
-Say we wanted to do a word cloud for a more substantive text like Darwin's "Origin of Species".
+Say we wanted to do a word cloud for a more substantive text like Darwin's *Origin of Species*.
 
 [Project Gutenberg](https://www.gutenberg.org) is a volunteer effort to digitize and archive cultural works and is the oldest digital library. It has over 60,000 books in the public domain (including Darwin's works).
 
@@ -229,21 +258,111 @@ darwins_works <- gutenberg_metadata %>%
 darwins_works
 ```
 
-An inspection of the results of 'Origin of Species' on the website reveals that the latest edition is ID 2009. We grab it, tidy it, and count it:
+An inspection of the results of *Origin of Species* on the website reveals that the latest edition is ID 2009. Let's grab it:
+
+```{r}
+OoS <- gutenberg_download(2009)
+```
+
+In the breakout rooms, we'll work through inspecting the frequencies and creating a word cloud for this text.
+
+The `gutenbergr` package is extremely useful, but as long as you can read a document into R, you can then convert it to a data frame as we did in the very first example above, and then the tidytext pipeline will work. The [readtext](https://cran.r-project.org/web/packages/readtext/vignettes/readtext_vignette.html) package can import a variety of formats, including PDFs and Microsoft Word documents.
+
+## Breakout rooms
+
+### Exercise 1
+
+:::puzzle
+
+Run the command:
+
+```r
+OoS <- gutenberg_download(2009)
+```
+and inspect the data frame. Identify the name of the column you want to tokenize.
+
+Then use the `unnest_tokens()` command to create a data frame of word tokens.
+
+<details> <summary> Hints (click here) </summary>
+
+<br>It's the <code>text</code> column you want. <code>gutenbergr</code> includes the <code>gutenberg_ID</code> in case you download multiple texts into the same data frame. Remember to name the column in the new data frame <code>word</code> so we can filter any stop words later on.
+<br>
+</details>
+
+<br>
+
+<details> <summary> Solution (click here) </summary>
+<br>
 
 ```{r}
 OoS <- gutenberg_download(2009)
 
+OoS
+```
+```{r}
 OoS_tidy <- OoS %>%
     unnest_tokens(word, text)
+    
+OoS_tidy
+```
 
+
+<br>
+
+
+</details>
+:::
+
+------------------------------------------------------------------------
+
+### Exercise 2
+
+:::puzzle
+
+Count and sort the tokens into a new data frame. Inspect the output. Are there any stop words?
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Pipe the <code>word</code> column of the data frame into the dplyr <code>count()</code> function with the <code>sort = TRUE</code> option.
+<br>
+</details>
+
+<br>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
 OoS_count <- OoS_tidy %>% 
     count(word, sort = TRUE)
 
 OoS_count
 ```
 
-Look at all those stop words! Stop them!!
+<br>
+
+
+</details>
+:::
+
+------------------------------------------------------------------------
+
+### Exercise 3
+
+:::puzzle
+
+Remove the stop words from the output and inspect the results.
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Use <code>antijoin()</code> with the tidytext <code>stop_words</code> data frame:
+<br>
+</details>
+
+<br>
+
+<details> <summary> Solution (click here) </summary>
+<br>
 
 ```{r}
 OoS_count <- OoS_tidy %>%
@@ -252,10 +371,31 @@ OoS_count <- OoS_tidy %>%
 
 OoS_count
 ```
+<br>
 
-It's kind of incredible how much grunt work has been done for us here, and so fast: punctuation, gone; stop words, gone; capitalization, normalized. It's not perfect by any means: but we don't need it to be! We haven't gotten rid of everything, but what remains is mostly just low frequency noise, and we'll be filtering that out of the word cloud anyway.
+</details>
+:::
 
-Here's the visualization of frequencies using ggplot, just as we did above:
+------------------------------------------------------------------------
+
+### Exercise 4
+
+:::puzzle
+
+Visualize the counts using `ggplot()`, from highest frequency to lowest, using a frequency cutoff of 200. Does any one word stand out in any way?
+
+Does the tidytext package perform lemmatization? Are there any irregular plurals in this result?
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Use a dplyr <code>filter()</code> command on the <code>n</code> column, and, well just look at the examples in the presentation for the details of piping it into <code>ggplot()</code>!
+<br>
+</details>
+
+<br>
+
+<details> <summary> Solution (click here) </summary>
+<br>
 
 ```{r}
 OoS_count %>%
@@ -266,29 +406,48 @@ OoS_count %>%
     theme_minimal() +
     labs(y = NULL)
 ```
+<br>
 
-The origin of what now? What was your point Mr. Darwin? 
+tidytext does not lemmatize. There are many plurals in this list, so undoubtedly there are corresponding singulars of lower frequency. Indeed we see both `forms` and `form`. And of course the irregular `genera` is the plural of `genus`.
 
-Plants beat animals! Birds a distant third...
+</details>
+:::
 
-#### Digression: lemmas
+------------------------------------------------------------------------
 
-Notice that this plot includes both "form" and the plural "forms". Again, arguably, these are the same word type, just grammatical variations. And no doubt 'plant', 'animal', 'organ', etc. are somewhere in this list as well. And 'genus'. Properly collapsing these into a single type is called **lemmatization**: a very difficult problem which would take us far afield into the **morphology of words**. Perhaps you would also consider the inflectional forms `run, runs, ran, running` as the same type. How do you reduce those algorithmically? And if you consider inflectional forms as the same "dictionary word", how would you tackle Ancient Greek, which has **hundreds** of inflected forms for the same verb? Here are just a few, there are pages and pages of them... 
+### Exercise 5
 
-![](greek.jpg)
+:::puzzle
 
-Currently machine learning has been unleashed on this problem, with limited success. The computational linguists' algorithms are still winning...
+Create a word cloud of this data frame, with the same frequency cut off as the `ggplot()` (200). Otherwise use the same settings as in the presentation. Tweak those settings, especially the frequency threshold and rotation proportion. See what happens when you set `random.order=TRUE`.
 
-#### End Digression
+<details> <summary> Hints (click here) </summary>
 
-On to the word cloud:
+<br>The option for the the frequency threshold is <code>min.freq = 200</code>.
+<br>
+</details>
+
+<br>
+
+<details> <summary> Solution (click here) </summary>
+<br>
 
 ```{r}
 wordcloud(words = OoS_count$word, 
           freq = OoS_count$n, 
-          min.freq = 100, 
+          min.freq = 200, 
           random.order=FALSE, 
           rot.per=0.35, 
           colors=brewer.pal(8, "Dark2"))
 ```
+
+
+<br>
+
+
+</details>
+:::
+
+------------------------------------------------------------------------
+
 
