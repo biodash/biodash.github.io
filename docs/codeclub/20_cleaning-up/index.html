@@ -1,0 +1,1873 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.0.0-beta.3 for Hugo" />
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Jelmer Poelstra" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="During this  session of Code Club, we will be learning to clean up variable names, combine and separate columns, and extract data with regular expressions." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/20_cleaning-up/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#3f51b5" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+      
+    
+
+    
+    
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.80f9a276c6100914c616a06e45ba8d09.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9F9CQ7P0DX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'G-9F9CQ7P0DX', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="https://biodash.github.io/codeclub/20_cleaning-up/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="BioDASH" />
+  <meta property="og:url" content="https://biodash.github.io/codeclub/20_cleaning-up/" />
+  <meta property="og:title" content="Cleaning up variables names, and other wrangling | BioDASH" />
+  <meta property="og:description" content="During this  session of Code Club, we will be learning to clean up variable names, combine and separate columns, and extract data with regular expressions." /><meta property="og:image" content="https://biodash.github.io/codeclub/20_cleaning-up/featured.jpeg" />
+    <meta property="twitter:image" content="https://biodash.github.io/codeclub/20_cleaning-up/featured.jpeg" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-04-29T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-04-29T09:45:58-04:00">
+  
+
+  
+
+
+
+  
+
+  
+
+  <link rel='stylesheet' href='/css/highlight-light.css' title='hl-light'>
+<link rel='stylesheet' href='/css/highlight-dark.css' title='hl-dark' disabled>
+
+
+
+  <title>Cleaning up variables names, and other wrangling | BioDASH</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="15be695bc3bed9ca7458afe8a992c490" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.7a224883d792570fd34d30c7134eace3.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Code Club</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/codeclub/"><span>- Sessions</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-schedule/"><span>- Schedule</span></a>
+            
+              <a class="dropdown-item" href="/"><span>----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-setup/"><span>- Computer Setup</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-novice/"><span>- Getting Started with R</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-present/"><span>- For Presenters</span></a>
+            
+              <a class="dropdown-item" href="/"><span>-----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-suggest/"><span>- Suggest a Topic</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-about/"><span>- About & Join!</span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/events/"><span>Other Events</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/material/"><span>Material</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/support/"><span>Support</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/suggest/"><span>Suggest...</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="https://github.com/biodash/biodash.github.io" target="_blank" rel="noopener"><i class='fab fa-github'></i><span></span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/index.xml" target="_blank" rel="noopener"><i class='fas fa-rss'></i><span></span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    
+<div class="container-fluid docs">
+    <div class="row flex-xl-nowrap">
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+            <ul class="nav toc-top">
+                <li><a href="#" id="back_to_top" class="docs-toc-title">Contents</a></li>
+            </ul>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#prep-homework">Prep homework</a>
+      <ul>
+        <li><a href="#basic-computer-setup">Basic computer setup</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#rmarkdown-for-todays-session">RMarkdown for today&rsquo;s session</a></li>
+      </ul>
+    </li>
+    <li><a href="#1---using-regexs-for-wrangling">1 - Using regexs for wrangling</a></li>
+    <li><a href="#2---accessing-our-data">2 - Accessing our data</a></li>
+    <li><a href="#3---variable-names">3 - Variable names</a>
+      <ul>
+        <li><a href="#clean_names"><code>clean_names()</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#4---unite-character-columns">4 - Unite character columns</a></li>
+    <li><a href="#5---separate-character-columns">5 - Separate character columns</a></li>
+    <li><a href="#6---extract-character-columns">6 - Extract character columns</a></li>
+    <li><a href="#exercises">Exercises</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+        <main class="col-12 col-md-0 col-xl-10 py-md-3 pl-md-5 docs-content" role="main">
+            
+
+            <article class="article">
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+
+<div class="article-container pt-3">
+  <h1>Cleaning up variables names, and other wrangling</h1>
+
+  
+  <p class="page-subtitle">On your marks, get set, bake!</p>
+  
+
+  
+
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span >
+      <a href="/authors/jessica-cooperstone/">Jessica Cooperstone</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+    Apr 29, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 405px;">
+  <div style="position: relative">
+    <img src="/codeclub/20_cleaning-up/featured_hua74af901d7485168e9b2819a5f7ffe89_557172_720x0_resize_q90_lanczos.jpeg" alt="" class="featured-image">
+    <span class="article-header-caption">Artwork by @allison_horst</span>
+  </div>
+</div>
+
+
+
+                <div class="article-container">
+                    <div class="article-style">
+                        <p><br> <br> <br></p>
+<hr>
+<h2 id="prep-homework">Prep homework</h2>
+<h3 id="basic-computer-setup">Basic computer setup</h3>
+<ul>
+<li>
+<p>If you didn&rsquo;t already do this, please follow the <a href="/codeclub-setup/04_ggplot2/">Code Club Computer Setup</a> instructions, which also has pointers for if you&rsquo;re new to R or RStudio.</p>
+</li>
+<li>
+<p>If you&rsquo;re able to do so, please open RStudio a bit before Code Club starts &ndash; and in case you run into issues, please join the Zoom call early and we&rsquo;ll help you troubleshoot.</p>
+</li>
+</ul>
+<br>
+<hr>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="rmarkdown-for-todays-session">RMarkdown for today&rsquo;s session</h3>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'># directory for Code Club Session 20:
+dir.create("S20")
+
+# directory for our RMarkdown
+# ("recursive" to create two levels at once.)
+dir.create("S20/Rmd/")
+
+# save the url location for today's script
+todays_Rmd <- 
+  'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/20_cleaning-up/CleaningUp.Rmd
+
+# indicate the name of the new script file
+Session20_Rmd <- "S20/Rmd/CleaningUp.Rmd"
+
+# go get that file! 
+download.file(url = todays_Rmd,
+              destfile = Session20_Rmd)</code></pre>
+</div>
+<br>
+<hr>
+<h2 id="1---using-regexs-for-wrangling">1 - Using regexs for wrangling</h2>
+<p align="center">
+<img src=bakers_5.png width="95%" alt="cute little monsters making cupcakes and enjoying R">
+</p>
+<p>Artwork by <a href="https://github.com/allisonhorst/stats-illustrations" target="_blank" rel="noopener">Allison Horst</a></p>
+<p>Now that we have gone through a mini-series on regular expressions, with the <a href="https://biodash.github.io/codeclub/17_regex/" target="_blank" rel="noopener">basics</a>, some <a href="https://biodash.github.io/codeclub/18_regex2/" target="_blank" rel="noopener">next level helpers</a>, and <a href="https://biodash.github.io/codeclub/19_wordclouds/" target="_blank" rel="noopener">using tidytext to make word clouds</a>, I thought I&rsquo;d talk today about some applications of this information to cleaning up your data.</p>
+<p>To do this, we are going to practice with the <a href="https://allisonhorst.github.io/palmerpenguins/" target="_blank" rel="noopener"><code>palmerpenguins</code></a> dataset, and get back to the <a href="https://bakeoff.netlify.app/" target="_blank" rel="noopener"><code>bakeoff</code></a> for our practice exercises.</p>
+</div>
+</div>
+<br>
+<hr>
+<h2 id="2---accessing-our-data">2 - Accessing our data</h2>
+<ul>
+<li>You can do this locally, or at OSC. You can find instructions if you are having trouble <a href="/codeclub-setup/">here</a>.</li>
+</ul>
+<p>First load your libraries. We will be using <code>stringr</code> and <code>tidyr</code> but those are both part of core <code>tidyverse</code>. We are also using a new package today called <code>janitor</code> which helps you &ldquo;clean up&rdquo; your data.</p>
+<p>If you don&rsquo;t have the package <code>janitor</code>, please install it.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"janitor"</span><span class='o'>)</span></code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/sfirke/janitor'>janitor</a></span><span class='o'>)</span> <span class='c'># for cleaning up column names</span>
+
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span> <span class='c'># for penguins data</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://bakeoff.netlify.com'>bakeoff</a></span><span class='o'>)</span> <span class='c'># for bakeoff data</span></code></pre>
+</div>
+<p>Then we will use the package <code>palmerpenguins</code> and the dataset <code>penguins_raw</code>, which has a bit more info than <code>penguins</code>, which we have used previously.</p>
+<p align="center">
+<img src=palmerpenguins.png width="95%" alt="hex sticker for the palmer penguins package, including 3 really cute penguins">
+</p>
+<p>Artwork by <a href="https://allisonhorst.github.io/palmerpenguins/articles/art.html" target="_blank" rel="noopener">Allison Horst</a></p>
+<br>
+<hr>
+<h2 id="3---variable-names">3 - Variable names</h2>
+<p>There are many instances where you may have variables names and/or sample names that are messy. For example, variable names that include characters like white spaces, special characters like symbols, or begin with a number are going to give you problems with some R coding. I&rsquo;ll say that you <em>can</em> have these non-standard variable names, but occasionally they will give you a big headache and so I&rsquo;d recommend to just avoid them.</p>
+<p>R variable &ldquo;rules&rdquo;:</p>
+<ul>
+<li>can contain letters, numbers, underscores (<code>_</code>) and periods (<code>.</code>)</li>
+<li>cannot start with a number or underscore</li>
+<li>shouldn&rsquo;t be a &ldquo;reserved&rdquo; word, like if, else, function, TRUE, FALSE etc. (if you want to see them all, execute <a href="https://rdrr.io/r/base/Reserved.html" target="_blank" rel="noopener"><code>?reserved</code></a> in your console)</li>
+</ul>
+<p>You can read about the <a href="https://style.tidyverse.org/syntax.html" target="_blank" rel="noopener">tidyverse style guide</a> if you want to learn more.</p>
+<p>Lets look at the variable names in <code>penguins_raw</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>penguins_raw</span><span class='o'>)</span>
+<span class='c'>#&gt; Rows: 344</span>
+<span class='c'>#&gt; Columns: 17</span>
+<span class='c'>#&gt; $ studyName             <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "PAL0708", "PAL0708", "PAL0708", "PAL0708", "PAL…</span></span>
+<span class='c'>#&gt; $ `Sample Number`       <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1…</span></span>
+<span class='c'>#&gt; $ Species               <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Adelie Penguin (Pygoscelis adeliae)", "Adelie P…</span></span>
+<span class='c'>#&gt; $ Region                <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Anvers", "Anvers", "Anvers", "Anvers", "Anvers"…</span></span>
+<span class='c'>#&gt; $ Island                <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Torgersen", "Torgersen", "Torgersen", "Torgerse…</span></span>
+<span class='c'>#&gt; $ Stage                 <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Adult, 1 Egg Stage", "Adult, 1 Egg Stage", "Adu…</span></span>
+<span class='c'>#&gt; $ `Individual ID`       <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "N1A1", "N1A2", "N2A1", "N2A2", "N3A1", "N3A2", …</span></span>
+<span class='c'>#&gt; $ `Clutch Completion`   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "No", …</span></span>
+<span class='c'>#&gt; $ `Date Egg`            <span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span> 2007-11-11, 2007-11-11, 2007-11-16, 2007-11-16,…</span></span>
+<span class='c'>#&gt; $ `Culmen Length (mm)`  <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34…</span></span>
+<span class='c'>#&gt; $ `Culmen Depth (mm)`   <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18…</span></span>
+<span class='c'>#&gt; $ `Flipper Length (mm)` <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 181, 186, 195, NA, 193, 190, 181, 195, 193, 190,…</span></span>
+<span class='c'>#&gt; $ `Body Mass (g)`       <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 34…</span></span>
+<span class='c'>#&gt; $ Sex                   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "MALE", "FEMALE", "FEMALE", NA, "FEMALE", "MALE"…</span></span>
+<span class='c'>#&gt; $ `Delta 15 N (o/oo)`   <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> NA, 8.94956, 8.36821, NA, 8.76651, 8.66496, 9.18…</span></span>
+<span class='c'>#&gt; $ `Delta 13 C (o/oo)`   <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> NA, -24.69454, -25.33302, NA, -25.32426, -25.298…</span></span>
+<span class='c'>#&gt; $ Comments              <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Not enough blood for isotopes.", NA, NA, "Adult…</span></span></code></pre>
+</div>
+<p>What you can see is that there are variable names here that don&rsquo;t comply with the &ldquo;rules&rdquo; I just indicated. How can that be?! You can see for the variable <code>Sample Number</code> that it is surrounded by backticks. This is how R know that this is a variable name.</p>
+<p>Okay, so who cares? If you want to call that particular variable, you will have to put it in backticks. For example:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'># this doesn't work
+penguins_raw %>%
+  select(Sample Number)</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># this works but is clunky</span>
+<span class='nv'>penguins_raw</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>`Sample Number`</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 344 x 1</span></span>
+<span class='c'>#&gt;    `Sample Number`</span>
+<span class='c'>#&gt;              <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>               1</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>               2</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span>               3</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span>               4</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span>               5</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span>               6</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span>               7</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>               8</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>               9</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span><span>              10</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 334 more rows</span></span></code></pre>
+</div>
+<p>And, this is using <code>tidyverse</code> functions - there will be other situations where you will get non-solvable errors because of your variable names.</p>
+<br>
+<p><strong>tl;dr just make your variable names R compliant, there are lots of other harder things you&rsquo;re going to be doing with coding, so just make this easier for yourself.</strong></p>
+<br>
+<p>What you can see is that there are variable names here that don&rsquo;t comply with the &ldquo;rules&rdquo; I just indicated. How can that be?! You can see for the variable <code>Sample Number</code> that it is surrounded by backticks. This is how R know that this is a variable name.</p>
+<p>Okay, so who cares? If you want to call that particular variable, you will have to put it in backticks. For example:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'># this doesn't work
+penguins_raw %>%
+  select(Sample Number)</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># this works but is clunky</span>
+<span class='nv'>penguins_raw</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>`Sample Number`</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 344 x 1</span></span>
+<span class='c'>#&gt;    `Sample Number`</span>
+<span class='c'>#&gt;              <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>               1</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>               2</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span>               3</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span>               4</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span>               5</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span>               6</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span>               7</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>               8</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>               9</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span><span>              10</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 334 more rows</span></span></code></pre>
+</div>
+<p>And, this is using <code>tidyverse</code> functions - there will be other situations where you will get non-solvable errors because of your variable names.</p>
+<p>tl;dr just make your variable names R compliant, there are lots of other harder things you&rsquo;re going to be doing with coding, so just make this easier for yourself.</p>
+<h3 id="clean_names"><code>clean_names()</code></h3>
+<p align="center">
+<img src=janitor_clean_names.png width="95%" alt="cute illustration of the function clean_names, with a little beaker feeding messy data into something that looks like a planar, and better column names coming out the other side">
+</p>
+<p>Artwork by <a href="https://github.com/allisonhorst/stats-illustrations" target="_blank" rel="noopener">Allison Horst</a></p>
+<p>You may be thinking now, okay but what happens if someone else gives me data that has unclean variable names?</p>
+<p>Don&rsquo;t worry too much, you can easily fix it. My favorite, and the simplest way to do this is using the package <code>janitor</code>, and the function <a href="https://www.rdocumentation.org/packages/janitor/versions/1.2.0/topics/clean_names" target="_blank" rel="noopener"><code>clean_names()</code></a>. Certainly you could clean your variable names manually, but why? This is really easy.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/pkg/janitor/man/clean_names.html'>clean_names</a></span><span class='o'>(</span><span class='nv'>penguins_raw</span><span class='o'>)</span>
+
+<span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>penguins_clean</span><span class='o'>)</span>  
+<span class='c'>#&gt; Rows: 344</span>
+<span class='c'>#&gt; Columns: 17</span>
+<span class='c'>#&gt; $ study_name        <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "PAL0708", "PAL0708", "PAL0708", "PAL0708", "PAL0708…</span></span>
+<span class='c'>#&gt; $ sample_number     <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1…</span></span>
+<span class='c'>#&gt; $ species           <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Adelie Penguin (Pygoscelis adeliae)", "Adelie Pengu…</span></span>
+<span class='c'>#&gt; $ region            <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Anvers", "Anvers", "Anvers", "Anvers", "Anvers", "A…</span></span>
+<span class='c'>#&gt; $ island            <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Torgersen", "Torgersen", "Torgersen", "Torgersen", …</span></span>
+<span class='c'>#&gt; $ stage             <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Adult, 1 Egg Stage", "Adult, 1 Egg Stage", "Adult, …</span></span>
+<span class='c'>#&gt; $ individual_id     <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "N1A1", "N1A2", "N2A1", "N2A2", "N3A1", "N3A2", "N4A…</span></span>
+<span class='c'>#&gt; $ clutch_completion <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "No", "No"…</span></span>
+<span class='c'>#&gt; $ date_egg          <span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span> 2007-11-11, 2007-11-11, 2007-11-16, 2007-11-16, 200…</span></span>
+<span class='c'>#&gt; $ culmen_length_mm  <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …</span></span>
+<span class='c'>#&gt; $ culmen_depth_mm   <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …</span></span>
+<span class='c'>#&gt; $ flipper_length_mm <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…</span></span>
+<span class='c'>#&gt; $ body_mass_g       <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …</span></span>
+<span class='c'>#&gt; $ sex               <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "MALE", "FEMALE", "FEMALE", NA, "FEMALE", "MALE", "F…</span></span>
+<span class='c'>#&gt; $ delta_15_n_o_oo   <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> NA, 8.94956, 8.36821, NA, 8.76651, 8.66496, 9.18718,…</span></span>
+<span class='c'>#&gt; $ delta_13_c_o_oo   <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> NA, -24.69454, -25.33302, NA, -25.32426, -25.29805, …</span></span>
+<span class='c'>#&gt; $ comments          <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> "Not enough blood for isotopes.", NA, NA, "Adult not…</span></span></code></pre>
+</div>
+<p>You can see that <code>Sample Number</code> became <code>sample_number</code>, <code>Culmen Length (mm)</code> became <code>culmen_length_mm</code>.</p>
+<p>The default is to parse with &ldquo;snake&rdquo; case, which would look like snake_case. You could also set the argument <code>case</code> to:</p>
+<ul>
+<li><code>&quot;lower_camel&quot;</code> or <code>&quot;small_camel&quot;</code> to get lowerCamel</li>
+<li><code>&quot;upper_camel&quot;</code> or <code>&quot;big_camel&quot;</code> to get UpperCamel</li>
+<li><code>&quot;screaming_snake&quot;</code> or <code>&quot;all_caps&quot;</code> to get SCREAMING_SNAKE (stop yelling please)</li>
+<li><code>&quot;lower_upper&quot;</code> to get lowerUPPER (I don&rsquo;t know why you&rsquo;d want this)</li>
+<li><code>&quot;upper_lower&quot;</code> to get UPPERlower (I also don&rsquo;t know why you&rsquo;d want this)</li>
+</ul>
+<p align="center">
+<img src=coding_cases.png width="95%" alt="an illustration showing a camel, and the differences between camel, kebab, snake, and other useful cases">
+</p>
+<p>Artwork by <a href="https://github.com/allisonhorst/stats-illustrations" target="_blank" rel="noopener">Allison Horst</a></p>
+<br>
+<hr>
+<h2 id="4---unite-character-columns">4 - Unite character columns</h2>
+<p>There will be times when you&rsquo;d like to take a variable, and combine it with another variable. For example, you might want a column called <code>region_island</code> which contains a combination of the <code>region</code> and <code>island</code> that each penguin is from. We can do this with the function [<code>unite()</code>](<a href="https://tidyr.tidyverse.org/reference/unite.html" class="uri"><a href="https://tidyr.tidyverse.org/reference/unite.html">https://tidyr.tidyverse.org/reference/unite.html</a></a>. The function <code>unite()</code> allows you to paste together multiple columns to become one column.</p>
+<p>The arguments to <code>unite</code> work like this:</p>
+<p><code>unite(data, col, ..., sep = &quot;_&quot;, remove = TRUE, na.rm = FALSE)</code></p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_unite</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_clean</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>unite</span><span class='o'>(</span>col <span class='o'>=</span> <span class='s'>"region_island"</span>, 
+        <span class='nv'>region</span><span class='o'>:</span><span class='nv'>island</span>, <span class='c'># indicate the columns to unite</span>
+        remove <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> <span class='c'># don't remove region and island</span></code></pre>
+</div>
+<p>Did it work?</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins_clean_unite</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 18</span></span>
+<span class='c'>#&gt;   study_name sample_number species         region_island  region island stage   </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> PAL0708                1 Adelie Penguin… Anvers_Torger… Anvers Torge… Adult, …</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> PAL0708                2 Adelie Penguin… Anvers_Torger… Anvers Torge… Adult, …</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> PAL0708                3 Adelie Penguin… Anvers_Torger… Anvers Torge… Adult, …</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> PAL0708                4 Adelie Penguin… Anvers_Torger… Anvers Torge… Adult, …</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> PAL0708                5 Adelie Penguin… Anvers_Torger… Anvers Torge… Adult, …</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> PAL0708                6 Adelie Penguin… Anvers_Torger… Anvers Torge… Adult, …</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 11 more variables: individual_id &lt;chr&gt;, clutch_completion &lt;chr&gt;,</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>#   date_egg &lt;date&gt;, culmen_length_mm &lt;dbl&gt;, culmen_depth_mm &lt;dbl&gt;,</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>#   flipper_length_mm &lt;dbl&gt;, body_mass_g &lt;dbl&gt;, sex &lt;chr&gt;,</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>#   delta_15_n_o_oo &lt;dbl&gt;, delta_13_c_o_oo &lt;dbl&gt;, comments &lt;chr&gt;</span></span></code></pre>
+</div>
+<p>This is a silly example since there is only one region, but I think you can see how this function is used.</p>
+<br>
+<hr>
+<h2 id="5---separate-character-columns">5 - Separate character columns</h2>
+<p>There will be times that you have a column that has two variables embedded within it, and you will want to separate or parse the column to become two separate columns. You can do this with the function <a href="https://tidyr.tidyverse.org/reference/separate.html" target="_blank" rel="noopener"><code>separate()</code></a>.</p>
+<p>The arguments to separate look like this:</p>
+<p><code>separate(data, col, into, sep = &quot;yourregex&quot;, remove = TRUE, extra = &quot;warn&quot;, fill = &quot;warn&quot;)</code></p>
+<p>Let&rsquo;s look at the column <code>stage</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean</span><span class='o'>$</span><span class='nv'>stage</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>5</span><span class='o'>]</span>
+<span class='c'>#&gt; [1] "Adult, 1 Egg Stage" "Adult, 1 Egg Stage" "Adult, 1 Egg Stage"</span>
+<span class='c'>#&gt; [4] "Adult, 1 Egg Stage" "Adult, 1 Egg Stage"</span></code></pre>
+</div>
+<p>We might want to separate the column <code>stage</code> into <code>age</code> and <code>egg_stage</code>. We can do this with <code>separate()</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_stage</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_clean</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>separate</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>stage</span>,
+           into <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"age"</span>, <span class='s'>"egg_stage"</span><span class='o'>)</span>,
+           sep <span class='o'>=</span> <span class='s'>","</span>, <span class='c'># the comma is the separator</span>
+           remove <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> </code></pre>
+</div>
+<p>Did it work?</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_stage</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>stage</span>, <span class='nv'>age</span>, <span class='nv'>egg_stage</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 3</span></span>
+<span class='c'>#&gt;   stage              age   egg_stage     </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adult, 1 Egg Stage Adult </span><span style='color: #555555;'>"</span><span> 1 Egg Stage</span><span style='color: #555555;'>"</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adult, 1 Egg Stage Adult </span><span style='color: #555555;'>"</span><span> 1 Egg Stage</span><span style='color: #555555;'>"</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adult, 1 Egg Stage Adult </span><span style='color: #555555;'>"</span><span> 1 Egg Stage</span><span style='color: #555555;'>"</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adult, 1 Egg Stage Adult </span><span style='color: #555555;'>"</span><span> 1 Egg Stage</span><span style='color: #555555;'>"</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adult, 1 Egg Stage Adult </span><span style='color: #555555;'>"</span><span> 1 Egg Stage</span><span style='color: #555555;'>"</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adult, 1 Egg Stage Adult </span><span style='color: #555555;'>"</span><span> 1 Egg Stage</span><span style='color: #555555;'>"</span></span></code></pre>
+</div>
+<p>A different type of example:</p>
+<p>The column <code>individual_id</code> has two parts: the letter N and then a number, and the letter A and then a number. Let&rsquo;s split this column into two columns, one called <code>id_n</code> that contains the number after the N, and a second called <code>id_a</code> that contains the number after the A.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_fixID</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_clean</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>separate</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>individual_id</span>,
+           into <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"id_n"</span>, <span class='s'>"id_a"</span><span class='o'>)</span>,
+           sep <span class='o'>=</span> <span class='s'>"A"</span>, <span class='c'># can also use regex "[A]"</span>
+           remove <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> </code></pre>
+</div>
+<p>Did it work?</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_fixID</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>individual_id</span>, <span class='nv'>id_n</span>, <span class='nv'>id_a</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 3</span></span>
+<span class='c'>#&gt;   individual_id id_n  id_a </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> N1A1          N1    1    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> N1A2          N1    2    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> N2A1          N2    1    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> N2A2          N2    2    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> N3A1          N3    1    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> N3A2          N3    2</span></span></code></pre>
+</div>
+<p>This worked to separate out the A, but the N is still linked with <code>id_n</code>. We can use separate again to remove it. In this case, we don&rsquo;t want to keep the column that will include only Ns, so we will indicate that in the <code>into</code> argument, and we set <code>remote = TRUE</code> (which actually you can omit because it is the default).</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_fixID</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_clean_fixID</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>separate</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>id_n</span>,
+           into <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='kc'>NA</span>, <span class='s'>"id_n"</span><span class='o'>)</span>, <span class='c'># the NA omits the variable</span>
+           sep <span class='o'>=</span> <span class='s'>"N"</span>, <span class='c'># can also use regex "[N]"</span>
+           remove <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='c'># optional, since this is the default </span></code></pre>
+</div>
+<p>Did it work?</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_fixID</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>individual_id</span>, <span class='nv'>id_n</span>, <span class='nv'>id_a</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 3</span></span>
+<span class='c'>#&gt;   individual_id id_n  id_a </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> N1A1          1     1    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> N1A2          1     2    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> N2A1          2     1    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> N2A2          2     2    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> N3A1          3     1    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> N3A2          3     2</span></span></code></pre>
+</div>
+<h2 id="6---extract-character-columns">6 - Extract character columns</h2>
+<p>We can use <a href="https://tidyr.tidyverse.org/reference/extract.html" target="_blank" rel="noopener"><code>extract()</code></a> to set up regular expressions to allow the separation of our variable <code>species</code> into exactly what we want.</p>
+<p>We will use str_view to figure out a regex that will work for us.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># indicate our string</span>
+<span class='nv'>string</span> <span class='o'>&lt;-</span> <span class='s'>"Adelie Penguin (Pygoscelis adeliae)"</span></code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># to get Adelie Penguin</span>
+<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>string</span>, <span class='s'>"[[:alnum:]]+\\s[[:alnum:]]+"</span><span class='o'>)</span></code></pre>
+</div>
+<div class="highlight">
+<p><img src="adelie_penguin_1.png" width="700px" style="display: block; margin: auto auto auto 0;" /></p>
+</div>
+<ul>
+<li><code>[[:alnum:]]</code> gives you anything alphanumeric.</li>
+<li>the <code>+</code> indicates to match alphanumeric at least 1 time</li>
+<li><code>\\s</code> indicates a space</li>
+</ul>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># to get Pygoscelis adeliae</span>
+<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>string</span>, <span class='s'>"(?&lt;=\\()[[:alnum:]]+\\s[[:alnum:]]+"</span><span class='o'>)</span></code></pre>
+</div>
+<div class="highlight">
+<p><img src="pygoscelis_adeliae_2.png" width="700px" style="display: block; margin: auto auto auto 0;" /></p>
+</div>
+<ul>
+<li><code>(?&lt;=)</code> is called the positive lookbehind, and has this general structure <code>(?&lt;=B)A</code> which can be read like &ldquo;find exprssion A which is preceeded by expression B.&rdquo; In our example, expression B is a parentheses <code>(</code>. But there is some additional complexity here because parentheses have their own meanings in R, so you need to use the <code>\\</code> to escape them. The whole expression for this part of our regex is <code>(?&lt;=\\()</code>.</li>
+<li><code>[[:alnum:]]</code> gives you anything alphanumeric.</li>
+<li>the <code>+</code> indicates to match alphanumeric at least 1 time</li>
+<li><code>\\s</code> indicates a space</li>
+</ul>
+<p>Ok our regexs work as desired! Now we can incorporate them into <code>extract()</code>. Here I am using <code>.*?</code> to indicate the separator, as our separator is <code>(</code>. If you had a simpler separator, this would look simpler.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_extract</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_clean</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>extract</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>species</span>,
+          into <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"common_name"</span>, <span class='s'>"genus_species"</span><span class='o'>)</span>,
+          regex <span class='o'>=</span> <span class='s'>"([[:alnum:]]+\\s[[:alnum:]]+).*?((?&lt;=\\()[[:alnum:]]+\\s[[:alnum:]]+)"</span>, 
+          remove <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> </code></pre>
+</div>
+<p>Did it work?</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_extract</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>species</span>, <span class='nv'>common_name</span>, <span class='nv'>genus_species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 3</span></span>
+<span class='c'>#&gt;   species                             common_name    genus_species     </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                               </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>             </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span></code></pre>
+</div>
+<p>Voila!</p>
+<br>
+<hr>
+<h2 id="exercises">Exercises</h2>
+<p>We will be doing our exercises today with a couple of datasets from the <code>bakeoff</code> package.</p>
+<p align="center">
+<img src=mel_and_sue.gif width="95%" alt="mel and sue from GBBO are super excited about jaffa cakes">
+</p>
+<br>
+<hr>
+<h4 id="exercise-1">Exercise 1</h4>
+<div class="puzzle">
+<div>
+<p>Using the dataset <code>bakers</code>, combine <code>bakers_last</code> with <code>bakers_first</code> to create a new column <code>bakers_last_first</code> which is indicated like this: Lastname, Firstname.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>Use <code>head()</code> or <code>glimpse()</code> to see the structure of this data. Use <code>unite()</code> to combine columns. Don&rsquo;t forget to indicate the correct <code>sep</code> <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 8</span></span>
+<span class='c'>#&gt;   series baker_full   baker    age occupation   hometown  baker_last baker_first</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> 1      </span><span style='color: #555555;'>"</span><span>Annetha Mi… Annet…    30 Midwife      Essex     Mills      Annetha    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> 1      </span><span style='color: #555555;'>"</span><span>David Cham… David     31 Entrepreneur Milton K… Chambers   David      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> 1      </span><span style='color: #555555;'>"</span><span>Edward \"E… Edd       24 Debt collec… Bradford  Kimber     Edward     </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> 1      </span><span style='color: #555555;'>"</span><span>Jasminder … Jasmi…    45 Assistant C… Birmingh… Randhawa   Jasminder  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> 1      </span><span style='color: #555555;'>"</span><span>Jonathan S… Jonat…    25 Research An… St Albans Shepherd   Jonathan   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> 1      </span><span style='color: #555555;'>"</span><span>Lea Harris</span><span style='color: #555555;'>"</span><span> Lea       51 Retired      Midlothi… Harris     Lea</span></span>
+
+<span class='nv'>bakers_2</span> <span class='o'>&lt;-</span> <span class='nv'>bakers</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>unite</span><span class='o'>(</span>col <span class='o'>=</span> <span class='s'>"bakers_last_first"</span>,
+        <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>baker_last</span>, <span class='nv'>baker_first</span><span class='o'>)</span>,
+        sep <span class='o'>=</span> <span class='s'>", "</span><span class='o'>)</span>
+
+<span class='c'># did it work?</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>bakers_2</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 7</span></span>
+<span class='c'>#&gt;   series baker_full    baker    age occupation       hometown   bakers_last_fir…</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>           </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> 1      </span><span style='color: #555555;'>"</span><span>Annetha Mil… Annet…    30 Midwife          Essex      Mills, Annetha  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> 1      </span><span style='color: #555555;'>"</span><span>David Chamb… David     31 Entrepreneur     Milton Ke… Chambers, David </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> 1      </span><span style='color: #555555;'>"</span><span>Edward \"Ed… Edd       24 Debt collector … Bradford   Kimber, Edward  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> 1      </span><span style='color: #555555;'>"</span><span>Jasminder R… Jasmi…    45 Assistant Credi… Birmingham Randhawa, Jasmi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> 1      </span><span style='color: #555555;'>"</span><span>Jonathan Sh… Jonat…    25 Research Analyst St Albans  Shepherd, Jonat…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> 1      </span><span style='color: #555555;'>"</span><span>Lea Harris</span><span style='color: #555555;'>"</span><span>  Lea       51 Retired          Midlothia… Harris, Lea</span></span></code></pre>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="exercise-2">Exercise 2</h4>
+<div class="puzzle">
+<div>
+<p>Using the dataset <code>bakers</code>, convert the column <code>hometown</code> to two columns, where whatever comes before the comma is in a column called <code>city</code> and whatever comes after is in a column called <code>locale</code>.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>Try using <code>separate()</code>. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>bakers</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 8</span></span>
+<span class='c'>#&gt;   series baker_full   baker    age occupation   hometown  baker_last baker_first</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> 1      </span><span style='color: #555555;'>"</span><span>Annetha Mi… Annet…    30 Midwife      Essex     Mills      Annetha    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> 1      </span><span style='color: #555555;'>"</span><span>David Cham… David     31 Entrepreneur Milton K… Chambers   David      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> 1      </span><span style='color: #555555;'>"</span><span>Edward \"E… Edd       24 Debt collec… Bradford  Kimber     Edward     </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> 1      </span><span style='color: #555555;'>"</span><span>Jasminder … Jasmi…    45 Assistant C… Birmingh… Randhawa   Jasminder  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> 1      </span><span style='color: #555555;'>"</span><span>Jonathan S… Jonat…    25 Research An… St Albans Shepherd   Jonathan   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> 1      </span><span style='color: #555555;'>"</span><span>Lea Harris</span><span style='color: #555555;'>"</span><span> Lea       51 Retired      Midlothi… Harris     Lea</span></span>
+
+<span class='nv'>bakers_hometown</span> <span class='o'>&lt;-</span> <span class='nv'>bakers</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>separate</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>hometown</span>,
+           into <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"city"</span>, <span class='s'>"locale"</span><span class='o'>)</span>,
+           sep <span class='o'>=</span> <span class='s'>", "</span><span class='o'>)</span>
+<span class='c'>#&gt; Warning: Expected 2 pieces. Additional pieces discarded in 1 rows [71].</span>
+<span class='c'>#&gt; Warning: Expected 2 pieces. Missing pieces filled with `NA` in 65 rows [1, 2, 3, 4, 5, 7, 8, 11, 12, 15, 19, 20, 23, 25, 27, 28, 31, 34, 38, 41, ...].</span>
+
+<span class='c'># did it work?</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>bakers_hometown</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 9</span></span>
+<span class='c'>#&gt;   series baker_full  baker    age occupation city  locale baker_last baker_first</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> 1      </span><span style='color: #555555;'>"</span><span>Annetha M… Annet…    30 Midwife    Essex </span><span style='color: #BB0000;'>NA</span><span>     Mills      Annetha    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> 1      </span><span style='color: #555555;'>"</span><span>David Cha… David     31 Entrepren… Milt… </span><span style='color: #BB0000;'>NA</span><span>     Chambers   David      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> 1      </span><span style='color: #555555;'>"</span><span>Edward \"… Edd       24 Debt coll… Brad… </span><span style='color: #BB0000;'>NA</span><span>     Kimber     Edward     </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> 1      </span><span style='color: #555555;'>"</span><span>Jasminder… Jasmi…    45 Assistant… Birm… </span><span style='color: #BB0000;'>NA</span><span>     Randhawa   Jasminder  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> 1      </span><span style='color: #555555;'>"</span><span>Jonathan … Jonat…    25 Research … St A… </span><span style='color: #BB0000;'>NA</span><span>     Shepherd   Jonathan   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> 1      </span><span style='color: #555555;'>"</span><span>Lea Harri… Lea       51 Retired    Midl… Scotl… Harris     Lea</span></span></code></pre>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="exercise-3">Exercise 3</h4>
+<div class="puzzle">
+<div>
+<p>Using the dataset <code>bakers</code> add a column <code>nickname</code> which indicates the bakers nickname, if they have one.</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>Think about how to make a regex that would pull out the nickname. Try using <code>str_view_all()</code> to get your regex working before you apply it to <code>bakers</code>.<br>
+<br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>baker_full</span> <span class='o'>&lt;-</span> <span class='nv'>bakers</span><span class='o'>$</span><span class='nv'>baker_full</span></code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># note I used single quotes because there were double quotes in the regex</span>
+<span class='nf'>str_view_all</span><span class='o'>(</span><span class='nv'>baker_full</span>, <span class='s'>'(?&lt;=\\").*(?=\\")'</span><span class='o'>)</span> </code></pre>
+</div>
+<div class="highlight">
+<p><img src="nicknames_3.png" width="40%" style="display: block; margin: auto auto auto 0;" /></p>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bakers_nickname</span> <span class='o'>&lt;-</span> <span class='nv'>bakers</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>extract</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>baker_full</span>,
+          into <span class='o'>=</span> <span class='s'>"nickname"</span>,
+          regex <span class='o'>=</span> <span class='s'>'((?&lt;=\\").*(?=\\"))'</span><span class='o'>)</span>
+
+<span class='nv'>bakers_nickname</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>arrange</span><span class='o'>(</span><span class='nv'>nickname</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 8</span></span>
+<span class='c'>#&gt;   series nickname baker    age occupation       hometown  baker_last baker_first</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> 1      Edd      Edd       24 Debt collector … Bradford  Kimber     Edward     </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> 2      Jo       Joanne    41 Housewife        Ongar, E… Wheatley   Joanne     </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> 7      Val      Val       66 Semi-retired, S… Yeovil    Stones     Valerie    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> 8      Yan      Yan       46 Laboratory rese… North Lo… Tsou       Chuen-Yan  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> 1      </span><span style='color: #BB0000;'>NA</span><span>       Annet…    30 Midwife          Essex     Mills      Annetha    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> 1      </span><span style='color: #BB0000;'>NA</span><span>       David     31 Entrepreneur     Milton K… Chambers   David</span></span></code></pre>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+<h4 id="exercise-4">Exercise 4</h4>
+<div class="puzzle">
+<div>
+<p>Using the dataset <code>challenge_results</code>, write a regex to find any <code>signature</code> that contains chocolate. Remove all observations that contain <code>NA</code> for the <code>signature</code>. How many of the signature bakes contain chocolate? What percentage of the total signature bakes (for which we have bake names) does this represent?</p>
+<details>
+<summary> Hints (click here) </summary>
+<p>You can get rid of NAs with <code>drop_na()</code>. Try using <code>str_count()</code> to see how many occurances you have of chocolate in the signatures. <br></p>
+</details>
+<br>
+<details>
+<summary> Solutions (click here) </summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># select only signatures, drop NAs</span>
+<span class='nv'>signatures</span> <span class='o'>&lt;-</span> <span class='nv'>challenge_results</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>signature</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> 
+
+<span class='c'># check dimensions </span>
+<span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>signatures</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 703   1</span>
+
+<span class='c'># regex for chocolate (or Chocolate, or Chocolatey)</span>
+<span class='nf'>str_count</span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"C?c?hocolat"</span><span class='o'>)</span> 
+<span class='c'>#&gt; Warning in stri_count_regex(string, pattern, opts_regex = opts(pattern)): argument is not an atomic vector; coercing</span>
+<span class='c'>#&gt; [1] 77</span>
+
+<span class='c'># what percent of signatures contain chocolate</span>
+<span class='o'>(</span><span class='nf'>str_count</span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"C?c?hocolat"</span><span class='o'>)</span><span class='o'>/</span><span class='nf'>count</span><span class='o'>(</span><span class='nv'>signatures</span><span class='o'>)</span><span class='o'>)</span><span class='o'>*</span><span class='m'>100</span>
+<span class='c'>#&gt; Warning in stri_count_regex(string, pattern, opts_regex = opts(pattern)): argument is not an atomic vector; coercing</span>
+<span class='c'>#&gt;          n</span>
+<span class='c'>#&gt; 1 10.95306</span></code></pre>
+</div>
+</details>
+<br>
+</div>
+</div>
+<hr>
+
+                    </div>
+
+                    <br>
+
+                    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/20_cleaning-up/&amp;text=Cleaning%20up%20variables%20names,%20and%20other%20wrangling" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/20_cleaning-up/&amp;t=Cleaning%20up%20variables%20names,%20and%20other%20wrangling" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Cleaning%20up%20variables%20names,%20and%20other%20wrangling&amp;body=https://biodash.github.io/codeclub/20_cleaning-up/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/20_cleaning-up/&amp;title=Cleaning%20up%20variables%20names,%20and%20other%20wrangling" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Cleaning%20up%20variables%20names,%20and%20other%20wrangling%20https://biodash.github.io/codeclub/20_cleaning-up/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/20_cleaning-up/&amp;title=Cleaning%20up%20variables%20names,%20and%20other%20wrangling" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="/authors/jessica-cooperstone/"><img class="avatar mr-3 avatar-circle" src="/authors/jessica-cooperstone/avatar_hub3c8c373219f94b7f8251ccae20f3fcb_68385_270x270_fill_q90_lanczos_center.jpg" alt="Jessica Cooperstone"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/authors/jessica-cooperstone/">Jessica Cooperstone</a></h5>
+      <h6 class="card-subtitle">Assistant Professor at HCS</h6>
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:cooperstone.1@osu.edu" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/CooperstoneLab" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=d-FkQNQAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/jcooperstone" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://phytochemicals.osu.edu/" target="_blank" rel="noopener">
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <br>
+
+                    <hr class="separator">
+
+                    <div class="clearfix">
+                        
+                        
+                        <span class="previous-link">
+                            <a href="https://biodash.github.io/codeclub/19_wordclouds/">← Session 19: Word Clouds via Tidytext</a>
+                        </span>
+                        
+                        
+                        
+                    </div>
+
+                    <hr class="separator">
+
+                </div>
+
+            </article>
+
+            
+        </main>
+    </div>
+</div>
+
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+    
+    <p class="powered-by">
+      <a href="/license/">LICENSE: CC-BY-SA <br> <i class="fab fa-creative-commons fa-2x"></i><i class="fab fa-creative-commons-by fa-2x"></i><i class="fab fa-creative-commons-sa fa-2x"></i> </a><br>
+    </p>
+    
+</footer>
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key="></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.25/gmaps.min.js" integrity="sha256-7vjlAeb8OaTrCXZkCNun9djzuB2owUsaO72kXaFDBJs=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+      
+    
+    <script src="/en/js/wowchemy.min.2f16af175a3ec51b41b36bb4934b1cf7.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>
