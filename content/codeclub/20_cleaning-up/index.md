@@ -13,7 +13,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: 389206306f1bb018
+rmd_hash: 2e5ee27079774e7c
 
 ---
 
@@ -41,23 +41,23 @@ Getting Started
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'># directory for Code Club Session 20:
-dir.create("S20")
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># directory for Code Club Session 20:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S20"</span><span class='o'>)</span>
 
-# directory for our RMarkdown
-# ("recursive" to create two levels at once.)
-dir.create("S20/Rmd/")
+<span class='c'># directory for our RMarkdown</span>
+<span class='c'># ("recursive" to create two levels at once.)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S20/Rmd/"</span><span class='o'>)</span>
 
-# save the url location for today's script
-todays_Rmd <- 
-  'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/20_cleaning-up/CleaningUp.Rmd
+<span class='c'># save the url location for today's script</span>
+<span class='nv'>todays_Rmd</span> <span class='o'>&lt;-</span> 
+  <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/20_cleaning-up/CleaningUp.Rmd'</span>
 
-# indicate the name of the new script file
-Session20_Rmd <- "S20/Rmd/CleaningUp.Rmd"
+<span class='c'># indicate the name of the new script file</span>
+<span class='nv'>Session20_Rmd</span> <span class='o'>&lt;-</span> <span class='s'>"S20/Rmd/CleaningUp.Rmd"</span>
 
-# go get that file! 
-download.file(url = todays_Rmd,
-              destfile = Session20_Rmd)</code></pre>
+<span class='c'># go get that file! </span>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_Rmd</span>,
+              destfile <span class='o'>=</span> <span class='nv'>Session20_Rmd</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -113,7 +113,7 @@ If you don't have the package `janitor`, please install it.
 Then we will use the package `palmerpenguins` and the dataset `penguins_raw`, which has a bit more info than `penguins`, which we have used previously.
 
 <p align="center">
-<img src=palmerpenguins.png width="95%" alt="hex sticker for the palmer penguins package, including 3 really cute penguins">
+<img src=palmerpenguins.png width="50%" alt="hex sticker for the palmer penguins package, including 3 really cute penguins">
 </p>
 
 Artwork by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
@@ -204,45 +204,7 @@ And, this is using `tidyverse` functions - there will be other situations where 
 
 <br>
 
-What you can see is that there are variable names here that don't comply with the "rules" I just indicated. How can that be?! You can see for the variable `Sample Number` that it is surrounded by backticks. This is how R know that this is a variable name.
-
-Okay, so who cares? If you want to call that particular variable, you will have to put it in backticks. For example:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'># this doesn't work
-penguins_raw %>%
-  select(Sample Number)</code></pre>
-
-</div>
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># this works but is clunky</span>
-<span class='nv'>penguins_raw</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>`Sample Number`</span><span class='o'>)</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 344 x 1</span></span>
-<span class='c'>#&gt;    `Sample Number`</span>
-<span class='c'>#&gt;              <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>               1</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>               2</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span>               3</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span>               4</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span>               5</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span>               6</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span>               7</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>               8</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>               9</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>10</span><span>              10</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 334 more rows</span></span></code></pre>
-
-</div>
-
-And, this is using `tidyverse` functions - there will be other situations where you will get non-solvable errors because of your variable names.
-
-tl;dr just make your variable names R compliant, there are lots of other harder things you're going to be doing with coding, so just make this easier for yourself.
-
-### `clean_names()`
+### Using `clean_names()`
 
 <p align="center">
 <img src=janitor_clean_names.png width="95%" alt="cute illustration of the function clean_names, with a little beaker feeding messy data into something that looks like a planar, and better column names coming out the other side">
@@ -304,7 +266,7 @@ Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)
 4 - Unite character columns
 ---------------------------
 
-There will be times when you'd like to take a variable, and combine it with another variable. For example, you might want a column called `region_island` which contains a combination of the `region` and `island` that each penguin is from. We can do this with the function \[`unite()`\](<a href="https://tidyr.tidyverse.org/reference/unite.html" class="uri">https://tidyr.tidyverse.org/reference/unite.html</a>. The function `unite()` allows you to paste together multiple columns to become one column.
+There will be times when you'd like to take a variable, and combine it with another variable. For example, you might want a column called `region_island` which contains a combination of the `region` and `island` that each penguin is from. We can do this with the function [`unite()`](https://tidyr.tidyverse.org/reference/unite.html). The function `unite()` allows you to paste together multiple columns to become one column.
 
 The arguments to `unite` work like this:
 
@@ -488,7 +450,7 @@ We will use str\_view to figure out a regex that will work for us.
 </div>
 
 -   `[[:alnum:]]` gives you anything alphanumeric.  
--   the `+` indicates to match alphanumeric at least 1 time
+-   the [`+`](https://rdrr.io/r/base/Arithmetic.html) indicates to match alphanumeric at least 1 time
 -   `\\s` indicates a space
 
 <div class="highlight">
@@ -506,7 +468,7 @@ We will use str\_view to figure out a regex that will work for us.
 
 -   `(?<=)` is called the positive lookbehind, and has this general structure `(?<=B)A` which can be read like "find exprssion A which is preceeded by expression B." In our example, expression B is a parentheses `(`. But there is some additional complexity here because parentheses have their own meanings in R, so you need to use the `\\` to escape them. The whole expression for this part of our regex is `(?<=\\()`.
 -   `[[:alnum:]]` gives you anything alphanumeric.  
--   the `+` indicates to match alphanumeric at least 1 time
+-   the [`+`](https://rdrr.io/r/base/Arithmetic.html) indicates to match alphanumeric at least 1 time
 -   `\\s` indicates a space
 
 Ok our regexs work as desired! Now we can incorporate them into `extract()`. Here I am using `.*?` to indicate the separator, as our separator is `(`. If you had a simpler separator, this would look simpler.
@@ -559,7 +521,7 @@ We will be doing our exercises today with a couple of datasets from the `bakeoff
 
 ------------------------------------------------------------------------
 
-#### Exercise 1
+### Exercise 1
 
 <div class="puzzle">
 
@@ -571,7 +533,7 @@ Using the dataset `bakers`, combine `bakers_last` with `bakers_first` to create 
 
 <summary> Hints (click here) </summary>
 
-Use `head()` or `glimpse()` to see the structure of this data. Use `unite()` to combine columns. Don't forget to indicate the correct `sep` <br>
+Use [`head()`](https://rdrr.io/r/utils/head.html) or `glimpse()` to see the structure of this data. Use `unite()` to combine columns. Don't forget to indicate the correct `sep` <br>
 </details>
 
 <br>
@@ -622,7 +584,7 @@ Use `head()` or `glimpse()` to see the structure of this data. Use `unite()` to 
 
 ------------------------------------------------------------------------
 
-#### Exercise 2
+### Exercise 2
 
 <div class="puzzle">
 
@@ -687,7 +649,7 @@ Try using `separate()`. <br>
 
 ------------------------------------------------------------------------
 
-#### Exercise 3
+### Exercise 3
 
 <div class="puzzle">
 
@@ -760,7 +722,7 @@ Think about how to make a regex that would pull out the nickname. Try using `str
 
 ------------------------------------------------------------------------
 
-#### Exercise 4
+### Exercise 4
 
 <div class="puzzle">
 
