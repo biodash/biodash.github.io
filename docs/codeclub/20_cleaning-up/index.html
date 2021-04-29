@@ -341,7 +341,7 @@
         content="2021-04-29T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-04-29T09:45:58-04:00">
+    <meta property="article:modified_time" content="2021-04-29T12:41:20-04:00">
   
 
   
@@ -786,7 +786,7 @@
     <li><a href="#2---accessing-our-data">2 - Accessing our data</a></li>
     <li><a href="#3---variable-names">3 - Variable names</a>
       <ul>
-        <li><a href="#clean_names"><code>clean_names()</code></a></li>
+        <li><a href="#using-clean_names">Using <code>clean_names()</code></a></li>
       </ul>
     </li>
     <li><a href="#4---unite-character-columns">4 - Unite character columns</a></li>
@@ -794,7 +794,10 @@
     <li><a href="#6---extract-character-columns">6 - Extract character columns</a></li>
     <li><a href="#exercises">Exercises</a>
       <ul>
-        <li></li>
+        <li><a href="#exercise-1">Exercise 1</a></li>
+        <li><a href="#exercise-2">Exercise 2</a></li>
+        <li><a href="#exercise-3">Exercise 3</a></li>
+        <li><a href="#exercise-4">Exercise 4</a></li>
       </ul>
     </li>
   </ul>
@@ -918,23 +921,23 @@
 <h2 id="getting-started">Getting Started</h2>
 <h3 id="rmarkdown-for-todays-session">RMarkdown for today&rsquo;s session</h3>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'># directory for Code Club Session 20:
-dir.create("S20")
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># directory for Code Club Session 20:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S20"</span><span class='o'>)</span>
 
-# directory for our RMarkdown
-# ("recursive" to create two levels at once.)
-dir.create("S20/Rmd/")
+<span class='c'># directory for our RMarkdown</span>
+<span class='c'># ("recursive" to create two levels at once.)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S20/Rmd/"</span><span class='o'>)</span>
 
-# save the url location for today's script
-todays_Rmd <- 
-  'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/20_cleaning-up/CleaningUp.Rmd
+<span class='c'># save the url location for today's script</span>
+<span class='nv'>todays_Rmd</span> <span class='o'>&lt;-</span> 
+  <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/20_cleaning-up/CleaningUp.Rmd'</span>
 
-# indicate the name of the new script file
-Session20_Rmd <- "S20/Rmd/CleaningUp.Rmd"
+<span class='c'># indicate the name of the new script file</span>
+<span class='nv'>Session20_Rmd</span> <span class='o'>&lt;-</span> <span class='s'>"S20/Rmd/CleaningUp.Rmd"</span>
 
-# go get that file! 
-download.file(url = todays_Rmd,
-              destfile = Session20_Rmd)</code></pre>
+<span class='c'># go get that file! </span>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_Rmd</span>,
+              destfile <span class='o'>=</span> <span class='nv'>Session20_Rmd</span><span class='o'>)</span></code></pre>
 </div>
 <br>
 <hr>
@@ -967,7 +970,7 @@ download.file(url = todays_Rmd,
 </div>
 <p>Then we will use the package <code>palmerpenguins</code> and the dataset <code>penguins_raw</code>, which has a bit more info than <code>penguins</code>, which we have used previously.</p>
 <p align="center">
-<img src=palmerpenguins.png width="95%" alt="hex sticker for the palmer penguins package, including 3 really cute penguins">
+<img src=palmerpenguins.png width="50%" alt="hex sticker for the palmer penguins package, including 3 really cute penguins">
 </p>
 <p>Artwork by <a href="https://allisonhorst.github.io/palmerpenguins/articles/art.html" target="_blank" rel="noopener">Allison Horst</a></p>
 <br>
@@ -1034,35 +1037,7 @@ penguins_raw %>%
 <br>
 <p><strong>tl;dr just make your variable names R compliant, there are lots of other harder things you&rsquo;re going to be doing with coding, so just make this easier for yourself.</strong></p>
 <br>
-<p>What you can see is that there are variable names here that don&rsquo;t comply with the &ldquo;rules&rdquo; I just indicated. How can that be?! You can see for the variable <code>Sample Number</code> that it is surrounded by backticks. This is how R know that this is a variable name.</p>
-<p>Okay, so who cares? If you want to call that particular variable, you will have to put it in backticks. For example:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'># this doesn't work
-penguins_raw %>%
-  select(Sample Number)</code></pre>
-</div>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># this works but is clunky</span>
-<span class='nv'>penguins_raw</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>`Sample Number`</span><span class='o'>)</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 344 x 1</span></span>
-<span class='c'>#&gt;    `Sample Number`</span>
-<span class='c'>#&gt;              <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>               1</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>               2</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span>               3</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span>               4</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span>               5</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span>               6</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span>               7</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>               8</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>               9</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>10</span><span>              10</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 334 more rows</span></span></code></pre>
-</div>
-<p>And, this is using <code>tidyverse</code> functions - there will be other situations where you will get non-solvable errors because of your variable names.</p>
-<p>tl;dr just make your variable names R compliant, there are lots of other harder things you&rsquo;re going to be doing with coding, so just make this easier for yourself.</p>
-<h3 id="clean_names"><code>clean_names()</code></h3>
+<h3 id="using-clean_names">Using <code>clean_names()</code></h3>
 <p align="center">
 <img src=janitor_clean_names.png width="95%" alt="cute illustration of the function clean_names, with a little beaker feeding messy data into something that looks like a planar, and better column names coming out the other side">
 </p>
@@ -1109,7 +1084,7 @@ penguins_raw %>%
 <br>
 <hr>
 <h2 id="4---unite-character-columns">4 - Unite character columns</h2>
-<p>There will be times when you&rsquo;d like to take a variable, and combine it with another variable. For example, you might want a column called <code>region_island</code> which contains a combination of the <code>region</code> and <code>island</code> that each penguin is from. We can do this with the function [<code>unite()</code>](<a href="https://tidyr.tidyverse.org/reference/unite.html" class="uri"><a href="https://tidyr.tidyverse.org/reference/unite.html">https://tidyr.tidyverse.org/reference/unite.html</a></a>. The function <code>unite()</code> allows you to paste together multiple columns to become one column.</p>
+<p>There will be times when you&rsquo;d like to take a variable, and combine it with another variable. For example, you might want a column called <code>region_island</code> which contains a combination of the <code>region</code> and <code>island</code> that each penguin is from. We can do this with the function <a href="https://tidyr.tidyverse.org/reference/unite.html" target="_blank" rel="noopener"><code>unite()</code></a>. The function <code>unite()</code> allows you to paste together multiple columns to become one column.</p>
 <p>The arguments to <code>unite</code> work like this:</p>
 <p><code>unite(data, col, ..., sep = &quot;_&quot;, remove = TRUE, na.rm = FALSE)</code></p>
 <div class="highlight">
@@ -1234,7 +1209,7 @@ penguins_raw %>%
 </div>
 <ul>
 <li><code>[[:alnum:]]</code> gives you anything alphanumeric.</li>
-<li>the <code>+</code> indicates to match alphanumeric at least 1 time</li>
+<li>the <a href="https://rdrr.io/r/base/Arithmetic.html" target="_blank" rel="noopener"><code>+</code></a> indicates to match alphanumeric at least 1 time</li>
 <li><code>\\s</code> indicates a space</li>
 </ul>
 <div class="highlight">
@@ -1247,7 +1222,7 @@ penguins_raw %>%
 <ul>
 <li><code>(?&lt;=)</code> is called the positive lookbehind, and has this general structure <code>(?&lt;=B)A</code> which can be read like &ldquo;find exprssion A which is preceeded by expression B.&rdquo; In our example, expression B is a parentheses <code>(</code>. But there is some additional complexity here because parentheses have their own meanings in R, so you need to use the <code>\\</code> to escape them. The whole expression for this part of our regex is <code>(?&lt;=\\()</code>.</li>
 <li><code>[[:alnum:]]</code> gives you anything alphanumeric.</li>
-<li>the <code>+</code> indicates to match alphanumeric at least 1 time</li>
+<li>the <a href="https://rdrr.io/r/base/Arithmetic.html" target="_blank" rel="noopener"><code>+</code></a> indicates to match alphanumeric at least 1 time</li>
 <li><code>\\s</code> indicates a space</li>
 </ul>
 <p>Ok our regexs work as desired! Now we can incorporate them into <code>extract()</code>. Here I am using <code>.*?</code> to indicate the separator, as our separator is <code>(</code>. If you had a simpler separator, this would look simpler.</p>
@@ -1283,13 +1258,13 @@ penguins_raw %>%
 </p>
 <br>
 <hr>
-<h4 id="exercise-1">Exercise 1</h4>
+<h3 id="exercise-1">Exercise 1</h3>
 <div class="puzzle">
 <div>
 <p>Using the dataset <code>bakers</code>, combine <code>bakers_last</code> with <code>bakers_first</code> to create a new column <code>bakers_last_first</code> which is indicated like this: Lastname, Firstname.</p>
 <details>
 <summary> Hints (click here) </summary>
-<p>Use <code>head()</code> or <code>glimpse()</code> to see the structure of this data. Use <code>unite()</code> to combine columns. Don&rsquo;t forget to indicate the correct <code>sep</code> <br></p>
+<p>Use <a href="https://rdrr.io/r/utils/head.html" target="_blank" rel="noopener"><code>head()</code></a> or <code>glimpse()</code> to see the structure of this data. Use <code>unite()</code> to combine columns. Don&rsquo;t forget to indicate the correct <code>sep</code> <br></p>
 </details>
 <br>
 <details>
@@ -1328,7 +1303,7 @@ penguins_raw %>%
 </div>
 </div>
 <hr>
-<h4 id="exercise-2">Exercise 2</h4>
+<h3 id="exercise-2">Exercise 2</h3>
 <div class="puzzle">
 <div>
 <p>Using the dataset <code>bakers</code>, convert the column <code>hometown</code> to two columns, where whatever comes before the comma is in a column called <code>city</code> and whatever comes after is in a column called <code>locale</code>.</p>
@@ -1375,7 +1350,7 @@ penguins_raw %>%
 </div>
 </div>
 <hr>
-<h4 id="exercise-3">Exercise 3</h4>
+<h3 id="exercise-3">Exercise 3</h3>
 <div class="puzzle">
 <div>
 <p>Using the dataset <code>bakers</code> add a column <code>nickname</code> which indicates the bakers nickname, if they have one.</p>
@@ -1421,7 +1396,7 @@ penguins_raw %>%
 </div>
 </div>
 <hr>
-<h4 id="exercise-4">Exercise 4</h4>
+<h3 id="exercise-4">Exercise 4</h3>
 <div class="puzzle">
 <div>
 <p>Using the dataset <code>challenge_results</code>, write a regex to find any <code>signature</code> that contains chocolate. Remove all observations that contain <code>NA</code> for the <code>signature</code>. How many of the signature bakes contain chocolate? What percentage of the total signature bakes (for which we have bake names) does this represent?</p>
