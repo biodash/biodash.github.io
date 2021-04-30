@@ -578,15 +578,22 @@ resultsNames(dds)
 
 Not all pairwise contrasts between the 5 levels in our `group` factor are available
 here: instead, `control_mock`, which we set as the reference level, is being compared
-with all 4 other levels. (However, we can still compare other levels too.)
+with the other 3 levels.
+(However, we can make other pairwise comparisons, too.)
 
-Above, we looked at the results (p-values and so on) for the last of these
-comparisons, which is what DESeq2 will show by default.
+Above, we looked at the results for the *last* of these comparisons
+(`group_Ri_myb_vs_control_mock`, i.e. "Ri_myb" vs. "control_mock"),
+simply because DESeq2 will show the last comparison by default when calling
+the `results()` function.
+
 To see the results table for one of the other 3 comparisons,
 we pass a vector to the `contrast` argument of the `results()` function with
-the factor (`group`) and the two levels to be contrasted:
+the factor (`group`) and the two levels to be contrasted.
+For example, to see the results for "Ri_mock" vs. "control_mock":
 
 ```{r}
+# Here, we could specify *any* pairwise contrast,
+# not just the ones with "control_mock" that resultsNames() prints as seen above.
 my_contrast <- c("Ri_mock", "control_mock")
 
 res <- results(dds,
@@ -599,31 +606,54 @@ How many adjusted p-values were less than 0.1?
 sum(res$padj < 0.1, na.rm = TRUE)
 ```
 
-We'll also create an object with adjusted (shrunken) LFC estimates,
+We'll also create an object with *adjusted (shrunken) LFC estimates*,
 which will be useful for visualization and ranking of genes by LFC:
 
 ```{r}
 my_coef <- paste0("group_", paste0(my_contrast, collapse = "_vs_"))
 my_coef
-res_LFC <- lfcShrink(dds, coef = my_coef, type = "apeglm", lfcThreshold = 1)
+
+res_LFC <- lfcShrink(dds,
+                     coef = my_coef,
+                     type = "apeglm",
+                     lfcThreshold = 1)
 ```
 
-Note that here, we had to provide the contrast ("coefficient") in the format
-given by `resultsNames(dds)`
-(that looks a bit confusing because this format uses underscores to separate levels,
-while our factor levels themselves also contain underscores).
+Here, we had to provide the contrast ("coefficient") in the format
+given by `resultsNames(dds)`.
+(And that looks a bit confusing because this format uses underscores to separate levels,
+while our factor levels themselves also contain underscores.)
+
+We also specified a threshold of 1 for the LFC value (`lfcThreshold = 1`),
+so we get s-values (analogous to p-values) that test not for differential
+expression of any magnitude (as in the tests above),
+but whether the LFC is greater than our specified threshold: 
+
+```{r}
+head(res_LFC)
+
+sum(res_LFC$svalue < 0.1, na.rm = TRUE)
+```
+
+This can be a useful way to try and tease out statistical from biological significance.
 
 <br>
 
 ----
 
-## Exploring the results
+## Visually exploring the results
+
+We will create a few plots, by way of example,
+of the results for the "Ri_mock" versus "control_mock" comparison,
+which we extracted above.
 
 ### MA-plot:
 
 For a nice overview of the results, we can plot a so-called "MA plot".
 An MA plot shows, for each gene:
-- Count differences in terms of LFC between two groups, on the y-axis
+
+- Count differences in terms of LFC between two groups, on the y-axis.
+
 - Mean counts across both groups, on the x-axis.
 
 We can create an MA plot using DESeq2's `plotMA` function,
@@ -675,8 +705,11 @@ ggplot(d, aes(x = mean, y = lfc, color = isDE)) +
        y = "Shrunken LFC")
 ```
 
-Finally, for a plot like this it could be useful to be able to identify individual
-genes. There are way too many to print the gene names on the plot, though.
+Note that significance is now specified for LFC > 1 -- FINISH
+
+Finally, for a plot like this,
+it could be useful to be able to identify individual genes.
+There are way too many to print the gene names on the plot, though.
 Instead, we can also make the plot **interactive with Plotly**,
 so we can see the identity of each gene *when we hover over the point*:
 
@@ -714,45 +747,73 @@ Let's plot the top-5 most significantly differentially expressed genes:
 
 ```{r, eval=TRUE}
 # First, we select the 5 genes with the lowest adjusted p-value:
-top5 <- row.names(res[order(res$padj), ][1:5, ])
+top5 <- row.names(res[order(res$padj)[1:5], ])
+```
 
-# Then we loop over these genes, creating a plot for each one:
-for(fgene in top5) {
+```{r, eval=TRUE}
+# Then we create a function to make a plot for a single gene:
+plotgene <- function(geneID, dds) {
   
   d <- plotCounts(dds,
-                  gene = fgene,
+                  gene = geneID,
                   intgroup = "group",
                   returnData = TRUE)
 
   p <- ggplot(d, aes(x = group, y = count)) +
           geom_point(position = position_jitter(w = 0.1, h = 0)) +
-          labs(title = fgene) +
+          labs(title = geneID) +
           theme_bw()
   
   print(p)
 }
-
 ```
+
+Finally, we use `sapply()` to apply this function to each of our genes in the
+`top5` vector.
+
+```{r}
+none <- sapply(top5, plotgene, dds)
+```
+
+If we wanted to, we could easily create plots for 100s of genes, this way.
 
 ### Heatmap
 
-We can create heatmaps with the `pheatmap` function --
-for instance, for the 20 most highly expressed genes:
+We can create heatmaps with the `pheatmap` function.
+Let's start by creating a function that will plot a heatmap given a vector
+of gene IDs and a DESeq2 object `dds`:
 
 ```{r, eval=TRUE}
-ntd <- normTransform(dds)
-selection <- order(rowMeans(counts(dds, normalized = TRUE)),
-                   decreasing = TRUE)[1:20]
-ntd_sel <- assay(ntd)[selection, ]
-df_meta <- as.data.frame(colData(dds)[, c("AMF", "Treatment")])
-```
-
-```{r, eval=TRUE}
-pheatmap(ntd_sel,
+plot_heatmap <- function(geneIDs, dds) {
+  
+  ntd <- assay(normTransform(dds))
+  
+  ntd_sel <- ntd[match(geneIDs, rownames(ntd)), ]
+  df_meta <- as.data.frame(colData(dds)[, c("AMF", "Treatment")])
+  
+  pheatmap(ntd_sel,
          cluster_rows = FALSE,
          cluster_cols = FALSE,
          show_rownames = FALSE,
          annotation_col = df_meta)
+}
+```
+
+Now, we can easily create a heatmap for the top-20 most highly differentially
+expressed genes:
+
+```{r, eval=TRUE}
+top20_DE <- row.names(res[order(res$padj)[1:20], ])
+plot_heatmap(top20_DE, dds)
+```
+
+Or for the 20 most highly expressed genes:
+
+```{r, eval=TRUE}
+top20_hi_idx <- order(rowMeans(counts(dds, normalized = TRUE)),
+                  decreasing = TRUE)[1:20]
+top20_hi <- row.names(dds)[top20_hi_idx]
+plot_heatmap(top20_hi, dds)
 ```
 
 ### Export the results
