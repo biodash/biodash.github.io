@@ -32,7 +32,11 @@ knitr::opts_chunk$set(echo = TRUE)
 - If you're able to do so, please open RStudio a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll help you troubleshoot.
 
 
+- You can use R locally, or at OSC.  You can find instructions if you are having trouble [here](/codeclub-setup/).
+
 <br>
+
+
 
 ----
 
@@ -76,16 +80,12 @@ Now that we have gone through a mini-series on regular expressions, with the [ba
 
 To do this, we are going to practice with the [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) dataset, and get back to the [`bakeoff`](https://bakeoff.netlify.app/) for our practice exercises.
 
-</div>
-</div>
 
 <br>
 
 ----
 
 ## 2 - Accessing our data
-
-* You can do this locally, or at OSC.  You can find instructions if you are having trouble [here](/codeclub-setup/).
 
 First load your libraries.  We will be using `stringr` and `tidyr` but those are both part of core `tidyverse`.  We are also using a new package today called `janitor` which helps you "clean up" your data.
 
@@ -252,7 +252,69 @@ penguins_clean_stage %>%
   head()
 ```
 
-A different type of example:
+----
+
+## 6 - Extract character columns
+
+We can use [`extract()`](https://tidyr.tidyverse.org/reference/extract.html) to set up regular expressions to allow the separation of our variable `species` into a column with the common name, and a column with the genus species.
+
+We will use str_view to figure out a regex that will work for us.
+```{r}
+# indicate our string
+string <- "Adelie Penguin (Pygoscelis adeliae)"
+```
+
+```{r, eval = FALSE}
+# to get Adelie Penguin
+str_view(string, "\\w+\\s\\w+")
+```
+
+```{r, echo=FALSE, results="show", out.width="60%", fig.align="left"}
+knitr::include_graphics("adelie_penguin_1.png")
+```
+
+
+* `\\w` gives you anything that's a word character   
+* the `+` indicates to match alphanumeric at least 1 time
+* `\\s` indicates a space
+
+```{r, eval = FALSE}
+# to get Pygoscelis adeliae
+str_view(string, "(?<=\\()\\w+\\s\\w+")
+```
+
+```{r, echo=FALSE, results="show", out.width="60%", fig.align="left"}
+knitr::include_graphics("pygoscelis_adeliae_2.png")
+```
+
+* `(?<=)` is called the positive lookbehind, and has this general structure `(?<=B)A` which can be read like "find exprssion A which is preceeded by expression B."  In our example, expression B is a parentheses `(`.  But there is some additional complexity here because parentheses have their own meanings in regex so you need to use the `\\` to escape them.  The whole expression for this part of our regex is `(?<=\\()`.
+* `\\w` gives you anything that's a word character  
+* the `+` indicates to match alphanumeric at least 1 time
+* `\\s` indicates a space
+
+Ok our regexs work as desired!  Now we can incorporate them into `extract()`.  Here I am using `.*?`  to match the characters between our two targeted regex which here is ` (`.  
+
+```{r}
+penguins_clean_extract <- penguins_clean %>%
+  extract(col = species,
+          into = c("common_name", "genus_species"),
+          regex = "(\\w+\\s\\w+).*?((?<=\\()\\w+\\s\\w+)", 
+          remove = FALSE) 
+```
+
+```{r}
+penguins_clean_extract %>%
+  select(species, common_name, genus_species) %>%
+  head()
+```
+
+Voila! 
+
+<br>
+
+----
+
+## 7 - Replacing with `str_replace()`
 
 The column `individual_id` has two parts: the letter N and then a number, and the letter A and then a number. Let's split this column into two columns, one called `id_n` that contains the number after the N, and a second called `id_a` that contains the number after the A.
 
@@ -272,80 +334,18 @@ penguins_clean_fixID %>%
   head()
 ```
 
-This worked to separate out the A, but the N is still linked with `id_n`. We can use separate again to remove it. In this case, we don't want to keep the column that will include only Ns, so we will indicate that in the `into` argument, and we set `remote = TRUE` (which actually you can omit because it is the default).
+This worked to separate out the A, but the N is still linked with `id_n`. We can use a combination of `mutate()` and `str_replace_all()` to remove the N. You can learn more about `str_replace()` [here](https://stringr.tidyverse.org/reference/str_replace.html).  
 
 ```{r}
 penguins_clean_fixID <- penguins_clean_fixID %>%
-  separate(col = id_n,
-           into = c(NA, "id_n"), # the NA omits the variable
-           sep = "N", # can also use regex "[N]"
-           remove = TRUE) # optional, since this is the default 
+  mutate(id_n = str_replace_all(id_n, "N", ""))
 ```
-
-Did it work?
 
 ```{r}
 penguins_clean_fixID %>%
   select(individual_id, id_n, id_a) %>%
   head()
 ```
-
-## 6 - Extract character columns
-
-We can use [`extract()`](https://tidyr.tidyverse.org/reference/extract.html) to set up regular expressions to allow the separation of our variable `species` into exactly what we want.
-
-We will use str_view to figure out a regex that will work for us.
-```{r}
-# indicate our string
-string <- "Adelie Penguin (Pygoscelis adeliae)"
-```
-
-```{r, eval = FALSE}
-# to get Adelie Penguin
-str_view(string, "[[:alnum:]]+\\s[[:alnum:]]+")
-```
-
-```{r, echo=FALSE, results="show", fig.align="left"}
-knitr::include_graphics("adelie_penguin_1.png")
-```
-
-* `[[:alnum:]]` gives you anything alphanumeric.  
-* the `+` indicates to match alphanumeric at least 1 time
-* `\\s` indicates a space
-
-```{r, eval = FALSE}
-# to get Pygoscelis adeliae
-str_view(string, "(?<=\\()[[:alnum:]]+\\s[[:alnum:]]+")
-```
-
-```{r, echo=FALSE, results="show", fig.align="left"}
-knitr::include_graphics("pygoscelis_adeliae_2.png")
-```
-
-* `(?<=)` is called the positive lookbehind, and has this general structure `(?<=B)A` which can be read like "find exprssion A which is preceeded by expression B."  In our example, expression B is a parentheses `(`.  But there is some additional complexity here because parentheses have their own meanings in R, so you need to use the `\\` to escape them.  The whole expression for this part of our regex is `(?<=\\()`.
-* `[[:alnum:]]` gives you anything alphanumeric.  
-* the `+` indicates to match alphanumeric at least 1 time
-* `\\s` indicates a space
-
-Ok our regexs work as desired!  Now we can incorporate them into `extract()`.  Here I am using `.*?`  to indicate the separator, as our separator is ` (`.  If you had a simpler separator, this would look simpler.
-
-```{r}
-penguins_clean_extract <- penguins_clean %>%
-  extract(col = species,
-          into = c("common_name", "genus_species"),
-          regex = "([[:alnum:]]+\\s[[:alnum:]]+).*?((?<=\\()[[:alnum:]]+\\s[[:alnum:]]+)", 
-          remove = FALSE) 
-```
-
-Did it work?
-
-```{r}
-penguins_clean_extract %>%
-  select(species, common_name, genus_species) %>%
-  head()
-```
-
-Voila! 
 
 <br>
 
@@ -463,7 +463,7 @@ Using the dataset `bakers` add a column `nickname` which indicates the bakers ni
   </summary>
 
 
-  Think about how to make a regex that would pull out the nickname.  Try using `str_view_all()` to get your regex working before you apply it to `bakers`.  
+  Think about how to make a regex that would pull out the nickname.  Try using `str_view_all()` to get your regex working before you apply it to `bakers`. Try using the lookahead syntax. 
 <br>
 </details>
 
@@ -491,7 +491,7 @@ knitr::include_graphics("nicknames_3.png")
 bakers_nickname <- bakers %>%
   extract(col = baker_full,
           into = "nickname",
-          regex = '((?<=\\").*(?=\\"))')
+          regex = '((?<=\\")\\w+(?=\\"))')
 
 bakers_nickname %>%
   arrange(nickname) %>%
@@ -541,10 +541,10 @@ signatures <- challenge_results %>%
 dim(signatures)
 
 # regex for chocolate (or Chocolate, or Chocolatey)
-str_count(signatures, "C?c?hocolat") 
+str_count(signatures, "[Cc]hocolat[ey]") 
 
 # what percent of signatures contain chocolate
-(str_count(signatures, "C?c?hocolat")/count(signatures))*100
+(str_count(signatures, "[Cc]hocolat[ey]")/count(signatures))*100
 ```
 
 </details>

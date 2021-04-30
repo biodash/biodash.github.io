@@ -3,8 +3,8 @@ title: "Cleaning up variables names, and other wrangling"
 subtitle: "On your marks, get set, bake!"
 summary: "During this  session of Code Club, we will be learning to clean up variable names, combine and separate columns, and extract data with regular expressions."  
 authors: [jessica-cooperstone]
-date: "2021-04-29"
-lastmod: "2021-04-29"
+date: "2021-04-30"
+lastmod: "2021-04-30"
 output: hugodown::md_document
 toc: true
 
@@ -13,7 +13,7 @@ image:
   focal_point: ""
   preview_only: false
 
-rmd_hash: 2e5ee27079774e7c
+rmd_hash: 6f40fb8987a0de17
 
 ---
 
@@ -29,6 +29,8 @@ Prep homework
 -   If you didn't already do this, please follow the [Code Club Computer Setup](/codeclub-setup/04_ggplot2/) instructions, which also has pointers for if you're new to R or RStudio.
 
 -   If you're able to do so, please open RStudio a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll help you troubleshoot.
+
+-   You can use R locally, or at OSC. You can find instructions if you are having trouble [here](/codeclub-setup/).
 
 <br>
 
@@ -78,17 +80,12 @@ Now that we have gone through a mini-series on regular expressions, with the [ba
 
 To do this, we are going to practice with the [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) dataset, and get back to the [`bakeoff`](https://bakeoff.netlify.app/) for our practice exercises.
 
-</div>
-</div>
-
 <br>
 
 ------------------------------------------------------------------------
 
 2 - Accessing our data
 ----------------------
-
--   You can do this locally, or at OSC. You can find instructions if you are having trouble [here](/codeclub-setup/).
 
 First load your libraries. We will be using `stringr` and `tidyr` but those are both part of core `tidyverse`. We are also using a new package today called `janitor` which helps you "clean up" your data.
 
@@ -358,7 +355,94 @@ Did it work?
 
 </div>
 
-A different type of example:
+------------------------------------------------------------------------
+
+6 - Extract character columns
+-----------------------------
+
+We can use [`extract()`](https://tidyr.tidyverse.org/reference/extract.html) to set up regular expressions to allow the separation of our variable `species` into a column with the common name, and a column with the genus species.
+
+We will use str\_view to figure out a regex that will work for us.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># indicate our string</span>
+<span class='nv'>string</span> <span class='o'>&lt;-</span> <span class='s'>"Adelie Penguin (Pygoscelis adeliae)"</span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># to get Adelie Penguin</span>
+<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>string</span>, <span class='s'>"\\w+\\s\\w+"</span><span class='o'>)</span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+<img src="adelie_penguin_1.png" width="60%" style="display: block; margin: auto auto auto 0;" />
+
+</div>
+
+-   `\\w` gives you anything that's a word character  
+-   the [`+`](https://rdrr.io/r/base/Arithmetic.html) indicates to match alphanumeric at least 1 time
+-   `\\s` indicates a space
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># to get Pygoscelis adeliae</span>
+<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>string</span>, <span class='s'>"(?&lt;=\\()\\w+\\s\\w+"</span><span class='o'>)</span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+<img src="pygoscelis_adeliae_2.png" width="60%" style="display: block; margin: auto auto auto 0;" />
+
+</div>
+
+-   `(?<=)` is called the positive lookbehind, and has this general structure `(?<=B)A` which can be read like "find exprssion A which is preceeded by expression B." In our example, expression B is a parentheses `(`. But there is some additional complexity here because parentheses have their own meanings in regex so you need to use the `\\` to escape them. The whole expression for this part of our regex is `(?<=\\()`.
+-   `\\w` gives you anything that's a word character  
+-   the [`+`](https://rdrr.io/r/base/Arithmetic.html) indicates to match alphanumeric at least 1 time
+-   `\\s` indicates a space
+
+Ok our regexs work as desired! Now we can incorporate them into `extract()`. Here I am using `.*?` to match the characters between our two targeted regex which here is `(`.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_extract</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_clean</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>extract</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>species</span>,
+          into <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"common_name"</span>, <span class='s'>"genus_species"</span><span class='o'>)</span>,
+          regex <span class='o'>=</span> <span class='s'>"(\\w+\\s\\w+).*?((?&lt;=\\()\\w+\\s\\w+)"</span>, 
+          remove <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> </code></pre>
+
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_extract</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>species</span>, <span class='nv'>common_name</span>, <span class='nv'>genus_species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 3</span></span>
+<span class='c'>#&gt;   species                             common_name    genus_species     </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                               </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>             </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span></code></pre>
+
+</div>
+
+Voila!
+
+<br>
+
+------------------------------------------------------------------------
+
+7 - Replacing with `str_replace()`
+----------------------------------
 
 The column `individual_id` has two parts: the letter N and then a number, and the letter A and then a number. Let's split this column into two columns, one called `id_n` that contains the number after the N, and a second called `id_a` that contains the number after the A.
 
@@ -391,19 +475,14 @@ Did it work?
 
 </div>
 
-This worked to separate out the A, but the N is still linked with `id_n`. We can use separate again to remove it. In this case, we don't want to keep the column that will include only Ns, so we will indicate that in the `into` argument, and we set `remote = TRUE` (which actually you can omit because it is the default).
+This worked to separate out the A, but the N is still linked with `id_n`. We can use a combination of `mutate()` and `str_replace_all()` to remove the N. You can learn more about `str_replace()` [here](https://stringr.tidyverse.org/reference/str_replace.html).
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_fixID</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_clean_fixID</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>separate</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>id_n</span>,
-           into <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='kc'>NA</span>, <span class='s'>"id_n"</span><span class='o'>)</span>, <span class='c'># the NA omits the variable</span>
-           sep <span class='o'>=</span> <span class='s'>"N"</span>, <span class='c'># can also use regex "[N]"</span>
-           remove <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='c'># optional, since this is the default </span></code></pre>
+  <span class='nf'>mutate</span><span class='o'>(</span>id_n <span class='o'>=</span> <span class='nf'>str_replace_all</span><span class='o'>(</span><span class='nv'>id_n</span>, <span class='s'>"N"</span>, <span class='s'>""</span><span class='o'>)</span><span class='o'>)</span></code></pre>
 
 </div>
-
-Did it work?
 
 <div class="highlight">
 
@@ -421,88 +500,6 @@ Did it work?
 <span class='c'>#&gt; <span style='color: #555555;'>6</span><span> N3A2          3     2</span></span></code></pre>
 
 </div>
-
-6 - Extract character columns
------------------------------
-
-We can use [`extract()`](https://tidyr.tidyverse.org/reference/extract.html) to set up regular expressions to allow the separation of our variable `species` into exactly what we want.
-
-We will use str\_view to figure out a regex that will work for us.
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># indicate our string</span>
-<span class='nv'>string</span> <span class='o'>&lt;-</span> <span class='s'>"Adelie Penguin (Pygoscelis adeliae)"</span></code></pre>
-
-</div>
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># to get Adelie Penguin</span>
-<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>string</span>, <span class='s'>"[[:alnum:]]+\\s[[:alnum:]]+"</span><span class='o'>)</span></code></pre>
-
-</div>
-
-<div class="highlight">
-
-<img src="adelie_penguin_1.png" width="700px" style="display: block; margin: auto auto auto 0;" />
-
-</div>
-
--   `[[:alnum:]]` gives you anything alphanumeric.  
--   the [`+`](https://rdrr.io/r/base/Arithmetic.html) indicates to match alphanumeric at least 1 time
--   `\\s` indicates a space
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># to get Pygoscelis adeliae</span>
-<span class='nf'>str_view</span><span class='o'>(</span><span class='nv'>string</span>, <span class='s'>"(?&lt;=\\()[[:alnum:]]+\\s[[:alnum:]]+"</span><span class='o'>)</span></code></pre>
-
-</div>
-
-<div class="highlight">
-
-<img src="pygoscelis_adeliae_2.png" width="700px" style="display: block; margin: auto auto auto 0;" />
-
-</div>
-
--   `(?<=)` is called the positive lookbehind, and has this general structure `(?<=B)A` which can be read like "find exprssion A which is preceeded by expression B." In our example, expression B is a parentheses `(`. But there is some additional complexity here because parentheses have their own meanings in R, so you need to use the `\\` to escape them. The whole expression for this part of our regex is `(?<=\\()`.
--   `[[:alnum:]]` gives you anything alphanumeric.  
--   the [`+`](https://rdrr.io/r/base/Arithmetic.html) indicates to match alphanumeric at least 1 time
--   `\\s` indicates a space
-
-Ok our regexs work as desired! Now we can incorporate them into `extract()`. Here I am using `.*?` to indicate the separator, as our separator is `(`. If you had a simpler separator, this would look simpler.
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_extract</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_clean</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>extract</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>species</span>,
-          into <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"common_name"</span>, <span class='s'>"genus_species"</span><span class='o'>)</span>,
-          regex <span class='o'>=</span> <span class='s'>"([[:alnum:]]+\\s[[:alnum:]]+).*?((?&lt;=\\()[[:alnum:]]+\\s[[:alnum:]]+)"</span>, 
-          remove <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span> </code></pre>
-
-</div>
-
-Did it work?
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_clean_extract</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>species</span>, <span class='nv'>common_name</span>, <span class='nv'>genus_species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 3</span></span>
-<span class='c'>#&gt;   species                             common_name    genus_species     </span>
-<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                               </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>             </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie Penguin (Pygoscelis adeliae) Adelie Penguin Pygoscelis adeliae</span></span></code></pre>
-
-</div>
-
-Voila!
 
 <br>
 
@@ -661,8 +658,7 @@ Using the dataset `bakers` add a column `nickname` which indicates the bakers ni
 
 <summary> Hints (click here) </summary>
 
-Think about how to make a regex that would pull out the nickname. Try using `str_view_all()` to get your regex working before you apply it to `bakers`.  
-<br>
+Think about how to make a regex that would pull out the nickname. Try using `str_view_all()` to get your regex working before you apply it to `bakers`. Try using the lookahead syntax. <br>
 </details>
 
 <br>
@@ -695,7 +691,7 @@ Think about how to make a regex that would pull out the nickname. Try using `str
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bakers_nickname</span> <span class='o'>&lt;-</span> <span class='nv'>bakers</span> <span class='o'>%&gt;%</span>
   <span class='nf'>extract</span><span class='o'>(</span>col <span class='o'>=</span> <span class='nv'>baker_full</span>,
           into <span class='o'>=</span> <span class='s'>"nickname"</span>,
-          regex <span class='o'>=</span> <span class='s'>'((?&lt;=\\").*(?=\\"))'</span><span class='o'>)</span>
+          regex <span class='o'>=</span> <span class='s'>'((?&lt;=\\")\\w+(?=\\"))'</span><span class='o'>)</span>
 
 <span class='nv'>bakers_nickname</span> <span class='o'>%&gt;%</span>
   <span class='nf'>arrange</span><span class='o'>(</span><span class='nv'>nickname</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
@@ -755,15 +751,15 @@ You can get rid of NAs with `drop_na()`. Try using `str_count()` to see how many
 <span class='c'>#&gt; [1] 703   1</span>
 
 <span class='c'># regex for chocolate (or Chocolate, or Chocolatey)</span>
-<span class='nf'>str_count</span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"C?c?hocolat"</span><span class='o'>)</span> 
+<span class='nf'>str_count</span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"[Cc]hocolat[ey]"</span><span class='o'>)</span> 
 <span class='c'>#&gt; Warning in stri_count_regex(string, pattern, opts_regex = opts(pattern)): argument is not an atomic vector; coercing</span>
-<span class='c'>#&gt; [1] 77</span>
+<span class='c'>#&gt; [1] 75</span>
 
 <span class='c'># what percent of signatures contain chocolate</span>
-<span class='o'>(</span><span class='nf'>str_count</span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"C?c?hocolat"</span><span class='o'>)</span><span class='o'>/</span><span class='nf'>count</span><span class='o'>(</span><span class='nv'>signatures</span><span class='o'>)</span><span class='o'>)</span><span class='o'>*</span><span class='m'>100</span>
+<span class='o'>(</span><span class='nf'>str_count</span><span class='o'>(</span><span class='nv'>signatures</span>, <span class='s'>"[Cc]hocolat[ey]"</span><span class='o'>)</span><span class='o'>/</span><span class='nf'>count</span><span class='o'>(</span><span class='nv'>signatures</span><span class='o'>)</span><span class='o'>)</span><span class='o'>*</span><span class='m'>100</span>
 <span class='c'>#&gt; Warning in stri_count_regex(string, pattern, opts_regex = opts(pattern)): argument is not an atomic vector; coercing</span>
 <span class='c'>#&gt;          n</span>
-<span class='c'>#&gt; 1 10.95306</span></code></pre>
+<span class='c'>#&gt; 1 10.66856</span></code></pre>
 
 </div>
 
