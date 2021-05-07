@@ -868,11 +868,12 @@ write.table(res_sig, res_sig_file,
 
 ## DE analysis -- all pairwise comparisons
 
+To run the DE analysis for all pairwise comparisons,
+we will start by writing a function that takes a comparison (contrast) in the
+form of `c(level1, level2)` along with a DESeq2 object (`dds`),
+and output a data frame with significantly differentially expressed genes:
+
 ```{r}
-comps <- combn(levels(dds@colData$group), 2, simplify = FALSE)
-
-my_contrast <- comps[[2]]
-
 sig_contrast <- function(my_contrast, dds) {
   
   res_sig <- results(dds,
@@ -886,9 +887,24 @@ sig_contrast <- function(my_contrast, dds) {
   
   return(res_sig)
 }
+```
 
+Then, we will create a list with all pairwise combinations of our `group` factor
+using the `combn()` function:
+
+```{r}
+comps <- combn(levels(dds@colData$group), 2, simplify = FALSE)
+```
+
+Finally, we run the function for all of our pairwise comparisons,
+and using `do.call(rbind, ...)`, we concatenate all the results in a single
+data frame:
+
+```{r}
 sig_all_contrasts <- do.call(rbind, lapply(comps, sig_contrast, dds))
 
+# The `kable()` function is just to display tables nicely in this R Markdown
+# document -- use `head(sig_all_contrasts)` in your own code.
 kable(head(sig_all_contrasts))
 ```
 
@@ -902,6 +918,9 @@ Say we wanted to analyze the effect of "mock" versus "myb"
 ("Treatment" column) while controlling for the effects of "control" versus "Ri"
 ("AMF" column).
 
+Let's start by turning "Treatment" and "AMF" into factors,
+and saving a new DESeq2 object:
+
 ```{r}
 # Convert Treatment and AMF into factors: 
 dds_raw$Treatment <- relevel(factor(dds_raw$Treatment), ref = "mock")
@@ -909,9 +928,14 @@ dds_raw$AMF <- relevel(factor(dds_raw$AMF), ref = "control")
 
 # Save a new object:
 dds_2f_raw <- dds_raw
+```
 
-# AMF + Treatment: Test for the effect of Treatment (the last factor),
-# ...controlling for the effect of AMF (the first factor).
+To include both factors, we use a `+` in the formula.
+Note that the order matters:
+using `AMF + Treatment`, we test for the effect of "Treatment" (the last factor),
+while controlling for the effect of AMF (the first factor).
+
+```{r}
 design(dds_2f_raw) <- formula(~ AMF + Treatment)
 ```
 
@@ -930,12 +954,15 @@ sum(res$padj < 0.1, na.rm = TRUE)
 
 ### With an interaction term
 
+We can add an interaction term using notation like `level1:level2`, with a colon.
+In this case, we want to include both "AMF", "Treatment", and the interaction
+between the two:
+
 ```{r}
 # Save a new object:
 dds_2fi_raw <- dds_raw
 
-# AMF + Treatment: Test for the effect of Treatment (the last factor),
-# ...controlling for the effect of AMF (the first factor).
+# The interaction term is `AMF:Treatment`:
 design(dds_2fi_raw) <- formula(~ AMF + Treatment + AMF:Treatment)
 ```
 
@@ -950,16 +977,19 @@ resultsNames(dds_2fi)
 From the [DESeq2 vignette](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#interactions):
 >The key point to remember about designs with interaction terms is that, unlike for a design `~ genotype + condition`, where the condition effect represents the overall effect controlling for differences due to genotype, by adding `genotype:condition`, the main condition effect only represents the effect of condition for the reference level of genotype (I, or whichever level was defined by the user as the reference level). The interaction terms genotypeII.conditionB and genotypeIII.conditionB give the difference between the condition effect for a given genotype and the condition effect for the reference genotype.
 
-Does the effects of Treatment differ among levels of AMF?
-The interaction term came last in our formula,
-so the `results()` function will get results for the interaction term by default:
+Now, we can check a number of different effects:
+
+#### Does the effects of Treatment differ among levels of AMF?
+
+This is described by the interaction term, which came last in our formula.
+Therefore, the `results()` function will get results for the interaction term by default:
 
 ```{r}
 res <- results(dds_2fi)
 kable(head(res))
 ```
 
-The effect of Treatment in "control" AMF: 
+#### The effect of Treatment in "control" AMF: 
 
 ```{r}
 res <- results(dds_2fi,
@@ -967,7 +997,7 @@ res <- results(dds_2fi,
 kable(head(res))
 ```
 
-The effect of Treatment in "myb" AMF: 
+#### The effect of Treatment in "myb" AMF: 
 
 ```{r}
 res <- results(dds_2fi,
@@ -975,7 +1005,7 @@ res <- results(dds_2fi,
 kable(head(res))
 ```
 
-The effect of AMF in "mock" Treatment:
+#### The effect of AMF in the "mock" Treatment:
 
 ```{r}
 res <- results(dds_2fi,
@@ -983,7 +1013,7 @@ res <- results(dds_2fi,
 kable(head(res))
 ```
 
-The effect of AMF in "myb" Treatment:
+#### The effect of AMF in "myb" Treatment:
 
 ```{r}
 res <- results(dds_2fi,
