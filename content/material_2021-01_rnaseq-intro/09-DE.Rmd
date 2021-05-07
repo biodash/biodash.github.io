@@ -11,6 +11,7 @@ output:
     theme: cerulean
     highlight: tango
     anchor_sections: true
+    df_print: kable
     css: html_page.css
 editor_options: 
   chunk_output_type: inline
@@ -113,7 +114,8 @@ packages <- c("DESeq2",          # Differential expression analysis
               "tidyverse",       # Misc. data manipulation and plotting
               "here",            # Managing file paths
               "pheatmap",        # Heatmap plot
-              "apeglm")          # For LFC shrinkage
+              "apeglm",          # For LFC shrinkage
+              "knitr")           # For table printing in Markdown file
 pacman::p_load(char = packages)
 
 theme_set(theme_bw())  # Set ggplot theme
@@ -165,7 +167,7 @@ Load the metadata information:
 ```{r}
 metadata <- read.table(metadata_file, header = TRUE)
 
-head(metadata)
+kable(head(metadata))
 ```
 
 The `Treatment` column currently has the values `Agrobacterium_noexp`,
@@ -476,7 +478,7 @@ which would be useful if you want to be able to change more defaults.
 
 ```{r}
 res <- results(dds)
-res
+kable(head(res))
 ```
 
 By default, the results table prints statistics
@@ -835,7 +837,7 @@ my_contrast_pasted
 ```{r}
 res$level1 <- my_contrast[1]
 res$level2 <- my_contrast[2]
-head(res)
+kable(head(res))
 ```
 
 Now we can write `res` to file:
@@ -852,7 +854,9 @@ We may also want to save a separate table with only significant results:
 ```{r, eval=FALSE}
 res_sig_file <- file.path(outdir, paste0(my_contrast_pasted, '_sig-res.txt'))
 
-res_sig <- res[res$padj < 0.1, ]
+res_sig <- res %>%
+  as.data.frame() %>% 
+  dplyr::filter(padj < 0.1)
 
 write.table(res_sig, res_sig_file,
             sep = '\t', row.names = TRUE, quote = FALSE)
@@ -864,26 +868,125 @@ write.table(res_sig, res_sig_file,
 
 ## DE analysis -- all pairwise comparisons
 
-TBA
+```{r}
+comps <- combn(levels(dds@colData$group), 2, simplify = FALSE)
+
+my_contrast <- comps[[2]]
+
+sig_contrast <- function(my_contrast, dds) {
+  
+  res_sig <- results(dds,
+                     contrast = c("group", my_contrast)) %>%
+    as.data.frame() %>% 
+    dplyr::filter(padj < 0.1) %>%
+    mutate(level1 = my_contrast[1],
+           level2 = my_contrast[2])
+  
+  cat(my_contrast[1], "versus", my_contrast[2], ":", nrow(res_sig), "significant\n")
+  
+  return(res_sig)
+}
+
+sig_all_contrasts <- do.call(rbind, lapply(comps, sig_contrast, dds))
+
+kable(head(sig_all_contrasts))
+```
 
 ----
 
 ## DE analysis -- with two factors
 
-TBA
+### Controlling for one factor
 
-```{r, eval=FALSE, echo=FALSE}
+Say we wanted to analyze the effect of "mock" versus "myb"
+("Treatment" column) while controlling for the effects of "control" versus "Ri"
+("AMF" column).
+
+```{r}
+# Convert Treatment and AMF into factors: 
+dds_raw$Treatment <- relevel(factor(dds_raw$Treatment), ref = "mock")
+dds_raw$AMF <- relevel(factor(dds_raw$AMF), ref = "control")
+
+# Save a new object:
 dds_2f_raw <- dds_raw
 
 # AMF + Treatment: Test for the effect of Treatment (the last factor),
 # ...controlling for the effect of AMF (the first factor).
 design(dds_2f_raw) <- formula(~ AMF + Treatment)
-
-# Or use interaction term: ∼ AMF + Treatment + AMF:Treatment
 ```
 
-```{r, eval=FALSE, echo=FALSE}
-# Run DESeq with the new design:
+Run DESeq with the new design:
+
+```{r}
 dds_2f <- DESeq(dds_2f_raw)
+res <- results(dds_2f)
 ```
 
+How many adjusted p-values were less than 0.1?
+
+```{r}
+sum(res$padj < 0.1, na.rm = TRUE)
+```
+
+### With an interaction term
+
+```{r}
+# Save a new object:
+dds_2fi_raw <- dds_raw
+
+# AMF + Treatment: Test for the effect of Treatment (the last factor),
+# ...controlling for the effect of AMF (the first factor).
+design(dds_2fi_raw) <- formula(~ AMF + Treatment + AMF:Treatment)
+```
+
+Run DESeq with the new design:
+
+```{r}
+dds_2fi <- DESeq(dds_2fi_raw)
+
+resultsNames(dds_2fi)
+```
+
+From the [DESeq2 vignette](http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#interactions):
+>The key point to remember about designs with interaction terms is that, unlike for a design `~ genotype + condition`, where the condition effect represents the overall effect controlling for differences due to genotype, by adding `genotype:condition`, the main condition effect only represents the effect of condition for the reference level of genotype (I, or whichever level was defined by the user as the reference level). The interaction terms genotypeII.conditionB and genotypeIII.conditionB give the difference between the condition effect for a given genotype and the condition effect for the reference genotype.
+
+Does the effects of Treatment differ among levels of AMF?
+The interaction term came last in our formula,
+so the `results()` function will get results for the interaction term by default:
+
+```{r}
+res <- results(dds_2fi)
+kable(head(res))
+```
+
+The effect of Treatment in "control" AMF: 
+
+```{r}
+res <- results(dds_2fi,
+               contrast = c("Treatment", "myb", "mock"))
+kable(head(res))
+```
+
+The effect of Treatment in "myb" AMF: 
+
+```{r}
+res <- results(dds_2fi,
+               contrast = list(c("Treatment_myb_vs_mock", "AMFRi.Treatmentmyb")))
+kable(head(res))
+```
+
+The effect of AMF in "mock" Treatment:
+
+```{r}
+res <- results(dds_2fi,
+                contrast = c("AMF", "Ri", "control"))
+kable(head(res))
+```
+
+The effect of AMF in "myb" Treatment:
+
+```{r}
+res <- results(dds_2fi,
+               contrast = list(c("AMF_Ri_vs_control", "AMFRi.Treatmentmyb")))
+kable(head(res))
+```
