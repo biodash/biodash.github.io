@@ -325,15 +325,16 @@
   
   
     
+    
   
   
-  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:card" content="summary" />
   
   <meta property="og:site_name" content="BioDASH" />
   <meta property="og:url" content="https://biodash.github.io/codeclub/19_wordclouds/" />
   <meta property="og:title" content="Session 19: Word Clouds via Tidytext | BioDASH" />
-  <meta property="og:description" content="Visualizing text frequency distributions" /><meta property="og:image" content="https://biodash.github.io/codeclub/19_wordclouds/featured.jpg" />
-    <meta property="twitter:image" content="https://biodash.github.io/codeclub/19_wordclouds/featured.jpg" /><meta property="og:locale" content="en-us" />
+  <meta property="og:description" content="Visualizing text frequency distributions" /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
+    <meta property="twitter:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
@@ -341,7 +342,7 @@
         content="2021-04-21T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-04-22T13:08:03-04:00">
+    <meta property="article:modified_time" content="2021-07-19T20:55:36-04:00">
   
 
   
@@ -808,26 +809,18 @@
 
 
 
-
-
-
-
-
-
-
+  
 
   
   
-    
   
-
-
 <div class="article-container pt-3">
   <h1>Session 19: Word Clouds via Tidytext</h1>
 
   
 
   
+    
 
 
 
@@ -850,7 +843,7 @@
   <span class="article-date">
     
     
-    Apr 22, 2021
+    Jul 19, 2021
   </span>
   
 
@@ -869,20 +862,13 @@
 
 </div>
 
-  
-
-
-
-
-
-</div>
-
-
-<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 596px;">
-  <div style="position: relative">
-    <img src="/codeclub/19_wordclouds/featured_hu7fba9da1679ce4a56c592454604cb9c1_162323_720x0_resize_q90_lanczos.jpg" alt="" class="featured-image">
     
-  </div>
+
+
+
+
+
+  
 </div>
 
 
@@ -913,7 +899,8 @@
 <p>This is another in our current series on text processing. We&rsquo;ll be using the following previously used packages which you should load first (install them if you haven&rsquo;t already):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
-<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://bakeoff.netlify.com'>bakeoff</a></span><span class='o'>)</span></code></pre>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://bakeoff.netlify.com'>bakeoff</a></span><span class='o'>)</span>
+</code></pre>
 </div>
 <p>We&rsquo;ll also be using the following packages, which you should install and load:</p>
 <div class="highlight">
@@ -922,7 +909,8 @@
                  
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/juliasilge/tidytext'>tidytext</a></span><span class='o'>)</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://docs.ropensci.org/gutenbergr/'>gutenbergr</a></span><span class='o'>)</span>
-<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://blog.fellstat.com/?cat=11'>wordcloud</a></span><span class='o'>)</span></code></pre>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://blog.fellstat.com/?cat=11'>wordcloud</a></span><span class='o'>)</span>
+</code></pre>
 </div>
 <h2 id="introduction">Introduction</h2>
 <p>In this CodeClub session we&rsquo;ll see how to create word clouds (also known as tag clouds) from text, using the <strong>tidytext</strong> and <strong>wordcloud</strong> packages. A word cloud is a visualization of word frequencies, graphically highlighting the most common words.</p>
@@ -932,7 +920,8 @@
           <span class='s'>"heiress still lives through winter in her Spartan cottage;"</span>,
           <span class='s'>"her sheep still graze above the sea."</span>,
           <span class='s'>"Her son's a bishop. Her farmer is first selectman in our village;"</span>,
-          <span class='s'>"she's in her dotage."</span><span class='o'>)</span></code></pre>
+          <span class='s'>"she's in her dotage."</span><span class='o'>)</span>
+</code></pre>
 </div>
 <p>In textual analysis we distinguish between word <strong>types</strong>, and word <strong>tokens</strong> (multiple instances of those words in text). For example there are two tokens of the word-type &ldquo;still&rdquo; in this stanza:</p>
 <blockquote>
@@ -961,6 +950,7 @@ her sheep <code>still</code> graze above the sea</p>
   <span class='nf'>as_tibble</span><span class='o'>(</span><span class='o'>)</span>                      
 
 <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>lowell_tokens</span>, n <span class='o'>=</span> <span class='m'>38</span><span class='o'>)</span>
+
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 38 x 1</span></span>
 <span class='c'>#&gt;    value    </span>
 <span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span></span>
@@ -1001,7 +991,8 @@ her sheep <code>still</code> graze above the sea</p>
 <span class='c'>#&gt; <span style='color: #555555;'>35</span><span> s        </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>36</span><span> in       </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>37</span><span> her      </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>38</span><span> dotage</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'>38</span><span> dotage</span></span>
+</code></pre>
 </div>
 <p>This is a good start: it gets rid of the capitalization issue, and also gets rid of the punctuation. But there&rsquo;s a problem. The regular expression pattern <code>[a-z]+</code> doesn&rsquo;t recognize <em>possessives</em> or <em>contractions</em>: it just strips anything that&rsquo;s not a letter, so it messes up with <code>Island's</code>, <code>son's</code>, and <code>she's</code>: welcome to the subtleties of processing natural language text algorithmically! Exceptions, exceptions!!</p>
 <p>We could fiddle about with our regex, but&hellip; <em>there&rsquo;s a package for that!</em> This kind of text mining is exactly what the <a href="https://www.tidytextmining.com" target="_blank" rel="noopener">tidytext</a> package was built for. It will simultaneously strip punctuation intelligently and &lsquo;unnest&rsquo; lines into word tokens.</p>
@@ -1010,6 +1001,7 @@ her sheep <code>still</code> graze above the sea</p>
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>lowell_df</span> <span class='o'>&lt;-</span> <span class='nf'>tibble</span><span class='o'>(</span>text <span class='o'>=</span> <span class='nv'>lowell</span><span class='o'>)</span>
 
 <span class='nv'>lowell_df</span>
+
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 5 x 1</span></span>
 <span class='c'>#&gt;   text                                                             </span>
 <span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                                            </span></span>
@@ -1017,7 +1009,8 @@ her sheep <code>still</code> graze above the sea</p>
 <span class='c'>#&gt; <span style='color: #555555;'>2</span><span> heiress still lives through winter in her Spartan cottage;       </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>3</span><span> her sheep still graze above the sea.                             </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Her son's a bishop. Her farmer is first selectman in our village;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> she's in her dotage.</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> she's in her dotage.</span></span>
+</code></pre>
 </div>
 <p>Each string in the character vector becomes a single row in the data frame.</p>
 <p>Again we want one word-token per row, to &lsquo;tidy&rsquo; our data. This is what <a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html" target="_blank" rel="noopener"><code>tidytext::unnest_tokens()</code></a> does. We&rsquo;re going to unnest words in this case (we can unnest other things, like characters, sentences, regexes, even tweets) and we need to specify the variable in the dataframe we are unnesting (in this case just <code>text</code>). This will create a new word-token data frame, and we&rsquo;ll name the variable in the data frame <code>word</code>. This is important (see later on stop words).</p>
@@ -1026,6 +1019,7 @@ her sheep <code>still</code> graze above the sea</p>
     <span class='nf'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='o'>(</span><span class='nv'>word</span>, <span class='nv'>text</span><span class='o'>)</span>
 
 <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>lowell_tidy</span>, n <span class='o'>=</span> <span class='m'>35</span><span class='o'>)</span>
+
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 35 x 1</span></span>
 <span class='c'>#&gt;    word     </span>
 <span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span></span>
@@ -1063,7 +1057,8 @@ her sheep <code>still</code> graze above the sea</p>
 <span class='c'>#&gt; <span style='color: #555555;'>32</span><span> she's    </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>33</span><span> in       </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>34</span><span> her      </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>35</span><span> dotage</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'>35</span><span> dotage</span></span>
+</code></pre>
 </div>
 <p>Punctuation has been stripped and all words are lower case, but possessives and contractions are preserved (fancy usage of <code>str_</code> regular expression functions under the hood&hellip;).</p>
 <h2 id="bakeoff">Bakeoff!</h2>
@@ -1073,6 +1068,7 @@ her sheep <code>still</code> graze above the sea</p>
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>signature_df</span> <span class='o'>&lt;-</span> <span class='nf'>select</span><span class='o'>(</span><span class='nv'>bakes</span>, <span class='nv'>signature</span><span class='o'>)</span>
 
 <span class='nv'>signature_df</span>
+
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 548 x 1</span></span>
 <span class='c'>#&gt;    signature                                                                    </span>
 <span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                                                        </span></span>
@@ -1086,7 +1082,8 @@ her sheep <code>still</code> graze above the sea</p>
 <span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> </span><span style='color: #555555;'>"</span><span>Sticky Marmalade Tea Loaf</span><span style='color: #555555;'>"</span><span>                                                  </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> </span><span style='color: #555555;'>"</span><span>Triple Layered Brownie Meringue Cake\nwith Raspberry Cream</span><span style='color: #555555;'>"</span><span>                 </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>10</span><span> </span><span style='color: #555555;'>"</span><span>Three Tiered Lemon Drizzle Cakewith Fresh Cream and freshly made Lemon Curd</span><span style='color: #555555;'>"</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 538 more rows</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 538 more rows</span></span>
+</code></pre>
 </div>
 <p>Next we tokenize by word on the signature column:</p>
 <div class="highlight">
@@ -1094,6 +1091,7 @@ her sheep <code>still</code> graze above the sea</p>
     <span class='nf'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='o'>(</span><span class='nv'>word</span>, <span class='nv'>signature</span><span class='o'>)</span>
 
 <span class='nv'>signature_tidy</span>
+
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 2,762 x 1</span></span>
 <span class='c'>#&gt;    word        </span>
 <span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span></span>
@@ -1107,7 +1105,8 @@ her sheep <code>still</code> graze above the sea</p>
 <span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> chocolate   </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> orange      </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>10</span><span> cake        </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 2,752 more rows</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 2,752 more rows</span></span>
+</code></pre>
 </div>
 <p>Now we want to count those tokens: i.e. we want to collapse all duplicate word tokens into a single word type, with the corresponding frequency. Since we now have tidy data, dplyr to the rescue!</p>
 <blockquote>
@@ -1118,6 +1117,7 @@ her sheep <code>still</code> graze above the sea</p>
     <span class='nf'>count</span><span class='o'>(</span><span class='nv'>word</span>, sort <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 
 <span class='nv'>signature_count</span>
+
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 806 x 2</span></span>
 <span class='c'>#&gt;    word          n</span>
 <span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
@@ -1131,7 +1131,8 @@ her sheep <code>still</code> graze above the sea</p>
 <span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> ginger       30</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> lemon        29</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>10</span><span> biscuits     26</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 796 more rows</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 796 more rows</span></span>
+</code></pre>
 </div>
 <p>We&rsquo;re way more interested in <code>cake</code> than <code>and</code>: this is an example of a <strong>stop word</strong>:</p>
 <blockquote>
@@ -1143,6 +1144,7 @@ her sheep <code>still</code> graze above the sea</p>
 <p>The tidytext package has a database of just over a thousand of these words, including &lsquo;and&rsquo;:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>stop_words</span>, n <span class='o'>=</span> <span class='m'>30</span><span class='o'>)</span>
+
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1,149 x 2</span></span>
 <span class='c'>#&gt;    word        lexicon</span>
 <span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span></span>
@@ -1176,7 +1178,8 @@ her sheep <code>still</code> graze above the sea</p>
 <span class='c'>#&gt; <span style='color: #555555;'>28</span><span> an          SMART  </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>29</span><span> and         SMART  </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>30</span><span> another     SMART  </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 1,119 more rows</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 1,119 more rows</span></span>
+</code></pre>
 </div>
 <p>Note that the name of the stop word column is <code>word</code>, and the name we used in our tokenized column is <code>word</code> (now you will see why we used that name) so we can use dplyr&rsquo;s <code>anti_join()</code> to filter the word tokens!</p>
 <blockquote>
@@ -1186,9 +1189,12 @@ her sheep <code>still</code> graze above the sea</p>
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>signature_count</span> <span class='o'>&lt;-</span> <span class='nv'>signature_tidy</span> <span class='o'>%&gt;%</span> 
     <span class='nf'>count</span><span class='o'>(</span><span class='nv'>word</span>, sort <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
     <span class='nf'>anti_join</span><span class='o'>(</span><span class='nv'>stop_words</span><span class='o'>)</span>
+
 <span class='c'>#&gt; Joining, by = "word"</span>
 
+
 <span class='nv'>signature_count</span>
+
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 762 x 2</span></span>
 <span class='c'>#&gt;    word          n</span>
 <span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
@@ -1202,7 +1208,8 @@ her sheep <code>still</code> graze above the sea</p>
 <span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> biscuits     26</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> loaf         22</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>10</span><span> walnut       22</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 752 more rows</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 752 more rows</span></span>
+</code></pre>
 </div>
 <p>Since we are in the tidyverse, we can pipe our results into ggplot. First we filter on counts above a certain threshold (here 12, just for visualization purposes):</p>
 <div class="highlight">
@@ -1212,6 +1219,7 @@ her sheep <code>still</code> graze above the sea</p>
     <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
     <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
     <span class='nf'>labs</span><span class='o'>(</span>y <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span>
+
 </code></pre>
 <p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
@@ -1224,6 +1232,7 @@ her sheep <code>still</code> graze above the sea</p>
     <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
     <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
     <span class='nf'>labs</span><span class='o'>(</span>y <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span>
+
 </code></pre>
 <p><img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
@@ -1236,6 +1245,7 @@ her sheep <code>still</code> graze above the sea</p>
           random.order<span class='o'>=</span><span class='kc'>FALSE</span>, 
           rot.per<span class='o'>=</span><span class='m'>0.3</span>, 
           colors<span class='o'>=</span><span class='nf'>brewer.pal</span><span class='o'>(</span><span class='m'>8</span>, <span class='s'>"Dark2"</span><span class='o'>)</span><span class='o'>)</span>
+
 </code></pre>
 <p><img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
@@ -1258,26 +1268,31 @@ her sheep <code>still</code> graze above the sea</p>
     <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>author</span> <span class='o'>==</span> <span class='s'>"Darwin, Charles"</span><span class='o'>)</span>
 
 <span class='nv'>darwins_works</span>
+
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 40 x 8</span></span>
-<span class='c'>#&gt;    gutenberg_id title  author  gutenberg_autho… language gutenberg_books… rights</span>
-<span class='c'>#&gt;           <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>          944 </span><span style='color: #555555;'>"</span><span>The … Darwin…              485 en       Travel/Harvard … Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>         </span><span style='text-decoration: underline;'>1</span><span>227 </span><span style='color: #555555;'>"</span><span>The … Darwin…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span>         </span><span style='text-decoration: underline;'>1</span><span>228 </span><span style='color: #555555;'>"</span><span>On t… Darwin…              485 en       Harvard Classic… Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>The … Darwin…              485 en       Harvard Classic… Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span>         </span><span style='text-decoration: underline;'>2</span><span>010 </span><span style='color: #555555;'>"</span><span>The … Darwin…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span>         </span><span style='text-decoration: underline;'>2</span><span>087 </span><span style='color: #555555;'>"</span><span>Life… Darwin…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span>         </span><span style='text-decoration: underline;'>2</span><span>088 </span><span style='color: #555555;'>"</span><span>Life… Darwin…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>         </span><span style='text-decoration: underline;'>2</span><span>300 </span><span style='color: #555555;'>"</span><span>The … Darwin…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>         </span><span style='text-decoration: underline;'>2</span><span>355 </span><span style='color: #555555;'>"</span><span>The … Darwin…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>10</span><span>         </span><span style='text-decoration: underline;'>2</span><span>485 </span><span style='color: #555555;'>"</span><span>The … Darwin…              485 en       Botany           Publi…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 30 more rows, and 1 more variable: has_text &lt;lgl&gt;</span></span></code></pre>
+<span class='c'>#&gt;    gutenberg_id title author gutenberg_autho… language gutenberg_books… rights</span>
+<span class='c'>#&gt;           <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>          944 </span><span style='color: #555555;'>"</span><span>The… Darwi…              485 en       Travel/Harvard … Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span>         </span><span style='text-decoration: underline;'>1</span><span>227 </span><span style='color: #555555;'>"</span><span>The… Darwi…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span>         </span><span style='text-decoration: underline;'>1</span><span>228 </span><span style='color: #555555;'>"</span><span>On … Darwi…              485 en       Harvard Classic… Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>The… Darwi…              485 en       Harvard Classic… Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span>         </span><span style='text-decoration: underline;'>2</span><span>010 </span><span style='color: #555555;'>"</span><span>The… Darwi…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span>         </span><span style='text-decoration: underline;'>2</span><span>087 </span><span style='color: #555555;'>"</span><span>Lif… Darwi…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span>         </span><span style='text-decoration: underline;'>2</span><span>088 </span><span style='color: #555555;'>"</span><span>Lif… Darwi…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>         </span><span style='text-decoration: underline;'>2</span><span>300 </span><span style='color: #555555;'>"</span><span>The… Darwi…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>         </span><span style='text-decoration: underline;'>2</span><span>355 </span><span style='color: #555555;'>"</span><span>The… Darwi…              485 en       </span><span style='color: #BB0000;'>NA</span><span>               Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span><span>         </span><span style='text-decoration: underline;'>2</span><span>485 </span><span style='color: #555555;'>"</span><span>The… Darwi…              485 en       Botany           Publi…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 30 more rows, and 1 more variable: has_text </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span></span>
+</code></pre>
 </div>
 <p>An inspection of the results of <em>Origin of Species</em> on the website reveals that the latest edition is ID 2009. Let&rsquo;s grab it:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>OoS</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html'>gutenberg_download</a></span><span class='o'>(</span><span class='m'>2009</span><span class='o'>)</span>
+
 <span class='c'>#&gt; Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest</span>
-<span class='c'>#&gt; Using mirror http://aleph.gutenberg.org</span></code></pre>
+
+<span class='c'>#&gt; Using mirror http://aleph.gutenberg.org</span>
+</code></pre>
 </div>
 <p>In the breakout rooms, we&rsquo;ll work through inspecting the frequencies and creating a word cloud for this text.</p>
 <p>The <code>gutenbergr</code> package is extremely useful, but as long as you can read a document into R, you can then convert it to a data frame as we did in the very first example above, and then the tidytext pipeline will work. The <a href="https://cran.r-project.org/web/packages/readtext/vignettes/readtext_vignette.html" target="_blank" rel="noopener">readtext</a> package can import a variety of formats, including PDFs and Microsoft Word documents.</p>
@@ -1304,7 +1319,8 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>OoS</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html'>gutenberg_download</a></span><span class='o'>(</span><span class='m'>2009</span><span class='o'>)</span>
 
 <span class='nv'>OoS</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 21,462 x 2</span></span>
+
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 21,556 x 2</span></span>
 <span class='c'>#&gt;    gutenberg_id text                                                            </span>
 <span class='c'>#&gt;           <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                                                           </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>1228    1859, First Edition</span><span style='color: #555555;'>"</span><span>                                   </span></span>
@@ -1317,14 +1333,16 @@ Solution (click here)
 <span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>On the Origin of Species</span><span style='color: #555555;'>"</span><span>                                      </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>""</span><span>                                                              </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>10</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 </span><span style='color: #555555;'>"</span><span>BY MEANS OF NATURAL SELECTION,</span><span style='color: #555555;'>"</span><span>                                </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 21,452 more rows</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 21,546 more rows</span></span>
+</code></pre>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>OoS_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>OoS</span> <span class='o'>%&gt;%</span>
     <span class='nf'><a href='https://rdrr.io/pkg/tidytext/man/unnest_tokens.html'>unnest_tokens</a></span><span class='o'>(</span><span class='nv'>word</span>, <span class='nv'>text</span><span class='o'>)</span>
     
 <span class='nv'>OoS_tidy</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 209,050 x 2</span></span>
+
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 209,048 x 2</span></span>
 <span class='c'>#&gt;    gutenberg_id word   </span>
 <span class='c'>#&gt;           <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 1</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 1228   </span></span>
@@ -1337,7 +1355,8 @@ Solution (click here)
 <span class='c'>#&gt; <span style='color: #555555;'> 8</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 edition</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 9</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 2009   </span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>10</span><span>         </span><span style='text-decoration: underline;'>2</span><span>009 1872   </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 209,040 more rows</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 209,038 more rows</span></span>
+</code></pre>
 </div>
 <br>
 </details>
@@ -1363,20 +1382,22 @@ Solution (click here)
     <span class='nf'>count</span><span class='o'>(</span><span class='nv'>word</span>, sort <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 
 <span class='nv'>OoS_count</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 9,060 x 2</span></span>
+
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 9,233 x 2</span></span>
 <span class='c'>#&gt;    word      n</span>
 <span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span> the   </span><span style='text-decoration: underline;'>14</span><span>572</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span> the   </span><span style='text-decoration: underline;'>14</span><span>570</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 2</span><span> of    </span><span style='text-decoration: underline;'>10</span><span>438</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 3</span><span> and    </span><span style='text-decoration: underline;'>5</span><span>853</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span> in     </span><span style='text-decoration: underline;'>5</span><span>415</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span> in     </span><span style='text-decoration: underline;'>5</span><span>414</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 5</span><span> to     </span><span style='text-decoration: underline;'>4</span><span>753</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span> a      </span><span style='text-decoration: underline;'>3</span><span>377</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span> a      </span><span style='text-decoration: underline;'>3</span><span>368</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 7</span><span> that   </span><span style='text-decoration: underline;'>2</span><span>749</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> as     </span><span style='text-decoration: underline;'>2</span><span>230</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> have   </span><span style='text-decoration: underline;'>2</span><span>114</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>10</span><span> be     </span><span style='text-decoration: underline;'>2</span><span>099</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 9,050 more rows</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 9,223 more rows</span></span>
+</code></pre>
 </div>
 <br>
 </details>
@@ -1401,23 +1422,27 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>OoS_count</span> <span class='o'>&lt;-</span> <span class='nv'>OoS_tidy</span> <span class='o'>%&gt;%</span>
     <span class='nf'>count</span><span class='o'>(</span><span class='nv'>word</span>, sort <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
     <span class='nf'>anti_join</span><span class='o'>(</span><span class='nv'>stop_words</span><span class='o'>)</span>
+
 <span class='c'>#&gt; Joining, by = "word"</span>
 
+
 <span class='nv'>OoS_count</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 8,505 x 2</span></span>
+
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 8,678 x 2</span></span>
 <span class='c'>#&gt;    word          n</span>
 <span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span> species    </span><span style='text-decoration: underline;'>1</span><span>923</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span> species    </span><span style='text-decoration: underline;'>1</span><span>921</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 2</span><span> forms       565</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 3</span><span> selection   561</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 4</span><span> natural     535</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 5</span><span> varieties   486</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 6</span><span> plants      471</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 7</span><span> animals     436</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> distinct    359</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> distinct    357</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> life        350</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>10</span><span> nature      326</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 8,495 more rows</span></span></code></pre>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span><span> nature      325</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 8,668 more rows</span></span>
+</code></pre>
 </div>
 <br>
 </details>
@@ -1447,6 +1472,7 @@ Solution (click here)
     <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
     <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
     <span class='nf'>labs</span><span class='o'>(</span>y <span class='o'>=</span> <span class='kc'>NULL</span><span class='o'>)</span>
+
 </code></pre>
 <p><img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
@@ -1477,6 +1503,7 @@ Solution (click here)
           random.order<span class='o'>=</span><span class='kc'>FALSE</span>, 
           rot.per<span class='o'>=</span><span class='m'>0.35</span>, 
           colors<span class='o'>=</span><span class='nf'>brewer.pal</span><span class='o'>(</span><span class='m'>8</span>, <span class='s'>"Dark2"</span><span class='o'>)</span><span class='o'>)</span>
+
 </code></pre>
 <p><img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
