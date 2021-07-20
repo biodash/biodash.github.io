@@ -160,38 +160,38 @@ The individual values for [`now()`](http://lubridate.tidyverse.org/reference/now
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Find the current system date using function today ()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>today</a></span><span class='o'>(</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-04-02"</span>
+<span class='c'>#&gt; [1] "2021-07-19"</span>
 
 
 <span class='c'># Find the current system time using function now ()</span>
 <span class='nv'>Now</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>now</a></span><span class='o'>(</span><span class='o'>)</span>
 <span class='nv'>Now</span>
 
-<span class='c'>#&gt; [1] "2021-04-02 12:08:07 EDT"</span>
+<span class='c'>#&gt; [1] "2021-07-19 20:54:27 EDT"</span>
 
 
 <span class='c'># Extract the day of the month from an object Now using function mday ()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/day.html'>mday</a></span><span class='o'>(</span><span class='nv'>Now</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 2</span>
+<span class='c'>#&gt; [1] 19</span>
 
 
 <span class='c'># Extract the day of the week from an object Now using function wday()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/day.html'>wday</a></span><span class='o'>(</span><span class='nv'>Now</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 6</span>
+<span class='c'>#&gt; [1] 2</span>
 
 
 <span class='c'># Extract the week of the year from an object Now using function week ()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/week.html'>week</a></span><span class='o'>(</span><span class='nv'>Now</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 14</span>
+<span class='c'>#&gt; [1] 29</span>
 
 
 <span class='c'># Extract the month from an object Now using function month ()</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/month.html'>month</a></span><span class='o'>(</span><span class='nv'>Now</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 4</span>
+<span class='c'>#&gt; [1] 7</span>
 
 
 <span class='c'># Extract the year from an object Now using function year ()</span>
@@ -218,17 +218,17 @@ Instants can be *rounded* to a convenient unit using the functions [`ceiling_dat
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>ceiling_date</a></span><span class='o'>(</span><span class='nv'>Now</span>, unit <span class='o'>=</span> <span class='s'>"minute"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-04-02 12:09:00 EDT"</span>
+<span class='c'>#&gt; [1] "2021-07-19 20:55:00 EDT"</span>
 
 
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>round_date</a></span><span class='o'>(</span><span class='nv'>Now</span>, unit <span class='o'>=</span> <span class='s'>"minute"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-04-02 12:08:00 EDT"</span>
+<span class='c'>#&gt; [1] "2021-07-19 20:54:00 EDT"</span>
 
 
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>floor_date</a></span><span class='o'>(</span><span class='nv'>Now</span>, unit <span class='o'>=</span> <span class='s'>"minute"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "2021-04-02 12:08:00 EDT"</span>
+<span class='c'>#&gt; [1] "2021-07-19 20:54:00 EDT"</span>
 </code></pre>
 
 </div>
@@ -288,7 +288,7 @@ To see the complete list of all time zone names, use [`OlsonNames()`](https://rd
 <span class='nv'>x1b</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/force_tz.html'>force_tz</a></span><span class='o'>(</span><span class='nv'>x1</span>, tzone <span class='o'>=</span> <span class='s'>"Australia/Lord_Howe"</span><span class='o'>)</span>
 <span class='nv'>x1</span> <span class='o'>-</span> <span class='nv'>x1b</span>
 
-<span class='c'>#&gt; Time difference of 15 hours</span>
+<span class='c'>#&gt; Time difference of 14.5 hours</span>
 </code></pre>
 
 </div>
@@ -327,13 +327,13 @@ Functions for working with intervals include [`is.interval()`](http://lubridate.
 <span class='nv'>h_age</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>today</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>ymd</a></span><span class='o'>(</span><span class='m'>19841014</span><span class='o'>)</span>
 <span class='nv'>h_age</span>
 
-<span class='c'>#&gt; Time difference of 13319 days</span>
+<span class='c'>#&gt; Time difference of 13427 days</span>
 
 
 <span class='c'># Time difference in years</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/as.duration.html'>as.duration</a></span><span class='o'>(</span><span class='nv'>h_age</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "1150761600s (~36.47 years)"</span>
+<span class='c'>#&gt; [1] "1160092800s (~36.76 years)"</span>
 </code></pre>
 
 </div>
@@ -410,7 +410,7 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>Jane_age</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/now.html'>today</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/ymd.html'>mdy</a></span><span class='o'>(</span><span class='s'>"January 31st, 1992"</span><span class='o'>)</span>
 <span class='nf'><a href='http://lubridate.tidyverse.org/reference/as.duration.html'>as.duration</a></span><span class='o'>(</span><span class='nv'>Jane_age</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "920505600s (~29.17 years)"</span>
+<span class='c'>#&gt; [1] "929836800s (~29.46 years)"</span>
 </code></pre>
 
 </div>
@@ -474,7 +474,7 @@ Solution (click here)
 <span class='nv'>WSU_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='http://lubridate.tidyverse.org/reference/force_tz.html'>force_tz</a></span><span class='o'>(</span><span class='nv'>C_time</span>, tzone <span class='o'>=</span> <span class='s'>"W-SU"</span><span class='o'>)</span>
 <span class='nv'>WSU_time</span>
 
-<span class='c'>#&gt; [1] "2021-04-02 12:08:09 MSK"</span>
+<span class='c'>#&gt; [1] "2021-07-19 20:54:29 MSK"</span>
 
 
 <span class='c'># Calculate time difference</span>
@@ -484,7 +484,7 @@ Solution (click here)
 
 <span class='nv'>C_time</span>
 
-<span class='c'>#&gt; [1] "2021-04-02 12:08:09 EDT"</span>
+<span class='c'>#&gt; [1] "2021-07-19 20:54:29 EDT"</span>
 
 
 <span class='c'># Calculate time for WET time zone </span>
