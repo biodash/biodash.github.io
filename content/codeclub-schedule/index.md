@@ -10,7 +10,7 @@ toc: true
 
 **This fall, we will meet on Thursdays at 3 pm through Zoom. [Sign up](/codeclub-about/#sign-up) or [email Jelmer](mailto:poelstra.1@osu.edu) to get the Zoom link.**
 
-| Session | Date         | Presenter                  | Topic (+ link)                                     | Block                    |
+| Session | Date         | Presenter                  | Topic (+ link)                                     | Topic block                    |
 |---------|--------------|----------------------------|----------------------------------------------------|--------------------------|
 | **21**  | Aug 26 | Jelmer                     | **R basics -- part I**                                 | Back to basics in R      |
 | **22**  | Sep 2  | Mike S.                    | **R basics -- part II**                                | Back to basics in R      |
@@ -23,7 +23,7 @@ toc: true
 | **29**  | Oct 28 | Jessica                    | **Interactive plots with _Plotly_**                    | Plotting in R            |
 | **30**  | Nov 04 | Daniel Quiroz Moreno (HCS) | **Adding statistical results to plots <br> using _ggpubr_** | Plotting in R            |
 | **31**  | Nov 11 | Matthew Teegarden (FST)    | **Adventures with R Shiny**                            | Putting code to practice |
-| **32**  | Nov 18 | Julia Vrtilek (EEOB)       | **Analysis of bat social vocalizations <br> with R at OSC** | Putting code to practice |
+| **32**  | Nov 18 | Julia Vrtilek (EEOB)       | **Analysis of bat social vocalizations <br> with R at OSC** _(date tentative)_ | Putting code to practice |
 | **33**  | Dec 02 | *TBD*                      | _TBD_                                              | Putting code to practice |
 | **34**  | Dec 09 | *TBD*                      | _TBD_                                              | Putting code to practice |
 
