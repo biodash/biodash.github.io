@@ -10,9 +10,9 @@ toc: true
 
 <div class="alert alert-note">
 <div>
-<b>Code Club restarts for the fall '21 semester on Thursday August 26th --
-see the [schedule](codeclub-schedule).
-If you're interested in joining, please fill out the
+<b>Code Club restarts for the fall '21 semester on Thursday August 26th &ndash;
+see the <a href="/codeclub-schedule/">schedule</a>.
+If you're interested in joining us, please fill out the
 <a href="#sign-up">form at the bottom of this page!</a></b>
 </div>
 </div>
