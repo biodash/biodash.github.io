@@ -22,7 +22,7 @@ toc: true
 | **28**  | Oct 14 | Mike S.                    | **Faceting, animating, and combining plots**           | Plotting in R            |
 | **29**  | Oct 28 | Jessica                    | **Interactive plots with _Plotly_**                    | Plotting in R            |
 | **30**  | Nov 04 | Daniel Quiroz Moreno (HCS) | **Adding statistical results to plots <br> using _ggpubr_** | Plotting in R            |
-| **31**  | Nov 11 | Matthew Teegarden (FST)    | **Adventures with R Shiny**                            | Putting code to practice |
+| **31**  | Nov 11 | Matthew Teegarden (FST)    | **Shiny bright like a diamond: an intro to building interactive applications in R**                            | Putting code to practice |
 | **32**  | Nov 18 | Julia Vrtilek (EEOB)       | **Analysis of bat social vocalizations <br> with R at OSC** _(date tentative)_ | Putting code to practice |
 | **33**  | Dec 02 | *TBD*                      | _TBD_                                              | Putting code to practice |
 | **34**  | Dec 09 | *TBD*                      | _TBD_                                              | Putting code to practice |
