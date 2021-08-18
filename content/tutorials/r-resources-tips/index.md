@@ -1,33 +1,30 @@
 ---
+title: "R Resources and Tips"
 toc: true
+date: "2021-08-17"
 ---
 
-# Code Club: <br/> R -- Getting Started and Some Tips
+-----
 
-----
 <br>
 
-## New to R?
-If you are completely new to R, we recommend watching at least the first couple of
-videos from [Mike Sovic's Youtube playlist of short videos on R](https://www.youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe),
-and ideally all of them, prior to attending Code Club. Here is the first video:
+## R Resources
+
+- [Our own Mike Sovic's Youtube playlist of short videos on R](https://www.youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe):
 
 {{< youtube ByxF3xjN2JQ >}}
 
 <br>
 
-In case you want to do more self-study (note that this is *not* required/needed),
-here are some additional resources:
 - A useful and fun written tutorial is [R for cats](https://rforcats.net/).
-- For a more systematic and lengthy introduction to R, see 
-  [A Tutorial Introduction to R](https://kingaa.github.io/R_Tutorial/)
-  (this gets fairly advanced after section 9).
-- Excellent comprehensive introductions are the [R Basics](https://www.edx.org/course/data-science-r-basics)
-  and [Visualization](https://www.edx.org/course/data-science-visualization) classes by Rafael Irizarry
-  that can be freely accessed; you do have to create an account. 
 
-Also, don't hesitate to reach out to the [Code Club organizers](/codeclub-about/#organizers)
-if you have any questions! 
+- For a more systematic and lengthy introduction to R, see 
+  [A Tutorial Introduction to R](https://kingaa.github.io/R_Tutorial/).
+
+- Excellent comprehensive introductions are the [R Basics](https://www.edx.org/course/data-science-r-basics)
+  and [Visualization](https://www.edx.org/course/data-science-visualization) courses
+  by Rafael Irizarry that can be freely accessed;
+  you do have to create an account. 
 
 <br>
 
@@ -38,13 +35,14 @@ if you have any questions!
 ### Useful settings
 
 By default, R will try to save your "environment" (e.g., your loaded data, variables, etc)
-when you exit, and then reload everything the way it was upon restarting R. However, this is bad!
+when you exit, and then reload everything the way it was upon restarting R.
+However, doing so is not good practice!
 You should always be able to reproduce your environment given a set of commands
-saved in an R script or R Markdown document, whereas saving and reloading your environment
-encourages you to be sloppy about this.
+*saved in an R script or R Markdown document*,
+whereas saving and reloading your entire environment encourages you to be sloppy about this.
 
-To disable this in RStudio, go to `Tools` > `Global Options` > `General` and set the options
-as follows:
+To disable this behavior in RStudio,
+click `Tools` > `Global Options` > `General` and set the options as follows:
 
 {{< figure src="r_environment.png" width="500px" caption="Recommended R/RStudio settings" >}}
 
@@ -61,6 +59,7 @@ R --no-save --no-restore-data
 ### Installing R packages
 
 #### CRAN packages
+
 To install an R package that is available at [CRAN](https://cran.r-project.org/), the default R package repository,
 from within R (e.g. in the R console in RStudio), use the `install.packages()` function.
 
@@ -132,6 +131,8 @@ BiocManager::install("edgeR")    # Install the edgeR package from Bioconductor
 ```
 
 <br>
+
+----
 
 ### Updating R
 
