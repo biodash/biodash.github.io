@@ -2,7 +2,7 @@
 output: hugodown::md_document
 title: "Session 12: Vectorization and loops in R"
 subtitle: "Need for repeat."
-summary: "This is be the first of several sessions broadly about iterating in order to avoid copying-and-pasting of code, and today we will talk about vectorization and for loops."
+summary: "This will be the first of several sessions broadly about iterating in order to avoid copying-and-pasting of code, and today we will talk about vectorization and for loops."
 authors: [admin]
 tags: [codeclub, markdown, rmarkdown]
 date: 2021-03-01
@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 4974ead950d4d20e
+rmd_hash: 545e0b4b6999c1c5
 
 ---
 
@@ -31,8 +31,7 @@ rmd_hash: 4974ead950d4d20e
 
 ------------------------------------------------------------------------
 
-Setup
------
+## Setup
 
 #### New to Code Club?
 
@@ -56,8 +55,7 @@ Today, you will learn:
 
 ------------------------------------------------------------------------
 
-Introduction
-------------
+## Introduction
 
 ### Don't Repeat Yourself
 
@@ -79,15 +77,13 @@ Before we tackle loops we should take a step back and explore ***vectorization**
 
 ------------------------------------------------------------------------
 
-I: Vectorization
-----------------
+## I: Vectorization
 
 Let's say we have a *vector* (i.e., a collection of values) that consists of distances in miles:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_miles</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>24</span>, <span class='m'>81</span>, <span class='m'>48</span>, <span class='m'>29</span>, <span class='m'>177</span>, <span class='m'>175</span>, <span class='m'>20</span>, <span class='m'>11</span>, <span class='m'>62</span>, <span class='m'>156</span><span class='o'>)</span>
-</code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_miles</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>24</span>, <span class='m'>81</span>, <span class='m'>48</span>, <span class='m'>29</span>, <span class='m'>177</span>, <span class='m'>175</span>, <span class='m'>20</span>, <span class='m'>11</span>, <span class='m'>62</span>, <span class='m'>156</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -97,9 +93,7 @@ Of course, we can't science with miles, so we'll have to convert these distances
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_km</span> <span class='o'>&lt;-</span> <span class='nv'>dists_miles</span> <span class='o'>*</span> <span class='m'>1.61</span>
 <span class='nv'>dists_km</span>
-
-<span class='c'>#&gt;  [1]  38.64 130.41  77.28  46.69 284.97 281.75  32.20  17.71  99.82 251.16</span>
-</code></pre>
+<span class='c'>#&gt;  [1]  38.64 130.41  77.28  46.69 284.97 281.75  32.20  17.71  99.82 251.16</span></code></pre>
 
 </div>
 
@@ -120,8 +114,7 @@ Above, we saw an example of multiplying a vector by a single number. We can also
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_Mar4</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>17</span>, <span class='m'>93</span>, <span class='m'>56</span>, <span class='m'>19</span>, <span class='m'>175</span>, <span class='m'>40</span>, <span class='m'>69</span>, <span class='m'>267</span>, <span class='m'>4</span>, <span class='m'>91</span><span class='o'>)</span>
-<span class='nv'>dists_Mar5</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>87</span>, <span class='m'>143</span>, <span class='m'>103</span>, <span class='m'>223</span>, <span class='m'>106</span>, <span class='m'>18</span>, <span class='m'>87</span>, <span class='m'>72</span>, <span class='m'>59</span>, <span class='m'>5</span><span class='o'>)</span>
-</code></pre>
+<span class='nv'>dists_Mar5</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>87</span>, <span class='m'>143</span>, <span class='m'>103</span>, <span class='m'>223</span>, <span class='m'>106</span>, <span class='m'>18</span>, <span class='m'>87</span>, <span class='m'>72</span>, <span class='m'>59</span>, <span class='m'>5</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -130,9 +123,7 @@ To get the sum of these values at each position (index) of the two vectors (`17 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_Mar4</span> <span class='o'>+</span> <span class='nv'>dists_Mar5</span>
-
-<span class='c'>#&gt;  [1] 104 236 159 242 281  58 156 339  63  96</span>
-</code></pre>
+<span class='c'>#&gt;  [1] 104 236 159 242 281  58 156 339  63  96</span></code></pre>
 
 </div>
 
@@ -148,9 +139,7 @@ in the example below, we negate ***every other*** value in a vector:
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>17</span>, <span class='m'>93</span>, <span class='m'>56</span>, <span class='m'>19</span>, <span class='m'>175</span>, <span class='m'>40</span>, <span class='m'>69</span>, <span class='m'>267</span>, <span class='m'>4</span>, <span class='m'>91</span><span class='o'>)</span> <span class='o'>*</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
-
-<span class='c'>#&gt;  [1]   17  -93   56  -19  175  -40   69 -267    4  -91</span>
-</code></pre>
+<span class='c'>#&gt;  [1]   17  -93   56  -19  175  -40   69 -267    4  -91</span></code></pre>
 
 </div>
 
@@ -168,15 +157,13 @@ This also works for columns of a data frame, which we can extract using the `dat
 
 <span class='nv'>dist_df</span><span class='o'>$</span><span class='nv'>dists_mean</span> <span class='o'>=</span> <span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>$</span><span class='nv'>dists_Mar4</span> <span class='o'>+</span> <span class='nv'>dist_df</span><span class='o'>$</span><span class='nv'>dists_Mar5</span><span class='o'>)</span> <span class='o'>/</span> <span class='m'>2</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>)</span>
-
 <span class='c'>#&gt;   dists_Mar4 dists_Mar5 dists_mean</span>
 <span class='c'>#&gt; 1         17         87       52.0</span>
 <span class='c'>#&gt; 2         93        143      118.0</span>
 <span class='c'>#&gt; 3         56        103       79.5</span>
 <span class='c'>#&gt; 4         19        223      121.0</span>
 <span class='c'>#&gt; 5        175        106      140.5</span>
-<span class='c'>#&gt; 6         40         18       29.0</span>
-</code></pre>
+<span class='c'>#&gt; 6         40         18       29.0</span></code></pre>
 
 </div>
 
@@ -192,14 +179,12 @@ Furthermore, we can also perform vectorized operations on *entire matrices*. Wit
 <span class='c'>## and put those in a 5*5 matrix:</span>
 <span class='nv'>mat</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>100</span>, <span class='m'>25</span><span class='o'>)</span>, nrow <span class='o'>=</span> <span class='m'>5</span>, ncol <span class='o'>=</span> <span class='m'>5</span><span class='o'>)</span>
 <span class='nv'>mat</span>
-
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]   92   79   64    3   23</span>
-<span class='c'>#&gt; [2,]   33   14   11   22   80</span>
-<span class='c'>#&gt; [3,]   50   47   91   10   58</span>
-<span class='c'>#&gt; [4,]   43   59   32   60   16</span>
-<span class='c'>#&gt; [5,]   35   88   24   28   62</span>
-</code></pre>
+<span class='c'>#&gt; [1,]    2   55    8   28   24</span>
+<span class='c'>#&gt; [2,]   81   30   99   33   12</span>
+<span class='c'>#&gt; [3,]   22   67   41   54    6</span>
+<span class='c'>#&gt; [4,]   48   84   42   35  100</span>
+<span class='c'>#&gt; [5,]   57   47   93   10   31</span></code></pre>
 
 </div>
 
@@ -209,25 +194,21 @@ Furthermore, we can also perform vectorized operations on *entire matrices*. Wit
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>mat_more</span> <span class='o'>&lt;-</span> <span class='nv'>mat</span> <span class='o'>*</span> <span class='m'>10</span>
 <span class='nv'>mat_more</span>
-
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]  920  790  640   30  230</span>
-<span class='c'>#&gt; [2,]  330  140  110  220  800</span>
-<span class='c'>#&gt; [3,]  500  470  910  100  580</span>
-<span class='c'>#&gt; [4,]  430  590  320  600  160</span>
-<span class='c'>#&gt; [5,]  350  880  240  280  620</span>
-
+<span class='c'>#&gt; [1,]   20  550   80  280  240</span>
+<span class='c'>#&gt; [2,]  810  300  990  330  120</span>
+<span class='c'>#&gt; [3,]  220  670  410  540   60</span>
+<span class='c'>#&gt; [4,]  480  840  420  350 1000</span>
+<span class='c'>#&gt; [5,]  570  470  930  100  310</span>
 
 <span class='nv'>mat_squared</span> <span class='o'>&lt;-</span> <span class='nv'>mat</span> <span class='o'>*</span> <span class='nv'>mat</span>
 <span class='nv'>mat_squared</span>
-
-<span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,] 8464 6241 4096    9  529</span>
-<span class='c'>#&gt; [2,] 1089  196  121  484 6400</span>
-<span class='c'>#&gt; [3,] 2500 2209 8281  100 3364</span>
-<span class='c'>#&gt; [4,] 1849 3481 1024 3600  256</span>
-<span class='c'>#&gt; [5,] 1225 7744  576  784 3844</span>
-</code></pre>
+<span class='c'>#&gt;      [,1] [,2] [,3] [,4]  [,5]</span>
+<span class='c'>#&gt; [1,]    4 3025   64  784   576</span>
+<span class='c'>#&gt; [2,] 6561  900 9801 1089   144</span>
+<span class='c'>#&gt; [3,]  484 4489 1681 2916    36</span>
+<span class='c'>#&gt; [4,] 2304 7056 1764 1225 10000</span>
+<span class='c'>#&gt; [5,] 3249 2209 8649  100   961</span></code></pre>
 
 </div>
 
@@ -246,16 +227,12 @@ To do so, we make use of R's ability to index a vector with a logical vector:
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## "not_far_enough" will be a vector of logicals:</span>
 <span class='nv'>not_far_enough</span> <span class='o'>&lt;-</span> <span class='nv'>dists_Mar4</span> <span class='o'>&lt;</span> <span class='m'>50</span>
 <span class='nv'>not_far_enough</span>
-
 <span class='c'>#&gt;  [1]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE</span>
-
 
 <span class='c'>## When we index the original vector with a logical vector,</span>
 <span class='c'>## we get only those values for which "not_far_enough" is TRUE:</span>
 <span class='nv'>dists_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span>
-
-<span class='c'>#&gt; [1] 17 19 40  4</span>
-</code></pre>
+<span class='c'>#&gt; [1] 17 19 40  4</span></code></pre>
 
 </div>
 
@@ -265,9 +242,7 @@ With the following syntax, we can replace just those low distances in our origin
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dists_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nv'>dists_Mar4</span><span class='o'>[</span><span class='nv'>not_far_enough</span><span class='o'>]</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span>
 <span class='nv'>dists_Mar4</span>
-
-<span class='c'>#&gt;  [1] -17  93  56 -19 175 -40  69 267  -4  91</span>
-</code></pre>
+<span class='c'>#&gt;  [1] -17  93  56 -19 175 -40  69 267  -4  91</span></code></pre>
 
 </div>
 
@@ -280,9 +255,7 @@ In a simple case like this, we could also use the vectorized [`ifelse()`](https:
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span><span class='nv'>dists_Mar5</span> <span class='o'>&lt;</span> <span class='m'>50</span>, <span class='nv'>dists_Mar5</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span>, <span class='nv'>dists_Mar5</span><span class='o'>)</span>
-
-<span class='c'>#&gt;  [1]  87 143 103 223 106 -18  87  72  59  -5</span>
-</code></pre>
+<span class='c'>#&gt;  [1]  87 143 103 223 106 -18  87  72  59  -5</span></code></pre>
 
 </div>
 
@@ -294,8 +267,7 @@ In a simple case like this, we could also use the vectorized [`ifelse()`](https:
 
 ------------------------------------------------------------------------
 
-II: For loops
--------------
+## II: For loops
 
 While it is important to use vectorization whenever possible, it can only be applied to a specific set of problems. A more universal solution when you need to repeat operations is the `for` loop. `for` loops iterate over a collection of values, allowing you to perform one or more actions for each value in the collection.
 
@@ -317,12 +289,10 @@ The *variable name* is arbitrary, and the *collection* is whatever you want to l
 <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>one_number</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>  <span class='c'># We iterate over 1, 2, 3, 4</span>
   <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>one_number</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>             <span class='c'># Multiply each number by -1</span>
 <span class='o'>&#125;</span>
-
 <span class='c'>#&gt; [1] -1</span>
 <span class='c'>#&gt; [1] -2</span>
 <span class='c'>#&gt; [1] -3</span>
-<span class='c'>#&gt; [1] -4</span>
-</code></pre>
+<span class='c'>#&gt; [1] -4</span></code></pre>
 
 </div>
 
@@ -333,12 +303,10 @@ Note that we don't *have to* use the variable that we are looping over: we could
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>dummy</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='s'>"Yes!"</span><span class='o'>)</span>                     <span class='c'># Print "Yes!" in each of our four iterations </span>
 <span class='o'>&#125;</span>
-
 <span class='c'>#&gt; [1] "Yes!"</span>
 <span class='c'>#&gt; [1] "Yes!"</span>
 <span class='c'>#&gt; [1] "Yes!"</span>
-<span class='c'>#&gt; [1] "Yes!"</span>
-</code></pre>
+<span class='c'>#&gt; [1] "Yes!"</span></code></pre>
 
 </div>
 
@@ -350,23 +318,19 @@ As mentioned, the **variable name** that we assign is arbitrary: we could use an
 <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>positive_number</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>positive_number</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
 <span class='o'>&#125;</span>
-
 <span class='c'>#&gt; [1] -1</span>
 <span class='c'>#&gt; [1] -2</span>
 <span class='c'>#&gt; [1] -3</span>
 <span class='c'>#&gt; [1] -4</span>
-
 
 <span class='c'>## Example 2 with a different variable name: "i"</span>
 <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>i</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span>, <span class='m'>3</span>, <span class='m'>4</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>i</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
 <span class='o'>&#125;</span>
-
 <span class='c'>#&gt; [1] -1</span>
 <span class='c'>#&gt; [1] -2</span>
 <span class='c'>#&gt; [1] -3</span>
-<span class='c'>#&gt; [1] -4</span>
-</code></pre>
+<span class='c'>#&gt; [1] -4</span></code></pre>
 
 </div>
 
@@ -375,9 +339,7 @@ Note that the variable as it was last assigned in the loop does **persist in you
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>i</span>
-
-<span class='c'>#&gt; [1] 4</span>
-</code></pre>
+<span class='c'>#&gt; [1] 4</span></code></pre>
 
 </div>
 
@@ -386,12 +348,10 @@ The ***curly braces*** are not strictly necessary for one-liners like this:
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>i</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>4</span><span class='o'>)</span> <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>i</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
-
 <span class='c'>#&gt; [1] -1</span>
 <span class='c'>#&gt; [1] -2</span>
 <span class='c'>#&gt; [1] -3</span>
-<span class='c'>#&gt; [1] -4</span>
-</code></pre>
+<span class='c'>#&gt; [1] -4</span></code></pre>
 
 </div>
 
@@ -405,8 +365,7 @@ Note that we need the [`print()`](https://rdrr.io/r/base/print.html) function to
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>i</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>4</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nv'>i</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span>
-<span class='o'>&#125;</span>
-</code></pre>
+<span class='o'>&#125;</span></code></pre>
 
 </div>
 
@@ -429,9 +388,7 @@ For example, you might be inclined to do the following if you wanted to compute 
 <span class='o'>&#125;</span>
 
 <span class='nv'>column_medians</span>
-
-<span class='c'>#&gt; [1] 62.50 87.00 78.75</span>
-</code></pre>
+<span class='c'>#&gt; [1] 62.50 87.00 78.75</span></code></pre>
 
 </div>
 
@@ -446,8 +403,7 @@ Instead, you'll want to give the final vector (here, `column_medians`) the appro
 <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>column_number</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nv'>column_median</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='o'>(</span><span class='nv'>dist_df</span><span class='o'>[[</span><span class='nv'>column_number</span><span class='o'>]</span><span class='o'>]</span><span class='o'>)</span>
   <span class='nv'>column_medians</span><span class='o'>[</span><span class='nv'>column_number</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nv'>column_median</span>
-<span class='o'>&#125;</span>
-</code></pre>
+<span class='o'>&#125;</span></code></pre>
 
 </div>
 
@@ -469,8 +425,7 @@ Learning about how to create your own functions and/or to use functional program
 
 ------------------------------------------------------------------------
 
-Breakout rooms!
----------------
+## Breakout rooms!
 
 For the exercises, you can download an R Markdown file with some code to get set up (I recommend coding in that document to get a nice overview of the maps that you will make):
 
@@ -478,8 +433,7 @@ For the exercises, you can download an R Markdown file with some code to get set
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S12'</span><span class='o'>)</span>
 <span class='nv'>todays_rmd</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/12_loops/exercises.Rmd'</span>
-<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_rmd</span>, destfile <span class='o'>=</span> <span class='s'>'S12/exercises.Rmd'</span><span class='o'>)</span>
-</code></pre>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_rmd</span>, destfile <span class='o'>=</span> <span class='s'>'S12/exercises.Rmd'</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -490,8 +444,7 @@ The following code is already in your R Markdown file, which will download and r
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Download the file with bird data:</span>
 <span class='nv'>birds_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_sample_error.tsv'</span>
 <span class='nv'>birds_file</span> <span class='o'>&lt;-</span> <span class='s'>'backyard-birds_sample_error.tsv'</span>
-<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span>
-</code></pre>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>birds_url</span>, destfile <span class='o'>=</span> <span class='nv'>birds_file</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -502,7 +455,7 @@ The following code is already in your R Markdown file, which will download and r
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Load the tidyverse:</span>
-<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 
 <span class='c'>## Read the file with bird data:</span>
 <span class='nv'>birds</span> <span class='o'>&lt;-</span> <span class='nf'>read_tsv</span><span class='o'>(</span><span class='nv'>birds_file</span><span class='o'>)</span>
@@ -510,8 +463,7 @@ The following code is already in your R Markdown file, which will download and r
 <span class='c'>## Load the maps package and get the state map:</span>
 <span class='c'># install.packages('maps')   # first install if necessary</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'>maps</span><span class='o'>)</span>
-<span class='nv'>states</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"state"</span><span class='o'>)</span>
-</code></pre>
+<span class='nv'>states</span> <span class='o'>&lt;-</span> <span class='nf'>map_data</span><span class='o'>(</span><span class='s'>"state"</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -536,7 +488,6 @@ Last week, we learned about making maps. If you attended one of the first few Co
              color <span class='o'>=</span> <span class='s'>"green4"</span>, alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span> <span class='o'>+</span>       <span class='c'># Green points, somewhat transparent</span>
   <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>                                <span class='c'># Fix projection</span>
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>'Carolina Chickadee'</span><span class='o'>)</span>
-
 </code></pre>
 <img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" />
 
@@ -557,7 +508,9 @@ Try to fix the coordinates using vectorized operations, and recreate the map to 
 -   Start with the **latitude**, which is wrong for all points.
 
 <details>
-<summary> Hints (click here) </summary>
+<summary>
+Hints (click here)
+</summary>
 <p>
 
 -   You'll need to modify the `caro_chickadee` data frame, while you can keep the plotting code exactly the same.
@@ -572,8 +525,11 @@ Try to fix the coordinates using vectorized operations, and recreate the map to 
 <br>
 
 <details>
+<summary>
+Solution (click here)
+</summary>
 
-<summary> Solution (click here) </summary> <br>
+<br>
 
 First we fix the latitude, which was simply negated:
 
@@ -585,8 +541,7 @@ First we fix the latitude, which was simply negated:
 <span class='c'># caro_chickadee[['lat']] &lt;- -caro_chickadee[['lat']]</span>
 
 <span class='c'>## Or a tidyverse way of doing this:</span>
-<span class='c'># caro_chickadee &lt;- caro_chickadee %&gt;% mutate(lat = -lat)</span>
-</code></pre>
+<span class='c'># caro_chickadee &lt;- caro_chickadee %&gt;% mutate(lat = -lat)</span></code></pre>
 
 </div>
 
@@ -602,7 +557,6 @@ Create the first map with the same code as the example:
              color <span class='o'>=</span> <span class='s'>"green4"</span>, alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>'Carolina Chickadee'</span><span class='o'>)</span>
-
 </code></pre>
 <img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" />
 
@@ -616,7 +570,9 @@ Create the first map with the same code as the example:
 -   Once you have fixed the latitude, you should notice that *for one state*, there is a problem with the **longitude** (the offset is 10 decimal degrees).
 
 <details>
-<summary> Hints (click here) </summary>
+<summary>
+Hints (click here)
+</summary>
 <p>
 
 -   The displaced state is North Carolina.
@@ -626,7 +582,7 @@ Create the first map with the same code as the example:
 -   It may help to first create a logical vector indicating whether for each row in the `caro_chickadee` data frame, `stateProvincefor` equals "North Carolina".
 
 -   Your final map will look nicer if you get rid of the plotting canvas by adding  
-    <code>+ theme\_void()</code> to the code for the plot.
+    <code>+ theme_void()</code> to the code for the plot.
 
 </p>
 </details>
@@ -634,8 +590,11 @@ Create the first map with the same code as the example:
 <br>
 
 <details>
+<summary>
+Solution (click here)
+</summary>
 
-<summary> Solution (click here) </summary> <br>
+<br>
 
 It turns out that North Carolina's chickadees are above the Atlantic. Let's perform a rescue operation by fixing the longitudes, which are offset by 10 degrees, **just for North Carolina**:
 
@@ -654,8 +613,7 @@ It turns out that North Carolina's chickadees are above the Atlantic. Let's perf
 
 <span class='c'>## Or with mutate and ifelse:</span>
 <span class='c'># caro_chickadee %&gt;%</span>
-<span class='c'>#   mutate(long = ifelse(stateProvince == "North Carolina", long - 10, long))</span>
-</code></pre>
+<span class='c'>#   mutate(long = ifelse(stateProvince == "North Carolina", long - 10, long))</span></code></pre>
 
 </div>
 
@@ -672,7 +630,6 @@ And we create the final map:
   <span class='nf'>coord_fixed</span><span class='o'>(</span><span class='m'>1.3</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>'Carolina Chickadee'</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme_void</span><span class='o'>(</span><span class='o'>)</span>
-
 </code></pre>
 <img src="figs/unnamed-chunk-28-1.png" width="700px" style="display: block; margin: auto;" />
 
@@ -698,7 +655,9 @@ Find the 10 most commonly observed bird species in the data set, and save their 
 Feel free to check out the solution if you're not sure how, because the focus here is on the next step: trying to create a loop.
 
 <details>
-<summary> Solution (click here) </summary>
+<summary>
+Solution (click here)
+</summary>
 <p>
 
 <div class="highlight">
@@ -706,8 +665,7 @@ Feel free to check out the solution if you're not sure how, because the focus he
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>top10</span> <span class='o'>&lt;-</span> <span class='nv'>birds</span> <span class='o'>%&gt;%</span>
   <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species_en</span>, sort <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='o'>%&gt;%</span>  <span class='c'># Produces a sorted count table for "species_en"</span>
   <span class='nf'>pull</span><span class='o'>(</span><span class='nv'>species_en</span><span class='o'>)</span> <span class='o'>%&gt;%</span>                <span class='c'># Extracts the "species_en" column</span>
-  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span>n <span class='o'>=</span> <span class='m'>10</span><span class='o'>)</span>                        <span class='c'># Take the top 10</span>
-</code></pre>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span>n <span class='o'>=</span> <span class='m'>10</span><span class='o'>)</span>                        <span class='c'># Take the top 10</span></code></pre>
 
 </div>
 
@@ -720,7 +678,9 @@ Next, loop over the top-10 species to produce a plot for each one of them.
 Start with the code for the Carolina Chickadee, including the subsetting operation, and modify that.
 
 <details>
-<summary> Hints (click here) </summary>
+<summary>
+Hints (click here)
+</summary>
 <p>
 
 -   In the subsetting operation where you select data for the focal species, replace "Carolina Chickadee" with whatever you name the variable (indicating an individual species) that you loop over.
@@ -735,8 +695,11 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
 <br>
 
 <details>
+<summary>
+Solution (click here)
+</summary>
 
-<summary>Solution (click here)</summary> <br>
+<br>
 
 <div class="highlight">
 
@@ -758,7 +721,6 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
   <span class='nf'>theme_void</span><span class='o'>(</span><span class='o'>)</span>
 <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>p</span><span class='o'>)</span>
 <span class='o'>&#125;</span>
-
 </code></pre>
 <img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-2.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-3.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-4.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-5.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-6.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-7.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-8.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-9.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-30-10.png" width="700px" style="display: block; margin: auto;" />
 
@@ -782,8 +744,7 @@ For instance, we may want to check in a script whether a certain directory (fold
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>if</span> <span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.exists</a></span><span class='o'>(</span><span class='s'>'path/to/my/dir'</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='kr'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='o'>(</span><span class='s'>"Oh my, the output directory doesn't exist yet!"</span><span class='o'>)</span>
   <span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'path/to/my/dir'</span><span class='o'>)</span>
-<span class='o'>&#125;</span>
-</code></pre>
+<span class='o'>&#125;</span></code></pre>
 
 </div>
 
@@ -798,11 +759,9 @@ Inside the parentheses `()` after `if` should be a statement that evaluates to e
     <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>one_number</span><span class='o'>)</span>
   <span class='o'>&#125;</span>
 <span class='o'>&#125;</span>
-
 <span class='c'>#&gt; [1] 8</span>
 <span class='c'>#&gt; [1] 9</span>
-<span class='c'>#&gt; [1] 10</span>
-</code></pre>
+<span class='c'>#&gt; [1] 10</span></code></pre>
 
 </div>
 
@@ -819,8 +778,11 @@ First, select the the top 50 most observed bird species, just like you did in ex
 Then, use an `if` statement to create plots only for those top-50 birds that have *not* been seen in Ohio.
 
 <details>
+<summary>
+Solution (click here)
+</summary>
 
-<summary> Solution (click here) </summary> <br>
+<br>
 
 -   Select the top-50 birds:
 
@@ -829,8 +791,7 @@ Then, use an `if` statement to create plots only for those top-50 birds that hav
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>all_species</span> <span class='o'>&lt;-</span> <span class='nv'>birds</span> <span class='o'>%&gt;%</span>
   <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species_en</span>, sort <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>pull</span><span class='o'>(</span><span class='nv'>species_en</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span>n <span class='o'>=</span> <span class='m'>50</span><span class='o'>)</span>
-</code></pre>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span>n <span class='o'>=</span> <span class='m'>50</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -862,7 +823,6 @@ Then, use an `if` statement to create plots only for those top-50 birds that hav
     <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>p</span><span class='o'>)</span>
     <span class='o'>&#125;</span>
 <span class='o'>&#125;</span>
-
 </code></pre>
 <img src="figs/unnamed-chunk-34-1.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-34-2.png" width="700px" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-34-3.png" width="700px" style="display: block; margin: auto;" />
 
@@ -879,8 +839,7 @@ Then, use an `if` statement to create plots only for those top-50 birds that hav
 
 ------------------------------------------------------------------------
 
-Going further
--------------
+## Going further
 
 <div class="alert alert-note">
 
@@ -897,8 +856,7 @@ Extract a column *as a vector*:
 <span class='nv'>birds</span><span class='o'>[[</span><span class='s'>'lat'</span><span class='o'>]</span><span class='o'>]</span>   <span class='c'># Equivalent, $ notation is shorthand</span>
 
 <span class='c'>## By index (column number):</span>
-<span class='nv'>birds</span><span class='o'>[[</span><span class='m'>8</span><span class='o'>]</span><span class='o'>]</span>
-</code></pre>
+<span class='nv'>birds</span><span class='o'>[[</span><span class='m'>8</span><span class='o'>]</span><span class='o'>]</span></code></pre>
 
 </div>
 
@@ -914,7 +872,6 @@ with a leading comma (`[, column]`) meaning all rows:
 <span class='c'>## By index (column numbers):</span>
 <span class='nv'>birds</span><span class='o'>[</span>, <span class='m'>8</span><span class='o'>]</span>       <span class='c'># dataframe[row_number, column_number]</span>
 <span class='nv'>birds</span><span class='o'>[</span>, <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>8</span>, <span class='m'>9</span><span class='o'>)</span><span class='o'>]</span>
-
 </code></pre>
 
 </div>
@@ -924,8 +881,7 @@ Subset rows by a condition, with a trailing comma (`[row, ]`) meaning all column
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>lat</span> <span class='o'>&gt;</span> <span class='m'>25</span>, <span class='o'>]</span>
-<span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>species_en</span> <span class='o'>==</span> <span class='s'>'Carolina Chickadee'</span>, <span class='o'>]</span>
-</code></pre>
+<span class='nv'>birds</span><span class='o'>[</span><span class='nv'>birds</span><span class='o'>$</span><span class='nv'>species_en</span> <span class='o'>==</span> <span class='s'>'Carolina Chickadee'</span>, <span class='o'>]</span></code></pre>
 
 </div>
 
@@ -949,9 +905,7 @@ However, an alternative is [`seq_along()`](https://rdrr.io/r/base/seq.html), whi
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>birds</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>'titmouse'</span>, <span class='s'>'chickadee'</span>, <span class='s'>'cardinal'</span><span class='o'>)</span>
 <span class='nf'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='o'>(</span><span class='nv'>birds</span><span class='o'>)</span>
-
-<span class='c'>#&gt; [1] 1 2 3</span>
-</code></pre>
+<span class='c'>#&gt; [1] 1 2 3</span></code></pre>
 
 </div>
 
