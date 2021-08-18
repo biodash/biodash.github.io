@@ -839,16 +839,13 @@ Solution
 &lt;h2 id=&#34;i-vectorization&#34;&gt;I: Vectorization&lt;/h2&gt;
 &lt;p&gt;Let&amp;rsquo;s say we have a &lt;em&gt;vector&lt;/em&gt; (i.e., a collection of values) that consists of distances in miles:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dists_miles&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;24&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;81&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;48&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;29&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;177&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;175&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;20&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;11&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;62&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;156&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dists_miles&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;24&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;81&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;48&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;29&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;177&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;175&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;20&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;11&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;62&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;156&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Of course, we can&amp;rsquo;t science with miles, so we&amp;rsquo;ll have to convert these distances to kilometers by multiplying each value in the vector by 1.61. You may or may not know that this can be done &lt;em&gt;really easily&lt;/em&gt; in R:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dists_km&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;dists_miles&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1.61&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;dists_km&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  38.64 130.41  77.28  46.69 284.97 281.75  32.20  17.71  99.82 251.16&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  38.64 130.41  77.28  46.69 284.97 281.75  32.20  17.71  99.82 251.16&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;What is happening here is called a &lt;em&gt;&lt;strong&gt;vectorized operation&lt;/strong&gt;&lt;/em&gt;: &lt;code&gt;1.61&lt;/code&gt; is automatically recycled as many times as needed to be multiplied with &lt;em&gt;each individual value&lt;/em&gt; in the &lt;code&gt;dist_miles&lt;/code&gt; vector. This is a pretty unique and very useful feature of R!&lt;/p&gt;
 &lt;p&gt;In many other languages, we would need a &lt;em&gt;&lt;strong&gt;loop&lt;/strong&gt;&lt;/em&gt; or a similar construct to iterate over each value in the vector and multiply by 1.61. In fact, under the hood, R &lt;em&gt;also&lt;/em&gt; uses a loop to do this! So does it even make a difference? Yes &amp;ndash; the advantages of using vectorization in R are:&lt;/p&gt;
@@ -865,15 +862,12 @@ Solution
 &lt;p&gt;Above, we saw an example of multiplying a vector by a single number. We can also use vectorized operations when both objects contain multiple items. For instance, say we have a vector with corresponding values for two dates:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;17&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;93&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;56&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;19&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;175&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;69&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;267&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;91&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;87&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;143&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;103&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;223&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;106&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;18&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;87&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;72&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;59&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;87&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;143&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;103&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;223&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;106&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;18&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;87&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;72&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;59&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;To get the sum of these values at each position (index) of the two vectors (&lt;code&gt;17 + 87&lt;/code&gt;, &lt;code&gt;93 + 143&lt;/code&gt;, etc.), we can simply do the following:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 104 236 159 242 281  58 156 339  63  96&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 104 236 159 242 281  58 156 339  63  96&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;br&gt;
 &lt;div class=&#34;alert alert-note&#34;&gt;
@@ -882,9 +876,7 @@ Solution
 in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&gt;&lt;/em&gt; value in a vector:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;17&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;93&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;56&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;19&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;175&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;69&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;267&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;91&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]   17  -93   56  -19  175  -40   69 -267    4  -91&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]   17  -93   56  -19  175  -40   69 -267    4  -91&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -895,15 +887,13 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 
 &lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dists_mean&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;
 &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;   dists_Mar4 dists_Mar5 dists_mean&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; 1         17         87       52.0&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; 2         93        143      118.0&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; 3         56        103       79.5&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; 4         19        223      121.0&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; 5        175        106      140.5&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6         40         18       29.0&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6         40         18       29.0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;br&gt;
 &lt;h3 id=&#34;vectorization-with-matrices&#34;&gt;Vectorization with matrices&lt;/h3&gt;
@@ -913,38 +903,32 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;span class=&#39;c&#39;&gt;## and put those in a 5*5 matrix:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/matrix.html&#39;&gt;matrix&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/sample.html&#39;&gt;sample&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;25&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, nrow &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;, ncol &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;      [,1] [,2] [,3] [,4] [,5]&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,]   92   79   64    3   23&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,]   33   14   11   22   80&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]   50   47   91   10   58&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,]   43   59   32   60   16&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,]   35   88   24   28   62&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,]    2   55    8   28   24&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,]   81   30   99   33   12&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]   22   67   41   54    6&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,]   48   84   42   35  100&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,]   57   47   93   10   31&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;&amp;hellip;we could multiple all values by 10 or get the square of each value simply as follows:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;mat_more&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;mat_more&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;      [,1] [,2] [,3] [,4] [,5]&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,]  920  790  640   30  230&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,]  330  140  110  220  800&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]  500  470  910  100  580&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,]  430  590  320  600  160&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,]  350  880  240  280  620&lt;/span&gt;
-
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,]   20  550   80  280  240&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,]  810  300  990  330  120&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]  220  670  410  540   60&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,]  480  840  420  350 1000&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,]  570  470  930  100  310&lt;/span&gt;
 
 &lt;span class=&#39;nv&#39;&gt;mat_squared&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;mat_squared&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;      [,1] [,2] [,3] [,4] [,5]&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,] 8464 6241 4096    9  529&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,] 1089  196  121  484 6400&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,] 2500 2209 8281  100 3364&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,] 1849 3481 1024 3600  256&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,] 1225 7744  576  784 3844&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;      [,1] [,2] [,3] [,4]  [,5]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,]    4 3025   64  784   576&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,] 6561  900 9801 1089   144&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]  484 4489 1681 2916    36&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,] 2304 7056 1764 1225 10000&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,] 3249 2209 8649  100   961&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;br&gt;
 &lt;h3 id=&#34;vectorization-with-indices&#34;&gt;Vectorization with indices&lt;/h3&gt;
@@ -955,33 +939,25 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## &#34;not_far_enough&#34; will be a vector of logicals:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;not_far_enough&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;50&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;not_far_enough&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE&lt;/span&gt;
-
 
 &lt;span class=&#39;c&#39;&gt;## When we index the original vector with a logical vector,&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;## we get only those values for which &#34;not_far_enough&#34; is TRUE:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;not_far_enough&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 17 19 40  4&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 17 19 40  4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;With the following syntax, we can replace just those low distances in our original vector:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;not_far_enough&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;not_far_enough&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;dists_Mar4&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] -17  93  56 -19 175 -40  69 267  -4  91&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] -17  93  56 -19 175 -40  69 267  -4  91&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;div class=&#34;alert alert-note&#34;&gt;
 &lt;div&gt;
 &lt;p&gt;In a simple case like this, we could also use the vectorized &lt;a href=&#34;https://rdrr.io/r/base/ifelse.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ifelse()&lt;/code&gt;&lt;/a&gt; function:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/ifelse.html&#39;&gt;ifelse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;50&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;dists_Mar5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  87 143 103 223 106 -18  87  72  59  -5&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  87 143 103 223 106 -18  87  72  59  -5&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1000,24 +976,20 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;  &lt;span class=&#39;c&#39;&gt;# We iterate over 1, 2, 3, 4&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;             &lt;span class=&#39;c&#39;&gt;# Multiply each number by -1&lt;/span&gt;
 &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -1&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -3&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Note that we don&amp;rsquo;t &lt;em&gt;have to&lt;/em&gt; use the variable that we are looping over: we could also use a &lt;code&gt;for&lt;/code&gt; loop as a roundabout way to simply repeat something as many times as there are values in our collection:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dummy&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Yes!&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;                     &lt;span class=&#39;c&#39;&gt;# Print &#34;Yes!&#34; in each of our four iterations &lt;/span&gt;
 &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Yes!&#34;&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Yes!&#34;&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Yes!&#34;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Yes!&#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Yes!&#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;As mentioned, the &lt;strong&gt;variable name&lt;/strong&gt; that we assign is arbitrary: we could use anything, as long as we reference it with the same name inside the loop:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -1025,40 +997,32 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;positive_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;positive_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -1&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -3&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;
-
 
 &lt;span class=&#39;c&#39;&gt;## Example 2 with a different variable name: &#34;i&#34;&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -1&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -3&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Note that the variable as it was last assigned in the loop does &lt;strong&gt;persist in your environment&lt;/strong&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 4&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;The &lt;em&gt;&lt;strong&gt;curly braces&lt;/strong&gt;&lt;/em&gt; are not strictly necessary for one-liners like this:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -1&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -3&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;br&gt;
 &lt;h3 id=&#34;for-loop-output&#34;&gt;&lt;code&gt;for&lt;/code&gt; loop output&lt;/h3&gt;
@@ -1066,8 +1030,7 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
   &lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;
-&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Similarly, if we want the output to be saved in an object of some kind, we need to explicitly make an assignment in each iteration of the loop. &lt;em&gt;This is where we need to start paying attention to the design of our loop.&lt;/em&gt; Unless computational speed is of no concern at all, you should &lt;strong&gt;avoid growing an object in each iteration of the loop&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;For example, you might be inclined to do the following if you wanted to compute the median of each column in a data frame:&lt;/p&gt;
@@ -1085,9 +1048,7 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
 
 &lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 62.50 87.00 78.75&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 62.50 87.00 78.75&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Similarly, you may be tempted to add a column (with &lt;a href=&#34;https://rdrr.io/r/base/cbind.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;cbind()&lt;/code&gt;&lt;/a&gt;) or a row (with &lt;a href=&#34;https://rdrr.io/r/base/cbind.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rbind()&lt;/code&gt;&lt;/a&gt;) to a data frame in each iteration of the loop. However, the problem with these approaches is that &lt;strong&gt;R has to create an entirely new object in each iteration of the loop&lt;/strong&gt;, because the object&amp;rsquo;s memory requirements keep increasing.&lt;/p&gt;
 &lt;p&gt;Instead, you&amp;rsquo;ll want to give the final vector (here, &lt;code&gt;column_medians&lt;/code&gt;) the appropriate size before you start the loop:&lt;/p&gt;
@@ -1097,8 +1058,7 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/nrow.html&#39;&gt;ncol&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
   &lt;span class=&#39;nv&#39;&gt;column_median&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/median.html&#39;&gt;median&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dist_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
   &lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;column_median&lt;/span&gt;
-&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Note that for very small problems, such as the example above, there will not be a noticeable difference in computation time between pre-assigning a properly sized object versus growing an object inside the loop. However, it is still good to get into the habit of pre-assigning an object of the right size.&lt;/p&gt;
 &lt;br&gt;
@@ -1117,22 +1077,20 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/files2.html&#39;&gt;dir.create&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#39;S12&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;todays_rmd&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/12_loops/exercises.Rmd&#39;&lt;/span&gt;
-&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;todays_rmd&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;S12/exercises.Rmd&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;todays_rmd&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;S12/exercises.Rmd&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;The following code is already in your R Markdown file, which will download and read the bird dataset and the necessary packages:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Download the file with bird data:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;birds_url&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/birds/backyard-birds_sample_error.tsv&#39;&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;birds_file&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;backyard-birds_sample_error.tsv&#39;&lt;/span&gt;
-&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;birds_url&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;birds_file&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;birds_url&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;birds_file&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;/div&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Load the tidyverse:&lt;/span&gt;
-&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;## Read the file with bird data:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;read_tsv&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;birds_file&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
@@ -1140,8 +1098,7 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;span class=&#39;c&#39;&gt;## Load the maps package and get the state map:&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;# install.packages(&#39;maps&#39;)   # first install if necessary&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;maps&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;nv&#39;&gt;states&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;map_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;state&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;nv&#39;&gt;states&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;map_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;state&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Last week, we learned about making maps. If you attended one of the first few Code Club sessions, you&amp;rsquo;ll recall our &lt;strong&gt;Great Backyard Birdcount data set&lt;/strong&gt;. Here, we&amp;rsquo;ll use a country-wide random subset of this data (the full file is over 4 GB) to see where Carolina Chickadees were seen:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -1162,7 +1119,6 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
              color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;green4&#34;&lt;/span&gt;, alpha &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;       &lt;span class=&#39;c&#39;&gt;# Green points, somewhat transparent&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;coord_fixed&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1.3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;                                &lt;span class=&#39;c&#39;&gt;# Fix projection&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;Carolina Chickadee&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-24-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -1176,7 +1132,9 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;li&gt;Start with the &lt;strong&gt;latitude&lt;/strong&gt;, which is wrong for all points.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;details&gt;
-&lt;summary&gt; Hints (click here) &lt;/summary&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
 &lt;p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -1193,7 +1151,10 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;/details&gt;
 &lt;br&gt;
 &lt;details&gt;
-&lt;summary&gt; Solution (click here) &lt;/summary&gt; &lt;br&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
 &lt;p&gt;First we fix the latitude, which was simply negated:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;caro_chickadee&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;lat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;caro_chickadee&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;lat&lt;/span&gt;
@@ -1202,8 +1163,7 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;span class=&#39;c&#39;&gt;# caro_chickadee[[&#39;lat&#39;]] &amp;lt;- -caro_chickadee[[&#39;lat&#39;]]&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;## Or a tidyverse way of doing this:&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;# caro_chickadee &amp;lt;- caro_chickadee %&amp;gt;% mutate(lat = -lat)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;# caro_chickadee &amp;lt;- caro_chickadee %&amp;gt;% mutate(lat = -lat)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Create the first map with the same code as the example:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -1215,7 +1175,6 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
              color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;green4&#34;&lt;/span&gt;, alpha &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;coord_fixed&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1.3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;Carolina Chickadee&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-26-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -1226,7 +1185,9 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;li&gt;Once you have fixed the latitude, you should notice that &lt;em&gt;for one state&lt;/em&gt;, there is a problem with the &lt;strong&gt;longitude&lt;/strong&gt; (the offset is 10 decimal degrees).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;details&gt;
-&lt;summary&gt; Hints (click here) &lt;/summary&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
 &lt;p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -1247,7 +1208,10 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;/details&gt;
 &lt;br&gt;
 &lt;details&gt;
-&lt;summary&gt; Solution (click here) &lt;/summary&gt; &lt;br&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
 &lt;p&gt;It turns out that North Carolina&amp;rsquo;s chickadees are above the Atlantic. Let&amp;rsquo;s perform a rescue operation by fixing the longitudes, which are offset by 10 degrees, &lt;strong&gt;just for North Carolina&lt;/strong&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Get a vector of logicals, indicating which rows are from North Carolina:&lt;/span&gt;
@@ -1263,8 +1227,7 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 
 &lt;span class=&#39;c&#39;&gt;## Or with mutate and ifelse:&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;# caro_chickadee %&amp;gt;%&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#   mutate(long = ifelse(stateProvince == &#34;North Carolina&#34;, long - 10, long))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#   mutate(long = ifelse(stateProvince == &#34;North Carolina&#34;, long - 10, long))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;And we create the final map:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -1277,7 +1240,6 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
   &lt;span class=&#39;nf&#39;&gt;coord_fixed&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1.3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;Carolina Chickadee&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;theme_void&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-28-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -1292,14 +1254,15 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;p&gt;Find the 10 most commonly observed bird species in the data set, and save their English names (found in the &lt;code&gt;species_en&lt;/code&gt; column) in a vector.&lt;/p&gt;
 &lt;p&gt;Feel free to check out the solution if you&amp;rsquo;re not sure how, because the focus here is on the next step: trying to create a loop.&lt;/p&gt;
 &lt;details&gt;
-&lt;summary&gt; Solution (click here) &lt;/summary&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
 &lt;p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;top10&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;count&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species_en&lt;/span&gt;, sort &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;  &lt;span class=&#39;c&#39;&gt;# Produces a sorted count table for &#34;species_en&#34;&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;pull&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species_en&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;                &lt;span class=&#39;c&#39;&gt;# Extracts the &#34;species_en&#34; column&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;                        &lt;span class=&#39;c&#39;&gt;# Take the top 10&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;                        &lt;span class=&#39;c&#39;&gt;# Take the top 10&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/p&gt;
 &lt;/details&gt;
@@ -1307,7 +1270,9 @@ in the example below, we negate &lt;em&gt;&lt;strong&gt;every other&lt;/strong&g
 &lt;p&gt;Next, loop over the top-10 species to produce a plot for each one of them.&lt;br&gt;
 Start with the code for the Carolina Chickadee, including the subsetting operation, and modify that.&lt;/p&gt;
 &lt;details&gt;
-&lt;summary&gt; Hints (click here) &lt;/summary&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
 &lt;p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -1322,7 +1287,10 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
 &lt;/details&gt;
 &lt;br&gt;
 &lt;details&gt;
-&lt;summary&gt;Solution (click here)&lt;/summary&gt; &lt;br&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_species&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;top10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
 
@@ -1342,7 +1310,6 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
   &lt;span class=&#39;nf&#39;&gt;theme_void&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-30-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-30-2.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-30-3.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-30-4.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-30-5.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-30-6.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-30-7.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-30-8.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-30-9.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-30-10.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -1357,8 +1324,7 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/files2.html&#39;&gt;dir.exists&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#39;path/to/my/dir&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
   &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/warning.html&#39;&gt;warning&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Oh my, the output directory doesn&#39;t exist yet!&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/files2.html&#39;&gt;dir.create&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#39;path/to/my/dir&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Inside the parentheses &lt;code&gt;()&lt;/code&gt; after &lt;code&gt;if&lt;/code&gt; should be a statement that evaluates to either &lt;code&gt;TRUE&lt;/code&gt; or &lt;code&gt;FALSE&lt;/code&gt; (&lt;a href=&#34;https://rdrr.io/r/base/files2.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dir.exists()&lt;/code&gt;&lt;/a&gt; will be &lt;code&gt;TRUE&lt;/code&gt; if the directory exists, and &lt;code&gt;FALSE&lt;/code&gt; if it does not). If it is &lt;code&gt;TRUE&lt;/code&gt;, whatever is inside the curly braces &lt;code&gt;{}&lt;/code&gt; will be executed, and if it is &lt;code&gt;FALSE&lt;/code&gt;, what is inside the curly braces will be ignored.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;if&lt;/code&gt; statements are commonly combined with &lt;code&gt;for&lt;/code&gt; loops: we may want to only execute the functions in our loop for items in our collection that fulfill a certain condition:&lt;/p&gt;
@@ -1368,11 +1334,9 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
     &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
   &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
 &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 8&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 9&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;In the example above, &lt;code&gt;one number &amp;gt; 7&lt;/code&gt; will only be &lt;code&gt;TRUE&lt;/code&gt; for numbers larger than 7. This example is quite contrived, as it would have been easier (and faster!) to remove these items from the vector before the loop, but it hopefully gets the point across of how an &lt;code&gt;if&lt;/code&gt; statement works.&lt;/p&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
@@ -1381,7 +1345,10 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
 &lt;p&gt;First, select the the top 50 most observed bird species, just like you did in exercise 2.&lt;/p&gt;
 &lt;p&gt;Then, use an &lt;code&gt;if&lt;/code&gt; statement to create plots only for those top-50 birds that have &lt;em&gt;not&lt;/em&gt; been seen in Ohio.&lt;/p&gt;
 &lt;details&gt;
-&lt;summary&gt; Solution (click here) &lt;/summary&gt; &lt;br&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
 &lt;ul&gt;
 &lt;li&gt;Select the top-50 birds:&lt;/li&gt;
 &lt;/ul&gt;
@@ -1389,8 +1356,7 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;all_species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;count&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species_en&lt;/span&gt;, sort &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;pull&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species_en&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;50&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;50&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;ul&gt;
 &lt;li&gt;Loop over the species:&lt;/li&gt;
@@ -1420,7 +1386,6 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
     &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
     &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
 &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
-
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-34-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-34-2.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-34-3.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -1441,8 +1406,7 @@ Start with the code for the Carolina Chickadee, including the subsetting operati
 &lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#39;lat&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Equivalent, $ notation is shorthand&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;## By index (column number):&lt;/span&gt;
-&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Extract one or more columns &lt;em&gt;as a data frame&lt;/em&gt; using &lt;code&gt;[row, column]&lt;/code&gt; notation,&lt;br&gt;
 with a leading comma (&lt;code&gt;[, column]&lt;/code&gt;) meaning all rows:&lt;/p&gt;
@@ -1454,14 +1418,12 @@ with a leading comma (&lt;code&gt;[, column]&lt;/code&gt;) meaning all rows:&lt;
 &lt;span class=&#39;c&#39;&gt;## By index (column numbers):&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;       &lt;span class=&#39;c&#39;&gt;# dataframe[row_number, column_number]&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;, &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;9&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
-
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Subset rows by a condition, with a trailing comma (&lt;code&gt;[row, ]&lt;/code&gt;) meaning all columns:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;lat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;25&lt;/span&gt;, &lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
-&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species_en&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;Carolina Chickadee&#39;&lt;/span&gt;, &lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species_en&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;Carolina Chickadee&#39;&lt;/span&gt;, &lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1474,9 +1436,7 @@ with a leading comma (&lt;code&gt;[, column]&lt;/code&gt;) meaning all rows:&lt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#39;titmouse&#39;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;chickadee&#39;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#39;cardinal&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/seq.html&#39;&gt;seq_along&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;birds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1 2 3&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1 2 3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;The advantage of &lt;a href=&#34;https://rdrr.io/r/base/seq.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;seq_along()&lt;/code&gt;&lt;/a&gt; is thtat it will behave better when your vector accidentally has length 0 (because &lt;code&gt;1:length()&lt;/code&gt; will have &lt;code&gt;1&lt;/code&gt; and &lt;code&gt;0&lt;/code&gt; when the length is 0, and you&amp;rsquo;ll get odd-seeming errors).&lt;/p&gt;
 &lt;/div&gt;
