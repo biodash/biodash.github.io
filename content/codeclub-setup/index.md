@@ -15,24 +15,25 @@ Additional setup instructions for individual sessions will appear in the posts f
 ## Summary
 
 - You can work in your browser at the [Ohio Supercomputer Center (OSC)](/codeclub-setup/#osc)
-  or or you can work [with local software installations](/codeclub-setup/#local).
+  or you can work [with local software installations](/codeclub-setup/#local).
 
 - **If you plan to work at OSC**:
   
-  - Sign up at OSC if you don't have an account yet.
+  - You should receive an email from OSC that you have been added to the Code Club
+    OSC project. Follow the instructions from that email, including to sign up
+    for an OSC account itself if you don't have one.
   
-  - You should have received 
-  
-  - Test if you can start an RStudio Server session at OSC OnDemand.
+  - Test if you can start an RStudio Server session at OSC OnDemand,
+    and optionally test if you can load the *tidyverse* package.
 
 - **If you plan to work with local software installations**:
   
-  - [Install R](/codeclub-setup/#install-r) and [install RStudio](/codeclub-setup/#install-rstudio). <br>
-    (If you already have R but you version is below `R 3.6`, then [update R](/codeclub-novice/#updating-r).)
+  - Install R and RStudio. <br>
+    (If you already have R but a version below `R 3.6`, then [update R](/tutorials/r-resources-tips/#updating-r).)
   
-  - [Install the *tidyverse* and test if you can load it](/codeclub-setup/#install-tidy).
+  - Optionally, install the *tidyverse* package and test if you can load it.
   
-- **Questions?** Don't hesitate to contact [Jelmer](mailto:poelstra.1@osu.edu) or
+- **Run into issues or have questions?** Don't hesitate to contact [Jelmer](mailto:poelstra.1@osu.edu) or
   one of the other organizers. You can also join the Code Club Zoom call
   15 minutes early, and one or more of the organizers will be on there already.
 
@@ -44,12 +45,12 @@ Additional setup instructions for individual sessions will appear in the posts f
 
 All Code Club participants will get access to the [Ohio Supercomputer Center (OSC)](http://osc.edu)
 Classroom Project for Code Club (`PAS1838`).
-This way, you can code in, for example, RStudio from your browser rather than with a local installation.
-This is a good option if you prefer not to install anything locally or if you run
+This way, you can code in RStudio from your browser rather than with a local installation.
+This is a good option if you prefer not to install anything or if you run
 into problems during installations.
 
-**After signing up for Code Club, you should have received an email from OSC
-that you were added to the OSC project.**
+**After signing up for Code Club, you should receive an email from OSC
+that you have been added to the Code Club OSC project.**
 
 - *If you already have an OSC account*,
   you shouldn't need to do anything to gain access,
@@ -78,42 +79,43 @@ that you were added to the OSC project.**
   
   </details>
 
-### Run RStudio Server {#osc-run-rstudio}
+### Run RStudio Server from the OSC website {#osc-run-rstudio}
 
 [OSC OnDemand](https://ondemand.osc.edu/) lets you access OSC resources through your
 browser and run applications like RStudio.
 It has a separate access point, <https://class.osc.edu/>,
 for "classroom projects" such as this one. 
 
-- To get started, go to <https://class.osc.edu/> and log in with your OSC username and password.
+1. To get started, go to <https://class.osc.edu/> and log in with your OSC username and password.
 
-- Then, click on `Apps` in the blue top bar, and select `RStudio Server: Form`:
+2. Click on `Apps` in the blue top bar, and select `RStudio Server: Form`, as shown below:
   
   {{< figure src="osc_rstudio-app.png" width="600px" caption="" >}}
 
-- Now, you're on a page from which you can launch an RStudio server that will run on an OSC cluster.
-  As shown below, make sure that "Code Club" is selected under `Class Materials`,
-  and change the select `Number of hours` to 2. Then click `Launch`.
+3. Now, you're on a page from which you can launch an RStudio server that will run on an OSC cluster.
+   As shown below, make sure that "Code Club" is selected under `Class Materials`,
+   and change the select `Number of hours` to 2. Then click `Launch`.
 
-  {{< figure src="osc_rstudio-form.png" width="500px" caption="" >}}
+   {{< figure src="osc_rstudio-form.png" width="500px" caption="" >}}
   
-- Now, you should see a box like this:
+4. You should see a box like this:
 
-  {{< figure src="osc_queued.png" width="600px" caption="" >}}
+   {{< figure src="osc_queued.png" width="600px" caption="" >}}
 
-- Your job usually starts running within seconds, causing the color of the top
-  bar to switch from blue ("Queued") to green ("Running"):
-  {{< figure src="osc_running.png" width="600px" caption="" >}}
+5. Your job usually starts running within seconds, and the color of the top
+   bar will then switch from blue ("Queued") to green ("Running"):
+   
+   {{< figure src="osc_running.png" width="600px" caption="" >}}
 
-- Click `Connect to RStudio Server` at the bottom of the box,
-  and an RStudio Server instance will open.
+6. Click `Connect to RStudio Server` at the bottom of the box,
+   and an RStudio Server instance will open.
 
-### Test whether you can load the *tidyverse*
+### Test whether you can load the *tidyverse* (optional)
 
-Several commonly used packages will be automatically available to you,
+Several commonly used packages will be automatically available to you at OSC,
 and that should include the *tidyverse*.
 Test whether you can load the *tidyverse* by running `library(tidyverse)`,
-and checking whether you get output similar to what is shown below:
+and check whether you get output similar to what is shown below:
 
 ```r
 library(tidyverse)
@@ -156,9 +158,9 @@ at his channel [The Data Point](https://www.youtube.com/channel/UC2dB6jDTbqzlTM6
 ### Already have R installed?
 
 - Please check your version of R, and update if it is below version `3.6`.  
-  [See this page for instructions.](/codeclub-novice/#updating-r)
+  [See this page for instructions.](/tutorials/r-resources-tips/#updating-r)
 
-- Make sure you have [installed the *tidyverse*](/codeclub-setup/#install-r).
+- Make sure you have installed the *tidyverse* package.
   
 </div>
 </div>
@@ -183,7 +185,7 @@ the de facto standard for working with R and is very useful.
 To install RStudio, go to the [RStudio download page](https://rstudio.com/products/rstudio/download/#download)
 and download and run the installer file for your operating system. 
 
-### Install the *tidyverse* {#install-tidy}
+### Install the *tidyverse* (optional) {#install-tidy}
 
 To install or update the *tidyverse*, which is a collection of useful R packages,
 copy the following command into an R console, and press Enter:
@@ -192,9 +194,9 @@ copy the following command into an R console, and press Enter:
 install.packages("tidyverse")
 ```
 
-### Test whether you can load the *tidyverse* {#test-tidy}
+### Test whether you can load the *tidyverse* (optional) {#test-tidy} 
 
-When you issue the command `library(tidyverse)`,
+When you issue the command `library(tidyverse)` in your R console inside RStudio,
 you should get output similar to what is shown below:
 
 ```r
@@ -221,12 +223,12 @@ You can also send the [organizers of Code Club](https://biodash.github.io/codecl
 
 ## More info {#more}
 
-Please see the **[Getting started with R](/codeclub-novice/)** page for:
+Please see our **[R Resources and Tips](/tutorials/r-resources-tips/)** page for:
 
-- [Resources to get started with R](/codeclub-novice/#new-to-r)
-- [Useful R and RStudio settings](/codeclub-novice/#useful-settings)
-- [The basics of installing packages in R](/codeclub-novice/#installing-r-packages)
-- [Instructions for updating R](/codeclub-novice/#updating-r)
+- [Resources to get started with R](/tutorials/r-resources-tips/#r-resources)
+- [Useful R and RStudio settings](/tutorials/r-resources-tips/#useful-settings)
+- [The basics of installing packages in R](/tutorials/r-resources-tips/#installing-r-packages)
+- [Instructions for updating R](/tutorials/r-resources-tips/#updating-r)
 
 
 
