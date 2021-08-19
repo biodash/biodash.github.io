@@ -14,7 +14,7 @@ This fall, we will meet on Thursdays at 3 pm through Zoom.
 
 | Session | Date         | Presenter                  | Topic (+ link)                                     | Topic block                    |
 |---------|--------------|----------------------------|----------------------------------------------------|--------------------------|
-| **21**  | Aug 26 | Jelmer                     | [**R basics -- part I**](/codeclub/S02E01_r-intro-part1/) | Back to basics in R      |
+| **21**  | Aug 26 | Jelmer                     | **R basics -- part I** | Back to basics in R      |
 | **22**  | Sep 2  | Mike S.                    | **R basics -- part II**                                | Back to basics in R      |
 | **23**  | Sep 9  | Michael B.                 | **R Markdown**                                         | Back to basics in R      |
 | **24**  | Sep 16 | Jessica                    | **Tidyverse intro -- part I**                         | Back to basics in R      |
