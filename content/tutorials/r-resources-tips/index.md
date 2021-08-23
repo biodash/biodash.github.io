@@ -10,21 +10,34 @@ date: "2021-08-17"
 
 ## R Resources
 
+- [RStudio cheatsheets](https://www.rstudio.com/resources/cheatsheets/)
+
 - [Our own Mike Sovic's Youtube playlist of short videos on R](https://www.youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe):
 
 {{< youtube ByxF3xjN2JQ >}}
 
 <br>
 
-- A useful and fun written tutorial is [R for cats](https://rforcats.net/).
+- Also for getting started with R, a useful and fun written tutorial is [R for cats](https://rforcats.net/).
 
 - For a more systematic and lengthy introduction to R, see 
   [A Tutorial Introduction to R](https://kingaa.github.io/R_Tutorial/).
 
-- Excellent comprehensive introductions are the [R Basics](https://www.edx.org/course/data-science-r-basics)
+- The Carpentries have a number of great lessons on R, such as:
+
+  - [Data Analysis and Visualization in R for Ecologists](https://datacarpentry.org/R-ecology-lesson),
+    which includes data wrangling with *tidyverse* packages and plotting with *ggplot2*.
+    
+  - [R for Reproducible Scientific Analysis](https://swcarpentry.github.io/r-novice-gapminder/)
+
+- If you prefer material structured as a course, excellent free ones include
+  the [R Basics](https://www.edx.org/course/data-science-r-basics)
   and [Visualization](https://www.edx.org/course/data-science-visualization) courses
-  by Rafael Irizarry that can be freely accessed;
-  you do have to create an account. 
+  by Rafael Irizarry (you do have to create an EdX account for access).
+  
+- If you prefer a book, we would recommend Wickham & Grolemund's
+  "R for Data Science", which is freely available on the web in a really nice format
+  [here](https://r4ds.had.co.nz/).
 
 <br>
 
@@ -44,7 +57,7 @@ whereas saving and reloading your entire environment encourages you to be sloppy
 To disable this behavior in RStudio,
 click `Tools` > `Global Options` > `General` and set the options as follows:
 
-{{< figure src="r_environment.png" width="500px" caption="Recommended R/RStudio settings" >}}
+{{< figure src="r_environment.png" width="400px" caption="Recommended R/RStudio settings" >}}
 
 To start R in the same way from the command line:
 
