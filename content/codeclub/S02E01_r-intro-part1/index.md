@@ -8,7 +8,7 @@ date: "2021-08-17"
 lastmod: "2021-08-17"
 output: hugodown::md_document
 toc: true
-rmd_hash: 285c0b3f3aeb071c
+rmd_hash: e9f22a1eee1a03ea
 
 ---
 
@@ -80,11 +80,11 @@ Each session consists of an instructional part where you can either listen or co
 
 #### Otherwise
 
--   We need your feedback!
+-   We need your feedback! Always feel free to email one of the organizers, and for suggestions for a topic to cover in a future Code Club, you can fill out [this form](/codeclub-suggest/)!
 
--   Show Code Club menu and how to get around on the BioDASH website.
+-   I will quickly show the Code Club menu and BioDASH website during the session.
 
--   Polling question: are you working at OSC or locally?
+-   Zoom polling question: are you working at OSC or locally?
 
 <br>
 
@@ -104,7 +104,7 @@ R is a programming language that is most well-known for being excellent for *sta
 
 -   R is more than a platform to perform analysis and create figures. **R Markdown** combines R with *Markdown*, a very simple text markup language, to produce *analysis reports* that integrate code, results, and text, and to create *slide decks*, *data dashboards*, *websites*, and even *books*! In the third session of Code Club, Michael Broe will introduce R Markdown.
 
--   While not as versatile outside of data-focused topics as a language like Python, R can be used a general programming language, for instance to **automate tasks** such as large-scale file renaming.
+-   While not as versatile outside of data-focused topics as a language like Python, R can be used as a general programming language, for instance to **automate tasks** such as large-scale file renaming.
 
 Finally, R:
 
@@ -289,7 +289,7 @@ Instead of a number, what if we try to have R print some *text* back to us?
 
 <br>
 
-Whenever you type a *character string* (text), R expects to find an *object* with that name. When no object exists with that name, R will throw an error. We will learn some of the basics of objects in section 5 of today's session.
+Whenever you type a *character string* (text), R expects to find an *object* with that name (we will get to what exactly objects are in a little bit!). When no object exists with that name, R will throw an error. We will learn some of the basics of objects in section 5 of today's session.
 
 </details>
 
@@ -376,6 +376,8 @@ For example:
 
 Type that into your script, and use <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to send it to the console.
 
+The objects you create get added to your "workspace" or "environment." RStudio shows this in the **Environment tab** in the topright panel -- check to see if `wingspan_in` is indeed there.
+
 After you've assigned a number to an object, you can use it in other calculations:
 
 <div class="highlight">
@@ -418,12 +420,6 @@ You will make things easier for yourself by naming objects in a consistent way, 
 </div>
 
 </div>
-
-<br>
-
-#### Objects in your workspace
-
-The objects you create get added to your "workspace" or "environment." RStudio shows this in the **Environment panel.** (You can also list all objects in your workspace with [`ls()`](https://rdrr.io/r/base/ls.html).)
 
 <br>
 
@@ -487,7 +483,7 @@ What do you think the value of `y` will be after executing the following lines i
 
 <br>
 
-Objects don't get linked to each other, so if you change one objects, it won't affect the values of other objects that were defined earlier.
+Objects don't get linked to each other, so if you change one object, it won't affect the values of other objects that were defined earlier.
 
 **Therefore, `y` will continue to be `100`.**
 
@@ -523,7 +519,7 @@ In section 3, you might have noticed that we got a different error when typing o
 
 Reproduce these errors for yourself: in Rstudio's editor pane, type these or equivalent error-generating examples in a script saved with a `.R` extension, and send them to the console.
 
-Why is error in the second case different, and what does it mean?
+Why is the error in the second case different, and what does it mean?
 
 <details>
 <summary>
@@ -568,11 +564,11 @@ When typing a single unquoted word which is not an existing object, R will look 
 
 When typing multiple unquoted words with a space between them, regardless of whether those are existing objects, R will notice a *syntax ("R grammar") error* before it even gets around to checking objects.
 
-The problem is that you be referring to two objects sequentially and without any mathematical operator in between them, or some other syntax to "join" them. In R, that's not valid syntax. (You may think it would perhaps simply try to print both objects, but this is not the case.)
+The problem is that you are referring to two objects sequentially and without any mathematical operator in between them, or some other syntax to "join" them. In R, that's not valid syntax. (You may think it would perhaps simply try to print both objects, but this is not the case.)
 
 </details>
 
-A general lesson here is that you should always pay attention to the error message that your are getting. While the language may seem terse and odd at first, it usually holds important clues as to what is going wrong exactly.
+A general lesson here is that you should always pay attention to the details of the error messages that you get. While the language may seem terse and odd at first, it usually holds important clues as to what is going wrong exactly.
 
 </div>
 
