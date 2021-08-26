@@ -8,7 +8,7 @@ date: "2021-08-17"
 lastmod: "2021-08-17"
 output: hugodown::md_document
 toc: true
-rmd_hash: 5f3079bdd3b078ad
+rmd_hash: 0b4af7d80e612a8c
 
 ---
 
@@ -111,19 +111,23 @@ Finally, R:
 
 -   Has a large and welcoming user community.
 
+<br>
+
+------------------------------------------------------------------------
+
 ## 2 -- Exploring RStudio
 
 R simply provides a "*console*" (command-line interface) where you can type your commands.
 
 However, because you want to save your commands in scripts and see the graphics that you produce, it is more effective to work in an environment that provides all of this side-by-side. We will use RStudio, an excellent *graphical environment* ("Integrated Development Environment", IDE) for R.
 
-*I will now demonstrate how to start an RStudio Server session from the Ohio Supercomputer Center's website following the steps from our [Code Club Computer Setup page](/codeclub-setup/#osc-run-rstudio).*
+*I will now demonstrate how to start an RStudio Server session from the Ohio Supercomputer Center's website following the steps from our [Code Club Computer Setup page](/codeclub-setup/#osc-run-rstudio).* *If you have RStudio installed on your own computer, start it now, and otherwise, follow along with me to run RStudio in your browser.*
 
 Once you have a running instance of RStudio, **create a new R script** by clicking `File` \> `New File` \> `R Script`.
 
 Now, you should see all 4 "panes" that the RStudio window is divided into:
 
--   *Top-left*: The **Editor** for your scripts and documents (*hidden when you don't have a file open*).
+-   *Top-left*: The **Editor** for your scripts and other documents (*hidden when no file is open*).
 -   *Bottom-left*: The **R Console** to interactively run your code (+ a tab with a **Terminal**).
 -   *Top-right*: Your **Environment** with R objects you have created (+ several other tabs).
 -   *Bottom-left*: Tabs for **Files**, **Plots**, **Help**, and others.
@@ -132,7 +136,7 @@ Now, you should see all 4 "panes" that the RStudio window is divided into:
 <img src=img/rstudio-layout-ed.png width="95%">
 </p>
 
-So, in RStudio, we have a single interface to write code in text files or directly in the console, visualize plots, navigate the files found on our computer, and inspect the data and other objects we work with.
+So, in RStudio, we have a single interface to write code in text files or directly in the console, visualize plots, navigate the files found on our computer, and inspect the data we are working with.
 
 RStudio has a lot of useful features and during the next few sessions of Code Club, we will introduce some tips and tricks for working with it.
 
@@ -206,7 +210,7 @@ Note that pressing the *up arrow* key will put your previous command back on the
 
 #### Experimenting a bit...
 
-What if we add spaces around our valies?
+What if we add spaces around our values?
 
 <div class="highlight">
 
@@ -249,6 +253,7 @@ R is waiting for you to finish the command, since you typed an incomplete comman
 
 While it was obvious here that our command was incomplete, you will often type incomplete commands without realizing you did so. Just remember that when you see the [`+`](https://rdrr.io/r/base/Arithmetic.html) prompt, *something* has to be missing in your command: most commonly, you'll have forgotten a closing parenthesis `)` or you accidentally opened up an unwanted opening parenthesis `(`.
 
+If you want to *abort* completing the incomplete command, you can press <kbd>Esc</kbd>.
 </details>
 
 <br>
@@ -266,7 +271,7 @@ R will print the number back to us! It turns out that the default, implicit acti
 
 <br>
 
-Instead of a number, what if we try to have R print some *text* back to us?
+Instead of a number, what if we try to have R print some *text* (a character string) back to us?
 
 <div class="highlight">
 
@@ -291,7 +296,7 @@ Instead of a number, what if we try to have R print some *text* back to us?
 
 <br>
 
-Whenever you type a *character string* (text), R expects to find an *object* with that name (we will get to what exactly objects are in a little bit!). When no object exists with that name, R will throw an error. We will learn some of the basics of objects in section 5 of today's session.
+Whenever you type a character string, R expects to find an *object* with that name (we will get to what exactly objects are in a little bit!). When no object exists with that name, R will throw an error. We will learn some of the basics of objects in section 5 of today's session.
 
 </details>
 
@@ -383,13 +388,15 @@ After you've assigned a number to an object, you can use it in other calculation
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>wingspan_inch</span> <span class='o'>&lt;-</span> <span class='nv'>wingspan_cm</span> <span class='o'>/</span> <span class='nv'>conversion</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>wingspan_inch</span> <span class='o'>&lt;-</span> <span class='nv'>wingspan_cm</span> <span class='o'>/</span> <span class='nv'>conversion</span>
+<span class='nv'>wingspan_inch</span>
+<span class='c'>#&gt; [1] 79.92126</span></code></pre>
 
 </div>
 
-More generally speaking, the object name that you provide is substituted with its contents by R, so it is a *pointer* (reference) to the underlying value.
+More generally speaking, the object name that you provide is substituted with its contents by R, so the object name is just a *reference* to the underlying value.
 
-While our objects so far contained just a single number, objects can get much bigger, and more complex too. R distinguishes between different *types* of objects as we will see next week.
+Our objects so far contained just a single number and we may have also called them *variables*. Object is the more general name that encompasses R items of any size or complexity. As we see will see next week, R distinguishes between different *types* of objects.
 
 <br>
 
@@ -399,13 +406,13 @@ Objects can be given any name such as `x`, `current_temperature`, or `subject_id
 
 Some pointers on object names:
 
--   Because R is case sensitive, `weight` is different from `Weight`.
+-   Because R is case sensitive, `wingspan_inch` is different from `Wingspan_inch`.
 
 -   An object name cannot contain a space, so for readability, separate words using:
 
-    -   **`_`** -- e.g. `total_weight` (this is called "snake case", which we will tend to use in Code Club instructional materials)
-    -   **`.`** -- e.g. `total.weight`
-    -   *capitalization* -- e.g. `totalWeight` or `TotalWeight` ("camel case")
+    -   **`_`** -- e.g. `wingspan_inch` (this is called "snake case", which we will tend to use in Code Club instructional materials)
+    -   **`.`** -- e.g. `wingspan.inch`
+    -   *capitalization* -- e.g. `wingspanInch` or `WingspanInch` ("camel case")
 
 -   Object names can contain but cannot start with a number (`2x` is not valid, but `x2` is)[^2].
 
