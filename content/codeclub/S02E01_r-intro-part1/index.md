@@ -8,7 +8,7 @@ date: "2021-08-17"
 lastmod: "2021-08-17"
 output: hugodown::md_document
 toc: true
-rmd_hash: e9f22a1eee1a03ea
+rmd_hash: 5f3079bdd3b078ad
 
 ---
 
@@ -18,7 +18,6 @@ rmd_hash: e9f22a1eee1a03ea
 
 > -   Learn what Code Club is all about
 > -   Get some basic familiarity with R and RStudio
-> -   Learn why and how to use RStudio Projects
 > -   Understand a bit about R *objects* and how to use them
 
 <br>
@@ -39,13 +38,13 @@ In case you run into issues, contact [Jelmer](mailto:poelstra.1@osu.edu) or for 
 
 ## (Re)Introducing Code Club
 
-OSU Code Club is a regularly occurring, interactive, online gathering to improve coding skills.
+OSU Code Club is a regularly occurring online gathering to improve coding skills, now in its second year.
 
-Some of the general ideas behind Code Club:
-
--   Ongoing exposure and practice is a good way to learn.
+This Code Club was inspired by a paper in PLoS Computational Biology (["Ten simple rules to increase computational skills among biologists with Code Clubs"](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008119)), and here are some of the underlying ideas:
 
 -   Coding is best learned by doing, so Code Club is interactive and hands-on.
+
+-   *Ongoing* exposure and practice also helps when learning.
 
 -   We aim to keep it informal and maybe even fun.
 
@@ -61,7 +60,7 @@ Some of the general ideas behind Code Club:
 
 #### Session structure
 
-Each session consists of an instructional part where you can either listen or code along, some exercises in breakout rooms with 3-4 people, and exercise recaps with the entire group.
+Each session consists of an instructional part where you can code along or listen, some exercises in breakout rooms with 3-4 people, and exercise recaps with the entire group.
 
 #### Zoom guidelines
 
@@ -102,7 +101,7 @@ R is a programming language that is most well-known for being excellent for *sta
 
 -   R is highly **interdisciplinary** and can be used with many different kinds of data. To just name two examples, R has a very strong ecosystem for bioinformatics analysis ("Bioconductor" project), and can be used to create maps and perform GIS analyses.
 
--   R is more than a platform to perform analysis and create figures. **R Markdown** combines R with *Markdown*, a very simple text markup language, to produce *analysis reports* that integrate code, results, and text, and to create *slide decks*, *data dashboards*, *websites*, and even *books*! In the third session of Code Club, Michael Broe will introduce R Markdown.
+-   R is more than a platform to perform analysis and create figures. **R Markdown** combines R with a simple text markup language to produce *analysis reports* that integrate code, results, and text, and to create *slide decks*, *data dashboards*, *websites*, and even *books*! In the third session of Code Club, Michael Broe will talk more about R Markdown.
 
 -   While not as versatile outside of data-focused topics as a language like Python, R can be used as a general programming language, for instance to **automate tasks** such as large-scale file renaming.
 
@@ -114,22 +113,26 @@ Finally, R:
 
 ## 2 -- Exploring RStudio
 
-R simply provides a "*console*" where you can type your commands. However, because you want to save your sequences of commands in scripts, and regularly examine output such as graphics, it is more effective to work in an environment that provides all of this side-by-side.
+R simply provides a "*console*" (command-line interface) where you can type your commands.
 
-We will use RStudio, an excellent "Integrated Development Environment" (IDE) for R. In RStudio, we have a *single interface* to write code in text files or directly in the console, visualize plots, navigate the files found on our computer, and inspect the data and other objects we work with.
+However, because you want to save your commands in scripts and see the graphics that you produce, it is more effective to work in an environment that provides all of this side-by-side. We will use RStudio, an excellent *graphical environment* ("Integrated Development Environment", IDE) for R.
 
 *I will now demonstrate how to start an RStudio Server session from the Ohio Supercomputer Center's website following the steps from our [Code Club Computer Setup page](/codeclub-setup/#osc-run-rstudio).*
 
-Once we have a running instance of RStudio, let's have a look at the different "panes" that the RStudio window is divided into:
+Once you have a running instance of RStudio, **create a new R script** by clicking `File` \> `New File` \> `R Script`.
+
+Now, you should see all 4 "panes" that the RStudio window is divided into:
 
 -   *Top-left*: The **Editor** for your scripts and documents (*hidden when you don't have a file open*).
--   *Bottom-left*: The **R Console** (+ a tab with a **Terminal**).
--   *Top-right*: Your **Environment** (+ several other tabs).
+-   *Bottom-left*: The **R Console** to interactively run your code (+ a tab with a **Terminal**).
+-   *Top-right*: Your **Environment** with R objects you have created (+ several other tabs).
 -   *Bottom-left*: Tabs for **Files**, **Plots**, **Help**, and others.
 
 <p align="center">
 <img src=img/rstudio-layout-ed.png width="95%">
 </p>
+
+So, in RStudio, we have a single interface to write code in text files or directly in the console, visualize plots, navigate the files found on our computer, and inspect the data and other objects we work with.
 
 RStudio has a lot of useful features and during the next few sessions of Code Club, we will introduce some tips and tricks for working with it.
 
@@ -155,7 +158,9 @@ We'll return to the same breakout room configuration later in this session to do
 
 #### Check that everyone has RStudio working
 
-And if you can't figure it out among yourselves, click the `Ask for help` button.
+-   Take a moment to explore the RStudio interface.
+
+-   If you run into issues, click the `Ask for help` button in Zoom and one of us will come by.
 
 </div>
 
@@ -195,6 +200,8 @@ With the expected set of symbols, you can use R as a general calculator:
 
 </div>
 
+Note that pressing the *up arrow* key will put your previous command back on the prompt, and you can press the *up arrow* again to go further back (as well as the *down arrow* to go in the other direction).
+
 <br>
 
 #### Experimenting a bit...
@@ -225,7 +232,7 @@ How about:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'>203 +</code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'>203 /</code></pre>
 
 </div>
 
@@ -238,15 +245,10 @@ Now the *prompt* turned into a [`+`](https://rdrr.io/r/base/Arithmetic.html) ins
 
 <br>
 
-R is waiting for you to finish the command, since you typed an incomplete command: something has to follow the [`+`](https://rdrr.io/r/base/Arithmetic.html).
+R is waiting for you to finish the command, since you typed an incomplete command: something has to follow the division sign [`/`](https://rdrr.io/r/base/Arithmetic.html).
 
 While it was obvious here that our command was incomplete, you will often type incomplete commands without realizing you did so. Just remember that when you see the [`+`](https://rdrr.io/r/base/Arithmetic.html) prompt, *something* has to be missing in your command: most commonly, you'll have forgotten a closing parenthesis `)` or you accidentally opened up an unwanted opening parenthesis `(`.
 
-In the editor, RStudio will also alert you when you are making so-called *syntax errors* such as this:
-
-<p align="center">
-<img src="img/Rstudio_error.png" style="width:50%; margin-top: 10px; margin-bottom: 10px;"/>
-</p>
 </details>
 
 <br>
@@ -299,8 +301,8 @@ We *can* get R to print character strings back to us, and work with strings in o
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='s'>"Well, I'm really liking R so far."</span>
-<span class='c'>#&gt; [1] "Well, I'm really liking R so far."</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='s'>"Fantastic"</span>
+<span class='c'>#&gt; [1] "Fantastic"</span></code></pre>
 
 </div>
 
@@ -312,15 +314,9 @@ We *can* get R to print character strings back to us, and work with strings in o
 
 #### Need for scripts
 
-We can go along like this, typing commands directly into the R console. But to keep better track of what we're doing, it's a good idea to write code in plain text files, i.e. to write "**scripts**". And when we start creating scripts, we need to worry about how we organize the scripts and data for a project.
+We can go along like this, typing commands directly into the R console. But to keep better track of what we're doing, it's a good idea to write code in plain text files, i.e. to write "**scripts**".
 
-So let's take a short diversion to talk about file organization.
-
-<br>
-
-#### Our first R script
-
--   Create a new R script by clicking `File` \> `New File` \> `R Script`.
+-   You should have already created a script above (otherwise, click `File` \> `New File` \> `R Script`).
 
 -   Click `File` \> `Save As` to save the script; give it a descriptive name like `intro-to-R.R`.  
     (You may want to put the script in a new subfolder for this Code Club session.)
@@ -339,7 +335,11 @@ We want to make sure to save our division command, so start by typing the follow
 
 </div>
 
-With the cursor still on this line, press <kbd>Ctrl</kbd> + <kbd>Enter</kbd>. The command will be copied to the R console and executed, and then the cursor will move to the next line. (And when you have selected multiple lines of code, <kbd>Ctrl</kbd> + <kbd>Enter</kbd> will execute them all.)
+With the cursor still on this line, press <kbd>Ctrl</kbd> + <kbd>Enter</kbd>. The command will be copied to the R console and executed, and then the cursor will move to the next line.
+
+Note that it doesn't matter where on the line your cursor is: <kbd>Ctrl</kbd> + <kbd>Enter</kbd> will execute the entire line unless you have selected only part of it.
+
+(And when you have selected multiple lines of code, <kbd>Ctrl</kbd> + <kbd>Enter</kbd> will execute them all.)
 
 <br>
 
@@ -347,7 +347,7 @@ With the cursor still on this line, press <kbd>Ctrl</kbd> + <kbd>Enter</kbd>. Th
 
 You can use `#` signs to annotate (comment) your code. Anything to the right of a `#` is ignored by R, meaning it won't be executed. You can use `#` both at the start of a line or anywhere in a line following code.
 
-Comments are a great way to describe what your code does within the code itself, so comment liberally in your R scripts!
+Comments are a great way to describe what your code does within the code itself, so comment liberally in your R scripts! This is useful not only for others that you may share your code with, but perhaps especially for yourself when you look back at your code a day, a month, or a year later.
 
 <div class="highlight">
 
@@ -370,32 +370,28 @@ For example:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>wingspan_in</span> <span class='o'>&lt;-</span> <span class='m'>203</span> <span class='o'>/</span> <span class='m'>2.54</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>wingspan_cm</span> <span class='o'>&lt;-</span> <span class='m'>203</span>
+<span class='nv'>conversion</span> <span class='o'>&lt;-</span> <span class='m'>2.54</span></code></pre>
 
 </div>
 
 Type that into your script, and use <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to send it to the console.
 
-The objects you create get added to your "workspace" or "environment." RStudio shows this in the **Environment tab** in the topright panel -- check to see if `wingspan_in` is indeed there.
+The objects you create get added to your "workspace" or "environment." RStudio shows this in the **Environment tab** in the topright panel -- check to see if `wingspan_cm` and `conversion` are indeed there.
 
 After you've assigned a number to an object, you can use it in other calculations:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>wingspan_in</span> <span class='o'>*</span> <span class='m'>2.54</span>
-<span class='c'>#&gt; [1] 203</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>wingspan_inch</span> <span class='o'>&lt;-</span> <span class='nv'>wingspan_cm</span> <span class='o'>/</span> <span class='nv'>conversion</span></code></pre>
 
 </div>
 
-More generally speaking, the object name that you provide is substituted with its contents by R, so it is a *pointer* (reference) to any underlying values.
+More generally speaking, the object name that you provide is substituted with its contents by R, so it is a *pointer* (reference) to the underlying value.
 
-While our object `wingspan_in` just contained a single number, objects can get much bigger, and more complex too. R distinguishes between different *types* of objects as we will see next week.
+While our objects so far contained just a single number, objects can get much bigger, and more complex too. R distinguishes between different *types* of objects as we will see next week.
 
 <br>
-
-<div class="alert alert-note">
-
-<div>
 
 #### Object names
 
@@ -403,7 +399,7 @@ Objects can be given any name such as `x`, `current_temperature`, or `subject_id
 
 Some pointers on object names:
 
--   Make them descriptive yet not too long.
+-   Because R is case sensitive, `weight` is different from `Weight`.
 
 -   An object name cannot contain a space, so for readability, separate words using:
 
@@ -411,21 +407,21 @@ Some pointers on object names:
     -   **`.`** -- e.g. `total.weight`
     -   *capitalization* -- e.g. `totalWeight` or `TotalWeight` ("camel case")
 
--   Because R is case sensitive, `weight` is different from `Weight`.
-
 -   Object names can contain but cannot start with a number (`2x` is not valid, but `x2` is)[^2].
+
+-   Make object names descriptive yet not too long.
 
 You will make things easier for yourself by naming objects in a consistent way, for instance by always sticking to your favorite case like "snake case."[^3]
 
-</div>
-
-</div>
-
 <br>
+
+<div class="alert alert-note">
+
+<div>
 
 #### Objects, your workspace, and closing R
 
-When you close R, it will probably ask you whether you want to save your workspace. When you do so, then the next time you start R, you can reload everything the way it was, such as your previously created objects.
+When you close R, it will probably ask you whether you want to save your workspace (*"Save workspace image to \~/.RData"*). When you do so, then the next time you start R, you can reload everything the way it was, such as your previously created objects.
 
 While this may seem convenient, we recommend that you don't do this.
 
@@ -451,6 +447,10 @@ To make RStudio stop asking you about saving your workspace, click `Tools` \> `G
 Taking these ideas a step further, it can be a good idea to occasionally restart R so you can check whether the code in your script is correct and complete, that you are not relying on code that is not in the script, and so on. To do so, you don't need to close and reopen RStudio itself: under `Session` in the top menu bar, you can click `Restart R` (and you should also see the keyboard shortcut for it in the menu bar, which is <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F10</kbd> for Windows/Linux, and <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>F10</kbd> for Mac).
 
 </details>
+
+</div>
+
+</div>
 
 <br>
 
