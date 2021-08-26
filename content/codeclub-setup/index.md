@@ -103,7 +103,7 @@ for "classroom projects" such as this one.
    {{< figure src="osc_queued.png" width="600px" caption="" >}}
 
 5. Your job usually starts running within seconds, and the color of the top
-   bar will then switch from blue ("Queued") to green ("Running"):
+   bar will then switch from blue ("Queued" and then "Starting") to green ("Running"):
    
    {{< figure src="osc_running.png" width="600px" caption="" >}}
 
