@@ -13,6 +13,575 @@
     </image>
     
     <item>
+      <title>Code Club S02E02: An introduction to R (Part 2)</title>
+      <link>https://biodash.github.io/codeclub/s02e02_r-intro_part2/</link>
+      <pubDate>Mon, 30 Aug 2021 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/s02e02_r-intro_part2/</guid>
+      <description>&lt;br&gt;
+&lt;h2 id=&#34;learning-objectives&#34;&gt;Learning objectives&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Recognize and use R functions&lt;/li&gt;
+&lt;li&gt;Differentiate between some common object classes and data structures in R&lt;/li&gt;
+&lt;li&gt;Read in data from a file&lt;/li&gt;
+&lt;li&gt;Install and load R packages&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1----intro&#34;&gt;1 &amp;ndash; Intro&lt;/h2&gt;
+&lt;p&gt;Last week Jelmer introduced objects - things in R to which a name can be assigned with the assignment operator &amp;ldquo;&amp;lt;-&amp;rdquo;. For example, running the following three lines of code creates objects named &amp;ldquo;x&amp;rdquo;, &amp;ldquo;y&amp;rdquo;, and &amp;ldquo;z&amp;rdquo;, respectively&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;z&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;cat&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;If you run these lines in RStudio, you&amp;rsquo;ll see the resulting objects listed in the top right panel. This is really helpful for keeping track of object names, as you&amp;rsquo;ll often create many objects during an R session. Calling the objects returns their values&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 6&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] TRUE&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;z&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;cat&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;2----functions&#34;&gt;2 &amp;ndash; Functions&lt;/h2&gt;
+&lt;p&gt;We&amp;rsquo;ll return to objects shortly, but first, let&amp;rsquo;s take a very basic look at functions, which make up a second really important part of R. You can think of objects as &lt;strong&gt;being&lt;/strong&gt; things in R, while functions &lt;strong&gt;do&lt;/strong&gt; things in R. Essentially every task in R will involve objects or functions, and often both, so these are two things worth learning early on.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ll start by writing a very simple function&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#define the function&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;cubed_plus10&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;function&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;^&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#apply the function&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;cubed_plus10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 74&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;No need to get caught up in details of writing the function right now. A couple important things to recognize at this point&amp;hellip;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;We created a function that took some input - the &amp;lsquo;4&amp;rsquo; in the example above, did something to it, and returned some output.&lt;/li&gt;
+&lt;li&gt;To run the function, we used its name, followed by a set of parentheses. All R functions have that general structure. The parentheses might contain 0, 1, or more items (often referred to as &lt;strong&gt;options&lt;/strong&gt; or &lt;strong&gt;arguments&lt;/strong&gt;).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;It&amp;rsquo;s useful to be able to create your own functions. But if that sounds a little advanced to you at this point, you can still do a lot with R even without knowing how to write your own, as there are lots that have already been written for you. A number of commonly-used functions are available as soon as you start an R session - these are often referred to as &amp;ldquo;base R&amp;rdquo; functions.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#some example base R functions&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/date.html&#39;&gt;date&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Mon Aug 30 12:35:50 2021&#34;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/getwd.html&#39;&gt;getwd&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;/Users/sovic.1/Desktop/docs/Desktop_clear_4-28-21/S18_dev/biodash.github.io/content/codeclub/S02E02_r-intro_part2&#34;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/MathFun.html&#39;&gt;sqrt&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;25&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 5&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;3----object-classes-and-data-structures&#34;&gt;3 &amp;ndash; Object Classes and Data Structures&lt;/h2&gt;
+&lt;p&gt;Now that we have at least a basic idea of R functions, we&amp;rsquo;ll turn attention back to objects (and use functions along the way from here on out). The objects we&amp;rsquo;ve created so far have been pretty simple. Let&amp;rsquo;s revisit the three from above&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 6&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] TRUE&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;z&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;cat&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;There are lots of different kinds, or &lt;em&gt;classes&lt;/em&gt; of objects in R, and behind the scenes, each object that&amp;rsquo;s created is immediately assigned to a class (or possibly multiple classes). There&amp;rsquo;s no real limit to the number of classes that exist, as new ones can be created for specialized cases at any time. But there are a fairly small number of object classes you&amp;rsquo;ll encounter a lot in R, so we&amp;rsquo;ll take a look at some of those now. Let&amp;rsquo;s use the &lt;a href=&#34;https://rdrr.io/r/base/class.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;class()&lt;/code&gt;&lt;/a&gt; function to figure out what class R assigned each of our objects to&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;numeric&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;logical&#34;&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;z&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;character&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Some very common object classes you&amp;rsquo;ll encounter&amp;hellip;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;integer&lt;/li&gt;
+&lt;li&gt;double (numeric)&lt;/li&gt;
+&lt;li&gt;logical&lt;/li&gt;
+&lt;li&gt;character&lt;/li&gt;
+&lt;li&gt;factor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I&amp;rsquo;m going to introduce a new term here that&amp;rsquo;s closely tied to object classes, and that&amp;rsquo;s &lt;em&gt;data structures&lt;/em&gt;. Again, there are a small number of data structures you&amp;rsquo;ll work with a lot in R. They include&amp;hellip;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Vectors&lt;/li&gt;
+&lt;li&gt;Matrices&lt;/li&gt;
+&lt;li&gt;Data Frames&lt;/li&gt;
+&lt;li&gt;Lists&lt;/li&gt;
+&lt;li&gt;Arrays&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Today we&amp;rsquo;ll focus in on two of these - &lt;strong&gt;vectors&lt;/strong&gt; and &lt;strong&gt;data frames&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;4----vectors&#34;&gt;4 &amp;ndash; Vectors&lt;/h2&gt;
+&lt;p&gt;Vectors in R share a couple important characteristics&amp;hellip;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;They&amp;rsquo;re one-dimensional. In other words, they can be defined by a length property, with length zero, one, or more.&lt;/li&gt;
+&lt;li&gt;All elements of a vector must be of the same type, or class.&lt;/li&gt;
+&lt;li&gt;Operations can be performed on vectors - &lt;em&gt;vector recycling&lt;/em&gt; rules apply (we&amp;rsquo;ll see this in the breakout exercises next).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The &lt;a href=&#34;https://rdrr.io/r/base/c.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;c()&lt;/code&gt;&lt;/a&gt; function is useful for creating vectors in R. It stands for &amp;ldquo;combine&amp;rdquo;, and allows you to combine multiple items into a single vector object&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;odds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;7&lt;/span&gt;,&lt;span class=&#39;m&#39;&gt;9&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;animals&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;dog&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;cat&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;cow&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;odds&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1 3 5 7 9&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;animals&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;dog&#34; &#34;cat&#34; &#34;cow&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;breakout-rooms-i-10-min&#34;&gt;Breakout Rooms I (~10 min.)&lt;/h3&gt;
+&lt;h4 id=&#34;exercise-1-create-vector-objects&#34;&gt;Exercise 1: Create Vector Objects&lt;/h4&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Create two objects (vectors) named &lt;em&gt;short_vec&lt;/em&gt; and &lt;em&gt;long_vec&lt;/em&gt;. To &lt;em&gt;short_vec&lt;/em&gt;, assign the integers 1 through 5, and to &lt;em&gt;long_vec&lt;/em&gt;, assign the integers 1 through 10. View each of the objects and check their class.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; The colon can be used to define a sequence of integers in R, for example, 1:3 represents the vector 1,2,3. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;short_vec&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;long_vec&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;short_vec&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1 2 3 4 5&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;long_vec&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  1  2  3  4  5  6  7  8  9 10&lt;/span&gt;
+
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;short_vec&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;integer&#34;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;long_vec&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;integer&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;h4 id=&#34;exercise-2-vector-operationsrecycling&#34;&gt;Exercise 2: Vector Operations/Recycling&lt;/h4&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Now try adding the two vectors, &lt;em&gt;short_vec&lt;/em&gt; and &lt;em&gt;long_vec&lt;/em&gt;, together. Assign the result to a new object named &lt;em&gt;vec_sum&lt;/em&gt;. Think about and talk through what you expect the result might look like before you execute the code.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Before R performs an operation on any vectors, the vectors involved must be the same length. If they aren&amp;rsquo;t, the shorter vector is &amp;ldquo;recycled&amp;rdquo; until it matches the length of longer vector. Then the operation is performed. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;
+&lt;span class=&#39;nv&#39;&gt;vec_sum&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;short_vec&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;long_vec&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;vec_sum&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  2  4  6  8 10  7  9 11 13 15&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;h4 id=&#34;exercise-3-vector-operationsrecycling-ii&#34;&gt;Exercise 3: Vector Operations/Recycling II&lt;/h4&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Just to drive this point on vector recycling home a little more, let&amp;rsquo;s do more operation - this time, subtract 3 (itself a vector of length 1) from &lt;em&gt;short_vec&lt;/em&gt;. Again, try to predict what will happen before you run it.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;short_vec&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2 -1  0  1  2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;p&gt;Keep in mind that all elements of a vector in R have to be of the same class. This means you typically won&amp;rsquo;t see a vector that looks like&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;mixed_vector&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;cat&#34;&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;dog&#34;&lt;/span&gt;, &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You can create such a vector, but in this case, R will view it as a character vector, meaning, for example, the 1 and 4 won&amp;rsquo;t be treated as numbers, but as characters. Such forcing of an element or object into a specific class is often referred to as &lt;strong&gt;coercion&lt;/strong&gt;. Let&amp;rsquo;s go back to our object &amp;lsquo;x&amp;rsquo;&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 6&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;numeric&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice it&amp;rsquo;s assigned as numeric. Let&amp;rsquo;s say we wanted R to see it as an integer (just slightly different in R than numeric)&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/integer.html&#39;&gt;as.integer&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;integer&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We have used the &lt;a href=&#34;https://rdrr.io/r/base/integer.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;as.integer()&lt;/code&gt;&lt;/a&gt; function to coerce x into class &lt;strong&gt;integer&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5----data-frames&#34;&gt;5 &amp;ndash; Data Frames&lt;/h2&gt;
+&lt;p&gt;Data frames are another data structure in R you&amp;rsquo;ll likely use a lot. Some characteristics of data frames&amp;hellip;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;They have two dimensions (rows, columns)&lt;/li&gt;
+&lt;li&gt;Each variable (column) needs to have the same number of entries.&lt;/li&gt;
+&lt;li&gt;All elements of any one column have to be of the same type/class, but different columns can be of different classes.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;A good way to think about a data frame is as being analogous to an Excel spreadsheet, with the caveat that all the columns have the same number of entries, which isn&amp;rsquo;t a requirement in an Excel sheet.&lt;/p&gt;
+&lt;p&gt;You can create a data frame by hand with the &lt;a href=&#34;https://rdrr.io/r/base/data.frame.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;data.frame()&lt;/code&gt;&lt;/a&gt; function, but in many cases, you&amp;rsquo;ll create a data frame in R by reading data in from a file with one of a number of functions that are available for that purpose. Let&amp;rsquo;s try it. Here&amp;rsquo;s a small example dataset I generated in Excel&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://github.com/biodash/biodash.github.io/raw/master/assets/data/data_frame/df_example.png&#34; alt=&#34;example data set&#34;&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s available at the following address&amp;hellip; &lt;a href=&#34;https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/data_frame/example_df.tsv&#34;&gt;https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/data_frame/example_df.tsv&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;(In this case, the data set comes from online, but often it will be a file on your computer, and the path to the file works the same way as how you&amp;rsquo;ll use the web address below.)&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;breakout-rooms-ii-10-min&#34;&gt;Breakout Rooms II (~10 min.)&lt;/h3&gt;
+&lt;h4 id=&#34;exercise-4-reading-in-a-data-frame&#34;&gt;Exercise 4: Reading In A Data Frame&lt;/h4&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Create an object named &amp;ldquo;data_address&amp;rdquo; that stores the web address for the dataset.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use the assignment operator and make sure to put the address in quotes to define it as a character string. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;data_address&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/data_frame/example_df.tsv&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;p&gt;Now use the &lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read.table()&lt;/code&gt;&lt;/a&gt; function to read the dataset in as a data frame. Assign it as an object named &amp;lsquo;exp_data&amp;rsquo; and view it in R.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use the &lt;em&gt;data_address&lt;/em&gt; object as the first argument in the &lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read.table()&lt;/code&gt;&lt;/a&gt; function. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/read.table.html&#39;&gt;read.table&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;data_address&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    V1        V2        V3        V4&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 Age Height_cm Eye_Color Graduated&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2  22    175.26      Blue      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3  67    170.18     Green      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4  53     165.1      Blue     FALSE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5  13    134.62     Brown     FALSE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6  19    147.32     Green      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 7  27    185.42      Gray      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 8  30     190.5      Blue      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 9  11    144.78     Brown     FALSE&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;h4 id=&#34;exercise-5-getting-info-about-functions&#34;&gt;Exercise 5: Getting Info About Functions&lt;/h4&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;The column names (header) were read in as the first observation, and default column names (i.e. V1, V2, etc) were added. Take a look at the help page for &lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read.table()&lt;/code&gt;&lt;/a&gt; by typing &lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;?read.table&lt;/code&gt;&lt;/a&gt; in your R console, or by searching for &amp;ldquo;read.table&amp;rdquo; in the search box in the Help tab of the lower right RStudio panel. Look through some of the options/arguments and make an adjustment to fix the column names/header, then view the data frame again.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Rerun the command, setting &amp;ldquo;header&amp;rdquo; to TRUE, instead of the default FALSE. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/read.table.html&#39;&gt;read.table&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;data_address&lt;/span&gt;, header &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   Age Height_cm Eye_Color Graduated&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1  22    175.26      Blue      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2  67    170.18     Green      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3  53    165.10      Blue     FALSE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4  13    134.62     Brown     FALSE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5  19    147.32     Green      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6  27    185.42      Gray      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 7  30    190.50      Blue      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 8  11    144.78     Brown     FALSE&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;h4 id=&#34;exercise-6-practicing-with-some-functions&#34;&gt;Exercise 6: Practicing With Some Functions&lt;/h4&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Spend a few minutes playing around with some of the following functions and try to figure out what they do by applying them to the exp_data object. If it&amp;rsquo;s not clear, use the help&amp;hellip;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;head()&lt;/li&gt;
+&lt;li&gt;dim()&lt;/li&gt;
+&lt;li&gt;nrow()&lt;/li&gt;
+&lt;li&gt;ncol()&lt;/li&gt;
+&lt;li&gt;names()&lt;/li&gt;
+&lt;li&gt;str()&lt;/li&gt;
+&lt;li&gt;summary()&lt;/li&gt;
+&lt;/ul&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   Age Height_cm Eye_Color Graduated&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1  22    175.26      Blue      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2  67    170.18     Green      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3  53    165.10      Blue     FALSE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4  13    134.62     Brown     FALSE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5  19    147.32     Green      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6  27    185.42      Gray      TRUE&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#gives preview of object&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/dim.html&#39;&gt;dim&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 8 4&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#returns dimensions (number of row, number of columns) of the object&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/nrow.html&#39;&gt;nrow&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 8&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#returns number of rows in data frame&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/nrow.html&#39;&gt;ncol&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 4&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#returns number of columns in data frame&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/names.html&#39;&gt;names&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Age&#34;       &#34;Height_cm&#34; &#34;Eye_Color&#34; &#34;Graduated&#34;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#returns vector of column names&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/str.html&#39;&gt;str&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &#39;data.frame&#39;:  8 obs. of  4 variables:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ Age      : int  22 67 53 13 19 27 30 11&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ Height_cm: num  175 170 165 135 147 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ Eye_Color: Factor w/ 4 levels &#34;Blue&#34;,&#34;Brown&#34;,..: 1 4 1 2 4 3 1 2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ Graduated: logi  TRUE TRUE FALSE FALSE TRUE TRUE ...&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#summarizes the structure of an object&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/summary.html&#39;&gt;summary&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;exp_data&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;       Age          Height_cm     Eye_Color Graduated      &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Min.   :11.00   Min.   :134.6   Blue :3   Mode :logical  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  1st Qu.:17.50   1st Qu.:146.7   Brown:2   FALSE:3        &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Median :24.50   Median :167.6   Gray :1   TRUE :5        &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Mean   :30.25   Mean   :164.1   Green:2                  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  3rd Qu.:35.75   3rd Qu.:177.8                            &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Max.   :67.00   Max.   :190.5&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#provides a summary/summary statistics for individual variables/columns &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;h2 id=&#34;6----r-packages&#34;&gt;6 &amp;ndash; R Packages&lt;/h2&gt;
+&lt;p&gt;I mentioned above when talking about functions that many have already been written for you, and some are available as soon as you open up R - those that are considered part of &amp;ldquo;base R&amp;rdquo;. All the functions we&amp;rsquo;ve used up to this point are included in that set. But there are lots of other functions available as part of additional packages you can install and load. The two most common places to get packages are the CRAN and Bioconductor repositories - I did a couple short videos on these as part of &lt;a href=&#34;https://youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this Intro To R Playlist&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As one example, we used the function &lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read.table()&lt;/code&gt;&lt;/a&gt; above to read in the example dataset. A similar function, &lt;a href=&#34;https://readr.tidyverse.org/reference/read_delim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read_tsv()&lt;/code&gt;&lt;/a&gt; is available as part of the &lt;em&gt;readr&lt;/em&gt; package, which is available from CRAN, and so can be installed with the &lt;a href=&#34;https://rdrr.io/r/utils/install.packages.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;install.packages()&lt;/code&gt;&lt;/a&gt; function&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;readr&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The installation should only have to be done once. Then we use the &lt;a href=&#34;https://rdrr.io/r/base/library.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library()&lt;/code&gt;&lt;/a&gt; function to load the library in each R session where we want to use it&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://readr.tidyverse.org&#39;&gt;readr&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: package &#39;readr&#39; was built under R version 3.6.2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Now we should have access to the readr package and all of the functions contained in it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;exp_data2&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://readr.tidyverse.org/reference/read_delim.html&#39;&gt;read_tsv&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;data_address&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BBBB;&#39;&gt;──&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;font-weight: bold;&#39;&gt;Column specification&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #00BBBB;&#39;&gt;────────────────────────────────────────────────────────&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; cols(&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   Age = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   Height_cm = &lt;span style=&#39;color: #00BB00;&#39;&gt;col_double()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   Eye_Color = &lt;span style=&#39;color: #BB0000;&#39;&gt;col_character()&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   Graduated = &lt;span style=&#39;color: #BBBB00;&#39;&gt;col_logical()&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; )&lt;/span&gt;
+
+
+&lt;span class=&#39;nv&#39;&gt;exp_data2&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 8 x 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;     Age Height_cm Eye_Color Graduated&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;lgl&amp;gt;&lt;/span&gt;&lt;span&gt;    &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt;    22      175. Blue      TRUE     &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt;    67      170. Green     TRUE     &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt;    53      165. Blue      FALSE    &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt;    13      135. Brown     FALSE    &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt;    19      147. Green     TRUE     &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt;    27      185. Gray      TRUE     &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;7&lt;/span&gt;&lt;span&gt;    30      190. Blue      TRUE     &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;8&lt;/span&gt;&lt;span&gt;    11      145. Brown     FALSE&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You might notice that &lt;em&gt;exp_data2&lt;/em&gt; is a tibble, while &lt;em&gt;exp_data&lt;/em&gt; is a data frame (try the &lt;a href=&#34;https://rdrr.io/r/base/class.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;class()&lt;/code&gt;&lt;/a&gt; function on each). This small difference in the types of objects that are returned is one of the differences in the functions &lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read.table()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://readr.tidyverse.org/reference/read_delim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read_tsv()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;bonus-breakout-rooms-iii-10-min&#34;&gt;Bonus: Breakout Rooms III (~10 min.)&lt;/h3&gt;
+&lt;h5 id=&#34;exercise-7-reading-in-compressed-data&#34;&gt;Exercise 7: Reading In Compressed Data&lt;/h5&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Let&amp;rsquo;s look at one more example for a bit more practice with packages and reading data in to R. This time, we&amp;rsquo;ll try reading in a compressed (gzipped) version of the same example dataset. This one&amp;rsquo;s available from&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/biodash/biodash.github.io/raw/master/assets/data/data_frame/example_df.tsv.gz&#34;&gt;https://github.com/biodash/biodash.github.io/raw/master/assets/data/data_frame/example_df.tsv.gz&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s read this dataset in as an object named &lt;em&gt;zip_data&lt;/em&gt;. First try using the &lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read.table()&lt;/code&gt;&lt;/a&gt; function just like before.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;Try replacing the previous address with the updated address for the compressed file. Remember to set the header argument to TRUE.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#create an object storing the web address&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;zip_address&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;https://github.com/biodash/biodash.github.io/raw/master/assets/data/data_frame/example_df.tsv.gz&#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;zip_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/read.table.html&#39;&gt;read.table&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;zip_address&lt;/span&gt;, header &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;p&gt;&lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read.table()&lt;/code&gt;&lt;/a&gt; isn&amp;rsquo;t able to uncompress a file directly from online, so you probably got an error message. However, it can automatically uncompress a file when reading it in locally (from your computer). So, see if you can use the &lt;a href=&#34;https://rdrr.io/r/utils/download.file.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;download.file()&lt;/code&gt;&lt;/a&gt; function to get the compressed file and then read it in in a second step.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;a href=&#34;https://rdrr.io/r/utils/download.file.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;download.file()&lt;/code&gt;&lt;/a&gt; requires that two arguments are defined: &lt;em&gt;url&lt;/em&gt; and &lt;em&gt;destfile&lt;/em&gt;. Check &lt;a href=&#34;https://rdrr.io/r/utils/download.file.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;?download.file&lt;/code&gt;&lt;/a&gt; for details.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;zip_address&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;example_zip_file.tsv.gz&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;zip_data&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/read.table.html&#39;&gt;read.table&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;example_zip_file.tsv.gz&#34;&lt;/span&gt;, header &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;p&gt;Alternatively, you could install the &lt;em&gt;data.table&lt;/em&gt; package and try its &lt;a href=&#34;https://Rdatatable.gitlab.io/data.table/reference/fread.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fread()&lt;/code&gt;&lt;/a&gt; function, which is able to download and automatically uncompress a file from online all in one step (though doing so requires another package, &lt;em&gt;R.utils&lt;/em&gt;, so you&amp;rsquo;ll also have to get that one first if you don&amp;rsquo;t already have it)&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;R.utils&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;data.table&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/HenrikBengtsson/R.utils&#39;&gt;R.utils&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://r-datatable.com&#39;&gt;data.table&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;data.table&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://Rdatatable.gitlab.io/data.table/reference/fread.html&#39;&gt;fread&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;zip_address&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    Age Height_cm Eye_Color Graduated&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1:  22    175.26      Blue      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2:  67    170.18     Green      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3:  53    165.10      Blue     FALSE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4:  13    134.62     Brown     FALSE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5:  19    147.32     Green      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6:  27    185.42      Gray      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 7:  30    190.50      Blue      TRUE&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 8:  11    144.78     Brown     FALSE&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Not only does this offer a little more practice with objects, functions, and reading in data, but it also provides one small example of the value in having multiple functions available that do similar things. In this specific case, when reading in data directly from online, you might find &lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read.table()&lt;/code&gt;&lt;/a&gt; to be a little easier to work with if the data are uncompressed, but &lt;a href=&#34;https://Rdatatable.gitlab.io/data.table/reference/fread.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fread()&lt;/code&gt;&lt;/a&gt; might make things a bit easier (one less step) if the file is compressed. And we actually saw a third function, &lt;a href=&#34;https://readr.tidyverse.org/reference/read_delim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read_tsv()&lt;/code&gt;&lt;/a&gt; earlier (from the &lt;em&gt;readr&lt;/em&gt; package), which offers yet another option for reading in data-frame-like data. This kind of thing is common in R - there are typically multiple ways of doing things, and as you work in R, you&amp;rsquo;ll continue to pick up more and more efficient ways of doing what you want to do.&lt;/p&gt;
+&lt;br&gt;
+&lt;p&gt;&lt;br&gt; &lt;br&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Session 18: Regular Expressions: Part II</title>
       <link>https://biodash.github.io/codeclub/18_regex2/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
