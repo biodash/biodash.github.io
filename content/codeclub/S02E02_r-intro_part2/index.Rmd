@@ -1,0 +1,510 @@
+---
+title: "Code Club S02E02: An introduction to R (Part 2)"
+summary: "Part 2 of hitting some of the important basics for working in R. We'll take a look at functions, packages, and pick up from last week with a bit more on R objects."  
+authors: [mike-sovic]
+date: "2021-08-30"
+lastmod: "2021-08-30"
+output: hugodown::md_document
+toc: true
+---
+
+<br>
+
+## Learning objectives
+
+> * Recognize and use R functions
+> * Differentiate between some common object classes and data structures in R
+> * Read in data from a file
+> * Install and load R packages
+
+<br>
+
+----
+
+## 1 -- Intro
+
+Last week Jelmer introduced objects - things in R to which a name can be assigned with the assignment operator "<-". For example, running the following three lines of code creates objects named "x", "y", and "z", respectively...
+
+```{r}
+x <- 3 + 3
+y <- TRUE
+z <- "cat"
+```
+
+If you run these lines in RStudio, you'll see the resulting objects listed in the top right panel. This is really helpful for keeping track of object names, as you'll often create many objects during an R session. Calling the objects returns their values...
+
+```{r}
+x
+y
+z
+```
+
+## 2 -- Functions
+
+We'll return to objects shortly, but first, let's take a very basic look at functions, which make up a second really important part of R. You can think of objects as **being** things in R, while functions **do** things in R. Essentially every task in R will involve objects or functions, and often both, so these are two things worth learning early on. 
+
+I'll start by writing a very simple function...
+
+```{r}
+#define the function
+cubed_plus10 <- function(number) {
+  number^3+10
+}
+
+#apply the function
+cubed_plus10(4)
+
+```
+
+No need to get caught up in details of writing the function right now. A couple important things to recognize at this point...
+
+1. We created a function that took some input - the '4' in the example above, did something to it, and returned some output.
+2. To run the function, we used its name, followed by a set of parentheses. All R functions have that general structure. The parentheses might contain 0, 1, or more items (often referred to as **options** or **arguments**). 
+ 
+It's useful to be able to create your own functions. But if that sounds a little advanced to you at this point, you can still do a lot with R even without knowing how to write your own, as there are lots that have already been written for you. A number of commonly-used functions are available as soon as you start an R session - these are often referred to as "base R" functions.
+ 
+```{r}
+#some example base R functions
+date()
+getwd()
+sqrt(25)
+
+```
+
+
+
+
+
+## 3 -- Object Classes and Data Structures
+
+Now that we have at least a basic idea of R functions, we'll turn attention back to objects (and use functions along the way from here on out). The objects we've created so far have been pretty simple. Let's revisit the three from above...
+
+```{r}
+x
+y
+z
+
+```
+
+There are lots of different kinds, or *classes* of objects in R, and behind the scenes, each object that's created is immediately assigned to a class (or possibly multiple classes). There's no real limit to the number of classes that exist, as new ones can be created for specialized cases at any time. But there are a fairly small number of object classes you'll encounter a lot in R, so we'll take a look at some of those now. Let's use the `class()` function to figure out what class R assigned each of our objects to...
+
+```{r}
+class(x)
+
+class(y)
+
+class(z)
+
+```
+
+Some very common object classes you'll encounter...
+
+> * integer
+> * double (numeric)
+> * logical
+> * character
+> * factor
+
+I'm going to introduce a new term here that's closely tied to object classes, and that's *data structures*. Again, there are a small number of data structures you'll work with a lot in R. They include...
+
+> * Vectors
+> * Matrices
+> * Data Frames
+> * Lists
+> * Arrays
+
+Today we'll focus in on two of these - **vectors** and **data frames**.
+
+
+## 4 -- Vectors
+
+Vectors in R share a couple important characteristics... 
+
+1. They're one-dimensional. In other words, they can be defined by a length property, with length zero, one, or more.
+2. All elements of a vector must be of the same type, or class.
+3. Operations can be performed on vectors - *vector recycling* rules apply (we'll see this in the breakout exercises next).
+ 
+The `c()` function is useful for creating vectors in R. It stands for "combine", and allows you to combine multiple items into a single vector object...
+
+```{r}
+odds <- c(1,3,5,7,9)
+animals <- c("dog", "cat", "cow")
+
+odds
+animals
+```
+
+----
+
+### Breakout Rooms I (~10 min.)
+
+#### Exercise 1: Create Vector Objects
+
+<div class="puzzle">
+<div>
+
+Create two objects (vectors) named *short_vec* and *long_vec*. To *short_vec*, assign the integers 1 through 5, and to *long_vec*, assign the integers 1 through 10. View each of the objects and check their class.
+
+<details>
+
+<summary><b>Hint</b> (click here) </summary>
+
+<br> The colon can be used to define a sequence of integers in R, for example, 1:3 represents the vector 1,2,3. <br> 
+
+</details>
+
+<details><summary><b>Solution</b> (click here) </summary>
+```{r}
+short_vec <- 1:5
+long_vec <- 1:10
+
+short_vec
+long_vec
+
+class(short_vec)
+class(long_vec)
+```
+
+</details>
+
+</div>
+</div>
+
+<br>
+
+#### Exercise 2: Vector Operations/Recycling
+
+<div class="puzzle">
+<div>
+
+Now try adding the two vectors, *short_vec* and *long_vec*, together. Assign the result to a new object named *vec_sum*. Think about and talk through what you expect the result might look like before you execute the code.
+
+<details>
+<summary> <b>Hint</b> (click here) </summary>
+
+<br> Before R performs an operation on any vectors, the vectors involved must be the same length. If they aren't, the shorter vector is "recycled" until it matches the length of longer vector. Then the operation is performed. <br>
+
+</details>
+
+<details>
+<summary> <b>Solution</b> (click here) </summary>
+
+```{r}
+
+vec_sum <- short_vec + long_vec
+
+vec_sum
+
+```
+</details>
+
+</div>
+</div>
+<br>
+
+#### Exercise 3: Vector Operations/Recycling II
+
+<div class="puzzle">
+<div>
+
+Just to drive this point on vector recycling home a little more, let's do more operation - this time, subtract 3 (itself a vector of length 1) from *short_vec*. Again, try to predict what will happen before you run it.
+
+<details>
+<summary> <b>Solution</b> (click here) </summary>
+
+```{r}
+short_vec - 3
+```
+</details>
+
+</div>
+</div>
+
+<br>
+
+Keep in mind that all elements of a vector in R have to be of the same class. This means you typically won't see a vector that looks like...
+
+```{r}
+mixed_vector <- c(1, "cat", 4, "dog", TRUE)
+
+```
+You can create such a vector, but in this case, R will view it as a character vector, meaning, for example, the 1 and 4 won't be treated as numbers, but as characters. Such forcing of an element or object into a specific class is often referred to as **coercion**. Let's go back to our object 'x'...
+
+```{r}
+x
+class(x)
+```
+
+Notice it's assigned as numeric. Let's say we wanted R to see it as an integer (just slightly different in R than numeric)...
+
+```{r}
+x <- as.integer(x)
+
+class(x)
+```
+
+We have used the `as.integer()` function to coerce x into class **integer**.
+
+----
+
+## 5 -- Data Frames
+
+Data frames are another data structure in R you'll likely use a lot. Some characteristics of data frames...
+
+1. They have two dimensions (rows, columns)
+2. Each variable (column) needs to have the same number of entries.
+3. All elements of any one column have to be of the same type/class, but different columns can be of different classes. 
+
+A good way to think about a data frame is as being analogous to an Excel spreadsheet, with the caveat that all the columns have the same number of entries, which isn't a requirement in an Excel sheet.
+
+You can create a data frame by hand with the `data.frame()` function, but in many cases, you'll create a data frame in R by reading data in from a file with one of a number of functions that are available for that purpose. Let's try it. Here's a small example dataset I generated in Excel...
+
+![example data set](https://github.com/biodash/biodash.github.io/raw/master/assets/data/data_frame/df_example.png)
+
+It's available at the following address...
+https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/data_frame/example_df.tsv
+
+(In this case, the data set comes from online, but often it will be a file on your computer, and the path to the file works the same way as how you'll use the web address below.)
+
+----
+
+### Breakout Rooms II (~10 min.)
+
+#### Exercise 4: Reading In A Data Frame
+
+<div class="puzzle">
+<div>
+
+
+Create an object named "data_address" that stores the web address for the dataset.
+
+<details>
+<summary> <b>Hint</b> (click here) </summary>
+
+<br> Use the assignment operator and make sure to put the address in quotes to define it as a character string. <br>
+
+</details>
+
+<details>
+<summary> <b>Solution</b> (click here) </summary>
+
+```{r}
+data_address <- "https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/data_frame/example_df.tsv"
+```
+</details>
+<br>
+
+Now use the `read.table()` function to read the dataset in as a data frame. Assign it as an object named 'exp_data' and view it in R.
+
+<details>
+<summary> <b>Hint</b> (click here) </summary>
+
+<br> Use the *data_address* object as the first argument in the `read.table()` function. <br>
+
+</details>
+
+<details>
+<summary> <b>Solution</b> (click here) </summary>
+
+```{r}
+exp_data <- read.table(data_address)
+
+exp_data
+
+```
+
+</details>
+
+</div>
+</div>
+
+<br>
+
+#### Exercise 5: Getting Info About Functions
+
+<div class="puzzle">
+<div>
+
+
+The column names (header) were read in as the first observation, and default column names (i.e. V1, V2, etc) were added. Take a look at the help page for `read.table()` by typing `?read.table` in your R console, or by searching for "read.table" in the search box in the Help tab of the lower right RStudio panel. Look through some of the options/arguments and make an adjustment to fix the column names/header, then view the data frame again.
+
+<details>
+<summary> <b>Hint</b> (click here) </summary>
+
+<br> Rerun the command, setting "header" to TRUE, instead of the default FALSE. <br>
+
+</details>
+
+<details>
+<summary> <b>Solution</b> (click here) </summary>
+
+```{r}
+exp_data <- read.table(data_address, header = TRUE)
+
+exp_data
+
+```
+
+</details>
+
+</div>
+</div>
+
+<br>
+
+#### Exercise 6: Practicing With Some Functions
+
+<div class="puzzle">
+<div>
+
+Spend a few minutes playing around with some of the following functions and try to figure out what they do by applying them to the exp_data object. If it's not clear, use the help...
+
+ - head()
+ - dim()
+ - nrow()
+ - ncol()
+ - names()
+ - str()
+ - summary()
+
+<details>
+<summary> <b>Solution</b> (click here) </summary>
+
+```{r}
+head(exp_data)
+#gives preview of object
+
+dim(exp_data)
+#returns dimensions (number of row, number of columns) of the object
+
+nrow(exp_data)
+#returns number of rows in data frame
+
+ncol(exp_data)
+#returns number of columns in data frame
+
+names(exp_data)
+#returns vector of column names
+
+str(exp_data)
+#summarizes the structure of an object
+
+summary(exp_data)
+#provides a summary/summary statistics for individual variables/columns 
+
+```
+
+</details>
+
+
+</div>
+</div>
+
+<br>
+
+
+## 6 -- R Packages
+
+I mentioned above when talking about functions that many have already been written for you, and some are available as soon as you open up R - those that are considered part of "base R". All the functions we've used up to this point are included in that set. But there are lots of other functions available as part of additional packages you can install and load. The two most common places to get packages are the CRAN and Bioconductor repositories - I did a couple short videos on these as part of [this Intro To R Playlist](https://youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe). 
+
+As one example, we used the function `read.table()` above to read in the example dataset. A similar function, `read_tsv()` is available as part of the *readr* package, which is available from CRAN, and so can be installed with the `install.packages()` function...
+
+```{r, eval = FALSE}
+install.packages("readr")
+```
+
+The installation should only have to be done once. Then we use the `library()` function to load the library in each R session where we want to use it...
+
+```{r}
+library(readr)
+```
+
+Now we should have access to the readr package and all of the functions contained in it.
+
+```{r}
+exp_data2 <- read_tsv(data_address)
+
+exp_data2
+
+```
+
+You might notice that *exp_data2* is a tibble, while *exp_data* is a data frame (try the `class()` function on each). This small difference in the types of objects that are returned is one of the differences in the functions `read.table()` and `read_tsv()`. 
+
+----
+
+### Bonus: Breakout Rooms III (~10 min.)
+
+##### Exercise 7: Reading In Compressed Data
+
+<div class="puzzle">
+<div>
+
+Let's look at one more example for a bit more practice with packages and reading data in to R. This time, we'll try reading in a compressed (gzipped) version of the same example dataset. This one's available from...
+
+https://github.com/biodash/biodash.github.io/raw/master/assets/data/data_frame/example_df.tsv.gz
+
+Let's read this dataset in as an object named *zip_data*. First try using the `read.table()` function just like before.
+
+<details>
+<summary> <b>Hint</b> (click here) </summary>
+
+Try replacing the previous address with the updated address for the compressed file. Remember to set the header argument to TRUE.
+
+</details>
+
+<details>
+<summary> <b>Solution</b> (click here) </summary>
+
+```{r}
+#create an object storing the web address
+zip_address <- "https://github.com/biodash/biodash.github.io/raw/master/assets/data/data_frame/example_df.tsv.gz"
+```
+
+```{r, eval = FALSE}
+zip_data <- read.table(zip_address, header = TRUE)
+```
+</details>
+<br>
+
+`read.table()` isn't able to uncompress a file directly from online, so you probably got an error message. However, it can automatically uncompress a file when reading it in locally (from your computer). So, see if you can use the `download.file()` function to get the compressed file and then read it in in a second step.
+
+<details>
+<summary> <b>Hint</b> (click here) </summary>
+`download.file()` requires that two arguments are defined: *url* and *destfile*. Check `?download.file` for details.
+
+</details>
+
+<details>
+<summary> <b>Solution</b> (click here) </summary>
+
+```{r}
+download.file(zip_address, destfile = "example_zip_file.tsv.gz")
+
+zip_data <- read.table("example_zip_file.tsv.gz", header = TRUE)
+```
+</details>
+<br>
+
+Alternatively, you could install the *data.table* package and try its `fread()` function, which is able to download and automatically uncompress a file from online all in one step (though doing so requires another package, *R.utils*, so you'll also have to get that one first if you don't already have it)...
+
+```{r, eval = FALSE}
+install.packages("R.utils")
+install.packages("data.table")
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(R.utils)
+library(data.table)
+
+data.table::fread(zip_address)
+
+```
+
+</div>
+</div>
+
+Not only does this offer a little more practice with objects, functions, and reading in data, but it also provides one small example of the value in having multiple functions available that do similar things. In this specific case, when reading in data directly from online, you might find `read.table()` to be a little easier to work with if the data are uncompressed, but `fread()` might make things a bit easier (one less step) if the file is compressed. And we actually saw a third function, `read_tsv()` earlier (from the *readr* package), which offers yet another option for reading in data-frame-like data. This kind of thing is common in R - there are typically multiple ways of doing things, and as you work in R, you'll continue to pick up more and more efficient ways of doing what you want to do.
+
+<br>
+
+<br> <br>
