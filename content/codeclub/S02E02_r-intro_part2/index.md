@@ -6,7 +6,7 @@ date: "2021-08-30"
 lastmod: "2021-08-30"
 output: hugodown::md_document
 toc: true
-rmd_hash: 4770c1dade6230cd
+rmd_hash: f68fa1ea27e04a57
 
 ---
 
@@ -62,9 +62,7 @@ If you run these lines in RStudio, you'll see the resulting objects listed in th
 
 ## 3 -- Functions
 
-We'll return to objects shortly, but first, let's take a very basic look at functions, which make up a second really important part of R. You can think of objects as **being** things in R, while functions **do** things in R. Essentially every task in R will involve objects or functions, and often both, so these are two things worth learning early on.
-
-I'll start by writing a very simple function...
+We'll return to objects shortly, but first, let's take a very basic look at functions, which make up a second really important part of R. You can think of objects as **being** things in R, while functions **do** things in R. I'll start by writing a very simple function...
 
 <div class="highlight">
 
@@ -93,7 +91,7 @@ It's useful to be able to create your own functions. But if that sounds a little
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#some example base R functions</span>
 <span class='nf'><a href='https://rdrr.io/r/base/date.html'>date</a></span><span class='o'>(</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "Tue Aug 31 09:58:36 2021"</span>
+<span class='c'>#&gt; [1] "Tue Aug 31 10:24:39 2021"</span>
 
 <span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>
 
