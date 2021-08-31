@@ -6,7 +6,7 @@ date: "2021-08-30"
 lastmod: "2021-08-30"
 output: hugodown::md_document
 toc: true
-rmd_hash: 188d55a1cd9194c8
+rmd_hash: 4770c1dade6230cd
 
 ---
 
@@ -14,6 +14,7 @@ rmd_hash: 188d55a1cd9194c8
 
 ## Learning objectives
 
+> -   Create objects in R
 > -   Recognize and use R functions
 > -   Differentiate between some common object classes and data structures in R
 > -   Read in data from a file
@@ -25,7 +26,11 @@ rmd_hash: 188d55a1cd9194c8
 
 ## 1 -- Intro
 
-Last week Jelmer introduced objects - things in R to which a name can be assigned with the assignment operator "\<-". For example, running the following three lines of code creates objects named "x", "y", and "z", respectively...
+Nearly everything you do in R will involve **objects**, **functions**, or (often) both. In this session, we'll take a quick look at each of these fundamental components for working in R. In addition, we'll get introduced to R packages (since they'll provide many of the functions you'll use), and also practice reading some data in to R.
+
+## 2 -- Objects
+
+Objects are things in R to which a name can be assigned. They're created using the assignment operator "\<-", which can be thought of as an arrow (it's actually two separate characters - the less than symbol and dash) that points whatever is on the right side to a name provided on the left side. For example, running the following three lines of code creates objects named "x", "y", and "z", respectively...
 
 <div class="highlight">
 
@@ -55,7 +60,7 @@ If you run these lines in RStudio, you'll see the resulting objects listed in th
 
 </div>
 
-## 2 -- Functions
+## 3 -- Functions
 
 We'll return to objects shortly, but first, let's take a very basic look at functions, which make up a second really important part of R. You can think of objects as **being** things in R, while functions **do** things in R. Essentially every task in R will involve objects or functions, and often both, so these are two things worth learning early on.
 
@@ -88,7 +93,7 @@ It's useful to be able to create your own functions. But if that sounds a little
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#some example base R functions</span>
 <span class='nf'><a href='https://rdrr.io/r/base/date.html'>date</a></span><span class='o'>(</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] "Mon Aug 30 12:35:50 2021"</span>
+<span class='c'>#&gt; [1] "Tue Aug 31 09:58:36 2021"</span>
 
 <span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span>
 
@@ -101,7 +106,7 @@ It's useful to be able to create your own functions. But if that sounds a little
 
 </div>
 
-## 3 -- Object Classes and Data Structures
+## 4 -- Object Classes and Data Structures
 
 Now that we have at least a basic idea of R functions, we'll turn attention back to objects (and use functions along the way from here on out). The objects we've created so far have been pretty simple. Let's revisit the three from above...
 
@@ -161,7 +166,7 @@ I'm going to introduce a new term here that's closely tied to object classes, an
 
 Today we'll focus in on two of these - **vectors** and **data frames**.
 
-## 4 -- Vectors
+## 5 -- Vectors
 
 Vectors in R share a couple important characteristics...
 
@@ -176,6 +181,7 @@ The [`c()`](https://rdrr.io/r/base/c.html) function is useful for creating vecto
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>odds</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>,<span class='m'>3</span>,<span class='m'>5</span>,<span class='m'>7</span>,<span class='m'>9</span><span class='o'>)</span>
 <span class='nv'>animals</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"dog"</span>, <span class='s'>"cat"</span>, <span class='s'>"cow"</span><span class='o'>)</span>
 
+<span class='c'>#view the objects</span>
 <span class='nv'>odds</span>
 
 <span class='c'>#&gt; [1] 1 3 5 7 9</span>
@@ -183,6 +189,16 @@ The [`c()`](https://rdrr.io/r/base/c.html) function is useful for creating vecto
 <span class='nv'>animals</span>
 
 <span class='c'>#&gt; [1] "dog" "cat" "cow"</span>
+
+
+<span class='c'>#check their class</span>
+<span class='nf'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='o'>(</span><span class='nv'>odds</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "numeric"</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='o'>(</span><span class='nv'>animals</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "character"</span>
 </code></pre>
 
 </div>
@@ -357,7 +373,7 @@ We have used the [`as.integer()`](https://rdrr.io/r/base/integer.html) function 
 
 ------------------------------------------------------------------------
 
-## 5 -- Data Frames
+## 6 -- Data Frames
 
 Data frames are another data structure in R you'll likely use a lot. Some characteristics of data frames...
 
@@ -594,7 +610,7 @@ Spend a few minutes playing around with some of the following functions and try 
 
 <br>
 
-## 6 -- R Packages
+## 7 -- R Packages
 
 I mentioned above when talking about functions that many have already been written for you, and some are available as soon as you open up R - those that are considered part of "base R". All the functions we've used up to this point are included in that set. But there are lots of other functions available as part of additional packages you can install and load. The two most common places to get packages are the CRAN and Bioconductor repositories - I did a couple short videos on these as part of [this Intro To R Playlist](https://youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe).
 
@@ -651,7 +667,9 @@ Now we should have access to the readr package and all of the functions containe
 
 </div>
 
-You might notice that *exp_data2* is a tibble, while *exp_data* is a data frame (try the [`class()`](https://rdrr.io/r/base/class.html) function on each). This small difference in the types of objects that are returned is one of the differences in the functions [`read.table()`](https://rdrr.io/r/utils/read.table.html) and [`read_tsv()`](https://readr.tidyverse.org/reference/read_delim.html).
+You might notice that *exp_data2* is a tibble, while *exp_data* is a data frame (try the [`class()`](https://rdrr.io/r/base/class.html) function on each). This small difference in the types of objects that are returned is one of the differences in the functions [`read.table()`](https://rdrr.io/r/utils/read.table.html) and [`read_tsv()`](https://readr.tidyverse.org/reference/read_delim.html). While the class of the objects is different, the contents of the objects are the same.
+
+In addition to functions like [`install.packages()`](https://rdrr.io/r/utils/install.packages.html) and [`library()`](https://rdrr.io/r/base/library.html) that help you manage packages in R, RStudio also provides some point-and-click ways to do these same things. Check out the *packages* tab in the bottom-right RStudio panel.
 
 ------------------------------------------------------------------------
 
