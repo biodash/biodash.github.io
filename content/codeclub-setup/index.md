@@ -1,49 +1,39 @@
 ---
 toc: true
+title: "Computer Setup for Code Club"
 ---
 
-# Code Club: <br/> Computer setup and <br> other information for newcomers
-
 ----
+
 <br>
 
 Here, you will find general information on computer setup for Code Club.
 Additional setup instructions for individual sessions will appear in the posts for each session.
 
-#### Summary:
+<br>
 
-- You can work [with local installations](/codeclub-setup/#local) or
-  in your browser at the [Ohio Supercomputer Center (OSC)](/codeclub-setup/#osc).
+## Summary
 
-- **If you plan to work with local installations**:
-  
-  - [Install R](/codeclub-setup/#install-r) and [install RStudio](/codeclub-setup/#install-rstudio),
-    or [update R](/codeclub-novice/#updating-r) if your version is below `R 3.6`.
-  
-  - [Install the *tidyverse*](/codeclub-setup/#install-tidy) and [test if you can load it](/codeclub-setup/#install-tidy).
-  
-  - We recommend you do make sure you have an active OSC account with
-    access to the Code Club project, as a backup option.
+- You can work in your browser at the [Ohio Supercomputer Center (OSC)](/codeclub-setup/#osc)
+  or you can work [with local software installations](/codeclub-setup/#local).
 
 - **If you plan to work at OSC**:
   
-  - Sign up at OSC if you don't have an account yet.
+  - You should receive an email from OSC that you have been added to the Code Club
+    OSC project. Follow the instructions from that email, including to sign up
+    for an OSC account itself if you don't have one.
   
-  - You should have received 
+  - Test if you can start an RStudio Server session at OSC OnDemand,
+    and optionally test if you can load the *tidyverse* package.
+
+- **If you plan to work with local software installations**:
   
-  - Test if you can start an RStudio Server session.
+  - Install R and RStudio. <br>
+    (If you already have R but a version below `R 3.6`, then [update R](/tutorials/r-resources-tips/#updating-r).)
   
-- **Planning to come to Code Club for the first time?** Have a look at the **[introductory slides](/slides/CC01/)**.
-
-- **Have not used R before?**
-  See the **[Getting Started with R](/codeclub-novice/)** page.
-
-- **Have not used RStudio before?**  
-  Take a moment to explore it, and it may help to check out
-  [Mike Sovic's 1-minute intro](https://www.youtube.com/watch?v=ByxF3xjN2JQ&list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe&t=2m15s) 
-  or [RStudio's intro video](https://fast.wistia.net/embed/iframe/520zbd3tij?videoFoam=true).
-
-- **Questions?** Don't hesitate to contact [Jelmer](mailto:poelstra.1@osu.edu) or
+  - Optionally, install the *tidyverse* package and test if you can load it.
+  
+- **Run into issues or have questions?** Don't hesitate to contact [Jelmer](mailto:poelstra.1@osu.edu) or
   one of the other organizers. You can also join the Code Club Zoom call
   15 minutes early, and one or more of the organizers will be on there already.
 
@@ -55,43 +45,97 @@ Additional setup instructions for individual sessions will appear in the posts f
 
 All Code Club participants will get access to the [Ohio Supercomputer Center (OSC)](http://osc.edu)
 Classroom Project for Code Club (`PAS1838`).
-This way, you can code in (e.g.) RStudio from your browser rather than with a local installation.
-This is a good option if you prefer not to install anything locally or run into problems when doing so.
+This way, you can code in RStudio from your browser rather than with a local installation.
+This is a good option if you prefer not to install anything or if you run
+into problems during installations.
 
-*If you already had an OSC account*, you should have been added to the Code Club OSC project
-and can continue to the [second step](/codeclub-setup/#osc-run-rstudio).
-Otherwise, please follow the instructions below to sign up and get access to the project.
+**After signing up for Code Club, you should receive an email from OSC
+that you have been added to the Code Club OSC project.**
 
-### Sign up at OSC {#osc-signup}
+- *If you already have an OSC account*,
+  you shouldn't need to do anything to gain access,
+  although the email may ask you to confirm/accept your being added to project.
 
-To sign up:
+- *If you do not yet have an OSC account*,
+  the email you received from OSC should have a link to do so.
+  Alternatively, follow the instructions below to sign up and get access to the project.
+  
+  <details>
+  <summary>
+  Instructions to sign up at OSC (click here)
+  </summary>
 
-- Go to <https://my.osc.edu/> and click the blue "*Sign Up*" bar.
+  To sign up:
+  
+  - Go to <https://my.osc.edu/> and click the blue "*Sign Up*" bar.
+  
+  - In the bottom right portion of the form where you provide your info (see screenshot below),
+    you should enter Code Club's Project Code, which is `PAS1838`.
+    **If you want to use OSC, please do this on a day prior to your first Code Club participation.**
+    This way, there is time to troubleshoot if needed. Moreover, the `Code Club` option on the
+    Interactive Apps page below can take a few hours to appear after you become a member of the project.
+  
+  {{< figure src="osc_signup2.png" width="600px" caption="Enter Project Code PAS1838 in the red box (click to enlarge)" >}}
+  
+  </details>
 
-- In the bottom right portion of the form where you provide your info (see screenshot below),
-  you should enter Code Club's Project Code, which is `PAS1838`.
-  **If you want to use OSC, please do this on a day prior to your first Code Club participation.**
-  This way, there is time to troubleshoot if needed. Moreover, the `Code Club` option on the
-  Interactive Apps page below can take a few hours to appear after you become a member of the project.
+### Run RStudio Server from the OSC website {#osc-run-rstudio}
 
-{{< figure src="osc_signup2.png" width="800px" caption="Enter Project Code PAS1838 in the red box (click to enlarge)" >}}
+[OSC OnDemand](https://ondemand.osc.edu/) lets you access OSC resources through your
+browser and run applications like RStudio.
+It has a separate access point, <https://class.osc.edu/>,
+for "classroom projects" such as this one. 
 
-### Run RStudio Server during Code Club {#osc-run-rstudio}
+1. To get started, go to <https://class.osc.edu/> and log in with your OSC username and password.
 
-[OSC OnDemand](https://ondemand.osc.edu/) lets you access OSC resources through your browser and run a couple of applications with GUIs,
-like RStudio. It has a separate access point, <https://class.osc.edu/>, for classroom projects such as this one. 
-- To get started, go to <https://class.osc.edu/> and log in with your OSC username and password.
-- Then, click on `Interactive Apps` in the blue top bar, and select `RStudio Server (Owens and Pitzer): Form`.
-- Now, you're on a page from which you can launch an RStudio server that will run on an OSC cluster.
-  - Under `Class Materials`, select `Code Club`.
-  - Under `Number of hours`, enter `2`.
-  - Click `Launch`.
-- Now, you should see a box like this:
-{{< figure src="osc_queued.png" width="700px" caption="" >}}
-- Your job should start running pretty soon, and when it's ready the box should look like this: 
-{{< figure src="osc_running.png" width="700px" caption="" >}}
-- Click `Connect to RStudio Server` at the bottom of the box, and an RStudio Server instance will open. You're ready to go!
+2. Click on `Apps` in the blue top bar, and select `RStudio Server: Form`, as shown below:
+  
+  {{< figure src="osc_rstudio-app.png" width="600px" caption="" >}}
 
+3. Now, you're on a page from which you can launch an RStudio server that will run on an OSC cluster.
+   As shown below, make sure that "Code Club" is selected under `Class Materials`,
+   and change the select `Number of hours` to 2. Then click `Launch`.
+
+   {{< figure src="osc_rstudio-form.png" width="500px" caption="" >}}
+  
+4. You should see a box like this:
+
+   {{< figure src="osc_queued.png" width="600px" caption="" >}}
+
+5. Your job usually starts running within seconds, and the color of the top
+   bar will then switch from blue ("Queued" and then "Starting") to green ("Running"):
+   
+   {{< figure src="osc_running.png" width="600px" caption="" >}}
+
+6. Click `Connect to RStudio Server` at the bottom of the box,
+   and an RStudio Server instance will open.
+
+### Test whether you can load the *tidyverse* (optional)
+
+Several commonly used packages will be automatically available to you at OSC,
+and that should include the *tidyverse*.
+Test whether you can load the *tidyverse* by running `library(tidyverse)`,
+and check whether you get output similar to what is shown below:
+
+```r
+library(tidyverse)
+
+#> ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.1 ──
+#> ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+#> ✓ tibble  3.1.3     ✓ dplyr   1.0.7
+#> ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+#> ✓ readr   2.0.1     ✓ forcats 0.5.1
+#> ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> x dplyr::filter() masks stats::filter()
+#> x dplyr::lag()    masks stats::lag()
+```
+
+If you get an error, install the *tidyverse* as follows:
+
+```r
+install.packages("tidyverse")
+```
+  
 ### More about OSC {#osc-more}
 
 The above instructions should be all you need to access RStudio using OSC,
@@ -106,15 +150,20 @@ at his channel [The Data Point](https://www.youtube.com/channel/UC2dB6jDTbqzlTM6
 
 ----
 
-## Option 2 -- Local install {#local}
+## Option 2 -- Local installation {#local}
 
-### Summary {#local-summary}
+<div class="alert alert-note">
+<div>
 
-You will need:
-- R: At least version `3.6` -- [See here for instructions to update R](/codeclub-novice/#updating-r)
-- RStudio
-- R packages that we will regularly use:
-  - `tidyverse`
+### Already have R installed?
+
+- Please check your version of R, and update if it is below version `3.6`.  
+  [See this page for instructions.](/tutorials/r-resources-tips/#updating-r)
+
+- Make sure you have installed the *tidyverse* package.
+  
+</div>
+</div>
 
 ### Install R {#install-r}
 
@@ -136,40 +185,37 @@ the de facto standard for working with R and is very useful.
 To install RStudio, go to the [RStudio download page](https://rstudio.com/products/rstudio/download/#download)
 and download and run the installer file for your operating system. 
 
-### Install the *tidyverse* {#install-tidy}
+### Install the *tidyverse* (optional) {#install-tidy}
 
-Install the *tidyverse*, which is a collection of useful R packages,
-by typing the following command inside an R console:
+To install or update the *tidyverse*, which is a collection of useful R packages,
+copy the following command into an R console, and press Enter:
 
 ```r
 install.packages("tidyverse")
 ```
 
-### Test whether you can load the *tidyverse* {#test-tidy}
+### Test whether you can load the *tidyverse* (optional) {#test-tidy} 
 
-When you issue the command `library("tidyverse")`,
-you should get the output shown below:
+When you issue the command `library(tidyverse)` in your R console inside RStudio,
+you should get output similar to what is shown below:
 
 ```r
-library("tidyverse")
+library(tidyverse)
 
-#> ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
-
-#> ✔ ggplot2 3.3.2     ✔ purrr   0.3.4
-#> ✔ tibble  3.0.4     ✔ dplyr   1.0.2
-#> ✔ tidyr   1.1.2     ✔ stringr 1.4.0
-#> ✔ readr   1.3.1     ✔ forcats 0.5.0
-
-#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter() masks stats::filter()
-#> ✖ dplyr::lag()    masks stats::lag()
+#> ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.1 ──
+#> ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+#> ✓ tibble  3.1.3     ✓ dplyr   1.0.7
+#> ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+#> ✓ readr   2.0.1     ✓ forcats 0.5.1
+#> ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> x dplyr::filter() masks stats::filter()
+#> x dplyr::lag()    masks stats::lag()
 ```
 
-If you get an error instead, please try to troubleshoot it.
-Updating R itself may be necessary, see [here](/codeclub-novice/#updating-r) for instructions.
+If you get an error instead, please try to troubleshoot it by following any instructions
+given, or by Googling the error message.
+It may be necessary to update R itself, see [here](/codeclub-novice/#updating-r) for instructions.
 You can also send the [organizers of Code Club](https://biodash.github.io/codeclub-about/#organizers) an email.
-And if you can't get it to work yet,
-you can always use OSC for the time being, see the [setup instructions further up on this page](/codeclub-setup/#osc).
 
 <br>
 
@@ -177,12 +223,12 @@ you can always use OSC for the time being, see the [setup instructions further u
 
 ## More info {#more}
 
-Please see the **[Getting started with R](/codeclub-novice/)** page for:
+Please see our **[R Resources and Tips](/tutorials/r-resources-tips/)** page for:
 
-- [Resources to get started with R](/codeclub-novice/#new-to-r)
-- [Useful R and RStudio settings](/codeclub-novice/#useful-settings)
-- [The basics of installing packages in R](/codeclub-novice/#installing-r-packages)
-- [Instructions for updating R](/codeclub-novice/#updating-r)
+- [Resources to get started with R](/tutorials/r-resources-tips/#r-resources)
+- [Useful R and RStudio settings](/tutorials/r-resources-tips/#useful-settings)
+- [The basics of installing packages in R](/tutorials/r-resources-tips/#installing-r-packages)
+- [Instructions for updating R](/tutorials/r-resources-tips/#updating-r)
 
 
 

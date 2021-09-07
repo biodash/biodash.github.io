@@ -1,8 +1,7 @@
 ---
 toc: true
+title: "Information for Code Club Presenters"
 ---
-
-# Code Club: <br/> Information for Presenters
 
 ----
 

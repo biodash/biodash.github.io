@@ -1,0 +1,281 @@
+---
+title: "Cleaning Up"
+author: "Jessica Cooperstone"
+date: "4/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+## 1 - Using regexs for wrangling
+
+Now that we have gone through a mini-series on regular expressions, with the [basics](https://biodash.github.io/codeclub/17_regex/), some [next level helpers](https://biodash.github.io/codeclub/18_regex2/), and [using tidytext to make word clouds](https://biodash.github.io/codeclub/19_wordclouds/), I thought I'd talk today about some applications of this information to cleaning up your data.
+
+To do this, we are going to practice with the [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) dataset, and get back to the [`bakeoff`](https://bakeoff.netlify.app/) for our practice exercises.
+
+
+## 2 - Accessing our data
+
+First load your libraries.  We will be using `stringr` and `tidyr` but those are both part of core `tidyverse`.  We are also using a new package today called `janitor` which helps you "clean up" your data.
+
+If you don't have the package `janitor`, please install it.
+```{r, eval = FALSE}
+install.packages("janitor")
+```
+
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(janitor) # for cleaning up column names
+
+library(palmerpenguins) # for penguins data
+library(bakeoff) # for bakeoff data
+```
+
+Then we will use the package `palmerpenguins` and the dataset `penguins_raw`, which has a bit more info than `penguins`, which we have used previously.  
+
+----
+
+## 3 - Variable names
+
+There are many instances where you may have variables names and/or sample names that are messy. For example, variable names that include characters like white spaces, special characters like symbols, or begin with a number are going to give you problems with some R coding. I'll say that you *can* have these non-standard variable names, but occasionally they will give you a big headache and so I'd recommend to just avoid them.
+
+R variable "rules":
+
+-   can contain letters, numbers, underscores (`_`) and periods (`.`)
+-   cannot start with a number or underscore
+-   shouldn't be a "reserved" word, like if, else, function, TRUE, FALSE etc. (if you want to see them all, execute     `?reserved` in your console)
+
+You can read about the [tidyverse style guide](https://style.tidyverse.org/syntax.html) if you want to learn more.
+
+Lets look at the variable names in `penguins_raw`.
+
+```{r}
+glimpse(penguins_raw)
+```
+
+What you can see is that there are variable names here that don't comply with the "rules" I just indicated. How can that be?! You can see for the variable `Sample Number` that it is surrounded by backticks. This is how R know that this is a variable name.
+
+Okay, so who cares? If you want to call that particular variable, you will have to put it in backticks. For example:
+
+```{r, eval = FALSE}
+# this doesn't work
+penguins_raw %>%
+  select(Sample Number)
+```
+
+```{r}
+# this works but is clunky
+penguins_raw %>%
+  select(`Sample Number`)
+```
+
+And, this is using `tidyverse` functions - there will be other situations where you will get non-solvable errors because of your variable names.
+
+**tl;dr just make your variable names R compliant, there are lots of other harder things you're going to be doing with coding, so just make this easier for yourself.**
+
+### Using `clean_names()`
+
+<p align="center"> 
+<img src=janitor_clean_names.png width="95%" alt="cute illustration of the function clean_names, with a little beaker feeding messy data into something that looks like a planar, and better column names coming out the other side">
+</p>
+Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)
+
+You may be thinking now, okay but what happens if someone else gives me data that has unclean variable names?
+
+Don't worry too much, you can easily fix it. My favorite, and the simplest way to do this is using the package `janitor`, and the function [`clean_names()`](https://www.rdocumentation.org/packages/janitor/versions/1.2.0/topics/clean_names). Certainly you could clean your variable names manually, but why? This is really easy.
+
+```{r}
+penguins_clean <- clean_names(penguins_raw)
+
+glimpse(penguins_clean)  
+```
+
+You can see that `Sample Number` became `sample_number`, `Culmen Length (mm)` became `culmen_length_mm`.
+
+The default is to parse with "snake" case, which would look like snake\_case. You could also set the argument `case` to:
+
+-   `"lower_camel"` or `"small_camel"` to get lowerCamel
+-   `"upper_camel"` or `"big_camel"` to get UpperCamel
+-   `"screaming_snake"` or `"all_caps"` to get SCREAMING\_SNAKE (stop yelling please)
+-   `"lower_upper"` to get lowerUPPER (I don't know why you'd want this)
+-   `"upper_lower"` to get UPPERlower (I also don't know why you'd want this)
+
+----
+
+## 4 - Unite character columns
+
+There will be times when you'd like to take a variable, and combine it with another variable. For example, you might want a column called `region_island` which contains a combination of the `region` and `island` that each penguin is from. We can do this with the function [`unite()`](https://tidyr.tidyverse.org/reference/unite.html). The function `unite()` allows you to paste together multiple columns to become one column.
+
+The arguments to `unite` work like this:
+
+`unite(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE)`
+
+```{r}
+penguins_clean_unite <- penguins_clean %>%
+  unite(col = "region_island", 
+        region:island, # indicate the columns to unite
+        remove = FALSE) # don't remove region and island
+```
+
+Did it work?
+
+```{r}
+head(penguins_clean_unite)
+```
+
+
+This is a silly example since there is only one region, but I think you can see how this function is used.
+
+----
+
+## 5 - Separate character columns
+
+There will be times that you have a column that has two variables embedded within it, and you will want to separate or parse the column to become two separate columns. You can do this with the function [`separate()`](https://tidyr.tidyverse.org/reference/separate.html).
+
+The arguments to separate look like this:
+
+`separate(data, col, into, sep = "yourregex", remove = TRUE, extra = "warn", fill = "warn")`
+
+Let's look at the column `stage`.
+
+```{r}
+penguins_clean$stage[1:5]
+```
+
+We might want to separate the column `stage` into `age` and `egg_stage`. We can do this with `separate()`.
+
+```{r}
+penguins_clean_stage <- penguins_clean %>%
+  separate(col = stage,
+           into = c("age", "egg_stage"),
+           sep = ",", # the comma is the separator
+           remove = FALSE) 
+```
+
+Did it work?
+
+```{r}
+penguins_clean_stage %>%
+  select(stage, age, egg_stage) %>%
+  head()
+```
+
+----
+
+## 6 - Extract character columns
+
+We can use [`extract()`](https://tidyr.tidyverse.org/reference/extract.html) to set up regular expressions to allow the separation of our variable `species` into a column with the common name, and a column with the genus species.
+
+We will use str_view to figure out a regex that will work for us.
+```{r}
+# indicate our string
+string <- "Adelie Penguin (Pygoscelis adeliae)"
+```
+
+```{r}
+# to get Adelie Penguin
+str_view(string, "\\w+\\s\\w+")
+```
+
+* `\\w` gives you anything that's a word character   
+* the `+` indicates to match alphanumeric at least 1 time
+* `\\s` indicates a space
+
+```{r}
+# to get Pygoscelis adeliae
+str_view(string, "(?<=\\()\\w+\\s\\w+")
+```
+
+* `(?<=)` is called the positive lookbehind, and has this general structure `(?<=B)A` which can be read like "find exprssion A which is preceeded by expression B."  In our example, expression B is a parentheses `(`.  But there is some additional complexity here because parentheses have their own meanings in regex so you need to use the `\\` to escape them.  The whole expression for this part of our regex is `(?<=\\()`.
+* `\\w` gives you anything that's a word character  
+* the `+` indicates to match alphanumeric at least 1 time
+* `\\s` indicates a space
+
+Ok our regexs work as desired!  Now we can incorporate them into `extract()`.  Here I am using `.*?`  to match the characters between our two targeted regex which here is ` (`.  
+
+```{r}
+penguins_clean_extract <- penguins_clean %>%
+  extract(col = species,
+          into = c("common_name", "genus_species"),
+          regex = "(\\w+\\s\\w+).*?((?<=\\()\\w+\\s\\w+)", 
+          remove = FALSE) 
+```
+
+```{r}
+penguins_clean_extract %>%
+  select(species, common_name, genus_species) %>%
+  head()
+```
+
+Voila! 
+
+----
+
+## 7 - Replacing with `str_replace()`
+
+The column `individual_id` has two parts: the letter N and then a number, and the letter A and then a number. Let's split this column into two columns, one called `id_n` that contains the number after the N, and a second called `id_a` that contains the number after the A.
+
+```{r}
+penguins_clean_fixID <- penguins_clean %>%
+  separate(col = individual_id,
+           into = c("id_n", "id_a"),
+           sep = "A", # can also use regex "[A]"
+           remove = FALSE) 
+```
+
+Did it work?
+
+```{r}
+penguins_clean_fixID %>%
+  select(individual_id, id_n, id_a) %>%
+  head()
+```
+
+This worked to separate out the A, but the N is still linked with `id_n`. We can use a combination of `mutate()` and `str_replace_all()` to remove the N. You can learn more about `str_replace()` [here](https://stringr.tidyverse.org/reference/str_replace.html).  
+
+```{r}
+penguins_clean_fixID <- penguins_clean_fixID %>%
+  mutate(id_n = str_replace_all(id_n, "N", ""))
+```
+
+```{r}
+penguins_clean_fixID %>%
+  select(individual_id, id_n, id_a) %>%
+  head()
+```
+
+## Exercises
+### Exercise 1
+
+Using the dataset `bakers`, combine `bakers_last` with `bakers_first` to create a new column `bakers_last_first` which is indicated like this: Lastname, Firstname.
+```{r}
+
+```
+
+
+### Exercise 2
+Using the dataset `bakers`, convert the column `hometown` to two columns, where whatever comes before the comma is in a column called `city` and whatever comes after is in a column called `locale`.
+```{r}
+
+```
+
+### Exercise 3
+Using the dataset `bakers` add a column `nickname` which indicates the bakers nickname, if they have one.
+```{r}
+
+```
+
+
+
+### Exercise 4
+Using the dataset `challenge_results`, write a regex to find any `signature` that contains chocolate.  Remove all observations that contain `NA` for the `signature`.  
+How many of the signature bakes contain chocolate?  What percentage of the total signature bakes (for which we have bake names) does this represent?
+```{r}
+
+```
+
