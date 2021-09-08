@@ -1,7 +1,6 @@
 ---
 output: hugodown::md_document
-# output: html_document
-title: "Code Club S02E01: R Markdown"
+title: "Code Club S02E03: R Markdown"
 subtitle: "Text + Code + Output"
 summary: "In session of Code Club, we'll learn about Markdown syntax and some of the great functionality of R Markdown."
 authors: [michael-broe]
@@ -18,7 +17,7 @@ projects: []
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 017998764619de07
+rmd_hash: 04aa0481f671ac9f
 
 ---
 
