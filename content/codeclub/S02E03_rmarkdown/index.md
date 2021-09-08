@@ -8,7 +8,6 @@ tags: [codeclub, markdown, rmarkdown]
 date: "2021-09-02"
 lastmod: "2021-09-02"
 toc: true
-# Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
 image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
@@ -17,7 +16,7 @@ projects: []
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: c6f86e504e7cb90d
+rmd_hash: 07d547969d53271e
 
 ---
 
