@@ -33,7 +33,7 @@
   
     
   
-  <meta name="description" content="In this 7th session of Code Club, we will learn about Markdown syntax and some of the great functionality of R Markdown." />
+  <meta name="description" content="In session of Code Club, we&#39;ll learn about Markdown syntax and some of the great functionality of R Markdown." />
 
   
   <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s02e03_rmarkdown/" />
@@ -331,17 +331,17 @@
   
   <meta property="og:site_name" content="BioDASH" />
   <meta property="og:url" content="https://biodash.github.io/codeclub/s02e03_rmarkdown/" />
-  <meta property="og:title" content="Session 7: R Markdown | BioDASH" />
-  <meta property="og:description" content="In this 7th session of Code Club, we will learn about Markdown syntax and some of the great functionality of R Markdown." /><meta property="og:image" content="https://biodash.github.io/codeclub/s02e03_rmarkdown/featured.jpg" />
+  <meta property="og:title" content="Code Club S02E03: R Markdown | BioDASH" />
+  <meta property="og:description" content="In session of Code Club, we&#39;ll learn about Markdown syntax and some of the great functionality of R Markdown." /><meta property="og:image" content="https://biodash.github.io/codeclub/s02e03_rmarkdown/featured.jpg" />
     <meta property="twitter:image" content="https://biodash.github.io/codeclub/s02e03_rmarkdown/featured.jpg" /><meta property="og:locale" content="en-us" />
   
     
       <meta
         property="article:published_time"
-        content="2021-01-24T00:00:00&#43;00:00"
+        content="2021-09-02T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-09-08T12:24:52-04:00">
+    <meta property="article:modified_time" content="2021-09-08T13:28:12-04:00">
   
 
   
@@ -357,11 +357,11 @@
 
 
 
-  <title>Session 7: R Markdown | BioDASH</title>
+  <title>Code Club S02E03: R Markdown | BioDASH</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="1943b8884139c555f8ed51dac6d60f81" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="d66c3740a020d0474cb6ee94580d5f78" >
 
   
   
@@ -766,19 +766,6 @@
         <li></li>
       </ul>
     </li>
-    <li><a href="#breakout-rooms">Breakout rooms!</a>
-      <ul>
-        <li><a href="#exercise-1-output-formatting-with-yaml">Exercise 1: Output formatting with YAML</a></li>
-        <li><a href="#exercise-2-code-chunks">Exercise 2: Code chunks</a></li>
-        <li><a href="#bonus-1-markdown-and-inline-code">Bonus 1: Markdown and inline code</a></li>
-        <li><a href="#bonus-2-other-output-formats">Bonus 2: Other output formats</a></li>
-      </ul>
-    </li>
-    <li><a href="#go-further">Go further</a>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
   </ul>
 </nav>
         </div>
@@ -815,7 +802,7 @@
 
 
 <div class="article-container pt-3">
-  <h1>Session 7: R Markdown</h1>
+  <h1>Code Club S02E03: R Markdown</h1>
 
   
   <p class="page-subtitle">Text + Code + Output</p>
@@ -835,7 +822,7 @@
     
 
   <span >
-      <a href="/authors/admin/">Jelmer Poelstra</a></span>
+      <a href="/authors/michael-broe/">Michael Broe</a></span>
   </div>
   
   
@@ -886,7 +873,11 @@
                         <p><br> <br> <br></p>
 <hr>
 <h2 id="introduction">Introduction</h2>
-<p>R Markdown consists of an amazing ecosystem of R packages to produce many types of technical content. Its signature capability is that is can <strong>run R code and print the code along with its results and nicely formatted prose.</strong></p>
+<p>R Markdown consists of an amazing ecosystem of R packages to produce many types of technical content. Its signature capability is that is can <strong>print formatted text, run R code, and display the results, all inside a single document</strong>. Furthermore, you can easily export this document in a large variety of formats, including HTML, PDF, Word, RTF, etc. The webpage you are looking at now was written completely in R Markdown.</p>
+<p>At the most basic level, instead of using comments interleaved with your code in an R script:<br>
+<code># This is a comment</code><br>
+you can insert formatted text around your code in an R Markdown file. You can structure your document with headings and subheadings. You can add tables of contents. You can even generate formatted bibliographies. And the R code you insert in the document runs <strong>inside the document</strong> and the results go to the document itself, not to the console or (in the case of plots) to the Plots pane in RStudio.</p>
+<p>This makes RMarkdown a great <strong>computer lab notebook</strong>, since you can explain what you&rsquo;re doing and why (to colleagues or your future self). It&rsquo;s also an example of <strong>reproducible research</strong> since you share not just a Word file, say, with example code, but an active document in which the code actually runs and the results are reproduced.</p>
 <p>To understand R Markdown, we need to learn about three new things:</p>
 <ol>
 <li>
@@ -899,47 +890,167 @@
 <p><strong>The YAML header</strong>, which encodes metadata about the output, such as the desired output format and specific formatting features.</p>
 </li>
 </ol>
-<p>We&rsquo;ll focus on HTML page output, but will glimpse at the <strong>many possibilities for the output format</strong>: with R Markdown, it is possible to create not just technical reports, but also slide decks, websites, books, scientific articles, and so on.</p>
+<p>We&rsquo;ll focus on HTML output, but will also glance at other possibilities for the output format: with R Markdown, it is possible to create not just technical reports, but also slide decks, websites, books, scientific articles, dissertations, and so on.</p>
 <br>
 <h4 id="setup">Setup</h4>
 <p>At the core of the R Markdown ecosystem is the <em>rmarkdown</em> package. We need to install this but don&rsquo;t need to load it:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"rmarkdown"</span><span class='o'>)</span></code></pre>
 </div>
-<p>Inside your directory for Code Club, create a directory for this week:</p>
+<p>Inside your directory for Code Club, create a folder for this week:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S07'</span><span class='o'>)</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'S02E03'</span><span class='o'>)</span></code></pre>
 </div>
+<p>Select this folder in the Files pane. Then make this your working directory, using &ldquo;Set as Working Directory&rdquo; from the More options:</p>
+<p align="center">
+<img src="figs/setwd.jpg" width="1000px"/>
+</p>
 <br>
 <h4 id="first-an-example">First, an example</h4>
-<p>Before we go into details, let&rsquo;s first see a quick demonstration of what we are talking about:</p>
+<p>Before we go into details, let&rsquo;s first see a quick demonstration of what we&rsquo;re talking about. RStudio lets you create an example R Markdown document with a couple of clicks. Here are the instructions. I&rsquo;ll run through them, and then we&rsquo;ll open Breakout rooms so you can try it out yourself.</p>
 <ol>
 <li>
 <p>Go to <code>File</code> =&gt; <code>New File</code> =&gt; <code>R Markdown</code>, change the <em>Title</em> to &ldquo;Markdown demo&rdquo;, and click <code>OK</code>.</p>
 </li>
 <li>
-<p>Take a look at the R Markdown document, and notice that there seems to be some sort of header (=&gt; <em><strong>YAML</strong></em>), followed by R code wrapped in strange constructs with backticks (=&gt; <em><strong>Code chunks</strong></em>), and plain written text (=&gt; <em><strong>Markdown</strong></em>).</p>
+<p>Take a look at the R Markdown document, and notice that there seems to be some sort of header bounded by three dashes (=&gt; <em><strong>YAML</strong></em>), followed by R code wrapped in strange constructs with backticks and curly brackets (=&gt; <em><strong>Code chunks</strong></em>), and formatted written text (=&gt; <em><strong>Markdown</strong></em>).</p>
 </li>
 <li>
-<p>Before we can create output, we need to save the document. Click the <code>Save</code> button and save the files as <code>demo.Rmd</code> inside your newly created directory.</p>
+<p>Before we can render the output, we need to save the document. Click the <code>Save</code> button and save the files as <code>demo.Rmd</code> inside your newly created directory.</p>
 </li>
 <li>
-<p>Now click the <strong>Knit button</strong> in one of the top bars, and a document should show up in a pop-up or the Viewer pane. This is the <em>rendered output</em> from the R Markdown document.</p>
+<p>Now click the <strong>Knit button</strong> in one of the top bars, and a document should show up in a pop-up or the Viewer pane. This is the <em>rendered output</em> from the R Markdown document, translated into .html behind the scenes, and displayed using a built in web-browser.</p>
 </li>
 </ol>
-<p>Notice that the YAML header is not printed, at least not verbatim, while some of the code is printed, and we also see code output including a plot!</p>
+<p>Notice that the YAML header is not printed (at least not verbatim) while some of the code is printed (some is hidden), and we also see code output, including a plot!</p>
 <p>This is what the raw and rendered output look side-by-side:</p>
 <p align="center">
-<img src=img/rmd-demo-both.png width="1000px">
+<img src="img/rmd-demo-both.png" width="1000px"/>
 </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">## Breakout room</td>
+</tr>
+<tr>
+<td style="text-align:left">:::puzzle</td>
+</tr>
+<tr>
+<td style="text-align:left">Work through the example above yourselves. Generate a sample R Markdown file, in the correct directory, look at the contents, and make sure you can render it on your system using the &ldquo;Knit&rdquo; to HTML button in the top command bar.</td>
+</tr>
+<tr>
+<td style="text-align:left">:::</td>
+</tr>
+<tr>
+<td style="text-align:left"><br></td>
+</tr>
+</tbody>
+</table>
 <p>We&rsquo;ll now talk about Markdown, code chunks, and the YAML header in turn.</p>
-<br>
-<hr>
 <h2 id="i-markdown">I: Markdown</h2>
-<p>Markdown is a very lightweight language to format plain text files, which evolved from simple in-line formatting applied in emails before those started using HTML.</p>
-<p>Need to emphasize a word without being able to make it italic or bold? How about adding emphasis with asterisks *like so*?</p>
+<p>To fully appreciate the magic of Markdown and where it came from, it&rsquo;s useful to just briefly visit the notion of a <a href="https://en.m.wikipedia.org/wiki/Markup_language" target="_blank" rel="noopener">Markup language</a>.</p>
+<p>The original markup was a blue pencil on a handwritten manuscript. This markup included typographic instructions, such as to make a heading larger or text boldface, etc.</p>
+<p>Computer Markup languages have the same kind of annotations, which are included in the plain text, but are visually different from the content. This marked-up text is then sent to an interpreter (e.g. a web browser, a PDF viewer, an app like Word) which renders the final document.</p>
+<p>A large number of markup languages have been developed over the years. At current count there are about 60. This is how you would markup italic text in a small selection of them:</p>
+<p><strong>HTML</strong></p>
+<p><code>&lt;i&gt;This text is italic&lt;/i&gt;</code></p>
+<p><strong>Word .docx</strong></p>
+<p><code>&lt;w:t&gt;This is italic text.&lt;/w:t&gt;</code></p>
+<p><strong>TeX</strong></p>
+<p><code>\textit{This text is italic}</code></p>
+<p><strong>ODF text document .odt</strong></p>
+<p><code>&lt;text:p text:style-name=&quot;P1&quot;&gt;This text is italic.&lt;/text:p&gt;</code></p>
+<p><strong>Rich text format .rtf</strong></p>
+<p><code>{\rtlch\ai \ltrch\loch\i\loch This text is italic.}</code></p>
+<p>Some of these are more readable than others. Some are never meant to be read by humans at all! But underneath the hood <strong>every format is actually markup</strong>.</p>
+<p>The aim of Markdown is to create lightweight markup language, which is <strong>easy to read and easy to write</strong> in a text editor. It embodies the principle &ldquo;make common things easy, and rare things possible&rdquo;. Then we let the computer do the work of translating Markdown into various markup languages and rendering them, so we don&rsquo;t have to worry about the details:</p>
+<p><strong>Markdown</strong></p>
+<p><code>*This text is italic.*</code></p>
+<p>The &ldquo;Swiss Army Knife&rdquo; for letting the computer convert between Markup languages is <a href="https://pandoc.org" target="_blank" rel="noopener">Pandoc</a>. The site contains a graphic which shows what can be translated to what (just so you get a sense of the extend of this Markup world):</p>
+<p><img src="figs/pandoc.jpg" alt=""></p>
+<p>R Markdown uses Pandoc as its engine for translating Markdown to various Markup languages.</p>
 <br>
 <h4 id="an-overview-of-commonly-used-markdown-syntax">An overview of commonly used Markdown syntax</h4>
+<table>
+<thead>
+<tr>
+<th>Syntax</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td># My Title</td>
+<td>Header level 1 (largest)</td>
+</tr>
+<tr>
+<td>## My Section</td>
+<td>Header level 2</td>
+</tr>
+<tr>
+<td>### My Subsection</td>
+<td>Header level 3 &ndash; and so forth</td>
+</tr>
+<tr>
+<td>*italic* or _italic_</td>
+<td><em>italic</em></td>
+</tr>
+<tr>
+<td>**bold** or __bold__</td>
+<td><strong>bold</strong></td>
+</tr>
+<tr>
+<td><code>[Markdown Guide](markdownguide.org)</code></td>
+<td><a href="https://markdownguide.org" target="_blank" rel="noopener">Markdown Guide</a> (Link with custom text)</td>
+</tr>
+<tr>
+<td>![](path/to/figure.png)</td>
+<td>Figure</td>
+</tr>
+<tr>
+<td>- List item</td>
+<td>Unordered (bulleted) list</td>
+</tr>
+<tr>
+<td>1. List item</td>
+<td>Ordered (numbered) list</td>
+</tr>
+<tr>
+<td><code>`inline code`</code></td>
+<td><code>inline code</code></td>
+</tr>
+<tr>
+<td><code>```</code> <br> &hellip;code&hellip; <br> <code>```</code></td>
+<td>Generic code block (for formatting only) <br> (<em>Alternative syntax: 4 leading spaces.</em>)</td>
+</tr>
+<tr>
+<td><code>```r</code> <br> &hellip;code&hellip; <br> <code>```</code></td>
+<td><code>r</code> code block (for formatting only)</td>
+</tr>
+<tr>
+<td><code>---</code></td>
+<td>Horizontal rule (line)</td>
+</tr>
+</tbody>
+</table>
+<p>Below you&rsquo;ll see an examples of raw Markdown on the left, and its <em>rendered</em> (formatted) output on the right:</p>
+<p align="center">
+<img src=img/md-demo.png width="2000px">
+</p>
+<div class="alert alert-note">
+<div>
+<p>&ldquo;Plain&rdquo; Markdown files have the extension <code>.md</code>, whereas R Markdown</p>
+<p>files have the extension <code>.Rmd</code>.</p>
+</div>
+</div>
+<br>
+<hr>
+<h4 id="an-overview-of-commonly-used-markdown-syntax-1">An overview of commonly used Markdown syntax</h4>
 <table>
 <thead>
 <tr>
@@ -1006,11 +1117,7 @@
 <p align="center">
 <img src=img/md-demo.png width="2000px">
 </p>
-<div class="alert alert-note">
-<div>
 <p>&ldquo;Plain&rdquo; Markdown files have the extension <code>.md</code>, whereas R Markdown files have the extension <code>.Rmd</code>.</p>
-</div>
-</div>
 <br>
 <hr>
 <h2 id="ii-integrating-r-code">II: Integrating R code</h2>
@@ -1027,6 +1134,10 @@
 </thead>
 <tbody>
 <tr>
+<td>There are <code>`365*24`</code> hours in a year</td>
+<td>There are <code>365*24</code> hours in a year</td>
+</tr>
+<tr>
 <td>There are <code>`r 365*24`</code> hours in a year</td>
 <td>There are 8760 hours in a year</td>
 </tr>
@@ -1036,17 +1147,32 @@
 <li>
 <p>To generate <em>code blocks</em>, which we call <strong>code chunks</strong> in an R Markdown context,<br>
 we add r <em>inside curly braces</em>: <code>```{r}</code></p>
-<p>We can optionally add settings that we want to apply to that chunk and/or chunk labels:<br>
-<code>```{r, option1=value, ...}</code> or <code>```{r, unique-chunk-label, option1=value, ...}</code></p>
+<p>We can optionally add settings that we want to apply to that chunk:</p>
+<p><code>```{r, option1=value, ...}</code></p>
+<p>These options control things like:</p>
+<ul>
+<li>do you want your code to be displayed in the document, or just the results?</li>
+<li>do you want alerts and warnings to be displayed or not?</li>
+<li>do you want to turn off results, temporarily or permanently?</li>
+</ul>
+</li>
+</ul>
+<p>and many others.</p>
 <div class="alert alert-note">
 <div>
 <p>RStudio keyboard shortcut to insert a code chunk: <kbd>Cmd/Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>I</kbd>.</p>
+<p>There is also an Insert Code Chunk Button in the top bar of RStudio.</p>
 </div>
 </div>
-</li>
-</ul>
 <br>
 <h4 id="code-chunk-examples">Code chunk examples</h4>
+<p>In these examples we&rsquo;ll use the <a href="https://allisonhorst.github.io/palmerpenguins/" target="_blank" rel="noopener">Palmer Penguins</a> dataset. To access this dataset yourself, do:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;palmerpenguins&#34;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">palmerpenguins</span><span class="p">)</span>
+</code></pre></div><p>The example code we&rsquo;ll be using comes from the <strong>tidyverse</strong> package. If you don&rsquo;t have that installed yet, you need to do:</p>
+<div class="highlight"><pre class="chroma"><code class="language-r" data-lang="r"><span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;tidyverse&#34;</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+</code></pre></div><p>Don&rsquo;t worry <strong>at all</strong> if you don&rsquo;t understand the example code. This is exactly what we&rsquo;ll be moving onto in the coming weeks. The point is that the code is executed and displayed inside the document.</p>
 <ul>
 <li>
 <p>A code chunk with <strong>default options</strong>&hellip;</p>
@@ -1069,7 +1195,7 @@ we add r <em>inside curly braces</em>: <code>```{r}</code></p>
 </div>
 </li>
 <li>
-<p><strong>Figures</strong> can, of course, also be printed:</p>
+<p><strong>Figures</strong> have some specific options, including <strong>captions</strong>:</p>
 <p align="left">
 <img src=img/example-chunk-3.png width="100%">
 </p>
@@ -1088,10 +1214,11 @@ Fig. 1: Bill length and depth are correlated within species, <br> and differ sub
 </div>
 </li>
 </ul>
-<p>Above, we added a <strong>caption</strong> for the figure using the <code>fig.cap</code> argument (with a little trick to force a line break, using the <code>&lt;br&gt;</code> HTML syntax).</p>
+<p>We added a caption for the figure using the <code>fig.cap</code> argument (with a little trick to force a line break, using the <code>&lt;br&gt;</code> HTML syntax).</p>
 <div class="alert alert-note">
 <div>
 <h4 id="code-chunk-options">Code chunk options</h4>
+<p>There are huge number of options, and various options are specific to certain types of code chunks. Just learn the basic structure first, and if you ever wonder &ldquo;Can I do X to modify the output?&rdquo;, just know that many, many people have wondered that before, and if it makes sense to do it, you can probably do it with options.</p>
 <p>Here is an overview of some the most commonly made <em>changes to defaults</em> for code chunk options. This quickly gets confusing, but you&rsquo;ll get the hang of it after experimenting a bit.</p>
 <ul>
 <li><code>echo=FALSE</code> &ndash; Don&rsquo;t print the code in the output file.</li>
@@ -1115,15 +1242,6 @@ Fig. 1: Bill length and depth are correlated within species, <br> and differ sub
 </div>
 <div class="alert alert-note">
 <div>
-<h4 id="default-chunk-options">Default chunk options</h4>
-<p>It is often practical to set default chunk options for the entire document, and you can do so with the <code>opts_chunk$set()</code> function as shown below:</p>
-<p align="left">
-<img src=img/global-chunk.png width="100%">
-</p>
-<p>This is usually done in separate <em>&ldquo;global setup chunk&rdquo;</em> at the start of the document.<br>
-Whenever necessary, you can then override these defaults for specific chunks.</p>
-</div>
-</div>
 <br>
 <hr>
 <h2 id="iii-the-yaml-header">III: The YAML header</h2>
@@ -1148,12 +1266,7 @@ output:
 ---
 </code></pre>
 <ul>
-<li>
-<p>Note the syntax changes (newlines and added indentation) between the above two examples, this is perhaps a little awkward and often leads to mistakes.</p>
-</li>
-<li>
-<p>Indentation in YAML is using two or four spaces (no tabs!) per indentation level, and it is <em>sensitive to indentation errors</em>. (Fortunately, RStudio inserts spaces for tabs by default &ndash; check/set in <code>Tools</code> =&gt; <code>Global Options</code> =&gt; <code>Code</code> =&gt; <code>Editing</code>.)</p>
-</li>
+<li>Note that indentation in YAML uses two (or four) spaces (no tabs!) per indentation level, and it is <em>sensitive to indentation errors</em>. (Fortunately, RStudio inserts spaces for tabs by default &ndash; check/set in <code>Tools</code> =&gt; <code>Global Options</code> =&gt; <code>Code</code> =&gt; <code>Editing</code>.)</li>
 </ul>
 <div class="alert alert-note">
 <div>
@@ -1188,33 +1301,13 @@ Three HTML document <code>theme</code> options: <code>darkly</code>, <code>flatl
 <p>If you get preview pop-up windows in RStudio, click the cog wheel icon next to the Knit button, and then select &ldquo;<em>Preview in Viewer Pane</em>&rdquo;.</p>
 </div>
 </div>
-<br>
-<p>Instead of knitting the entire document, you can also <strong>run individual code chunks</strong> using the green &ldquo;play button&rdquo; (or <kbd>Cmd/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd>), or all code chunks up until the current one (button to the left of the play button).</p>
-<p>For a <strong>live preview (!)</strong> of R Markdown output for your active document,<br>
-use the <em>infinite moon reader</em> from the <em>xaringan</em> package:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"xaringan"</span><span class='o'>)</span>
-
-<span class='c'># Simply running the function without arguments will start the preview:</span>
-<span class='nf'>xaringan</span><span class='nf'>::</span><span class='nf'>inf_mr</span><span class='o'>(</span><span class='o'>)</span>
-
-<span class='c'># To shut down the preview server, if needed, run `servr::daemon_stop()`</span></code></pre>
-</div>
-<br>
-<h4 id="visual-markdown-editor">Visual Markdown Editor</h4>
-<p>If your RStudio version is at least 1.4 (Click <code>Help</code> =&gt; <code>About RStudio</code>), which was released last fall, you can also use the <em>Visual Markdown Editor</em>.</p>
-<p>This makes writing in R Markdown almost like using a word processor, and also includes many other features such as better citation support with Zotero integration. Read more about the visual editor <a href="https://rstudio.github.io/visual-markdown-editing" target="_blank" rel="noopener">here</a>.</p>
-<p>To switch between the visual editor and regular (&ldquo;source&rdquo;) editing mode, click the A-shaped ruler button in the top-right corner or press <kbd>Cmd/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F4</kbd>.</p>
-<p>This is what our document looks like in the visual editor &ndash; kind of intermediate between the raw R Markdown and the rendered output:</p>
-<p align="center">
-<img src=img/visual-editor.png width="70%">
-</p>
+<p><br> Instead of knitting the entire document, you can also <strong>run individual code chunks</strong> using the green &ldquo;play button&rdquo; (or <kbd>Cmd/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd>), or all code chunks up until the current one (button to the left of the play button).</p>
 <br>
 <hr>
 <h2 id="v-a-single-source-doc-many-output-formats">V: A single source doc, many output formats!</h2>
-<p>One of the greatest features of R Markdown is that you can output to many formats. So from one source document, or very similar variants, you can create completely different output depending on what you need.</p>
+<p>Because of the Pandoc backend, a great feature of R Markdown is that you can output to many formats. So from one source document, or very similar variants, you can create completely different output depending on what you need.</p>
 <h4 id="built-in-output-formats">Built-in output formats</h4>
-<p>The <a href="https://rmarkdown.rstudio.com/docs/reference/index.html#section-output-formats" target="_blank" rel="noopener">built-in output formats</a>, which can be used with just the <em>rmarkdown</em> package, are listed below. These include HTML, PDF, Word, PowerPoint, and different HTML slide show formats!</p>
+<p>The <a href="https://rmarkdown.rstudio.com/docs/reference/index.html#section-output-formats" target="_blank" rel="noopener">built-in output formats</a>, which can be used with just the <em>rmarkdown</em> package, are listed below. These include HTML, PDF, Word, PowerPoint, and different HTML slide show formats.</p>
 <p align="center">
 <img src=img/rmarkdown-output-formats.png width="80%">
 </p>
@@ -1244,306 +1337,6 @@ use the <em>infinite moon reader</em> from the <em>xaringan</em> package:</p>
 </span><span class="w"></span><span class="nn">---</span><span class="w">
 </span></code></pre></div><br>
 <hr>
-<h2 id="breakout-rooms">Breakout rooms!</h2>
-<p>In the exercises, we will work with an <code>.Rmd</code> file that you can download as follows:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># dir.create("S07")     # You should have already done this</span>
-
-<span class='c'># Save the URL for the Rmd file:</span>
-<span class='nv'>todays_rmd</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/07_rmarkdown/penguins.Rmd'</span>
-
-<span class='c'># Download the Rmd file:</span>
-<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_rmd</span>, destfile <span class='o'>=</span> <span class='s'>'S07/penguins.Rmd'</span><span class='o'>)</span></code></pre>
-</div>
-<p>Next, open the document in RStudio, and fire up the <em>infinite moon reader</em>:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># install.packages("xaringan")</span>
-
-<span class='nf'>xaringan</span><span class='nf'>::</span><span class='nf'>inf_mr</span><span class='o'>(</span><span class='o'>)</span></code></pre>
-</div>
-<p>This way, you will be able to nearly instantaneously see the effect of your changes: save the document whenever you want the server to update.</p>
-<p>You can use either the &ldquo;visual editor&rdquo; or the regular (&ldquo;source&rdquo;) editor &ndash; and you could also start by compating the two.</p>
-<div class="puzzle">
-<div>
-<h3 id="exercise-1-output-formatting-with-yaml">Exercise 1: Output formatting with YAML</h3>
-<p>In this exercise, you will fiddle with the YAML header to modify aspects of the <code>html_document</code> output format:</p>
-<ul>
-<li>
-<p>Add a <code>theme</code> key to <code>html_output</code>, and try a few of the available value options (&quot;<em>default</em>&quot;, &ldquo;<em>cerulean</em>&rdquo;, &ldquo;<em>journal</em>&rdquo;, &ldquo;<em>flatly</em>&rdquo;, &ldquo;<em>darkly</em>&rdquo;, &ldquo;<em>readable</em>&rdquo;, &ldquo;<em>spacelab</em>&rdquo;, &ldquo;<em>united</em>&rdquo;, &ldquo;<em>cosmo</em>&rdquo;, &ldquo;<em>lumen</em>&rdquo;, &ldquo;<em>paper</em>&rdquo;, &ldquo;<em>sandstone</em>&rdquo;, &ldquo;<em>simplex</em>&rdquo;, &ldquo;<em>yeti</em>&quot;).</p>
-<p>Determine, once and for all, what the best theme is.</p>
-</li>
-<li>
-<p>Try some of the other options mentioned above (<code>code_download</code>, <code>code_folding</code>, <code>toc</code>, <code>toc_float</code>, <code>toc_depth</code>, <code>df_print</code>), and look at the effects on the rendered output.</p>
-</li>
-</ul>
-<details>
-<summary>
-Hints (click here)
-</summary>
-<p>
-<ul>
-<li>
-<p>To add options to <code>html_document</code> in the YAML header, you&rsquo;ll need to go from <code>output: html_document</code> on a single line, to a multi-line format with indentation, and with a colon added after <code>html_document</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">output</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">html_document</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="l">&lt;option&gt;</span><span class="w">
-</span></code></pre></div></li>
-</ul>
-</p>
-</details>
-<br>
-<details>
-<summary>
-Solutions (click here)
-</summary>
-<br>
-<ul>
-<li>An example YAML header with several options added:</li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
-</span><span class="w"></span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Penguins, demystified.&#34;</span><span class="w">
-</span><span class="w"></span><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Jelmer Poelstra&#34;</span><span class="w">
-</span><span class="w"></span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1/29/2021&#34;</span><span class="w">
-</span><span class="w"></span><span class="nt">output</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">html_document</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">theme</span><span class="p">:</span><span class="w"> </span><span class="l">flatly</span><span class="w">
-</span><span class="w">    </span><span class="nt">toc</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">    </span><span class="nt">toc_float</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">    </span><span class="nt">toc_depth</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
-</span><span class="w">    </span><span class="nt">number_sections</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">    </span><span class="nt">code_download</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">    </span><span class="nt">code_folding</span><span class="p">:</span><span class="w"> </span><span class="l">hide</span><span class="w">
-</span><span class="w">    </span><span class="nt">df_print</span><span class="p">:</span><span class="w"> </span><span class="l">kable</span><span class="w">
-</span><span class="w"></span><span class="nn">---</span><span class="w">
-</span></code></pre></div><br>
-</details>
-</div>
-</div>
-<br>
-<div class="puzzle">
-<div>
-<h3 id="exercise-2-code-chunks">Exercise 2: Code chunks</h3>
-<p>Our output document looks nice, but there is plenty of room for improvement. In this exercise, we&rsquo;ll refine the output using code chunk options.</p>
-<p>Before you start, take another look at the box <a href="#code-chunk-options">Code chunk options</a> above.</p>
-<ul>
-<li>
-<p>Did you notice those messages (when the <em>tidyverse</em> is loaded) and warnings (for the two plots) in the output? Let&rsquo;s get rid of those all at once: suppress R <em>messages</em> and <em>warnings</em> for all chunks by adding arguments to the <code>knitr::opts_chunk$set()</code> function in the first code chunk.</p>
-</li>
-<li>
-<p>Currently, the code line in the <code>install-package</code> code chunk is commented out to avoid the code from running, while still printing it. Try to accomplish this using a code chunk option instead, so you can uncomment the line.</p>
-</li>
-<li>
-<p>We do want to print the code in some cases, but not in others. For the chunk labeled <code>print-tibble</code>, which prints <code>penguins</code>, alter the settings such that the code is no longer printed.</p>
-</li>
-<li>
-<p>Our first figure is kind of squished, and the point and font sizes are perhaps too large. Compare this with the second figure, which has a different setting <em>only</em> for <code>out.width</code>.</p>
-<p>Play around with the values for the three options that are already in the code chunks (<code>fig.width</code>, <code>out.width</code>, and <code>fig.asp</code>), for one or both figures, see what the effects are, and try to make some improvements.</p>
-<p>Do you understand the difference between the two methods to indicate the figure size (<code>fig.width</code> and <code>out.width</code>)?</p>
-</li>
-<li>
-<p>Insert a new code chunk that prints the <code>penguins_raw</code> tibble in some way (this is available in your environment).</p>
-</li>
-</ul>
-<details>
-<summary>
-Hints (click here)
-</summary>
-<p>
-<ul>
-<li>
-<p>To suppress messages and warnings throughout:<br>
-Add <code>message=FALSE</code> and <code>warnings=FALSE</code> inside <code>knitr::opts_chunk$set()</code> in the <code>setup</code> chunk.</p>
-</li>
-<li>
-<p>To avoid running the code:<br>
-Use <code>eval=FALSE</code> in the header of the <code>install-package</code> code chunk.</p>
-</li>
-<li>
-<p>To avoid printing the code:<br>
-Use the <code>echo</code> option in the header of the <code>print-tibble</code> code chunk.</p>
-</li>
-<li>
-<p>Figure sizing:<br>
-There are two types of sizes that you can set: the size at which R creates figures (<code>fig.width</code> and <code>fig.height</code>), and the size at which the figures are inserted in the document (<code>out.width</code> and <code>out.height</code>). The former will effectively only control relative font and point sizes, whereas the latter controls the &ldquo;actual&rdquo; / final size. For more details and advice, see <a href="https://r4ds.had.co.nz/graphics-for-communication.html#figure-sizing" target="_blank" rel="noopener">this section</a> in R for Data Science.</p>
-<p>The aspect ratio (<code>fig.asp</code>) is height/width, so a value smaller than one creates a wide figure and a value larger than one creates a narrow figure.</p>
-<p>Here, we&rsquo;ve been setting width only &ndash; you can also set <code>fig.height</code> and <code>out.height</code>, but these options become redundant when you set the width <em>and</em> the aspect ratio.</p>
-</li>
-</ul>
-</p>
-</details>
-<br>
-<details>
-<summary>
-Solutions (click here)
-</summary>
-<br>
-<ul>
-<li>
-<p>To suppress messages and warnings throughout:<br>
-<code>knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)</code></p>
-</li>
-<li>
-<p>To avoid running the code: <code>{r install-package, eval=FALSE}</code></p>
-</li>
-<li>
-<p>To avoid printing the code:<br>
-<code>{r print-tibble, echo=FALSE}</code></p>
-</li>
-<li>
-<p>Figure sizing:<br>
-Example settings for better-sized figures &ndash;<br>
-<code>{r plot-bills, out.width=&quot;80%&quot;, fig.width=6, fig.asp=0.7}</code></p>
-</li>
-<li>
-<p>A code chunk to print the <code>penguins_raw</code> tibble (replace single quotes by backticks):</p>
-</li>
-</ul>
-<!-- -->
-<pre><code>'''{r}
-penguins_raw
-'''
-</code></pre>
-<br>
-</details>
-</div>
-</div>
-<br>
-<div class="puzzle">
-<div>
-<h3 id="bonus-1-markdown-and-inline-code">Bonus 1: Markdown and inline code</h3>
-<p>The formatting for the prose in our document could also be improved. For instance:</p>
-<ul>
-<li>
-<p>Use inline code <em>formatting</em> in a couple of cases where this is appropriate.</p>
-</li>
-<li>
-<p>Instead of simply saying &ldquo;8 variables (n = 344 penguins)&rdquo; (under the <em>Summary of the dataset</em>&quot; heading), use <em>inline R code</em> that makes these calculations and print the results.</p>
-</li>
-<li>
-<p>Try a couple of other things: heading levels (one of them is currently not right!), <em>italic</em> text, <strong>bold</strong> text, and/or ordered (numbered) and unordered (bulleted) lists.</p>
-</li>
-</ul>
-<details>
-<summary>
-Hints (click here)
-</summary>
-<p>
-<ul>
-<li>
-<p>Simply put backticks around the inline text you want have formatted as code. You can do this, for instance, for mentions of <a href="https://allisonhorst.github.io/palmerpenguins/reference/penguins.html" target="_blank" rel="noopener"><code>palmerpenguins::penguins</code></a>.</p>
-</li>
-<li>
-<p>For inline code that runs, use <code>`r my-code`</code>.</p>
-<p>The number of variables and penguins in the penguin dataset are the number of columns and rows, respectively, in the <code>penguin</code> tibble.</p>
-</li>
-</ul>
-</p>
-</details>
-<br>
-<details>
-<summary>
-Solutions (click here)
-</summary>
-<br>
-<p>Inline calculation of the number of variables and penguins:</p>
-<pre><code>[...] that contains `r ncol(penguins)` variables
-(n = `r nrow(penguins)` penguins).
-</code></pre>
-<br>
-</details>
-</div>
-</div>
-<br>
-<div class="puzzle">
-<div>
-<h3 id="bonus-2-other-output-formats">Bonus 2: Other output formats</h3>
-<p>Try one or more output formats other than <code>html_document</code>, see <a href="https://rmarkdown.rstudio.com/docs/reference/index.html#section-output-formats" target="_blank" rel="noopener">this website</a> for the list of available options. If you want to try presentations, note that three dashes <code>---</code> are used to separate slides.</p>
-<div class="alert alert-note">
-<div>
-<p>It might be confusing that on the website linked to above (see also the screenshot in section V), the output formats are listed <em>functions</em> (<code>html_document()</code> rather than <code>html_document</code>) &ndash; but this is simply because under the hood, these functions are called via the YAML header.</p>
-</div>
-</div>
-</div>
-</div>
-<p><br> <br></p>
-<hr>
-<h2 id="go-further">Go further</h2>
-<h4 id="pitfalls--tips">Pitfalls / Tips</h4>
-<ul>
-<li>
-<p><strong>The working directory</strong><br>
-By default, the working directory for an R Markdown document is the directory in which the file resides.</p>
-<p>This can be a bit annoying if you&rsquo;re used to using your project&rsquo;s root directory as your working directory (which you should be) and the R Markdown file is not in the project&rsquo;s root directory (which it probably shouldn&rsquo;t be). Nevertheless, simply using <code>../</code> notation to move one or two directories up should generally work.</p>
-<p>If you really need to set a different working directory, you should be aware that surprisingly, setting the working directory with <code>setwd()</code> in a code chunk is <strong>not persistent</strong> across code chunks. To set a different working directory for the entire document, use <code>knitr::opts_knit$set(root.dir = '/my/working/dir')</code> in a setup chunk.</p>
-</li>
-<li>
-<p><strong>Chunk labels</strong><br>
-Chunk labels are optional but if you do give them, note that they have to be <em>unique</em>: the document will fail to render if have two chunks with the same label. Also, <em>avoid using spaces and underscores in the labels</em> (<code>good-chunk-label</code>, <code>bad chunk label</code>, <code>bad_chunk_label</code>).</p>
-</li>
-</ul>
-<br>
-<h4 id="tables">Tables</h4>
-<ul>
-<li>
-<p><strong>Tables produced by Markdown text</strong><br>
-The syntax for basic Markdown tables is as follows:</p>
-<pre><code>| Time          | Session | Topic    |
-|:--------------|:-------:|---------:|
-| _left_        | _center_| _right_  |
-| Wed 5 pm      | 1       | Getting started  |
-| Fri 3 pm      |         |          |
-| Wed 5 pm      | 2       | *dplyr*  |
-| Fri 3 pm      |         | *Break*  |
-</code></pre>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Time</th>
-<th style="text-align:center">Session</th>
-<th style="text-align:right">Topic</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><em>left</em></td>
-<td style="text-align:center"><em>center</em></td>
-<td style="text-align:right"><em>right</em></td>
-</tr>
-<tr>
-<td style="text-align:left">Wed 5 pm</td>
-<td style="text-align:center">1</td>
-<td style="text-align:right">Getting started</td>
-</tr>
-<tr>
-<td style="text-align:left">Fri 3 pm</td>
-<td style="text-align:center"></td>
-<td style="text-align:right"></td>
-</tr>
-<tr>
-<td style="text-align:left">Wed 5 pm</td>
-<td style="text-align:center">2</td>
-<td style="text-align:right"><em>dplyr</em></td>
-</tr>
-<tr>
-<td style="text-align:left">Fri 3 pm</td>
-<td style="text-align:center"></td>
-<td style="text-align:right"><em>Break</em></td>
-</tr>
-</tbody>
-</table>
-<p>In the Visual Markdown editor in RStudio, you can simply insert a table with a little dialogue box after clicking <code>Table</code> =&gt; <code>Insert Table</code>.</p>
-</li>
-<li>
-<p><strong>Tables (dataframes) produced by R code</strong><br>
-Using <code>kable(my_df)</code> in a code chunk will create nicer output for individual dataframes (recall the <code>df_print: kable</code> YAML option for document-wide &ldquo;kable&rdquo; printing).</p>
-<p>There are many packages available for more advanced options, such as <a href="https://gt.rstudio.com/" target="_blank" rel="noopener"><em>GT</em></a>, <a href="https://rstudio.github.io/DT/" target="_blank" rel="noopener"><em>DT</em></a>, and <a href="https://glin.github.io/reactable/" target="_blank" rel="noopener"><em>reactable</em></a>.</p>
-</li>
-</ul>
-<br>
-<h4 id="websites">Websites</h4>
-<p>Note that <code>rmarkdown::render_site()</code> can create simple websites that connects multiple pages with a navigation bar. All you need is a simple YAML file called <code>_site.yml</code> with some settings, and a file for the front page which needs to be called <code>index.Rmd</code>. See <a href="https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html" target="_blank" rel="noopener">here in the R Markdown book</a> for more details.</p>
-<p>Options with more features, like a blog, are <a href="https://rstudio.github.io/distill/website.html" target="_blank" rel="noopener"><em>distill websites</em></a>, and the <a href="https://bookdown.org/yihui/blogdown/" target="_blank" rel="noopener"><em>blogdown</em> package</a> for Hugo sites.</p>
-<br>
 <h4 id="further-resources">Further resources</h4>
 <ul>
 <li>Free online books by the primary creator of R Markdown and other authors:
@@ -1592,7 +1385,7 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s02e03_rmarkdown/&amp;text=Session%207:%20R%20Markdown" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s02e03_rmarkdown/&amp;text=Code%20Club%20S02E03:%20R%20Markdown" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -1605,7 +1398,7 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s02e03_rmarkdown/&amp;t=Session%207:%20R%20Markdown" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s02e03_rmarkdown/&amp;t=Code%20Club%20S02E03:%20R%20Markdown" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -1618,7 +1411,7 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
       
       
       <li>
-        <a href="mailto:?subject=Session%207:%20R%20Markdown&amp;body=https://biodash.github.io/codeclub/s02e03_rmarkdown/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Code%20Club%20S02E03:%20R%20Markdown&amp;body=https://biodash.github.io/codeclub/s02e03_rmarkdown/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -1631,7 +1424,7 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s02e03_rmarkdown/&amp;title=Session%207:%20R%20Markdown" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s02e03_rmarkdown/&amp;title=Code%20Club%20S02E03:%20R%20Markdown" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -1644,7 +1437,7 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
       
       
       <li>
-        <a href="whatsapp://send?text=Session%207:%20R%20Markdown%20https://biodash.github.io/codeclub/s02e03_rmarkdown/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=Code%20Club%20S02E03:%20R%20Markdown%20https://biodash.github.io/codeclub/s02e03_rmarkdown/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -1657,7 +1450,7 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s02e03_rmarkdown/&amp;title=Session%207:%20R%20Markdown" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s02e03_rmarkdown/&amp;title=Code%20Club%20S02E03:%20R%20Markdown" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -1689,12 +1482,12 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
   <div class="media author-card content-widget-hr">
     
       
-      <a href="/authors/admin/"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hu6d2513500ad4d038e15c8975d9d8565d_488180_270x270_fill_q90_lanczos_center.jpg" alt="Jelmer Poelstra"></a>
+      <a href="/authors/michael-broe/"><img class="avatar mr-3 avatar-circle" src="/authors/michael-broe/avatar_hu13632d739ac05d9f7c100f25ef9127c7_976850_270x270_fill_q90_lanczos_center.jpg" alt="Michael Broe"></a>
     
 
     <div class="media-body">
-      <h5 class="card-title"><a href="/authors/admin/">Jelmer Poelstra</a></h5>
-      <h6 class="card-subtitle">Bioinformatician at MCIC</h6>
+      <h5 class="card-title"><a href="/authors/michael-broe/">Michael Broe</a></h5>
+      <h6 class="card-subtitle">Bioinformatician at EEOB</h6>
       
       <ul class="network-icon" aria-hidden="true">
   
@@ -1708,7 +1501,7 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
     
     
     <li>
-      <a href="mailto:poelstra.1@osu.edu" >
+      <a href="mailto:broe.1@osu.edu" >
         <i class="fas fa-envelope"></i>
       </a>
     </li>
@@ -1716,21 +1509,6 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
     
     
     
-    
-    
-    
-    
-      
-    
-    <li>
-      <a href="https://scholar.google.com/citations?user=h_a6S0cAAAAJ" target="_blank" rel="noopener">
-        <i class="ai ai-google-scholar"></i>
-      </a>
-    </li>
-  
-    
-    
-    
       
     
     
@@ -1740,7 +1518,7 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
       
     
     <li>
-      <a href="https://github.com/jelmerp" target="_blank" rel="noopener">
+      <a href="https://github.com/michaelbroe" target="_blank" rel="noopener">
         <i class="fab fa-github"></i>
       </a>
     </li>
@@ -1776,15 +1554,9 @@ Using <code>kable(my_df)</code> in a code chunk will create nicer output for ind
                         
                         
                         <span class="previous-link">
-                            <a href="https://biodash.github.io/codeclub/06_factors/">← Session 6: Factors</a>
+                            <a href="https://biodash.github.io/codeclub/s02e02_r-intro_part2/">← Code Club S02E02: An introduction to R (Part 2)</a>
                         </span>
                         
-                        
-                        
-                        
-                        <span class="next-link">
-                            <a href="https://biodash.github.io/codeclub/07_rmarkdown/">Session 7: R Markdown →</a>
-                        </span>
                         
                         
                     </div>
