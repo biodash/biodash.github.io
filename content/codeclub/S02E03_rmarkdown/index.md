@@ -2,7 +2,7 @@
 output: hugodown::md_document
 title: "Code Club S02E03: R Markdown"
 subtitle: "Text + Code + Output"
-summary: "In session of Code Club, we'll learn about Markdown syntax and some of the great functionality of R Markdown."
+summary: "In this session of Code Club, we'll learn about Markdown syntax and some of the great functionality of R Markdown."
 authors: [michael-broe]
 tags: [codeclub, markdown, rmarkdown]
 date: "2021-09-02"
@@ -16,7 +16,7 @@ projects: []
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: d6c25f155f139f9d
+rmd_hash: 7b1f60110fd56673
 
 ---
 
@@ -154,7 +154,14 @@ The aim of Markdown is to create *lightweight* Markup language, which is **easy 
 
 The "Swiss Army Knife" for letting the computer convert between Markup languages is [Pandoc](https://pandoc.org). The Pandoc site contains a graphic which shows what can be translated to what (included here just to give you a sense of the extent of this Markup world):
 
+<details>
+<summary>
+Click here to see the Pandoc figure
+</summary>
+
 ![](figs/pandoc.jpg)
+
+</details>
 
 R Markdown uses Pandoc as its engine for translating Markdown to various Markup languages.
 
