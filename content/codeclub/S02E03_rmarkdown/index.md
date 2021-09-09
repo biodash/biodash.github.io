@@ -16,7 +16,7 @@ projects: []
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 07d547969d53271e
+rmd_hash: 77d0476245d1b90d
 
 ---
 
@@ -26,7 +26,7 @@ rmd_hash: 07d547969d53271e
 
 ## Introduction
 
-R Markdown consists of an amazing ecosystem of R packages to produce many types of technical content. Its signature capability is that is can **print formatted text, run R code, and display the results, all inside a single document**. Furthermore, you can easily export this document in a large variety of formats, including HTML, PDF, Word, RTF, etc. The webpage you are looking at now was written completely in R Markdown.
+R Markdown consists of an amazing ecosystem of R packages to produce many types of technical content. Its signature capability is that is can **print formatted text, run R code, and display the results, all inside a single document**. Furthermore, you can easily export this document in a large variety of formats, including HTML, PDF, Word, RTF, etc. The webpage you are looking at now was written (almost) completely in R Markdown.
 
 At the most basic level, instead of using comments interleaved with your code in an R script:  
 `# This is a comment`  
@@ -72,11 +72,13 @@ Select this folder in the Files pane. Then make this your working directory, usi
 
 </p>
 
+(You don't need to do this now: we'll make it part of the first Breakout Room in just a moment...)
+
 <br>
 
 #### First, an example
 
-Before we go into details, let's first see a quick demonstration of what we're talking about. RStudio lets you create an example R Markdown document with a couple of clicks. Here are the instructions. I'll run through them, and then we'll open Breakout rooms so you can try it out yourself.
+Before we go into details, let's first see a quick demonstration of what we're talking about. RStudio lets you create an example R Markdown document with a couple of clicks. Here are the instructions: I'll run through them, and then we'll open Breakout rooms so you can try it out yourself.
 
 1.  Go to `File` =\> `New File` =\> `R Markdown`, change the *Title* to "Markdown demo", and click `OK`.
 
@@ -84,7 +86,7 @@ Before we go into details, let's first see a quick demonstration of what we're t
 
 3.  Before we can render the output, we need to save the document. Click the `Save` button and save the files as `demo.Rmd` inside your newly created directory.
 
-4.  Now click the **Knit button** in one of the top bars, and a document should show up in a pop-up or the Viewer pane. This is the *rendered output* from the R Markdown document, translated into .html behind the scenes, and displayed using a built in web-browser.
+4.  Now click the **Knit button** in one of the top bars, and a document should show up in a pop-up in the Viewer pane. This is the *rendered output* from the R Markdown document, which is translated from Markdown into HTML behind the scenes, and displayed using a built in web-browser.
 
 Notice that the YAML header is not printed (at least not verbatim) while some of the code is printed (some is hidden), and we also see code output, including a plot!
 
@@ -96,13 +98,19 @@ This is what the raw and rendered output look side-by-side:
 
 </p>
 
-|                                                                                                                                                                                                                                      |
-|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| \#\# Breakout room                                                                                                                                                                                                                   |
-| :::puzzle                                                                                                                                                                                                                            |
-| Work through the example above yourselves. Generate a sample R Markdown file, in the correct directory, look at the contents, and make sure you can render it on your system using the "Knit" to HTML button in the top command bar. |
-| :::                                                                                                                                                                                                                                  |
-| <br>                                                                                                                                                                                                                                 |
+------------------------------------------------------------------------
+
+## Breakout rooms
+
+<div class="puzzle">
+
+Work through the example above yourselves. Generate a sample R Markdown file, in the correct directory, look at the contents, and make sure you can render it on your system using the "Knit" to HTML button in the top command bar.
+
+</div>
+
+<br>
+
+------------------------------------------------------------------------
 
 We'll now talk about Markdown, code chunks, and the YAML header in turn.
 
@@ -110,7 +118,7 @@ We'll now talk about Markdown, code chunks, and the YAML header in turn.
 
 To fully appreciate the magic of Markdown and where it came from, it's useful to just briefly visit the notion of a [Markup language](https://en.m.wikipedia.org/wiki/Markup_language).
 
-The original markup was a blue pencil on a handwritten manuscript. This markup included typographic instructions, such as to make a heading larger or text boldface, etc.
+The original markup was done by a subeditor using a blue pencil on a handwritten or typed manuscript. This markup included typographic instructions for printing, like making a heading larger or text boldface, etc.
 
 Computer Markup languages have the same kind of annotations, which are included in the plain text, but are visually different from the content. This marked-up text is then sent to an interpreter (e.g. a web browser, a PDF viewer, an app like Word) which renders the final document.
 
@@ -136,15 +144,15 @@ A large number of markup languages have been developed over the years. At curren
 
 `{\rtlch\ai \ltrch\loch\i\loch This text is italic.}`
 
-Some of these are more readable than others. Some are never meant to be read by humans at all! But underneath the hood **every format is actually markup**.
+Some of these are more readable than others. Some are never meant to be read by humans at all! But underneath the hood **every format is actually Markup**.
 
-The aim of Markdown is to create lightweight markup language, which is **easy to read and easy to write** in a text editor. It embodies the principle "make common things easy, and rare things possible". Then we let the computer do the work of translating Markdown into various markup languages and rendering them, so we don't have to worry about the details:
+The aim of Markdown is to create *lightweight* Markup language, which is **easy to read and easy to write** in a text editor. It embodies the principle: "make common things easy, and rare things possible". Then we let the computer do the work of translating Markdown into various markup languages and rendering them, so we don't have to worry about the details:
 
 **Markdown**
 
 `*This text is italic.*`
 
-The "Swiss Army Knife" for letting the computer convert between Markup languages is [Pandoc](https://pandoc.org). The site contains a graphic which shows what can be translated to what (just so you get a sense of the extend of this Markup world):
+The "Swiss Army Knife" for letting the computer convert between Markup languages is [Pandoc](https://pandoc.org). The Pandoc site contains a graphic which shows what can be translated to what (included here just to give you a sense of the extent of this Markup world):
 
 ![](figs/pandoc.jpg)
 
@@ -189,36 +197,6 @@ files have the extension `.Rmd`.
 </div>
 
 </div>
-
-<br>
-
-------------------------------------------------------------------------
-
-#### An overview of commonly used Markdown syntax
-
-| Syntax                                            | Result                                                                                  |
-|---------------------------------------------------|-----------------------------------------------------------------------------------------|
-| \# My Title                                       | Header level 1 (largest)                                                                |
-| \#\# My Section                                   | Header level 2                                                                          |
-| \#\#\# My Subsection                              | Header level 3 -- and so forth                                                          |
-| \*italic\* or \_italic\_                          | *italic*                                                                                |
-| \*\*bold\*\* or \_\_bold\_\_                      | **bold**                                                                                |
-| `[Markdown Guide](markdownguide.org)`             | [Markdown Guide](https://markdownguide.org) (Link with custom text)                     |
-| !\[\](path/to/figure.png)                         | Figure                                                                                  |
-| \- List item                                      | Unordered (bulleted) list                                                               |
-| 1\. List item                                     | Ordered (numbered) list                                                                 |
-| `` `inline code` ``                               | `inline code`                                                                           |
-| ```` ``` ```` <br> ...code... <br> ```` ``` ````  | Generic code block (for formatting only) <br> (*Alternative syntax: 4 leading spaces.*) |
-| ```` ```r ```` <br> ...code... <br> ```` ``` ```` | `r` code block (for formatting only)                                                    |
-| `---`                                             | Horizontal rule (line)                                                                  |
-
-To see this formatting in action, see below an example of a raw Markdown file on the left, and its *rendered* (formatted) output on the right:
-
-<p align="center">
-<img src=img/md-demo.png width="2000px">
-</p>
-
-"Plain" Markdown files have the extension `.md`, whereas R Markdown files have the extension `.Rmd`.
 
 <br>
 
@@ -280,6 +258,8 @@ install.packages("tidyverse")
 library(tidyverse)
 ```
 
+(If you've participated in Code Club before you probably have these packages installed).
+
 Don't worry **at all** if you don't understand the example code. This is exactly what we'll be moving onto in the coming weeks. The point is that the code is executed and displayed inside the document.
 
 -   A code chunk with **default options**...
@@ -340,15 +320,11 @@ Don't worry **at all** if you don't understand the example code. This is exactly
 
     </div>
 
-We added a caption for the figure using the `fig.cap` argument (with a little trick to force a line break, using the `<br>` HTML syntax).
-
-<div class="alert alert-note">
-
-<div>
+We added a caption for the figure using the `fig.cap` option.
 
 #### Code chunk options
 
-There are huge number of options, and various options are specific to certain types of code chunks. Just learn the basic structure first, and if you ever wonder "Can I do X to modify the output?", just know that many, many people have wondered that before, and if it makes sense to do it, you can probably do it with options.
+There are huge number of options, and various options are specific to certain types of code chunks. Just learn the basic structure first, and if you ever wonder "Can I do X to modify the output?" just know that many, many people have wondered that before, and if it makes sense to do it, you can probably do it with options.
 
 Here is an overview of some the most commonly made *changes to defaults* for code chunk options. This quickly gets confusing, but you'll get the hang of it after experimenting a bit.
 
@@ -368,15 +344,6 @@ For figures, the following options are especially useful:
 -   `fig.height=9.6` -- Height in inches: same as sizing in regular R code.
 -   `out.width="70%"` -- Figure width as *printed in the document* (in `%` or pixels, `px`).
 -   `out.height="500px"` -- Figure height as *printed in the document*.
-
-Finally, if your document takes a long time to knit, use `cache=TRUE` to enable caching of results.
-
-</div>
-
-</div>
-
-<div class="alert alert-note">
-<div>
 
 <br>
 
@@ -400,7 +367,7 @@ Here is an example of a very basic YAML header:
 
 Note the lines which just contain **three dashes**, which mark the beginning and the end of the YAML header.
 
-#### Adding options
+#### Adding extra options
 
 Often, a value (like `html_document`) can itself be given key-value pairs to specify additional options -- see the example below where we include a Table of Contents (`toc`) and also set it to "float":
 
@@ -469,6 +436,42 @@ If you get preview pop-up windows in RStudio, click the cog wheel icon next to t
 
 ------------------------------------------------------------------------
 
+## Breakout rooms
+
+<div class="puzzle">
+
+For this exercise, you'll convert an R Script file into an R Markdown file.
+
+First you'll download the script file to your working directory. Then open it in R Studio, copy the contents, and paste the contents into your demo.Rmd file (after the YAML header). Then work through making adjustments, and Knit at various times to check your work.
+
+There are various suggestions (in parentheses) for Markdown formatting throughout the script.
+
+And remember, you need to wrap the actual R code from the script inside R Markdown code chunks.
+
+You'll also download an example picture. Include this picture in your demo.Rmd file using the Markdown syntax shown above. Then experiment with the various figure options to get it how you want it.
+
+We'll download the files an a similar way to last week. Execute the following code, either by copying into the console, or by creating a new script file and copying the commands into it, and executing them one by one. To keep things tidy and readable, first we create objects that hold the URLs we're downloading from:
+
+``` r
+script_URL <- "https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S02E03_rmarkdown/demo.R"
+picture_URL <- "https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S02E03_rmarkdown/picture.jpg"
+```
+
+Then use the [`download.file()`](https://rdrr.io/r/utils/download.file.html) function with two arguments, the remote URL and the local file name (which must be in quotes):
+
+``` r
+download.file(url = script_URL, destfile = "demo.R")
+download.file(url = picture_URL, destfile = "picture.jpg")
+```
+
+You should end up with the two local files showing up in your Files pane.
+
+</div>
+
+<br>
+
+------------------------------------------------------------------------
+
 ## V: A single source doc, many output formats!
 
 Because of the Pandoc backend, a great feature of R Markdown is that you can output to many formats. So from one source document, or very similar variants, you can create completely different output depending on what you need.
@@ -512,10 +515,15 @@ output: distill::distill_article
 #### Further resources
 
 -   Free online books by the primary creator of R Markdown and other authors:
+
     -   [R Markdown -- The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
     -   [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)
+
 -   [RStudio's 5-page R Markdown Reference PDF](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+
 -   [RStudio's R Markdown Cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf)
+
 -   [RStudio R Markdown lessons](https://rmarkdown.rstudio.com/lesson-1.html)
+
 -   [Markdown tutorial](https://commonmark.org/help/tutorial/)
 
