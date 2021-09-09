@@ -16,7 +16,7 @@ projects: []
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 77d0476245d1b90d
+rmd_hash: d6c25f155f139f9d
 
 ---
 
@@ -100,7 +100,7 @@ This is what the raw and rendered output look side-by-side:
 
 ------------------------------------------------------------------------
 
-## Breakout rooms
+## Breakout Room 1
 
 <div class="puzzle">
 
@@ -436,13 +436,13 @@ If you get preview pop-up windows in RStudio, click the cog wheel icon next to t
 
 ------------------------------------------------------------------------
 
-## Breakout rooms
+## Breakout Room 2
 
 <div class="puzzle">
 
 For this exercise, you'll convert an R Script file into an R Markdown file.
 
-First you'll download the script file to your working directory. Then open it in R Studio, copy the contents, and paste the contents into your demo.Rmd file (after the YAML header). Then work through making adjustments, and Knit at various times to check your work.
+First you'll download the script file to your working directory (using the code provided below). Then open it in R Studio, copy the contents, and paste the contents into your demo.Rmd file (after the YAML header). Then work through making adjustments, and Knit at various times to check your work.
 
 There are various suggestions (in parentheses) for Markdown formatting throughout the script.
 
@@ -450,7 +450,7 @@ And remember, you need to wrap the actual R code from the script inside R Markdo
 
 You'll also download an example picture. Include this picture in your demo.Rmd file using the Markdown syntax shown above. Then experiment with the various figure options to get it how you want it.
 
-We'll download the files an a similar way to last week. Execute the following code, either by copying into the console, or by creating a new script file and copying the commands into it, and executing them one by one. To keep things tidy and readable, first we create objects that hold the URLs we're downloading from:
+We'll download the files in a similar way to last week. Execute the following code, either by copying into the console, or by creating a new script file and copying the commands into it, and executing them one by one. To keep things tidy and readable, first we create objects that hold the URLs we're downloading from:
 
 ``` r
 script_URL <- "https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S02E03_rmarkdown/demo.R"
