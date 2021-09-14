@@ -1,0 +1,1817 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.0.0-beta.3 for Hugo" />
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Jelmer Poelstra" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="During this session of Code Club, we will be learning about what the tidyverse is, the pipe operator, and how to use some of the most popular dplyr one-table functions, including filter and select." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#3f51b5" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+      
+    
+
+    
+    
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.80f9a276c6100914c616a06e45ba8d09.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9F9CQ7P0DX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'G-9F9CQ7P0DX', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="BioDASH" />
+  <meta property="og:url" content="https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/" />
+  <meta property="og:title" content="Code Club S02E04: Intro to the Tidyverse (Part 1) | BioDASH" />
+  <meta property="og:description" content="During this session of Code Club, we will be learning about what the tidyverse is, the pipe operator, and how to use some of the most popular dplyr one-table functions, including filter and select." /><meta property="og:image" content="https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/featured.png" />
+    <meta property="twitter:image" content="https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/featured.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-09-14T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-09-14T19:21:49-04:00">
+  
+
+  
+
+
+
+  
+
+  
+
+  <link rel='stylesheet' href='/css/highlight-light.css' title='hl-light'>
+<link rel='stylesheet' href='/css/highlight-dark.css' title='hl-dark' disabled>
+
+
+
+  <title>Code Club S02E04: Intro to the Tidyverse (Part 1) | BioDASH</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="df085db1615b3713af0a446430dc8eb4" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.7a224883d792570fd34d30c7134eace3.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Code Club</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/codeclub-schedule/"><span>- <b>Schedule</b></span></a>
+            
+              <a class="dropdown-item" href="/codeclub/"><span>- Past Sessions</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-setup/"><span>- Computer Setup</span></a>
+            
+              <a class="dropdown-item" href="/"><span>------------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-suggest/"><span>- Suggest a Topic</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-present/"><span>- Info for Presenters</span></a>
+            
+              <a class="dropdown-item" href="/"><span>-----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-about/"><span>- <b>About Code Club & Join Us!</b></span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/events/"><span>Other Events</span></a>
+        </li>
+
+        
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Tutorials & Materials</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/material/"><span><b>Overview</b></span></a>
+            
+              <a class="dropdown-item" href="/"><span>---------------------</span></a>
+            
+              <a class="dropdown-item" href="/tutorials/r-resources-tips/"><span>- R Resources and Tips</span></a>
+            
+              <a class="dropdown-item" href="/"><span>--------------------</span></a>
+            
+              <a class="dropdown-item" href="https://mcic-osu.github.io/2020-12-microbiomics-workshop/"><span>- Metabarcoding workshop (Fall '20)</span></a>
+            
+              <a class="dropdown-item" href="/tutorials/2021-01_rnaseq/"><span>- RNA-seq intro meetings (Spring '21)</span></a>
+            
+              <a class="dropdown-item" href="https://mcic-osu.github.io/pracs-sp21/"><span>- Computing Course (Spring '21)</span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/support/"><span>Need Support?</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="https://github.com/biodash/biodash.github.io" target="_blank" rel="noopener"><i class='fab fa-github'></i><span></span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/index.xml" target="_blank" rel="noopener"><i class='fas fa-rss'></i><span></span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    
+<div class="container-fluid docs">
+    <div class="row flex-xl-nowrap">
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+            <ul class="nav toc-top">
+                <li><a href="#" id="back_to_top" class="docs-toc-title">Contents</a></li>
+            </ul>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#prep-homework">Prep homework</a>
+      <ul>
+        <li><a href="#basic-computer-setup">Basic computer setup</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started">Getting started</a>
+      <ul>
+        <li><a href="#download-todays-content">Download today&rsquo;s content</a></li>
+      </ul>
+    </li>
+    <li><a href="#1---what-is-the-tidyverse-and-how-do-i-use-it">1 - What is the tidyverse, and how do I use it?</a></li>
+    <li><a href="#breakout-session-1---install-tidyverse">Breakout session 1 - install tidyverse</a></li>
+    <li><a href="#2---using-the-pipe-">2 - Using the pipe <code>%&gt;%</code></a></li>
+    <li><a href="#3---using-select">3 - Using <code>select()</code></a></li>
+    <li><a href="#4---using-filter">4 - Using <code>filter()</code></a></li>
+    <li><a href="#breakout-session-2---pipe-filter-select">Breakout session 2 - pipe, filter, select</a>
+      <ul>
+        <li><a href="#exercise-1">Exercise 1</a></li>
+        <li><a href="#exercise-2">Exercise 2</a></li>
+        <li><a href="#exercise-3">Exercise 3</a></li>
+      </ul>
+    </li>
+    <li><a href="#further-reading">Further reading</a></li>
+  </ul>
+</nav>
+        </div>
+        <main class="col-12 col-md-0 col-xl-10 py-md-3 pl-md-5 docs-content" role="main">
+            
+
+            <article class="article">
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+
+<div class="article-container pt-3">
+  <h1>Code Club S02E04: Intro to the Tidyverse (Part 1)</h1>
+
+  
+  <p class="page-subtitle">Tidyverse, the pipe, filter, and select</p>
+  
+
+  
+
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span >
+      <a href="/authors/jessica-cooperstone/">Jessica Cooperstone</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+    Sep 14, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 720px;">
+  <div style="position: relative">
+    <img src="/codeclub/s02e04_tidyverse-intro-part1/featured_hua0e0fd07040f8cf296f885bf680947bb_5450052_720x0_resize_lanczos_2.png" alt="" class="featured-image">
+    <span class="article-header-caption">Artwork by @allison_horst</span>
+  </div>
+</div>
+
+
+
+                <div class="article-container">
+                    <div class="article-style">
+                        <p><br> <br> <br></p>
+<hr>
+<h2 id="prep-homework">Prep homework</h2>
+<h3 id="basic-computer-setup">Basic computer setup</h3>
+<ul>
+<li>
+<p>If you didn&rsquo;t already do this, please follow the <a href="/codeclub-setup/">Code Club Computer Setup</a> instructions, which also has pointers for if you&rsquo;re new to R or RStudio.</p>
+</li>
+<li>
+<p>If you&rsquo;re able to do so, please open RStudio a bit before Code Club starts &ndash; and in case you run into issues, please join the Zoom call early and we&rsquo;ll troubleshoot.</p>
+</li>
+</ul>
+<br>
+<hr>
+<h2 id="getting-started">Getting started</h2>
+<p>Now that you are familiar with the basics of <a href="/codeclub/s02e03_rmarkdown/">RMarkdown</a>, I put together a RMarkdown file you can download which has the content for today&rsquo;s Code Club.</p>
+<h3 id="download-todays-content">Download today&rsquo;s content</h3>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># directory for Code Club Session 2:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S02E04"</span><span class='o'>)</span>
+
+<span class='c'># directory for our script</span>
+<span class='c'># ("recursive" to create two levels at once.)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"S02E04/Rmds/"</span><span class='o'>)</span>
+
+<span class='c'># save the url location for today's script</span>
+<span class='nv'>todays_Rmd</span> <span class='o'>&lt;-</span> <span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S02E04_tidyverse-intro-part1/intro-to-tidyverse1.Rmd"</span>
+
+<span class='c'># indicate the name of the new Rmd file</span>
+<span class='nv'>intro_tidyverse1</span> <span class='o'>&lt;-</span> <span class='s'>"S02E04/Rmds/intro-to-tidyverse1.Rmd"</span>
+
+<span class='c'># go get that file! </span>
+<span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_Rmd</span>,
+              destfile <span class='o'>=</span> <span class='nv'>intro_tidyverse1</span><span class='o'>)</span></code></pre>
+</div>
+<br>
+<div class="alert alert-note">
+<div>
+<p><strong>What will we go over today</strong></p>
+<ul>
+<li>What is the tidyverse and why would I want to use it?</li>
+<li>Understanding how to use <a href="https://style.tidyverse.org/pipes.html" target="_blank" rel="noopener">&ldquo;the pipe&rdquo;</a> <code>%&gt;%</code></li>
+<li>Using <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> - picks observations (i.e., rows) based on their values</li>
+<li>Using <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> - picks variables (i.e., columns) based on their names</li>
+</ul>
+</div>
+</div>
+<br>
+<hr>
+<h2 id="1---what-is-the-tidyverse-and-how-do-i-use-it">1 - What is the tidyverse, and how do I use it?</h2>
+<p>The <a href="https://www.tidyverse.org/" target="_blank" rel="noopener">tidyverse</a> is a collection of R packages that are designed for data science. You can certainly use R without using the tidyverse, but it has many packages that I think will make your life a lot easier. The popular package <a href="https://ggplot2.tidyverse.org/index.html" target="_blank" rel="noopener"><code>ggplot2</code></a> is a part of the core tidyverse, which we have talked about in previous Code Clubs (<a href="/codeclub/04_ggplot2">intro</a>, <a href="/codeclub/05_ggplot-round-2">intro2</a>, <a href="/codeclub/11_ggplot-maps">maps</a>, and <a href="/codeclub/15_plotly">ggplotly</a>), and will talk about in future sessions as well.</p>
+<p>Before we talk more about the tidyverse, let&rsquo;s download it.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span></code></pre>
+</div>
+<p>To use any of the packages within the tidyverse, we need to call them up using <a href="https://rdrr.io/r/base/library.html" target="_blank" rel="noopener"><code>library()</code></a>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+<span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span><span> ─────────────────────────────────────── tidyverse 1.3.1 ──</span></span>
+<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>ggplot2</span><span> 3.3.3     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>purrr  </span><span> 0.3.4</span></span>
+<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>tibble </span><span> 3.1.4     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>dplyr  </span><span> 1.0.7</span></span>
+<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>tidyr  </span><span> 1.1.3     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>stringr</span><span> 1.4.0</span></span>
+<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>readr  </span><span> 1.4.0     </span><span style='color: #00BB00;'>✔</span><span> </span><span style='color: #0000BB;'>forcats</span><span> 0.5.1</span></span>
+<span class='c'>#&gt; ── <span style='font-weight: bold;'>Conflicts</span><span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span class='c'>#&gt; <span style='color: #BB0000;'>✖</span><span> </span><span style='color: #0000BB;'>dplyr</span><span>::</span><span style='color: #00BB00;'>filter()</span><span> masks </span><span style='color: #0000BB;'>stats</span><span>::filter()</span></span>
+<span class='c'>#&gt; <span style='color: #BB0000;'>✖</span><span> </span><span style='color: #0000BB;'>dplyr</span><span>::</span><span style='color: #00BB00;'>lag()</span><span>    masks </span><span style='color: #0000BB;'>stats</span><span>::lag()</span></span></code></pre>
+</div>
+<p>Let&rsquo;s look at this message, we can see that there are eight &ldquo;attaching packages&rdquo; as part of the <a href="https://www.tidyverse.org/packages/" target="_blank" rel="noopener">&ldquo;core&rdquo;</a> set of tidyverse.</p>
+<p>We see that there are some conflicts, for example, there is a function called <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> (which we will talk about today) that is part of <code>dplyr</code> (a tidyverse package) that is masking another function called <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> within the <code>stats</code> package (which loads with base R). Now this is fine for us right now, so there is nothing to do, but it is a good habit to get into reading (and not ignoring) any warnings or messages that R gives you. (It is trying to help!)</p>
+<p>Note the double colon operator <a href="https://rdrr.io/r/base/ns-dblcolon.html" target="_blank" rel="noopener"><code>::</code></a> which indicates a function from a particular package. So when you see <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>stats::filter()</code></a>, that indicates the function <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> within the package <code>stats</code>.</p>
+<p align="center">
+<img src=tidyverse-packages.png width="90%" alt="an illustration of eight hexagons with the names of the tidyverse core packages inside, dplyr, readr, purrr, tidyverse, ggplot2, tidyr, and tibble">
+</p>
+<p>By <a href="https://education.rstudio.com/blog/2020/07/teaching-the-tidyverse-in-2020-part-1-getting-started/" target="_blank" rel="noopener">Mine Çetinkaya-Rundel</a></p>
+<p>Below is a quick description of what each package is used for.</p>
+<ul>
+<li><a href="https://dplyr.tidyverse.org/" target="_blank" rel="noopener"><code>dplyr</code></a>: for data manipulation</li>
+<li><a href="https://ggplot2.tidyverse.org/" target="_blank" rel="noopener"><code>ggplot2</code></a>: a &ldquo;grammar of graphics&rdquo; for creating beautiful plots</li>
+<li><a href="https://forcats.tidyverse.org/" target="_blank" rel="noopener"><code>forcats</code></a>: for handling categorical variables (i.e., factors) (meow!)</li>
+<li><a href="https://tibble.tidyverse.org/" target="_blank" rel="noopener"><code>tibble</code></a>: using tibbles as modern/better dataframes</li>
+<li><a href="https://readr.tidyverse.org/" target="_blank" rel="noopener"><code>readr</code></a>: for reading in rectangular data (i.e., Excel-style formatting)</li>
+<li><a href="https://stringr.tidyverse.org/" target="_blank" rel="noopener"><code>stringr</code></a>: handling strings (i.e., text or stuff in quotes)</li>
+<li><a href="https://tidyr.tidyverse.org/" target="_blank" rel="noopener"><code>tidyr</code></a>: to make &ldquo;tidy data&rdquo;</li>
+<li><a href="https://purrr.tidyverse.org/" target="_blank" rel="noopener"><code>purrr</code></a>: for enhancing functional programming (also meow!)</li>
+</ul>
+<p>If you&rsquo;re not understanding what some of this means, that&rsquo;s totally fine, its not important that you do right now.</p>
+<p>There are more tidyverse packages outside of these core eight, and you can see what they are below.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://tidyverse.tidyverse.org/reference/tidyverse_packages.html'>tidyverse_packages</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt;  [1] "broom"         "cli"           "crayon"        "dbplyr"       </span>
+<span class='c'>#&gt;  [5] "dplyr"         "dtplyr"        "forcats"       "googledrive"  </span>
+<span class='c'>#&gt;  [9] "googlesheets4" "ggplot2"       "haven"         "hms"          </span>
+<span class='c'>#&gt; [13] "httr"          "jsonlite"      "lubridate"     "magrittr"     </span>
+<span class='c'>#&gt; [17] "modelr"        "pillar"        "purrr"         "readr"        </span>
+<span class='c'>#&gt; [21] "readxl"        "reprex"        "rlang"         "rstudioapi"   </span>
+<span class='c'>#&gt; [25] "rvest"         "stringr"       "tibble"        "tidyr"        </span>
+<span class='c'>#&gt; [29] "xml2"          "tidyverse"</span></code></pre>
+</div>
+<p><strong>tl;dr</strong> Tidyverse has a lot of packages that make data analysis easier. None of them are &lsquo;required&rsquo; to do data analysis, but many tidyverse approaches you&rsquo;ll find easier than using base R.</p>
+<p>You can find <a href="https://tavareshugo.github.io/data_carpentry_extras/base-r_tidyverse_equivalents/base-r_tidyverse_equivalents.html" target="_blank" rel="noopener">here</a> some examples of comparing tidyverse and base R syntax.</p>
+<hr>
+<h2 id="breakout-session-1---install-tidyverse">Breakout session 1 - install tidyverse</h2>
+<div class="alert puzzle">
+<div>
+<p>In your breakout sessions, make sure that you each have the tidyverse installed and loaded.</p>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"dplyr"</span><span class='o'>)</span> <span class='c'># this is the only one of the 8 tidyverse packages we will use today</span>
+
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></code></pre>
+</div>
+<p>Occasionally we see people who are having tidyverse install issues, if this happens to you, please read the warning that R gives you, you may need to download an additional package to get it to work. If you have trouble, first try restarting your R session and see if that helps, or reach out to one of the organizers or one of your fellow codeclubbers.</p>
+</details>
+</div>
+</div>
+<hr>
+<h2 id="2---using-the-pipe-">2 - Using the pipe <code>%&gt;%</code></h2>
+<p>The pipe operator <code>%&gt;%</code> is a tool that is used for expressing a series of operations. It comes from the <a href="https://cran.r-project.org/web/packages/magrittr/index.html" target="_blank" rel="noopener"><code>magrittr</code></a> package, and is loaded automatically when you load the tidyverse.</p>
+<p>The purpose of the pipe is to allow you to take the output of one operation and have it be the starting material of the next step. It also (hopefully) makes your code easier to read and interpret.</p>
+<p><strong>Let&rsquo;s get set up and grab some data so that we have some material to work with</strong></p>
+<p align="center">
+<img src=palmerpenguins_hex.png width="50%" alt="a cute hexagon image of three penguins as a part of the palmer penguins package">
+</p>
+<p>Illustration by <a href="https://allisonhorst.github.io/palmerpenguins/articles/art.html" target="_blank" rel="noopener">Allison Horst</a></p>
+<p>We are going to use a package called <a href="https://allisonhorst.github.io/palmerpenguins/" target="_blank" rel="noopener"><code>palmerpenguins</code></a> which has some fun 🐧 data for us to play with. To get this data, we need to install the <code>palmerpenguins</code> package.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='nv'>palmerpenguins</span><span class='o'>)</span></code></pre>
+</div>
+<p>Then, to use the package, we need to use the function <a href="https://rdrr.io/r/base/library.html" target="_blank" rel="noopener"><code>library()</code></a> to call the package up in R.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span></code></pre>
+</div>
+<p>The data we want to use is called <code>penguins</code>.</p>
+<p align="center">
+<img src=culmen_depth.png width="50%" alt="a cute hexagon image of three penguins as a part of the palmer penguins package">
+</p>
+<p>Illustration by <a href="https://allisonhorst.github.io/palmerpenguins/articles/art.html" target="_blank" rel="noopener">Allison Horst</a></p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># look at the first 6 rows, all columns</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 8</span></span>
+<span class='c'>#&gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torge…           39.1          18.7              181        </span><span style='text-decoration: underline;'>3</span><span>750 male </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torge…           39.5          17.4              186        </span><span style='text-decoration: underline;'>3</span><span>800 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torge…           40.3          18                195        </span><span style='text-decoration: underline;'>3</span><span>250 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torge…           </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>                 </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torge…           36.7          19.3              193        </span><span style='text-decoration: underline;'>3</span><span>450 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torge…           39.3          20.6              190        </span><span style='text-decoration: underline;'>3</span><span>650 male </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 1 more variable: year &lt;int&gt;</span></span>
+
+<span class='c'># check the structure of penguins_data</span>
+<span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; Rows: 344</span>
+<span class='c'>#&gt; Columns: 8</span>
+<span class='c'>#&gt; $ species           <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…</span></span>
+<span class='c'>#&gt; $ island            <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…</span></span>
+<span class='c'>#&gt; $ bill_length_mm    <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …</span></span>
+<span class='c'>#&gt; $ bill_depth_mm     <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …</span></span>
+<span class='c'>#&gt; $ flipper_length_mm <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…</span></span>
+<span class='c'>#&gt; $ body_mass_g       <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …</span></span>
+<span class='c'>#&gt; $ sex               <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> male, female, female, NA, female, male, female, male…</span></span>
+<span class='c'>#&gt; $ year              <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</span></span></code></pre>
+</div>
+<p>Okay now we have a sense of what the <code>penguins</code> dataset is.</p>
+<p>We can use the pipe to send <code>penguins</code> forward through a series of steps. For example, we can use the function <code>count()</code> to figure out how many of each penguin <code>species</code> there are in our dataset.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> <span class='c'># take penguins_data</span>
+  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='c'># count how many of each species there is</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
+<span class='c'>#&gt;   species       n</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie      152</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Chinstrap    68</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Gentoo      124</span></span></code></pre>
+</div>
+<p>You could alternatively write your code like this. In the <code>count()</code> function, the first argument is the dataset, and the next argument is what you want to be counted. You can always learn more about the functions by using <code>?count()</code> or googling for the documentation.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>count</span><span class='o'>(</span><span class='nv'>penguins</span>, <span class='nv'>species</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
+<span class='c'>#&gt;   species       n</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie      152</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Chinstrap    68</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Gentoo      124</span></span></code></pre>
+</div>
+<p>You can see you get the same thing. The benefit of the pipe is readability, and also the ability to pipe many things together (which we are not doing with <code>count()</code>).</p>
+<p>I am going to show you an example of a place I think the pipe really shines, don&rsquo;t worry if you don&rsquo;t understand all the syntax, I just want you to see how the pipe can be used.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># drop missing values listed as NA</span>
+  <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># group by species</span>
+  <span class='nf'>summarize</span><span class='o'>(</span>mean_mass <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>body_mass_g</span><span class='o'>)</span><span class='o'>)</span> <span class='c'># summarize mass into new column called </span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
+<span class='c'>#&gt;   species   mean_mass</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie        </span><span style='text-decoration: underline;'>3</span><span>706.</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Chinstrap     </span><span style='text-decoration: underline;'>3</span><span>733.</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Gentoo        </span><span style='text-decoration: underline;'>5</span><span>092.</span></span></code></pre>
+</div>
+<p>We are going to continue to use the pipe <code>%&gt;%</code> as we practice with some new <code>dplyr</code> functions.</p>
+<br>
+<hr>
+<h2 id="3---using-select">3 - Using <code>select()</code></h2>
+<p>It has been estimated that the process of getting your data into the appropriate formats takes about 80% of the total time of analysis. I find that getting data into a format that enables analysis often trips people up more than doing the actual analysis. The tidyverse packages <code>dplyr</code> has a number of functions that help in data wrangling.</p>
+<p>The first one we will talk about is <code>select()</code>. Tidyverse is nice in that the functions are very descritpive and intuitive as to what they do: <code>select()</code> allows you to pick certain columns to be included in your data frame.</p>
+<p>Let&rsquo;s try out both the <code>%&gt;%</code> and <code>select()</code>. Let&rsquo;s make a new dataframe from <code>penguins</code> that contains only the variables <code>species</code>, <code>island</code> and <code>sex</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_only_factors</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>species</span>, <span class='nv'>island</span>, <span class='nv'>sex</span><span class='o'>)</span></code></pre>
+</div>
+<p>Did it work?</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins_only_factors</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span>
+<span class='c'>#&gt;   species island    sex   </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torgersen male  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torgersen female</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torgersen female</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torgersen </span><span style='color: #BB0000;'>NA</span><span>    </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torgersen female</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torgersen male</span></span></code></pre>
+</div>
+<p>Let&rsquo;s check the dimensions of each dataframe to make sure we have what we would expect</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># what are the dimensions of penguins?</span>
+<span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 344   8</span>
+
+<span class='c'># what are the dimensions of penguins_only_factors?</span>
+<span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>penguins_only_factors</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 344   3</span></code></pre>
+</div>
+<p>The output is ordered rows (first number) by columns (second number). Our output makes sense - we haven&rsquo;t removed any observation (i.e., rows), we have only selected some of the columns that we want to work with.</p>
+<p>What if we want to pick just the first three columns? We can do that too.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span> <span class='c'># what are those first three columns?</span>
+<span class='c'>#&gt; tibble [344 × 8] (S3: tbl_df/tbl/data.frame)</span>
+<span class='c'>#&gt;  $ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='c'>#&gt;  $ island           : Factor w/ 3 levels "Biscoe","Dream",..: 3 3 3 3 3 3 3 3 3 3 ...</span>
+<span class='c'>#&gt;  $ bill_length_mm   : num [1:344] 39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...</span>
+<span class='c'>#&gt;  $ bill_depth_mm    : num [1:344] 18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...</span>
+<span class='c'>#&gt;  $ flipper_length_mm: int [1:344] 181 186 195 NA 193 190 181 195 193 190 ...</span>
+<span class='c'>#&gt;  $ body_mass_g      : int [1:344] 3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...</span>
+<span class='c'>#&gt;  $ sex              : Factor w/ 2 levels "female","male": 2 1 1 NA 1 2 1 2 NA NA ...</span>
+<span class='c'>#&gt;  $ year             : int [1:344] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span>
+
+<span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>:</span><span class='nv'>bill_length_mm</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># pick columns species through bill_length_mm</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span> <span class='c'># you can add head() as part of your pipe!</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span>
+<span class='c'>#&gt;   species island    bill_length_mm</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torgersen           39.1</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torgersen           39.5</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torgersen           40.3</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torgersen           </span><span style='color: #BB0000;'>NA</span><span>  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torgersen           36.7</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torgersen           39.3</span></span></code></pre>
+</div>
+<p>Note, in the above chunk, this new dataframe is not being saved because we have not assigned it to anything.</p>
+<p>You could use slightly different syntax to get the same thing using an indexing approach.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>3</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># pick columns one through three</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span>
+<span class='c'>#&gt;   species island    bill_length_mm</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torgersen           39.1</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torgersen           39.5</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torgersen           40.3</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torgersen           </span><span style='color: #BB0000;'>NA</span><span>  </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torgersen           36.7</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torgersen           39.3</span></span></code></pre>
+</div>
+<p>There is also convenient shorthand for indicating what you <em>don&rsquo;t</em> want (instead of what you do).</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='o'>-</span><span class='nv'>year</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># all the columns except year</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 7</span></span>
+<span class='c'>#&gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torge…           39.1          18.7              181        </span><span style='text-decoration: underline;'>3</span><span>750 male </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torge…           39.5          17.4              186        </span><span style='text-decoration: underline;'>3</span><span>800 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torge…           40.3          18                195        </span><span style='text-decoration: underline;'>3</span><span>250 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torge…           </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>                 </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torge…           36.7          19.3              193        </span><span style='text-decoration: underline;'>3</span><span>450 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torge…           39.3          20.6              190        </span><span style='text-decoration: underline;'>3</span><span>650 male</span></span></code></pre>
+</div>
+<p>Embedded within <code>select()</code> is the column order - you change use the order you denote to change the order of your columns.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>bill_length_mm</span>, <span class='nv'>island</span>, <span class='nv'>flipper_length_mm</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span>
+<span class='c'>#&gt;   bill_length_mm island    flipper_length_mm</span>
+<span class='c'>#&gt;            <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>                 </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span>           39.1 Torgersen               181</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span>           39.5 Torgersen               186</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span>           40.3 Torgersen               195</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span>           </span><span style='color: #BB0000;'>NA</span><span>   Torgersen                </span><span style='color: #BB0000;'>NA</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span>           36.7 Torgersen               193</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span>           39.3 Torgersen               190</span></span></code></pre>
+</div>
+</div>
+<br>
+<hr>
+<h2 id="4---using-filter">4 - Using <code>filter()</code></h2>
+<p align="center">
+<img src=dplyr_filter.jpeg width="95%">
+<figcaption>
+Artwork by <a href="https://github.com/allisonhorst/stats-illustrations">Allison Horst</a>.
+</figcaption>
+</p>
+<p><a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> allows you to pick certain observations (i.e, rows) based on their values to be included in your data frame. Let&rsquo;s see it in action.</p>
+<p>We will select only the penguins that are the <code>species</code> &ldquo;Chinstrap&rdquo;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_chinstrap</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Chinstrap"</span><span class='o'>)</span> <span class='c'># note the double equals</span>
+
+<span class='c'># let's check that it worked</span>
+<span class='nv'>penguins_chinstrap</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 × 2</span></span>
+<span class='c'>#&gt;   species       n</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Chinstrap    68</span></span></code></pre>
+</div>
+<p>We can also check to see if we got what we would expect by looking at the dimensions of both <code>penguins</code> and <code>penguins_chinstrap</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 344   8</span>
+<span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>penguins_chinstrap</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 68  8</span></code></pre>
+</div>
+<p>Great, you can see we have kept all of the columns (denoted by the second number 8), but trimmed down or rows/observations to only the Chinstrap penguins.</p>
+<p>You can use <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> in other useful ways too. Let&rsquo;s make a new dataframe that has only the penguins that are over 5000 g.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>big_penguins</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>body_mass_g</span> <span class='o'>&gt;</span> <span class='m'>5000</span><span class='o'>)</span>
+
+<span class='c'># did it work?</span>
+<span class='nv'>big_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>body_mass_g</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/range.html'>range</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 5050 6300</span>
+
+<span class='c'># another faster non-tidyverse way to do this</span>
+<span class='nf'><a href='https://rdrr.io/r/base/range.html'>range</a></span><span class='o'>(</span><span class='nv'>big_penguins</span><span class='o'>$</span><span class='nv'>body_mass_g</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 5050 6300</span></code></pre>
+</div>
+<p>You can start stacking qualifiers to get the exact penguins you want. Let&rsquo;s say we are only interested in penguins that are female and on the island Dream.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span> <span class='o'>&amp;</span> <span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Dream"</span><span class='o'>)</span> 
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 61 × 8</span></span>
+<span class='c'>#&gt;    species island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g</span>
+<span class='c'>#&gt;    <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span><span> Adelie  Dream            39.5          16.7               178        </span><span style='text-decoration: underline;'>3</span><span>250</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span><span> Adelie  Dream            39.5          17.8               188        </span><span style='text-decoration: underline;'>3</span><span>300</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span><span> Adelie  Dream            36.4          17                 195        </span><span style='text-decoration: underline;'>3</span><span>325</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span><span> Adelie  Dream            42.2          18.5               180        </span><span style='text-decoration: underline;'>3</span><span>550</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span><span> Adelie  Dream            37.6          19.3               181        </span><span style='text-decoration: underline;'>3</span><span>300</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span><span> Adelie  Dream            36.5          18                 182        </span><span style='text-decoration: underline;'>3</span><span>150</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span><span> Adelie  Dream            36            18.5               186        </span><span style='text-decoration: underline;'>3</span><span>100</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span><span> Adelie  Dream            37            16.9               185        </span><span style='text-decoration: underline;'>3</span><span>000</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span><span> Adelie  Dream            36            17.9               190        </span><span style='text-decoration: underline;'>3</span><span>450</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span><span> Adelie  Dream            37.3          17.8               191        </span><span style='text-decoration: underline;'>3</span><span>350</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 51 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</span></span></code></pre>
+</div>
+<p>There are lots of useful <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> functions like:</p>
+<ul>
+<li><a href="https://rdrr.io/r/base/Comparison.html" target="_blank" rel="noopener"><code>==</code></a>: exactly equals to</li>
+<li><a href="https://rdrr.io/r/base/Comparison.html" target="_blank" rel="noopener"><code>&gt;=</code></a>: greater than or equals to, you can also use ≥</li>
+<li><a href="https://rdrr.io/r/base/Comparison.html" target="_blank" rel="noopener"><code>&lt;=</code></a>: less than or equals to, you can also use ≤</li>
+<li><a href="https://rdrr.io/r/base/Logic.html" target="_blank" rel="noopener"><code>&amp;</code></a>: and</li>
+<li><a href="https://rdrr.io/r/base/Logic.html" target="_blank" rel="noopener"><code>|</code></a>: or</li>
+<li><a href="https://rdrr.io/r/base/Comparison.html" target="_blank" rel="noopener"><code>!=</code></a>: not equal to</li>
+<li><code>!x</code>: not x</li>
+<li><a href="https://rdrr.io/r/base/NA.html" target="_blank" rel="noopener"><code>is.na()</code></a>: is NA (i.e. missing data)</li>
+</ul>
+<p>There is a longer list of helpful <code>select()</code> features <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener">here</a>.</p>
+<br>
+<p><strong>tl;dr, <code>select()</code> picks columns/variables and <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> picks rows/observations.</strong></p>
+<h2 id="breakout-session-2---pipe-filter-select">Breakout session 2 - pipe, filter, select</h2>
+<h3 id="exercise-1">Exercise 1</h3>
+<div class="alert puzzle">
+<div>
+<p>Make a new dataframe called <code>penguins_new</code> that includes only the columns with numeric or integer data.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> Use <a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> or <code>glimpse()</code> to figure out which columns are numeric or integers. Then use <code>select()</code> to pick only the columns you want.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; Rows: 344</span>
+<span class='c'>#&gt; Columns: 8</span>
+<span class='c'>#&gt; $ species           <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…</span></span>
+<span class='c'>#&gt; $ island            <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…</span></span>
+<span class='c'>#&gt; $ bill_length_mm    <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …</span></span>
+<span class='c'>#&gt; $ bill_depth_mm     <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …</span></span>
+<span class='c'>#&gt; $ flipper_length_mm <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…</span></span>
+<span class='c'>#&gt; $ body_mass_g       <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …</span></span>
+<span class='c'>#&gt; $ sex               <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> male, female, female, NA, female, male, female, male…</span></span>
+<span class='c'>#&gt; $ year              <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</span></span>
+
+<span class='nv'>penguins_new</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>bill_length_mm</span><span class='o'>:</span><span class='nv'>body_mass_g</span>, <span class='nv'>year</span><span class='o'>)</span>
+
+<span class='c'># check to see if it worked</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins_new</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 5</span></span>
+<span class='c'>#&gt;   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g  year</span>
+<span class='c'>#&gt;            <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>             </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span>           39.1          18.7               181        </span><span style='text-decoration: underline;'>3</span><span>750  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span>           39.5          17.4               186        </span><span style='text-decoration: underline;'>3</span><span>800  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span>           40.3          18                 195        </span><span style='text-decoration: underline;'>3</span><span>250  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span>           </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>                  </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span>  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span>           36.7          19.3               193        </span><span style='text-decoration: underline;'>3</span><span>450  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span>           39.3          20.6               190        </span><span style='text-decoration: underline;'>3</span><span>650  </span><span style='text-decoration: underline;'>2</span><span>007</span></span></code></pre>
+</div>
+<p>Getting fancy with some more advanced options</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># this works too</span>
+<span class='nv'>penguins_new2</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nf'>ends_with</span><span class='o'>(</span><span class='s'>"mm"</span><span class='o'>)</span>, <span class='nv'>body_mass_g</span>, <span class='nv'>year</span><span class='o'>)</span>
+
+<span class='c'># this works three</span>
+<span class='nv'>penguins_new3</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nf'>where</span><span class='o'>(</span><span class='nv'>is.numeric</span><span class='o'>)</span> <span class='o'>|</span> <span class='nf'>where</span><span class='o'>(</span><span class='nv'>is.integer</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'># are they all the same?</span>
+<span class='nf'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span><span class='o'>(</span><span class='nv'>penguins_new2</span>, <span class='nv'>penguins_new3</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] TRUE</span></code></pre>
+</div>
+</details>
+</div>
+</div>
+<hr>
+<h3 id="exercise-2">Exercise 2</h3>
+<div class="alert puzzle">
+<div>
+<p>Make a new dataframe called <code>penguins_adelie_female</code> that includes only the female penguins that are of the <code>species</code> Adelie.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> Use <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> to set which penguins you want to keep. Use the <code>%&gt;%</code> and <code>count()</code> to make sure what you did worked.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_adelie</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span> <span class='o'>&amp;</span> <span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span>
+
+<span class='c'># check to see if it worked</span>
+<span class='nv'>penguins_adelie</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species</span>, <span class='nv'>sex</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 × 3</span></span>
+<span class='c'>#&gt;   species sex        n</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  female    73</span></span></code></pre>
+</div>
+</details>
+</div>
+</div>
+<hr>
+<h3 id="exercise-3">Exercise 3</h3>
+<div class="alert puzzle">
+<div>
+<p>Make a new dataframe called <code>penguins_dream_or_2007</code> that includes only the penguins on the island dream, or from the year 2007. Then make sure the dataframe only contains those variables you have filtered on.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> Use <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> to set which penguins you want to keep. Use the <code>%&gt;%</code> and <code>select()</code> to construct your new dataframe.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_dream_or_2007</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Dream"</span> <span class='o'>|</span> <span class='nv'>year</span> <span class='o'>==</span> <span class='s'>"2007"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>island</span>, <span class='nv'>year</span><span class='o'>)</span>
+
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins_dream_or_2007</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 2</span></span>
+<span class='c'>#&gt;   island     year</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Torgersen  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Torgersen  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Torgersen  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Torgersen  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Torgersen  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Torgersen  </span><span style='text-decoration: underline;'>2</span><span>007</span></span>
+
+<span class='c'># did it work?</span>
+<span class='nv'>penguins_dream_or_2007</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>island</span>, <span class='nv'>year</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 5 × 3</span></span>
+<span class='c'>#&gt;   island     year     n</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Biscoe     </span><span style='text-decoration: underline;'>2</span><span>007    44</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Dream      </span><span style='text-decoration: underline;'>2</span><span>007    46</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Dream      </span><span style='text-decoration: underline;'>2</span><span>008    34</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Dream      </span><span style='text-decoration: underline;'>2</span><span>009    44</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Torgersen  </span><span style='text-decoration: underline;'>2</span><span>007    20</span></span></code></pre>
+</div>
+</details>
+</div>
+</div>
+<hr>
+<h2 id="further-reading">Further reading</h2>
+<p>There are many good (free) references for the tidyverse, including the book <a href="https://r4ds.had.co.nz/" target="_blank" rel="noopener">R for Data Science</a> by Hadley Wickham and Garrett Grolemund.</p>
+<p>The package <a href="https://dplyr.tidyverse.org/" target="_blank" rel="noopener"><code>dplyr</code></a>, as part of the <a href="https://www.rdocumentation.org/packages/tidyverse/versions/1.3.0" target="_blank" rel="noopener"><code>tidyverse</code></a> has a number of very helpful functions that will help you get your data into a format suitable for your analysis.</p>
+<p>RStudio makes very useful <a href="https://www.rstudio.com/resources/cheatsheets/" target="_blank" rel="noopener">cheatsheets</a>, including ones on tidyverse packages like <code>dplyr</code>, <code>ggplot2</code>, and others.</p>
+
+                    </div>
+
+                    <br>
+
+                    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/&amp;text=Code%20Club%20S02E04:%20Intro%20to%20the%20Tidyverse%20%28Part%201%29" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/&amp;t=Code%20Club%20S02E04:%20Intro%20to%20the%20Tidyverse%20%28Part%201%29" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Code%20Club%20S02E04:%20Intro%20to%20the%20Tidyverse%20%28Part%201%29&amp;body=https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/&amp;title=Code%20Club%20S02E04:%20Intro%20to%20the%20Tidyverse%20%28Part%201%29" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Code%20Club%20S02E04:%20Intro%20to%20the%20Tidyverse%20%28Part%201%29%20https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/&amp;title=Code%20Club%20S02E04:%20Intro%20to%20the%20Tidyverse%20%28Part%201%29" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="/authors/jessica-cooperstone/"><img class="avatar mr-3 avatar-circle" src="/authors/jessica-cooperstone/avatar_hub3c8c373219f94b7f8251ccae20f3fcb_68385_270x270_fill_q90_lanczos_center.jpg" alt="Jessica Cooperstone"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/authors/jessica-cooperstone/">Jessica Cooperstone</a></h5>
+      <h6 class="card-subtitle">Assistant Professor at HCS</h6>
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:cooperstone.1@osu.edu" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/CooperstoneLab" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=d-FkQNQAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/jcooperstone" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://phytochemicals.osu.edu/" target="_blank" rel="noopener">
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <br>
+
+                    <hr class="separator">
+
+                    <div class="clearfix">
+                        
+                        
+                        <span class="previous-link">
+                            <a href="https://biodash.github.io/codeclub/s02e03_rmarkdown/">← Code Club S02E03: R Markdown</a>
+                        </span>
+                        
+                        
+                        
+                    </div>
+
+                    <hr class="separator">
+
+                </div>
+
+            </article>
+
+            
+        </main>
+    </div>
+</div>
+
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+    
+    <p class="powered-by">
+      <a href="/license/">LICENSE: CC-BY-SA <br> <i class="fab fa-creative-commons fa-2x"></i><i class="fab fa-creative-commons-by fa-2x"></i><i class="fab fa-creative-commons-sa fa-2x"></i> </a><br>
+    </p>
+    
+</footer>
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key="></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.25/gmaps.min.js" integrity="sha256-7vjlAeb8OaTrCXZkCNun9djzuB2owUsaO72kXaFDBJs=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+      
+    
+    <script src="/en/js/wowchemy.min.2f16af175a3ec51b41b36bb4934b1cf7.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>
