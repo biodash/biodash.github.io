@@ -18,17 +18,21 @@ knitr::opts_chunk$set(echo = TRUE)
 -   Using [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) - picks observations (i.e., rows) based on their values
 -   Using [`select()`](https://dplyr.tidyverse.org/reference/select.html) - picks variables (i.e., columns) based on their names
 
+----
+
 ## 1 - What is the tidyverse, and how do I use it?
 
 The [tidyverse](https://www.tidyverse.org/) is a collection of R packages that are designed for data science. You can certainly use R without using the tidyverse, but it has many packages that I think will make your life a lot easier. The popular package [`ggplot2`](https://ggplot2.tidyverse.org/index.html) is a part of the core tidyverse, which we have talked about in previous Code Clubs ([intro](/codeclub/04_ggplot2), [intro2](/codeclub/05_ggplot-round-2), [maps](/codeclub/11_ggplot-maps), and [ggplotly](/codeclub/15_plotly)), and will talk about in future sessions as well.
 
-Before we talk more about the tidyverse, let's download it.
+Packages contain shareable code, documentation, tests, and data.  One way to download packages is using the function [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages) which will allow you to download packages that exist within the Comprehensive R Archive Network, or [CRAN](https://cran.r-project.org/).  There are packages that exist outside CRAN but that is a story for another time.
+
+Before we talk more about the tidyverse, let's download it.  We only need to do this once.
 
 ```{r, eval = FALSE}
 install.packages("tidyverse")
 ```
 
-To use any of the packages within the tidyverse, we need to call them up using `library()`.
+To use any of the packages within the tidyverse, we need to call them up using `library()` anytime we want to use the code embedded within them.
 
 ```{r}
 library(tidyverse)
@@ -36,22 +40,29 @@ library(tidyverse)
 
 Let's look at this message, we can see that there are eight "attaching packages" as part of the ["core"](https://www.tidyverse.org/packages/) set of tidyverse.  
 
-We see that there are some conflicts, for example, there is a function called `filter()` (which we will talk about today) that is part of `dplyr` (a tidyverse package) that is masking another function called `filter()` within the `stats` package (which loads with base R).  Now this is fine for us right now, so there is nothing to do, but it is a good habit to get into reading (and not ignoring) any warnings or messages that R gives you.  (It is trying to help!)
+We see that there are some conflicts, for example, there is a function called `filter()` (which we will talk about today) that is part of `dplyr` (a tidyverse package) that is masking another function called `filter()` within the `stats` package (which loads with base R).  
 
-Note the double colon operator `::` which indicates a function from a particular package.  So when you see `stats::filter()`, that indicates the function `filter()` within the package `stats`.
+The conflict arises from the fact that there are now two functions named `filter()`.  After loading the tidyverse, the default `filter()` will be that from `dplyr`.  If we want explcitly to use the `filter()` function from `stats`, we can do that using the double colon operator `::` like this: `stats::filter()`.
+
+Now this is fine for us right now, so there is nothing to do, but it is a good habit to get into reading (and not ignoring) any warnings or messages that R gives you.  (It is trying to help!)
+
+Remember, you can learn more about any package by accessing the help documentation.  The help will pop up in the Help tab of the bottom right quadrant of RStudio when you execute the code below.
+```{r}
+?tidyverse
+```
 
 Below is a quick description of what each package is used for.
 
 - [`dplyr`](https://dplyr.tidyverse.org/): for data manipulation
 - [`ggplot2`](https://ggplot2.tidyverse.org/): a "grammar of graphics" for creating beautiful plots
-- [`forcats`](https://forcats.tidyverse.org/): for handling categorical variables (i.e., factors) (meow!)
-- [`tibble`](https://tibble.tidyverse.org/): using tibbles as modern/better dataframes
 - [`readr`](https://readr.tidyverse.org/): for reading in rectangular data (i.e., Excel-style formatting)
+- [`tibble`](https://tibble.tidyverse.org/): using tibbles as modern/better dataframes
 - [`stringr`](https://stringr.tidyverse.org/): handling strings (i.e., text or stuff in quotes)
+- [`forcats`](https://forcats.tidyverse.org/): for handling categorical variables (i.e., factors) (meow!)
 - [`tidyr`](https://tidyr.tidyverse.org/): to make "tidy data"
 - [`purrr`](https://purrr.tidyverse.org/): for enhancing functional programming (also meow!)
 
-If you're not understanding what some of this means, that's totally fine, its not important that you do right now.
+If you're not understanding what some of this means, that's totally fine.
 
 There are more tidyverse packages outside of these core eight, and you can see what they are below.
 
@@ -65,30 +76,13 @@ You can find [here](https://tavareshugo.github.io/data_carpentry_extras/base-r_t
 
 ------------------------------------------------------------------------
 
-## Breakout session 1 - install tidyverse
-
-In your breakout sessions, make sure that you each have the tidyverse installed and loaded.  
-
-```{r, eval = FALSE}
-install.packages("tidyverse")
-install.packages("dplyr") # this is the only one of the 8 tidyverse packages we will use today
-```
-
-```{r}
-library(tidyverse)
-```
-
-Occasionally we see people who are having tidyverse install issues, if this happens to you, please read the warning that R gives you, you may need to download an additional package to get it to work.  If you have trouble, first try restarting your R session and see if that helps, or reach out to one of the organizers or one of your fellow codeclubbers.  
-
-------------------------------------------------------------------------
-
 ## 2 - Using the pipe `%>%`
 
 The pipe operator `%>%` is a tool that is used for expressing a series of operations.  It comes from the [`magrittr`](https://cran.r-project.org/web/packages/magrittr/index.html) package, and is loaded automatically when you load the tidyverse.  
 
 The purpose of the pipe is to allow you to take the output of one operation and have it be the starting material of the next step.  It also (hopefully) makes your code easier to read and interpret.  
 
-**Let's get set up and grab some data so that we have some material to work with**
+**Let's get set up and grab some data so that we have some material to work with.**
 
 We are going to use a package called [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) which has some fun 🐧 data for us to play with.  To get this data, we need to install the `palmerpenguins` package.
 
@@ -96,37 +90,45 @@ We are going to use a package called [`palmerpenguins`](https://allisonhorst.git
 install.packages(palmerpenguins)
 ```
 
+[`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/index.html) is a package developed by Allison Horst, Alison Hill and Kristen Gorman, including a dataset collected by Dr. Kristen Gorman at the Palmer Station Antarctica, as part of the Long Term Ecological Research Network.  It is a nice, relatively simple dataset to practice data exploration and visualization in R.   Plus the penguins are v cute.
+
 Then, to use the package, we need to use the function `library()` to call the package up in R.
 ```{r}
 library(palmerpenguins)
 ```
 
-The data we want to use is called `penguins`.
+The data we will use today is called `penguins`.
 
 ```{r}
 # look at the first 6 rows, all columns
 head(penguins)
 
 # check the structure of penguins_data
+# glimpse() which is a part of dplyr functions 
+# similarly to str() and can be used interchangeably
 glimpse(penguins)
 ```
 
 Okay now we have a sense of what the `penguins` dataset is.
 
-We can use the pipe to send `penguins` forward through a series of steps.  For example, we can use the function `count()` to figure out how many of each penguin `species` there are in our dataset.
+If we want to know how many penguins there are of each `species` we can use the function `count().`  In the `count()` function, the first argument is the dataset, and the next argument is what you want to be counted.  You can always learn more about the arguments and syntax of functions by using `?yourfunction()` or googling for the documentation.  This is the base R way.
+
+```{r}
+count(penguins, species)
+```
+
+Alternatively, we can use the pipe to send `penguins` forward through a series of steps.  For example, we can use the function `count()` to figure out how many of each penguin `species` there are in our dataset.
 
 ```{r}
 penguins %>% # take penguins_data
   count(species) # count how many of each species there is
 ```
 
-You could alternatively write your code like this.  In the `count()` function, the first argument is the dataset, and the next argument is what you want to be counted.  You can always learn more about the functions by using `?count()` or googling for the documentation.
+### Comparing to base R
 
-```{r}
-count(penguins, species)
-```
+A main benefit of the pipe is readability, and also the ability to "pipe" many things together (which we are not doing with `count()`).
 
-You can see you get the same thing.  The benefit of the pipe is readability, and also the ability to pipe many things together (which we are not doing with `count()`).
+I want to stress that everything you can do with the tidyverse you can also do using base R.  I tend to think the tidyverse is more intuitive than base R, which is why we have elected to teach it here first.  [Here](https://tavareshugo.github.io/data_carpentry_extras/base-r_tidyverse_equivalents/base-r_tidyverse_equivalents.html) you can find a bunch fo examples comparing tidyverse to base R equivalent syntax.  [Here](http://varianceexplained.org/r/teach-tidyverse/) is an interesting blogpost on the topic if this is really keeping you up at night.
 
 I am going to show you an example of a place I think the pipe really shines, don't worry if you don't understand all the syntax, I just want you to see how the pipe can be used.
 
@@ -138,6 +140,36 @@ penguins %>%
 ```
 
 We are going to continue to use the pipe `%>%` as we practice with some new `dplyr` functions.
+<br>
+
+------------------------------------------------------------------------
+## Breakout session 1 - install tidyverse, use the pipe
+
+Install and load the tidyverse.
+```{r, eval = FALSE}
+
+```
+
+Occasionally we see people who are having tidyverse install issues, if this happens to you, please read the warning that R gives you, you may need to download an additional package to get it to work.  If you have trouble, first try restarting your R session and see if that helps, or reach out to one of the organizers or one of your fellow codeclubbers.  
+
+
+We will practice using the pipe.  In S02E02, Mike introduced you to some new functions in [Exercise 6](/codeclub/s02e02_r-intro_part2/#breakout-rooms-ii-10-min).  Take the dataset `penguins` and use the pipe to determine the dimensions of the dataframe.  
+
+```{r}
+
+```
+
+Take the dataset `penguins` and use the pipe to determine the names of the columns of the dataframe.  
+
+```{r}
+penguins %>%
+  names()
+
+# the same
+penguins %>%
+  colnames()
+```
+These are the names of our 8 columns.
 
 ------------------------------------------------------------------------
 
@@ -184,7 +216,7 @@ Note, in the above chunk, this new dataframe is not being saved because we have 
 You could use slightly different syntax to get the same thing using an indexing approach.
 ```{r}
 penguins %>%
-  select(1:3) %>% # pick columns one through three
+  select(1:3) %>% # pick columns 1-3
   head()
 ```
 
@@ -206,9 +238,9 @@ penguins %>%
 
 ## 4 - Using `filter()`
 
-[`filter()`](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/filter) allows you to pick certain observations (i.e, rows) based on their values to be included in your data frame.  Let's see it in action.
+`filter()` allows you to pick certain observations (i.e, rows) based on their values to be included in your data frame.  Let's see it in action.
 
-We will select only the penguins that are the `species` "Chinstrap"
+We will select only the "Chinstrap" penguins.
 ```{r}
 penguins_chinstrap <- penguins %>%
   filter(species == "Chinstrap") # note the double equals
@@ -217,6 +249,7 @@ penguins_chinstrap <- penguins %>%
 penguins_chinstrap %>%
   count(species)
 ```
+
 We can also check to see if we got what we would expect by looking at the dimensions of both `penguins` and `penguins_chinstrap`.
 ```{r}
 dim(penguins)
@@ -244,11 +277,11 @@ You can start stacking qualifiers to get the exact penguins you want.  Let's say
 penguins %>%
   filter(sex == "female" & island == "Dream") 
 ```
-There are lots of useful `filter()` functions like:
+There are lots of useful generic R operators that you can use inside functions like `filter()` including:
 
 - `==`: exactly equals to
-- `≥`: greater than or equals to
-- `≤`: less than or equals to
+- `>=`: greater than or equals to, you can also use ≥
+- `<=`: less than or equals to, you can also use ≤
 - `&`: and
 - `|`: or
 - `!=`: not equal to
@@ -256,6 +289,8 @@ There are lots of useful `filter()` functions like:
 - `is.na()`: is NA (i.e. missing data)
 
 There is a longer list of helpful `select()` features [here](https://dplyr.tidyverse.org/reference/select.html).
+
+<br>
 
 **tl;dr, `select()` picks columns/variables and `filter()` picks rows/observations.**
 
@@ -267,17 +302,13 @@ Make a new dataframe called `penguins_new` that includes only the columns with n
 
 ```{r}
 
-
 # check to see if it worked
-head(penguins_new)
+
 ```
 
 Getting fancy with some more advanced options
 ```{r}
 # this works too
-
-
-# this works three
 
 
 # are they all the same?
@@ -302,12 +333,14 @@ Make a new dataframe called `penguins_adelie_female` that includes only the fema
 ### Exercise 3
 
 Make a new dataframe called `penguins_dream_or_2007` that includes only the penguins on the island dream, or from the year 2007.  Then make sure the dataframe only contains those variables you have filtered on.
+
 ```{r}
 
 
 # did it work?
 
 ```
+
 
 ----
 
@@ -318,4 +351,3 @@ There are many good (free) references for the tidyverse, including the book [R f
 The package [`dplyr`](https://dplyr.tidyverse.org/), as part of the [`tidyverse`](https://www.rdocumentation.org/packages/tidyverse/versions/1.3.0) has a number of very helpful functions that will help you get your data into a format suitable for your analysis.
 
 RStudio makes very useful [cheatsheets](https://www.rstudio.com/resources/cheatsheets/), including ones on tidyverse packages like `dplyr`, `ggplot2`, and others.
-
