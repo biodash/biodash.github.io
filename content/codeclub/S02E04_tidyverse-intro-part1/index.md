@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: f3a1ecc0a1401973
+rmd_hash: ac85e017a3cba94b
 
 ---
 
@@ -246,7 +246,7 @@ Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/ar
 
 Okay now we have a sense of what the `penguins` dataset is.
 
-If we want to know how many penguins there are of each `species` we can use the function `count().` In the `count()` function, the first argument is the dataset, and the next argument is what you want to be counted. You can always learn more about the arguments and syntax of functions by using `?yourfunction()` or googling for the documentation. This is the base R way.
+If we want to know how many penguins there are of each `species` we can use the function `count().` In the `count()` function, the first argument is the dataset, and the next argument is what you want to be counted. You can always learn more about the arguments and syntax of functions by using `?yourfunction()` or googling for the documentation. This is the non-pipe approach.
 
 <div class="highlight">
 
@@ -279,7 +279,7 @@ Alternatively, we can use the pipe to send `penguins` forward through a series o
 
 A main benefit of the pipe is readability, and also the ability to "pipe" many things together (which we are not doing with `count()`).
 
-I want to stress that everything you can do with the tidyverse you can also do using base R. I tend to think the tidyverse is more intuitive than base R, which is why we have elected to teach it here first. [Here](https://tavareshugo.github.io/data_carpentry_extras/base-r_tidyverse_equivalents/base-r_tidyverse_equivalents.html) you can find a bunch fo examples comparing tidyverse to base R equivalent syntax. [Here](http://varianceexplained.org/r/teach-tidyverse/) is an interesting blogpost on the topic if this is really keeping you up at night.
+I want to stress that everything you can do with the tidyverse you can also do using base R. I tend to think the tidyverse is more intuitive than base R, which is why we have elected to teach it here first. [Here](https://tavareshugo.github.io/data_carpentry_extras/base-r_tidyverse_equivalents/base-r_tidyverse_equivalents.html) you can find a bunch of examples comparing tidyverse to base R equivalent syntax. [Here](http://varianceexplained.org/r/teach-tidyverse/) is an interesting blogpost on the topic if this is really keeping you up at night.
 
 I am going to show you an example of a place I think the pipe really shines, don't worry if you don't understand all the syntax, I just want you to see how the pipe can be used.
 
@@ -421,9 +421,9 @@ These are the names of our 8 columns.
 
 ## 3 - Using `select()`
 
-It has been estimated that the process of getting your data into the appropriate formats takes about 80% of the total time of analysis. I find that getting data into a format that enables analysis often trips people up more than doing the actual analysis. The tidyverse packages `dplyr` has a number of functions that help in data wrangling.
+It has been estimated that the process of getting your data into the appropriate formats takes about 80% of the total time of analysis. I find that getting data into a format that enables analysis often trips people up more than doing the actual analysis. The tidyverse package `dplyr` has a number of functions that help in data wrangling.
 
-The first one we will talk about is `select()`. Tidyverse is nice in that the functions are very descritpive and intuitive as to what they do: `select()` allows you to pick certain columns to be included in your data frame.
+The first one we will talk about is `select()`. Tidyverse is nice in that the functions are very descriptive and intuitive as to what they do: `select()` allows you to pick certain columns to be included in your data frame.
 
 Let's try out both the `%>%` and `select()`. Let's make a new dataframe from `penguins` that contains only the variables `species`, `island` and `sex`.
 
@@ -537,7 +537,7 @@ There is also convenient shorthand for indicating what you *don't* want (instead
 
 </div>
 
-Embedded within `select()` is the column order - you change use the order you denote to change the order of your columns.
+Embedded within `select()` is the column order - you can change the order by denoting the order of your columns.
 
 <div class="highlight">
 
@@ -607,7 +607,7 @@ We can also check to see if we got what we would expect by looking at the dimens
 
 </div>
 
-Great, you can see we have kept all of the columns (denoted by the second number 8), but trimmed down or rows/observations to only the Chinstrap penguins.
+Great, you can see we have kept all of the columns (denoted by the second number 8), but trimmed down the rows/observations to only the Chinstrap penguins.
 
 You can use [`filter()`](https://rdrr.io/r/stats/filter.html) in other useful ways too. Let's make a new dataframe that has only the penguins that are over 5000 g.
 
