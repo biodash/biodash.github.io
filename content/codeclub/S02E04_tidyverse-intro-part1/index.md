@@ -1,9 +1,9 @@
 ---
 title: "Code Club S02E04: Intro to the Tidyverse (Part 1)"
-subtitle: "Tidyverse, the pipe, filter, and select"
+subtitle: "Tidyverse, the pipe, filter, select, and 🐧"
 summary: "During this session of Code Club, we will be learning about what the tidyverse is, the pipe operator, and how to use some of the most popular dplyr one-table functions, including filter and select."  
 authors: [jessica-cooperstone]
-date: "2021-09-14"
+date: "2021-09-15"
 output: hugodown::md_document
 toc: true
 
@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: c077d47f21da24ee
+rmd_hash: f3a1ecc0a1401973
 
 ---
 
@@ -33,9 +33,14 @@ rmd_hash: c077d47f21da24ee
 
 ## Getting started
 
-Now that you are familiar with the basics of [RMarkdown](/codeclub/s02e03_rmarkdown/), I put together a RMarkdown file you can download which has the content for today's Code Club.
+Now that you are familiar with the basics of RMarkdown [season 1](/codeclub/07_rmarkdown) and [season 2](/codeclub/s02e03_rmarkdown/), I put together a RMarkdown file you can download which has the content for today's Code Club.
 
 ### Download today's content
+
+<details>
+<summary>
+Click here to get an Rmd (optional)
+</summary>
 
 <div class="highlight">
 
@@ -58,6 +63,7 @@ Now that you are familiar with the basics of [RMarkdown](/codeclub/s02e03_rmarkd
 
 </div>
 
+</details>
 <br>
 
 <div class="alert alert-note">
@@ -83,7 +89,9 @@ Now that you are familiar with the basics of [RMarkdown](/codeclub/s02e03_rmarkd
 
 The [tidyverse](https://www.tidyverse.org/) is a collection of R packages that are designed for data science. You can certainly use R without using the tidyverse, but it has many packages that I think will make your life a lot easier. The popular package [`ggplot2`](https://ggplot2.tidyverse.org/index.html) is a part of the core tidyverse, which we have talked about in previous Code Clubs ([intro](/codeclub/04_ggplot2), [intro2](/codeclub/05_ggplot-round-2), [maps](/codeclub/11_ggplot-maps), and [ggplotly](/codeclub/15_plotly)), and will talk about in future sessions as well.
 
-Before we talk more about the tidyverse, let's download it.
+Packages contain shareable code, documentation, tests, and data. One way to download packages is using the function [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages) which will allow you to download packages that exist within the Comprehensive R Archive Network, or [CRAN](https://cran.r-project.org/). There are packages that exist outside CRAN but that is a story for another time.
+
+Before we talk more about the tidyverse, let's download it. We only need to do this once.
 
 <div class="highlight">
 
@@ -91,7 +99,7 @@ Before we talk more about the tidyverse, let's download it.
 
 </div>
 
-To use any of the packages within the tidyverse, we need to call them up using [`library()`](https://rdrr.io/r/base/library.html).
+To use any of the packages within the tidyverse, we need to call them up using [`library()`](https://rdrr.io/r/base/library.html) anytime we want to use the code embedded within them.
 
 <div class="highlight">
 
@@ -109,9 +117,19 @@ To use any of the packages within the tidyverse, we need to call them up using [
 
 Let's look at this message, we can see that there are eight "attaching packages" as part of the ["core"](https://www.tidyverse.org/packages/) set of tidyverse.
 
-We see that there are some conflicts, for example, there is a function called [`filter()`](https://rdrr.io/r/stats/filter.html) (which we will talk about today) that is part of `dplyr` (a tidyverse package) that is masking another function called [`filter()`](https://rdrr.io/r/stats/filter.html) within the `stats` package (which loads with base R). Now this is fine for us right now, so there is nothing to do, but it is a good habit to get into reading (and not ignoring) any warnings or messages that R gives you. (It is trying to help!)
+We see that there are some conflicts, for example, there is a function called [`filter()`](https://rdrr.io/r/stats/filter.html) (which we will talk about today) that is part of `dplyr` (a tidyverse package) that is masking another function called [`filter()`](https://rdrr.io/r/stats/filter.html) within the `stats` package (which loads with base R).
 
-Note the double colon operator [`::`](https://rdrr.io/r/base/ns-dblcolon.html) which indicates a function from a particular package. So when you see [`stats::filter()`](https://rdrr.io/r/stats/filter.html), that indicates the function [`filter()`](https://rdrr.io/r/stats/filter.html) within the package `stats`.
+The conflict arises from the fact that there are now two functions named [`filter()`](https://rdrr.io/r/stats/filter.html). After loading the tidyverse, the default [`filter()`](https://rdrr.io/r/stats/filter.html) will be that from `dplyr`. If we want explcitly to use the [`filter()`](https://rdrr.io/r/stats/filter.html) function from `stats`, we can do that using the double colon operator [`::`](https://rdrr.io/r/base/ns-dblcolon.html) like this: [`stats::filter()`](https://rdrr.io/r/stats/filter.html).
+
+Now this is fine for us right now, so there is nothing to do, but it is a good habit to get into reading (and not ignoring) any warnings or messages that R gives you. (It is trying to help!)
+
+Remember, you can learn more about any package by accessing the help documentation. The help will pop up in the Help tab of the bottom right quadrant of RStudio when you execute the code below.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>?</span><span class='nv'>tidyverse</span></code></pre>
+
+</div>
 
 <p align="center">
 <img src=tidyverse-packages.png width="90%" alt="an illustration of eight hexagons with the names of the tidyverse core packages inside, dplyr, readr, purrr, tidyverse, ggplot2, tidyr, and tibble">
@@ -123,14 +141,14 @@ Below is a quick description of what each package is used for.
 
 -   [`dplyr`](https://dplyr.tidyverse.org/): for data manipulation
 -   [`ggplot2`](https://ggplot2.tidyverse.org/): a "grammar of graphics" for creating beautiful plots
--   [`forcats`](https://forcats.tidyverse.org/): for handling categorical variables (i.e., factors) (meow!)
--   [`tibble`](https://tibble.tidyverse.org/): using tibbles as modern/better dataframes
 -   [`readr`](https://readr.tidyverse.org/): for reading in rectangular data (i.e., Excel-style formatting)
+-   [`tibble`](https://tibble.tidyverse.org/): using tibbles as modern/better dataframes
 -   [`stringr`](https://stringr.tidyverse.org/): handling strings (i.e., text or stuff in quotes)
+-   [`forcats`](https://forcats.tidyverse.org/): for handling categorical variables (i.e., factors) (meow!)
 -   [`tidyr`](https://tidyr.tidyverse.org/): to make "tidy data"
 -   [`purrr`](https://purrr.tidyverse.org/): for enhancing functional programming (also meow!)
 
-If you're not understanding what some of this means, that's totally fine, its not important that you do right now.
+If you're not understanding what some of this means, that's totally fine.
 
 There are more tidyverse packages outside of these core eight, and you can see what they are below.
 
@@ -154,7 +172,137 @@ You can find [here](https://tavareshugo.github.io/data_carpentry_extras/base-r_t
 
 ------------------------------------------------------------------------
 
-## Breakout session 1 - install tidyverse
+## 2 - Using the pipe `%>%`
+
+The pipe operator `%>%` is a tool that is used for expressing a series of operations. It comes from the [`magrittr`](https://cran.r-project.org/web/packages/magrittr/index.html) package, and is loaded automatically when you load the tidyverse.
+
+The purpose of the pipe is to allow you to take the output of one operation and have it be the starting material of the next step. It also (hopefully) makes your code easier to read and interpret.
+
+**Let's get set up and grab some data so that we have some material to work with.**
+
+<p align="center">
+<img src=palmerpenguins_hex.png width="50%" alt="a cute hexagon image of three penguins as a part of the palmer penguins package">
+</p>
+
+Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
+
+We are going to use a package called [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) which has some fun 🐧 data for us to play with. To get this data, we need to install the `palmerpenguins` package.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='nv'>palmerpenguins</span><span class='o'>)</span></code></pre>
+
+</div>
+
+[`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/index.html) is a package developed by Allison Horst, Alison Hill and Kristen Gorman, including a dataset collected by Dr. Kristen Gorman at the Palmer Station Antarctica, as part of the Long Term Ecological Research Network. It is a nice, relatively simple dataset to practice data exploration and visualization in R. Plus the penguins are v cute.
+
+Then, to use the package, we need to use the function [`library()`](https://rdrr.io/r/base/library.html) to call the package up in R.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span></code></pre>
+
+</div>
+
+The data we will use today is called `penguins`.
+
+<p align="center">
+<img src=culmen_depth.png width="50%" alt="a cute hexagon image of three penguins as a part of the palmer penguins package">
+</p>
+
+Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># look at the first 6 rows, all columns</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 8</span></span>
+<span class='c'>#&gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torge…           39.1          18.7              181        </span><span style='text-decoration: underline;'>3</span><span>750 male </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torge…           39.5          17.4              186        </span><span style='text-decoration: underline;'>3</span><span>800 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torge…           40.3          18                195        </span><span style='text-decoration: underline;'>3</span><span>250 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torge…           </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>                 </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torge…           36.7          19.3              193        </span><span style='text-decoration: underline;'>3</span><span>450 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torge…           39.3          20.6              190        </span><span style='text-decoration: underline;'>3</span><span>650 male </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 1 more variable: year &lt;int&gt;</span></span>
+
+<span class='c'># check the structure of penguins_data</span>
+<span class='c'># glimpse() which is a part of dplyr functions </span>
+<span class='c'># similarly to str() and can be used interchangeably</span>
+<span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; Rows: 344</span>
+<span class='c'>#&gt; Columns: 8</span>
+<span class='c'>#&gt; $ species           <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…</span></span>
+<span class='c'>#&gt; $ island            <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…</span></span>
+<span class='c'>#&gt; $ bill_length_mm    <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …</span></span>
+<span class='c'>#&gt; $ bill_depth_mm     <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …</span></span>
+<span class='c'>#&gt; $ flipper_length_mm <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…</span></span>
+<span class='c'>#&gt; $ body_mass_g       <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …</span></span>
+<span class='c'>#&gt; $ sex               <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> male, female, female, NA, female, male, female, male…</span></span>
+<span class='c'>#&gt; $ year              <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</span></span></code></pre>
+
+</div>
+
+Okay now we have a sense of what the `penguins` dataset is.
+
+If we want to know how many penguins there are of each `species` we can use the function `count().` In the `count()` function, the first argument is the dataset, and the next argument is what you want to be counted. You can always learn more about the arguments and syntax of functions by using `?yourfunction()` or googling for the documentation. This is the base R way.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>count</span><span class='o'>(</span><span class='nv'>penguins</span>, <span class='nv'>species</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
+<span class='c'>#&gt;   species       n</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie      152</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Chinstrap    68</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Gentoo      124</span></span></code></pre>
+
+</div>
+
+Alternatively, we can use the pipe to send `penguins` forward through a series of steps. For example, we can use the function `count()` to figure out how many of each penguin `species` there are in our dataset.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> <span class='c'># take penguins_data</span>
+  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='c'># count how many of each species there is</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
+<span class='c'>#&gt;   species       n</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie      152</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Chinstrap    68</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Gentoo      124</span></span></code></pre>
+
+</div>
+
+### Comparing to base R
+
+A main benefit of the pipe is readability, and also the ability to "pipe" many things together (which we are not doing with `count()`).
+
+I want to stress that everything you can do with the tidyverse you can also do using base R. I tend to think the tidyverse is more intuitive than base R, which is why we have elected to teach it here first. [Here](https://tavareshugo.github.io/data_carpentry_extras/base-r_tidyverse_equivalents/base-r_tidyverse_equivalents.html) you can find a bunch fo examples comparing tidyverse to base R equivalent syntax. [Here](http://varianceexplained.org/r/teach-tidyverse/) is an interesting blogpost on the topic if this is really keeping you up at night.
+
+I am going to show you an example of a place I think the pipe really shines, don't worry if you don't understand all the syntax, I just want you to see how the pipe can be used.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># drop missing values listed as NA</span>
+  <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># group by species</span>
+  <span class='nf'>summarize</span><span class='o'>(</span>mean_mass <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>body_mass_g</span><span class='o'>)</span><span class='o'>)</span> <span class='c'># summarize mass into new column called </span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
+<span class='c'>#&gt;   species   mean_mass</span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie        </span><span style='text-decoration: underline;'>3</span><span>706.</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Chinstrap     </span><span style='text-decoration: underline;'>3</span><span>733.</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Gentoo        </span><span style='text-decoration: underline;'>5</span><span>092.</span></span></code></pre>
+
+</div>
+
+We are going to continue to use the pipe `%>%` as we practice with some new `dplyr` functions. <br>
+
+------------------------------------------------------------------------
+
+## Breakout session 1 - install tidyverse, use the pipe
 
 <div class="alert puzzle">
 
@@ -186,129 +334,88 @@ Occasionally we see people who are having tidyverse install issues, if this happ
 
 </div>
 
-------------------------------------------------------------------------
+<div class="alert puzzle">
 
-## 2 - Using the pipe `%>%`
+<div>
 
-The pipe operator `%>%` is a tool that is used for expressing a series of operations. It comes from the [`magrittr`](https://cran.r-project.org/web/packages/magrittr/index.html) package, and is loaded automatically when you load the tidyverse.
+We will practice using the pipe. In S02E02, Mike introduced you to some new functions in [Exercise 6](/codeclub/s02e02_r-intro_part2/#breakout-rooms-ii-10-min). Take the dataset `penguins` and use the pipe to determine the dimensions of the dataframe.
 
-The purpose of the pipe is to allow you to take the output of one operation and have it be the starting material of the next step. It also (hopefully) makes your code easier to read and interpret.
+<details>
+<summary>
+Hints (click here)
+</summary>
 
-**Let's get set up and grab some data so that we have some material to work with**
+<br> Use [`dim()`](https://rdrr.io/r/base/dim.html) to determine the dimensions
 
-<p align="center">
-<img src=palmerpenguins_hex.png width="50%" alt="a cute hexagon image of three penguins as a part of the palmer penguins package">
-</p>
-
-Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
-
-We are going to use a package called [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) which has some fun 🐧 data for us to play with. To get this data, we need to install the `palmerpenguins` package.
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='nv'>palmerpenguins</span><span class='o'>)</span></code></pre>
-
-</div>
-
-Then, to use the package, we need to use the function [`library()`](https://rdrr.io/r/base/library.html) to call the package up in R.
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span></code></pre>
-
-</div>
-
-The data we want to use is called `penguins`.
-
-<p align="center">
-<img src=culmen_depth.png width="50%" alt="a cute hexagon image of three penguins as a part of the palmer penguins package">
-</p>
-
-Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># look at the first 6 rows, all columns</span>
-<span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 8</span></span>
-<span class='c'>#&gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  </span>
-<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torge…           39.1          18.7              181        </span><span style='text-decoration: underline;'>3</span><span>750 male </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torge…           39.5          17.4              186        </span><span style='text-decoration: underline;'>3</span><span>800 fema…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torge…           40.3          18                195        </span><span style='text-decoration: underline;'>3</span><span>250 fema…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torge…           </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>                 </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>   </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torge…           36.7          19.3              193        </span><span style='text-decoration: underline;'>3</span><span>450 fema…</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torge…           39.3          20.6              190        </span><span style='text-decoration: underline;'>3</span><span>650 male </span></span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 1 more variable: year &lt;int&gt;</span></span>
-
-<span class='c'># check the structure of penguins_data</span>
-<span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
-<span class='c'>#&gt; Rows: 344</span>
-<span class='c'>#&gt; Columns: 8</span>
-<span class='c'>#&gt; $ species           <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…</span></span>
-<span class='c'>#&gt; $ island            <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…</span></span>
-<span class='c'>#&gt; $ bill_length_mm    <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …</span></span>
-<span class='c'>#&gt; $ bill_depth_mm     <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …</span></span>
-<span class='c'>#&gt; $ flipper_length_mm <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…</span></span>
-<span class='c'>#&gt; $ body_mass_g       <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …</span></span>
-<span class='c'>#&gt; $ sex               <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> male, female, female, NA, female, male, female, male…</span></span>
-<span class='c'>#&gt; $ year              <span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</span></span></code></pre>
-
-</div>
-
-Okay now we have a sense of what the `penguins` dataset is.
-
-We can use the pipe to send `penguins` forward through a series of steps. For example, we can use the function `count()` to figure out how many of each penguin `species` there are in our dataset.
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> <span class='c'># take penguins_data</span>
-  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='c'># count how many of each species there is</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
-<span class='c'>#&gt;   species       n</span>
-<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie      152</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Chinstrap    68</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Gentoo      124</span></span></code></pre>
-
-</div>
-
-You could alternatively write your code like this. In the `count()` function, the first argument is the dataset, and the next argument is what you want to be counted. You can always learn more about the functions by using `?count()` or googling for the documentation.
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>count</span><span class='o'>(</span><span class='nv'>penguins</span>, <span class='nv'>species</span><span class='o'>)</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
-<span class='c'>#&gt;   species       n</span>
-<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie      152</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Chinstrap    68</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Gentoo      124</span></span></code></pre>
-
-</div>
-
-You can see you get the same thing. The benefit of the pipe is readability, and also the ability to pipe many things together (which we are not doing with `count()`).
-
-I am going to show you an example of a place I think the pipe really shines, don't worry if you don't understand all the syntax, I just want you to see how the pipe can be used.
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># drop missing values listed as NA</span>
-  <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># group by species</span>
-  <span class='nf'>summarize</span><span class='o'>(</span>mean_mass <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>body_mass_g</span><span class='o'>)</span><span class='o'>)</span> <span class='c'># summarize mass into new column called </span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
-<span class='c'>#&gt;   species   mean_mass</span>
-<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie        </span><span style='text-decoration: underline;'>3</span><span>706.</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Chinstrap     </span><span style='text-decoration: underline;'>3</span><span>733.</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Gentoo        </span><span style='text-decoration: underline;'>5</span><span>092.</span></span></code></pre>
+  <span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 344   8</span></code></pre>
 
 </div>
 
-We are going to continue to use the pipe `%>%` as we practice with some new `dplyr` functions.
+This means the dataframe is 344 rows and 8 columns in size.
+
+</details>
+
+</div>
+
+</div>
+
+<div class="alert puzzle">
+
+<div>
+
+Take the dataset `penguins` and use the pipe to determine the names of the columns of the dataframe.
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+
+<br> Use [`names()`](https://rdrr.io/r/base/names.html) or [`colnames()`](https://rdrr.io/r/base/colnames.html) to pull the column names.
 
 <br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] "species"           "island"            "bill_length_mm"   </span>
+<span class='c'>#&gt; [4] "bill_depth_mm"     "flipper_length_mm" "body_mass_g"      </span>
+<span class='c'>#&gt; [7] "sex"               "year"</span>
+
+<span class='c'># the same</span>
+<span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] "species"           "island"            "bill_length_mm"   </span>
+<span class='c'>#&gt; [4] "bill_depth_mm"     "flipper_length_mm" "body_mass_g"      </span>
+<span class='c'>#&gt; [7] "sex"               "year"</span></code></pre>
+
+</div>
+
+These are the names of our 8 columns.
+
+</details>
+
+</div>
+
+</div>
 
 ------------------------------------------------------------------------
 
@@ -397,7 +504,7 @@ You could use slightly different syntax to get the same thing using an indexing 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>select</span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>3</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># pick columns one through three</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>3</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='c'># pick columns 1-3</span>
   <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span>
 <span class='c'>#&gt;   species island    bill_length_mm</span>
@@ -466,7 +573,13 @@ Artwork by <a href="https://github.com/allisonhorst/stats-illustrations">Allison
 
 [`filter()`](https://rdrr.io/r/stats/filter.html) allows you to pick certain observations (i.e, rows) based on their values to be included in your data frame. Let's see it in action.
 
-We will select only the penguins that are the `species` "Chinstrap"
+<p align="center">
+<img src=lter_penguins.png width="90%" alt="an illustration of the three cutepenguins in the palmer penguins package, chinstrap, gentoo and adélie">
+<figcaption>
+Artwork by <a href="https://github.com/allisonhorst/stats-illustrations">Allison Horst</a>.
+</figcaption>
+</p>
+We will select only the "Chinstrap" penguins.
 
 <div class="highlight">
 
@@ -538,7 +651,7 @@ You can start stacking qualifiers to get the exact penguins you want. Let's say 
 
 </div>
 
-There are lots of useful [`filter()`](https://rdrr.io/r/stats/filter.html) functions like:
+There are lots of useful generic R operators that you can use inside functions like [`filter()`](https://rdrr.io/r/stats/filter.html) including:
 
 -   [`==`](https://rdrr.io/r/base/Comparison.html): exactly equals to
 -   [`>=`](https://rdrr.io/r/base/Comparison.html): greater than or equals to, you can also use ≥
@@ -610,6 +723,8 @@ Solution (click here)
 <span class='c'>#&gt; <span style='color: #555555;'>6</span><span>           39.3          20.6               190        </span><span style='text-decoration: underline;'>3</span><span>650  </span><span style='text-decoration: underline;'>2</span><span>007</span></span></code></pre>
 
 </div>
+
+<br>
 
 Getting fancy with some more advanced options
 
