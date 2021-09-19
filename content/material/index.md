@@ -15,7 +15,7 @@ slidedecks, materials from past workshops, and so on.
 
 - CAPS/Mike Sovic's [Youtube Channel](https://www.youtube.com/channel/UC2dB6jDTbqzlTM6edzfBSGQ).
 
-- [Slides from RNA-seq intro meetings, Jan-Feb 2021](/material_2021-01_rnaseq-intro/).
+- [Slides from RNA-seq intro meetings, Jan-Feb 2021](/tutorials/2021-01_rnaseq/).
 
 <br/> <br/> <br/>
 
