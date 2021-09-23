@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **What will we go over today**
 
--   We will continue using *dplyr* package of the *tidyverse* introduced last week.
+-   We will continue using the *dplyr* package, which is part of the *tidyverse* and was introduced last week.
 -   Learn using [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) - orders the rows of a data frame by the values of selected columns. 
 -   Learn using [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) - adds new variables and preserves existing ones.
 
@@ -59,11 +59,8 @@ Functions for *groups* of rows include:
 
 -   [`summarise()`](https://dplyr.tidyverse.org/reference/summarise.html) - collapses a group into a single row.
 
-Last week, we got introduced to the *tidyverse* and covered the pipe, `select()`, and `filter`.
-We also discussed *tidyverse* packages such as [`ggplot2`](https://ggplot2.tidyverse.org/index.html),
-a part of the core tidyverse, which we have talked about in previous Code Clubs ([intro](/codeclub/04_ggplot2), [intro2](/codeclub/05_ggplot-round-2), [maps](/codeclub/11_ggplot-maps), and [ggplotly](/codeclub/15_plotly)), and others.
-
-We also saw that packages are basically R add-ons that contain additional functions or datasets we can use.
+Last week, we got introduced to the *tidyverse* and covered the `%>%` pipe, `select()`, and `filter`.
+We saw that packages are basically R add-ons that contain additional functions or datasets we can use.
 Using the function [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages), we can install packages that are available at the Comprehensive R Archive Network, or [CRAN](https://cran.r-project.org/).  
 
 For those who have not installed the *tidyverse*, let's install it. 
@@ -88,14 +85,14 @@ library(tidyverse)
 We will learn how to use the `arrange()` function from *dplyr* to sort a data frame in multiple ways.
 First, we will sort a dataframe by values of a single variable,
 and then we will learn how to sort a dataframe by more than one variable in the dataframe.
-By default, *dplyr*’s `arrange()` sorts in _ascending_ order.
+By default, *dplyr*’s `arrange()` sorts in _ascending_ order (lowest values first).
 
 **Let's get set up and grab some data so that we have some material to work with.**
 
 We will use the same dataset [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/)
 we used last week.
 To get this data, we need to install the *palmerpenguins* package
-(no need to do this if you did so last week):
+(again, no need to do this if you already did so last week):
  
 ```{r, eval = FALSE}
 install.packages("palmerpenguins")
@@ -113,7 +110,9 @@ Let's take a look at the structure of the data:
 ```{r}
 # look at the first 10 rows and all columns
 head(penguins, 10)
+```
 
+```{r}
 # check the structure of penguins_data
 # glimpse() which is a part of dplyr functions 
 # similarly to str() and can be used interchangeably
@@ -122,7 +121,7 @@ glimpse(penguins)
 
 Okay, now we have a sense of what the `penguins` dataset is.
 
-Now we want to sort `penguins` dataframe by body mass to quickly learn about the lightest penguin and its relations to other variables.
+Now we want to sort the `penguins` dataframe by body mass to quickly learn about the lightest penguin and its relations to other variables.
 We will use the pipe operator `%>%` to feed the data to the `arrange()` function.
 We then specify name of the variable that we want to sort the dataframe by.
 
@@ -134,7 +133,7 @@ penguins %>%           # take the penguins_data
   arrange(body_mass_g) # sort the dataframe in ascending order based on body mass
 ```
 
-If we wanted to sort descendingly, such that the heaviest penguin are on top,
+If we wanted to sort _descendingly_, such that the heaviest penguins are in the first rows,
 we can add a `-` in front of the variable:
 
 ```{r}
@@ -160,12 +159,12 @@ Let's check the counts of different species and islands among our new dataset:
 
 ```{r}
 penguins_new %>%
-  count(species, .drop = FALSE)   # .drop=FALSE will keep values of 0
+  count(species)
 ```
 
 ```{r}
 penguins_new %>%
-  count(island, .drop = FALSE)
+  count(island)
 ```
 
 You can see that we have only retained Gentoo Penguins from the island of Biscoe.
@@ -218,12 +217,16 @@ penguins_shortflippers <-        # assign the results
   head(20)                       # take the top 20
 ```
 
+<br>
+
 - To see the species composition in `penguins_shortflippers`:
 
 ```{r, eval = TRUE}
 penguins_shortflippers %>%
   count(species)
 ```
+
+<br>
 
 - To see the island composition in `penguins_shortflippers`:
 
@@ -347,8 +350,9 @@ from 2008 (i.e., 2008 = year 1, 2009 = year 2, etc.)
 
 <details>
 <summary>
-Hint (click here)
+Hints (click here)
 </summary>
+<br>
 
 Not all values you pass to `mutate()` need to be variables!
 You can subtract `year` by a fixed number.
@@ -359,6 +363,7 @@ You can subtract `year` by a fixed number.
 <summary>
 Solution (click here)
 </summary>
+<br>
 
 ```{r}
 penguins_year <-
@@ -366,6 +371,8 @@ penguins_year <-
   filter(year > 2007) %>%
   mutate(year_nr = year - 2007) %>%
   arrange(year_nr)
+
+penguins_year
 ```
 
 </details>

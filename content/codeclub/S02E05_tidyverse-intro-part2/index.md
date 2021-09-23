@@ -5,7 +5,7 @@ author: [stephen-opiyo]
 date: "2021-09-22"
 output: hugodown::md_document
 toc: true
-rmd_hash: 25870e4d3771d59a
+rmd_hash: 017a723ef649e2bb
 
 ---
 
@@ -27,7 +27,7 @@ rmd_hash: 25870e4d3771d59a
 
 **What will we go over today**
 
--   We will continue using *dplyr* package of the *tidyverse* introduced last week.
+-   We will continue using the *dplyr* package, which is part of the *tidyverse* and was introduced last week.
 -   Learn using [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) - orders the rows of a data frame by the values of selected columns.
 -   Learn using [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) - adds new variables and preserves existing ones.
 
@@ -56,9 +56,7 @@ Functions for *groups* of rows include:
 
 -   [`summarise()`](https://dplyr.tidyverse.org/reference/summarise.html) - collapses a group into a single row.
 
-Last week, we got introduced to the *tidyverse* and covered the pipe, `select()`, and `filter`. We also discussed *tidyverse* packages such as [`ggplot2`](https://ggplot2.tidyverse.org/index.html), a part of the core tidyverse, which we have talked about in previous Code Clubs ([intro](/codeclub/04_ggplot2), [intro2](/codeclub/05_ggplot-round-2), [maps](/codeclub/11_ggplot-maps), and [ggplotly](/codeclub/15_plotly)), and others.
-
-We also saw that packages are basically R add-ons that contain additional functions or datasets we can use. Using the function [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages), we can install packages that are available at the Comprehensive R Archive Network, or [CRAN](https://cran.r-project.org/).
+Last week, we got introduced to the *tidyverse* and covered the `%>%` pipe, `select()`, and `filter`. We saw that packages are basically R add-ons that contain additional functions or datasets we can use. Using the function [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages), we can install packages that are available at the Comprehensive R Archive Network, or [CRAN](https://cran.r-project.org/).
 
 For those who have not installed the *tidyverse*, let's install it. We only need to do this once, so if you did this last week, you don't need to now.
 
@@ -90,11 +88,11 @@ To use the *dplyr* package within the *tidyverse*, we need to call it up using [
 
 ## 2 - Using the `arrange()` function
 
-We will learn how to use the `arrange()` function from *dplyr* to sort a data frame in multiple ways. First, we will sort a dataframe by values of a single variable, and then we will learn how to sort a dataframe by more than one variable in the dataframe. By default, *dplyr*'s `arrange()` sorts in *ascending* order.
+We will learn how to use the `arrange()` function from *dplyr* to sort a data frame in multiple ways. First, we will sort a dataframe by values of a single variable, and then we will learn how to sort a dataframe by more than one variable in the dataframe. By default, *dplyr*'s `arrange()` sorts in *ascending* order (lowest values first).
 
 **Let's get set up and grab some data so that we have some material to work with.**
 
-We will use the same dataset [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) we used last week. To get this data, we need to install the *palmerpenguins* package (no need to do this if you did so last week):
+We will use the same dataset [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) we used last week. To get this data, we need to install the *palmerpenguins* package (again, no need to do this if you already did so last week):
 
 <div class="highlight">
 
@@ -129,8 +127,13 @@ The dataframe we will use today is called `penguins`. Let's take a look at the s
 <span class='c'>#&gt; <span style='color: #555555;'> 8</span> Adelie  Torgersen           39.2          19.6               195        <span style='text-decoration: underline;'>4</span>675</span>
 <span class='c'>#&gt; <span style='color: #555555;'> 9</span> Adelie  Torgersen           34.1          18.1               193        <span style='text-decoration: underline;'>3</span>475</span>
 <span class='c'>#&gt; <span style='color: #555555;'>10</span> Adelie  Torgersen           42            20.2               190        <span style='text-decoration: underline;'>4</span>250</span>
-<span class='c'>#&gt; <span style='color: #555555;'># … with 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</span></span>
-<span class='c'># check the structure of penguins_data</span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</span></span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># check the structure of penguins_data</span>
 <span class='c'># glimpse() which is a part of dplyr functions </span>
 <span class='c'># similarly to str() and can be used interchangeably</span>
 <span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
@@ -149,7 +152,7 @@ The dataframe we will use today is called `penguins`. Let's take a look at the s
 
 Okay, now we have a sense of what the `penguins` dataset is.
 
-Now we want to sort `penguins` dataframe by body mass to quickly learn about the lightest penguin and its relations to other variables. We will use the pipe operator `%>%` to feed the data to the `arrange()` function. We then specify name of the variable that we want to sort the dataframe by.
+Now we want to sort the `penguins` dataframe by body mass to quickly learn about the lightest penguin and its relations to other variables. We will use the pipe operator `%>%` to feed the data to the `arrange()` function. We then specify name of the variable that we want to sort the dataframe by.
 
 In this example, we are sorting by variable `body_mass_g`, so we will see the lightest penguins at the top of the dataframe:
 
@@ -174,7 +177,7 @@ In this example, we are sorting by variable `body_mass_g`, so we will see the li
 
 </div>
 
-If we wanted to sort descendingly, such that the heaviest penguin are on top, we can add a [`-`](https://rdrr.io/r/base/Arithmetic.html) in front of the variable:
+If we wanted to sort *descendingly*, such that the heaviest penguins are in the first rows, we can add a [`-`](https://rdrr.io/r/base/Arithmetic.html) in front of the variable:
 
 <div class="highlight">
 
@@ -228,26 +231,22 @@ Let's check the counts of different species and islands among our new dataset:
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_new</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species</span>, .drop <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span>   <span class='c'># .drop=FALSE will keep values of 0</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
-<span class='c'>#&gt;   species       n</span>
-<span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span> Adelie        0</span>
-<span class='c'>#&gt; <span style='color: #555555;'>2</span> Chinstrap     0</span>
-<span class='c'>#&gt; <span style='color: #555555;'>3</span> Gentoo       61</span></code></pre>
+  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 × 2</span></span>
+<span class='c'>#&gt;   species     n</span>
+<span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span> Gentoo     61</span></code></pre>
 
 </div>
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_new</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>island</span>, .drop <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
-<span class='c'>#&gt;   island        n</span>
-<span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span> Biscoe       61</span>
-<span class='c'>#&gt; <span style='color: #555555;'>2</span> Dream         0</span>
-<span class='c'>#&gt; <span style='color: #555555;'>3</span> Torgersen     0</span></code></pre>
+  <span class='nf'>count</span><span class='o'>(</span><span class='nv'>island</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 × 2</span></span>
+<span class='c'>#&gt;   island     n</span>
+<span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span> Biscoe    61</span></code></pre>
 
 </div>
 
@@ -303,6 +302,8 @@ Solution (click here)
 
 </div>
 
+<br>
+
 -   To see the species composition in `penguins_shortflippers`:
 
 <div class="highlight">
@@ -316,6 +317,8 @@ Solution (click here)
 <span class='c'>#&gt; <span style='color: #555555;'>2</span> Chinstrap     3</span></code></pre>
 
 </div>
+
+<br>
 
 -   To see the island composition in `penguins_shortflippers`:
 
@@ -464,8 +467,10 @@ Create a new dataframe called `penguins_year`:
 
 <details>
 <summary>
-Hint (click here)
+Hints (click here)
 </summary>
+
+<br>
 
 Not all values you pass to `mutate()` need to be variables! You can subtract `year` by a fixed number.
 
@@ -475,13 +480,32 @@ Not all values you pass to `mutate()` need to be variables! You can subtract `ye
 Solution (click here)
 </summary>
 
+<br>
+
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_year</span> <span class='o'>&lt;-</span>
   <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>year</span> <span class='o'>&gt;</span> <span class='m'>2007</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>mutate</span><span class='o'>(</span>year_nr <span class='o'>=</span> <span class='nv'>year</span> <span class='o'>-</span> <span class='m'>2007</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>arrange</span><span class='o'>(</span><span class='nv'>year_nr</span><span class='o'>)</span></code></pre>
+  <span class='nf'>arrange</span><span class='o'>(</span><span class='nv'>year_nr</span><span class='o'>)</span>
+
+<span class='nv'>penguins_year</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 234 × 9</span></span>
+<span class='c'>#&gt;    species island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g</span>
+<span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>           <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>         <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>             <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span> Adelie  Biscoe           39.6          17.7               186        <span style='text-decoration: underline;'>3</span>500</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span> Adelie  Biscoe           40.1          18.9               188        <span style='text-decoration: underline;'>4</span>300</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span> Adelie  Biscoe           35            17.9               190        <span style='text-decoration: underline;'>3</span>450</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span> Adelie  Biscoe           42            19.5               200        <span style='text-decoration: underline;'>4</span>050</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span> Adelie  Biscoe           34.5          18.1               187        <span style='text-decoration: underline;'>2</span>900</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span> Adelie  Biscoe           41.4          18.6               191        <span style='text-decoration: underline;'>3</span>700</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span> Adelie  Biscoe           39            17.5               186        <span style='text-decoration: underline;'>3</span>550</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span> Adelie  Biscoe           40.6          18.8               193        <span style='text-decoration: underline;'>3</span>800</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span> Adelie  Biscoe           36.5          16.6               181        <span style='text-decoration: underline;'>2</span>850</span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span> Adelie  Biscoe           37.6          19.1               194        <span style='text-decoration: underline;'>3</span>750</span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 224 more rows, and 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;,</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>#   year_nr &lt;dbl&gt;</span></span></code></pre>
 
 </div>
 
