@@ -1,0 +1,379 @@
+---
+title: "Code Club S02E05: Intro to the Tidyverse (Part 2)"
+summary: "In this session of Code Club, we will be learning some more about data wrangling in the tidyverse."
+author: [stephen-opiyo]
+date: "2021-09-22"
+output: hugodown::md_document
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+----
+
+## Prep homework 
+
+### Basic computer setup
+
+-   If you didn't already do this, please follow the [Code Club Computer Setup](/codeclub-setup/) instructions, which also has pointers for if you're new to R or RStudio.
+
+-   If you're able to do so, please open RStudio a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll troubleshoot.
+
+<br>
+
+----
+
+## Introduction
+
+**What will we go over today**
+
+-   We will continue using *dplyr* package of the *tidyverse* introduced last week.
+-   Learn using [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) - orders the rows of a data frame by the values of selected columns. 
+-   Learn using [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) - adds new variables and preserves existing ones.
+
+<br>
+
+----
+
+## 1 - What is the dplyr package?
+
+[*dplyr*](https://dplyr.tidyverse.org/index.html) is one of the *tidyverse* packages
+that are designed for data science. *dplyr* provides functions for data manipulation. 
+
+Functions for row-wise operations include:
+
+-   [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) - chooses rows based on column values.
+-   [`slice()`](https://dplyr.tidyverse.org/reference/slice.html) - chooses rows based on location.
+-   [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) - orders the rows of a data frame by the values of selected columns.
+
+Functions for column-wise operations include:
+
+-   [`select()`](https://dplyr.tidyverse.org/reference/select.html) - changes whether or not a column is included.
+-   [`rename`()](https://dplyr.tidyverse.org/reference/rename.html) - changes the name of columns. 
+-   [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) - changes the values of columns and creates new columns
+-   [`relocate`()](https://dplyr.tidyverse.org/reference/relocate.html) - changes the order of the columns.
+
+Functions for *groups* of rows include:
+
+-   [`summarise()`](https://dplyr.tidyverse.org/reference/summarise.html) - collapses a group into a single row.
+
+Last week, we got introduced to the *tidyverse* and covered the pipe, `select()`, and `filter`.
+We also discussed *tidyverse* packages such as [`ggplot2`](https://ggplot2.tidyverse.org/index.html),
+a part of the core tidyverse, which we have talked about in previous Code Clubs ([intro](/codeclub/04_ggplot2), [intro2](/codeclub/05_ggplot-round-2), [maps](/codeclub/11_ggplot-maps), and [ggplotly](/codeclub/15_plotly)), and others.
+
+We also saw that packages are basically R add-ons that contain additional functions or datasets we can use.
+Using the function [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages), we can install packages that are available at the Comprehensive R Archive Network, or [CRAN](https://cran.r-project.org/).  
+
+For those who have not installed the *tidyverse*, let's install it. 
+We only need to do this once, so if you did this last week, you don't need to now.
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+```
+
+To use the *dplyr* package within the *tidyverse*, we need to call it up using `library()`.
+
+```{r}
+library(tidyverse)
+```
+
+<br> 
+
+------------------------------------------------------------------------
+
+## 2 - Using the `arrange()` function
+
+We will learn how to use the `arrange()` function from *dplyr* to sort a data frame in multiple ways.
+First, we will sort a dataframe by values of a single variable,
+and then we will learn how to sort a dataframe by more than one variable in the dataframe.
+By default, *dplyr*’s `arrange()` sorts in _ascending_ order.
+
+**Let's get set up and grab some data so that we have some material to work with.**
+
+We will use the same dataset [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/)
+we used last week.
+To get this data, we need to install the *palmerpenguins* package
+(no need to do this if you did so last week):
+ 
+```{r, eval = FALSE}
+install.packages("palmerpenguins")
+```
+
+Then, to use the package, we need to use the function `library()` to load the package in R:
+
+```{r}
+library(palmerpenguins)
+```
+
+The dataframe we will use today is called `penguins`.
+Let's take a look at the structure of the data:
+
+```{r}
+# look at the first 10 rows and all columns
+head(penguins, 10)
+
+# check the structure of penguins_data
+# glimpse() which is a part of dplyr functions 
+# similarly to str() and can be used interchangeably
+glimpse(penguins)
+```
+
+Okay, now we have a sense of what the `penguins` dataset is.
+
+Now we want to sort `penguins` dataframe by body mass to quickly learn about the lightest penguin and its relations to other variables.
+We will use the pipe operator `%>%` to feed the data to the `arrange()` function.
+We then specify name of the variable that we want to sort the dataframe by.
+
+In this example, we are sorting by variable `body_mass_g`,
+so we will see the lightest penguins at the top of the dataframe:
+
+```{r}
+penguins %>%           # take the penguins_data
+  arrange(body_mass_g) # sort the dataframe in ascending order based on body mass
+```
+
+If we wanted to sort descendingly, such that the heaviest penguin are on top,
+we can add a `-` in front of the variable:
+
+```{r}
+penguins %>%             # take the penguins_data
+  arrange(-body_mass_g)  # sort the dataframe in descending order based on body mass
+```
+
+We can also pipe the results into the `filter()` function covered last week,
+to select only penguins weighing more than 5000 g:
+
+```{r}
+penguins_new <-     # assign the results to a dataframe `penguins_new`
+  penguins %>%                               # take the penguins data
+  arrange(bill_length_mm, bill_depth_mm) %>% # sort by bill length followed by bill depth
+  filter(body_mass_g > 5000)                 # select species greater with mass > 5000 g.
+```
+
+```{r}
+head(penguins_new, 5)     # look at the top 5 
+```
+
+Let's check the counts of different species and islands among our new dataset:
+
+```{r}
+penguins_new %>%
+  count(species, .drop = FALSE)   # .drop=FALSE will keep values of 0
+```
+
+```{r}
+penguins_new %>%
+  count(island, .drop = FALSE)
+```
+
+You can see that we have only retained Gentoo Penguins from the island of Biscoe.
+
+<br>
+
+------------------------------------------------------------------------
+
+## Breakout session 1 - `arrange()`
+
+<div class="alert puzzle">
+<div>
+
+### Exercise 1
+
+With the `penguins` dataset, answer the following questions:
+
+- Create a new dataset called `penguins_shortflippers` from the `penguins` dataset
+  with the 20 penguins with the shortest flippers.
+
+- How many penguins of each species are found in `penguins_shortflippers`? 
+
+- Which islands do they come from?
+
+<details>
+<summary>
+Hints
+</summary>
+<br>
+
+- To create `penguins_shortflippers`, first use `arrange()` to sort by flipper lengths,
+  and pipe the results into the `head()` function to get the top 20.
+
+- To get the species and island composition, use the `count()` function.
+
+</details>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+
+- To create a dataframe with the 20 penguins with the shortest flippers:
+
+```{r, eval = TRUE}
+penguins_shortflippers <-        # assign the results
+  penguins %>%                   # take penguins_data
+  arrange(flipper_length_mm) %>% # sort the data by bill flipper length 
+  head(20)                       # take the top 20
+```
+
+- To see the species composition in `penguins_shortflippers`:
+
+```{r, eval = TRUE}
+penguins_shortflippers %>%
+  count(species)
+```
+
+- To see the island composition in `penguins_shortflippers`:
+
+```{r, eval = TRUE}
+penguins_shortflippers %>%
+  count(island)
+```
+
+</details>
+
+</div>
+</div>
+
+<br>
+
+------------------------------------------------------------------------
+
+## 3 - Using `mutate()`
+
+Besides selecting sets of existing columns, it’s often useful to add new columns that are derived from existing columns. 
+The `mutate()` function create new variables, usually by manipulating existing variables.
+
+`mutate()` always adds new columns at the end of the dataframe.
+When you use `mutate()`, you need typically to specify 3 things:
+
+- the name of the dataframe you want to modify
+- the name of the new column that you'll create
+- the values to be inserted in the new column
+
+We will be working with the penguins dataset to learn the `mutate()` function.
+We will create a new dataframe called `mutate_penguins`, with a new column called `body_mass_g_new`.
+
+The first argument (dataset to be piped) is the dataframe we're going to modify, `penguins`.
+After that, we have the name-value pair for our new variable.
+
+Here, the name of the new variable is `size` and the values are `body_mass_g` multiplied by
+`flipper_length_mm`:
+
+```{r}
+mutate_penguins <-  # assign the results to a dataframe `mutate_penguins`
+  penguins %>%      # take the penguins_data
+  mutate(size = body_mass_g * flipper_length_mm) # create a new column
+```
+
+```{r}
+head(mutate_penguins) %>%
+  select(6:9)       # show the first rows of columns 6-9
+```
+
+You can see that we created data with a new column called `size`.
+
+<br>
+
+-----
+
+## Breakout session 2 - `mutate()` 
+
+<div class="alert puzzle">
+<div>
+
+### Exercise 2
+
+- Create a new dataframe called `penguins_bills` with a new column called `bill_shape` by
+  dividing bill length by bill depth.
+
+- What is the species composition of the 20 penguins with the _largest_ values for `bill_shape`?
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>
+
+To get the species composition of the top 20,
+first use `arrange()` (think about the direction you need to sort in!),
+then `head()`, and then `count()`.
+
+</details>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+
+- New dataframe with a bill shape variable:
+
+```{r}
+penguins_bills <-
+  penguins %>%      # take the penguins_data
+  mutate(bill_shape = bill_length_mm / bill_depth_mm) # Create a new column `bill_shape`   
+```
+
+- Species composition of the 20 penguins with the largest `bill_shape` values:
+
+```{r}
+penguins_bills %>%
+  arrange(-bill_shape) %>%  # sort by bill_shape in descending order
+  head(20) %>%              # take the top 20
+  count(species)            # create a frequency table
+```
+
+They are all Gentoo penguins!
+
+</details>
+
+</div>
+</div>
+
+<div class="alert puzzle">
+<div>
+
+### Exercise 3
+
+Create a new dataframe called `penguins_year`:
+
+- with only penguins sampled after 2007,
+- with a new column called `year_nr` which has a year number that starts counting
+from 2008 (i.e., 2008 = year 1, 2009 = year 2, etc.)
+- sorted by `year_nr`.
+
+<details>
+<summary>
+Hint (click here)
+</summary>
+
+Not all values you pass to `mutate()` need to be variables!
+You can subtract `year` by a fixed number.
+
+</details>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+```{r}
+penguins_year <-
+  penguins %>%
+  filter(year > 2007) %>%
+  mutate(year_nr = year - 2007) %>%
+  arrange(year_nr)
+```
+
+</details>
+
+</div>
+</div>
+
+<br>
+
+----
+
