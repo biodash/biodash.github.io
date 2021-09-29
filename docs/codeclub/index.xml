@@ -13,6 +13,255 @@
     </image>
     
     <item>
+      <title>Code Club S02E04: Visualizing Data</title>
+      <link>https://biodash.github.io/codeclub/s02e06_ggplot2/</link>
+      <pubDate>Tue, 28 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/s02e06_ggplot2/</guid>
+      <description>&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;new-to-code-club&#34;&gt;New To Code Club?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;First, check out the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has some pointers that might be helpful if you&amp;rsquo;re new to R or RStudio.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Please open RStudio before Code Club to test things out &amp;ndash; if you run into issues, join the Zoom call early and we&amp;rsquo;ll troubleshoot.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;session-goals&#34;&gt;Session Goals&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Learn the philosophy of &lt;strong&gt;coding&lt;/strong&gt; a graphic.&lt;/li&gt;
+&lt;li&gt;Learn the basic &lt;strong&gt;template&lt;/strong&gt; of a &lt;strong&gt;ggplot&lt;/strong&gt; graphic, so you can reuse it for multiple chart types.&lt;/li&gt;
+&lt;li&gt;Learn how you can quickly add visual information to a graphic using &lt;strong&gt;aesthetics&lt;/strong&gt; and &lt;strong&gt;layers&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;intro-the-ggplot-philosophy&#34;&gt;Intro: The ggplot philosophy&lt;/h2&gt;
+&lt;p&gt;We have seen that in R, instead of manually manipulating data frames with a mouse as you do when editing Excel spreadsheets, we &lt;strong&gt;code&lt;/strong&gt; the operations we want to perform using &lt;code&gt;dplyr&lt;/code&gt; verbs like &lt;code&gt;select()&lt;/code&gt;, &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt;, &lt;code&gt;arrange()&lt;/code&gt;, and so on.&lt;/p&gt;
+&lt;p&gt;In a similar way when performing visualization, instead of clicking on a chart type in Excel and selecting options, we &lt;strong&gt;code the chart&lt;/strong&gt; in R.&lt;/p&gt;
+&lt;p&gt;And just as &lt;code&gt;dplyr&lt;/code&gt; gives us efficient ways to manipulate data frames, &lt;code&gt;ggplot2&lt;/code&gt; (which is also part of the tidyverse) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;gg&lt;/strong&gt; in &lt;strong&gt;gg&lt;/strong&gt;plot2 stands for &lt;em&gt;grammar of graphics&lt;/em&gt;, a systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this is to think about &amp;lsquo;pulling apart&amp;rsquo; various plots into their component pieces, then provide code that could put those pieces together again in different ways to make new plots.&lt;/p&gt;
+&lt;p&gt;This notion of pulling apart a graphic leads to the idea of &lt;em&gt;layers&lt;/em&gt;. You can build up a plot of any complexity by &lt;em&gt;overlaying&lt;/em&gt; different views of the same data.&lt;/p&gt;
+&lt;p&gt;There&amp;rsquo;s a learning curve here for sure, but there are many advantages.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;First, &lt;em&gt;every&lt;/em&gt; graphic shares a &lt;strong&gt;common template&lt;/strong&gt;. Once you understand this structure you can &amp;ldquo;say&amp;rdquo; a lot of different things.&lt;br&gt;
+(And I mean a &lt;em&gt;lot&lt;/em&gt;. The &lt;a href=&#34;https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ggplot cheat sheet&lt;/a&gt; lists over 40 plot-types, but because this is a language in its own right, users can create their own &lt;a href=&#34;https://exts.ggplot2.tidyverse.org/gallery/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;extensions&lt;/a&gt; that you can also utilize, adding over 80 more.)&lt;/li&gt;
+&lt;li&gt;Second, because the graphic is now a piece of code, it is &lt;em&gt;reusable&lt;/em&gt;. Once you have a little library of graphs you&amp;rsquo;ve made, you can tweak them in various ways to make more. You can also share your code with others, so they can apply the same approach to their data.&lt;/li&gt;
+&lt;li&gt;Third, the way we put layers together is identical to the way we use pipes. You can read &lt;code&gt;%&amp;gt;%&lt;/code&gt; as &lt;em&gt;and then&lt;/em&gt;: &amp;ldquo;&lt;code&gt;select()&lt;/code&gt; &lt;em&gt;and then&lt;/em&gt; &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; &lt;em&gt;and then&lt;/em&gt; &lt;code&gt;mutate()&lt;/code&gt;&amp;rdquo;. In graphics, the &amp;ldquo;and then&amp;rdquo; symbol is &lt;a href=&#34;https://rdrr.io/r/base/Arithmetic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;+&lt;/code&gt;&lt;/a&gt;: &amp;ldquo;show this layer, &lt;em&gt;and then&lt;/em&gt; add this layer, &lt;em&gt;and then&lt;/em&gt; add this layer&amp;rdquo;. In this way you can gradually build up a graphic of increasing complexity; or on the other hand take someone else&amp;rsquo;s code and simplify it by deleting layers.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;a-first-example&#34;&gt;A First Example&lt;/h2&gt;
+&lt;p&gt;So how does this work in practice? We&amp;rsquo;ll work through visualizing aspects of the &lt;a href=&#34;https://allisonhorst.github.io/palmerpenguins/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;palmerpenguins&lt;/a&gt; package which was introduced in &lt;a href=&#34;https://biodash.github.io/codeclub/s02e04_tidyverse-intro-part1/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;S02E04 Intro to the Tidyverse&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In addition, &lt;strong&gt;ggplot2&lt;/strong&gt; is part of the tidyverse package so we need to load that as well:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# this assumes you&#39;ve already installed tidyverse and palmerpenguins with install.packages()&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;And recall that the &lt;strong&gt;penguins&lt;/strong&gt; dataset is included in that package:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;glimpse&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Rows: 344&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Columns: 8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ species           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ island            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_length_mm    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_depth_mm     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ flipper_length_mm &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ body_mass_g       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ sex               &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; male, female, female, NA, female, male, female, male…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ year              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;What is the correlation between bill-length and bill-width in these species?&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;culmen_depth.png&#34; style=&#34;width:50.0%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Are longer bills also deeper? We can explore this with a &lt;strong&gt;scatterplot&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;But first let&amp;rsquo;s look at the &lt;code&gt;ggplot()&lt;/code&gt; &lt;strong&gt;template&lt;/strong&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: the &lt;em&gt;package&lt;/em&gt; is &lt;strong&gt;ggplot2&lt;/strong&gt;, the &lt;em&gt;command&lt;/em&gt; is just &lt;code&gt;ggplot()&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;ggplot(data = &amp;lt;DATA&amp;gt;) + 
+  &amp;lt;GEOM_FUNCTION&amp;gt;(mapping = aes(&amp;lt;MAPPINGS&amp;gt;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;These are the obligatory parts of any plot: &lt;strong&gt;data&lt;/strong&gt;, &lt;strong&gt;geoms&lt;/strong&gt;, and &lt;strong&gt;mappings&lt;/strong&gt;. The first argument to &lt;code&gt;ggplot()&lt;/code&gt; is the data frame:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-3-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;This is not very interesting! but it&amp;rsquo;s notable that it is &lt;em&gt;something&lt;/em&gt;. &lt;code&gt;ggplot()&lt;/code&gt; has created a base coordinate system (a base layer) that we can add visual layers to. It&amp;rsquo;s completely uninfomative because we haven&amp;rsquo;t said how we want the data (or even which data) to be mapped to graphic elements.&lt;/p&gt;
+&lt;p&gt;The &lt;em&gt;add a layer&lt;/em&gt; operator is &amp;ldquo;&lt;strong&gt;+&lt;/strong&gt;&amp;rdquo;, which is the &lt;code&gt;ggplot&lt;/code&gt; equivalent of the pipe symbol, and best practice is to &lt;strong&gt;place it at the end of the line&lt;/strong&gt;, just like the pipe. This makes your layers more readable in the code (and can lead to problems if you put it some other places).&lt;/p&gt;
+&lt;p&gt;The next argument specifies the kind plot we want: scatterplot, bar chart, fitted line, boxplot, violin plot, etc, etc. &lt;strong&gt;ggplot2&lt;/strong&gt; refers to these as &lt;strong&gt;geoms&lt;/strong&gt;: each different plot-type uses a different &lt;strong&gt;geom&lt;/strong&gt;etrical object to represent data.&lt;/p&gt;
+&lt;p&gt;You can see an overview of many of these geoms in the &lt;a href=&#34;https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;cheat sheet&lt;/a&gt;.The geom for a scatterplot is &lt;code&gt;geom_point()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;But we also require a &lt;code&gt;mapping&lt;/code&gt; argument, which maps the &lt;em&gt;variables&lt;/em&gt; or columns in the dataset we want to focus on to their &lt;em&gt;visual representation&lt;/em&gt; in the plot.&lt;/p&gt;
+&lt;p&gt;And finally we need to specify &lt;strong&gt;aesthetics&lt;/strong&gt; for the geometric objects in the plot, which will control things like shape, color, transparency, etc. Perhaps surprisingly, the &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; coordinates of the points are aesthetics, since these control, not the shape or color, but the relative &lt;strong&gt;position&lt;/strong&gt; of the points in the plot. (After all, flipping the &lt;code&gt;x&lt;/code&gt; for &lt;code&gt;y&lt;/code&gt; in some plots will flip the plot 90 degrees.)&lt;/p&gt;
+&lt;p&gt;Sounds like a lot when you spell it all out, but it&amp;rsquo;s actually pretty simple in practice. Here then is our complete first plot:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-4-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Hmmm&amp;hellip; the relationship is not very clear, but I guess if you squint your eyes you can maybe see some local positive correlations? We&amp;rsquo;ll explore this relationship in more detail below using extra aesthetics.&lt;/p&gt;
+&lt;p&gt;But let&amp;rsquo;s get coding!&lt;/p&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;Create a scatterplot comparing body mass and flipper length. Does it look like there is any correlation?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt; Check the ouput of the glimpse() function to see what the precise variable names for body mass and flipper length are. It&#39;s up to you which you assign to x and y. &lt;br&gt; &lt;br&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-5-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;the-power-of-aesthetics&#34;&gt;The power of aesthetics&lt;/h2&gt;
+&lt;p&gt;We saw above that the relationship between bill length and bill depth is not particularly clear; but that there &lt;em&gt;might&lt;/em&gt; be some local patterns. How can we explore this? Is it possible that these clusters correspond somehow to the three different species: &lt;em&gt;Adelie&lt;/em&gt;, &lt;em&gt;Chinstrap&lt;/em&gt;, and &lt;em&gt;Gentoo&lt;/em&gt;? Part of the problem with our original plot may be that we are lumping all the data from all three species together. We can quickly explore this by adding an extra aesthetic.&lt;/p&gt;
+&lt;p&gt;Our current plot uses two &lt;strong&gt;numeric&lt;/strong&gt; variables: &lt;code&gt;bill_length_mm&lt;/code&gt; and &lt;code&gt;bill_depth_mm&lt;/code&gt;. We can add a third &lt;strong&gt;categorical&lt;/strong&gt; variable, like &lt;code&gt;species&lt;/code&gt;, to a two dimensional scatterplot by mapping it to a different visual aesthetic. We&amp;rsquo;ve mapped length and depth to &lt;code&gt;x,y&lt;/code&gt; coordinates. Now we&amp;rsquo;ll simultaneously map species to &lt;code&gt;color&lt;/code&gt; by expanding our list of aesthetics.&lt;/p&gt;
+&lt;p&gt;But before we do that, let&amp;rsquo;s improve our plotting commands a little.&lt;/p&gt;
+&lt;p&gt;First, we have a general &lt;code&gt;mapping()&lt;/code&gt; argument, which includes a bunch of &lt;em&gt;specific&lt;/em&gt; mappings from variables to aesthetics. &lt;em&gt;When it doesn&amp;rsquo;t introduce ambiguity&lt;/em&gt; we can drop the &lt;code&gt;mapping()&lt;/code&gt; argument completely (together with its pesky extra pair of parentheses).&lt;/p&gt;
+&lt;p&gt;Second, we can actually pipe the dataset into the &lt;code&gt;ggplot()&lt;/code&gt; command! We then set the mappings, and then choose our geom in a new layer. This is very common. Our new syntax looks like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-6-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Now let&amp;rsquo;s add an extra aesthetic for the &lt;code&gt;species&lt;/code&gt; variable. For this example we&amp;rsquo;ll use the &lt;code&gt;color&lt;/code&gt; aesthetic:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-7-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;We get a neat legend on the right hand side for free. It&amp;rsquo;s much clearer now that, within each species, there does seem to be a positive correlation between length and depth. It&amp;rsquo;s just that the absolute values for each species fall in different regions of &amp;ldquo;bill space&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Notice that we are piping &lt;em&gt;the entire raw dataset&lt;/em&gt; into the plot here, while only graphing part of it. The elegance of the pipe syntax is that we can first pass the dataset through a series of &lt;code&gt;dplyr&lt;/code&gt; operations - filtering and mutating etc. - and then pipe that modified dataset directly into our plotting commands. We&amp;rsquo;ll see more of that in coming Code Clubs!&lt;/p&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;Go back to your body_mass/flipper data and color by species, also using our new syntax.&lt;/p&gt;
+&lt;p&gt;There are various aesthetics you can use for a categorical variable (see help for geom_point). One is &lt;code&gt;shape&lt;/code&gt;. Try this instead of &lt;code&gt;color&lt;/code&gt; and see which you prefer.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solutions (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-8-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, shape &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-9-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;the-fitted-line-geom-geom_smooth&#34;&gt;The fitted-line geom: &lt;code&gt;geom_smooth()&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;In the scatterplot for bill length vs. bill depth, there wasn&amp;rsquo;t a very clean overall positive relationship. We can make this even more apparent visually by fitting a line to the data: &lt;em&gt;overlaying&lt;/em&gt; another geom in the same plot.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-10-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Technical note&lt;/em&gt;: by default, the &lt;code&gt;geom_smooth()&lt;/code&gt; function doesn&amp;rsquo;t use classical linear regression to fit the data. Instead it uses &lt;strong&gt;lo&lt;/strong&gt;cally &lt;strong&gt;e&lt;/strong&gt;stimated &lt;strong&gt;s&lt;/strong&gt;catterplot &lt;strong&gt;s&lt;/strong&gt;moothing: &lt;a href=&#34;https://en.m.wikipedia.org/wiki/Local_regression&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;LOESS&lt;/a&gt;. This snakes around and tries to find a more local best fit to the data. You can request different fit algorithms with the &lt;code&gt;method&lt;/code&gt; option. See help for &lt;code&gt;geom_smooth&lt;/code&gt; for details.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;But again, this is messy since we are trying to analyze all the data at once. What if we set the species aesthetic before we apply &lt;em&gt;any&lt;/em&gt; geom, so that the aesthetic is inherited by &lt;em&gt;both&lt;/em&gt; geoms?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-11-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Here we can see there does seem to be a strong positive correlation if we analyze the data species-by-species.&lt;/p&gt;
+&lt;h3 id=&#34;exercise-3&#34;&gt;Exercise 3&lt;/h3&gt;
+&lt;p&gt;Revisit your flipper/body_mass data, and fit lines to each species.&lt;/p&gt;
+&lt;p&gt;There is a lot of overlap between two of the species in the scatterplot, which makes it hard to see the overall patterns for those two species. Does the fitted line overlay help make sense of this?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-12-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;p&gt;Perhaps you think this plot is too noisy, with the scatterplot data messing up the basic linear relationships. Modify your plot so it just shows the linear layer without the scatterplot layer.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-13-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;p&gt;(Bonus: if you have time&amp;hellip;)&lt;/p&gt;
+&lt;p&gt;Pipe your dataset into a dplyr &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; command which pulls out just the &lt;code&gt;Gentoo&lt;/code&gt; data; then pipe that data into the &lt;code&gt;ggplot()&lt;/code&gt; command, to create a scatterplot, together with a smoothed-line overlay, for just that one species.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt; Remember two important things about the filter() function: (i) the check for equality is a double equals sign == (ii) the species name is a character string, not a number, so has to be quoted with &#34;...&#34;. &lt;br&gt; &lt;br&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Gentoo&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-14-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Code Club S02E05: Intro to the Tidyverse (Part 2)</title>
       <link>https://biodash.github.io/codeclub/s02e05_tidyverse-intro-part2/</link>
       <pubDate>Wed, 22 Sep 2021 00:00:00 +0000</pubDate>
@@ -5364,7 +5613,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-798235461&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-465317298&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5374,7 +5623,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-798235461&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-465317298&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5450,7 +5699,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-698732145&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-936157842&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5460,7 +5709,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-698732145&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-936157842&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5481,7 +5730,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-924156783&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-326518749&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5491,7 +5740,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-924156783&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-326518749&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5518,7 +5767,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-617935428&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-431627895&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5528,7 +5777,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-617935428&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-431627895&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5555,7 +5804,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-598716432&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-239476581&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5565,7 +5814,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-598716432&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-239476581&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5588,7 +5837,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-569724183&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-954823176&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5598,7 +5847,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-569724183&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-954823176&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5639,7 +5888,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-591728364&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-948216375&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5649,7 +5898,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-591728364&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-948216375&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5668,7 +5917,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-892143567&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-614827359&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5678,7 +5927,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-892143567&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-614827359&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5704,7 +5953,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-897561234&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-859623714&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5714,7 +5963,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-897561234&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-859623714&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5744,7 +5993,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-268415739&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-532971684&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5754,7 +6003,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-268415739&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-532971684&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5968,7 +6217,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-537284169&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-169758234&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5978,7 +6227,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-537284169&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-169758234&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6039,7 +6288,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-658719342&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-761493825&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6049,7 +6298,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-658719342&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-761493825&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6124,7 +6373,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-394185276&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-874921356&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6134,7 +6383,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-394185276&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-874921356&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
