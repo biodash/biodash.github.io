@@ -1,5 +1,5 @@
 ---
-title: "Code Club S02E04: Visualizing Data"
+title: "Code Club S02E06: Visualizing Data"
 subtitle: "Introduction to data visualization with **ggplot2**"
 summary: "In this session of Code Club, we'll look at how to visualize data in R using the tidyverse package **ggplot2**."  
 authors: [michael-broe]
@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 6fc098975aa529d2
+rmd_hash: af689c05f4e65a1f
 
 ---
 
@@ -153,7 +153,7 @@ Create a scatterplot comparing body mass and flipper length. Does it look like t
 <summary>
 Hints (click here)
 </summary>
-<br> Check the ouput of the glimpse() function to see what the precise variable names for body mass and flipper length are. It's up to you which you assign to x and y. <br> <br>
+<br> Check the output of the glimpse() function to see what the precise variable names for body mass and flipper length are. It's up to you which you assign to x and y. <br> <br>
 </details>
 <details>
 <summary>
@@ -215,7 +215,7 @@ Now let's add an extra aesthetic for the `species` variable. For this example we
 
 We get a neat legend on the right hand side for free. It's much clearer now that, within each species, there does seem to be a positive correlation between length and depth. It's just that the absolute values for each species fall in different regions of "bill space".
 
-Notice that we are piping *the entire raw dataset* into the plot here, while only graphing part of it. The elegance of the pipe syntax is that we can first pass the dataset through a series of `dplyr` operations - filtering and mutating etc. - and then pipe that modified dataset directly into our plotting commands. We'll see more of that in coming Code Clubs!
+> *Notice*: We are piping *the entire raw dataset* into the plot here, while only graphing part of it. The elegance of the pipe syntax is that we can first pass the dataset through a series of `dplyr` operations - filtering and mutating etc. - and then pipe that modified dataset direc tly into our plotting commands. We'll see more of that in coming Code Clubs (and Exercise 3)!
 
 ### Exercise 2
 
@@ -296,6 +296,8 @@ Here we can see there does seem to be a strong positive correlation if we analyz
 
 ### Exercise 3
 
+<div class="puzzle">
+
 Revisit your flipper/body_mass data, and fit lines to each species.
 
 There is a lot of overlap between two of the species in the scatterplot, which makes it hard to see the overall patterns for those two species. Does the fitted line overlay help make sense of this?
@@ -321,6 +323,12 @@ Solution (click here)
 
 Perhaps you think this plot is too noisy, with the scatterplot data messing up the basic linear relationships. Modify your plot so it just shows the linear layer without the scatterplot layer.
 
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br> Remember you can delete layers just as easily as you can add layers. <br> <br>
+</details>
 <details>
 <summary>
 Solution (click here)
@@ -368,4 +376,6 @@ Solution (click here)
 </div>
 
 </details>
+
+</div>
 
