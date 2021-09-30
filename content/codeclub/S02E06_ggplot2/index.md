@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: 048fd8fe70357a37
+rmd_hash: 51deb01809cdf0ce
 
 ---
 
@@ -187,7 +187,7 @@ Our current plot uses two **numeric** variables: `bill_length_mm` and `bill_dept
 
 But before we do that, let's improve our plotting commands a little.
 
-First, we have a general `mapping()` argument, which includes a bunch of *specific* mappings from variables to aesthetics. While I think it's quite useful to be explicit that this is a mapping component, which connects columns with graphical objects, it turns out we can drop the `mapping =` syntax completely (and many people do). The very fact we have specific mappings inside `aes()` makes the `mapping =` redundant. (I've come to think of it as 'syntactic sugar').
+First, our template includes a general `mapping =` directive, which in turn includes a bunch of *specific* mappings from variables to aesthetics. While I think it's quite useful to be explicit that this is a mapping component (which connects columns with graphical objects) it turns out we can drop the `mapping =` syntax completely (and many people do). The very fact we have specific mappings inside `aes()` makes the `mapping =` redundant. (I've come to think of it as 'syntactic sugar').
 
 Second, we can actually pipe the dataset into the `ggplot()` command! We then set the mappings, and then choose our geom in a new layer. This is very common. Our new syntax looks like this:
 
