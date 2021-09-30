@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: af689c05f4e65a1f
+rmd_hash: 048fd8fe70357a37
 
 ---
 
@@ -101,7 +101,7 @@ Are longer bills also deeper? We can explore this with a **scatterplot**.
 
 But first let's look at the `ggplot()` **template**.
 
-> *Note*: the *package* is **ggplot2**, the *command* is just `ggplot()`.
+> *Note:* the *package* is **ggplot2**, the *command* is just `ggplot()`.
 
     ggplot(data = <DATA>) + 
       <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
@@ -187,7 +187,7 @@ Our current plot uses two **numeric** variables: `bill_length_mm` and `bill_dept
 
 But before we do that, let's improve our plotting commands a little.
 
-First, we have a general `mapping()` argument, which includes a bunch of *specific* mappings from variables to aesthetics. *When it doesn't introduce ambiguity* we can drop the `mapping()` argument completely (together with its pesky extra pair of parentheses).
+First, we have a general `mapping()` argument, which includes a bunch of *specific* mappings from variables to aesthetics. While I think it's quite useful to be explicit that this is a mapping component, which connects columns with graphical objects, it turns out we can drop the `mapping =` syntax completely (and many people do). The very fact we have specific mappings inside `aes()` makes the `mapping =` redundant. (I've come to think of it as 'syntactic sugar').
 
 Second, we can actually pipe the dataset into the `ggplot()` command! We then set the mappings, and then choose our geom in a new layer. This is very common. Our new syntax looks like this:
 
@@ -215,7 +215,7 @@ Now let's add an extra aesthetic for the `species` variable. For this example we
 
 We get a neat legend on the right hand side for free. It's much clearer now that, within each species, there does seem to be a positive correlation between length and depth. It's just that the absolute values for each species fall in different regions of "bill space".
 
-> *Notice*: We are piping *the entire raw dataset* into the plot here, while only graphing part of it. The elegance of the pipe syntax is that we can first pass the dataset through a series of `dplyr` operations - filtering and mutating etc. - and then pipe that modified dataset direc tly into our plotting commands. We'll see more of that in coming Code Clubs (and Exercise 3)!
+> *Notice:* We are piping *the entire raw dataset* into the plot here, while only graphing part of it. The elegance of the pipe syntax is that we can first pass the dataset through a series of `dplyr` operations - filtering and mutating etc. - and then pipe that modified dataset directly into our plotting commands. We'll see more of that in coming Code Clubs (and Exercise 3)!
 
 ### Exercise 2
 
@@ -276,7 +276,7 @@ In the scatterplot for bill length vs. bill depth, there wasn't a very clean ov
 
 </div>
 
-> *Technical note*: by default, the `geom_smooth()` function doesn't use classical linear regression to fit the data. Instead it uses **lo**cally **e**stimated **s**catterplot **s**moothing: [LOESS](https://en.m.wikipedia.org/wiki/Local_regression). This snakes around and tries to find a more local best fit to the data. You can request different fit algorithms with the `method` option. See help for `geom_smooth` for details.
+> *Technical note:* by default, the `geom_smooth()` function doesn't use classical linear regression to fit the data. Instead it uses **lo**cally **e**stimated **s**catterplot **s**moothing: [loess](https://en.m.wikipedia.org/wiki/Local_regression). This snakes around and tries to find a more local best fit to the data. You can request different fit algorithms with the `method` option. See help for `geom_smooth` for details.
 
 But again, this is messy since we are trying to analyze all the data at once. What if we set the species aesthetic before we apply *any* geom, so that the aesthetic is inherited by *both* geoms?
 
