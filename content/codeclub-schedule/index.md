@@ -14,20 +14,21 @@ This fall, we will meet on Thursdays at 3 pm through Zoom.
 
 | Session | Date         | Presenter                  | Topic (+ link)                                     | Topic block                    |
 |---------|--------------|----------------------------|----------------------------------------------------|--------------------------|
-| **21**  | Aug 26 | Jelmer                     | **R basics -- part I** | Back to basics in R      |
-| **22**  | Sep 2  | Mike S.                    | **R basics -- part II**                                | Back to basics in R      |
-| **23**  | Sep 9  | Michael B.                 | **R Markdown**                                         | Back to basics in R      |
-| **24**  | Sep 16 | Jessica                    | **Tidyverse intro -- part I**                         | Back to basics in R      |
-| **25**  | Sep 23 | Stephen                    | **Tidyverse intro -- part II**                        | Back to basics in R      |
-| **26**  | Sep 30 | Michael B.                 | ***ggplot* intro -- part I**                          | Plotting in R            |
-| **27**  | Oct 07 | Jelmer                     | ***ggplot* intro -- part II**                         | Plotting in R            |
-| **28**  | Oct 14 | Mike S.                    | **Faceting, animating, and combining plots**           | Plotting in R            |
-| **29**  | Oct 28 | Jessica                    | **Interactive plots with _Plotly_**                    | Plotting in R            |
-| **30**  | Nov 04 | Daniel Quiroz Moreno (HCS) | **Adding statistical results to plots <br> using _ggpubr_** | Plotting in R            |
-| **31**  | Nov 11 | Matthew Teegarden (FST)    | **Shiny bright like a diamond: an intro <br> to building interactive applications in R**                            | Putting code to practice |
-| **32**  | Nov 18 | Julia Vrtilek (EEOB)       | **Analysis of bat social vocalizations <br> with R at OSC** _(date tentative)_ | Putting code to practice |
-| **33**  | Dec 02 | *TBD*                      | _TBD_                                              | Putting code to practice |
-| **34**  | Dec 09 | *TBD*                      | _TBD_                                              | Putting code to practice |
+| **S02E01**  | Aug 26 | Jelmer                     | **R basics -- part I** | Back to basics in R      |
+| **S02E02**  | Sep 2  | Mike S.                    | **R basics -- part II**                                | Back to basics in R      |
+| **S02E03**  | Sep 9  | Michael B.                 | **R Markdown**                                         | Back to basics in R      |
+| **S02E04**  | Sep 16 | Jessica                    | **Tidyverse intro -- part I**                         | Back to basics in R      |
+| **S02E05**  | Sep 23 | Stephen                    | **Tidyverse intro -- part II**                        | Back to basics in R      |
+| **S02E06**  | Sep 30 | Michael B.                 | ***ggplot* intro -- part I**                          | Plotting in R            |
+| **S02E07**  | Oct 07 | Jelmer                     | ***ggplot* intro -- part II**                         | Plotting in R            |
+| **S02E08**  | Oct 14 | Mike S.                    | **Faceting, animating, and combining plots**           | Plotting in R            |
+| **S02E09**  | Oct 28 | Jessica                    | **Interactive plots with _Plotly_**                    | Plotting in R            |
+| **S02E10**  | Nov 04 | Daniel Quiroz Moreno (HCS) | **Adding statistical results to plots <br> using _ggpubr_** | Plotting in R            |
+| -  | Nov 11 |     | _No Code Club (Veteran's Day)_                            |  |
+| **S02E11**  | Nov 18 | Julia Vrtilek (EEOB)       | **Analysis of bat social vocalizations <br> with R at OSC** _(date tentative)_ | Putting code to practice |
+| -  | Nov 25 |     | _No Code Club (Thanksgiving)_                            |  |
+| **S02E12**  | Dec 02 | Matthew Teegarden (FST)                      | **Shiny bright like a diamond: an intro <br> to building interactive applications in R**                                          | Putting code to practice |
+| **S02E13**  | Dec 09 | *TBD*                      | _TBD_                                              | Putting code to practice |
 
 We have also included these sessions in the [BioDASH calendar](/events/#calendar).
 
