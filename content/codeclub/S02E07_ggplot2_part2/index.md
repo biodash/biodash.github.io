@@ -7,7 +7,7 @@ date: 2021-10-05
 output: hugodown::md_document
 toc: true
 
-rmd_hash: fc8fcf428b43ab71
+rmd_hash: 7f5f783f3a75e70c
 
 ---
 
@@ -403,7 +403,7 @@ Solution (click here)
 
 So far, we have mostly been concerned with *what* we are plotting, and haven't paid much attention to how our plot looks. But I, for one, dislike that gray background to the plot, and perhaps the axis labels are a little small?
 
-*ggplot2* offers *many* options to modify the look of our plot. There are so many that it isn't really possible to remember even the majority of them. Therefore, even for daily users *ggplot2*, creating a publication-ready figure will usually involve some Googling or checking the [ggplot2 documentation](https://ggplot2.tidyverse.org/).
+*ggplot2* offers *many* options to modify the look of our plot. There are so many that it isn't really possible to remember even the majority of them. Therefore, even for daily users of *ggplot2*, creating a publication-ready figure will usually involve some Googling or checking the [ggplot2 documentation](https://ggplot2.tidyverse.org/).
 
 Let's have a look at some of the most commonly used options to change the look of *ggplot2* plots.
 
@@ -472,7 +472,7 @@ These complete theme functions (`theme_<theme-name>`) also take a few arguments 
 
 This retains the relative sizes of different labels. For instance, note that in both plots, the "axis titles" (`species` on x, `bill_lenth_mm` on y) are larger than the "axis text" (the labels at the tick marks).
 
-If we wanted to change individual theme components like those, we would need to use the `theme()` function (check [its documentation page](https://ggplot2.tidyverse.org/reference/theme.html) to see the -many!- possible arguments).
+If we wanted to change individual theme components like those, we would need to use the `theme()` function (check [its documentation page](https://ggplot2.tidyverse.org/reference/theme.html) to see the many possible arguments).
 
 For example, to make axis titles and axis text/labels the same size:
 
