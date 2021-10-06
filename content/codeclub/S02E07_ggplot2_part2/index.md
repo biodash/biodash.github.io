@@ -7,7 +7,7 @@ date: 2021-10-05
 output: hugodown::md_document
 toc: true
 
-rmd_hash: d90465b4e27fa98b
+rmd_hash: fc8fcf428b43ab71
 
 ---
 
@@ -186,7 +186,9 @@ Great! We can see, at a glance, that Adelie Penguins tend to have considerably s
 
 ## 2 - Adding a plot layer
 
-To get an even better sense of the distribution of bill lengths, and also of our sample sizes, we may want to add the raw data points to our boxplot:
+To get an even better sense of the distribution of bill lengths, and also of our sample sizes, we may want to add the raw data points to our boxplot using `geom_point()`.
+
+(You may have noticed that in the previous plot, a Gentoo Penguin outlier was shown as a point. To prevent plotting that point twice, we will add `outlier.shape = NA` to the boxplot call, a somewhat roundabout way of saying that we don't want to plot outliers.)
 
 <div class="highlight">
 
@@ -201,12 +203,12 @@ To get an even better sense of the distribution of bill lengths, and also of our
 
 Why did this not work?
 
-We had previously set the aesthetics inside the `geom_boxplot()` call -- that is, we set it for that geom only, and not for the entire plot. To add a `geom_point()` layer with the same aesthetics, we can do one of two things:
+We had previously species the aesthetics mapping inside the `geom_boxplot()` call -- that is, we set it for that geom only ("local aesthetics") and not for the entire plot ("global aesthetics"). To add a `geom_point()` layer with the same aesthetics, we can do one of two things:
 
--   Move the `aes()` specification into the `ggplot()` call, or
--   Specify the `aes()` *also* inside `geom_point()`.
+-   Set the aesthetic mapping globally, i.e. inside the `ggplot()` call, or
+-   Set a local aesthetic mapping *also* inside `geom_point()`.
 
-Let's do the latter, so we are not repeating ourselves:
+Let's do the former, so we are not repeating ourselves:
 
 <div class="highlight">
 
