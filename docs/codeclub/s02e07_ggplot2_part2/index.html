@@ -342,7 +342,7 @@
         content="2021-10-05T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-10-06T07:28:46-04:00">
+    <meta property="article:modified_time" content="2021-10-06T11:40:42-04:00">
   
 
   
@@ -995,7 +995,8 @@ The nitty-gritty of boxplots: what is shown exactly? (click here)
 <br>
 <hr>
 <h2 id="2---adding-a-plot-layer">2 - Adding a plot layer</h2>
-<p>To get an even better sense of the distribution of bill lengths, and also of our sample sizes, we may want to add the raw data points to our boxplot:</p>
+<p>To get an even better sense of the distribution of bill lengths, and also of our sample sizes, we may want to add the raw data points to our boxplot using <code>geom_point()</code>.</p>
+<p>(You may have noticed that in the previous plot, a Gentoo Penguin outlier was shown as a point. To prevent plotting that point twice, we will add <code>outlier.shape = NA</code> to the boxplot call, a somewhat roundabout way of saying that we don&rsquo;t want to plot outliers.)</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>penguins</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_boxplot</span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>y <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, x <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span>,
@@ -1005,12 +1006,12 @@ The nitty-gritty of boxplots: what is shown exactly? (click here)
 <span class='c'>#&gt; Error: geom_point requires the following missing aesthetics: x and y</span></code></pre>
 </div>
 <p>Why did this not work?</p>
-<p>We had previously set the aesthetics inside the <code>geom_boxplot()</code> call &ndash; that is, we set it for that geom only, and not for the entire plot. To add a <code>geom_point()</code> layer with the same aesthetics, we can do one of two things:</p>
+<p>We had previously species the aesthetics mapping inside the <code>geom_boxplot()</code> call &ndash; that is, we set it for that geom only (&ldquo;local aesthetics&rdquo;) and not for the entire plot (&ldquo;global aesthetics&rdquo;). To add a <code>geom_point()</code> layer with the same aesthetics, we can do one of two things:</p>
 <ul>
-<li>Move the <code>aes()</code> specification into the <code>ggplot()</code> call, or</li>
-<li>Specify the <code>aes()</code> <em>also</em> inside <code>geom_point()</code>.</li>
+<li>Set the aesthetic mapping globally, i.e. inside the <code>ggplot()</code> call, or</li>
+<li>Set a local aesthetic mapping <em>also</em> inside <code>geom_point()</code>.</li>
 </ul>
-<p>Let&rsquo;s do the latter, so we are not repeating ourselves:</p>
+<p>Let&rsquo;s do the former, so we are not repeating ourselves:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>penguins</span>,
        mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>y <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, x <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>

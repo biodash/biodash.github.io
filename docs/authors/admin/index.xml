@@ -151,7 +151,8 @@ The nitty-gritty of boxplots: what is shown exactly? (click here)
 &lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;2---adding-a-plot-layer&#34;&gt;2 - Adding a plot layer&lt;/h2&gt;
-&lt;p&gt;To get an even better sense of the distribution of bill lengths, and also of our sample sizes, we may want to add the raw data points to our boxplot:&lt;/p&gt;
+&lt;p&gt;To get an even better sense of the distribution of bill lengths, and also of our sample sizes, we may want to add the raw data points to our boxplot using &lt;code&gt;geom_point()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;(You may have noticed that in the previous plot, a Gentoo Penguin outlier was shown as a point. To prevent plotting that point twice, we will add &lt;code&gt;outlier.shape = NA&lt;/code&gt; to the boxplot call, a somewhat roundabout way of saying that we don&amp;rsquo;t want to plot outliers.)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_boxplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
@@ -161,12 +162,12 @@ The nitty-gritty of boxplots: what is shown exactly? (click here)
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; Error: geom_point requires the following missing aesthetics: x and y&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Why did this not work?&lt;/p&gt;
-&lt;p&gt;We had previously set the aesthetics inside the &lt;code&gt;geom_boxplot()&lt;/code&gt; call &amp;ndash; that is, we set it for that geom only, and not for the entire plot. To add a &lt;code&gt;geom_point()&lt;/code&gt; layer with the same aesthetics, we can do one of two things:&lt;/p&gt;
+&lt;p&gt;We had previously species the aesthetics mapping inside the &lt;code&gt;geom_boxplot()&lt;/code&gt; call &amp;ndash; that is, we set it for that geom only (&amp;ldquo;local aesthetics&amp;rdquo;) and not for the entire plot (&amp;ldquo;global aesthetics&amp;rdquo;). To add a &lt;code&gt;geom_point()&lt;/code&gt; layer with the same aesthetics, we can do one of two things:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Move the &lt;code&gt;aes()&lt;/code&gt; specification into the &lt;code&gt;ggplot()&lt;/code&gt; call, or&lt;/li&gt;
-&lt;li&gt;Specify the &lt;code&gt;aes()&lt;/code&gt; &lt;em&gt;also&lt;/em&gt; inside &lt;code&gt;geom_point()&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Set the aesthetic mapping globally, i.e. inside the &lt;code&gt;ggplot()&lt;/code&gt; call, or&lt;/li&gt;
+&lt;li&gt;Set a local aesthetic mapping &lt;em&gt;also&lt;/em&gt; inside &lt;code&gt;geom_point()&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Let&amp;rsquo;s do the latter, so we are not repeating ourselves:&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s do the former, so we are not repeating ourselves:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;,
        mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;

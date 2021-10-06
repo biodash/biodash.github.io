@@ -151,7 +151,8 @@ The nitty-gritty of boxplots: what is shown exactly? (click here)
 &lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;2---adding-a-plot-layer&#34;&gt;2 - Adding a plot layer&lt;/h2&gt;
-&lt;p&gt;To get an even better sense of the distribution of bill lengths, and also of our sample sizes, we may want to add the raw data points to our boxplot:&lt;/p&gt;
+&lt;p&gt;To get an even better sense of the distribution of bill lengths, and also of our sample sizes, we may want to add the raw data points to our boxplot using &lt;code&gt;geom_point()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;(You may have noticed that in the previous plot, a Gentoo Penguin outlier was shown as a point. To prevent plotting that point twice, we will add &lt;code&gt;outlier.shape = NA&lt;/code&gt; to the boxplot call, a somewhat roundabout way of saying that we don&amp;rsquo;t want to plot outliers.)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_boxplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
@@ -161,12 +162,12 @@ The nitty-gritty of boxplots: what is shown exactly? (click here)
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; Error: geom_point requires the following missing aesthetics: x and y&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Why did this not work?&lt;/p&gt;
-&lt;p&gt;We had previously set the aesthetics inside the &lt;code&gt;geom_boxplot()&lt;/code&gt; call &amp;ndash; that is, we set it for that geom only, and not for the entire plot. To add a &lt;code&gt;geom_point()&lt;/code&gt; layer with the same aesthetics, we can do one of two things:&lt;/p&gt;
+&lt;p&gt;We had previously species the aesthetics mapping inside the &lt;code&gt;geom_boxplot()&lt;/code&gt; call &amp;ndash; that is, we set it for that geom only (&amp;ldquo;local aesthetics&amp;rdquo;) and not for the entire plot (&amp;ldquo;global aesthetics&amp;rdquo;). To add a &lt;code&gt;geom_point()&lt;/code&gt; layer with the same aesthetics, we can do one of two things:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Move the &lt;code&gt;aes()&lt;/code&gt; specification into the &lt;code&gt;ggplot()&lt;/code&gt; call, or&lt;/li&gt;
-&lt;li&gt;Specify the &lt;code&gt;aes()&lt;/code&gt; &lt;em&gt;also&lt;/em&gt; inside &lt;code&gt;geom_point()&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Set the aesthetic mapping globally, i.e. inside the &lt;code&gt;ggplot()&lt;/code&gt; call, or&lt;/li&gt;
+&lt;li&gt;Set a local aesthetic mapping &lt;em&gt;also&lt;/em&gt; inside &lt;code&gt;geom_point()&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Let&amp;rsquo;s do the latter, so we are not repeating ourselves:&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s do the former, so we are not repeating ourselves:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;,
        mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
@@ -6136,7 +6137,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-714963258&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-563478291&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6146,7 +6147,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-714963258&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-563478291&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6222,7 +6223,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-587136294&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-645812397&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6232,7 +6233,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-587136294&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-645812397&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6253,7 +6254,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-487921635&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-892364751&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6263,7 +6264,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-487921635&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-892364751&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6290,7 +6291,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-457318926&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-289731654&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6300,7 +6301,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-457318926&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-289731654&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6327,7 +6328,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-965237481&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-128973456&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6337,7 +6338,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-965237481&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-128973456&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6360,7 +6361,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-183964725&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-913865427&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6370,7 +6371,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-183964725&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-913865427&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6411,7 +6412,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-684729351&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-327651984&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6421,7 +6422,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-684729351&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-327651984&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6440,7 +6441,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-294375186&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-187349625&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6450,7 +6451,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-294375186&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-187349625&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6476,7 +6477,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-629743815&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-836219754&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6486,7 +6487,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-629743815&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-836219754&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6516,7 +6517,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-279154368&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-687149532&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6526,7 +6527,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-279154368&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-687149532&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6740,7 +6741,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-916247385&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-453629718&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6750,7 +6751,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-916247385&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-453629718&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6811,7 +6812,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-524871693&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-938716542&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6821,7 +6822,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-524871693&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-938716542&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6896,7 +6897,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-657439182&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-251493876&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6906,7 +6907,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-657439182&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-251493876&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
