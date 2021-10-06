@@ -1,13 +1,13 @@
 ---
 title: "S02E07: Intro to ggplot2 (part 2)"
-subtitle: "Boxplots -- and layering, formatting and saving plots."
+subtitle: "Boxplots, layering, and formatting plots."
 summary: "During this second part of an introduction to ggplot2, we will get a better understanding of using geoms, with boxplots as an example, and will also learn about formatting and saving plots."
 authors: [admin]
 date: 2021-10-05
 output: hugodown::md_document
 toc: true
 
-rmd_hash: a514fae3f9f37bf3
+rmd_hash: d90465b4e27fa98b
 
 ---
 
