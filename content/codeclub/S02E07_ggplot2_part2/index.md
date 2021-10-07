@@ -7,7 +7,7 @@ date: 2021-10-05
 output: hugodown::md_document
 toc: true
 
-rmd_hash: a6155139ac26d024
+rmd_hash: c479039c3f7f3196
 
 ---
 
@@ -389,8 +389,6 @@ Solution (click here)
 
 </details>
 
-<br>
-
 </div>
 
 </div>
@@ -532,7 +530,9 @@ We can do all of this with the `labs()` function as follows:
 
 ### Exercise 3
 
--   Modify the code used to produce the last plot (just above this exercise) to try several of the themes from the [list of complete themes](https://ggplot2.tidyverse.org/reference/ggtheme.html). Any preferences?
+-   Modify the code used to produce the last plot (just above this exercise) to try several of the themes from the [list of complete themes](https://ggplot2.tidyverse.org/reference/ggtheme.html).
+
+    Do you have a preference?
 
 The [list of complete themes](https://ggplot2.tidyverse.org/reference/ggtheme.html) also shows that these functions have a few more arguments than the `base_size` one we explored.
 
@@ -547,19 +547,24 @@ Example solution (click here)
 
 <br>
 
+With `theme_bw()` and:
+
+-   `base_line_size = 1` (thicker axis lines)
+-   the `cursive` font family using `base_family = cursive`
+
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>penguins</span>,
        mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_boxplot</span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>position <span class='o'>=</span> <span class='s'>"jitter"</span>, size <span class='o'>=</span> <span class='m'>1</span>, color <span class='o'>=</span> <span class='s'>"grey70"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>theme_classic</span><span class='o'>(</span>base_size <span class='o'>=</span> <span class='m'>14</span>,
+  <span class='nf'>theme_bw</span><span class='o'>(</span>base_size <span class='o'>=</span> <span class='m'>14</span>,
                 base_line_size <span class='o'>=</span> <span class='m'>1</span>,
-                base_family <span class='o'>=</span> <span class='s'>"Optima"</span><span class='o'>)</span> <span class='o'>+</span>
+                base_family <span class='o'>=</span> <span class='s'>"cursive"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Penguin Bill Length by Species and Sex"</span>,
        subtitle <span class='o'>=</span> <span class='s'>"Collected at Palmer Station, Antarctica"</span>,
-       x <span class='o'>=</span> <span class='s'>"Penguin Species"</span>,     <span class='c'># x-axis label</span>
-       y <span class='o'>=</span> <span class='s'>"Bill length (mm)"</span><span class='o'>)</span>    <span class='c'># y-axis label</span>
+       x <span class='o'>=</span> <span class='s'>"Penguin Species"</span>, 
+       y <span class='o'>=</span> <span class='s'>"Bill length (mm)"</span><span class='o'>)</span>
 <span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_boxplot).</span>
 <span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
 </code></pre>
@@ -568,8 +573,6 @@ Example solution (click here)
 </div>
 
 </details>
-
-<br>
 
 </div>
 
@@ -583,9 +586,9 @@ Example solution (click here)
 
 ### Exercise 4
 
--   Modify your code from Exercise 3 (or the code used to produce the last plot above Exercise 3) to color the jittered points, but not the boxplots, according to sex.
+-   Modify your code from Exercise 3 to color the jittered points, but not the boxplots, according to sex.
 
-As we also saw last week, a legend should have automatically appeared when mapping color to a variable. What if we wanted to move the legend from the right to the top of the plot?
+As we also saw last week, a legend should have automatically appeared when mapping color to a variable. But what if we wanted to move the legend from the right to the top of the plot?
 
 -   Scroll through the [`theme()` documentation](https://ggplot2.tidyverse.org/reference/theme.html) and try and find the argument that controls the position of the legend. Then, use this argument to move the legend to the top.
 
@@ -596,7 +599,7 @@ Hints (click here)
 
 <br>
 
--   To color points by sex, but not modify the boxplots, use the `mapping = aes()` argument inside the `geom_point()` call instead of inside the `ggplot()` call.
+-   To color points by sex without modifying the boxplots, add the mapping locally for `geom_point()` only.
 
 -   To move the legend, use the `legend.position` argument of `theme()`.
 
@@ -620,8 +623,8 @@ Solution (click here)
   <span class='nf'>theme_classic</span><span class='o'>(</span>base_size <span class='o'>=</span> <span class='m'>14</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Penguin Bill Length by Species and Sex"</span>,
        subtitle <span class='o'>=</span> <span class='s'>"Collected at Palmer Station, Antarctica"</span>,
-       x <span class='o'>=</span> <span class='s'>"Penguin Species"</span>,     <span class='c'># x-axis label</span>
-       y <span class='o'>=</span> <span class='s'>"Bill length (mm)"</span><span class='o'>)</span>    <span class='c'># y-axis label</span>
+       x <span class='o'>=</span> <span class='s'>"Penguin Species"</span>,
+       y <span class='o'>=</span> <span class='s'>"Bill length (mm)"</span><span class='o'>)</span>
 <span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_boxplot).</span>
 <span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
 </code></pre>
@@ -642,8 +645,8 @@ Solution (click here)
   <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"top"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Penguin Bill Length by Species and Sex"</span>,
        subtitle <span class='o'>=</span> <span class='s'>"Collected at Palmer Station, Antarctica"</span>,
-       x <span class='o'>=</span> <span class='s'>"Penguin Species"</span>,     <span class='c'># x-axis label</span>
-       y <span class='o'>=</span> <span class='s'>"Bill length (mm)"</span><span class='o'>)</span>    <span class='c'># y-axis label</span>
+       x <span class='o'>=</span> <span class='s'>"Penguin Species"</span>,
+       y <span class='o'>=</span> <span class='s'>"Bill length (mm)"</span><span class='o'>)</span>
 <span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_boxplot).</span>
 <span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
 </code></pre>
@@ -653,11 +656,72 @@ Solution (click here)
 
 </details>
 
+</div>
+
+</div>
+
+<div class="puzzle">
+
+<div>
+
+### Exercise 5 (bonus)
+
+-   Try to modify one of the previous plots to get separate boxes for each combination of species and sex, and no jittered points (don't hesitate to look at the hints!).
+
+-   Did you see the `NA` sex (i.e., missing data)? Recreate the plot without the missing data.
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+
 <br>
+
+-   Map `sex` to `color` or `fill` (and continue to map `species` to `x`).
+
+-   Use `drop_na(sex)` to remove rows with an `NA` in the `sex` column. You can save the result in a new dataframe and then plot that dataframe, or you can pipe (`%>%`) the result straight into the `ggplot()` function.
+
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
+
+This example maps `sex` to `fill`, which will "fill" the box with colors (as we saw before, mapping to `color` colors the lines instead):
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='nv'>sex</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>,
+                       y <span class='o'>=</span> <span class='nv'>bill_length_mm</span>,
+                       fill <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>   <span class='c'># Now mapping sex to "fill"</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>    <span class='c'># We now do want to see the outliers!</span>
+  <span class='nf'>theme_classic</span><span class='o'>(</span>base_size <span class='o'>=</span> <span class='m'>14</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Penguin Bill Length by Species and Sex"</span>,
+       subtitle <span class='o'>=</span> <span class='s'>"Collected at Palmer Station, Antarctica"</span>,
+       x <span class='o'>=</span> <span class='s'>"Penguin Species"</span>,
+       y <span class='o'>=</span> <span class='s'>"Bill length (mm)"</span><span class='o'>)</span>
+</code></pre>
+<img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
+</details>
 
 </div>
 
 </div>
 
 <br>
+
+------------------------------------------------------------------------
+
+## Going further
+
+-   One basic aspect of *ggplot2* that we have not touched upon in this or the previous session are "*scales*". For instance, to change the colors used in mappings (like our boxplot color), we would need to use scales. For an introduction, see the [section on scales from the R for Data Science book](https://r4ds.had.co.nz/graphics-for-communication.html#scales).
+
+-   We also didn't talk about saving plots, which can be done with the `ggsave()` function ([documentation page](https://ggplot2.tidyverse.org/reference/ggsave.html)). Just be aware that if you don't specify dimensions with the `width` and `height` arguments, they will be taken from the current size of the RStudio plotting window, which is not necessarily what you want.
 

@@ -366,7 +366,6 @@ ggplot(data = penguins,
 ```
 
 </details>
-<br>
 
 </div>
 </div>
@@ -503,7 +502,8 @@ ggplot(data = penguins,
 
 - Modify the code used to produce the last plot (just above this exercise)
   to try several of the themes from the [list of complete    themes](https://ggplot2.tidyverse.org/reference/ggtheme.html).
-  Any preferences?
+  
+  Do you have a preference?
 
 The [list of complete themes](https://ggplot2.tidyverse.org/reference/ggtheme.html)
 also shows that these functions have a few more arguments than the `base_size`
@@ -522,22 +522,26 @@ one we explored.
 <summary>Example solution (click here)</summary>
 <br>
 
+With `theme_bw()` and:
+
+- `base_line_size = 1` (thicker axis lines)
+- the `cursive` font family using `base_family = cursive`
+
 ```{r}
 ggplot(data = penguins,
        mapping = aes(x = species, y = bill_length_mm)) +
   geom_boxplot(outlier.shape = NA) +
   geom_point(position = "jitter", size = 1, color = "grey70") +
-  theme_classic(base_size = 14,
+  theme_bw(base_size = 14,
                 base_line_size = 1,
-                base_family = "Optima") +
+                base_family = "cursive") +
   labs(title = "Penguin Bill Length by Species and Sex",
        subtitle = "Collected at Palmer Station, Antarctica",
-       x = "Penguin Species",     # x-axis label
-       y = "Bill length (mm)")    # y-axis label
+       x = "Penguin Species", 
+       y = "Bill length (mm)")
 ```
 
 </details>
-<br>
 
 </div>
 </div>
@@ -549,13 +553,12 @@ ggplot(data = penguins,
 
 ### Exercise 4
 
-- Modify your code from Exercise 3
-  (or the code used to produce the last plot above Exercise 3)
-  to color the jittered points, but not the boxplots, according to sex.
+- Modify your code from Exercise 3 to color the jittered points,
+  but not the boxplots, according to sex.
 
 As we also saw last week, a legend should have automatically appeared
 when mapping color to a variable.
-What if we wanted to move the legend from the right to the top of the plot?
+But what if we wanted to move the legend from the right to the top of the plot?
 
 - Scroll through the [`theme()` documentation](https://ggplot2.tidyverse.org/reference/theme.html)
   and try and find the argument that controls the position of the legend.
@@ -565,9 +568,8 @@ What if we wanted to move the legend from the right to the top of the plot?
 <summary>Hints (click here)</summary>
 <br>
 
-- To color points by sex, but not modify the boxplots,
-  use the `mapping = aes()` argument inside the `geom_point()` call instead
-  of inside the `ggplot()` call.
+- To color points by sex without modifying the boxplots,
+  add the mapping locally for `geom_point()` only.
   
 - To move the legend, use the `legend.position` argument of `theme()`.
 
@@ -588,8 +590,8 @@ ggplot(data = penguins,
   theme_classic(base_size = 14) +
   labs(title = "Penguin Bill Length by Species and Sex",
        subtitle = "Collected at Palmer Station, Antarctica",
-       x = "Penguin Species",     # x-axis label
-       y = "Bill length (mm)")    # y-axis label
+       x = "Penguin Species",
+       y = "Bill length (mm)")
 ```
 
 - Move the legend to the top:  
@@ -604,14 +606,83 @@ ggplot(data = penguins,
   theme(legend.position = "top") +
   labs(title = "Penguin Bill Length by Species and Sex",
        subtitle = "Collected at Palmer Station, Antarctica",
-       x = "Penguin Species",     # x-axis label
-       y = "Bill length (mm)")    # y-axis label
+       x = "Penguin Species",
+       y = "Bill length (mm)")
 ```
 
 </details>
+
+</div>
+</div>
+
+<div class="puzzle">
+<div>
+
+### Exercise 5 (bonus)
+
+- Try to modify one of the previous plots to get separate boxes for each
+  combination of species and sex,
+  and no jittered points (don't hesitate to look at the hints!).
+
+- Did you see the `NA` sex (i.e., missing data)?
+  Recreate the plot without the missing data.
+
+<details>
+<summary>Hints (click here)</summary>
 <br>
+
+- Map `sex` to `color` or `fill`
+  (and continue to map `species` to `x`). 
+
+- Use `drop_na(sex)` to remove rows with an `NA` in the `sex` column.
+  You can save the result in a new dataframe and then plot that dataframe,
+  or you can pipe (`%>%`) the result straight into the `ggplot()` function.
+
+</details>
+
+<details>
+<summary>Solution (click here)</summary>
+<br>
+
+This example maps `sex` to `fill`, which will "fill" the box with colors
+(as we saw before, mapping to `color` colors the lines instead):
+
+```{r}
+penguins %>%
+  drop_na(sex) %>%
+  ggplot(mapping = aes(x = species,
+                       y = bill_length_mm,
+                       fill = sex)) +   # Now mapping sex to "fill"
+  geom_boxplot() +    # We now do want to see the outliers!
+  theme_classic(base_size = 14) +
+  labs(title = "Penguin Bill Length by Species and Sex",
+       subtitle = "Collected at Palmer Station, Antarctica",
+       x = "Penguin Species",
+       y = "Bill length (mm)")
+```
+
+</details>
 
 </div>
 </div>
 
 <br>
+
+----
+
+## Going further
+
+- One basic aspect of _ggplot2_ that we have not touched upon in this or the
+  previous session are "_scales_".
+  For instance, to change the colors used in mappings (like our boxplot color),
+  we would need to use scales.
+  For an introduction, see the
+  [section on scales from the R for Data Science book](https://r4ds.had.co.nz/graphics-for-communication.html#scales).
+
+- We also didn't talk about saving plots,
+  which can be done with the `ggsave()` function
+  ([documentation page](https://ggplot2.tidyverse.org/reference/ggsave.html)).
+  Just be aware that if you don't specify dimensions with the `width` and
+  `height` arguments,
+  they will be taken from the current size of the RStudio plotting window,
+  which is not necessarily what you want.
