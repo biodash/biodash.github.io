@@ -7,7 +7,7 @@ date: 2021-10-05
 output: hugodown::md_document
 toc: true
 
-rmd_hash: 7f5f783f3a75e70c
+rmd_hash: a6155139ac26d024
 
 ---
 
@@ -509,9 +509,9 @@ We can do all of this with the `labs()` function as follows:
   <span class='nf'>geom_boxplot</span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span>position <span class='o'>=</span> <span class='s'>"jitter"</span>, size <span class='o'>=</span> <span class='m'>1</span>, color <span class='o'>=</span> <span class='s'>"grey70"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme_classic</span><span class='o'>(</span>base_size <span class='o'>=</span> <span class='m'>14</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Penguin Bill Length by Species and Sex"</span>,
+  <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Penguin Bill Length by Species"</span>,
        subtitle <span class='o'>=</span> <span class='s'>"Collected at Palmer Station, Antarctica"</span>,
-       x <span class='o'>=</span> <span class='s'>"Penguin Species"</span>,     <span class='c'># x-axis label</span>
+       x <span class='o'>=</span> <span class='s'>"Penguin species"</span>,     <span class='c'># x-axis label</span>
        y <span class='o'>=</span> <span class='s'>"Bill length (mm)"</span><span class='o'>)</span>    <span class='c'># y-axis label</span>
 <span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_boxplot).</span>
 <span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
@@ -519,6 +519,8 @@ We can do all of this with the `labs()` function as follows:
 <img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
+
+<br>
 
 ------------------------------------------------------------------------
 
