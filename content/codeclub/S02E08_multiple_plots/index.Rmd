@@ -1,0 +1,386 @@
+---
+title: "Code Club S02E08: Combining Plots"
+summary: "Now that we've gotten a feel for creating plots, we'll look at how they can be arranged to include multiple plots in a single figure."  
+authors: [mike-sovic]
+date: "2021-10-19"
+output: hugodown::md_document
+toc: true
+---
+
+<br>
+
+## Learning objectives
+
+> * Continue to practice creating plots with ggplot
+> * Use faceting to divide a plot into multiple panels according to some variable. 
+> * Arrange multiple plots of different types on a single figure.
+
+<br>
+
+----
+
+## 1 -- Intro
+
+We'll continue in our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this...
+
+1.) You create a plot that needs to be subdivided according to some variable, possibly because accounting for that variable is important for the interpretation, or maybe there's just too much on one plot and it helps to split the data up according to some factor.
+
+2.) You have a series of different plots that all address some related question, maybe each in a slightly different way, and you want to present them all in one figure.
+
+We'll take a couple approaches during today's session to deal with these two scenarios. First, we'll look at some *ggplot* functions like `facet_wrap()` and `facet_grid()` that allow us to easily deal with scenario 1. Then we'll try a separate package, *patchwork*, that provides one good option for scenario 2.
+
+Like in previous sessions, we'll use some packages from the *tidyverse* and also the *palmerpenguins* dataset. If you haven't installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (library) to load them for the current session.
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+install.packages("palmerpenguins")
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(palmerpenguins)
+library(tidyverse)
+```
+
+
+## 2 -- Faceting
+
+Let's start by revisiting some plots Michael Broe created in his intro to ggplot a couple sessions ago. He was using the plots to investigate whether a relationship exists between the variables *bill length* and *bill depth* in these penguins. A scatterplot with a line of best fit from *ggplot*...
+
+```{r}
+penguins %>% 
+  drop_na() %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+As Michael pointed out previously, mapping an additional aesthetic (color) to the variable *species* helps us see a relationship a little more clearly...
+
+```{r}
+penguins %>% 
+  drop_na() %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+The color aesthetic partitions the data according to some variable (in this case, species), and here helps add important information to the visualization. An alternative might be to plot the data in separate panels, with each corresponding to a different species. We can do that with either of two functions from ggplot, `facet_wrap()` or `facet_grid()`. Let's start with `facet_wrap()`. This is added as an additional layer to the plot, and indicates one or more variables that will be used to split the data into separate panels. I'll facet here by species.
+
+```{r}
+penguins %>% 
+  drop_na() %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap("species")
+
+```
+
+The effect here is similar to what we did with adding a color aesthetic to the *species* variable earlier - it allows us to evaluate the relationship between bill length and bill depth for each species separately.
+
+----
+
+### Breakout Rooms I: Faceting
+
+#### Exercise 1: Analyze Adelie Penguins By Island
+
+<div class="puzzle">
+<div>
+
+Try analyzing just the data for Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?
+
+<details>
+
+<summary><b>Hint</b> (click here) </summary>
+
+<br> Use `filter()` to select out Adelie penguins, then create a plot similar to the one in the example, but facet on *island* instead of *species* <br> 
+
+</details>
+
+<details><summary><b>Solution</b> (click here) </summary>
+```{r}
+penguins %>%
+  drop_na() %>%
+  filter(species == "Adelie") %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap("island")
+```
+
+</details>
+
+</div>
+</div>
+
+#### Exercise 2a: Multiple Facets
+
+<div class="puzzle">
+<div>
+
+Now building on the plot you just created for Adelie Penguins, what if you wanted to facet on not just *island*, but a combination of *island* and *sex*? Give it a try.
+
+<details>
+
+<summary><b>Hint</b> (click here) </summary>
+
+<br> `facet_wrap()` accepts a character vector of column names. Use the c() function to provide a vector with two column names. <br> 
+
+</details>
+
+<details><summary><b>Solution</b> (click here) </summary>
+```{r}
+penguins %>% 
+  filter(species == "Adelie") %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(c("island", "sex"))
+```
+
+</details>
+
+</div>
+</div>
+
+
+#### Exercise 2b: Multiple Facets
+
+<div class="puzzle">
+<div>
+
+There are some facets coming through in that last plot that are based on NA's. Try getting rid of all observations that include missing data before creating the plot.
+
+<details>
+
+<summary><b>Hint</b> (click here) </summary>
+
+<br> Use the `drop_na()` function to remove observations with NA before calling ggplot. <br> 
+
+</details>
+
+<details><summary><b>Solution</b> (click here) </summary>
+```{r}
+penguins %>% 
+  drop_na() %>%
+  filter(species == "Adelie") %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(c("island", "sex"))
+```
+
+</details>
+
+</div>
+</div>
+
+# Exercise 3: Axis Scales
+
+<div class="puzzle">
+<div>
+
+Now let's go back to the full dataset where we faceted by species. The code we used, along with its associated plot, are below...
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap("species")
+```
+
+Use the help page for `facet_wrap` to look in to the *scales* option. Try changing the value of this option to see what effect it has on the plot.
+
+<details>
+
+<summary><b>Hint</b> (click here) </summary>
+
+<br> Within the `facet_wrap()` function, set scales = "free_y". <br> 
+
+</details>
+
+<details><summary><b>Solution</b> (click here) </summary>
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap("species", scales = "free")
+```
+
+</details>
+
+</div>
+</div>
+
+<br>
+
+----
+
+## 3 -- Grids
+
+In the breakout room, we tried faceting by two variables. While you can do this, `facet_wrap()` really is best suited for faceting on one variable. When you want to partition things based on more than one variable, `facet_grid()` might be a better option. Below, I'll create a plot similar to the one in the breakout room where we faceted on a combination of *island* and *sex*, but will do it with `facet_grid()` instead...
+
+```{r}
+penguins %>% 
+  drop_na() %>%
+  filter(species == "Adelie") %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_grid(rows = vars(sex), cols = vars(island))
+
+```
+
+This plot's a little cleaner than what we created with `facet_wrap()`, which looked like...
+
+```{r}
+penguins %>% 
+  drop_na() %>%
+  filter(species == "Adelie") %>%
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(c("island", "sex"))
+
+```
+
+
+----
+
+## 4 -- Multi-Panel Plots: Patchwork
+
+The faceting above works when you want to partition the plots based on one or more variables in the dataset. But if you want to just arrange different plots into one figure, possibly even different types of plots, one good option is the *patchwork* package. Let's install and load it...
+
+```{r, eval = FALSE}
+install.packages("patchwork")
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(patchwork)
+```
+
+With *patchwork*, you create and save each plot as a separate object. Then, once you've made the plots, you just tell patchwork how to arrange them. The syntax to define the layout is based on common mathematical operators.
+
+Some examples:
+
+* `plot1 + plot2` puts two plots side-by-side
+* `plot1 / plot2` stacks two plots vertically
+* `plot1 / (plot2 + plot3)` gives plot1 on a top row, and plots 2 and 3 on a bottom row
+
+In the examples above, *plot1*, *plot2*, and *plot3* represent plots that have been saved as objects with those names.
+
+Below is an example from *palmerpenguins*. First we create the plots, saving each as a new object...
+
+```{r}
+avg_island_lgth <- penguins %>%
+  drop_na() %>%
+  group_by(island) %>%
+  summarize("mean_bill_length" = mean(bill_length_mm)) %>%
+  ggplot(aes(x = island, y = mean_bill_length)) +
+  geom_col() +
+  ggtitle("Average Penguin Bill Length")
+
+mass_by_sex <- penguins %>%
+  drop_na() %>%
+  ggplot(aes(x = sex, y = body_mass_g)) +
+  geom_boxplot() +
+  ggtitle("Effect of Sex on Penguin Size")
+
+lgth_by_depth <- penguins %>% 
+  ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap("species") +
+  ggtitle("Relationship Between Bill Length and Bill Depth")
+```
+
+Then we simply use the patchwork syntax to define how these 3 plots will be arranged. In this case, the first (faceted) plot on top, with the other two side-by-side below it...
+
+```{r}
+lgth_by_depth / (avg_island_lgth + mass_by_sex)
+```
+
+
+----
+
+### Breakout Rooms II: Combining Plots
+
+<div class="puzzle">
+<div>
+
+Use the palmerpenguin data to try to create the plot below...
+
+```{r, echo = FALSE, message = FALSE, warning=FALSE}
+bill_flipper <- penguins %>%
+  drop_na() %>%
+  ggplot(aes(x = bill_length_mm, y = flipper_length_mm)) +
+  geom_point() +
+  facet_wrap("species") +
+  geom_smooth(method = "lm") +
+  theme_classic() +
+  labs(title = "Relationship Between Bill Length and Flipper Length",
+       x = "Bill Length (mm)",
+       y = "Flipper Length (mm)")
+  
+mass_yr <- penguins %>%
+  drop_na() %>%
+  mutate("year" = as.character(year)) %>%
+  ggplot(aes(x = year, y = body_mass_g)) +
+  geom_boxplot() + 
+  theme_classic() +
+  labs(title = "Penguin Size Over Time",
+       x = "Body Mass (g)",
+       y = "Year")
+
+bill_flipper / mass_yr + 
+  plot_annotation(tag_levels = 'A')
+
+```
+
+<details>
+
+<summary><b>Hints</b> (click here) </summary>
+
+<br> 1.) For the boxplot, R initially interprets the *year* variable as a continuous variable. Boxplots need a discrete x axis. Convert that variable to character or factor. You can use `mutate` along with `as.character` or `as.factor`.  
+2.) For the formatting, try `theme_classic()`
+3.) The title and axis labels can be specified with `labs()`, among other options. <br> 
+
+</details>
+
+<details><summary><b>Solution</b> (click here) </summary>
+```{r, eval = FALSE}
+bill_flipper <- penguins %>%
+  drop_na() %>%
+  ggplot(aes(x = bill_length_mm, y = flipper_length_mm)) +
+  geom_point() +
+  facet_wrap("species") +
+  geom_smooth(method = "lm") +
+  theme_classic() +
+  labs(title = "Relationship Between Bill Length and Flipper Length",
+       x = "Bill Length (mm)",
+       y = "Flipper Length (mm)")
+  
+mass_yr <- penguins %>%
+  drop_na() %>%
+  mutate("year" = as.character(year)) %>%
+  ggplot(aes(x = year, y = body_mass_g)) +
+  geom_boxplot() + 
+  theme_classic() +
+  labs(title = "Penguin Size Over Time",
+       x = "Body Mass (g)",
+       y = "Year")
+
+bill_flipper / mass_yr + 
+  plot_annotation(tag_levels = 'A')
+```
+
+</details>
+
+</div>
+</div>
+
+<br>
+
+----
