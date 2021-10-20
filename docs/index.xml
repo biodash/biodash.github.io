@@ -32,31 +32,28 @@
 &lt;p&gt;We&amp;rsquo;ll continue in our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this&amp;hellip;&lt;/p&gt;
 &lt;p&gt;1.) You create a plot that needs to be subdivided according to some variable, possibly because accounting for that variable is important for the interpretation, or maybe there&amp;rsquo;s just too much on one plot and it helps to split the data up according to some factor.&lt;/p&gt;
 &lt;p&gt;2.) You have a series of different plots that all address some related question, maybe each in a slightly different way, and you want to present them all in one figure.&lt;/p&gt;
-&lt;p&gt;We&amp;rsquo;ll take a couple of approaches during today&amp;rsquo;s session to deal with these two scenarios. First, we&amp;rsquo;ll look at some &lt;em&gt;ggplot&lt;/em&gt; functions like &lt;code&gt;facet_wrap()&lt;/code&gt; and &lt;code&gt;facet_grid()&lt;/code&gt; that allow us to easily deal with scenario 1. Then we&amp;rsquo;ll try a separate package, &lt;em&gt;patchwork&lt;/em&gt;, that is one good option for scenario 2.&lt;/p&gt;
-&lt;p&gt;Like in previous sessions, we&amp;rsquo;ll use some packages from the &lt;em&gt;tidyverse&lt;/em&gt; and also the &lt;em&gt;palmerpenguins&lt;/em&gt; dataset. If you haven&amp;rsquo;t installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (library).&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll take a couple approaches during today&amp;rsquo;s session to deal with these two scenarios. First, we&amp;rsquo;ll look at some &lt;em&gt;ggplot&lt;/em&gt; functions like &lt;code&gt;facet_wrap()&lt;/code&gt; and &lt;code&gt;facet_grid()&lt;/code&gt; that allow us to easily deal with scenario 1. Then we&amp;rsquo;ll try a separate package, &lt;em&gt;patchwork&lt;/em&gt;, that provides one good option for scenario 2.&lt;/p&gt;
+&lt;p&gt;Like in previous sessions, we&amp;rsquo;ll use some packages from the &lt;em&gt;tidyverse&lt;/em&gt; and also the &lt;em&gt;palmerpenguins&lt;/em&gt; dataset. If you haven&amp;rsquo;t installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (library) to load them for the current session.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;Then, we&amp;rsquo;ll load them&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;h2 id=&#34;2----faceting&#34;&gt;2 &amp;ndash; Faceting&lt;/h2&gt;
-&lt;p&gt;Let&amp;rsquo;s start by revisiting some plots Michael created in his intro to ggplot a couple sessions ago. He was using the plots to investigate whether there is a relationship between the variables &lt;em&gt;bill length&lt;/em&gt; and &lt;em&gt;bill depth&lt;/em&gt; in these penguins. A simple scatterplot with a line of best fit from &lt;em&gt;ggplot&lt;/em&gt;&amp;hellip;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s start by revisiting some plots Michael Broe created in his intro to ggplot a couple sessions ago. He was using the plots to investigate whether a relationship exists between the variables &lt;em&gt;bill length&lt;/em&gt; and &lt;em&gt;bill depth&lt;/em&gt; in these penguins. A scatterplot with a line of best fit from &lt;em&gt;ggplot&lt;/em&gt;&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing missing values (geom_point).&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-3-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
@@ -64,32 +61,26 @@
 &lt;p&gt;As Michael pointed out previously, mapping an additional aesthetic (color) to the variable &lt;em&gt;species&lt;/em&gt; helps us see a relationship a little more clearly&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing missing values (geom_point).&lt;/span&gt;
-
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-4-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
-&lt;p&gt;The color aesthetic partitions the data according to some variable (in this case, species), and here helps add important information to the visualization. An alternative might be to plot the data in separate panels, with each corresponding to a different species. We can do that with either of two functions from ggplot, &lt;code&gt;facet_wrap()&lt;/code&gt; or &lt;code&gt;facet_grid()&lt;/code&gt;. Let&amp;rsquo;s start with &lt;code&gt;facet_wrap()&lt;/code&gt;. This is added as an additional layer to the plot, and indicates one or more variables that will be used to split the data into separate panels in the plot. I&amp;rsquo;ll facet here by species.&lt;/p&gt;
+&lt;p&gt;The color aesthetic partitions the data according to some variable (in this case, species), and here helps add important information to the visualization. An alternative might be to plot the data in separate panels, with each corresponding to a different species. We can do that with either of two functions from ggplot, &lt;code&gt;facet_wrap()&lt;/code&gt; or &lt;code&gt;facet_grid()&lt;/code&gt;. Let&amp;rsquo;s start with &lt;code&gt;facet_wrap()&lt;/code&gt;. This is added as an additional layer to the plot, and indicates one or more variables that will be used to split the data into separate panels. I&amp;rsquo;ll facet here by species.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;facet_wrap&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing missing values (geom_point).&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-5-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
@@ -100,19 +91,20 @@
 &lt;h4 id=&#34;exercise-1-analyze-adelie-penguins-by-island&#34;&gt;Exercise 1: Analyze Adelie Penguins By Island&lt;/h4&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
-&lt;p&gt;Try analyzing just the data for Adelie penguins (the only species with data for each of the three islands). For theis species, try faceting by island. Does the relationship seem to be consistent across all islands?&lt;/p&gt;
+&lt;p&gt;Try analyzing just the data for Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Hint&lt;/b&gt; (click here)
 &lt;/summary&gt;
-&lt;p&gt;&lt;br&gt; Use &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; to select out Adelie penguins, then create a plot similar to in the example, but facet on &lt;em&gt;island&lt;/em&gt; instead of &lt;em&gt;species&lt;/em&gt; &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br&gt; Use &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; to select out Adelie penguins, then create a plot similar to the one in the example, but facet on &lt;em&gt;island&lt;/em&gt; instead of &lt;em&gt;species&lt;/em&gt; &lt;br&gt;&lt;/p&gt;
 &lt;/details&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Solution&lt;/b&gt; (click here)
 &lt;/summary&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Adelie&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
@@ -120,10 +112,6 @@
   &lt;span class=&#39;nf&#39;&gt;facet_wrap&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;island&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 1 rows containing non-finite values (stat_smooth).&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 1 rows containing missing values (geom_point).&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-6-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
@@ -6766,7 +6754,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-127584963&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-267843951&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6776,7 +6764,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-127584963&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-267843951&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6852,7 +6840,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-683124957&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-859761234&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6862,7 +6850,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-683124957&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-859761234&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6883,7 +6871,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-936124857&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-324815967&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6893,7 +6881,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-936124857&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-324815967&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6920,7 +6908,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-941276538&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-524739168&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6930,7 +6918,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-941276538&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-524739168&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6957,7 +6945,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-195368427&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-127395864&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6967,7 +6955,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-195368427&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-127395864&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6990,7 +6978,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-291378645&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-389745216&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7000,7 +6988,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-291378645&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-389745216&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7041,7 +7029,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-917382564&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-482619753&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7051,7 +7039,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-917382564&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-482619753&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7070,7 +7058,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-498736512&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-716453928&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7080,7 +7068,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-498736512&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-716453928&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7106,7 +7094,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-974862513&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-251834697&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7116,7 +7104,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-974862513&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-251834697&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7146,7 +7134,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-712536894&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-637419258&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7156,7 +7144,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-712536894&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-637419258&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7370,7 +7358,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-916845732&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-814762539&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7380,7 +7368,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-916845732&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-814762539&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7441,7 +7429,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-156479823&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-217945863&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7451,7 +7439,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-156479823&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-217945863&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7526,7 +7514,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-658319247&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-391826574&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7536,7 +7524,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-658319247&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-391826574&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();

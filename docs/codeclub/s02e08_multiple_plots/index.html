@@ -342,7 +342,7 @@
         content="2021-10-19T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-10-20T12:41:25-04:00">
+    <meta property="article:modified_time" content="2021-10-20T13:19:41-04:00">
   
 
   
@@ -855,31 +855,28 @@
 <p>We&rsquo;ll continue in our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this&hellip;</p>
 <p>1.) You create a plot that needs to be subdivided according to some variable, possibly because accounting for that variable is important for the interpretation, or maybe there&rsquo;s just too much on one plot and it helps to split the data up according to some factor.</p>
 <p>2.) You have a series of different plots that all address some related question, maybe each in a slightly different way, and you want to present them all in one figure.</p>
-<p>We&rsquo;ll take a couple of approaches during today&rsquo;s session to deal with these two scenarios. First, we&rsquo;ll look at some <em>ggplot</em> functions like <code>facet_wrap()</code> and <code>facet_grid()</code> that allow us to easily deal with scenario 1. Then we&rsquo;ll try a separate package, <em>patchwork</em>, that is one good option for scenario 2.</p>
-<p>Like in previous sessions, we&rsquo;ll use some packages from the <em>tidyverse</em> and also the <em>palmerpenguins</em> dataset. If you haven&rsquo;t installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (library).</p>
+<p>We&rsquo;ll take a couple approaches during today&rsquo;s session to deal with these two scenarios. First, we&rsquo;ll look at some <em>ggplot</em> functions like <code>facet_wrap()</code> and <code>facet_grid()</code> that allow us to easily deal with scenario 1. Then we&rsquo;ll try a separate package, <em>patchwork</em>, that provides one good option for scenario 2.</p>
+<p>Like in previous sessions, we&rsquo;ll use some packages from the <em>tidyverse</em> and also the <em>palmerpenguins</em> dataset. If you haven&rsquo;t installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (library) to load them for the current session.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"palmerpenguins"</span><span class='o'>)</span>
 </code></pre>
 </div>
-<p>Then, we&rsquo;ll load them</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 </code></pre>
 </div>
 <h2 id="2----faceting">2 &ndash; Faceting</h2>
-<p>Let&rsquo;s start by revisiting some plots Michael created in his intro to ggplot a couple sessions ago. He was using the plots to investigate whether there is a relationship between the variables <em>bill length</em> and <em>bill depth</em> in these penguins. A simple scatterplot with a line of best fit from <em>ggplot</em>&hellip;</p>
+<p>Let&rsquo;s start by revisiting some plots Michael Broe created in his intro to ggplot a couple sessions ago. He was using the plots to investigate whether a relationship exists between the variables <em>bill length</em> and <em>bill depth</em> in these penguins. A scatterplot with a line of best fit from <em>ggplot</em>&hellip;</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
 
 </code></pre>
 <p><img src="figs/unnamed-chunk-3-1.png" width="700px" style="display: block; margin: auto;" /></p>
@@ -887,32 +884,26 @@
 <p>As Michael pointed out previously, mapping an additional aesthetic (color) to the variable <em>species</em> helps us see a relationship a little more clearly&hellip;</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
-<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
-
 </code></pre>
 <p><img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>The color aesthetic partitions the data according to some variable (in this case, species), and here helps add important information to the visualization. An alternative might be to plot the data in separate panels, with each corresponding to a different species. We can do that with either of two functions from ggplot, <code>facet_wrap()</code> or <code>facet_grid()</code>. Let&rsquo;s start with <code>facet_wrap()</code>. This is added as an additional layer to the plot, and indicates one or more variables that will be used to split the data into separate panels in the plot. I&rsquo;ll facet here by species.</p>
+<p>The color aesthetic partitions the data according to some variable (in this case, species), and here helps add important information to the visualization. An alternative might be to plot the data in separate panels, with each corresponding to a different species. We can do that with either of two functions from ggplot, <code>facet_wrap()</code> or <code>facet_grid()</code>. Let&rsquo;s start with <code>facet_wrap()</code>. This is added as an additional layer to the plot, and indicates one or more variables that will be used to split the data into separate panels. I&rsquo;ll facet here by species.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='s'>"species"</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
 
 </code></pre>
 <p><img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" /></p>
@@ -923,19 +914,20 @@
 <h4 id="exercise-1-analyze-adelie-penguins-by-island">Exercise 1: Analyze Adelie Penguins By Island</h4>
 <div class="puzzle">
 <div>
-<p>Try analyzing just the data for Adelie penguins (the only species with data for each of the three islands). For theis species, try faceting by island. Does the relationship seem to be consistent across all islands?</p>
+<p>Try analyzing just the data for Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?</p>
 <details>
 <summary>
 <b>Hint</b> (click here)
 </summary>
-<p><br> Use <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> to select out Adelie penguins, then create a plot similar to in the example, but facet on <em>island</em> instead of <em>species</em> <br></p>
+<p><br> Use <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> to select out Adelie penguins, then create a plot similar to the one in the example, but facet on <em>island</em> instead of <em>species</em> <br></p>
 </details>
 <details>
 <summary>
 <b>Solution</b> (click here)
 </summary>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
@@ -943,10 +935,6 @@
   <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='s'>"island"</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 1 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 1 rows containing missing values (geom_point).</span>
 
 </code></pre>
 <p><img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" /></p>
