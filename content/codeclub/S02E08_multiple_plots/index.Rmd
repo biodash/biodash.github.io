@@ -21,7 +21,7 @@ toc: true
 
 ## 1 -- Intro
 
-We'll continue in our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this...
+We'll continue with our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this...
 
 1.) You create a plot that needs to be subdivided according to some variable, possibly because accounting for that variable is important for the interpretation, or maybe there's just too much on one plot and it helps to split the data up according to some factor.
 
@@ -29,7 +29,7 @@ We'll continue in our theme on plotting by exploring some options for arranging 
 
 We'll take a couple approaches during today's session to deal with these two scenarios. First, we'll look at some *ggplot* functions like `facet_wrap()` and `facet_grid()` that allow us to easily deal with scenario 1. Then we'll try a separate package, *patchwork*, that provides one good option for scenario 2.
 
-Like in previous sessions, we'll use some packages from the *tidyverse* and also the *palmerpenguins* dataset. If you haven't installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (library) to load them for the current session.
+Like in previous sessions, we'll use some packages from the *tidyverse* and also the *palmerpenguins* dataset. If you haven't installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (`library()`) to load them for the current session.
 
 ```{r, eval = FALSE}
 install.packages("tidyverse")
@@ -41,6 +41,13 @@ library(palmerpenguins)
 library(tidyverse)
 ```
 
+And now let's preview/explore the penguins dataset just to remind ourselves of what's in there...
+
+```{r, fig.width=10}
+head(penguins)
+summary(penguins)
+```
+
 
 ## 2 -- Faceting
 
@@ -48,7 +55,6 @@ Let's start by revisiting some plots Michael Broe created in his intro to ggplot
 
 ```{r}
 penguins %>% 
-  drop_na() %>%
   ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
   geom_point() +
   geom_smooth(method = "lm")
@@ -58,7 +64,6 @@ As Michael pointed out previously, mapping an additional aesthetic (color) to th
 
 ```{r}
 penguins %>% 
-  drop_na() %>%
   ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
   geom_point() +
   geom_smooth(method = "lm")
@@ -68,7 +73,6 @@ The color aesthetic partitions the data according to some variable (in this case
 
 ```{r}
 penguins %>% 
-  drop_na() %>%
   ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -87,7 +91,7 @@ The effect here is similar to what we did with adding a color aesthetic to the *
 <div class="puzzle">
 <div>
 
-Try analyzing just the data for Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?
+Try analyzing the relationship between bill length and bill depth for just the Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?
 
 <details>
 
@@ -100,7 +104,6 @@ Try analyzing just the data for Adelie penguins (the only species with observati
 <details><summary><b>Solution</b> (click here) </summary>
 ```{r}
 penguins %>%
-  drop_na() %>%
   filter(species == "Adelie") %>%
   ggplot(aes(x = bill_length_mm, y = bill_depth_mm)) +
   geom_point() +
@@ -180,7 +183,7 @@ penguins %>%
 <div class="puzzle">
 <div>
 
-Now let's go back to the full dataset where we faceted by species. The code we used, along with its associated plot, are below...
+Now let's go back to the full dataset where we faceted by species. The code we used (with the `drop_na` function added), along with its associated plot, are below...
 
 ```{r}
 penguins %>% 
@@ -195,7 +198,15 @@ Use the help page for `facet_wrap` to look in to the *scales* option. Try changi
 
 <details>
 
-<summary><b>Hint</b> (click here) </summary>
+<summary><b>Hint 1</b> (click here) </summary>
+
+<br> Use `?facet_wrap` to get the help page for the function, and find information about the *scales* option. <br> 
+
+</details>
+
+<details>
+
+<summary><b>Hint 2</b> (click here) </summary>
 
 <br> Within the `facet_wrap()` function, set scales = "free_y". <br> 
 
@@ -252,7 +263,7 @@ penguins %>%
 
 ## 4 -- Multi-Panel Plots: Patchwork
 
-The faceting above works when you want to partition the plots based on one or more variables in the dataset. But if you want to just arrange different plots into one figure, possibly even different types of plots, one good option is the *patchwork* package. Let's install and load it...
+The faceting above works when you want to partition the plots based on one or more variables in the dataset. But if you want to arrange multiple plots into one figure, possibly even different types of plots, one good option is the *patchwork* package. Let's install and load it...
 
 ```{r, eval = FALSE}
 install.packages("patchwork")
@@ -343,11 +354,33 @@ bill_flipper / mass_yr +
 
 <details>
 
-<summary><b>Hints</b> (click here) </summary>
+<summary><b>Hint 1</b> (click here) </summary>
 
-<br> 1.) For the boxplot, R initially interprets the *year* variable as a continuous variable. Boxplots need a discrete x axis. Convert that variable to character or factor. You can use `mutate` along with `as.character` or `as.factor`.  
-2.) For the formatting, try `theme_classic()`
-3.) The title and axis labels can be specified with `labs()`, among other options. <br> 
+<br> For the boxplot, R initially interprets the *year* variable as a continuous variable. Boxplots need a discrete x axis. Convert that variable to character or factor. You can use `mutate` along with `as.character` or `as.factor`. <br> 
+
+</details>
+
+<details>
+
+<summary><b>Hint 2</b> (click here) </summary>
+
+<br> For the formatting, try `theme_classic()` <br> 
+
+</details>
+
+<details>
+
+<summary><b>Hint 3</b> (click here) </summary>
+
+<br> The title and axis labels can be specified with `labs()`, among other options. <br> 
+
+</details>
+
+<details>
+
+<summary><b>Hint 4</b> (click here) </summary>
+
+<br> To get the 'A' and 'B' plot annotations, check out the help page for the `plot_annotation()` function within *patchwork*. <br> 
 
 </details>
 

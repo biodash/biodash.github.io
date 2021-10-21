@@ -5,7 +5,7 @@ authors: [mike-sovic]
 date: "2021-10-19"
 output: hugodown::md_document
 toc: true
-rmd_hash: 187f282806da5bfa
+rmd_hash: bad727a89c26c1d1
 
 ---
 
@@ -23,7 +23,7 @@ rmd_hash: 187f282806da5bfa
 
 ## 1 -- Intro
 
-We'll continue in our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this...
+We'll continue with our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this...
 
 1.) You create a plot that needs to be subdivided according to some variable, possibly because accounting for that variable is important for the interpretation, or maybe there's just too much on one plot and it helps to split the data up according to some factor.
 
@@ -31,7 +31,7 @@ We'll continue in our theme on plotting by exploring some options for arranging 
 
 We'll take a couple approaches during today's session to deal with these two scenarios. First, we'll look at some *ggplot* functions like `facet_wrap()` and `facet_grid()` that allow us to easily deal with scenario 1. Then we'll try a separate package, *patchwork*, that provides one good option for scenario 2.
 
-Like in previous sessions, we'll use some packages from the *tidyverse* and also the *palmerpenguins* dataset. If you haven't installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (library) to load them for the current session.
+Like in previous sessions, we'll use some packages from the *tidyverse* and also the *palmerpenguins* dataset. If you haven't installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands ([`library()`](https://rdrr.io/r/base/library.html)) to load them for the current session.
 
 <div class="highlight">
 
@@ -49,6 +49,45 @@ Like in previous sessions, we'll use some packages from the *tidyverse* and also
 
 </div>
 
+And now let's preview/explore the penguins dataset just to remind ourselves of what's in there...
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 x 8</span></span>
+<span class='c'>#&gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  </span>
+<span class='c'>#&gt;   <span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span> Adelie  Torge…           39.1          18.7              181        </span><span style='text-decoration: underline;'>3</span><span>750 male </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span><span> Adelie  Torge…           39.5          17.4              186        </span><span style='text-decoration: underline;'>3</span><span>800 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span><span> Adelie  Torge…           40.3          18                195        </span><span style='text-decoration: underline;'>3</span><span>250 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span><span> Adelie  Torge…           </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>                 </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>   </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span><span> Adelie  Torge…           36.7          19.3              193        </span><span style='text-decoration: underline;'>3</span><span>450 fema…</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span><span> Adelie  Torge…           39.3          20.6              190        </span><span style='text-decoration: underline;'>3</span><span>650 male </span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 1 more variable: year &lt;int&gt;</span></span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+
+<span class='c'>#&gt;       species          island    bill_length_mm  bill_depth_mm  </span>
+<span class='c'>#&gt;  Adelie   :152   Biscoe   :168   Min.   :32.10   Min.   :13.10  </span>
+<span class='c'>#&gt;  Chinstrap: 68   Dream    :124   1st Qu.:39.23   1st Qu.:15.60  </span>
+<span class='c'>#&gt;  Gentoo   :124   Torgersen: 52   Median :44.45   Median :17.30  </span>
+<span class='c'>#&gt;                                  Mean   :43.92   Mean   :17.15  </span>
+<span class='c'>#&gt;                                  3rd Qu.:48.50   3rd Qu.:18.70  </span>
+<span class='c'>#&gt;                                  Max.   :59.60   Max.   :21.50  </span>
+<span class='c'>#&gt;                                  NA's   :2       NA's   :2      </span>
+<span class='c'>#&gt;  flipper_length_mm  body_mass_g       sex           year     </span>
+<span class='c'>#&gt;  Min.   :172.0     Min.   :2700   female:165   Min.   :2007  </span>
+<span class='c'>#&gt;  1st Qu.:190.0     1st Qu.:3550   male  :168   1st Qu.:2007  </span>
+<span class='c'>#&gt;  Median :197.0     Median :4050   NA's  : 11   Median :2008  </span>
+<span class='c'>#&gt;  Mean   :200.9     Mean   :4202                Mean   :2008  </span>
+<span class='c'>#&gt;  3rd Qu.:213.0     3rd Qu.:4750                3rd Qu.:2009  </span>
+<span class='c'>#&gt;  Max.   :231.0     Max.   :6300                Max.   :2009  </span>
+<span class='c'>#&gt;  NA's   :2         NA's   :2</span>
+</code></pre>
+
+</div>
+
 ## 2 -- Faceting
 
 Let's start by revisiting some plots Michael Broe created in his intro to ggplot a couple sessions ago. He was using the plots to investigate whether a relationship exists between the variables *bill length* and *bill depth* in these penguins. A scatterplot with a line of best fit from *ggplot*...
@@ -56,15 +95,18 @@ Let's start by revisiting some plots Michael Broe created in his intro to ggplot
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
-  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
+<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
+
+<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
+
 </code></pre>
-<img src="figs/unnamed-chunk-3-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -73,15 +115,18 @@ As Michael pointed out previously, mapping an additional aesthetic (color) to th
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
-  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
+<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
+
+<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
+
 </code></pre>
-<img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -90,7 +135,6 @@ The color aesthetic partitions the data according to some variable (in this case
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
-  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
@@ -98,8 +142,12 @@ The color aesthetic partitions the data according to some variable (in this case
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
+<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
+
+<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
+
 </code></pre>
-<img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -115,7 +163,7 @@ The effect here is similar to what we did with adding a color aesthetic to the *
 
 <div>
 
-Try analyzing just the data for Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?
+Try analyzing the relationship between bill length and bill depth for just the Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?
 
 <details>
 <summary>
@@ -133,7 +181,6 @@ Try analyzing just the data for Adelie penguins (the only species with observati
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
@@ -142,8 +189,12 @@ Try analyzing just the data for Adelie penguins (the only species with observati
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
+<span class='c'>#&gt; Warning: Removed 1 rows containing non-finite values (stat_smooth).</span>
+
+<span class='c'>#&gt; Warning: Removed 1 rows containing missing values (geom_point).</span>
+
 </code></pre>
-<img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -190,7 +241,7 @@ Now building on the plot you just created for Adelie Penguins, what if you wante
 <span class='c'>#&gt; Warning: Removed 1 rows containing missing values (geom_point).</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -234,7 +285,7 @@ There are some facets coming through in that last plot that are based on NA's. T
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -250,7 +301,7 @@ There are some facets coming through in that last plot that are based on NA's. T
 
 <div>
 
-Now let's go back to the full dataset where we faceted by species. The code we used, along with its associated plot, are below...
+Now let's go back to the full dataset where we faceted by species. The code we used (with the `drop_na` function added), along with its associated plot, are below...
 
 <div class="highlight">
 
@@ -264,7 +315,7 @@ Now let's go back to the full dataset where we faceted by species. The code we u
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -272,7 +323,15 @@ Use the help page for `facet_wrap` to look in to the *scales* option. Try changi
 
 <details>
 <summary>
-<b>Hint</b> (click here)
+<b>Hint 1</b> (click here)
+</summary>
+
+<br> Use `?facet_wrap` to get the help page for the function, and find information about the *scales* option. <br>
+
+</details>
+<details>
+<summary>
+<b>Hint 2</b> (click here)
 </summary>
 
 <br> Within the `facet_wrap()` function, set scales = "free_y". <br>
@@ -298,7 +357,7 @@ Use the help page for `facet_wrap` to look in to the *scales* option. Try changi
 <span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -329,7 +388,7 @@ In the breakout room, we tried faceting by two variables. While you can do this,
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -348,7 +407,7 @@ This plot's a little cleaner than what we created with `facet_wrap()`, which loo
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -356,7 +415,7 @@ This plot's a little cleaner than what we created with `facet_wrap()`, which loo
 
 ## 4 -- Multi-Panel Plots: Patchwork
 
-The faceting above works when you want to partition the plots based on one or more variables in the dataset. But if you want to just arrange different plots into one figure, possibly even different types of plots, one good option is the *patchwork* package. Let's install and load it...
+The faceting above works when you want to partition the plots based on one or more variables in the dataset. But if you want to arrange multiple plots into one figure, possibly even different types of plots, one good option is the *patchwork* package. Let's install and load it...
 
 <div class="highlight">
 
@@ -420,7 +479,7 @@ Then we simply use the patchwork syntax to define how these 3 plots will be arra
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -436,17 +495,40 @@ Use the palmerpenguin data to try to create the plot below...
 
 <div class="highlight">
 
-<img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
 <details>
 <summary>
-<b>Hints</b> (click here)
+<b>Hint 1</b> (click here)
 </summary>
 
-<br> 1.) For the boxplot, R initially interprets the *year* variable as a continuous variable. Boxplots need a discrete x axis. Convert that variable to character or factor. You can use `mutate` along with `as.character` or `as.factor`.  
-2.) For the formatting, try `theme_classic()` 3.) The title and axis labels can be specified with `labs()`, among other options. <br>
+<br> For the boxplot, R initially interprets the *year* variable as a continuous variable. Boxplots need a discrete x axis. Convert that variable to character or factor. You can use `mutate` along with `as.character` or `as.factor`. <br>
+
+</details>
+<details>
+<summary>
+<b>Hint 2</b> (click here)
+</summary>
+
+<br> For the formatting, try `theme_classic()` <br>
+
+</details>
+<details>
+<summary>
+<b>Hint 3</b> (click here)
+</summary>
+
+<br> The title and axis labels can be specified with `labs()`, among other options. <br>
+
+</details>
+<details>
+<summary>
+<b>Hint 4</b> (click here)
+</summary>
+
+<br> To get the 'A' and 'B' plot annotations, check out the help page for the [`plot_annotation()`](https://patchwork.data-imaginist.com/reference/plot_annotation.html) function within *patchwork*. <br>
 
 </details>
 <details>
