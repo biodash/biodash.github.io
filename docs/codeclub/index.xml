@@ -29,11 +29,11 @@
 &lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;1----intro&#34;&gt;1 &amp;ndash; Intro&lt;/h2&gt;
-&lt;p&gt;We&amp;rsquo;ll continue in our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this&amp;hellip;&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll continue with our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this&amp;hellip;&lt;/p&gt;
 &lt;p&gt;1.) You create a plot that needs to be subdivided according to some variable, possibly because accounting for that variable is important for the interpretation, or maybe there&amp;rsquo;s just too much on one plot and it helps to split the data up according to some factor.&lt;/p&gt;
 &lt;p&gt;2.) You have a series of different plots that all address some related question, maybe each in a slightly different way, and you want to present them all in one figure.&lt;/p&gt;
 &lt;p&gt;We&amp;rsquo;ll take a couple approaches during today&amp;rsquo;s session to deal with these two scenarios. First, we&amp;rsquo;ll look at some &lt;em&gt;ggplot&lt;/em&gt; functions like &lt;code&gt;facet_wrap()&lt;/code&gt; and &lt;code&gt;facet_grid()&lt;/code&gt; that allow us to easily deal with scenario 1. Then we&amp;rsquo;ll try a separate package, &lt;em&gt;patchwork&lt;/em&gt;, that provides one good option for scenario 2.&lt;/p&gt;
-&lt;p&gt;Like in previous sessions, we&amp;rsquo;ll use some packages from the &lt;em&gt;tidyverse&lt;/em&gt; and also the &lt;em&gt;palmerpenguins&lt;/em&gt; dataset. If you haven&amp;rsquo;t installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (library) to load them for the current session.&lt;/p&gt;
+&lt;p&gt;Like in previous sessions, we&amp;rsquo;ll use some packages from the &lt;em&gt;tidyverse&lt;/em&gt; and also the &lt;em&gt;palmerpenguins&lt;/em&gt; dataset. If you haven&amp;rsquo;t installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (&lt;a href=&#34;https://rdrr.io/r/base/library.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library()&lt;/code&gt;&lt;/a&gt;) to load them for the current session.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
@@ -44,37 +44,77 @@
 &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+&lt;p&gt;And now let&amp;rsquo;s preview/explore the penguins dataset just to remind ourselves of what&amp;rsquo;s in there&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 x 8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;   &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;span&gt;           &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;         &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;            &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt;       &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt; Adelie  Torge…           39.1          18.7              181        &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;&lt;span&gt;750 male &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;&lt;span&gt; Adelie  Torge…           39.5          17.4              186        &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;&lt;span&gt;800 fema…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;&lt;span&gt; Adelie  Torge…           40.3          18                195        &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;&lt;span&gt;250 fema…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;&lt;span&gt; Adelie  Torge…           &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;            &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;                 &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;          &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;span&gt;   &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;&lt;span&gt; Adelie  Torge…           36.7          19.3              193        &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;&lt;span&gt;450 fema…&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;&lt;span&gt; Adelie  Torge…           39.3          20.6              190        &lt;/span&gt;&lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;&lt;span&gt;650 male &lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 1 more variable: year &amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/summary.html&#39;&gt;summary&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;       species          island    bill_length_mm  bill_depth_mm  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Adelie   :152   Biscoe   :168   Min.   :32.10   Min.   :13.10  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Chinstrap: 68   Dream    :124   1st Qu.:39.23   1st Qu.:15.60  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Gentoo   :124   Torgersen: 52   Median :44.45   Median :17.30  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                                  Mean   :43.92   Mean   :17.15  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                                  3rd Qu.:48.50   3rd Qu.:18.70  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                                  Max.   :59.60   Max.   :21.50  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                                  NA&#39;s   :2       NA&#39;s   :2      &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  flipper_length_mm  body_mass_g       sex           year     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Min.   :172.0     Min.   :2700   female:165   Min.   :2007  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  1st Qu.:190.0     1st Qu.:3550   male  :168   1st Qu.:2007  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Median :197.0     Median :4050   NA&#39;s  : 11   Median :2008  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Mean   :200.9     Mean   :4202                Mean   :2008  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  3rd Qu.:213.0     3rd Qu.:4750                3rd Qu.:2009  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  Max.   :231.0     Max.   :6300                Max.   :2009  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  NA&#39;s   :2         NA&#39;s   :2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 &lt;h2 id=&#34;2----faceting&#34;&gt;2 &amp;ndash; Faceting&lt;/h2&gt;
 &lt;p&gt;Let&amp;rsquo;s start by revisiting some plots Michael Broe created in his intro to ggplot a couple sessions ago. He was using the plots to investigate whether a relationship exists between the variables &lt;em&gt;bill length&lt;/em&gt; and &lt;em&gt;bill depth&lt;/em&gt; in these penguins. A scatterplot with a line of best fit from &lt;em&gt;ggplot&lt;/em&gt;&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing missing values (geom_point).&lt;/span&gt;
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-3-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-4-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;As Michael pointed out previously, mapping an additional aesthetic (color) to the variable &lt;em&gt;species&lt;/em&gt; helps us see a relationship a little more clearly&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing missing values (geom_point).&lt;/span&gt;
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-4-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-5-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;The color aesthetic partitions the data according to some variable (in this case, species), and here helps add important information to the visualization. An alternative might be to plot the data in separate panels, with each corresponding to a different species. We can do that with either of two functions from ggplot, &lt;code&gt;facet_wrap()&lt;/code&gt; or &lt;code&gt;facet_grid()&lt;/code&gt;. Let&amp;rsquo;s start with &lt;code&gt;facet_wrap()&lt;/code&gt;. This is added as an additional layer to the plot, and indicates one or more variables that will be used to split the data into separate panels. I&amp;rsquo;ll facet here by species.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
@@ -82,8 +122,12 @@
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing missing values (geom_point).&lt;/span&gt;
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-5-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-6-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;The effect here is similar to what we did with adding a color aesthetic to the &lt;em&gt;species&lt;/em&gt; variable earlier - it allows us to evaluate the relationship between bill length and bill depth for each species separately.&lt;/p&gt;
 &lt;hr&gt;
@@ -91,7 +135,7 @@
 &lt;h4 id=&#34;exercise-1-analyze-adelie-penguins-by-island&#34;&gt;Exercise 1: Analyze Adelie Penguins By Island&lt;/h4&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
-&lt;p&gt;Try analyzing just the data for Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?&lt;/p&gt;
+&lt;p&gt;Try analyzing the relationship between bill length and bill depth for just the Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Hint&lt;/b&gt; (click here)
@@ -104,7 +148,6 @@
 &lt;/summary&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Adelie&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
@@ -113,8 +156,12 @@
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 1 rows containing non-finite values (stat_smooth).&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 1 rows containing missing values (geom_point).&lt;/span&gt;
+
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-6-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-7-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/details&gt;
 &lt;/div&gt;
@@ -148,7 +195,7 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 1 rows containing missing values (geom_point).&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-7-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-8-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/details&gt;
 &lt;/div&gt;
@@ -179,7 +226,7 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-8-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-9-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/details&gt;
 &lt;/div&gt;
@@ -187,7 +234,7 @@
 &lt;h4 id=&#34;exercise-3-axis-scales&#34;&gt;Exercise 3: Axis Scales&lt;/h4&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
-&lt;p&gt;Now let&amp;rsquo;s go back to the full dataset where we faceted by species. The code we used, along with its associated plot, are below&amp;hellip;&lt;/p&gt;
+&lt;p&gt;Now let&amp;rsquo;s go back to the full dataset where we faceted by species. The code we used (with the &lt;code&gt;drop_na&lt;/code&gt; function added), along with its associated plot, are below&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
   &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
@@ -199,12 +246,18 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-9-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-10-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;Use the help page for &lt;code&gt;facet_wrap&lt;/code&gt; to look in to the &lt;em&gt;scales&lt;/em&gt; option. Try changing the value of this option to see what effect it has on the plot.&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
-&lt;b&gt;Hint&lt;/b&gt; (click here)
+&lt;b&gt;Hint 1&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; Use &lt;code&gt;?facet_wrap&lt;/code&gt; to get the help page for the function, and find information about the &lt;em&gt;scales&lt;/em&gt; option. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint 2&lt;/b&gt; (click here)
 &lt;/summary&gt;
 &lt;p&gt;&lt;br&gt; Within the &lt;code&gt;facet_wrap()&lt;/code&gt; function, set scales = &amp;ldquo;free_y&amp;rdquo;. &lt;br&gt;&lt;/p&gt;
 &lt;/details&gt;
@@ -226,7 +279,7 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; Warning: Removed 2 rows containing missing values (geom_point).&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-10-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-11-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/details&gt;
 &lt;/div&gt;
@@ -247,7 +300,7 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-11-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-12-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;This plot&amp;rsquo;s a little cleaner than what we created with &lt;code&gt;facet_wrap()&lt;/code&gt;, which looked like&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -262,11 +315,11 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-12-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-13-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;4----multi-panel-plots-patchwork&#34;&gt;4 &amp;ndash; Multi-Panel Plots: Patchwork&lt;/h2&gt;
-&lt;p&gt;The faceting above works when you want to partition the plots based on one or more variables in the dataset. But if you want to just arrange different plots into one figure, possibly even different types of plots, one good option is the &lt;em&gt;patchwork&lt;/em&gt; package. Let&amp;rsquo;s install and load it&amp;hellip;&lt;/p&gt;
+&lt;p&gt;The faceting above works when you want to partition the plots based on one or more variables in the dataset. But if you want to arrange multiple plots into one figure, possibly even different types of plots, one good option is the &lt;em&gt;patchwork&lt;/em&gt; package. Let&amp;rsquo;s install and load it&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;patchwork&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -315,7 +368,7 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-16-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-17-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;hr&gt;
 &lt;h3 id=&#34;breakout-rooms-ii-combining-plots&#34;&gt;Breakout Rooms II: Combining Plots&lt;/h3&gt;
@@ -323,14 +376,31 @@
 &lt;div&gt;
 &lt;p&gt;Use the palmerpenguin data to try to create the plot below&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-17-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-18-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;details&gt;
 &lt;summary&gt;
-&lt;b&gt;Hints&lt;/b&gt; (click here)
+&lt;b&gt;Hint 1&lt;/b&gt; (click here)
 &lt;/summary&gt;
-&lt;p&gt;&lt;br&gt; 1.) For the boxplot, R initially interprets the &lt;em&gt;year&lt;/em&gt; variable as a continuous variable. Boxplots need a discrete x axis. Convert that variable to character or factor. You can use &lt;code&gt;mutate&lt;/code&gt; along with &lt;code&gt;as.character&lt;/code&gt; or &lt;code&gt;as.factor&lt;/code&gt;.&lt;br&gt;
-2.) For the formatting, try &lt;code&gt;theme_classic()&lt;/code&gt; 3.) The title and axis labels can be specified with &lt;code&gt;labs()&lt;/code&gt;, among other options. &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br&gt; For the boxplot, R initially interprets the &lt;em&gt;year&lt;/em&gt; variable as a continuous variable. Boxplots need a discrete x axis. Convert that variable to character or factor. You can use &lt;code&gt;mutate&lt;/code&gt; along with &lt;code&gt;as.character&lt;/code&gt; or &lt;code&gt;as.factor&lt;/code&gt;. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint 2&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; For the formatting, try &lt;code&gt;theme_classic()&lt;/code&gt; &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint 3&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; The title and axis labels can be specified with &lt;code&gt;labs()&lt;/code&gt;, among other options. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint 4&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt; To get the &amp;lsquo;A&amp;rsquo; and &amp;lsquo;B&amp;rsquo; plot annotations, check out the help page for the &lt;a href=&#34;https://patchwork.data-imaginist.com/reference/plot_annotation.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;plot_annotation()&lt;/code&gt;&lt;/a&gt; function within &lt;em&gt;patchwork&lt;/em&gt;. &lt;br&gt;&lt;/p&gt;
 &lt;/details&gt;
 &lt;details&gt;
 &lt;summary&gt;
@@ -6560,7 +6630,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-957364128&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-642518937&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6570,7 +6640,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-957364128&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-642518937&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6646,7 +6716,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-946715823&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-436957218&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6656,7 +6726,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-946715823&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-436957218&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6677,7 +6747,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-156824793&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-538421769&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6687,7 +6757,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-156824793&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-538421769&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6714,7 +6784,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-135648792&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-713425869&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6724,7 +6794,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-135648792&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-713425869&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6751,7 +6821,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-895263174&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-724698315&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6761,7 +6831,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-895263174&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-724698315&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6784,7 +6854,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-914725368&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-976432518&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6794,7 +6864,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-914725368&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-976432518&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6835,7 +6905,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-196287534&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-176539428&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6845,7 +6915,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-196287534&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-176539428&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6864,7 +6934,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-459731862&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-716542938&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6874,7 +6944,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-459731862&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-716542938&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6900,7 +6970,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-618457932&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-265493781&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6910,7 +6980,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-618457932&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-265493781&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6940,7 +7010,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-193456728&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-562849317&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6950,7 +7020,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-193456728&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-562849317&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7164,7 +7234,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-469518327&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-975426813&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7174,7 +7244,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-469518327&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-975426813&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7235,7 +7305,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-589174362&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-782461935&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7245,7 +7315,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-589174362&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-782461935&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7320,7 +7390,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-813659472&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-719328465&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7330,7 +7400,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-813659472&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-719328465&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
