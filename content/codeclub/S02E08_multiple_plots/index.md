@@ -5,7 +5,7 @@ authors: [mike-sovic]
 date: "2021-10-19"
 output: hugodown::md_document
 toc: true
-rmd_hash: bdbb04aabd711ff0
+rmd_hash: 187f282806da5bfa
 
 ---
 
@@ -244,7 +244,7 @@ There are some facets coming through in that last plot that are based on NA's. T
 
 </div>
 
-# Exercise 3: Axis Scales
+#### Exercise 3: Axis Scales
 
 <div class="puzzle">
 
@@ -255,16 +255,13 @@ Now let's go back to the full dataset where we faceted by species. The code we u
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='s'>"species"</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
 
 </code></pre>
 <img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" />
@@ -404,6 +401,7 @@ Below is an example from *palmerpenguins*. First we create the plots, saving eac
   <span class='nf'>ggtitle</span><span class='o'>(</span><span class='s'>"Effect of Sex on Penguin Size"</span><span class='o'>)</span>
 
 <span class='nv'>lgth_by_depth</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
@@ -420,10 +418,6 @@ Then we simply use the patchwork syntax to define how these 3 plots will be arra
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>lgth_by_depth</span> <span class='o'>/</span> <span class='o'>(</span><span class='nv'>avg_island_lgth</span> <span class='o'>+</span> <span class='nv'>mass_by_sex</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
 
 </code></pre>
 <img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" />
