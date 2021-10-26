@@ -32,7 +32,7 @@
 &lt;p&gt;We&amp;rsquo;ll continue with our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this&amp;hellip;&lt;/p&gt;
 &lt;p&gt;1.) You create a plot that needs to be subdivided according to some variable, possibly because accounting for that variable is important for the interpretation, or maybe there&amp;rsquo;s just too much on one plot and it helps to split the data up according to some factor.&lt;/p&gt;
 &lt;p&gt;2.) You have a series of different plots that all address some related question, maybe each in a slightly different way, and you want to present them all in one figure.&lt;/p&gt;
-&lt;p&gt;We&amp;rsquo;ll take a couple approaches during today&amp;rsquo;s session to deal with these two scenarios. First, we&amp;rsquo;ll look at some &lt;em&gt;ggplot&lt;/em&gt; functions like &lt;code&gt;facet_wrap()&lt;/code&gt; and &lt;code&gt;facet_grid()&lt;/code&gt; that allow us to easily deal with scenario 1. Then we&amp;rsquo;ll try a separate package, &lt;em&gt;patchwork&lt;/em&gt;, that provides one good option for scenario 2.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll take a couple approaches during this and next week&amp;rsquo;s sessions to deal with these two scenarios. Today we&amp;rsquo;ll look at some &lt;em&gt;ggplot&lt;/em&gt; functions like &lt;code&gt;facet_wrap()&lt;/code&gt; and &lt;code&gt;facet_grid()&lt;/code&gt; that allow us to easily deal with scenario 1. Then in the next session we&amp;rsquo;ll try a separate package, &lt;em&gt;patchwork&lt;/em&gt;, that offers one good option for scenario 2.&lt;/p&gt;
 &lt;p&gt;Like in previous sessions, we&amp;rsquo;ll use some packages from the &lt;em&gt;tidyverse&lt;/em&gt; and also the &lt;em&gt;palmerpenguins&lt;/em&gt; dataset. If you haven&amp;rsquo;t installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (&lt;a href=&#34;https://rdrr.io/r/base/library.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library()&lt;/code&gt;&lt;/a&gt;) to load them for the current session.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
@@ -131,7 +131,7 @@
 &lt;/div&gt;
 &lt;p&gt;The effect here is similar to what we did with adding a color aesthetic to the &lt;em&gt;species&lt;/em&gt; variable earlier - it allows us to evaluate the relationship between bill length and bill depth for each species separately.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3 id=&#34;breakout-rooms-i-faceting&#34;&gt;Breakout Rooms I: Faceting&lt;/h3&gt;
+&lt;h3 id=&#34;breakout-rooms-faceting&#34;&gt;Breakout Rooms: Faceting&lt;/h3&gt;
 &lt;h4 id=&#34;exercise-1-analyze-adelie-penguins-by-island&#34;&gt;Exercise 1: Analyze Adelie Penguins By Island&lt;/h4&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
@@ -286,157 +286,7 @@
 &lt;/div&gt;
 &lt;br&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;3----grids&#34;&gt;3 &amp;ndash; Grids&lt;/h2&gt;
-&lt;p&gt;In the breakout room, we tried faceting by two variables. While you can do this, &lt;code&gt;facet_wrap()&lt;/code&gt; really is best suited for faceting on one variable. When you want to partition things based on more than one variable, &lt;code&gt;facet_grid()&lt;/code&gt; might be a better option. Below, I&amp;rsquo;ll create a plot similar to the one in the breakout room where we faceted on a combination of &lt;em&gt;island&lt;/em&gt; and &lt;em&gt;sex&lt;/em&gt;, but will do it with &lt;code&gt;facet_grid()&lt;/code&gt; instead&amp;hellip;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Adelie&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;facet_grid&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;rows &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;vars&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, cols &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;vars&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-12-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;p&gt;This plot&amp;rsquo;s a little cleaner than what we created with &lt;code&gt;facet_wrap()&lt;/code&gt;, which looked like&amp;hellip;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Adelie&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;facet_wrap&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;island&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;sex&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-13-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;4----multi-panel-plots-patchwork&#34;&gt;4 &amp;ndash; Multi-Panel Plots: Patchwork&lt;/h2&gt;
-&lt;p&gt;The faceting above works when you want to partition the plots based on one or more variables in the dataset. But if you want to arrange multiple plots into one figure, possibly even different types of plots, one good option is the &lt;em&gt;patchwork&lt;/em&gt; package. Let&amp;rsquo;s install and load it&amp;hellip;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;patchwork&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://patchwork.data-imaginist.com&#39;&gt;patchwork&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;With &lt;em&gt;patchwork&lt;/em&gt;, you create and save each plot as a separate object. Then, once you&amp;rsquo;ve made the plots, you just tell patchwork how to arrange them. The syntax to define the layout is based on common mathematical operators.&lt;/p&gt;
-&lt;p&gt;Some examples:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;plot1 + plot2&lt;/code&gt; puts two plots side-by-side&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;plot1 / plot2&lt;/code&gt; stacks two plots vertically&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;plot1 / (plot2 + plot3)&lt;/code&gt; gives plot1 on a top row, and plots 2 and 3 on a bottom row&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;In the examples above, &lt;em&gt;plot1&lt;/em&gt;, &lt;em&gt;plot2&lt;/em&gt;, and &lt;em&gt;plot3&lt;/em&gt; represent plots that have been saved as objects with those names.&lt;/p&gt;
-&lt;p&gt;Below is an example from &lt;em&gt;palmerpenguins&lt;/em&gt;. First we create the plots, saving each as a new object&amp;hellip;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;avg_island_lgth&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;group_by&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;summarize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mean_bill_length&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mean_bill_length&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_col&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggtitle&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Average Penguin Bill Length&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
-&lt;span class=&#39;nv&#39;&gt;mass_by_sex&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_boxplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggtitle&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Effect of Sex on Penguin Size&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
-&lt;span class=&#39;nv&#39;&gt;lgth_by_depth&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;facet_wrap&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggtitle&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Relationship Between Bill Length and Bill Depth&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;Then we simply use the patchwork syntax to define how these 3 plots will be arranged. In this case, the first (faceted) plot on top, with the other two side-by-side below it&amp;hellip;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;lgth_by_depth&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;avg_island_lgth&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mass_by_sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; `geom_smooth()` using formula &#39;y ~ x&#39;&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-17-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;hr&gt;
-&lt;h3 id=&#34;breakout-rooms-ii-combining-plots&#34;&gt;Breakout Rooms II: Combining Plots&lt;/h3&gt;
-&lt;div class=&#34;puzzle&#34;&gt;
-&lt;div&gt;
-&lt;p&gt;Use the palmerpenguin data to try to create the plot below&amp;hellip;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-18-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;details&gt;
-&lt;summary&gt;
-&lt;b&gt;Hint 1&lt;/b&gt; (click here)
-&lt;/summary&gt;
-&lt;p&gt;&lt;br&gt; For the boxplot, R initially interprets the &lt;em&gt;year&lt;/em&gt; variable as a continuous variable. Boxplots need a discrete x axis. Convert that variable to character or factor. You can use &lt;code&gt;mutate&lt;/code&gt; along with &lt;code&gt;as.character&lt;/code&gt; or &lt;code&gt;as.factor&lt;/code&gt;. &lt;br&gt;&lt;/p&gt;
-&lt;/details&gt;
-&lt;details&gt;
-&lt;summary&gt;
-&lt;b&gt;Hint 2&lt;/b&gt; (click here)
-&lt;/summary&gt;
-&lt;p&gt;&lt;br&gt; For the formatting, try &lt;code&gt;theme_classic()&lt;/code&gt; &lt;br&gt;&lt;/p&gt;
-&lt;/details&gt;
-&lt;details&gt;
-&lt;summary&gt;
-&lt;b&gt;Hint 3&lt;/b&gt; (click here)
-&lt;/summary&gt;
-&lt;p&gt;&lt;br&gt; The title and axis labels can be specified with &lt;code&gt;labs()&lt;/code&gt;, among other options. &lt;br&gt;&lt;/p&gt;
-&lt;/details&gt;
-&lt;details&gt;
-&lt;summary&gt;
-&lt;b&gt;Hint 4&lt;/b&gt; (click here)
-&lt;/summary&gt;
-&lt;p&gt;&lt;br&gt; To get the &amp;lsquo;A&amp;rsquo; and &amp;lsquo;B&amp;rsquo; plot annotations, check out the help page for the &lt;a href=&#34;https://patchwork.data-imaginist.com/reference/plot_annotation.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;plot_annotation()&lt;/code&gt;&lt;/a&gt; function within &lt;em&gt;patchwork&lt;/em&gt;. &lt;br&gt;&lt;/p&gt;
-&lt;/details&gt;
-&lt;details&gt;
-&lt;summary&gt;
-&lt;b&gt;Solution&lt;/b&gt; (click here)
-&lt;/summary&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_flipper&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;facet_wrap&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_smooth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;lm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;theme_classic&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Relationship Between Bill Length and Flipper Length&#34;&lt;/span&gt;,
-       x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Bill Length (mm)&#34;&lt;/span&gt;,
-       y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Flipper Length (mm)&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-  
-&lt;span class=&#39;nv&#39;&gt;mass_yr&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;mutate&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;year&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/character.html&#39;&gt;as.character&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;year&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;year&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;geom_boxplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; 
-  &lt;span class=&#39;nf&#39;&gt;theme_classic&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Penguin Size Over Time&#34;&lt;/span&gt;,
-       x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Body Mass (g)&#34;&lt;/span&gt;,
-       y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Year&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-
-&lt;span class=&#39;nv&#39;&gt;bill_flipper&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mass_yr&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; 
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://patchwork.data-imaginist.com/reference/plot_annotation.html&#39;&gt;plot_annotation&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;tag_levels &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#39;A&#39;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/details&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;br&gt;
-&lt;hr&gt;
+&lt;p&gt;In next week&amp;rsquo;s session, we&amp;rsquo;ll use &lt;code&gt;facet_grid()&lt;/code&gt;, which has some similarities to &lt;code&gt;facet_wrap()&lt;/code&gt;, and then check out the &lt;em&gt;patchwork&lt;/em&gt; package, which gives you more control over how multiple plots are combined in a single figure.&lt;/p&gt;
 </description>
     </item>
     
