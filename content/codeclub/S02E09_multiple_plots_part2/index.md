@@ -1,11 +1,11 @@
 ---
 title: "Code Club S02E09: Combining Plots - Part 2"
-summary: "In a continuation from the previous session, we'll look at additional approaches for combining plotsk with a focus on `facet_grid()` and the *patchwork* package."  
+summary: "In a continuation from the previous session, we'll look at additional approaches for combining plots with a focus on `facet_grid()` and the *patchwork* package."  
 authors: [mike-sovic]
 date: "2021-10-26"
 output: hugodown::md_document
 toc: true
-rmd_hash: 09640f767fba1295
+rmd_hash: b2c9369c9ab834b4
 
 ---
 
@@ -14,8 +14,8 @@ rmd_hash: 09640f767fba1295
 ## Learning objectives
 
 > -   Continue to practice creating plots with ggplot
-> -   Compare the ggplot functions `facet_grid()` and `facet_wrap()`.
-> -   Arrange multiple plots of different types on a single figure.
+> -   Compare the ggplot functions `facet_grid()` and `facet_wrap()`
+> -   Arrange multiple plots of different types on a single figure
 
 <br>
 
@@ -23,7 +23,7 @@ rmd_hash: 09640f767fba1295
 
 ## 1 -- Intro
 
-In the previous session we worked with the `facet_wrap()` function from ggplot, which allowed us to use some variable (column) in the dataset to partition data in to multiple panels of a single plot. In this session, we'll see how the `facet_wrap()` approach compares to a similar function, `facet_grid()`, and then also explore the package *patchwork* which offers more control and flexibility in arranging multiple plots in a single figure.
+In the previous session we worked with the `facet_wrap()` function from ggplot, which allowed us to use some variable (column) in the dataset to partition data into multiple panels of a single plot. In this session, we'll see how the `facet_wrap()` approach compares to a similar function, `facet_grid()`, and also explore the *patchwork* package, which offers more control and flexibility in arranging multiple plots in a single figure.
 
 We'll continue to use *tidyverse* functions and data from *palmerpenguins*, so install those if you need to. If you already have them installed, just load them into your current R session with the [`library()`](https://rdrr.io/r/base/library.html) functions below...
 
