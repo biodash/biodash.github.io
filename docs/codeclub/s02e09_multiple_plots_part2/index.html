@@ -33,10 +33,10 @@
   
     
   
-  <meta name="description" content="Now that we&#39;ve gotten a feel for creating plots, we&#39;ll look at how they can be arranged to include multiple plots in a single figure." />
+  <meta name="description" content="In a continuation from the previous session, we&#39;ll look at additional approaches for combining plotsk with a focus on `facet_grid()` and the *patchwork* package." />
 
   
-  <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s02e08_multiple_plots/" />
+  <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/" />
 
   
 
@@ -314,7 +314,7 @@
   <link rel="icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_32x32_fill_lanczos_center_2.png" />
   <link rel="apple-touch-icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_180x180_fill_lanczos_center_2.png" />
 
-  <link rel="canonical" href="https://biodash.github.io/codeclub/s02e08_multiple_plots/" />
+  <link rel="canonical" href="https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/" />
 
   
   
@@ -331,18 +331,18 @@
   <meta property="twitter:card" content="summary" />
   
   <meta property="og:site_name" content="BioDASH" />
-  <meta property="og:url" content="https://biodash.github.io/codeclub/s02e08_multiple_plots/" />
-  <meta property="og:title" content="Code Club S02E08: Combining Plots | BioDASH" />
-  <meta property="og:description" content="Now that we&#39;ve gotten a feel for creating plots, we&#39;ll look at how they can be arranged to include multiple plots in a single figure." /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
+  <meta property="og:url" content="https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/" />
+  <meta property="og:title" content="Code Club S02E09: Combining Plots - Part 2 | BioDASH" />
+  <meta property="og:description" content="In a continuation from the previous session, we&#39;ll look at additional approaches for combining plotsk with a focus on `facet_grid()` and the *patchwork* package." /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
     <meta property="twitter:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" /><meta property="og:locale" content="en-us" />
   
     
       <meta
         property="article:published_time"
-        content="2021-10-19T00:00:00&#43;00:00"
+        content="2021-10-26T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2021-10-26T14:42:15-04:00">
+    <meta property="article:modified_time" content="2021-10-26T14:47:40-04:00">
   
 
   
@@ -358,11 +358,11 @@
 
 
 
-  <title>Code Club S02E08: Combining Plots | BioDASH</title>
+  <title>Code Club S02E09: Combining Plots - Part 2 | BioDASH</title>
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="803100179d0db591e042f5c7dc41eb7e" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="b5bc6d9b231f1f1d1f663e1a2237ebdc" >
 
   
   
@@ -739,9 +739,15 @@
   <ul>
     <li><a href="#learning-objectives">Learning objectives</a></li>
     <li><a href="#1----intro">1 &ndash; Intro</a></li>
-    <li><a href="#2----faceting">2 &ndash; Faceting</a>
+    <li><a href="#2----review-of-facet_wrap">2 &ndash; Review Of <code>facet_wrap()</code></a></li>
+    <li><a href="#3----facet_grid">3 &ndash; <code>facet_grid()</code></a>
       <ul>
-        <li><a href="#breakout-rooms-faceting">Breakout Rooms: Faceting</a></li>
+        <li><a href="#breakout-rooms-i-facet-grids">Breakout Rooms I: Facet Grids</a></li>
+      </ul>
+    </li>
+    <li><a href="#4----multi-panel-plots-patchwork">4 &ndash; Multi-Panel Plots: Patchwork</a>
+      <ul>
+        <li><a href="#breakout-rooms-ii-combining-plots">Breakout Rooms II: Combining Plots</a></li>
       </ul>
     </li>
   </ul>
@@ -771,7 +777,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>Code Club S02E08: Combining Plots</h1>
+  <h1>Code Club S02E09: Combining Plots - Part 2</h1>
 
   
 
@@ -836,18 +842,15 @@
 <blockquote>
 <ul>
 <li>Continue to practice creating plots with ggplot</li>
-<li>Use faceting to divide a plot into multiple panels according to some variable.</li>
+<li>Compare the ggplot functions <code>facet_grid()</code> and <code>facet_wrap()</code>.</li>
 <li>Arrange multiple plots of different types on a single figure.</li>
 </ul>
 </blockquote>
 <br>
 <hr>
 <h2 id="1----intro">1 &ndash; Intro</h2>
-<p>We&rsquo;ll continue with our theme on plotting by exploring some options for arranging multiple plots on a single figure. A couple scenarios where you might want to do this&hellip;</p>
-<p>1.) You create a plot that needs to be subdivided according to some variable, possibly because accounting for that variable is important for the interpretation, or maybe there&rsquo;s just too much on one plot and it helps to split the data up according to some factor.</p>
-<p>2.) You have a series of different plots that all address some related question, maybe each in a slightly different way, and you want to present them all in one figure.</p>
-<p>We&rsquo;ll take a couple approaches during this and next week&rsquo;s sessions to deal with these two scenarios. Today we&rsquo;ll look at some <em>ggplot</em> functions like <code>facet_wrap()</code> and <code>facet_grid()</code> that allow us to easily deal with scenario 1. Then in the next session we&rsquo;ll try a separate package, <em>patchwork</em>, that offers one good option for scenario 2.</p>
-<p>Like in previous sessions, we&rsquo;ll use some packages from the <em>tidyverse</em> and also the <em>palmerpenguins</em> dataset. If you haven&rsquo;t installed either of those yet, you can do so with the following commands. If you installed them previously, you can just run the latter of the commands (<a href="https://rdrr.io/r/base/library.html" target="_blank" rel="noopener"><code>library()</code></a>) to load them for the current session.</p>
+<p>In the previous session we worked with the <code>facet_wrap()</code> function from ggplot, which allowed us to use some variable (column) in the dataset to partition data in to multiple panels of a single plot. In this session, we&rsquo;ll see how the <code>facet_wrap()</code> approach compares to a similar function, <code>facet_grid()</code>, and then also explore the package <em>patchwork</em> which offers more control and flexibility in arranging multiple plots in a single figure.</p>
+<p>We&rsquo;ll continue to use <em>tidyverse</em> functions and data from <em>palmerpenguins</em>, so install those if you need to. If you already have them installed, just load them into your current R session with the <a href="https://rdrr.io/r/base/library.html" target="_blank" rel="noopener"><code>library()</code></a> functions below&hellip;</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"palmerpenguins"</span><span class='o'>)</span>
@@ -893,136 +896,77 @@
 <span class='c'>#&gt;  NA's   :2         NA's   :2</span>
 </code></pre>
 </div>
-<h2 id="2----faceting">2 &ndash; Faceting</h2>
-<p>Let&rsquo;s start by revisiting some plots Michael Broe created in his intro to ggplot a couple sessions ago. He was using the plots to investigate whether a relationship exists between the variables <em>bill length</em> and <em>bill depth</em> in these penguins. A scatterplot with a line of best fit from <em>ggplot</em>&hellip;</p>
+<h2 id="2----review-of-facet_wrap">2 &ndash; Review Of <code>facet_wrap()</code></h2>
+<p>Last week we started with a plot Michael Broe had previously constructed&hellip;</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
-  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span>
-
-<span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
-
-</code></pre>
-<p><img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<p>As Michael pointed out previously, mapping an additional aesthetic (color) to the variable <em>species</em> helps us see a relationship a little more clearly&hellip;</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
-<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>We then used <code>facet_wrap()</code> to present the data for the three species in separate panels, in place of using color&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nf'>vars</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
 
-<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
+<span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
 </code></pre>
 <p><img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>The color aesthetic partitions the data according to some variable (in this case, species), and here helps add important information to the visualization. An alternative might be to plot the data in separate panels, with each corresponding to a different species. We can do that with either of two functions from ggplot, <code>facet_wrap()</code> or <code>facet_grid()</code>. Let&rsquo;s start with <code>facet_wrap()</code>. This is added as an additional layer to the plot, and indicates one or more variables that will be used to split the data into separate panels. I&rsquo;ll facet here by species.</p>
+<p>Then as part of the breakout rooms, we tried faceting on more than one variable - we subsetted the dataset for only Adelie penguins, then plotted the relationship between bill length and bill depth faceted across both <em>island</em> and <em>sex</em>&hellip;</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='s'>"species"</span><span class='o'>)</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nf'>vars</span><span class='o'>(</span><span class='nv'>island</span>, <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
 
 </code></pre>
 <p><img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>The effect here is similar to what we did with adding a color aesthetic to the <em>species</em> variable earlier - it allows us to evaluate the relationship between bill length and bill depth for each species separately.</p>
-<hr>
-<h3 id="breakout-rooms-faceting">Breakout Rooms: Faceting</h3>
-<h4 id="exercise-1-analyze-adelie-penguins-by-island">Exercise 1: Analyze Adelie Penguins By Island</h4>
-<div class="puzzle">
-<div>
-<p>Try analyzing the relationship between bill length and bill depth for just the Adelie penguins (the only species with observations from each of the three islands). For this species, try faceting by island. Does the relationship seem to be consistent across all islands?</p>
-<details>
-<summary>
-<b>Hint</b> (click here)
-</summary>
-<p><br> Use <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> to select out Adelie penguins, then create a plot similar to the one in the example, but facet on <em>island</em> instead of <em>species</em> <br></p>
-</details>
-<details>
-<summary>
-<b>Solution</b> (click here)
-</summary>
+<h2 id="3----facet_grid">3 &ndash; <code>facet_grid()</code></h2>
+<p>While you can use <code>facet_wrap()</code> as above, <code>facet_grid()</code> is often a better option when faceting on two variables. Here&rsquo;s what the example above looks like with <code>facet_grid()</code>&hellip;</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='s'>"island"</span><span class='o'>)</span>
+  <span class='nf'>facet_grid</span><span class='o'>(</span>rows <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>sex</span><span class='o'>)</span>, cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>island</span><span class='o'>)</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 1 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 1 rows containing missing values (geom_point).</span>
 
 </code></pre>
 <p><img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-</details>
-</div>
-</div>
-<h4 id="exercise-2a-multiple-facets">Exercise 2a: Multiple Facets</h4>
+<p>Notice that with <code>facet_grid()</code> we specify which variable defines the rows and which variable defines the columns.</p>
+<hr>
+<h3 id="breakout-rooms-i-facet-grids">Breakout Rooms I: Facet Grids</h3>
+<h4 id="exercise-1">Exercise 1</h4>
 <div class="puzzle">
 <div>
-<p>Now building on the plot you just created for Adelie Penguins, what if you wanted to facet on not just <em>island</em>, but a combination of <em>island</em> and <em>sex</em>? Give it a try.</p>
+<p>Try analyzing the relationship between Adelie penguin bill length and bill depth separately for each combination of <em>year</em> and <em>sex</em>. Make the columns represent male/female, and the rows represent the different years (in this case, 2007-2009).</p>
 <details>
 <summary>
 <b>Hint</b> (click here)
 </summary>
-<p><br> <code>facet_wrap()</code> accepts a character vector of column names. Use the c() function to provide a vector with two column names. <br></p>
-</details>
-<details>
-<summary>
-<b>Solution</b> (click here)
-</summary>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
-  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
-  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"island"</span>, <span class='s'>"sex"</span><span class='o'>)</span><span class='o'>)</span>
-
-<span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 1 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 1 rows containing missing values (geom_point).</span>
-
-</code></pre>
-<p><img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-</details>
-</div>
-</div>
-<h4 id="exercise-2b-multiple-facets">Exercise 2b: Multiple Facets</h4>
-<div class="puzzle">
-<div>
-<p>There are some facets coming through in that last plot that are based on NA&rsquo;s. Try getting rid of all observations that include missing data before creating the plot.</p>
-<details>
-<summary>
-<b>Hint</b> (click here)
-</summary>
-<p><br> Use the <code>drop_na()</code> function to remove observations with NA before calling ggplot. <br></p>
+<p><br> Use <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> to select out Adelie penguins, then create a scatter plot similar to the one in the <code>facet_grid()</code> example. Assign the rows as <em>year</em> and the columns as <em>sex</em>. <br></p>
 </details>
 <details>
 <summary>
@@ -1035,7 +979,39 @@
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"island"</span>, <span class='s'>"sex"</span><span class='o'>)</span><span class='o'>)</span>
+  <span class='nf'>facet_grid</span><span class='o'>(</span>rows <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span>, cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
+
+</code></pre>
+<p><img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+</div>
+</div>
+<h4 id="exercise-2">Exercise 2</h4>
+<div class="puzzle">
+<div>
+<p>Now let&rsquo;s modify the plot you just created a bit. Add the title &ldquo;Bill Dimensions Of Adelie Penguins&rdquo;, and move the year labels from the right side to the left side of the plot.</p>
+<details>
+<summary>
+<b>Hint</b> (click here)
+</summary>
+<p><br> Check out the <em>switch</em> option in the <code>facet_grid()</code> documentation for moving the year labels. For the title, consider <code>labs()</code> or <code>ggtitle()</code>. <br></p>
+</details>
+<details>
+<summary>
+<b>Solution</b> (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_grid</span><span class='o'>(</span>rows <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span>, cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>sex</span><span class='o'>)</span>, switch <span class='o'>=</span> <span class='s'>"y"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>ggtitle</span><span class='o'>(</span><span class='s'>"Bill Dimensions Of Adelie Penguins"</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
@@ -1045,62 +1021,132 @@
 </details>
 </div>
 </div>
-<h4 id="exercise-3-axis-scales">Exercise 3: Axis Scales</h4>
-<div class="puzzle">
-<div>
-<p>Now let&rsquo;s go back to the full dataset where we faceted by species. The code we used (with the <code>drop_na</code> function added), along with its associated plot, are below&hellip;</p>
+<hr>
+<h2 id="4----multi-panel-plots-patchwork">4 &ndash; Multi-Panel Plots: Patchwork</h2>
+<p>Faceting with <code>facet_wrap()</code> or <code>facet_grid()</code> works when you want to partition the plots based on one or more variables in the dataset. But if you want to arrange multiple plots into one figure, possibly even different types of plots, one good option is the <em>patchwork</em> package. Let&rsquo;s install and load it&hellip;</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"patchwork"</span><span class='o'>)</span>
+</code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://patchwork.data-imaginist.com'>patchwork</a></span><span class='o'>)</span>
+</code></pre>
+</div>
+<p>With <em>patchwork</em>, you create and save each plot as a separate object. Then, once you&rsquo;ve made the plots, you just tell patchwork how to arrange them. The syntax to define the layout is based on common mathematical operators.</p>
+<p>Some examples:</p>
+<ul>
+<li><code>plot1 + plot2</code> puts two plots side-by-side</li>
+<li><code>plot1 / plot2</code> stacks two plots vertically</li>
+<li><code>plot1 / (plot2 + plot3)</code> gives plot1 on a top row, and plots 2 and 3 on a bottom row</li>
+</ul>
+<p>In the examples above, <em>plot1</em>, <em>plot2</em>, and <em>plot3</em> represent plots that have been saved as objects with those names.</p>
+<p>Below is an example from <em>palmerpenguins</em>. First we create the plots, saving each as a new object&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>avg_island_lgth</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>group_by</span><span class='o'>(</span><span class='nv'>island</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>summarize</span><span class='o'>(</span><span class='s'>"mean_bill_length"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>island</span>, y <span class='o'>=</span> <span class='nv'>mean_bill_length</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>ggtitle</span><span class='o'>(</span><span class='s'>"Average Penguin Bill Length"</span><span class='o'>)</span>
+
+<span class='nv'>mass_by_sex</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sex</span>, y <span class='o'>=</span> <span class='nv'>body_mass_g</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>ggtitle</span><span class='o'>(</span><span class='s'>"Effect of Sex on Penguin Size"</span><span class='o'>)</span>
+
+<span class='nv'>lgth_by_depth</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
   <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='s'>"species"</span><span class='o'>)</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='s'>"species"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>ggtitle</span><span class='o'>(</span><span class='s'>"Relationship Between Bill Length and Bill Depth"</span><span class='o'>)</span>
+</code></pre>
+</div>
+<p>Then we simply use the patchwork syntax to define how these 3 plots will be arranged. In this case, the first (faceted) plot on top, with the other two side-by-side below it&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>lgth_by_depth</span> <span class='o'>/</span> <span class='o'>(</span><span class='nv'>avg_island_lgth</span> <span class='o'>+</span> <span class='nv'>mass_by_sex</span><span class='o'>)</span>
 
 <span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
 
 </code></pre>
-<p><img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>Use the help page for <code>facet_wrap</code> to look in to the <em>scales</em> option. Try changing the value of this option to see what effect it has on the plot.</p>
+<hr>
+<h3 id="breakout-rooms-ii-combining-plots">Breakout Rooms II: Combining Plots</h3>
+<div class="puzzle">
+<div>
+<p>Use the palmerpenguin data to try to create the plot below&hellip;</p>
+<div class="highlight">
+<p><img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
 <details>
 <summary>
-<b>Hint 1</b> (click here)
+<b>Hint 1 (Boxplot)</b> (click here)
 </summary>
-<p><br> Use <code>?facet_wrap</code> to get the help page for the function, and find information about the <em>scales</em> option. <br></p>
+<p><br> For the boxplot, use <code>geom_boxplot()</code>. <br></p>
 </details>
 <details>
 <summary>
-<b>Hint 2</b> (click here)
+<b>Hint 2 (Boxplot)</b> (click here)
 </summary>
-<p><br> Within the <code>facet_wrap()</code> function, set scales = &ldquo;free_y&rdquo;. <br></p>
+<p><br> Notice that R initially interprets the <em>year</em> variable as a continuous variable, but boxplots need a discrete x axis. Convert that variable to character or factor. You can use <code>mutate</code> along with <code>as.character</code> or <code>as.factor</code>. <br></p>
+</details>
+<details>
+<summary>
+<b>Hint 3 (Plot Formatting)</b> (click here)
+</summary>
+<p><br> For the formatting, try <code>theme_classic()</code> <br></p>
+</details>
+<details>
+<summary>
+<b>Hint 4 (Labels 1)</b> (click here)
+</summary>
+<p><br> The title and axis labels can be specified with <code>labs()</code>, among other options. <br></p>
+</details>
+<details>
+<summary>
+<b>Hint 5 (Labels 2)</b> (click here)
+</summary>
+<p><br> To get the &lsquo;A&rsquo; and &lsquo;B&rsquo; plot annotations, check out the help page for the <a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" target="_blank" rel="noopener"><code>plot_annotation()</code></a> function within <em>patchwork</em>. <br></p>
 </details>
 <details>
 <summary>
 <b>Solution</b> (click here)
 </summary>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
-  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_flipper</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>flipper_length_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='s'>"species"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_smooth</span><span class='o'>(</span>method <span class='o'>=</span> <span class='s'>"lm"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'>facet_wrap</span><span class='o'>(</span><span class='s'>"species"</span>, scales <span class='o'>=</span> <span class='s'>"free"</span><span class='o'>)</span>
+  <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Relationship Between Bill Length and Flipper Length"</span>,
+       x <span class='o'>=</span> <span class='s'>"Bill Length (mm)"</span>,
+       y <span class='o'>=</span> <span class='s'>"Flipper Length (mm)"</span><span class='o'>)</span>
+  
+<span class='nv'>mass_yr</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>mutate</span><span class='o'>(</span><span class='s'>"year"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>body_mass_g</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span> 
+  <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Penguin Size Over Time"</span>,
+       x <span class='o'>=</span> <span class='s'>"Body Mass (g)"</span>,
+       y <span class='o'>=</span> <span class='s'>"Year"</span><span class='o'>)</span>
 
-<span class='c'>#&gt; `geom_smooth()` using formula 'y ~ x'</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing non-finite values (stat_smooth).</span>
-
-<span class='c'>#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span>
-
+<span class='nv'>bill_flipper</span> <span class='o'>/</span> <span class='nv'>mass_yr</span> <span class='o'>+</span> 
+  <span class='nf'><a href='https://patchwork.data-imaginist.com/reference/plot_annotation.html'>plot_annotation</a></span><span class='o'>(</span>tag_levels <span class='o'>=</span> <span class='s'>'A'</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </details>
 </div>
 </div>
 <br>
 <hr>
-<p>In next week&rsquo;s session, we&rsquo;ll use <code>facet_grid()</code>, which has some similarities to <code>facet_wrap()</code>, and then check out the <em>patchwork</em> package, which gives you more control over how multiple plots are combined in a single figure.</p>
 
                     </div>
 
@@ -1126,7 +1172,7 @@
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s02e08_multiple_plots/&amp;text=Code%20Club%20S02E08:%20Combining%20Plots" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/&amp;text=Code%20Club%20S02E09:%20Combining%20Plots%20-%20Part%202" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -1139,7 +1185,7 @@
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s02e08_multiple_plots/&amp;t=Code%20Club%20S02E08:%20Combining%20Plots" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/&amp;t=Code%20Club%20S02E09:%20Combining%20Plots%20-%20Part%202" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -1152,7 +1198,7 @@
       
       
       <li>
-        <a href="mailto:?subject=Code%20Club%20S02E08:%20Combining%20Plots&amp;body=https://biodash.github.io/codeclub/s02e08_multiple_plots/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Code%20Club%20S02E09:%20Combining%20Plots%20-%20Part%202&amp;body=https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -1165,7 +1211,7 @@
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s02e08_multiple_plots/&amp;title=Code%20Club%20S02E08:%20Combining%20Plots" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/&amp;title=Code%20Club%20S02E09:%20Combining%20Plots%20-%20Part%202" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -1178,7 +1224,7 @@
       
       
       <li>
-        <a href="whatsapp://send?text=Code%20Club%20S02E08:%20Combining%20Plots%20https://biodash.github.io/codeclub/s02e08_multiple_plots/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=Code%20Club%20S02E09:%20Combining%20Plots%20-%20Part%202%20https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -1191,7 +1237,7 @@
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s02e08_multiple_plots/&amp;title=Code%20Club%20S02E08:%20Combining%20Plots" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/&amp;title=Code%20Club%20S02E09:%20Combining%20Plots%20-%20Part%202" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -1312,15 +1358,9 @@
                         
                         
                         <span class="previous-link">
-                            <a href="https://biodash.github.io/codeclub/s02e07_ggplot2_part2/">← S02E07: Intro to ggplot2 (part 2)</a>
+                            <a href="https://biodash.github.io/codeclub/s02e08_multiple_plots/">← Code Club S02E08: Combining Plots</a>
                         </span>
                         
-                        
-                        
-                        
-                        <span class="next-link">
-                            <a href="https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/">Code Club S02E09: Combining Plots - Part 2 →</a>
-                        </span>
                         
                         
                     </div>
