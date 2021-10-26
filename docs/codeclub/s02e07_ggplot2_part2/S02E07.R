@@ -3,7 +3,13 @@
 
 # 1 - A GEOM FOR BOXPLOTS ---------------------------------
 
+## Taking a look at the dataframe
+
+
 ## Our first attempt at a boxplot
+
+
+## Checking what the warning is about
 
 
 ## A separate box for each species
@@ -33,6 +39,9 @@ ggplot(data = penguins,
 
 ## Good code
 
+
+## Violin plot
+a
 
 # 3 - INTRO TO FORMATTING PLOTS -------------------------
 
