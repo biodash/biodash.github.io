@@ -2,11 +2,11 @@
 title: "Code Club S02E10: An introduction to ggpubr"
 summary: "In this session wil be exploring one of the most powerful ggplot extension, ggpubr. We will take a look on how to add statistical results to a comparison plot"  
 authors: [Daniel Quiroz]
-date: "2021-11-04"
-lastmod: "2021-11-04"
+date: "2021-11-03"
+lastmod: "2021-11-03"
 output: hugodown::md_document
 toc: true
-rmd_hash: cafe6e23e577d563
+rmd_hash: f8acca2ed1de7b07
 
 ---
 
@@ -90,7 +90,7 @@ To install the ggpubr package for the first time, you can use this command.
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
 <span class='c'>#&gt; Rows: 344</span>
 <span class='c'>#&gt; Columns: 8</span>
 <span class='c'>#&gt; $ species           <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span> Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…</span>
@@ -111,12 +111,12 @@ Therefore, we need to filter based on *species == Adelie* and *island == Biscoe*
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Filter by species and island</span>
-<span class='nv'>penguins_filtered</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/ggpubr/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span>, <span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Biscoe"</span><span class='o'>)</span>
+<span class='nv'>penguins_filtered</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span>, <span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Biscoe"</span><span class='o'>)</span>
 
 <span class='c'># Count the occurence of the factors levels of sex, species and island</span>
-<span class='nv'>penguins_filtered</span> <span class='o'><a href='https://rpkgs.datanovia.com/ggpubr/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span><span class='nv'>sex</span>, <span class='nv'>species</span>, <span class='nv'>island</span><span class='o'>)</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 2 x 4</span></span>
+<span class='nv'>penguins_filtered</span> <span class='o'>%&gt;%</span> <span class='nf'>count</span><span class='o'>(</span><span class='nv'>sex</span>, <span class='nv'>species</span>, <span class='nv'>island</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 2 × 4</span></span>
 <span class='c'>#&gt;   sex    species island     n</span>
 <span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>1</span> female Adelie  Biscoe    22</span>
@@ -130,8 +130,8 @@ One of the main difference between ggplot and ggpubr is the syntax to create the
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>penguins_filtered</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sex</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, fill <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>penguins_filtered</span>, <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sex</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, fill <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span><span class='o'>)</span>
 </code></pre>
 <img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
 
@@ -158,7 +158,7 @@ Now, since ggpubr has its own built-in geoms, the we can use the *ggboxplot()* f
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>base_plot</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggboxplot.html'>ggboxplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>penguins_filtered</span>, x <span class='o'>=</span> <span class='s'>"sex"</span>,
                        y <span class='o'>=</span> <span class='s'>"bill_depth_mm"</span>, fill <span class='o'>=</span> <span class='s'>"sex"</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Comparison between Adelie penguins by sex"</span>,
+  <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Comparison between Adelie penguins by sex"</span>,
        fill <span class='o'>=</span> <span class='s'>"Sex:"</span>, x <span class='o'>=</span> <span class='s'>"Sex"</span>, y <span class='o'>=</span> <span class='s'>"Bill depth (mm)"</span><span class='o'>)</span>
 <span class='nv'>base_plot</span>
 </code></pre>
@@ -220,8 +220,8 @@ In order to be 100% sure about the computed p-value, we can compute the Wilcoxon
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>penguins_filtered</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span><span class='nv'>sex</span>, <span class='nv'>bill_depth_mm</span>, fill <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span> <span class='nf'><a href='https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html'>stat_compare_means</a></span><span class='o'>(</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>penguins_filtered</span>, <span class='nf'>aes</span><span class='o'>(</span><span class='nv'>sex</span>, <span class='nv'>bill_depth_mm</span>, fill <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span> <span class='nf'>theme_bw</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span> <span class='nf'><a href='https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html'>stat_compare_means</a></span><span class='o'>(</span><span class='o'>)</span>
 </code></pre>
 <img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
 
@@ -264,9 +264,9 @@ Solution (click here)
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Using ggpubr</span>
 
-<span class='nv'>penguins_exc1</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/ggpubr/reference/pipe.html'>%&gt;%</a></span> 
+<span class='nv'>penguins_exc1</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
   <span class='c'># Filter by species and island</span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Chinstrap"</span>, <span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Dream"</span><span class='o'>)</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Chinstrap"</span>, <span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Dream"</span><span class='o'>)</span>
 
 <span class='nv'>exc1_plot</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggboxplot.html'>ggboxplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>penguins_exc1</span>, x <span class='o'>=</span> <span class='s'>"sex"</span>,
                        y <span class='o'>=</span> <span class='s'>"bill_depth_mm"</span>, fill <span class='o'>=</span> <span class='s'>"sex"</span><span class='o'>)</span> <span class='o'>+</span>
@@ -282,14 +282,14 @@ Solution (click here)
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Using ggplot only</span>
 
-<span class='nv'>penguins_exc1</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/ggpubr/reference/pipe.html'>%&gt;%</a></span> 
+<span class='nv'>penguins_exc1</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
   <span class='c'># Filter by species and island</span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Chinstrap"</span>, <span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Dream"</span><span class='o'>)</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Chinstrap"</span>, <span class='nv'>island</span> <span class='o'>==</span> <span class='s'>"Dream"</span><span class='o'>)</span>
 
-<span class='nv'>exc1_plot_ggplot</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>penguins_exc1</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span><span class='nv'>sex</span>, <span class='nv'>bill_depth_mm</span>, fill <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+<span class='nv'>exc1_plot_ggplot</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>penguins_exc1</span>, <span class='nf'>aes</span><span class='o'>(</span><span class='nv'>sex</span>, <span class='nv'>bill_depth_mm</span>, fill <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html'>stat_compare_means</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='o'>(</span><span class='o'>)</span>
+  <span class='nf'>theme_bw</span><span class='o'>(</span><span class='o'>)</span>
 
 <span class='nv'>exc1_plot_ggplot</span>
 </code></pre>
@@ -310,9 +310,9 @@ In the case of the penguins data we can find this layout if we need to compare t
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_male</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/ggpubr/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"male"</span><span class='o'>)</span>
-<span class='nv'>penguins_male</span> <span class='o'><a href='https://rpkgs.datanovia.com/ggpubr/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span> <span class='nv'>species</span>, <span class='nv'>sex</span><span class='o'>)</span>
-<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 x 3</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_male</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"male"</span><span class='o'>)</span>
+<span class='nv'>penguins_male</span> <span class='o'>%&gt;%</span> <span class='nf'>count</span><span class='o'>(</span> <span class='nv'>species</span>, <span class='nv'>sex</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 3</span></span>
 <span class='c'>#&gt;   species   sex       n</span>
 <span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'>1</span> Adelie    male     73</span>
@@ -396,9 +396,9 @@ Solution (click here)
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># Filtering by sex</span>
-<span class='nv'>penguins_exc2</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/ggpubr/reference/pipe.html'>%&gt;%</a></span> 
+<span class='nv'>penguins_exc2</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span> 
   <span class='c'># Filter by species and island</span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span>
 
 <span class='c'># Creating the base plot</span>
 <span class='nv'>exc2_plot</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggboxplot.html'>ggboxplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>penguins_exc2</span>, x <span class='o'>=</span> <span class='s'>"species"</span>,
