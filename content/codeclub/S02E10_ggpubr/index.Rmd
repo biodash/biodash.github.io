@@ -1,6 +1,6 @@
 ---
 title: "Code Club S02E10: An introduction to ggpubr"
-summary: "In this session wil be exploring one of the most powerful ggplot extension, ggpubr. We will take a look on how to add statistical results to a comparison plot"  
+summary: "In this session, we will be exploring one of the most powerful ggplot extensions, ggpubr. We will take a look at how to add statistical results to a comparison plot."  
 authors: [Daniel Quiroz]
 date: "2021-11-03"
 lastmod: "2021-11-03"
@@ -12,37 +12,46 @@ toc: true
 
 # Learning objectives
 
-> * Understand what is a ggplot extension
-> * Define what is ggpubr
-> * Recognize the advantages and drawback of ggpubr
-> * Create a density plot with ggpubr
+> * Understand what is a _ggplot_ extension
+> * Define what is _ggpubr_
+> * Recognize the advantages and drawback of _ggpubr_
+> * Create a density plot with _ggpubr_
 > * Add statistical results to density plots
 
 <br>
 
 ----
 
-## Understand what is a ggplot extension
+## Understand what is a _ggplot_ extension
 
-A ggplot extension is a set of functions that helps in the automation of a given
-task. In the case of ggplot extensions, there are 102 registered extensions
+A _ggplot_ extension is a set of functions that helps in the automation of a given
+task. In the case of _ggplot_ extensions, there are 102 registered extensions
 up today.
 
-ggplots extensions are developed based in the core of ggplot and helps to
+_ggplot_'s extensions are developed based on the core of _ggplot_ and help to
 create a customized plot with certain features such as animation, specific
 color scales, or to produce a ready to publish figure.
+
+The [_ggplot_ extensions website](https://exts.ggplot2.tidyverse.org/) has an overview
+of the available extensions:
 
 ```{r echo=FALSE, out.width="100%", out.height="10in"}
 knitr::include_url("https://exts.ggplot2.tidyverse.org/gallery/")
 ```
 
+<br>
 
-## Define what is ggpubr
+----
 
-ggpubr is an R package that produces ggplot-based plots with a more
-elegant aesthetic. Although ggpubr has default figures themes, plots usually
+## Define what is _ggpubr_
+
+_ggpubr_ is an R package that produces ggplot-based plots with a more
+elegant aesthetic. Although _ggpubr_ has default figures themes, plots usually
 require some formatting before sending them for publication.
 
+<br>
+
+----
 
 ## Getting everything ready
 
@@ -50,10 +59,10 @@ First, we can take a look at the data that we are going to use. In this case,
 since we are already familiar with *palmerpenguins* dataset, we are going
 to continue using this data.
 
-To remember the data structure, we can use the *glimpse* function.
+To remember the data structure, we can use the `glimpse` function.
 
----
-**WARNING**
+<div class="alert alert-warning">
+<div>
 
 If you do not have installed the palmergenguins library, you can do it with
 this line. If you already have it, skip this line.
@@ -68,27 +77,27 @@ To install the ggpubr package for the first time, you can use this command.
 install.packages("ggpubr")
 ```
 
+</div>
+</div>
 
 ---
 
 ### Loading all required packages
 
----
-**NOTE**
-
-According to the good programming coding style, is better to load all
-packages at the very begining of the script.
-
----
+<div class="alert alert-note">
+<div>
+A good programming style is to load all necessary packages at the very beginning of the script.
+</div>
+</div>
 
 ```{r message=FALSE, warning=FALSE}
-library(tidyverse) # To load all packages including in the tidyverse
+library(tidyverse)      # To load all packages including in the tidyverse
 library(palmerpenguins) # Load the example data
-library(ggpubr) # Create ready to publish figures
+library(ggpubr)         # Create ready to publish figures
 ```
 
 
-### Remembering palmer penguins data
+### Remembering the palmer penguins data
 
 ![](./culmen_depth.png)
 
@@ -97,9 +106,9 @@ glimpse(penguins)
 ```
 
 For the downstream example, we are going to contrast the bill depth of
-the female vs male penguins of the Adelie species found in Biscoe island.
+the female vs male penguins of the Adelie species found on the island of Biscoe.
 
-Therefore, we need to filter based on *species == Adelie* and *island == Biscoe*.
+Therefore, we need to filter based on `species == Adelie` and `island == Biscoe`.
 
 ```{r}
 # Filter by species and island
@@ -110,90 +119,110 @@ penguins_filtered <- penguins %>%
 penguins_filtered %>% count(sex, species, island)
 ```
 
-
 ### Creating the plot with ggplot
 
-One of the main difference between ggplot and ggpubr is the syntax to 
-create the plot. In the case of ggplot, it is a layer based syntax,
-while in ggpubr, the syntax is embedded in a single function.
-
+One of the main differences between _ggplot_ and _ggpubr_ is the syntax to 
+create the base plot. In the case of _ggplot_, it is a layer based syntax,
+while in _ggpubr_, the syntax is embedded in a single function.
 
 ```{r}
-ggplot(penguins_filtered, aes(x = sex, y = bill_depth_mm, fill = sex)) +
+ggplot(penguins_filtered,
+       aes(x = sex, y = bill_depth_mm, fill = sex)) +
   geom_boxplot()
 ```
 
-Now, since ggpubr has its own built-in geoms, the we can use the 
-*ggboxplot()* functions.
+Now, since _ggpubr_ has its own built-in geoms, we can use the 
+`ggboxplot()` function:
 
 ```{r}
-base_plot <- ggboxplot(data = penguins_filtered, x = "sex",
-                       y = "bill_depth_mm", fill = "sex")
+base_plot <- ggboxplot(data = penguins_filtered,
+                       x = "sex",
+                       y = "bill_depth_mm",
+                       fill = "sex")
+
 base_plot
 ```
 
----
-**NOTE**
+<div class="alert alert-note">
+<div>
 
-Since ggpubr creates plots based on ggplot syntax, can treat these plots
-as another ggplot figure and use the same functions that you would use to
-format base ggplot plots.
+Since _ggpubr_ creates plots based on _ggplot_ syntax, you can treat these plots
+as another _ggplot_ figure and use the same functions that you would use to
+format base _ggplot_ plots.
 
----
+</div>
+</div>
 
 ```{r}
-base_plot <- ggboxplot(data = penguins_filtered, x = "sex",
-                       y = "bill_depth_mm", fill = "sex") +
+base_plot <- ggboxplot(data = penguins_filtered,
+                       x = "sex",
+                       y = "bill_depth_mm",
+                       fill = "sex") +
   labs(title = "Comparison between Adelie penguins by sex",
-       fill = "Sex:", x = "Sex", y = "Bill depth (mm)")
+       fill = "Sex:",
+       x = "Sex",
+       y = "Bill depth (mm)")
+
 base_plot
 ```
 
+<br>
 
----
+----
 
 ## Add statistical results to the density plot
 
 When hypotheses testing is brought to the table, we need to consider which type
-of stats wee can and cannot apply to our data. Briefly, if our data fits 
-the assumptions for normally distribution and variance homogeneity, we can
+of stats we can and cannot apply to our data. Briefly, if our data fits 
+the assumptions of being normally distributed and having variance homogeneity, we can
 apply parametric tests. On the other hand, if our data does not fit the 
-assumptions, we need to apply non parametric test to the data.
+assumptions, we need to apply a nonparametric test to the data.
 
 
-Parametric | Non parametric
---------|-----------
-t-test | Wilcoxon test
-one-way anova | Krustal-Wallis test 
+| Comparison | Parametric    | Nonparametric
+| -----------|---------------|-----------
+| **2 groups**   | t-test        | Wilcoxon test
+| **>2 groups**  | one-way anova | Krustal-Wallis test 
 
 ### Checking assumptions
 
 If we would like to conduct a hypotheses test, we need first to check 
-assumptions (homogeneity of variance and and normality)
+assumptions (homogeneity of variance and and normality):
 
 ```{r}
 bartlett.test(bill_depth_mm ~ sex, data = penguins_filtered)
 ```
 
 
-### Exploring the *stat_compare_means()* functions
+### Exploring the `stat_compare_means()` function
+
+We can use the function `stat_compare_means()` to annotate the plot with
+the results of a statistical test comparing group means:
 
 ```{r}
-base_plot + stat_compare_means()
+base_plot +
+  stat_compare_means()
 ```
 
 In order to be 100% sure about the computed p-value, we can compute 
-the Wilcoxon test in the console.
+the Wilcoxon test in the console:
 
 ```{r warning=FALSE}
 wilcox.test(bill_depth_mm ~ sex, data = penguins_filtered)
 ```
 
-#### Using ggplot to recreate the plot
+### Using _ggplot_ to recreate the plot
+
+Above, we created the base plot using _ggpubr_ syntax, but we don't need to do this.
+The following code would create a very similar plot using _ggplot_ syntax and
+then only adding the `stat_compare_means()` at the end:
 
 ```{r}
-ggplot(penguins_filtered, aes(sex, bill_depth_mm, fill = sex)) +
-  geom_boxplot() + theme_bw() + stat_compare_means()
+ggplot(penguins_filtered,
+       aes(sex, bill_depth_mm, fill = sex)) +
+  geom_boxplot() +
+  theme_bw() +
+  stat_compare_means()
 ```
 
 
@@ -205,20 +234,20 @@ ggplot(penguins_filtered, aes(sex, bill_depth_mm, fill = sex)) +
 ### Exercise 1
 
 - Filter the penguins data in order to have only the observations (rows) from
-  the Chinstrap specie from the Dream island.
+  the Chinstrap species from Dream island.
 
-- Create a boxplot using the ggpubr package or using base ggplot.
+- Create a boxplot using the _ggpubr_ package or using base _ggplot_.
 
-- Use *stat_compare_means()* function to add p-value
+- Use *stat_compare_means()* function to add a p-value.
 
 <details>
 <summary>Hints (click here)</summary>
 <br>
 
-- Use the *filter()* function
-- filter by species == Chinstrap and island == Dream
-- Use *ggboxplot()* function to create the boxplot
-- Use *stat_compare_means()* to add p-value
+- Use the `filter()` function to filter rows
+- Filter using `species == Chinstrap` and `island == Dream`
+- If you want to use the _ggpubr_ package to create the boxplot,
+  use the `ggboxplot()` function.
 
 </details>
 
@@ -226,33 +255,39 @@ ggplot(penguins_filtered, aes(sex, bill_depth_mm, fill = sex)) +
 <summary>Solution (click here)</summary>
 <br>
 
-
 ```{r}
 # Using ggpubr
 
+# Filter by species and island
 penguins_exc1 <- penguins %>% 
-  # Filter by species and island
   filter(species == "Chinstrap", island == "Dream")
 
-exc1_plot <- ggboxplot(data = penguins_exc1, x = "sex",
-                       y = "bill_depth_mm", fill = "sex") +
+# Create the plot
+exc1_plot <- ggboxplot(data = penguins_exc1,
+                       x = "sex",
+                       y = "bill_depth_mm",
+                       fill = "sex") +
   stat_compare_means()
 
+# Show the plot
 exc1_plot
 ```
 
 ```{r}
 # Using ggplot only
 
+# Filter by species and island
 penguins_exc1 <- penguins %>% 
-  # Filter by species and island
   filter(species == "Chinstrap", island == "Dream")
 
-exc1_plot_ggplot <- ggplot(penguins_exc1, aes(sex, bill_depth_mm, fill = sex)) +
+# Create the plot
+exc1_plot_ggplot <- ggplot(penguins_exc1,
+                           aes(sex, bill_depth_mm, fill = sex)) +
   geom_boxplot() +
   stat_compare_means() +
   theme_bw()
 
+# Show the plot
 exc1_plot_ggplot
 ```
 
@@ -261,44 +296,58 @@ exc1_plot_ggplot
 
 <br>
 
-
 ### Multiple group comparison within a variable
 
 In many experiments we can have multiple groups in a single variable.
-For example, within the a *nutrient concentration* we can have multiple
+For example, within a variable *nutrient concentration* we can have multiple
 nutrient concentration levels such as 10%, 20%, 30% and so on.
 
 In the case of the penguins data we can find this layout if we need to 
 compare the males bill depth between species. Only for teaching purposes,
 we are not going to consider any difference by island.
 
-
 ```{r}
-penguins_male <- penguins %>% filter(sex == "male")
-penguins_male %>% count( species, sex)
+penguins_male <- penguins %>%
+  filter(sex == "male")
+
+penguins_male %>% 
+  count(species, sex)
 ```
 
 ```{r}
 penguins_male_plot <- ggboxplot(penguins_male,
-                                 x = "species", y = "bill_depth_mm",
-                                 color = "species")
+                                x = "species",
+                                y = "bill_depth_mm",
+                                color = "species")
 penguins_male_plot
 ```
 
-
+Like before, we can use the function `stat_compare_means` to add a p-value for
+an overall comparison between groups:
 
 ```{r}
-penguins_male_plot + stat_compare_means()
+penguins_male_plot +
+  stat_compare_means()
 ```
+
+However, we may also be interested in getting a p-value for the different
+pairwise comparisons between groups.
+For instance, does the bill depth of Chinstrap penguins differ significantly
+from that in Gentoo penguins?
+
+To do this, we can pass a _list_ to that the `stat_compare_means` function.
+A list is a flexible, hierarchical R data structure.
+Here, we will use a list to store multiple vectors,
+each of which contains a pairwise comparison of interest:
 
 ```{r}
 comparison_list <- list(c("Adelie", "Chinstrap"),
                         c("Chinstrap", "Gentoo"),
-                         c("Adelie", "Gentoo"))
+                        c("Adelie", "Gentoo"))
 
-penguins_male_plot + stat_compare_means(comparisons = comparison_list) +
+penguins_male_plot +
+  stat_compare_means(comparisons = comparison_list) +
   stat_compare_means(label.y = 25)
-
 ```
 
 
@@ -312,26 +361,25 @@ penguins_male_plot + stat_compare_means(comparisons = comparison_list) +
 - Filter the penguins data in order to have only the observations (rows) from
   female penguins.
 
-- Create a boxplot using the ggpubr package.
+- Create a boxplot using the _ggpubr_ package.
 
 - Add the multiple group comparison
 
-- Add pairwise comparison between all groups combinations
+- Add pairwise comparisons between all groups combinations
 
 <details>
 <summary>Hints (click here)</summary>
 <br>
 
-- Use the *filter()* function to select desired rows
+- Use the `filter()` function to select desired rows
 
-- filter by sex == "female"
+- Filter by `sex == "female"`
 
-- Use *ggboxplot()* function for the base plot
+- Use `ggboxplot()` function for the base plot
 
-- Use *stat_compare_means()* function for multiple group comparison
+- Use the `stat_compare_means()` function for multiple group comparison
 
-- Use the *comparison* argument to add pairwise comparison
-
+- Use the `comparison` argument to add pairwise comparison
 
 </details>
 
@@ -347,15 +395,17 @@ penguins_exc2 <- penguins %>%
   filter(sex == "female")
 
 # Creating the base plot
-exc2_plot <- ggboxplot(data = penguins_exc2, x = "species",
-                       y = "bill_depth_mm", fill = "species")
+exc2_plot <- ggboxplot(data = penguins_exc2,
+                       x = "species",
+                       y = "bill_depth_mm",
+                       fill = "species")
 
 # Adding the multiple group comparison
 exc2_plot <- exc2_plot 
 
 # Creating the pairwise comparison
 exc2_comparison <-  list(c("Adelie", "Chinstrap"),
-                        c("Chinstrap", "Gentoo"),
+                         c("Chinstrap", "Gentoo"),
                          c("Adelie", "Gentoo"))
 
 exc2_plot <- exc2_plot +
