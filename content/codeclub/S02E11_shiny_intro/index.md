@@ -1,9 +1,10 @@
 ---
 title: 'Shiny Bright Like a Diamond: an Introduction to ShinyR'
 author: "Matt Teegarden"
-date: "11/22/2021"
+date: "2021-11-30"
 output: hugodown::md_document
-rmd_hash: 7d20f4739268dc45
+toc: true
+rmd_hash: 367756f002446f12
 
 ---
 
