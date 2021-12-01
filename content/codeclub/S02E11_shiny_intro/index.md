@@ -1,12 +1,33 @@
 ---
-title: 'Shiny Bright Like a Diamond: an Introduction to ShinyR'
+title: 'Code Club S02E11: Shiny Bright Like a Diamond'
+subtitle: 'An Introduction to ShinyR'
 author: "Matt Teegarden"
 date: "2021-11-30"
 output: hugodown::md_document
 toc: true
-rmd_hash: 367756f002446f12
+rmd_hash: cdd01cc360a195a0
 
 ---
+
+<br>
+
+<div class="alert alert-note">
+
+<div>
+
+**What will we go over today**
+
+-   What is Shiny, and why would I want to use it?
+-   Understanding the principles of user interfaces and servers
+-   The structure of a basic Shiny app
+
+</div>
+
+</div>
+
+<br>
+
+------------------------------------------------------------------------
 
 ## Interactive Applications with R
 
@@ -19,6 +40,8 @@ The code for a Shiny app contains three main parts.
 1.  A section defining the user interface (UI)
 2.  A section defining the server
 3.  A piece of code that combines the UI and server sections
+
+Let's talk through some examples to illustrate what a UI and server are.
 
 ### A Conceptual Example
 
@@ -46,7 +69,7 @@ You can apply what you have already learned in code club to make a fancy, intera
 
 We just need to learn how to code R within the Shiny environment.
 
-### Let's start with a simple Shiny example
+### Let's start with a simple Shiny app
 
 First, take a second to install Shiny, and for the purpose of our demonstration today, I recommend you also pre-load the tidyverse (I am assuming you already have that installed)
 
@@ -256,11 +279,182 @@ Re-run the code, and you should now see a plot that will respond to changes in t
 
 ## Exercise 1
 
+<div class="alert puzzle">
+
+<div>
+
 Now it is your turn to add on to the app. The World Pumpkin Committee would like to also have the app generate a table that contains the weight, grower name, city, and state/province of each first place vegetable for the year selected in the input.
 
 **Bonus** Explore `renderTable` to see how you can change the number of significant figures displayed.
 
+<details>
+<summary>
+Hints (click here)
+</summary>
+
+<br> Focus on the server side of the app, you already have the input from the UI that you need. Use [`renderTable()`](https://rdrr.io/pkg/shiny/man/renderTable.html).
+
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ui</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='o'>(</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>sidebarPanel</a></span><span class='o'>(</span>
+    <span class='c'>#here we are naming the input as 'year', the box will display 'Select year', and </span>
+    <span class='c'>#the user will choose from the competition years as referenced from the </span>
+    <span class='c'>#pumpkins dataframe</span>
+    <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/selectInput.html'>selectInput</a></span><span class='o'>(</span>inputId <span class='o'>=</span> <span class='s'>"year"</span>, label <span class='o'>=</span> <span class='s'>"Select Year"</span>, choices <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='o'>(</span><span class='nv'>pumpkins</span><span class='o'>$</span><span class='nv'>year</span><span class='o'>)</span><span class='o'>)</span>
+    
+  <span class='o'>)</span>,
+  <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>mainPanel</a></span><span class='o'>(</span>
+     <span class='c'>#placeholder for a plot to generate</span>
+    <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='o'>(</span>outputId <span class='o'>=</span> <span class='s'>"weight_distribution"</span><span class='o'>)</span>,
+    <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/tableOutput.html'>tableOutput</a></span><span class='o'>(</span>outputId <span class='o'>=</span> <span class='s'>"winner_table"</span><span class='o'>)</span>
+  <span class='o'>)</span>
+<span class='o'>)</span>
+
+<span class='nv'>server</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>input</span>,<span class='nv'>output</span><span class='o'>)</span><span class='o'>&#123;</span>
+  <span class='c'>#notice the callback to our outputID</span>
+  <span class='nv'>output</span><span class='o'>$</span><span class='nv'>weight_distribution</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='o'>(</span>
+    <span class='nv'>pumpkins</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+      <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>==</span><span class='nv'>input</span><span class='o'>$</span><span class='nv'>year</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+      <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span><span class='nv'>vegetable</span>, <span class='nv'>weight_lbs</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+      <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span><span class='o'>)</span>
+  <span class='o'>)</span>
+  <span class='c'>#create the output for the table using renderTable</span>
+  <span class='nv'>output</span><span class='o'>$</span><span class='nv'>winner_table</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/renderTable.html'>renderTable</a></span><span class='o'>(</span>
+    <span class='nv'>pumpkins</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+      <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>==</span><span class='nv'>input</span><span class='o'>$</span><span class='nv'>year</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+      <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>place</span> <span class='o'>==</span> <span class='s'>"1"</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+      <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>vegetable</span>, <span class='nv'>weight_lbs</span>, <span class='nv'>grower_name</span>, <span class='nv'>city</span>, <span class='nv'>state_prov</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+      <span class='c'>#I just wanted to rename the columns to look nicer</span>
+      <span class='nf'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='o'>(</span><span class='s'>"weight (lbs)"</span><span class='o'>=</span><span class='nv'>weight_lbs</span>, <span class='s'>"grower name"</span><span class='o'>=</span><span class='nv'>grower_name</span>, <span class='s'>"state/provice"</span><span class='o'>=</span><span class='nv'>state_prov</span><span class='o'>)</span>,
+    <span class='c'>#setting significant figures as an option under renderTable</span>
+    digits <span class='o'>=</span> <span class='m'>1</span>,
+    <span class='c'>#adding a caption to be fancy</span>
+    caption <span class='o'>=</span> <span class='s'>"Table of Winners"</span>,
+    caption.placement <span class='o'>=</span> <span class='s'>"top"</span>
+  <span class='o'>)</span>
+<span class='o'>&#125;</span>
+
+<span class='nf'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='o'>(</span>ui<span class='o'>=</span><span class='nv'>ui</span>,server<span class='o'>=</span><span class='nv'>server</span><span class='o'>)</span></code></pre>
+
+</div>
+
+</details>
+
+</div>
+
+</div>
+
 ## Exercise 2
 
+<div class="alert puzzle">
+
+<div>
+
 Create a new app that allows a user to visualize how changing the value of "m" in y=mx+b affects the slope of a line.
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+
+<br> You will need to define the values of x. You can do this within the server function (i.e. `a <- tibble(a=-100:100)`).
+
+Also note that changing the slope of a line may not be so noticable because plots will automatically adjust to the scale of the data. Consider locking your coordinates so you notice changing slopes more easily.
+
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ui</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='o'>(</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>sidebarPanel</a></span><span class='o'>(</span>
+    <span class='c'>#I chose sliderInput here, you can choose another input type</span>
+    <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='o'>(</span>inputId <span class='o'>=</span> <span class='s'>"slope"</span>, min <span class='o'>=</span> <span class='o'>-</span><span class='m'>10</span>, max <span class='o'>=</span> <span class='m'>10</span>, value <span class='o'>=</span> <span class='m'>2</span>, label <span class='o'>=</span> <span class='s'>"Slope"</span><span class='o'>)</span>
+  <span class='o'>)</span>,
+  <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>mainPanel</a></span><span class='o'>(</span>
+    <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='o'>(</span>outputId <span class='o'>=</span> <span class='s'>"graph"</span><span class='o'>)</span>
+  <span class='o'>)</span>
+<span class='o'>)</span>
+
+<span class='nv'>server</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>input</span>,<span class='nv'>output</span><span class='o'>)</span><span class='o'>&#123;</span>
+  <span class='nv'>a</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='o'>(</span>a<span class='o'>=</span><span class='o'>-</span><span class='m'>100</span><span class='o'>:</span><span class='m'>100</span><span class='o'>)</span>
+  
+  <span class='nv'>output</span><span class='o'>$</span><span class='nv'>graph</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='o'>(</span>
+    <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>a</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span><span class='nv'>a</span>, <span class='nv'>input</span><span class='o'>$</span><span class='nv'>slope</span><span class='o'>*</span><span class='nv'>a</span><span class='o'>)</span><span class='o'>)</span><span class='o'>+</span>
+      <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='o'>(</span><span class='o'>)</span><span class='o'>+</span>
+      <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>xlim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='o'>-</span><span class='m'>25</span>,<span class='m'>25</span><span class='o'>)</span>, ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='o'>-</span><span class='m'>100</span>,<span class='m'>100</span><span class='o'>)</span><span class='o'>)</span>
+  <span class='o'>)</span>
+  
+<span class='o'>&#125;</span>
+
+<span class='nf'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='o'>(</span>ui<span class='o'>=</span><span class='nv'>ui</span>,server<span class='o'>=</span><span class='nv'>server</span><span class='o'>)</span></code></pre>
+
+</div>
+
+</details>
+
+</div>
+
+</div>
+
+## Exercise 3
+
+<div class="alert puzzle">
+
+<div>
+
+Add on to your app from Exercise 2 by providing another input for user to adjust the y-intercept.
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>ui</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='o'>(</span>
+  <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>sidebarPanel</a></span><span class='o'>(</span>
+    <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='o'>(</span>inputId <span class='o'>=</span> <span class='s'>"slope"</span>, min <span class='o'>=</span> <span class='o'>-</span><span class='m'>10</span>, max <span class='o'>=</span> <span class='m'>10</span>, value <span class='o'>=</span> <span class='m'>2</span>, label <span class='o'>=</span> <span class='s'>"Slope"</span><span class='o'>)</span>,
+    <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/sliderInput.html'>sliderInput</a></span><span class='o'>(</span>inputId <span class='o'>=</span> <span class='s'>"intercept"</span>, min <span class='o'>=</span> <span class='o'>-</span><span class='m'>10</span>, max <span class='o'>=</span> <span class='m'>10</span>, value <span class='o'>=</span> <span class='m'>2</span>, label <span class='o'>=</span> <span class='s'>"Y-Intercept"</span><span class='o'>)</span>
+  <span class='o'>)</span>,
+  <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/sidebarLayout.html'>mainPanel</a></span><span class='o'>(</span>
+    <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='o'>(</span>outputId <span class='o'>=</span> <span class='s'>"graph"</span><span class='o'>)</span>
+  <span class='o'>)</span>
+<span class='o'>)</span>
+
+<span class='nv'>server</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>input</span>,<span class='nv'>output</span><span class='o'>)</span><span class='o'>&#123;</span>
+  <span class='nv'>a</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='o'>(</span>a<span class='o'>=</span><span class='o'>-</span><span class='m'>100</span><span class='o'>:</span><span class='m'>100</span><span class='o'>)</span>
+  
+  <span class='nv'>output</span><span class='o'>$</span><span class='nv'>graph</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='o'>(</span>
+    <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>a</span>, <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span><span class='nv'>a</span>, <span class='nv'>input</span><span class='o'>$</span><span class='nv'>slope</span><span class='o'>*</span><span class='nv'>a</span><span class='o'>+</span><span class='nv'>input</span><span class='o'>$</span><span class='nv'>intercept</span><span class='o'>)</span><span class='o'>)</span><span class='o'>+</span>
+      <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='o'>(</span><span class='o'>)</span><span class='o'>+</span>
+      <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>xlim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='o'>-</span><span class='m'>25</span>,<span class='m'>25</span><span class='o'>)</span>, ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='o'>-</span><span class='m'>100</span>,<span class='m'>100</span><span class='o'>)</span><span class='o'>)</span>
+  <span class='o'>)</span>
+  
+<span class='o'>&#125;</span>
+
+<span class='nf'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='o'>(</span>ui<span class='o'>=</span><span class='nv'>ui</span>,server<span class='o'>=</span><span class='nv'>server</span><span class='o'>)</span></code></pre>
+
+</div>
+
+</details>
+
+</div>
+
+</div>
 

@@ -1,5 +1,6 @@
 ---
-title: 'Shiny Bright Like a Diamond: an Introduction to ShinyR'
+title: 'Code Club S02E11: Shiny Bright Like a Diamond'
+subtitle: 'An Introduction to ShinyR'
 author: "Matt Teegarden"
 date: "`r Sys.Date()`"
 output: hugodown::md_document
@@ -10,6 +11,22 @@ toc: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+<br>
+<div class="alert alert-note">
+<div>
+
+**What will we go over today**
+
+-   What is Shiny, and why would I want to use it?
+-   Understanding the principles of user interfaces and servers
+-   The structure of a basic Shiny app
+
+</div>
+</div>
+
+<br>
+
+----
 ## Interactive Applications with R
 
 Shiny is a package that builds interactive html-based applications using the R coding language and capabilities. 
@@ -22,6 +39,8 @@ The code for a Shiny app contains three main parts.
 1. A section defining the user interface (UI)
 2. A section defining the server
 3. A piece of code that combines the UI and server sections
+
+Let's talk through some examples to illustrate what a UI and server are. 
 
 ### A Conceptual Example
 
@@ -50,7 +69,7 @@ You can apply what you have already learned in code club to make a fancy, intera
 
 We just need to learn how to code R within the Shiny environment. 
 
-### Let's start with a simple Shiny example
+### Let's start with a simple Shiny app
 
 First, take a second to install Shiny, and for the purpose of our demonstration today, I recommend you also pre-load the tidyverse (I am assuming you already have that installed)
 
@@ -241,14 +260,170 @@ These commands are also special because they are "reactive", meaning they react 
 Re-run the code, and you should now see a plot that will respond to changes in the year input box. 
 
 ## Exercise 1
+<div class="alert puzzle">
+<div>
 
 Now it is your turn to add on to the app. The World Pumpkin Committee would like to also have the app generate a table that contains the weight, grower name, city, and state/province of each first place vegetable for the year selected in the input. 
 
 **Bonus**
 Explore `renderTable` to see how you can change the number of significant figures displayed. 
 
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+
+<br>
+  Focus on the server side of the app, you already have the input from the UI that you need. Use `renderTable()`.
+  
+<br>
+</details>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
+```{r eval=FALSE}
+ui <- fluidPage(
+  sidebarPanel(
+    #here we are naming the input as 'year', the box will display 'Select year', and 
+    #the user will choose from the competition years as referenced from the 
+    #pumpkins dataframe
+    selectInput(inputId = "year", label = "Select Year", choices = unique(pumpkins$year))
+    
+  ),
+  mainPanel(
+     #placeholder for a plot to generate
+    plotOutput(outputId = "weight_distribution"),
+    tableOutput(outputId = "winner_table")
+  )
+)
+
+server <- function(input,output){
+  #notice the callback to our outputID
+  output$weight_distribution <- renderPlot(
+    pumpkins %>%
+      filter(year==input$year) %>%
+      ggplot(aes(vegetable, weight_lbs)) +
+      geom_boxplot()
+  )
+  #create the output for the table using renderTable
+  output$winner_table <- renderTable(
+    pumpkins %>%
+      filter(year==input$year) %>%
+      filter(place == "1") %>%
+      select(vegetable, weight_lbs, grower_name, city, state_prov) %>%
+      #I just wanted to rename the columns to look nicer
+      rename("weight (lbs)"=weight_lbs, "grower name"=grower_name, "state/provice"=state_prov),
+    #setting significant figures as an option under renderTable
+    digits = 1,
+    #adding a caption to be fancy
+    caption = "Table of Winners",
+    caption.placement = "top"
+  )
+}
+
+shinyApp(ui=ui,server=server)
+```
+
+</details>
+</div>
+</div>
 
 ## Exercise 2
+<div class="alert puzzle">
+<div>
 
 Create a new app that allows a user to visualize how changing the value of "m" in y=mx+b affects the slope of a line. 
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+
+<br>
+  You will need to define the values of x. You can do this within the server function (i.e. `a <- tibble(a=-100:100)`).
+  
+  Also note that changing the slope of a line may not be so noticable because plots will automatically adjust to the scale of the data. Consider locking your coordinates so you notice changing slopes more easily. 
+  
+<br>
+</details>
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
+```{r eval=FALSE}
+ui <- fluidPage(
+  sidebarPanel(
+    #I chose sliderInput here, you can choose another input type
+    sliderInput(inputId = "slope", min = -10, max = 10, value = 2, label = "Slope")
+  ),
+  mainPanel(
+    plotOutput(outputId = "graph")
+  )
+)
+
+server <- function(input,output){
+  a <- tibble(a=-100:100)
+  
+  output$graph <- renderPlot(
+    ggplot(a, aes(a, input$slope*a))+
+      geom_line()+
+      coord_cartesian(xlim = c(-25,25), ylim = c(-100,100))
+  )
+  
+}
+
+shinyApp(ui=ui,server=server)
+```
+
+</details>
+</div>
+</div>
+
+## Exercise 3
+<div class="alert puzzle">
+<div>
+
+Add on to your app from Exercise 2 by providing another input for user to adjust the y-intercept. 
+
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
+```{r eval=FALSE}
+ui <- fluidPage(
+  sidebarPanel(
+    sliderInput(inputId = "slope", min = -10, max = 10, value = 2, label = "Slope"),
+    sliderInput(inputId = "intercept", min = -10, max = 10, value = 2, label = "Y-Intercept")
+  ),
+  mainPanel(
+    plotOutput(outputId = "graph")
+  )
+)
+
+server <- function(input,output){
+  a <- tibble(a=-100:100)
+  
+  output$graph <- renderPlot(
+    ggplot(a, aes(a, input$slope*a+input$intercept))+
+      geom_line()+
+      coord_cartesian(xlim = c(-25,25), ylim = c(-100,100))
+  )
+  
+}
+
+shinyApp(ui=ui,server=server)
+```
+
+</details>
+</div>
+</div>
 
