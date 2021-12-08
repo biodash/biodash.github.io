@@ -1,0 +1,284 @@
+---
+title: "Intro to RNAseq alignment and STAR"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default", "default-fonts", "slides.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: rainbow
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class:inverse middle center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Intro to RNAseq alignment and <br> the STAR aligner
+
+----
+
+### Including indexing a genome with STAR
+
+<br> <br> <br>
+
+### Jelmer Poelstra, MCIC Wooster
+### 2021/02/17 (updated: `r Sys.Date()`)
+  
+---
+
+## Overview of the analysis pipeline
+
+<p align="center">
+<img src=img/pipeline-overview2.png width="90%">
+</p>
+
+---
+
+## Aligning RNAseq reads
+
+The purpose of aligning reads, also known as *mapping*:  
+**determine where in the genome each read originates from.**
+  
+Aligning RNAseq reads is more challenging than DNA reads:
+due to *splicing*, many reads can't be simply be mapped wholly to the genome.
+  
+Moreover, there is often *alternative splicing*,
+such that a single "correct" reference is simply not applicable.
+
+<figure>
+<p align="center">
+<img src="img/DNA_alternative_splicing.gif" width="75%">
+<figcaption>Figure from <a href="https://en.wikipedia.org/wiki/Alternative_splicing#/media/File:DNA_alternative_splicing.gif">Wikipedia</a></figcaption>
+</p>
+</figure>
+
+---
+
+## Aligning RNAseq reads (cont.)
+
+Three different strategies are possible &ndash; but mapping to the genome
+is preferable as long as a reference genome is available:
+
+<br>
+
+<figure>
+<p align="center">
+<img src="img/mapping-strategies.png" width="85%">
+<figcaption>Figures from <a href="https://www.nature.com/articles/nmeth1010-793">Cloonan & Grimmond 2010</a></figcaption>
+</p>
+</figure>
+
+---
+
+## Aligning RNAseq reads (cont.)
+
+Therefore, RNAseq mappers have to be "splice-aware":
+
+<br>
+
+<figure>
+<p align="center">
+<img src="img/star-map.png" width="80%">
+<figcaption>Figure from Dobin et al. 2013</figcaption>
+</p>
+</figure>
+
+---
+
+## Alignment output: SAM/BAM files
+
+- SAM/BAM files contain the original sequences *along with the genomic coordinates
+  to which they were mapped* (and more information).
+
+- We get 1 SAM/BAM file for each sample with both the forward and the reverse
+  reads (not 2 separate files like for FASTQ files).
+
+--
+
+- SAM is an uncompressed text file and BAM is its binary, compressed counterpart.
+  
+  - SAM: Sequence Alignment/Map
+  
+  - BAM: Binary Alignment/Map
+
+  - Most software can work directly with BAM files, and you can use programs
+    like Samtools to view them.
+  
+- For subsequent analyses, BAM files usually also need to be *sorted* by
+  genomic coordinates (e.g. with Samtools but also STAR).
+
+---
+
+## The STAR aligner
+
+**About STAR:**
+
+- STAR is an acronym for "Spliced Transcripts Alignment to a Reference".
+
+- Reference paper &ndash; Dobin et al. 2013, *Bioinformatics*: [STAR: ultrafast
+  universal RNA-seq aligner](https://academic.oup.com/bioinformatics/article/29/1/15/272537).
+
+- [This page](https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/03_alignment.html)
+  has a nice quick, visual explanation of STAR's alignment strategy.
+
+- It's a very fast aligner, but memory-intensive. Luckily we have OSC!
+
+--
+
+<br>
+
+.content-box-info[
+Before we can perform the mapping, we also need to index the genome with STAR.
+Every mapper has its own mapping algorith and associated with that also its
+own way to create a genome dictionary.
+]
+
+---
+
+## STAR at OSC
+
+- STAR is available in a module at OSC. The Owens cluster has a more recent
+  version available, so make sure to log in to the Owens cluster.
+
+  ```sh
+  $ cd /fs/project/PAS0471/teach/misc/2021-02_rnaseq/$USER
+  ```
+  
+  ```sh
+  $ module load star/2.6.0a
+  ```
+
+---
+
+## STAR options for genome indexing
+
+Some options when generating a genome index with STAR are as follows:
+
+| Option                        | Meaning
+|-------------------------------|---------
+| `--runThreadN 18`             | Use 18 cores/threads
+| `--runMode genomeGenerate`    | The mode to index a genome
+| `--genomeDir mydir`           | Destination dir for index 
+| `--genomeFastaFiles my.fasta` | Path to the genome FASTA file
+| `--sjdbGTFfile my.gtf`        | Path to the genome GTF file
+| `--sjdbOverhang ReadLength-1` | Length of the donor/acceptor sequence <br> on each side of the junctions
+| `--genomeSAindexNbases 14`    | Length of the SA pre-indexing string
+
+--
+
+.content-box-info[
+According to the documentation `genomeSAindexNbases` should be:
+
+`log2(GenomeLength)/2 - 1)` => `log2(782520133)/2 - 1)` = 13.77 = 14
+]
+
+---
+
+## The key parts of a script to index the genome
+
+```sh
+#!/bin/bash
+#SBATCH --account=PAS0471
+#SBATCH --time=2:00:00
+#SBATCH --cpus-per-task=18
+module load star/2.6.0a
+
+STAR --runThreadN "$SLURM_CPUS_ON_NODE" \
+    --runMode genomeGenerate \
+    --genomeDir "$index_dir" \
+    --genomeFastaFiles "$ref_fa" \
+    --sjdbGTFtagExonParentTranscript "$ref_gff" \
+    --genomeSAindexNbases 13 \
+    --sjdbOverhang ReadLength-1
+```
+
+--
+
+Submit the script:
+
+```sh
+$ ref_fa=data/ref/Heinz1706_4.00/S_lycopersicum_chromosomes.4.00.fa
+$ ref_gff=data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+$ index_dir=data/ref/Heinz1706_4.00/STAR_index
+
+$ sbatch scripts/align/star_index.sh \
+    "$ref_fa" "$ref_gff" "$index_dir"
+#> Submitted batch job 12826056
+```
+
+---
+
+## Check the output
+
+```sh
+$ ls
+#> slurm-STAR-index-12826056.out Log.out
+
+$ cat slurm-STAR-index-12826056.out
+#> Feb 10 14:53:19 ..... started STAR run
+#> Feb 10 14:53:19 ... starting to generate Genome files
+#> Feb 10 14:53:34 ... starting to sort Suffix Array. This may take a long time...
+#> Feb 10 14:53:39 ... sorting Suffix Array chunks and saving them to disk...
+#> Feb 10 14:55:09 ... loading chunks from disk, packing SA...
+#> Feb 10 14:55:28 ... finished generating suffix array
+#> Feb 10 14:55:28 ... generating Suffix Array index
+#> Feb 10 14:56:15 ... completed Suffix Array index
+#> Feb 10 14:56:15 ... writing Genome to disk ...
+#> Feb 10 14:56:15 ... writing Suffix Array to disk ...
+#> Feb 10 14:56:18 ... writing SAindex to disk
+#> Feb 10 14:56:18 ..... finished successfully
+```
+
+---
+
+## Check the output (cont.)
+
+STAR also automatically outputs a file `Log.out` with lots of information
+about the run:
+  
+```sh
+$ less Log.out
+
+#> STAR version=STAR_2.6.0a
+#> STAR compilation time,server,dir=Mon Apr 23 13:19:26 EDT 2018 #> florence.cshl.edu:/sonas-hs/gingeras/nlsas_norepl/user/dobin/STAR/STAR.master/source
+#> ##### DEFAULT parameters:
+#> versionSTAR                       20201
+#> versionGenome                     20101   20200   
+#> parametersFiles                   -   
+#> sysShell                          -
+#> runMode                           alignReads
+#> runThreadN                        1
+#> runDirPerm                        User_RWX
+#> runRNGseed                        777
+#> ...
+```
+
+```sh
+$ wc -l Log.out
+#> 416
+```
+
+---
+
+## Check the output (cont.)
+
+Check the actual indexing output files:
+  
+```sh
+$ ls -lh data/ref/Heinz1706_4.00/STAR_index
+
+#> total 7.2G
+#> -rw-r--r-- 1 jelmer PAS0471  116 Feb 10 14:53 chrLength.txt
+#> -rw-r--r-- 1 jelmer PAS0471  246 Feb 10 14:53 chrNameLength.txt
+#> -rw-r--r-- 1 jelmer PAS0471  130 Feb 10 14:53 chrName.txt
+#> -rw-r--r-- 1 jelmer PAS0471  130 Feb 10 14:53 chrStart.txt
+#> -rw-r--r-- 1 jelmer PAS0471 748M Feb 10 14:56 Genome
+#> -rw-r--r-- 1 jelmer PAS0471  734 Feb 10 14:56 genomeParameters.txt
+#> -rw-r--r-- 1 jelmer PAS0471 6.1G Feb 10 14:56 SA
+#> -rw-r--r-- 1 jelmer PAS0471 374M Feb 10 14:56 SAindex
+```

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>RNAseq read alignment with STAR</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class:inverse middle center
+
+
+
+# RNAseq read alignment with STAR
+
+----
+
+&lt;br&gt; &lt;br&gt; &lt;br&gt;
+
+### Jelmer Poelstra, MCIC Wooster
+### 2021/02/26 (updated: 2021-03-04)
+  
+---
+
+## STAR options for alignment
+
+Some options for aligning reads to the genome using STAR are  
+(_not showing options that were shown above for indexing_):
+
+| Option                    | Meaning
+|---------------------------|------------
+| `--readFilesIn`           | Path to FASTQ file
+| `--outFileNamePrefix`     | Path and (**sample**) prefix for output files
+| `--outFilterMultimapNmax` | Max. nr. alignments for a read &lt;br&gt; (default: 10)
+| `--outSAMtype` | Output sorted BAM (default: SAM) &lt;br&gt; `BAM SortedByCoordinate` for sorted BAM
+| `--outSAMunmapped`        | What to do with unmapped reads &lt;br&gt; (default: don't output)
+| `--alignIntronMin 5`      | Minimum intron length* (default: 20)
+|`--alignIntronMax 350000`  | Maximum intron length* (default: 1 M)
+
+* From [Clark et al. 2019](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6546887/):
+&gt; [Tomato] intron sizes varied from 5 to 313,176 bp with a mean value of 1,352 bp.
+
+---
+
+## The key parts of a script to map reads for 1 sample
+
+```sh
+#!/bin/bash
+#SBATCH --account=PAS0471
+#SBATCH --time=2:00:00
+#SBATCH --cpus-per-task=18
+module load star/2.6.0a
+
+R1=$(ls "$fastq_dir"/*"$sample"*R1*fastq.gz)
+R2=$(ls "$fastq_dir"/*"$sample"*R2*fastq.gz)
+
+STAR --runThreadN "$SLURM_CPUS_ON_NODE" \
+   --genomeDir "$index_dir" \
+   --sjdbGTFtagExonParentTranscript "$ref_gff" \
+   --readFilesIn "$R1" "$R2" \
+   --readFilesCommand zcat \
+   --outFileNamePrefix "$bam_dir/$sample"_ \
+   --outSAMtype BAM SortedByCoordinate \
+   --alignIntronMin 5 --alignIntronMax 350000
+```
+
+---
+
+## Submit the script for one sample
+
+We run the script for an arbitrary sample to see if it works:
+
+```sh
+# You should be here:
+# /fs/project/PAS0471/teach/misc/2021-02_rnaseq/$USER/
+
+sample=C6_myb2
+
+fastq_dir=data/fastq_concat_subsample 
+index_dir=data/ref/Heinz1706_4.00/STAR_index
+ref_gff=data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+bam_dir=results/align/bam
+
+sbatch scripts/align/star_align.sh \
+  "$sample" "$fastq_dir" "$index_dir" "$ref_gff" "$bam_dir"
+```
+
+---
+
+## Check the output
+
+First, let's have a look at the SLURM log of our script:
+
+```sh
+$ cat slurm-align-C6_myb2-12836540.out
+#&gt; Starting script star_align.sh
+#&gt; Mon Feb 15 20:47:51 EST 2021
+#&gt; -------------------
+#&gt; 
+#&gt; R1 input file: data/fastq_concat_subsample/C6_myb2_R1.fastq.gz
+#&gt; R2 input file: data/fastq_concat_subsample/C6_myb2_R2.fastq.gz
+#&gt; Genome index dir: data/ref/Heinz1706_4.00/STAR_index
+#&gt; Genome annotation file: data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+#&gt; Bam (output) directory: results/align/bam
+#&gt; 
+#&gt; Running STAR....
+#&gt; Feb 15 20:47:51 ..... started STAR run
+#&gt; Feb 15 20:47:52 ..... loading genome
+#&gt; Feb 15 20:47:59 ..... started mapping
+#&gt; Feb 15 20:50:11 ..... started sorting BAM
+#&gt; Feb 15 20:50:19 ..... finished successfully
+#&gt; 
+#&gt; ----------------
+#&gt; Done with script star_align.sh
+#&gt; Mon Feb 15 20:50:19 EST 2021
+```
+
+---
+
+## Check the output (cont.)
+
+Next, let's check if we can see the BAM file and what its size is:
+
+```sh
+$ du -sh results/align/bam/*bam
+#&gt; 230M    results/align/bam/C6_myb2_Aligned.sortedByCoord.out.bam
+```
+
+&lt;br&gt;
+
+We'll take a closer look at the STAR log files, which our script moved
+to a sub-directory of the output dir:
+
+```sh
+$ ls results/align/bam/star_logs
+#&gt; results/align/bam/star_logs/C6_myb2_Log.final.out
+#&gt; results/align/bam/star_logs/C6_myb2_Log.out
+#&gt; results/align/bam/star_logs/C6_myb2_Log.progress.out
+#&gt; results/align/bam/star_logs/C6_myb2_SJ.out.tab
+```
+
+---
+
+## Check the output (cont.)
+
+The file `&lt;sample&gt;_Log` has a basic run log:
+
+```sh
+$ less results/align/bam/star_logs/C6_myb2_Log.out
+# STAR version=STAR_2.6.0a
+# STAR compilation time,server,dir=Mon Apr 23 13:19:26 EDT 2018 # florence.cshl.edu:/sonas-hs/gingeras/nlsas_norepl/user/dobin/STAR/STAR.master/source
+# ##### DEFAULT parameters:
+# versionSTAR                       20201
+# versionGenome                     20101   20200   
+# parametersFiles                   -   
+# sysShell                          -
+# runMode                           alignReads
+# 
+# ...
+# 
+# Loading Genome ... done! state: good=1 eof=0 fail=0 bad=0; loaded 784072704 bytes
+# SA file size: 6455421245 bytes; state: good=1 eof=0 fail=0 bad=0
+# Loading SA ... done! state: good=1 eof=0 fail=0 bad=0; loaded 6455421245 bytes
+# Loading SAindex ... done: 391468491 bytes
+# Finished loading the genome: Mon Feb 15 20:47:59 2021
+# 
+# alignIntronMax=alignMatesGapMax=0, the max intron size will be approximately determined by # (2^winBinNbits)*winAnchorDistNbins=589824
+# Created thread # 1
+# Created thread # 2
+```
+
+---
+
+## Check the output (cont.)
+
+The file `&lt;sample&gt;_Log.progress.out` has a log of mapping progress.
+
+The mapping of this file apparently went so fast that only one row is shown,
+but this file can show multiple rows with mappping stats as time progresses.
+
+```sh
+$ cat results/align/bam/star_logs/C6_myb2_Log.progress.out
+
+#           Time    Speed        Read     Read   Mapped   Mapped   Mapped   Mapped Unmapped Unmapped Unmapped Unmapped
+#                    M/hr      number   length   unique   length   MMrate    multi   multi+       MM    short    other
+# Feb 15 20:49:27     48.8     1192672      276    76.3%    277.8     0.2%     1.6%     0.1%     0.3%    19.1%     2.6%
+# ALL DONE!
+```
+
+---
+
+## Check the output (cont.)
+
+The file `&lt;sample&gt;_SJ.out.tab` has a table of high-confidence splice junctions
+(only those supported by *uniquely* mapping reads):
+
+```sh
+$ less results/align/bam/star_logs/C6_myb2_SJ.out.tab
+# SL4.0ch00       18299   19023   1       1       0       1       0       12
+# SL4.0ch00       1253757 1264285 2       2       0       0       1       46
+# SL4.0ch00       1259569 1263678 2       2       0       1       0       47
+# SL4.0ch00       1259569 1264285 2       2       0       1       0       26
+# SL4.0ch00       1263726 1264285 2       2       0       2       1       47
+# SL4.0ch00       1376108 1376905 1       5       0       0       1       33
+# SL4.0ch00       1386429 1387446 1       1       0       0       1       55
+# SL4.0ch00       1389552 1390217 0       0       0       0       18      66
+# SL4.0ch00       1457286 1457951 0       0       0       0       18      65
+# SL4.0ch00       1470754 1471439 1       5       0       0       1       64
+# SL4.0ch00       1531568 1532365 1       5       0       0       1       33
+# SL4.0ch00       1541889 1542906 1       1       0       0       1       55
+# SL4.0ch00       1545012 1545677 0       0       0       0       18      66
+# SL4.0ch00       1903425 1905479 2       2       0       0       1       53
+# SL4.0ch00       1903425 1946574 2       2       0       0       1       53
+# SL4.0ch00       2044995 2046903 0       0       0       0       6       32
+# SL4.0ch00       2497375 2498040 0       0       0       0       18      65
+# SL4.0ch00       2510840 2511525 1       5       0       0       1       64
+# SL4.0ch00       2574688 2575704 2       2       0       0       1       55
+```
+
+---
+
+## Check the output (cont.)
+
+Most useful for now is the file `&lt;sample&gt;_Log.final.out`,
+which has a summary of mapping statistics:
+
+
+```sh
+$ less results/align/bam/star_logs/C6_myb2_Log.final.out
+# Started job on                            | Feb 15 20:47:51
+# Started mapping on                        | Feb 15 20:47:59
+# Finished on                               | Feb 15 20:50:19
+# Mapping speed, Million of reads per hour  | 65.57
+# Number of input reads                     | 2549920
+# Average input read length                 | 276
+# UNIQUE READS:     
+# Uniquely mapped reads number              | 1945474
+# Uniquely mapped reads %                   | 76.30%
+# Average mapped length                     | 277.75
+# Number of splices: Total                  | 1487782
+# Number of splices: Annotated (sjdb)       | 0
+# Number of splices: GT/AG                  | 1451397
+# Number of splices: GC/AG                  | 14313
+# Number of splices: AT/AC                  | 747
+# Number of splices: Non-canonical          | 21325
+# Mismatch rate per base, %                 | 0.18%
+# Deletion rate per base                    | 0.01%
+# Deletion average length                   | 1.02
+# Insertion rate per base                   | 0.01%
+# Insertion average length                  | 2.63
+```
+
+---
+
+## Check the output (cont.)
+
+While 76% of reads mapped uniquely (previous slide),
+among the rest, we can see that "multi-mapped reads" account for a relatively
+small proportion (&lt;2%) while there are a lot (&gt;20%) of unmapped reads.
+
+Among unmapped reads, the vast majority (19% of the total number of reads)
+are "too short". This does not necessarily mean that the read itself was too
+short. More often, it will mean that the alignment that could be made was
+too short.
+
+```sh
+# [...continuing results/align/bam/star_logs/C6_myb2_Log.final.out]
+# MULTI-MAPPING READS:
+# Number of reads mapped to multiple loci   | 42055
+# % of reads mapped to multiple loci        | 1.65%
+# Number of reads mapped to too many loci   | 1977
+# % of reads mapped to too many loci        | 0.08%
+# UNMAPPED READS:
+# % of reads unmapped: too many mismatches  | 0.31%
+# % of reads unmapped: too short            | 19.12%
+# % of reads unmapped: other                | 2.55%
+# CHIMERIC READS:
+# Number of chimeric reads                  | 0
+# % of chimeric reads                       | 0.00%
+```
+
+---
+
+## Splice site frequencies in plants
+
+In the log file, we saw the numbers of different observed splice sites.
+How do those compare to our expectations?
+
+---
+
+```sh
+# Number of splices: GT/AG                  | 1451397
+# Number of splices: GC/AG                  | 14313
+# Number of splices: AT/AC                  | 747
+# Number of splices: Non-canonical          | 21325
+```
+
+&lt;figure&gt;
+&lt;p align="center"&gt;
+&lt;img src=img/splice-sites_PuckerBrockington2018.png width="90%"&gt;
+&lt;figcaption&gt;&lt;a href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-018-5360-z"&gt;Pucker &amp; Brockington 2018&lt;/a&gt; &lt;/figcaption&gt;
+&lt;/p&gt;
+&lt;/figure&gt;
+
+---
+
+## A script to loop over all files
+
+```sh
+#!/bin/bash
+
+samples=($(cat "$sample_list"))
+
+for sample in "${samples[@]}"; do
+
+  R1=$(ls "$fastq_dir"/*"$sample"*_R1*fastq.gz)
+
+  slurm_log=slurm-align-"$sample"-%j.out 
+
+  echo "Submitting star_align.sh for $sample"
+  sbatch -o "$slurm_log" scripts/align/star_align.sh \
+      "$sample" "$fastq_dir" "$index_dir" "$ref_gff" "$bam_dir"
+
+done
+```
+
+---
+
+## Submit the loop script
+
+```sh
+# You should still have the other variables ($fastq_dir etc) assigned
+$ sample_list=data/meta/samples.txt
+
+$ bash scripts/align/star_align_loop.sh
+      "$sample_list" "$fastq_dir" "$index_dir" "$ref_gff" "$bam_dir"
+    
+#&gt; Starting script star_align_loop.sh
+#&gt; Wed Feb 10 21:03:13 EST 2021
+#&gt; -------------------
+#&gt; 
+#&gt; FASTQ dir: data/fastq_concat
+#&gt; Sample list: data/meta/samples.txt
+#&gt; Genome index dir: data/ref/Heinz1706_4.00/STAR_index
+#&gt; Genome annotation file: data/ref/annot/ITAG4.1/ITAG4.1_gene_models.gff
+#&gt; Bam (output) directory: results/align/bam
+#&gt; 
+#&gt; Submitting star_align.sh for C6_myb2
+#&gt; Submitted batch job 12830287
+#&gt; Submitting star_align.sh for C6_myb3
+#&gt; Submitted batch job 12830291
+#&gt; ...
+```
+
+---
+
+## Check the output (cont.)
+
+```sh
+$ du -sh $bam_dir/*bam
+#&gt; 230M    results/align/bam/C6_myb2_Aligned.sortedByCoord.out.bam
+#&gt; 270M    results/align/bam/C6_myb3_Aligned.sortedByCoord.out.bam
+#&gt; 183M    results/align/bam/C6_myb4_Aligned.sortedByCoord.out.bam
+#&gt; 237M    results/align/bam/cnt_1_Aligned.sortedByCoord.out.bam
+#&gt; 240M    results/align/bam/cnt_2_Aligned.sortedByCoord.out.bam
+#&gt; 211M    results/align/bam/cnt_3_Aligned.sortedByCoord.out.bam
+#&gt; 274M    results/align/bam/CT_05_Aligned.sortedByCoord.out.bam
+#&gt; 254M    results/align/bam/CT_06_Aligned.sortedByCoord.out.bam
+#&gt; 286M    results/align/bam/CT_09_Aligned.sortedByCoord.out.bam
+#&gt; 275M    results/align/bam/myb_1_Aligned.sortedByCoord.out.bam
+#&gt; 285M    results/align/bam/myb_2_Aligned.sortedByCoord.out.bam
+#&gt; 292M    results/align/bam/myb_3_Aligned.sortedByCoord.out.bam
+#&gt; 251M    results/align/bam/T_26_Aligned.sortedByCoord.out.bam
+#&gt; 284M    results/align/bam/T_29_Aligned.sortedByCoord.out.bam
+#&gt; 0       results/align/bam/T_30_Aligned.sortedByCoord.out.bam
+```
+
+---
+
+## Check the output (cont.)
+
+```sh
+$ grep "Uniquely mapped reads %" results/align/bam/star_logs/*Log.final*
+#&gt; C6_myb2_Log.final.out: Uniquely mapped reads % |   76.30%
+#&gt; C6_myb3_Log.final.out: Uniquely mapped reads % |   79.46%
+#&gt; C6_myb4_Log.final.out: Uniquely mapped reads % |   56.44%
+#&gt; cnt_1_Log.final.out:   Uniquely mapped reads % |   71.11%
+#&gt; cnt_2_Log.final.out:   Uniquely mapped reads % |   78.40%
+#&gt; cnt_3_Log.final.out:   Uniquely mapped reads % |   66.60%
+#&gt; CT_05_Log.final.out:   Uniquely mapped reads % |   80.29%
+#&gt; CT_06_Log.final.out:   Uniquely mapped reads % |   81.05%
+#&gt; CT_09_Log.final.out:   Uniquely mapped reads % |   86.46%
+#&gt; myb_1_Log.final.out:   Uniquely mapped reads % |   87.14%
+#&gt; myb_2_Log.final.out:   Uniquely mapped reads % |   86.76%
+#&gt; myb_3_Log.final.out:   Uniquely mapped reads % |   87.18%
+#&gt; T_26_Log.final.out:    Uniquely mapped reads % |   85.01%
+#&gt; T_29_Log.final.out:    Uniquely mapped reads % |   86.01%
+```
+
+---
+
+## Running MultiQC on the STAR logs
+
+```sh
+$ sbatch scripts/qc/multiqc.sh results/align/bam/star_logs
+```
+
+&lt;br&gt;
+
+### <i class="fas  fa-user-edit "></i> Check MultiQC output
+
+---
+
+## Other options for QC and viewing of alignments
+
+- **Qualimap**
+  ([website](http://qualimap.conesalab.org/doc_html/index.html),
+  [paper](https://pubmed.ncbi.nlm.nih.gov/26428292/))
+  is an alignment QC tool, which can, for instance:
+  - Compute statistics on the proportions of reads mapping to different genomic
+    feature types such as exons, introns, and intergenic regions.
+  - Quantify 3' and 5' bias.
+  - Analyze splice junctions.
+  
+- Another option for extensive alignment QC is **RseQC**
+  ([website](http://rseqc.sourceforge.net/),
+  [paper](https://academic.oup.com/bioinformatics/article/28/16/2184/325191)).
+
+---
+
+## Other options for QC and viewing of alignments
+
+Integrative Genome Viewer (**IGV**):
+
+&lt;figure&gt;
+&lt;p align="center"&gt;
+&lt;img src=img/igv.png width="100%"&gt;
+&lt;figcaption&gt;&lt;a href="https://github.com/griffithlab/rnabio.org/blob/master/assets/lectures/cshl/2020/mini/RNASeq_MiniLecture_02_04_alignmentQC.pdf"&gt;Source&lt;/a&gt; &lt;/figcaption&gt;
+&lt;/p&gt;
+&lt;/figure&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "rainbow",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
