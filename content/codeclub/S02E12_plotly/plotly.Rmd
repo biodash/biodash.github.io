@@ -1,0 +1,398 @@
+---
+title: "S02E12 Plotly"
+author: "Jessica Cooperstone"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+## Prep homework 
+
+### Basic computer setup
+
+- If you didn't already do this, please follow the [Code Club Computer Setup](/codeclub-setup/04_ggplot2/) instructions, which also has pointers for if you're new to R or RStudio.
+
+- If you're able to do so, please open RStudio a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll help you troubleshoot.
+
+### New to ggplot?
+
+Check out the three Code Club pages for [Session 4](/codeclub/04_ggplot2/), [Session 5](/codeclub/05_ggplot-round-2/) and [Session 10](/codeclub/10_faceting-animating/) which are all about `ggplot2`.
+
+If you've never used `ggplot2` before (or even if you have), you may find [this cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) useful.
+
+
+## Getting Started
+
+### RMarkdown for today's session
+```{r, eval = FALSE}
+# directory for Code Club Session 15:
+dir.create("S02E12")
+
+# directory for our RMarkdown
+# ("recursive" to create two levels at once.)
+dir.create("S02E12/Rmd/")
+
+# save the url location for today's script
+todays_Rmd <- 
+  "https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S02E12_plotly/plotly.Rmd"
+
+# indicate the name of the new Rmd
+S02E12_Rmd <- "S02E12/Rmd/S02E12_plotly.Rmd"
+
+# go get that file! 
+download.file(url = todays_Rmd,
+              destfile = S02E12_Rmd)
+```
+
+
+----
+
+
+## 1 - What is plotly?
+
+Today we are going to talk about making interactive plots using [Plotly](https://plotly.com/).  Plotly exists in a variety of programming languages, but today we will be just talking about using it in [R](https://plotly.com/r/).  All of the plotly documentation can be found [here](https://cran.r-project.org/web/packages/plotly/plotly.pdf).  
+
+If you have never used `plotly` before, install it with the code below. 
+```{r, eval = FALSE}
+install.packages("plotly")
+```
+
+Here are some useful links to find info about using `ggplotly`.
+
+* [Basic ggplot2 charts](https://plotly.com/ggplot2/#layout-options)
+* [Plotly R library fundamentals](https://plotly.com/r/plotly-fundamentals/)
+* [Intro to `ggplotly()`](https://plotly-r.com/overview.html#intro-ggplotly)
+* [Using `layout()`](https://plotly.com/r/reference/layout/#)
+* [`ggplotly()` tooltips](https://plotly-r.com/controlling-tooltips.html#tooltip-text-ggplotly)
+
+Before we start, there are two basic ways to use plot in R using plotly:
+
+* Using [`ggplotly()`](https://www.rdocumentation.org/packages/plotly/versions/4.9.3/topics/ggplotly) - this is what we will go over today because it has the same syntax as `ggplot()` which we have already learned
+* Using [`plot_ly()`](https://www.rdocumentation.org/packages/plotly/versions/4.9.3/topics/plot_ly) - there is slightly more functionality in this function, but the syntax is all new, so I'd suggest if you can do what you want with `ggplotly()`, do that.  The syntax is not particularly hard so don't be scared to use it if interactive plots are something you're very interested in.
+
+When you are googling about using plotly, you will find a combination of `ggplotly()` and `plot_ly()` approaches, and some parts of the code are interchangable.  The easiesy way to see which parts are, is to try.
+
+Also note, Google gets a bit confused when googling "ggplotly" and often returns information about just ggplot, so read extra carefully when problem solving.
+
+----
+
+## 2 - Load libraries, get data
+Lets load the libraries we are using for today.
+```{r, message = FALSE}
+library(tidyverse)
+library(plotly) # for making interactive plots
+library(glue) # for easy pasting
+library(htmlwidgets) # for saving html files
+```
+
+We are going to continue to use the pumpkins data we downloaded last week when we were learning about [Shiny](/codeclub/S02E11_shiny_intro/).
+```{r}
+pumpkins <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-19/pumpkins.csv')
+```
+
+We will start with the wrangling that Matt shared with us last week, and then go from there.
+```{r}
+pumpkins <- pumpkins %>%
+  # separate the year column
+  separate(col = id, into = c("year", "vegetable"), sep = "-") %>%
+  # find and tag the rows that do not have data
+  mutate(delete = str_detect(place, "\\d*\\s*Entries")) %>%
+  # filter out the rows that do not have data
+  filter(delete==FALSE) %>%
+  # remove the tagging column
+  select(-delete)
+
+# rename the vegetables to their actual names
+pumpkins$vegetable <- pumpkins$vegetable %>%
+  str_replace("^F$", "Field Pumpkin") %>%
+  str_replace("^P$", "Giant Pumpkin") %>%
+  str_replace("^S$", "Giant Squash") %>%
+  str_replace("^W$", "Giant Watermelon") %>%
+  str_replace("^L$", "Long Gourd") %>%
+  str_replace("^T$", "Tomato")
+
+# get rid of commas in the weight_lbs column
+pumpkins$weight_lbs <- as.numeric(gsub(",","",pumpkins$weight_lbs))
+```
+
+Lets look at our data structure.
+```{r}  
+glimpse(pumpkins)
+```
+
+Note that all of the columns have the class "character" except `weight_lbs` which is numeric.  We could just fix this now, but I'm going to show you an alternative way to handle this in a minute.
+
+----
+
+## 3 - Create base ggplot object
+Using the `pumpkins` dataset lets work towards creating a plot that shows the distribution of weights of tomatoes by country.  I will show you here how you can use `dplyr` functions within your `ggplot2` call.
+```{r}
+pumpkins %>%
+  filter(vegetable == "Tomato") %>%
+  ggplot(aes(x = country, 
+             y = weight_lbs, 
+             color = country)) +
+  geom_jitter()
+```
+
+We have a plot, its not horrible but it has a number of issues.
+
+1. The country names are getting cut off because some are too long, and there are enough of them that we are having overlapping.
+2. We have an [overplotting](https://www.displayr.com/what-is-overplotting/) problem
+3. The x-axis countries are ordered alphabetically.  We will order our axis based on something more meaningful, like a characteristic of our data (more about this later).
+4. The aesthetics need some adjustment for a more beautiful plot
+
+We will work on making our plot a bit better, and then we will make it interactive, such that you can hover your mouse over each datapoint, and learn more about that datapoint than what is directly visualized in the plot.
+
+----
+
+## 4 - Optimize our base plot
+
+### 1. Prevent country name overlap
+
+We can do this using by using [`guide_axis()`](https://ggplot2.tidyverse.org/reference/guide_axis.html) within a `scale` function, here, `scale_x_discrete()`.  To learn more about ggplot scales, click [here](https://ggplot2-book.org/scales-guides.html).  
+```{r}
+pumpkins %>%
+  filter(vegetable == "Tomato") %>%
+  ggplot(aes(x = country, 
+             y = weight_lbs, 
+             color = country)) +
+  geom_jitter() +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) # dodge every other name
+```
+
+Wow that was easy.  We still have some overlapping, though we have a big figure legend that is in this case, not necessary.  Lets remove it.
+
+```{r}
+pumpkins %>%
+  filter(vegetable == "Tomato") %>%
+  ggplot(aes(x = country, 
+             y = weight_lbs, 
+             color = country)) +
+  geom_jitter() +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  theme(legend.position = "none")
+```
+
+This is not the only way to fix the plot to avoid label overlap.  Instead, you could put the x-axis country labels on an angle by using `theme(axis.text.x = element_text(angle = 45))`.
+
+### 2. Reduce overplotting
+For the countries that have a lot of tomato entries, its hard to see some individual data points because there are just so many of them.  We can add some transparency to the datapoints such that its easier to see them.  I am also playing around with `color`, `fill`, and point `shape` so you can see what changing those values does to the plot.
+```{r}
+pumpkins %>%
+  filter(vegetable == "Tomato") %>%
+  ggplot(aes(x = country, 
+             y = weight_lbs, 
+             fill = country)) +
+  geom_jitter(alpha = 0.5, color = "black", shape = 21) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45)) 
+```
+We still have overplotting but I think this is an improvement.
+
+### 3. Reorder x-axis to something meaningful
+Our x-axis is currently ordered alphabetically.  This is really a meaningless ordering - instead lets order our data by some characteristic of the data that we want to communicate to our viewer.  For example, we could order by increasing mean tomato weight.  This would tell us, just by looking at the order of the x-axis, which country has on average, the biggest tomatoes.  This is something that is hard to see with the data in its current form.
+
+Remember before we saw that each of the columns except for `weight_lbs` was of the class "character."  To allow reordering, we need to change `country` to be a factor.  We can do this directly in the `pumpkins` dataframe, or we can do it within the ggplot call using the pipe `%>%`.
+
+We will use [`fct_reorder()`](https://forcats.tidyverse.org/reference/fct_reorder.html) to do this, where we provide the the column we want to reorder (here, `country`), and what we want to reorder based on (here, `weight_lbs`), and what function to use for the reordering (here, `.fun = mean`).
+
+```{r}
+pumpkins %>%
+  filter(vegetable == "Tomato") %>%
+  mutate(country = as.factor(country)) %>%
+  ggplot(aes(x = fct_reorder(country, weight_lbs, .fun = mean), 
+             y = weight_lbs, 
+             fill = country)) +
+  geom_jitter(alpha = 0.5, color = "black", shape = 21) +
+  scale_x_discrete(guide = guide_axis(angle = 45)) +
+  theme(legend.position = "none")
+```
+Now we can see easily that Switzerland has the heaviest tomatoes on average entered into this competition.
+
+### 4. Pretty it up
+Let's fix up the aesthetics of the plot, and adjust the axis labels, and add a title.  Note, in the title, adding `\n` into your title inserts a line break.
+```{r}
+tomato_plot <- pumpkins %>%
+  filter(vegetable == "Tomato") %>%
+  mutate(country = as.factor(country)) %>%
+  ggplot(aes(x = fct_reorder(country, weight_lbs, .fun = mean), 
+             y = weight_lbs, 
+             fill = country)) +
+  geom_jitter(alpha = 0.5, color = "black", shape = 21) +
+  scale_x_discrete(guide = guide_axis(angle = 45)) +
+  theme_classic() +
+  theme(legend.position = "none") +
+  labs (x = "Country",
+        y = "Weight (in lbs)",
+        title = "Weights of Tomatoes by Country Entered \nin the Great Pumpkin Commonwealth Competition")
+
+tomato_plot
+```
+
+## 5 - Make it interactive with `ggplotly()`
+You can learn more about the `ggplotly()` function, including its arguments  [here](https://www.rdocumentation.org/packages/plotly/versions/4.9.3/topics/ggplotly).
+
+```{r}
+ggplotly(tomato_plot)
+```
+
+Wow that was easy!  Note that when you hover over a data point you see the information mapped in your `aes()` statement -- this is the default.  Some of the work we did to make our plot look nice is gone, so we will have to come back to that.
+
+----
+
+## 6 - Using tooltip
+
+Using tooltip helps you to indicate what appears when you hover over different parts of your plot.  You can learn more about controlling `tooltip` [here](https://plotly-r.com/controlling-tooltips.html).
+
+What if we want to hover over each point and be able to tell who grew that tomato?
+
+To do this, we indicate what we want to hover with using `text =` in our aesthetic mappings.  Then, we indicate `tooltip = "text"` to tell `ggplotly()` what we want to hover.
+
+```{r}
+tomato_plot <- pumpkins %>%
+  filter(vegetable == "Tomato") %>%
+  mutate(country = as.factor(country)) %>%
+  ggplot(aes(x = fct_reorder(country, weight_lbs, .fun = mean), 
+             y = weight_lbs, 
+             fill = country,
+             text = grower_name)) +
+  geom_jitter(alpha = 0.5, color = "black", shape = 21) +
+  scale_x_discrete(guide = guide_axis(angle = 45)) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45)) +
+  labs (x = "Country",
+        y = "Weight (in lbs)",
+        title = "Weights of Tomatoes by Country Entered \nin the Great Pumpkin Commonwealth Competition")
+
+ggplotly(tomato_plot,
+         tooltip = "text")
+```
+
+You can play around a lot with tooltip to get it to be exactly how you want, and you can include multiple things in your hover text.
+
+You can add multiple items to `text`, and also ues the function `glue()` which allows more intuitive pasting to get your hover text to in your preferred format.
+```{r}
+tomato_plot <- pumpkins %>%
+  filter(vegetable == "Tomato") %>%
+  mutate(country = as.factor(country)) %>%
+  ggplot(aes(x = fct_reorder(country, weight_lbs, .fun = mean), 
+             y = weight_lbs, 
+             fill = country,
+             text = glue("Grown by {grower_name}
+                         From {city}, {state_prov}"))) +
+  geom_jitter(alpha = 0.5, color = "black", shape = 21) +
+  scale_x_discrete(guide = guide_axis(angle = 45)) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45)) +
+  labs (x = "Country",
+        y = "Weight (in lbs)",
+        title = "Weights of Tomatoes by Country Entered \nin the Great Pumpkin Commonwealth Competition")
+
+ggplotly(tomato_plot,
+         tooltip = "text")
+```
+
+----
+
+## 7 - Hover label aesthetics
+
+You might not like the default hover text aesthetics, and can change them!
+You can do this using `style` and `layout` and adding these functions using the pipe `%>%`.
+
+```{r}
+# setting fonts for the plot
+font <- list(
+  family = "Calibri",
+  size = 15,
+  color = "white")
+
+# setting hover label specs
+label <- list(
+  bgcolor = "#FF0000",
+  bordercolor = "transparent",
+  font = font) # we can do this bc we already set font
+
+# amending our ggplotly call to include new fonts and hover label specs
+ggplotly(tomato_plot, tooltip = "text") %>%
+  style(hoverlabel = label) %>%
+  layout(font = font)
+```
+
+----
+
+## 8 - Saving your plots
+
+Now that you've made a beautiful interactive plot, you probably want to save it.
+
+Assign the plot you want to save to an object, and use the function `saveWidget()` to save it.  You can find the documentation [here](https://www.rdocumentation.org/packages/htmlwidgets/versions/1.5.3/topics/saveWidget).
+
+```{r}
+# assign ggplotly plot to an object
+ggplotly_to_save <- ggplotly(tomato_plot,
+                             tooltip = "text") %>%
+                      style(hoverlabel = label) %>%
+                      layout(font = font)
+
+# save
+saveWidget(widget = ggplotly_to_save,
+           file = "ggplotlying.html")
+```
+
+----
+
+## Breakout rooms
+
+We are going to use the `palmerpenguins` dataset called `penguins`.
+
+```{r}
+library(palmerpenguins)
+
+head(penguins)
+```
+
+
+### Exercise 1
+
+Using the `penguins` dataset and make a base scatter plot with bill length on the y, and bill depth on the x.  Remove any observations with missing data.
+
+```{r}
+
+```
+
+
+----
+
+### Exercise 2
+
+Add appropriate x and y-axis labels, and a title to your plot.
+
+```{r}
+
+```
+
+----
+
+### Exercise 3
+
+Make your plot interactive such that when you hover over a point, it tell you what island the penguin is from.
+  
+```{r}
+
+```
+
+----
+
+### Exercise 4
+
+Add the sex of the penguin to the hover text, change the hover text so that the background color is red, and make all the fonts for the plot something other than the default.
+
+```{r}
+
+```
+
+
+----
+
