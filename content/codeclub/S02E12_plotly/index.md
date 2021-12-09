@@ -6,7 +6,7 @@ authors: [jessica-cooperstone]
 date: "2021-12-09"
 output: hugodown::md_document
 toc: true
-rmd_hash: 19a6b5161ecfc1dd
+rmd_hash: 04d89795a54aab53
 
 ---
 
@@ -592,7 +592,7 @@ Solutions (click here)
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Culmen Depth (mm)"</span>,
        y <span class='o'>=</span> <span class='s'>"Culmen Length (mm)"</span>,
-       title <span class='o'>=</span> <span class='s'>"Exploration penguin bill length and depth relationships"</span><span class='o'>)</span>
+       title <span class='o'>=</span> <span class='s'>"Exploration of penguin bill length and depth relationships"</span><span class='o'>)</span>
 
 <span class='nv'>bill_depth_length</span>
 </code></pre>
@@ -640,7 +640,7 @@ Solutions (click here)
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Culmen Depth (mm)"</span>,
        y <span class='o'>=</span> <span class='s'>"Culmen Length (mm)"</span>,
-       title <span class='o'>=</span> <span class='s'>"Exploration penguin bill length and depth relationships"</span><span class='o'>)</span>
+       title <span class='o'>=</span> <span class='s'>"Exploration of penguin bill length and depth relationships"</span><span class='o'>)</span>
 
 <span class='nf'><a href='https://rdrr.io/pkg/plotly/man/ggplotly.html'>ggplotly</a></span><span class='o'>(</span><span class='nv'>bill_depth_length</span>,
          tooltip <span class='o'>=</span> <span class='s'>"text"</span><span class='o'>)</span></code></pre>
@@ -707,7 +707,7 @@ Solutions (click here)
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Culmen Depth (mm)"</span>,
        y <span class='o'>=</span> <span class='s'>"Culmen Length (mm)"</span>,
-       title <span class='o'>=</span> <span class='s'>"Exploration penguin bill length and depth relationships"</span><span class='o'>)</span>
+       title <span class='o'>=</span> <span class='s'>"Exploration of penguin bill length and depth relationships"</span><span class='o'>)</span>
 
 <span class='c'># amending our ggplotly call to include new fonts and hover label specs</span>
 <span class='nf'><a href='https://rdrr.io/pkg/plotly/man/ggplotly.html'>ggplotly</a></span><span class='o'>(</span><span class='nv'>bill_depth_length</span>, tooltip <span class='o'>=</span> <span class='s'>"text"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
