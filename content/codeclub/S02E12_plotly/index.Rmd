@@ -25,7 +25,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### New to ggplot?
 
-Check out the three Code Club pages for [Session 4](/codeclub/04_ggplot2/), [Session 5](/codeclub/05_ggplot-round-2/) and [Session 10](/codeclub/10_faceting-animating/) which are all about `ggplot2`.
+Check out the PAST Code Club sessions covering `ggplot2`:
+
+* [S01E04](/codeclub/04_ggplot2/): intro to ggplot2
+* [S01E05](/codeclub/05_ggplot-round-2/): intro to ggplot2 round 2
+* [S01E10](/codeclub/10_faceting-animating/): faceting and animating
+* [S02E06](/codeclub/s02e06_ggplot2/): another intro to ggplot2
+* [S02E07](/codeclub/s02e07_ggplot2_part2/): a second intro to ggplot2 round 2
+* [S02E08](/codeclub/s02e08_multiple_plots/): combining plots using faceting
+* [S02E09](/codeclub/s02e09_multiple_plots_part2/): combining plots using faceting and patchwork
+* [S02E10](/codeclub/s02e10_ggpubr/): adding statistics to plots
 
 If you've never used `ggplot2` before (or even if you have), you may find [this cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) useful.
 
@@ -227,8 +236,8 @@ pumpkins %>%
              y = weight_lbs, 
              fill = country)) +
   geom_jitter(alpha = 0.5, color = "black", shape = 21) +
-  scale_x_discrete(guide = guide_axis(angle = 45)) +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1)) 
 ```
 Now we can see easily that Switzerland has the heaviest tomatoes on average entered into this competition.
 
@@ -242,9 +251,9 @@ tomato_plot <- pumpkins %>%
              y = weight_lbs, 
              fill = country)) +
   geom_jitter(alpha = 0.5, color = "black", shape = 21) +
-  scale_x_discrete(guide = guide_axis(angle = 45)) +
   theme_classic() +
-  theme(legend.position = "none") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs (x = "Country",
         y = "Weight (in lbs)",
         title = "Weights of Tomatoes by Country Entered \nin the Great Pumpkin Commonwealth Competition")
@@ -264,12 +273,12 @@ ggplotly(tomato_plot)
 to_plot <- ggplotly(tomato_plot)
 
 json <- plotly_json(to_plot, FALSE)
-write(json, 'tomato1')
+write(json, 'tomato1.json')
 ```
 
-```{{< chart data="tomato1.json" >}}``` 
+```{{< chart data="tomato1" >}}``` 
 
-Wow that was easy!  Note that when you hover over a data point you see the information mapped in your `aes()` statement -- this is the default.  Some of the work we did to make our plot look nice is gone, so we will have to come back to that.
+Wow that was easy!  Note that when you hover over a data point you see the information mapped in your `aes()` statement -- this is the default.  We will go over ways to change this.
 
 <br>
 
@@ -292,7 +301,6 @@ tomato_plot <- pumpkins %>%
              fill = country,
              text = grower_name)) +
   geom_jitter(alpha = 0.5, color = "black", shape = 21) +
-  scale_x_discrete(guide = guide_axis(angle = 45)) +
   theme_classic() +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 45)) +
@@ -305,7 +313,7 @@ ggplotly(tomato_plot,
 ```
 
 ```{r, echo = FALSE}
-to_plot <- ggplotly(tomato_plot)
+to_plot <- ggplotly(tomato_plot, tooltip = "text")
 
 json <- plotly_json(to_plot, FALSE)
 write(json, 'tomato2.json')
@@ -315,7 +323,7 @@ write(json, 'tomato2.json')
 
 You can play around a lot with tooltip to get it to be exactly how you want, and you can include multiple things in your hover text.
 
-You can add multiple items to `text`, and also ues the function `glue()` which allows more intuitive pasting to get your hover text to in your preferred format.
+You can add multiple items to `text`, and also use the function `glue()` which allows more intuitive pasting to get your hover text to in your preferred format.
 ```{r, eval = FALSE}
 tomato_plot <- pumpkins %>%
   filter(vegetable == "Tomato") %>%
@@ -326,7 +334,6 @@ tomato_plot <- pumpkins %>%
              text = glue("Grown by {grower_name}
                          From {city}, {state_prov}"))) +
   geom_jitter(alpha = 0.5, color = "black", shape = 21) +
-  scale_x_discrete(guide = guide_axis(angle = 45)) +
   theme_classic() +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 45)) +
@@ -339,7 +346,7 @@ ggplotly(tomato_plot,
 ```
 
 ```{r, echo = FALSE}
-to_plot <- ggplotly(tomato_plot)
+to_plot <- ggplotly(tomato_plot, tooltip = "text")
 
 json <- plotly_json(to_plot, FALSE)
 write(json, 'tomato3.json')
