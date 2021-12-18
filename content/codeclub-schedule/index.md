@@ -7,10 +7,22 @@ title: "Schedule for Code Club"
 
 <br>
 
-## Fall 2021 sessions
+## Spring '22
 
-This fall, we will meet on Thursdays at 3 pm through Zoom.  
-[Sign up using the form](/codeclub-about/#sign-up) or [email Jelmer](mailto:poelstra.1@osu.edu) to get the Zoom link.
+We will restart Code Club during the week of January 10th, 2022.
+[Sign up using the form](/codeclub-about/#sign-up)!
+
+The schedule will appear here as soon as we have finalized it.
+
+<!--- We have also included these sessions in the [BioDASH calendar](/events/#calendar). -->
+
+<br>
+
+------------------------------------------------------------------------
+
+## Past sessions
+
+### Fall '21
 
 | Session | Date         | Presenter                  | Topic (+ link)                                              | Topic block              |
 |---------|--------------|----------------------------|-------------------------------------------------------------|--------------------------|
@@ -21,23 +33,13 @@ This fall, we will meet on Thursdays at 3 pm through Zoom.
 | **S02E05**  | Sep 23 | Stephen                    | [**Tidyverse intro -- part II**](/codeclub/s02e05_tidyverse-intro-part2/)  | Back to basics in R |
 | **S02E06**  | Sep 30 | Michael B.                 | [**_ggplot_ intro -- part I**](/codeclub/s02e06_ggplot2/)      | Plotting in R            |
 | **S02E07**  | Oct 07 | Jelmer                     | [**_ggplot_ intro -- part II**](/codeclub/s02e07_ggplot2_part2/) | Plotting in R          |
-| -           | Oct 14 |                            | _No Code Club (Fall Break)_                                   |                          |
 | **S02E08**  | Oct 21 | Mike S.                    | [**Faceting plots**](/codeclub/s02e08_multiple_plots/)        | Plotting in R            |
-| **S02E09**  | Oct 28 | Mike S.                    | **Combining plots & more faceting**                           | Plotting in R            |
-| **S02E10**  | Nov 04 | Daniel Quiroz Moreno (HCS) | **Adding statistical results to plots <br> using _ggpubr_**   | Plotting in R            |
-| -           | Nov 11 |                            | _No Code Club (Veteran's Day)_                                |                          |
+| **S02E09**  | Oct 28 | Mike S.                    | [**Faceting and combining plots**](/codeclub/s02e09_multiple_plots_part2/)     | Plotting in R            |
+| **S02E10**  | Nov 04 | Daniel Quiroz Moreno (HCS) | [**Adding statistical results to plots <br> using _ggpubr_**](/codeclub/s02e10_ggpubr/)   | Plotting in R            |
 | **S02E11**  | Nov 18 | Julia Vrtilek (EEOB)       | **Analysis of bat social vocalizations <br> with R at OSC**   | Putting code to practice |
-| -           | Nov 25 |                            | _No Code Club (Thanksgiving)_                                 |                          |
-| **S02E12**  | Dec 02 | Matthew Teegarden (FST)    | **Shiny bright like a diamond: an intro <br> to building interactive applications in R** | Putting code to practice |
-| **S02E13**  | Dec 09 | Jessica                    | **Interactive plots with _Plotly_**                           | Plotting in R |
+| **S02E12**  | Dec 02 | Matthew Teegarden (FST)    | [**Shiny bright like a diamond: an intro <br> to building interactive applications in R**](/codeclub/s02e11_shiny_intro/) | Putting code to practice |
+| **S02E13**  | Dec 09 | Jessica                    | [**Interactive plots with _Plotly_**](/codeclub/s02e12_plotly/)                          | Plotting in R |
 
-We have also included these sessions in the [BioDASH calendar](/events/#calendar).
-
-<br>
-
-------------------------------------------------------------------------
-
-## Past sessions
 
 ### Season 1: '20-'21
 

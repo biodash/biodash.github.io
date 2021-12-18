@@ -10,7 +10,7 @@ toc: true
 
 <div class="alert alert-note">
 <div>
-<b>Code Club restarts for the fall '21 semester on Thursday August 26th &ndash;
+<b>Code Club restarts for the Spring '22 semester in the week of January 10th &ndash;
 see the <a href="/codeclub-schedule/">schedule</a>.
 If you're interested in joining us, please fill out the
 <a href="#sign-up">form at the bottom of this page!</a></b>
@@ -74,7 +74,7 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 ## Sign up
 To sign up, please fill out the Google Form below. Hope to see you at Code Club! 
 
-<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfz8xJL_gjG7ZbSfpnDuz3ugasNbAAhFpIxFaZaND50i3NYUA/viewform?embedded=true" width="640" height="2460" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfP9OJdeoEpPGji3tqCvLdcBqAcmZi4P-TUVaBJtI1QhqNl2Q/viewform?embedded=true" width="640" height="2273" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
 <br/> <br/> <br/>
 
