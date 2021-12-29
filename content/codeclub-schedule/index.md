@@ -20,7 +20,7 @@ Here is the schedule for the first several sessions:
 |-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
 | **S02E14**  | Jan 13    | Mike S.      | **T-tests**                                                      | Basic statistics in R    |
 | **S02E15**  | Jan 20    | Jessica      | **ANOVA**                                                        | Basic statistics in R    |
-| **S02E16**  | Jan 27    | Stephen      | **Regression**                                                   | Basic statistics in R    |
+| **S02E16**  | Jan 27    | Stephen      | **Correlation and regression**                                   | Basic statistics in R    |
 | **S02E17**  | Feb 03    | Jelmer       | **Principal Component Analysis**                                 | Basic statistics in R    |
 | **S02E18**  | Feb 10    | Michael B.   | **Working with data structures returned by stats functions**     | Basic statistics in R    |
 
