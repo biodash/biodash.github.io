@@ -9,8 +9,11 @@ title: "Schedule for Code Club"
 
 ## Spring '22
 
-We will meet on Thursdays at 2 pm starting on January 13th, 2022.
+We will meet on **Thursdays at 2 pm** starting on January 13th, 2022.
 [Sign up using the form](/codeclub-about/#sign-up)!
+
+We meet over Zoom (sign up for the link) but you can
+you can also join Jessica in person in Howlett 340.
 
 <!--- We have also included these sessions in the [BioDASH calendar](/events/#calendar). -->
 
@@ -20,8 +23,8 @@ Here is the schedule for the first several sessions:
 |-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
 | **S02E14**  | Jan 13    | Mike S.      | **T-tests**                                                      | Basic statistics in R    |
 | **S02E15**  | Jan 20    | Jessica      | **ANOVA**                                                        | Basic statistics in R    |
-| **S02E16**  | Jan 27    | Stephen      | **Correlation and regression**                                   | Basic statistics in R    |
-| **S02E17**  | Feb 03    | Jelmer       | **Principal Component Analysis**                                 | Basic statistics in R    |
+| **S02E16**  | Jan 27    | Jelmer       | **Principal Component Analysis**                                 | Basic statistics in R    |
+| **S02E17**  | Feb 03    | Stephen      | **Correlation and regression**                                   | Basic statistics in R    |
 | **S02E18**  | Feb 10    | Michael B.   | **Working with data structures returned by stats functions**     | Basic statistics in R    |
 
 <br>
