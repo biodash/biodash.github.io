@@ -12,8 +12,8 @@ title: "Schedule for Code Club"
 We will meet on **Thursdays at 2 pm** starting on January 13th, 2022.
 [Sign up using the form](/codeclub-about/#sign-up)!
 
-We meet over Zoom (sign up for the link) but you can
-you can also join Jessica in person in Howlett 340.
+We will be meeting over Zoom (sign up for the link),
+but you can also join Jessica, who will connect from Howlett 340, in person.
 
 <!--- We have also included these sessions in the [BioDASH calendar](/events/#calendar). -->
 
