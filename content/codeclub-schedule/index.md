@@ -9,18 +9,28 @@ title: "Schedule for Code Club"
 
 ## Spring '22
 
-We will restart Code Club during the week of January 10th, 2022.
+We will meet on Thursdays at 2 pm starting on January 13th, 2022.
 [Sign up using the form](/codeclub-about/#sign-up)!
 
-The schedule will appear here as soon as we have finalized it.
-
 <!--- We have also included these sessions in the [BioDASH calendar](/events/#calendar). -->
+
+Here is the schedule for the first several sessions:
+
+| Session     | Date      | Presenter    | Topic (+ link)                                                   | Topic block              |
+|-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
+| **S02E14**  | Jan 13    | Mike S.      | **T-tests**                                                      | Basic statistics in R    |
+| **S02E15**  | Jan 20    | Jessica      | **ANOVA**                                                        | Basic statistics in R    |
+| **S02E16**  | Jan 27    | Stephen      | **Regression**                                                   | Basic statistics in R    |
+| **S02E17**  | Feb 03    | Jelmer       | **Principal Component Analysis**                                 | Basic statistics in R    |
+| **S02E18**  | Feb 10    | Michael B.   | **Working with data structures returned by stats functions**     | Basic statistics in R    |
 
 <br>
 
 ------------------------------------------------------------------------
 
 ## Past sessions
+
+Ask us for access to the Zoom recordings of previous Code Club sessions!
 
 ### Fall '21
 
@@ -51,7 +61,7 @@ The schedule will appear here as soon as we have finalized it.
 | **4**       | Dec 16, 2020 | Michael B. | [***ggplot2 -- round 1***](/codeclub/04_ggplot2)                                 |                         |
 | **5**       | Jan 15, 2021 | Jessica    | [***ggplot2 -- round 2***](/codeclub/05_ggplot-round-2)                          |                         |
 | **6**       | Jan 22, 2021 | Stephen    | [**Factors**](/codeclub/06_factors)                                              |                         |
-| **7**       | Jan 29, 2021 | Jelmer     | [**R Markdown**](/codeclub/07_rmarkdown/)                                         |                         |
+| **7**       | Jan 29, 2021 | Jelmer     | [**R Markdown**](/codeclub/07_rmarkdown/)                                         |                       |
 | **8**       | Feb 5, 2021  | Mike S.    | [**Pivoting data**](/codeclub/08_pivoting/)                                      |                         |
 | **9**       | Feb 12, 2021 | Michael B. | [**Subsetting data**](/codeclub/09_subsetting/)                                  |                         |
 | **10**      | Feb 19, 2021 | Jessica    | [**Faceting, animating, and combining plots**](/codeclub/10_faceting-animating/) |                         |
