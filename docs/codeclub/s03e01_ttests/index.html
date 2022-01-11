@@ -1,0 +1,1735 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.0.0-beta.3 for Hugo" />
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Jelmer Poelstra" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="We&#39;ll start off our series on statistical tests by running some basic t-tests, extracting the results, and creating some visualizations." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s03e01_ttests/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#3f51b5" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+      
+    
+
+    
+    
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.80f9a276c6100914c616a06e45ba8d09.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9F9CQ7P0DX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'G-9F9CQ7P0DX', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="https://biodash.github.io/codeclub/s03e01_ttests/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="BioDASH" />
+  <meta property="og:url" content="https://biodash.github.io/codeclub/s03e01_ttests/" />
+  <meta property="og:title" content="Code Club S03E01: t-tests In R | BioDASH" />
+  <meta property="og:description" content="We&#39;ll start off our series on statistical tests by running some basic t-tests, extracting the results, and creating some visualizations." /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
+    <meta property="twitter:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2022-01-10T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2022-01-11T17:46:07-05:00">
+  
+
+  
+
+
+
+  
+
+  
+
+  <link rel='stylesheet' href='/css/highlight-light.css' title='hl-light'>
+<link rel='stylesheet' href='/css/highlight-dark.css' title='hl-dark' disabled>
+
+
+
+  <title>Code Club S03E01: t-tests In R | BioDASH</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="eb0c91c55bbdbb6b7fa83685bb498369" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.7a224883d792570fd34d30c7134eace3.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Code Club</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/codeclub-schedule/"><span>- <b>Schedule</b></span></a>
+            
+              <a class="dropdown-item" href="/codeclub/"><span>- Past Sessions</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-setup/"><span>- Computer Setup</span></a>
+            
+              <a class="dropdown-item" href="/"><span>------------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-suggest/"><span>- Suggest a Topic</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-present/"><span>- Info for Presenters</span></a>
+            
+              <a class="dropdown-item" href="/"><span>-----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-about/"><span>- <b>About Code Club & Join Us!</b></span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/events/"><span>Other Events</span></a>
+        </li>
+
+        
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Tutorials & Materials</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/material/"><span><b>Overview</b></span></a>
+            
+              <a class="dropdown-item" href="/"><span>---------------------</span></a>
+            
+              <a class="dropdown-item" href="/tutorials/r-resources-tips/"><span>- R Resources and Tips</span></a>
+            
+              <a class="dropdown-item" href="/"><span>--------------------</span></a>
+            
+              <a class="dropdown-item" href="https://mcic-osu.github.io/2020-12-microbiomics-workshop/"><span>- Metabarcoding workshop (Fall '20)</span></a>
+            
+              <a class="dropdown-item" href="/tutorials/2021-01_rnaseq/"><span>- RNA-seq intro meetings (Spring '21)</span></a>
+            
+              <a class="dropdown-item" href="https://mcic-osu.github.io/pracs-sp21/"><span>- Computing Course (Spring '21)</span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/support/"><span>Need Support?</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="https://github.com/biodash/biodash.github.io" target="_blank" rel="noopener"><i class='fab fa-github'></i><span></span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/index.xml" target="_blank" rel="noopener"><i class='fas fa-rss'></i><span></span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    
+<div class="container-fluid docs">
+    <div class="row flex-xl-nowrap">
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+            <ul class="nav toc-top">
+                <li><a href="#" id="back_to_top" class="docs-toc-title">Contents</a></li>
+            </ul>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#learning-objectives">Learning objectives</a></li>
+    <li><a href="#1----intro">1 &ndash; Intro</a>
+      <ul>
+        <li><a href="#breakout-room-does-average-14-mile-speed-differ-for-high-and-low-horsepower-cars">Breakout Room: Does Average 1/4-mile Speed Differ For High And Low Horsepower Cars?</a></li>
+        <li><a href="#bonus">Bonus</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+        <main class="col-12 col-md-0 col-xl-10 py-md-3 pl-md-5 docs-content" role="main">
+            
+
+            <article class="article">
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Code Club S03E01: t-tests In R</h1>
+
+  
+
+  
+    
+
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span >
+      <a href="/authors/mike-sovic/">Mike Sovic</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+    Jan 11, 2022
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+                <div class="article-container">
+                    <div class="article-style">
+                        <br>
+<h2 id="learning-objectives">Learning objectives</h2>
+<blockquote>
+<ul>
+<li>Identify the types of data structures underlying the inputs and outputs of a basic t-test in R, with focus on vectors, lists, and data frames.</li>
+<li>Use a helper tidy package (broom) to clean up t-test results.</li>
+<li>Create some t-test-related visualizations.</li>
+<li>Practice with some basic tidyverse/dplyr functions (select, filter)</li>
+</ul>
+</blockquote>
+<br>
+<hr>
+<h2 id="1----intro">1 &ndash; Intro</h2>
+<p>Starting today, the upcoming block of Code Club sessions will center around performing some common statistical tests in R. We don&rsquo;t plan to dive in to a lot of statistical details, but will instead focus on practical aspects of running the tests/analyses. We&rsquo;ll pay particular attention to things like the types/classes of data that need to go in to each test, the structure of the results that come out, and since R is so good with visualization, we&rsquo;ll probably do a fair amount of plotting along the way too. Let&rsquo;s go ahead and load the tidyverse before we get started&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+</code></pre>
+</div>
+<p>In this session we&rsquo;ll do t-tests with the <a href="https://rdrr.io/r/stats/t.test.html" target="_blank" rel="noopener"><code>t.test()</code></a> function. First I&rsquo;m going to use the <a href="https://rdrr.io/r/stats/Normal.html" target="_blank" rel="noopener"><code>rnorm()</code></a> function to get some example data to work with by generating random samples (N=20) for each of two populations from a normal distribution with a mean of 10 and standard deviation of 3.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#generate a sample for population 1</span>
+<span class='nv'>pop1</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='o'>(</span>n <span class='o'>=</span> <span class='m'>20</span>, mean <span class='o'>=</span> <span class='m'>10</span>, sd <span class='o'>=</span> <span class='m'>3</span><span class='o'>)</span>
+<span class='c'>#view the population 1 data</span>
+<span class='nv'>pop1</span>
+
+<span class='c'>#&gt;  [1]  5.768260  8.557372 10.971429 10.649832  8.088188 14.940798 12.890222</span>
+<span class='c'>#&gt;  [8] 11.976135 11.202048 12.652296 12.290697  8.053090  9.374655 11.088953</span>
+<span class='c'>#&gt; [15]  7.866983  7.948705 12.953359 11.017880  8.615094  3.599791</span>
+
+
+<span class='c'>#generate a sample for population 2</span>
+<span class='nv'>pop2</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='o'>(</span>n <span class='o'>=</span> <span class='m'>20</span>, mean <span class='o'>=</span> <span class='m'>10</span>, sd <span class='o'>=</span> <span class='m'>3</span><span class='o'>)</span>
+<span class='c'>#view the population 2 data</span>
+<span class='nv'>pop2</span>
+
+<span class='c'>#&gt;  [1]  7.905270  3.495405 14.574270 13.983999  6.879837  6.010075  4.481750</span>
+<span class='c'>#&gt;  [8]  5.499168 11.481124 12.772900 13.914296 15.452734 11.653593 17.513278</span>
+<span class='c'>#&gt; [15] 13.021984  8.409504 12.502958  8.316560  8.356185  9.599970</span>
+</code></pre>
+</div>
+<p>A t-test is a good choice here if we want to use our samples to draw inference around whether the true means of these two populations are different. First we can check the means of the samples&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>pop1</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 10.02529</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>pop2</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 10.29124</span>
+</code></pre>
+</div>
+<p>The sample means are a bit different, but given they&rsquo;re random samples, that&rsquo;s not surprising even if they were drawn from the same population. The question is whether the observed difference in the means is large enough that, at some given level of confidence, we can infer that the true population means are different. Let&rsquo;s take a look at the documentation for the <a href="https://rdrr.io/r/stats/t.test.html" target="_blank" rel="noopener"><code>t.test()</code></a> function&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>?</span><span class='nv'>t.test</span>
+</code></pre>
+</div>
+<p><img src="images/ttest1.png" alt="ttest help"></p>
+<p>Like documentation for all R functions, this gives us some information on how to use <a href="https://rdrr.io/r/stats/t.test.html" target="_blank" rel="noopener"><code>t.test()</code></a>. In its most basic form, the only thing that has to be provided is the &lsquo;x&rsquo; argument, though since we have a two-sample test, we&rsquo;ll need to provide both &lsquo;x&rsquo; and &lsquo;y&rsquo;. According to the documentation, these need to be numeric vectors. Let&rsquo;s check that they are&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='o'>(</span><span class='nv'>pop1</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] TRUE</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/vector.html'>is.vector</a></span><span class='o'>(</span><span class='nv'>pop1</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] TRUE</span>
+
+
+<span class='nf'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='o'>(</span><span class='nv'>pop2</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] TRUE</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/vector.html'>is.vector</a></span><span class='o'>(</span><span class='nv'>pop2</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] TRUE</span>
+</code></pre>
+</div>
+<p>Looks like our two sets of data are in the right format, so we can run the t-test&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#run the t-test</span>
+<span class='nf'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>pop1</span>, y <span class='o'>=</span> <span class='nv'>pop2</span><span class='o'>)</span>
+
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt;   Welch Two Sample t-test</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; data:  pop1 and pop2</span>
+<span class='c'>#&gt; t = -0.2477, df = 33.833, p-value = 0.8059</span>
+<span class='c'>#&gt; alternative hypothesis: true difference in means is not equal to 0</span>
+<span class='c'>#&gt; 95 percent confidence interval:</span>
+<span class='c'>#&gt;  -2.448338  1.916431</span>
+<span class='c'>#&gt; sample estimates:</span>
+<span class='c'>#&gt; mean of x mean of y </span>
+<span class='c'>#&gt;  10.02529  10.29124</span>
+</code></pre>
+</div>
+<p>This result gives us several pieces of information. If it&rsquo;s not immediately apparent, we can again get some information about these results from the help, where the &ldquo;Value&rdquo; section tells us about what&rsquo;s returned by the function&hellip;</p>
+<p><img src="images/ttest2.png" alt="ttest help2"></p>
+<p>It says the result is a list, which is a flexible data structure in R that allows you to store multiple items of different types. This particular list has 10 entries. We can see details with the <a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> command. First we&rsquo;ll rerun <a href="https://rdrr.io/r/stats/t.test.html" target="_blank" rel="noopener"><code>t.test()</code></a> and this time save the results as an object named <em>tresult</em>&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#run t.test and save output to 'tresult'</span>
+<span class='nv'>tresult</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>pop1</span>, y <span class='o'>=</span> <span class='nv'>pop2</span><span class='o'>)</span>
+<span class='c'>#get the structure of 'tresult'</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>tresult</span><span class='o'>)</span>
+
+<span class='c'>#&gt; List of 10</span>
+<span class='c'>#&gt;  $ statistic  : Named num -0.248</span>
+<span class='c'>#&gt;   ..- attr(*, "names")= chr "t"</span>
+<span class='c'>#&gt;  $ parameter  : Named num 33.8</span>
+<span class='c'>#&gt;   ..- attr(*, "names")= chr "df"</span>
+<span class='c'>#&gt;  $ p.value    : num 0.806</span>
+<span class='c'>#&gt;  $ conf.int   : num [1:2] -2.45 1.92</span>
+<span class='c'>#&gt;   ..- attr(*, "conf.level")= num 0.95</span>
+<span class='c'>#&gt;  $ estimate   : Named num [1:2] 10 10.3</span>
+<span class='c'>#&gt;   ..- attr(*, "names")= chr [1:2] "mean of x" "mean of y"</span>
+<span class='c'>#&gt;  $ null.value : Named num 0</span>
+<span class='c'>#&gt;   ..- attr(*, "names")= chr "difference in means"</span>
+<span class='c'>#&gt;  $ stderr     : num 1.07</span>
+<span class='c'>#&gt;  $ alternative: chr "two.sided"</span>
+<span class='c'>#&gt;  $ method     : chr "Welch Two Sample t-test"</span>
+<span class='c'>#&gt;  $ data.name  : chr "pop1 and pop2"</span>
+<span class='c'>#&gt;  - attr(*, "class")= chr "htest"</span>
+</code></pre>
+</div>
+<p>From this we see that the list of 10 items consists of a mixture of numerics and characters. Each of the list entries has a name, and the &lsquo;$&rsquo; can be used with the name of the entry to extract an item from the list (this applies to lists in general in R - not just this one). Alternatively, the square bracket notation can be used to index (pull out) items from the list. Let&rsquo;s try several options for pulling out the pvalue, which is the 3rd entry&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>p.value</span>
+
+<span class='c'>#&gt; [1] 0.805862</span>
+
+<span class='nv'>tresult</span><span class='o'>[</span><span class='m'>3</span><span class='o'>]</span>
+
+<span class='c'>#&gt; $p.value</span>
+<span class='c'>#&gt; [1] 0.805862</span>
+
+<span class='nv'>tresult</span><span class='o'>[[</span><span class='m'>3</span><span class='o'>]</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1] 0.805862</span>
+</code></pre>
+</div>
+<p>We&rsquo;ve talked in a number of previous Code Club sessions about working with tidy data - this list doesn&rsquo;t fall in to that category, but can be converted to a tidy object with the <code>tidy()</code> function from the broom package, which is installed as part of the tidyverse (though not loaded).</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tidytresult</span> <span class='o'>&lt;-</span> <span class='nf'>broom</span><span class='nf'>::</span><span class='nf'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span><span class='o'>(</span><span class='nv'>tresult</span><span class='o'>)</span>
+<span class='nv'>tidytresult</span>
+
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 x 10</span></span>
+<span class='c'>#&gt;   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high</span>
+<span class='c'>#&gt;      <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span>   -</span><span style='color: #BB0000;'>0.266</span><span>      10.0      10.3    -</span><span style='color: #BB0000;'>0.248</span><span>   0.806      33.8    -</span><span style='color: #BB0000;'>2.45</span><span>      1.92</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</span></span>
+</code></pre>
+</div>
+<p>The <code>tidy()</code> function from broom takes results from a number of base R functions and makes them tidy. Now instead of a list we have a data frame (which actually is just a special kind of list) with 10 columns (though note they don&rsquo;t correspond directly to the 10 entries of the original list).</p>
+<p>Having results in this tidy format allows you to use the tidy approaches we&rsquo;ve worked with in the past. Let&rsquo;s try plotting the means of the two samples as a simple bar (column) plot. The two sample means are in the <em>estimate1</em> and <em>estimate2</em> columns. First we&rsquo;ll create a separate data frame that stores those means in long format (the values in one column and associated labels in a separate column).</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#get popualation 1 mean</span>
+<span class='nv'>pop1_mean</span> <span class='o'>&lt;-</span> <span class='nv'>tidytresult</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>estimate1</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#view population 1 mean</span>
+<span class='nv'>pop1_mean</span>
+
+<span class='c'>#&gt; estimate1 </span>
+<span class='c'>#&gt;  10.02529</span>
+
+
+<span class='c'>#get popualation 1 mean</span>
+<span class='nv'>pop2_mean</span> <span class='o'>&lt;-</span> <span class='nv'>tidytresult</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>estimate2</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#view population 2 mean</span>
+<span class='nv'>pop2_mean</span>
+
+<span class='c'>#&gt; estimate2 </span>
+<span class='c'>#&gt;  10.29124</span>
+
+
+<span class='nv'>means_to_plot</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span><span class='s'>"mean"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>pop1_mean</span>, <span class='nv'>pop2_mean</span><span class='o'>)</span>,
+                            <span class='s'>"sample"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"Population 1"</span>, <span class='s'>"Population 2"</span><span class='o'>)</span><span class='o'>)</span>
+  
+<span class='nv'>means_to_plot</span>
+
+<span class='c'>#&gt;               mean       sample</span>
+<span class='c'>#&gt; estimate1 10.02529 Population 1</span>
+<span class='c'>#&gt; estimate2 10.29124 Population 2</span>
+</code></pre>
+</div>
+<p>Now we can use that data frame to create the plot with <em>ggplot2</em>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#get a basic plot</span>
+<span class='nv'>means_to_plot</span> <span class='o'>%&gt;%</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sample</span>, y <span class='o'>=</span> <span class='nv'>mean</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span>
+
+</code></pre>
+<p><img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>And we can do a little customization&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#customize the plot a bit</span>
+<span class='nv'>means_to_plot</span> <span class='o'>%&gt;%</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sample</span>, y <span class='o'>=</span> <span class='nv'>mean</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='s'>"Mean Values From Random Samples"</span>, 
+       x <span class='o'>=</span> <span class='kc'>NULL</span>,
+       y <span class='o'>=</span> <span class='s'>"Mean Value"</span><span class='o'>)</span>
+
+</code></pre>
+<p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Now let&rsquo;s work with some real data. R has a small example dataset named <em>mtcars</em> already built in. It&rsquo;s a data frame with data on different models of car. It can be called with <code>mtcars</code>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>mtcars</span>
+
+<span class='c'>#&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
+<span class='c'>#&gt; Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
+<span class='c'>#&gt; Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>
+<span class='c'>#&gt; Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1</span>
+<span class='c'>#&gt; Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1</span>
+<span class='c'>#&gt; Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2</span>
+<span class='c'>#&gt; Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1</span>
+<span class='c'>#&gt; Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4</span>
+<span class='c'>#&gt; Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2</span>
+<span class='c'>#&gt; Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2</span>
+<span class='c'>#&gt; Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4</span>
+<span class='c'>#&gt; Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4</span>
+<span class='c'>#&gt; Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3</span>
+<span class='c'>#&gt; Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3</span>
+<span class='c'>#&gt; Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3</span>
+<span class='c'>#&gt; Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4</span>
+<span class='c'>#&gt; Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4</span>
+<span class='c'>#&gt; Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4</span>
+<span class='c'>#&gt; Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1</span>
+<span class='c'>#&gt; Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2</span>
+<span class='c'>#&gt; Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1</span>
+<span class='c'>#&gt; Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1</span>
+<span class='c'>#&gt; Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2</span>
+<span class='c'>#&gt; AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2</span>
+<span class='c'>#&gt; Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4</span>
+<span class='c'>#&gt; Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2</span>
+<span class='c'>#&gt; Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1</span>
+<span class='c'>#&gt; Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2</span>
+<span class='c'>#&gt; Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2</span>
+<span class='c'>#&gt; Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4</span>
+<span class='c'>#&gt; Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6</span>
+<span class='c'>#&gt; Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8</span>
+<span class='c'>#&gt; Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</span>
+</code></pre>
+</div>
+<p>As a quick reminder, <code>select()</code> allows you to choose columns of a data frame by name, while <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> allows you to select rows based on one or more logical (True/False) expressions.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#example of "select()"</span>
+<span class='nv'>mtcars</span> <span class='o'>%&gt;%</span> <span class='nf'>select</span><span class='o'>(</span><span class='nv'>mpg</span>, <span class='nv'>disp</span>, <span class='nv'>carb</span><span class='o'>)</span>
+
+<span class='c'>#&gt;                      mpg  disp carb</span>
+<span class='c'>#&gt; Mazda RX4           21.0 160.0    4</span>
+<span class='c'>#&gt; Mazda RX4 Wag       21.0 160.0    4</span>
+<span class='c'>#&gt; Datsun 710          22.8 108.0    1</span>
+<span class='c'>#&gt; Hornet 4 Drive      21.4 258.0    1</span>
+<span class='c'>#&gt; Hornet Sportabout   18.7 360.0    2</span>
+<span class='c'>#&gt; Valiant             18.1 225.0    1</span>
+<span class='c'>#&gt; Duster 360          14.3 360.0    4</span>
+<span class='c'>#&gt; Merc 240D           24.4 146.7    2</span>
+<span class='c'>#&gt; Merc 230            22.8 140.8    2</span>
+<span class='c'>#&gt; Merc 280            19.2 167.6    4</span>
+<span class='c'>#&gt; Merc 280C           17.8 167.6    4</span>
+<span class='c'>#&gt; Merc 450SE          16.4 275.8    3</span>
+<span class='c'>#&gt; Merc 450SL          17.3 275.8    3</span>
+<span class='c'>#&gt; Merc 450SLC         15.2 275.8    3</span>
+<span class='c'>#&gt; Cadillac Fleetwood  10.4 472.0    4</span>
+<span class='c'>#&gt; Lincoln Continental 10.4 460.0    4</span>
+<span class='c'>#&gt; Chrysler Imperial   14.7 440.0    4</span>
+<span class='c'>#&gt; Fiat 128            32.4  78.7    1</span>
+<span class='c'>#&gt; Honda Civic         30.4  75.7    2</span>
+<span class='c'>#&gt; Toyota Corolla      33.9  71.1    1</span>
+<span class='c'>#&gt; Toyota Corona       21.5 120.1    1</span>
+<span class='c'>#&gt; Dodge Challenger    15.5 318.0    2</span>
+<span class='c'>#&gt; AMC Javelin         15.2 304.0    2</span>
+<span class='c'>#&gt; Camaro Z28          13.3 350.0    4</span>
+<span class='c'>#&gt; Pontiac Firebird    19.2 400.0    2</span>
+<span class='c'>#&gt; Fiat X1-9           27.3  79.0    1</span>
+<span class='c'>#&gt; Porsche 914-2       26.0 120.3    2</span>
+<span class='c'>#&gt; Lotus Europa        30.4  95.1    2</span>
+<span class='c'>#&gt; Ford Pantera L      15.8 351.0    4</span>
+<span class='c'>#&gt; Ferrari Dino        19.7 145.0    6</span>
+<span class='c'>#&gt; Maserati Bora       15.0 301.0    8</span>
+<span class='c'>#&gt; Volvo 142E          21.4 121.0    2</span>
+
+
+<span class='c'>#example of "filter()"</span>
+<span class='nv'>mtcars</span> <span class='o'>%&gt;%</span> <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>wt</span> <span class='o'>&gt;</span> <span class='m'>4</span><span class='o'>)</span>
+
+<span class='c'>#&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
+<span class='c'>#&gt; Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3</span>
+<span class='c'>#&gt; Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4</span>
+<span class='c'>#&gt; Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4</span>
+<span class='c'>#&gt; Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4</span>
+</code></pre>
+</div>
+<p>We&rsquo;ll focus on just a couple of the variables in this dataset: Horsepower (hp) and 1/4 mile time in seconds (qsec). Note that in some cases I&rsquo;ve provided a couple equivalent solutions that represent a tidy way of doing things (generally preferred) and a non-tidy (aka base R) way of doing things, just so you can see the difference if you are interested. If this is likely to confuse you, feel free to ignore the alternative (non-tidy) parts.</p>
+<hr>
+<h3 id="breakout-room-does-average-14-mile-speed-differ-for-high-and-low-horsepower-cars">Breakout Room: Does Average 1/4-mile Speed Differ For High And Low Horsepower Cars?</h3>
+<div class="puzzle">
+<div>
+<p>We&rsquo;ll define &ldquo;low&rdquo; horsepower cars as those with &lt;120 hp, and &ldquo;high&rdquo; horsepower cars as &gt;=120 hp. First let&rsquo;s get the average 1/4-mile times (qsec) for each of these groups. Save these mean times as the objects &lsquo;low_hp_time&rsquo; and &lsquo;high_hp_time&rsquo;.</p>
+<details>
+<summary>
+<b>Hint</b> (click here)
+</summary>
+<p><br> Use <a href="https://rdrr.io/r/stats/filter.html" target="_blank" rel="noopener"><code>filter()</code></a>, <code>select()</code>, and <a href="https://rdrr.io/r/base/unlist.html" target="_blank" rel="noopener"><code>unlist()</code></a> to pull out the appropriate sets of numeric values for each group, and then <a href="https://rdrr.io/r/base/mean.html" target="_blank" rel="noopener"><code>mean()</code></a> to get the averages. Note that <a href="https://rdrr.io/r/base/unlist.html" target="_blank" rel="noopener"><code>unlist()</code></a> takes a list or data frame object and &ldquo;flattens&rdquo; it, or in other words, simplifies it down to, in this case, a numeric vector. <br></p>
+</details>
+<details>
+<summary>
+<b>Solution 1 (tidy)</b> (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>low_hp_time</span> <span class='o'>&lt;-</span> <span class='nv'>mtcars</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>hp</span> <span class='o'>&lt;</span> <span class='m'>120</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>qsec</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='nv'>low_hp_time</span>
+
+<span class='c'>#&gt; [1] 18.91</span>
+
+
+<span class='nv'>high_hp_time</span> <span class='o'>&lt;-</span> <span class='nv'>mtcars</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>hp</span> <span class='o'>&gt;=</span> <span class='m'>120</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>qsec</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='nv'>high_hp_time</span>
+
+<span class='c'>#&gt; [1] 16.91235</span>
+</code></pre>
+</div>
+</details>
+<details>
+<summary>
+<b>Solution 2 (not tidy) </b> (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>low_hp_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>mtcars</span><span class='o'>$</span><span class='nv'>qsec</span><span class='o'>[</span><span class='nv'>mtcars</span><span class='o'>$</span><span class='nv'>hp</span> <span class='o'>&lt;</span> <span class='m'>120</span><span class='o'>]</span><span class='o'>)</span> 
+
+<span class='nv'>low_hp_time</span>
+
+<span class='c'>#&gt; [1] 18.91</span>
+
+
+<span class='nv'>high_hp_time</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>mtcars</span><span class='o'>$</span><span class='nv'>qsec</span><span class='o'>[</span><span class='nv'>mtcars</span><span class='o'>$</span><span class='nv'>hp</span> <span class='o'>&gt;=</span> <span class='m'>120</span><span class='o'>]</span><span class='o'>)</span>
+
+<span class='nv'>high_hp_time</span>
+
+<span class='c'>#&gt; [1] 16.91235</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="puzzle">
+<div>
+<br>
+<p>Now let&rsquo;s plot those mean values with a bar plot (<code>geom_col()</code>).</p>
+<details>
+<summary>
+<b>Hint</b> (click here)
+</summary>
+<p><br> All ggplots (<code>geom_col()</code> is a ggplot function) need input data from a data frame (or tibble, which is just a special data frame). First create a data frame named &ldquo;time_df&rdquo; that has a column named &ldquo;time&rdquo; that stores the average qsec values and a column named &ldquo;hp_class&rdquo; that indicates whether the corresponding time is for &ldquo;High HP&rdquo; or &ldquo;Low HP&rdquo; cars. Then map the ggplot &ldquo;x&rdquo; aesthetic to the &ldquo;hp_class&rdquo; column and the &ldquo;y&rdquo; aesthetic to the &ldquo;time&rdquo; column and add a <code>geom_col()</code> layer.<br></p>
+</details>
+<details>
+<summary>
+<b>Solution</b> (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>time_df</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span><span class='s'>"time"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>low_hp_time</span>, <span class='nv'>high_hp_time</span><span class='o'>)</span>,
+                      <span class='s'>"hp_class"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"Low HP"</span>, <span class='s'>"High HP"</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='nv'>time_df</span>
+
+<span class='c'>#&gt;       time hp_class</span>
+<span class='c'>#&gt; 1 18.91000   Low HP</span>
+<span class='c'>#&gt; 2 16.91235  High HP</span>
+
+
+<span class='nv'>time_df</span> <span class='o'>%&gt;%</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>hp_class</span>, y <span class='o'>=</span> <span class='nv'>time</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span>
+
+</code></pre>
+<p><img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+</div>
+</div>
+<div class="puzzle">
+<div>
+<br>
+<p>So, do these data provide evidence for true differences in 1/4 mile speed between high and low horsepower cars? Try running a t-test to test for differences in the two groups of 1/4 mile times, and save the pvalue as an object named <em>speed_p</em>.</p>
+<details>
+<summary>
+<b>Hint</b> (click here)
+</summary>
+<p><br> Use the <a href="https://rdrr.io/r/stats/t.test.html" target="_blank" rel="noopener"><code>t.test()</code></a> function. Remember that the &ldquo;x&rdquo; and &ldquo;y&rdquo; arguments each need to be numeric vectors. <br></p>
+</details>
+<details>
+<summary>
+<b>Solution 1 (tidy)</b> (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#get the values for low-horsepower cars</span>
+<span class='nv'>low_hp_vals</span> <span class='o'>&lt;-</span> <span class='nv'>mtcars</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>hp</span> <span class='o'>&lt;</span> <span class='m'>120</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>qsec</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='c'>#get the values for high-horsepower cars</span>
+<span class='nv'>high_hp_vals</span> <span class='o'>&lt;-</span> <span class='nv'>mtcars</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>hp</span> <span class='o'>&gt;=</span> <span class='m'>120</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='nv'>qsec</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='c'>#run the t-test and save the results</span>
+<span class='nv'>speed_res</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>low_hp_vals</span>, y <span class='o'>=</span> <span class='nv'>high_hp_vals</span><span class='o'>)</span>
+
+<span class='nv'>speed_p</span> <span class='o'>&lt;-</span> <span class='nv'>speed_res</span><span class='o'>$</span><span class='nv'>p.value</span>
+
+<span class='nv'>speed_p</span>
+
+<span class='c'>#&gt; [1] 0.001007059</span>
+</code></pre>
+</div>
+</details>
+<details>
+<summary>
+<b>Solution 2 (not tidy)</b> (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#get the values for low-horsepower cars</span>
+<span class='nv'>low_hp_vals</span> <span class='o'>&lt;-</span> <span class='nv'>mtcars</span><span class='o'>$</span><span class='nv'>qsec</span><span class='o'>[</span><span class='nv'>mtcars</span><span class='o'>$</span><span class='nv'>hp</span> <span class='o'>&lt;</span> <span class='m'>120</span><span class='o'>]</span>
+
+<span class='c'>#get the values for high-horsepower cars</span>
+<span class='nv'>high_hp_vals</span> <span class='o'>&lt;-</span> <span class='nv'>mtcars</span><span class='o'>$</span><span class='nv'>qsec</span><span class='o'>[</span><span class='nv'>mtcars</span><span class='o'>$</span><span class='nv'>hp</span> <span class='o'>&gt;=</span> <span class='m'>120</span><span class='o'>]</span>
+
+<span class='c'>#run the t-test and save the results</span>
+<span class='nv'>speed_res</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>low_hp_vals</span>, y <span class='o'>=</span> <span class='nv'>high_hp_vals</span><span class='o'>)</span>
+
+<span class='nv'>speed_p</span> <span class='o'>&lt;-</span> <span class='nv'>speed_res</span><span class='o'>$</span><span class='nv'>p.value</span>
+
+<span class='nv'>speed_p</span>
+
+<span class='c'>#&gt; [1] 0.001007059</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="puzzle">
+<div>
+<br>
+<p>Try running the same test as above, but this time, do it as a one-sided test, with the alternative hypothesis that the 1/4-mile time for the high-horsepower group will be lower than that for the low-horsepower group. How does the p-value from this test compare to the previous (two-sided) test?</p>
+<details>
+<summary>
+<b>Hint</b> (click here)
+</summary>
+<p><br> Check out the <em>alternative</em> argument on the t.test help page, along with information in the <strong>Details</strong> section of that same page. <br></p>
+</details>
+<details>
+<summary>
+<b>Solution</b> (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#run the t-test and save the results</span>
+<span class='nv'>speed_res</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>low_hp_vals</span>, y <span class='o'>=</span> <span class='nv'>high_hp_vals</span>, alternative <span class='o'>=</span> <span class='s'>"greater"</span><span class='o'>)</span>
+
+<span class='nv'>speed_p</span> <span class='o'>&lt;-</span> <span class='nv'>speed_res</span><span class='o'>$</span><span class='nv'>p.value</span>
+
+<span class='nv'>speed_p</span>
+
+<span class='c'>#&gt; [1] 0.0005035295</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<hr>
+<h3 id="bonus">Bonus</h3>
+<div class="puzzle">
+<div>
+<br>
+<p>Let&rsquo;s try to visualize the data in a different way? This time, let&rsquo;s try plotting the distribution of values in each of the samples together on a single plot. See if you can recreate the plot below&hellip;</p>
+<div class="highlight">
+<p><img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<details>
+<summary>
+<b>Hint</b> (click here)
+</summary>
+<p><br> First obtain a long data frame with the raw values for both groups in one column, and an identifier (high-hp, low-hp) in another column. You can do this by hand, using similar methods as we used in exercises above, or you can go back to the original <em>mtcars</em> data frame and use <code>mutate()</code> in combination with either <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a> or <code>case_when()</code> to add the identifier column. Then use <code>geom_histogram()</code>, adjusting the <em>alpha</em> and <em>position</em> arguments, and customize the theme and the labels. <br></p>
+</details>
+<details>
+<summary>
+<b>Solution</b> (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>mtcars</span> <span class='o'>%&gt;%</span> <span class='nf'>mutate</span><span class='o'>(</span><span class='s'>"hp_class"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span><span class='nv'>hp</span> <span class='o'>&lt;</span> <span class='m'>120</span>, <span class='s'>"Low_HP"</span>, <span class='s'>"High_HP"</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>qsec</span>, fill <span class='o'>=</span> <span class='nv'>hp_class</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_histogram</span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.7</span>, position <span class='o'>=</span> <span class='s'>"identity"</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Time (seconds)"</span>,
+       y <span class='o'>=</span> <span class='s'>"Count"</span>,
+       title <span class='o'>=</span> <span class='s'>"Distribution of 1/4 Mile Times By Horsepower Class"</span><span class='o'>)</span>
+
+<span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
+
+</code></pre>
+<p><img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+</div>
+</div>
+<br>
+<hr>
+
+                    </div>
+
+                    <br>
+
+                    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s03e01_ttests/&amp;text=Code%20Club%20S03E01:%20t-tests%20In%20R" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s03e01_ttests/&amp;t=Code%20Club%20S03E01:%20t-tests%20In%20R" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Code%20Club%20S03E01:%20t-tests%20In%20R&amp;body=https://biodash.github.io/codeclub/s03e01_ttests/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s03e01_ttests/&amp;title=Code%20Club%20S03E01:%20t-tests%20In%20R" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Code%20Club%20S03E01:%20t-tests%20In%20R%20https://biodash.github.io/codeclub/s03e01_ttests/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s03e01_ttests/&amp;title=Code%20Club%20S03E01:%20t-tests%20In%20R" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="/authors/mike-sovic/"><img class="avatar mr-3 avatar-circle" src="/authors/mike-sovic/avatar_hu1ab2c0735ccc2e414b344a1bc08b8162_24652_270x270_fill_q90_lanczos_center.jpg" alt="Mike Sovic"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/authors/mike-sovic/">Mike Sovic</a></h5>
+      <h6 class="card-subtitle">Bioinformatician at CAPS</h6>
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:sovic.1@osu.edu" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/mikesovic" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.youtube.com/channel/UC2dB6jDTbqzlTM6edzfBSGQ" target="_blank" rel="noopener">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <br>
+
+                    <hr class="separator">
+
+                    <div class="clearfix">
+                        
+                        
+                        <span class="previous-link">
+                            <a href="https://biodash.github.io/codeclub/s02e12_plotly/">← S02E12: Plotly</a>
+                        </span>
+                        
+                        
+                        
+                    </div>
+
+                    <hr class="separator">
+
+                </div>
+
+            </article>
+
+            
+        </main>
+    </div>
+</div>
+
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+    
+    <p class="powered-by">
+      <a href="/license/">LICENSE: CC-BY-SA <br> <i class="fab fa-creative-commons fa-2x"></i><i class="fab fa-creative-commons-by fa-2x"></i><i class="fab fa-creative-commons-sa fa-2x"></i> </a><br>
+    </p>
+    
+</footer>
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key="></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.25/gmaps.min.js" integrity="sha256-7vjlAeb8OaTrCXZkCNun9djzuB2owUsaO72kXaFDBJs=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+      
+    
+    <script src="/en/js/wowchemy.min.2f16af175a3ec51b41b36bb4934b1cf7.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>
