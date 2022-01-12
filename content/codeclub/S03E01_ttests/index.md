@@ -2,10 +2,10 @@
 title: "Code Club S03E01: t-tests In R"
 summary: "We'll start off our series on statistical tests by running some basic t-tests, extracting the results, and creating some visualizations."  
 authors: [mike-sovic]
-date: "2022-01-10"
+date: "2022-01-12"
 output: hugodown::md_document
 toc: true
-rmd_hash: 702ffe7438a6ac51
+rmd_hash: 8406e95f98bfc34b
 
 ---
 
@@ -14,9 +14,56 @@ rmd_hash: 702ffe7438a6ac51
 ## Learning objectives
 
 > -   Identify the types of data structures underlying the inputs and outputs of a basic t-test in R, with focus on vectors, lists, and data frames.
-> -   Use a helper tidy package (broom) to clean up t-test results.
+> -   Use the "broom" package to clean (tidy) up t-test results.
 > -   Create some t-test-related visualizations.
-> -   Practice with some basic tidyverse/dplyr functions (select, filter)
+> -   Practice with some basic tidyverse/dplyr functions (`select()`, [`filter()`](https://rdrr.io/r/stats/filter.html))
+
+## Notes For Beginners
+
+We're starting this new session of Code Club a bit differently than we've started previous major sessions in that we're not easing in with basic R material, but instead assuming a bit of prior knowledge. But if you're new to Code Club and/or R though, don't worry - this section, and the rest of us in Code Club are here to help. Below I'll give a very brief overview of R, with an emphasis on things that will be relevant for today's session. Remember too that all previous Code Club material is available online, so feel free to check that out. And please don't hesitate to ask questions during the session, whether in the main room or in Breakout rooms. Some highlights for today's session...
+
+In R there are objects and functions.
+
+### Objects
+
+Objects are things you assign a name to, and we do that with something called the assignment operator ( \<- )...
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#assign the value 5 to an object named "my_object"</span>
+<span class='nv'>my_object</span> <span class='o'>&lt;-</span> <span class='m'>5</span>
+
+<span class='c'>#ask R to return that object</span>
+<span class='nv'>my_object</span>
+
+<span class='c'>#&gt; [1] 5</span>
+</code></pre>
+
+</div>
+
+You create lots of objects as you work in R. They persist until you remove them or until you close your R session.
+
+Each object is categorized into a type of data structure. Some common ones in R (and ones relevant for this session) include vectors, lists, and data frames.
+
+-   Vectors: Have one dimension, meaning they can be characterized by their length. "my_object" that I created above is a vector of length 1. If vectors contain more than one entry, all the entries must be of the same type, or class, at least from R's perspective. Numeric, character, and logical (TRUE/FALSE) are a few examples, and "my_object" is a numeric vector.
+-   Lists: A list is an object that can store multiple objects. Unlike vectors, the different objects stored in a list can be of different types. For example, a list could have three entries - 1.) a numeric vector of length 5 that stores the values 10:14, 2.) another list that itself stores several objects, and 3.) a character vector of length 3 that stores "red", "blue", "green".
+-   Data Frames: Data frames store "rectangular data", meaning datasets that are organized into colums and rows, and specifically those that have the same number of rows for each column. They are somewhat analgous to an Excel spreadsheet, assuming the data in that worksheet are perfectly rectangular.
+
+### Functions
+
+Functions in R usually have a descriptive name that gives you an idea of what they do, and they look like... [`mean()`](https://rdrr.io/r/base/mean.html) [`sum()`](https://rdrr.io/r/base/sum.html) [`c()`](https://rdrr.io/r/base/c.html)
+
+The [`c()`](https://rdrr.io/r/base/c.html) one might not be all that descriptive, but it stands for combine, and is a function that's used a lot to combine items into vectors of length \>1.
+
+Inside the parentheses you often specify one or more objects for the function to operate on, and also might give some function-specific directives that tweak its behavior.
+
+### Syntax
+
+There are essentially two dialects in R - often referred to as "base R" and the "tidyverse". You should be able to do most anything you want in R with either approach, and they can be mixed and matched. In general, base R tends to use more parentheses, square brackets, and \$'s, while with the "tidyverse" you'll see functions like `select()` and [`filter()`](https://rdrr.io/r/stats/filter.html) a lot, along with the pipe symbol ( %\>% ) which takes results from one function and "pipes" them directly into a next function. Admittedly, essentially having two languages can lead to confusion, especially if you're just getting started. We mostly stick with "tidy" code during Code Club, as it tends to be easier to follow/interpret.
+
+### Data Visualization
+
+R is really useful for creating data visualizations. Again, there are "base R"\" ways to plot data and "tidyverse" ways, which utilize functions that are part of a package named "ggplot2". While ggplot is a bit harder to learn than the base R plotting functions, it's also much more powerful, and in sticking with the "tidy" theme, we generally use it. Plots in ggplot are built by adding one or more layers to a plot, and data are specified with aesthetics, which link aspects of the plot (like the x and y axes, colors for points or lines on the plot, etc) to columns of a data frame that store the data.
 
 <br>
 
@@ -42,9 +89,9 @@ In this session we'll do t-tests with the [`t.test()`](https://rdrr.io/r/stats/t
 <span class='c'>#view the population 1 data</span>
 <span class='nv'>pop1</span>
 
-<span class='c'>#&gt;  [1]  5.768260  8.557372 10.971429 10.649832  8.088188 14.940798 12.890222</span>
-<span class='c'>#&gt;  [8] 11.976135 11.202048 12.652296 12.290697  8.053090  9.374655 11.088953</span>
-<span class='c'>#&gt; [15]  7.866983  7.948705 12.953359 11.017880  8.615094  3.599791</span>
+<span class='c'>#&gt;  [1] 10.154661  7.498932  3.426916  7.597499 11.533421 16.520010  9.607716</span>
+<span class='c'>#&gt;  [8] 13.356270  5.174309 13.373562  9.085778  6.630155  6.513986 11.570739</span>
+<span class='c'>#&gt; [15] 15.113513  9.793049 11.512667 11.191199 14.772047  5.842280</span>
 
 
 <span class='c'>#generate a sample for population 2</span>
@@ -52,9 +99,9 @@ In this session we'll do t-tests with the [`t.test()`](https://rdrr.io/r/stats/t
 <span class='c'>#view the population 2 data</span>
 <span class='nv'>pop2</span>
 
-<span class='c'>#&gt;  [1]  7.905270  3.495405 14.574270 13.983999  6.879837  6.010075  4.481750</span>
-<span class='c'>#&gt;  [8]  5.499168 11.481124 12.772900 13.914296 15.452734 11.653593 17.513278</span>
-<span class='c'>#&gt; [15] 13.021984  8.409504 12.502958  8.316560  8.356185  9.599970</span>
+<span class='c'>#&gt;  [1]  9.356629 13.664574 12.295782 16.459519 14.261572  9.605285  8.537716</span>
+<span class='c'>#&gt;  [8]  9.808906  7.465455 13.998645 11.770977 14.035046  4.744950 14.298506</span>
+<span class='c'>#&gt; [15]  9.867982  8.149314  5.317449 12.199504  9.139201  9.280096</span>
 </code></pre>
 
 </div>
@@ -65,11 +112,11 @@ A t-test is a good choice here if we want to use our samples to draw inference a
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>pop1</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 10.02529</span>
+<span class='c'>#&gt; [1] 10.01344</span>
 
 <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>pop2</span><span class='o'>)</span>
 
-<span class='c'>#&gt; [1] 10.29124</span>
+<span class='c'>#&gt; [1] 10.71286</span>
 </code></pre>
 
 </div>
@@ -120,13 +167,13 @@ Looks like our two sets of data are in the right format, so we can run the t-tes
 <span class='c'>#&gt;   Welch Two Sample t-test</span>
 <span class='c'>#&gt; </span>
 <span class='c'>#&gt; data:  pop1 and pop2</span>
-<span class='c'>#&gt; t = -0.2477, df = 33.833, p-value = 0.8059</span>
+<span class='c'>#&gt; t = -0.65482, df = 37.453, p-value = 0.5166</span>
 <span class='c'>#&gt; alternative hypothesis: true difference in means is not equal to 0</span>
 <span class='c'>#&gt; 95 percent confidence interval:</span>
-<span class='c'>#&gt;  -2.448338  1.916431</span>
+<span class='c'>#&gt;  -2.862735  1.463895</span>
 <span class='c'>#&gt; sample estimates:</span>
 <span class='c'>#&gt; mean of x mean of y </span>
-<span class='c'>#&gt;  10.02529  10.29124</span>
+<span class='c'>#&gt;  10.01344  10.71286</span>
 </code></pre>
 
 </div>
@@ -145,14 +192,14 @@ It says the result is a list, which is a flexible data structure in R that allow
 <span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>tresult</span><span class='o'>)</span>
 
 <span class='c'>#&gt; List of 10</span>
-<span class='c'>#&gt;  $ statistic  : Named num -0.248</span>
+<span class='c'>#&gt;  $ statistic  : Named num -0.655</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "t"</span>
-<span class='c'>#&gt;  $ parameter  : Named num 33.8</span>
+<span class='c'>#&gt;  $ parameter  : Named num 37.5</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "df"</span>
-<span class='c'>#&gt;  $ p.value    : num 0.806</span>
-<span class='c'>#&gt;  $ conf.int   : num [1:2] -2.45 1.92</span>
+<span class='c'>#&gt;  $ p.value    : num 0.517</span>
+<span class='c'>#&gt;  $ conf.int   : num [1:2] -2.86 1.46</span>
 <span class='c'>#&gt;   ..- attr(*, "conf.level")= num 0.95</span>
-<span class='c'>#&gt;  $ estimate   : Named num [1:2] 10 10.3</span>
+<span class='c'>#&gt;  $ estimate   : Named num [1:2] 10 10.7</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr [1:2] "mean of x" "mean of y"</span>
 <span class='c'>#&gt;  $ null.value : Named num 0</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "difference in means"</span>
@@ -165,22 +212,26 @@ It says the result is a list, which is a flexible data structure in R that allow
 
 </div>
 
+Another (arguably better, or at least cleaner) way to view this list is by simply clicking on *tresult* in the Environment window (usually top right on screen). Doing so allows us to view the object itself...
+
+![ttest_result](images/ttest_res.png)
+
 From this we see that the list of 10 items consists of a mixture of numerics and characters. Each of the list entries has a name, and the '\$' can be used with the name of the entry to extract an item from the list (this applies to lists in general in R - not just this one). Alternatively, the square bracket notation can be used to index (pull out) items from the list. Let's try several options for pulling out the pvalue, which is the 3rd entry...
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>p.value</span>
 
-<span class='c'>#&gt; [1] 0.805862</span>
+<span class='c'>#&gt; [1] 0.5165855</span>
 
 <span class='nv'>tresult</span><span class='o'>[</span><span class='m'>3</span><span class='o'>]</span>
 
 <span class='c'>#&gt; $p.value</span>
-<span class='c'>#&gt; [1] 0.805862</span>
+<span class='c'>#&gt; [1] 0.5165855</span>
 
 <span class='nv'>tresult</span><span class='o'>[[</span><span class='m'>3</span><span class='o'>]</span><span class='o'>]</span>
 
-<span class='c'>#&gt; [1] 0.805862</span>
+<span class='c'>#&gt; [1] 0.5165855</span>
 </code></pre>
 
 </div>
@@ -195,7 +246,7 @@ We've talked in a number of previous Code Club sessions about working with tidy 
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 x 10</span></span>
 <span class='c'>#&gt;   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high</span>
 <span class='c'>#&gt;      <span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'>1</span><span>   -</span><span style='color: #BB0000;'>0.266</span><span>      10.0      10.3    -</span><span style='color: #BB0000;'>0.248</span><span>   0.806      33.8    -</span><span style='color: #BB0000;'>2.45</span><span>      1.92</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span><span>   -</span><span style='color: #BB0000;'>0.699</span><span>      10.0      10.7    -</span><span style='color: #BB0000;'>0.655</span><span>   0.517      37.5    -</span><span style='color: #BB0000;'>2.86</span><span>      1.46</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'># … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</span></span>
 </code></pre>
 
@@ -215,7 +266,7 @@ Having results in this tidy format allows you to use the tidy approaches we've w
 <span class='nv'>pop1_mean</span>
 
 <span class='c'>#&gt; estimate1 </span>
-<span class='c'>#&gt;  10.02529</span>
+<span class='c'>#&gt;  10.01344</span>
 
 
 <span class='c'>#get popualation 1 mean</span>
@@ -226,7 +277,7 @@ Having results in this tidy format allows you to use the tidy approaches we've w
 <span class='nv'>pop2_mean</span>
 
 <span class='c'>#&gt; estimate2 </span>
-<span class='c'>#&gt;  10.29124</span>
+<span class='c'>#&gt;  10.71286</span>
 
 
 <span class='nv'>means_to_plot</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span><span class='s'>"mean"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>pop1_mean</span>, <span class='nv'>pop2_mean</span><span class='o'>)</span>,
@@ -235,8 +286,8 @@ Having results in this tidy format allows you to use the tidy approaches we've w
 <span class='nv'>means_to_plot</span>
 
 <span class='c'>#&gt;               mean       sample</span>
-<span class='c'>#&gt; estimate1 10.02529 Population 1</span>
-<span class='c'>#&gt; estimate2 10.29124 Population 2</span>
+<span class='c'>#&gt; estimate1 10.01344 Population 1</span>
+<span class='c'>#&gt; estimate2 10.71286 Population 2</span>
 </code></pre>
 
 </div>
@@ -250,7 +301,7 @@ Now we can use that data frame to create the plot with *ggplot2*.
   <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -267,7 +318,7 @@ And we can do a little customization...
        y <span class='o'>=</span> <span class='s'>"Mean Value"</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -486,7 +537,7 @@ Now let's plot those mean values with a bar plot (`geom_col()`).
   <span class='nf'>geom_col</span><span class='o'>(</span><span class='o'>)</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -626,11 +677,11 @@ Try running the same test as above, but this time, do it as a one-sided test, wi
 
 <br>
 
-Let's try to visualize the data in a different way? This time, let's try plotting the distribution of values in each of the samples together on a single plot. See if you can recreate the plot below...
+Let's visualize the data in a different way. This time, try plotting the distribution of values in each of the samples together on a single plot. See if you can recreate the plot below...
 
 <div class="highlight">
 
-<img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -660,7 +711,7 @@ Let's try to visualize the data in a different way? This time, let's try plottin
 <span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
 
 </code></pre>
-<img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 

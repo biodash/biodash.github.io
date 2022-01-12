@@ -2,7 +2,7 @@
 title: "Code Club S03E01: t-tests In R"
 summary: "We'll start off our series on statistical tests by running some basic t-tests, extracting the results, and creating some visualizations."  
 authors: [mike-sovic]
-date: "2022-01-10"
+date: "2022-01-12"
 output: hugodown::md_document
 toc: true
 ---
@@ -12,9 +12,54 @@ toc: true
 ## Learning objectives
 
 > * Identify the types of data structures underlying the inputs and outputs of a basic t-test in R, with focus on vectors, lists, and data frames.
-> * Use a helper tidy package (broom) to clean up t-test results.
+> * Use the "broom" package to clean (tidy) up t-test results.
 > * Create some t-test-related visualizations.
-> * Practice with some basic tidyverse/dplyr functions (select, filter)
+> * Practice with some basic tidyverse/dplyr functions (`select()`, `filter()`)
+
+## Notes For Beginners
+
+We're starting this new session of Code Club a bit differently than we've started previous major sessions in that we're not easing in with basic R material, but instead assuming a bit of prior knowledge. But if you're new to Code Club and/or R though, don't worry - this section, and the rest of us in Code Club are here to help. Below I'll give a very brief overview of R, with an emphasis on things that will be relevant for today's session. Remember too that all previous Code Club material is available online, so feel free to check that out. And please don't hesitate to ask questions during the session, whether in the main room or in Breakout rooms. Some highlights for today's session...
+
+In R there are objects and functions. 
+
+### Objects
+
+Objects are things you assign a name to, and we do that with something called the assignment operator ( <- )...
+
+```{r}
+#assign the value 5 to an object named "my_object"
+my_object <- 5
+
+#ask R to return that object
+my_object
+```
+You create lots of objects as you work in R. They persist until you remove them or until you close your R session.
+
+Each object is categorized into a type of data structure. Some common ones in R (and ones relevant for this session) include vectors, lists, and data frames. 
+
+ - Vectors: Have one dimension, meaning they can be characterized by their length. "my_object" that I created above is a vector of length 1. If vectors contain more than one entry, all the entries must be of the same type, or class, at least from R's perspective. Numeric, character, and logical (TRUE/FALSE) are a few examples, and "my_object" is a numeric vector.
+ - Lists: A list is an object that can store multiple objects. Unlike vectors, the different objects stored in a list can be of different types. For example, a list could have three entries - 1.) a numeric vector of length 5 that stores the values 10:14, 2.) another list that itself stores several objects, and 3.) a character vector of length 3 that stores "red", "blue", "green".
+  - Data Frames: Data frames store "rectangular data", meaning datasets that are organized into colums and rows, and specifically those that have the same number of rows for each column. They are somewhat analgous to an Excel spreadsheet, assuming the data in that worksheet are perfectly rectangular.
+ 
+### Functions
+
+Functions in R usually have a descriptive name that gives you an idea of what they do, and they look like...
+`mean()`
+`sum()`
+`c()`
+
+The `c()` one might not be all that descriptive, but it stands for combine, and is a function that's used a lot to combine items into vectors of length >1.
+
+Inside the parentheses you often specify one or more objects for the function to operate on, and also might give some function-specific directives that tweak its behavior.
+  
+### Syntax
+
+There are essentially two dialects in R - often referred to as "base R" and the "tidyverse". You should be able to do most anything you want in R with either approach, and they can be mixed and matched. In general, base R tends to use more parentheses, square brackets, and $'s, while with the "tidyverse" you'll see functions like `select()` and `filter()` a lot, along with the pipe symbol ( %>% ) which takes results from one function and "pipes" them directly into a next function. Admittedly, essentially having two languages can lead to confusion, especially if you're just getting started. We mostly stick with "tidy" code during Code Club, as it tends to be easier to follow/interpret. 
+
+### Data Visualization
+R is really useful for creating data visualizations. Again, there are "base R"" ways to plot data and "tidyverse" ways, which utilize functions that are part of a package named "ggplot2". While ggplot is a bit harder to learn than the base R plotting functions, it's also much more powerful, and in sticking with the "tidy" theme, we generally use it. Plots in ggplot are built by adding one or more layers to a plot, and data are specified with aesthetics, which link aspects of the plot (like the x and y axes, colors for points or lines on the plot, etc) to columns of a data frame that store the data. 
+
+
 
 <br>
 
@@ -86,6 +131,11 @@ tresult <- t.test(x = pop1, y = pop2)
 #get the structure of 'tresult'
 str(tresult)
 ```
+
+Another (arguably better, or at least cleaner) way to view this list is by simply clicking on *tresult* in the Environment window (usually top right on screen). Doing so allows us to view the object itself...
+
+![ttest_result](images/ttest_res.png)
+
 
 From this we see that the list of 10 items consists of a mixture of numerics and characters. Each of the list entries has a name, and the '$' can be used with the name of the entry to extract an item from the list (this applies to lists in general in R - not just this one). Alternatively, the square bracket notation can be used to index (pull out) items from the list. Let's try several options for pulling out the pvalue, which is the 3rd entry...
 
@@ -370,7 +420,7 @@ speed_p
 <div>
 <br> 
  
-Let's try to visualize the data in a different way? This time, let's try plotting the distribution of values in each of the samples together on a single plot. See if you can recreate the plot below...
+Let's visualize the data in a different way. This time, try plotting the distribution of values in each of the samples together on a single plot. See if you can recreate the plot below...
 
 ```{r, echo = FALSE, message=FALSE}
 low_hp_vals <- mtcars %>%
