@@ -15,18 +15,48 @@
     <item>
       <title>Code Club S03E01: t-tests In R</title>
       <link>https://biodash.github.io/codeclub/s03e01_ttests/</link>
-      <pubDate>Mon, 10 Jan 2022 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 12 Jan 2022 00:00:00 +0000</pubDate>
       <guid>https://biodash.github.io/codeclub/s03e01_ttests/</guid>
       <description>&lt;br&gt;
 &lt;h2 id=&#34;learning-objectives&#34;&gt;Learning objectives&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;Identify the types of data structures underlying the inputs and outputs of a basic t-test in R, with focus on vectors, lists, and data frames.&lt;/li&gt;
-&lt;li&gt;Use a helper tidy package (broom) to clean up t-test results.&lt;/li&gt;
+&lt;li&gt;Use the &amp;ldquo;broom&amp;rdquo; package to clean (tidy) up t-test results.&lt;/li&gt;
 &lt;li&gt;Create some t-test-related visualizations.&lt;/li&gt;
-&lt;li&gt;Practice with some basic tidyverse/dplyr functions (select, filter)&lt;/li&gt;
+&lt;li&gt;Practice with some basic tidyverse/dplyr functions (&lt;code&gt;select()&lt;/code&gt;, &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
+&lt;h2 id=&#34;notes-for-beginners&#34;&gt;Notes For Beginners&lt;/h2&gt;
+&lt;p&gt;We&amp;rsquo;re starting this new session of Code Club a bit differently than we&amp;rsquo;ve started previous major sessions in that we&amp;rsquo;re not easing in with basic R material, but instead assuming a bit of prior knowledge. But if you&amp;rsquo;re new to Code Club and/or R though, don&amp;rsquo;t worry - this section, and the rest of us in Code Club are here to help. Below I&amp;rsquo;ll give a very brief overview of R, with an emphasis on things that will be relevant for today&amp;rsquo;s session. Remember too that all previous Code Club material is available online, so feel free to check that out. And please don&amp;rsquo;t hesitate to ask questions during the session, whether in the main room or in Breakout rooms. Some highlights for today&amp;rsquo;s session&amp;hellip;&lt;/p&gt;
+&lt;p&gt;In R there are objects and functions.&lt;/p&gt;
+&lt;h3 id=&#34;objects&#34;&gt;Objects&lt;/h3&gt;
+&lt;p&gt;Objects are things you assign a name to, and we do that with something called the assignment operator ( &amp;lt;- )&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#assign the value 5 to an object named &#34;my_object&#34;&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;my_object&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#ask R to return that object&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;my_object&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 5&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You create lots of objects as you work in R. They persist until you remove them or until you close your R session.&lt;/p&gt;
+&lt;p&gt;Each object is categorized into a type of data structure. Some common ones in R (and ones relevant for this session) include vectors, lists, and data frames.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Vectors: Have one dimension, meaning they can be characterized by their length. &amp;ldquo;my_object&amp;rdquo; that I created above is a vector of length 1. If vectors contain more than one entry, all the entries must be of the same type, or class, at least from R&amp;rsquo;s perspective. Numeric, character, and logical (TRUE/FALSE) are a few examples, and &amp;ldquo;my_object&amp;rdquo; is a numeric vector.&lt;/li&gt;
+&lt;li&gt;Lists: A list is an object that can store multiple objects. Unlike vectors, the different objects stored in a list can be of different types. For example, a list could have three entries - 1.) a numeric vector of length 5 that stores the values 10:14, 2.) another list that itself stores several objects, and 3.) a character vector of length 3 that stores &amp;ldquo;red&amp;rdquo;, &amp;ldquo;blue&amp;rdquo;, &amp;ldquo;green&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;Data Frames: Data frames store &amp;ldquo;rectangular data&amp;rdquo;, meaning datasets that are organized into colums and rows, and specifically those that have the same number of rows for each column. They are somewhat analgous to an Excel spreadsheet, assuming the data in that worksheet are perfectly rectangular.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;functions&#34;&gt;Functions&lt;/h3&gt;
+&lt;p&gt;Functions in R usually have a descriptive name that gives you an idea of what they do, and they look like&amp;hellip; &lt;a href=&#34;https://rdrr.io/r/base/mean.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mean()&lt;/code&gt;&lt;/a&gt; &lt;a href=&#34;https://rdrr.io/r/base/sum.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;sum()&lt;/code&gt;&lt;/a&gt; &lt;a href=&#34;https://rdrr.io/r/base/c.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;c()&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;https://rdrr.io/r/base/c.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;c()&lt;/code&gt;&lt;/a&gt; one might not be all that descriptive, but it stands for combine, and is a function that&amp;rsquo;s used a lot to combine items into vectors of length &amp;gt;1.&lt;/p&gt;
+&lt;p&gt;Inside the parentheses you often specify one or more objects for the function to operate on, and also might give some function-specific directives that tweak its behavior.&lt;/p&gt;
+&lt;h3 id=&#34;syntax&#34;&gt;Syntax&lt;/h3&gt;
+&lt;p&gt;There are essentially two dialects in R - often referred to as &amp;ldquo;base R&amp;rdquo; and the &amp;ldquo;tidyverse&amp;rdquo;. You should be able to do most anything you want in R with either approach, and they can be mixed and matched. In general, base R tends to use more parentheses, square brackets, and $&amp;rsquo;s, while with the &amp;ldquo;tidyverse&amp;rdquo; you&amp;rsquo;ll see functions like &lt;code&gt;select()&lt;/code&gt; and &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; a lot, along with the pipe symbol ( %&amp;gt;% ) which takes results from one function and &amp;ldquo;pipes&amp;rdquo; them directly into a next function. Admittedly, essentially having two languages can lead to confusion, especially if you&amp;rsquo;re just getting started. We mostly stick with &amp;ldquo;tidy&amp;rdquo; code during Code Club, as it tends to be easier to follow/interpret.&lt;/p&gt;
+&lt;h3 id=&#34;data-visualization&#34;&gt;Data Visualization&lt;/h3&gt;
+&lt;p&gt;R is really useful for creating data visualizations. Again, there are &amp;ldquo;base R&amp;rdquo;&amp;quot; ways to plot data and &amp;ldquo;tidyverse&amp;rdquo; ways, which utilize functions that are part of a package named &amp;ldquo;ggplot2&amp;rdquo;. While ggplot is a bit harder to learn than the base R plotting functions, it&amp;rsquo;s also much more powerful, and in sticking with the &amp;ldquo;tidy&amp;rdquo; theme, we generally use it. Plots in ggplot are built by adding one or more layers to a plot, and data are specified with aesthetics, which link aspects of the plot (like the x and y axes, colors for points or lines on the plot, etc) to columns of a data frame that store the data.&lt;/p&gt;
 &lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;1----intro&#34;&gt;1 &amp;ndash; Intro&lt;/h2&gt;
@@ -42,9 +72,9 @@
 &lt;span class=&#39;c&#39;&gt;#view the population 1 data&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;pop1&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  5.768260  8.557372 10.971429 10.649832  8.088188 14.940798 12.890222&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] 11.976135 11.202048 12.652296 12.290697  8.053090  9.374655 11.088953&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [15]  7.866983  7.948705 12.953359 11.017880  8.615094  3.599791&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 10.154661  7.498932  3.426916  7.597499 11.533421 16.520010  9.607716&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] 13.356270  5.174309 13.373562  9.085778  6.630155  6.513986 11.570739&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [15] 15.113513  9.793049 11.512667 11.191199 14.772047  5.842280&lt;/span&gt;
 
 
 &lt;span class=&#39;c&#39;&gt;#generate a sample for population 2&lt;/span&gt;
@@ -52,20 +82,20 @@
 &lt;span class=&#39;c&#39;&gt;#view the population 2 data&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;pop2&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  7.905270  3.495405 14.574270 13.983999  6.879837  6.010075  4.481750&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8]  5.499168 11.481124 12.772900 13.914296 15.452734 11.653593 17.513278&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [15] 13.021984  8.409504 12.502958  8.316560  8.356185  9.599970&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  9.356629 13.664574 12.295782 16.459519 14.261572  9.605285  8.537716&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8]  9.808906  7.465455 13.998645 11.770977 14.035046  4.744950 14.298506&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [15]  9.867982  8.149314  5.317449 12.199504  9.139201  9.280096&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;A t-test is a good choice here if we want to use our samples to draw inference around whether the true means of these two populations are different. First we can check the means of the samples&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pop1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10.02529&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10.01344&lt;/span&gt;
 
 &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pop2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10.29124&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10.71286&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;The sample means are a bit different, but given they&amp;rsquo;re random samples, that&amp;rsquo;s not surprising even if they were drawn from the same population. The question is whether the observed difference in the means is large enough that, at some given level of confidence, we can infer that the true population means are different. Let&amp;rsquo;s take a look at the documentation for the &lt;a href=&#34;https://rdrr.io/r/stats/t.test.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;t.test()&lt;/code&gt;&lt;/a&gt; function&amp;hellip;&lt;/p&gt;
@@ -103,13 +133,13 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;   Welch Two Sample t-test&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; data:  pop1 and pop2&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; t = -0.2477, df = 33.833, p-value = 0.8059&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; t = -0.65482, df = 37.453, p-value = 0.5166&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; alternative hypothesis: true difference in means is not equal to 0&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; 95 percent confidence interval:&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  -2.448338  1.916431&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  -2.862735  1.463895&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; sample estimates:&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; mean of x mean of y &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  10.02529  10.29124&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  10.01344  10.71286&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;This result gives us several pieces of information. If it&amp;rsquo;s not immediately apparent, we can again get some information about these results from the help, where the &amp;ldquo;Value&amp;rdquo; section tells us about what&amp;rsquo;s returned by the function&amp;hellip;&lt;/p&gt;
@@ -122,14 +152,14 @@
 &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/str.html&#39;&gt;str&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;tresult&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; List of 10&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ statistic  : Named num -0.248&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ statistic  : Named num -0.655&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;   ..- attr(*, &#34;names&#34;)= chr &#34;t&#34;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ parameter  : Named num 33.8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ parameter  : Named num 37.5&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;   ..- attr(*, &#34;names&#34;)= chr &#34;df&#34;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ p.value    : num 0.806&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ conf.int   : num [1:2] -2.45 1.92&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ p.value    : num 0.517&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ conf.int   : num [1:2] -2.86 1.46&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;   ..- attr(*, &#34;conf.level&#34;)= num 0.95&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ estimate   : Named num [1:2] 10 10.3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ estimate   : Named num [1:2] 10 10.7&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;   ..- attr(*, &#34;names&#34;)= chr [1:2] &#34;mean of x&#34; &#34;mean of y&#34;&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ null.value : Named num 0&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;   ..- attr(*, &#34;names&#34;)= chr &#34;difference in means&#34;&lt;/span&gt;
@@ -140,20 +170,22 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  - attr(*, &#34;class&#34;)= chr &#34;htest&#34;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+&lt;p&gt;Another (arguably better, or at least cleaner) way to view this list is by simply clicking on &lt;em&gt;tresult&lt;/em&gt; in the Environment window (usually top right on screen). Doing so allows us to view the object itself&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;images/ttest_res.png&#34; alt=&#34;ttest_result&#34;&gt;&lt;/p&gt;
 &lt;p&gt;From this we see that the list of 10 items consists of a mixture of numerics and characters. Each of the list entries has a name, and the &amp;lsquo;$&amp;rsquo; can be used with the name of the entry to extract an item from the list (this applies to lists in general in R - not just this one). Alternatively, the square bracket notation can be used to index (pull out) items from the list. Let&amp;rsquo;s try several options for pulling out the pvalue, which is the 3rd entry&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;tresult&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;p.value&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0.805862&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0.5165855&lt;/span&gt;
 
 &lt;span class=&#39;nv&#39;&gt;tresult&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; $p.value&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0.805862&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0.5165855&lt;/span&gt;
 
 &lt;span class=&#39;nv&#39;&gt;tresult&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0.805862&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0.5165855&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;We&amp;rsquo;ve talked in a number of previous Code Club sessions about working with tidy data - this list doesn&amp;rsquo;t fall in to that category, but can be converted to a tidy object with the &lt;code&gt;tidy()&lt;/code&gt; function from the broom package, which is installed as part of the tidyverse (though not loaded).&lt;/p&gt;
@@ -164,7 +196,7 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 x 10&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;   estimate estimate1 estimate2 statistic p.value parameter conf.low conf.high&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;      &lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;   &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;    &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;span&gt;     &lt;/span&gt;&lt;span style=&#39;color: #555555;font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt;   -&lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;0.266&lt;/span&gt;&lt;span&gt;      10.0      10.3    -&lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;0.248&lt;/span&gt;&lt;span&gt;   0.806      33.8    -&lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;2.45&lt;/span&gt;&lt;span&gt;      1.92&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;&lt;span&gt;   -&lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;0.699&lt;/span&gt;&lt;span&gt;      10.0      10.7    -&lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;0.655&lt;/span&gt;&lt;span&gt;   0.517      37.5    -&lt;/span&gt;&lt;span style=&#39;color: #BB0000;&#39;&gt;2.86&lt;/span&gt;&lt;span&gt;      1.46&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 2 more variables: method &amp;lt;chr&amp;gt;, alternative &amp;lt;chr&amp;gt;&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
@@ -179,7 +211,7 @@
 &lt;span class=&#39;nv&#39;&gt;pop1_mean&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; estimate1 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  10.02529&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  10.01344&lt;/span&gt;
 
 
 &lt;span class=&#39;c&#39;&gt;#get popualation 1 mean&lt;/span&gt;
@@ -190,7 +222,7 @@
 &lt;span class=&#39;nv&#39;&gt;pop2_mean&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; estimate2 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  10.29124&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  10.71286&lt;/span&gt;
 
 
 &lt;span class=&#39;nv&#39;&gt;means_to_plot&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mean&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pop1_mean&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;pop2_mean&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
@@ -199,8 +231,8 @@
 &lt;span class=&#39;nv&#39;&gt;means_to_plot&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;               mean       sample&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; estimate1 10.02529 Population 1&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; estimate2 10.29124 Population 2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; estimate1 10.01344 Population 1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; estimate2 10.71286 Population 2&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Now we can use that data frame to create the plot with &lt;em&gt;ggplot2&lt;/em&gt;.&lt;/p&gt;
@@ -210,7 +242,7 @@
   &lt;span class=&#39;nf&#39;&gt;geom_col&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-11-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-12-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;And we can do a little customization&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -223,7 +255,7 @@
        y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Mean Value&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-12-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-13-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;Now let&amp;rsquo;s work with some real data. R has a small example dataset named &lt;em&gt;mtcars&lt;/em&gt; already built in. It&amp;rsquo;s a data frame with data on different models of car. It can be called with &lt;code&gt;mtcars&lt;/code&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -405,7 +437,7 @@
   &lt;span class=&#39;nf&#39;&gt;geom_col&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-17-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-18-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/details&gt;
 &lt;/div&gt;
@@ -505,9 +537,9 @@
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
 &lt;br&gt;
-&lt;p&gt;Let&amp;rsquo;s try to visualize the data in a different way? This time, let&amp;rsquo;s try plotting the distribution of values in each of the samples together on a single plot. See if you can recreate the plot below&amp;hellip;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s visualize the data in a different way. This time, try plotting the distribution of values in each of the samples together on a single plot. See if you can recreate the plot below&amp;hellip;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-21-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-22-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;details&gt;
 &lt;summary&gt;
@@ -531,7 +563,7 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.&lt;/span&gt;
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-22-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-23-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/details&gt;
 &lt;/div&gt;
