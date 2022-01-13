@@ -15,17 +15,17 @@ We will meet on **Thursdays at 2 pm** starting on January 13th, 2022.
 We will be meeting over Zoom (sign up for the link),
 but you can also join Jessica, who will connect from Howlett 340, in person.
 
-<!--- We have also included these sessions in the [BioDASH calendar](/events/#calendar). -->
+We have also included these sessions in the [BioDASH calendar](/events/#calendar).
 
 Here is the schedule for the first several sessions:
 
 | Session     | Date      | Presenter    | Topic (+ link)                                                   | Topic block              |
 |-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
-| **S02E14**  | Jan 13    | Mike S.      | **T-tests**                                                      | Basic statistics in R    |
-| **S02E15**  | Jan 20    | Jessica      | **ANOVA**                                                        | Basic statistics in R    |
-| **S02E16**  | Jan 27    | Jelmer       | **Principal Component Analysis**                                 | Basic statistics in R    |
-| **S02E17**  | Feb 03    | Stephen      | **Correlation and regression**                                   | Basic statistics in R    |
-| **S02E18**  | Feb 10    | Michael B.   | **Working with data structures returned by stats functions**     | Basic statistics in R    |
+| **S03E01**  | Jan 13    | Mike S.      | [**T-tests**](/codeclub/s03e01_ttests/)                          | Basic statistics in R    |
+| **S03E02**  | Jan 20    | Jessica      | **ANOVA**                                                        | Basic statistics in R    |
+| **S03E03**  | Jan 27    | Jelmer       | **Principal Component Analysis**                                 | Basic statistics in R    |
+| **S03E04**  | Feb 03    | Stephen      | **Correlation and regression**                                   | Basic statistics in R    |
+| **S03E05**  | Feb 10    | Michael B.   | **Working with data structures returned by stats functions**     | Basic statistics in R    |
 
 <br>
 
