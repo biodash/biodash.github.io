@@ -58,26 +58,26 @@ Ask us for access to the Zoom recordings of previous Code Club sessions!
 
 | Session nr. | Date         | Presenter  | Topic (+ link)                                                                   | Other                   |
 |-------------|--------------|------------|----------------------------------------------------------------------------------|-------------------------|
-| **1**       | Nov 18, 2020 | Jelmer     | [**RStudio Projects & getting started**](/codeclub/01_backyard-birds/)           | [slides](/slides/CC01/) |
-| **2**       | Dec 2, 2020  | Jessica    | [***dplyr*** **core verbs**](/codeclub/02_dplyr-core-verbs)                      |                         |
-| **3**       | Dec 9, 2020  | Mike S.    | [**Joining datasets**](/codeclub/03_joining-datasets)                           |                         |
-| **4**       | Dec 16, 2020 | Michael B. | [***ggplot2 -- round 1***](/codeclub/04_ggplot2)                                 |                         |
-| **5**       | Jan 15, 2021 | Jessica    | [***ggplot2 -- round 2***](/codeclub/05_ggplot-round-2)                          |                         |
-| **6**       | Jan 22, 2021 | Stephen    | [**Factors**](/codeclub/06_factors)                                              |                         |
-| **7**       | Jan 29, 2021 | Jelmer     | [**R Markdown**](/codeclub/07_rmarkdown/)                                         |                       |
-| **8**       | Feb 5, 2021  | Mike S.    | [**Pivoting data**](/codeclub/08_pivoting/)                                      |                         |
-| **9**       | Feb 12, 2021 | Michael B. | [**Subsetting data**](/codeclub/09_subsetting/)                                  |                         |
-| **10**      | Feb 19, 2021 | Jessica    | [**Faceting, animating, and combining plots**](/codeclub/10_faceting-animating/) |                         |
-| **11**      | Feb 26, 2021 | Stephen    | [**Making maps with *ggmap***](/codeclub/11_ggplot-maps/)                         |                         |
-| **12**      | Mar 5, 2021  | Jelmer     | [**Vectorization and loops**](/codeclub/12_loops/)                               |                         |
-| **13**      | Mar 12, 2021 | Mike S.    | [**The apply family of functions**](/codeclub/13_apply)                          |                         |
-| **14**      | Mar 19, 2021 | Michael B. | [**Writing your own functions**](/codeclub/14_functions/)                        |                         |
-| **15**      | Mar 26, 2021 | Jessica    | [**Interactive plots with *Plotly***](/codeclub/15_plotly/)                      |                         |
-| **16**      | Apr 02, 2021 | Stephen    | [**Working with dates with *lubridate***](/codeclub/16_lubridate/)               |                         |
-| **17**      | Apr 09, 2021 | Jelmer     | [**Introduction to regular expressions**](/codeclub/17_regex/)                   |                         |
-| **18**      | Apr 16, 2021 | Mike S.    | [**Regular Expressions: Part II**](/codeclub/18_regex2/)                         |                         |
-| **19**      | Apr 23, 2021 | Michael B. | [**Word Clouds via *tidytext***](/codeclub/19_wordclouds/)                       |                         |
-| **20**      | Apr 30, 2021 | Jessica    | [**Cleaning up variables names**](/codeclub/20_cleaning-up/)                     |                         |
+| **S01E01**       | Nov 18, 2020 | Jelmer     | [**RStudio Projects & getting started**](/codeclub/01_backyard-birds/)           | [slides](/slides/CC01/) |
+| **S01E02**       | Dec 2, 2020  | Jessica    | [***dplyr*** **core verbs**](/codeclub/02_dplyr-core-verbs)                      |                         |
+| **S01E03**       | Dec 9, 2020  | Mike S.    | [**Joining datasets**](/codeclub/03_joining-datasets)                           |                         |
+| **S01E04**       | Dec 16, 2020 | Michael B. | [***ggplot2 -- round 1***](/codeclub/04_ggplot2)                                 |                         |
+| **S01E05**       | Jan 15, 2021 | Jessica    | [***ggplot2 -- round 2***](/codeclub/05_ggplot-round-2)                          |                         |
+| **S01E06**       | Jan 22, 2021 | Stephen    | [**Factors**](/codeclub/06_factors)                                              |                         |
+| **S01E07**       | Jan 29, 2021 | Jelmer     | [**R Markdown**](/codeclub/07_rmarkdown/)                                         |                       |
+| **S01E08**       | Feb 5, 2021  | Mike S.    | [**Pivoting data**](/codeclub/08_pivoting/)                                      |                         |
+| **S01E09**       | Feb 12, 2021 | Michael B. | [**Subsetting data**](/codeclub/09_subsetting/)                                  |                         |
+| **S01E10**      | Feb 19, 2021 | Jessica    | [**Faceting, animating, and combining plots**](/codeclub/10_faceting-animating/) |                         |
+| **S01E11**      | Feb 26, 2021 | Stephen    | [**Making maps with *ggmap***](/codeclub/11_ggplot-maps/)                         |                         |
+| **S01E12**      | Mar 5, 2021  | Jelmer     | [**Vectorization and loops**](/codeclub/12_loops/)                               |                         |
+| **S01E13**      | Mar 12, 2021 | Mike S.    | [**The apply family of functions**](/codeclub/13_apply)                          |                         |
+| **S01E14**      | Mar 19, 2021 | Michael B. | [**Writing your own functions**](/codeclub/14_functions/)                        |                         |
+| **S01E15**      | Mar 26, 2021 | Jessica    | [**Interactive plots with *Plotly***](/codeclub/15_plotly/)                      |                         |
+| **S01E16**      | Apr 02, 2021 | Stephen    | [**Working with dates with *lubridate***](/codeclub/16_lubridate/)               |                         |
+| **S01E17**      | Apr 09, 2021 | Jelmer     | [**Introduction to regular expressions**](/codeclub/17_regex/)                   |                         |
+| **S01E18**      | Apr 16, 2021 | Mike S.    | [**Regular Expressions: Part II**](/codeclub/18_regex2/)                         |                         |
+| **S01E19**      | Apr 23, 2021 | Michael B. | [**Word Clouds via *tidytext***](/codeclub/19_wordclouds/)                       |                         |
+| **S01E20**      | Apr 30, 2021 | Jessica    | [**Cleaning up variables names**](/codeclub/20_cleaning-up/)                     |                         |
 
 <br/> <br/> <br/> <br/>
 
