@@ -587,7 +587,7 @@ Here is some {{</* hl */>}}highlighted text{{</* /hl */>}}.
 
 This will render as:
 
-Here is some {{< hl >}}highlighted text{{< /hl >}}.
+
 
 #### Icons
 
