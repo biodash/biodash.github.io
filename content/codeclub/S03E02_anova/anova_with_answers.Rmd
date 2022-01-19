@@ -1,0 +1,329 @@
+---
+title: "ANOVA"
+author: "Jessica Cooperstone"
+date: "1/17/2022"
+output: html_document
+---
+
+# Introduction
+Often people are first introduced to the R programming language when they are wanting to conduct statistical analyses. My experience is that beginners are often able to conduct the analysis they want, and print their results to the console. But, the process of locating and then using the output of their analysis tends to be more complex.
+
+Today, we are going to go over how to:
+
+* test if our data is suitable for running ANOVA
+* run an ANOVA test
+* run posthoc tests to understand group differences
+* use the ANOVA data output object as a means to understand R data structure.
+
+The purpose of today's session is more to give you practical experience with running and retrieving ANOVA analysis output, than teaching about the assumptions and background of the test itself.
+
+If you are looking for a good statistics test, I would recommend Dr. Kristin Mercer's [HCS 8887 Experimental Design](https://hcs.osu.edu/courses/hcs-8887).
+
+### Load libraries
+
+We are going to start with our favorite dataset `palmerpenguins` to provide the input data for our analysis.
+
+```{r}
+library(tidyverse)
+library(palmerpenguins) # for data
+library(rstatix) # for testing assumptions
+library(agricolae) # for post-hoc comparison of groups
+```
+
+## 1. Getting acclimated
+
+Some words on syntax: the dataset `penguins` is an object within the `palmerpenguins` package.  If you call the object `penguins` (after executing `library(palmerpenguins)`), you will be able to see what is contained within that dataframe.
+```{r}
+penguins
+```
+However, `penguins` will not be in your environment tab because it is not in your local environment. You can use it without it being in your local environment, but if you are bothered by this, you can save a copy in your local environment such it shows up in that top right pane.
+```{r}
+penguins <- penguins
+```
+
+What is within this dataset?
+```{r}
+glimpse(penguins)
+```
+
+## 2. ANOVA function
+
+We want to see if there are any differences in bill length (`bill_length_mm`) in penguins by `sex` or by `species`.  We do this using ANOVA.
+
+First let's get some descriptive information about our data.
+
+```{r}
+penguins %>%
+  drop_na() %>%
+  group_by(species, sex) %>%
+  count()
+```
+
+The most commonly used function to run ANOVA in R is called [`aov()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov) which is a part of the `stats` package that is pre-loaded with base R. So no new packages need to be installed here.
+
+If we want to learn more about the function `aov()` we can do so using the code below. The help documentation will show up in the bottom right quadrant of your RStudio.
+```{r}
+?aov
+```
+
+We can run an ANOVA by indicating our model, and here I'm also selecting to drop the NAs.
+```{r}
+bill_length_anova <- 
+  aov(data = penguins %>% drop_na(),
+      bill_length_mm ~ species + sex + species*sex)
+```
+
+```{r}
+summary(bill_length_anova)
+```
+
+We can take the output of our ANOVA and use the function `tidy()` within the `broom` package to turn our output into a tidy table.
+```{r}
+tidy_anova <- broom::tidy(bill_length_anova)
+
+View(tidy_anova)
+```
+
+We can also look at our data by visually plotting it, as below.
+```{r}
+penguins %>%
+  drop_na() %>%
+  ggplot(aes(x = species, y = bill_length_mm, color = sex)) +
+  geom_boxplot()
+```
+
+## 3. Posthoc group analysis
+
+Now that we've seen that `sex` and `species` are significant effectors of `bill_length_mm`, our next logical question might be, which groups are different from each other?  We can determine this by conducting post-hoc tests. We will do our post-hoc analysis using Tukey's Honestly Significant Difference test and the function [`HSD.test()`](https://www.rdocumentation.org/packages/agricolae/versions/1.3-5/topics/HSD.test) which is a part of the useful package `agricolae`.
+```{r}
+tukey_bill_length <- HSD.test(bill_length_anova, 
+                      trt = c("species", "sex"), 
+                      console = TRUE) # prints the results to console
+```
+
+Like we did with t-tests, you can also look at the resulting HSD.test object (here, `tukey_bill_length`) in your environment pane.
+
+Here, instead of using the `broom` package, you can convert the part of the `tukey_bill_length` object that contains the post-hoc groupings into a dataframe using `as.data.frame()`.
+```{r}
+tidy_tukey <- as.data.frame(tukey_bill_length$groups)
+```
+
+## 4. Testing assumptions
+
+I know I said we weren't going to talk about this, but I thought I'd be remiss if I didn't show you how to test that you aren't violating any of the assumptions needed to conduct an ANOVA.  We went over this a little bit back in the session put together by Daniel Quiroz on [ggpubr](https://biodash.github.io/codeclub/s02e10_ggpubr/) and adding statistical results to ggplots.
+
+Briefly, in order to use parametric procedures (like ANOVA), we need to be sure our data meets the assumptions for 1) normality and 2) constant variance. This can be done in a few different ways.
+
+### Shapiro-Wilk test for normality
+We are going to use the Shapiro-Wilk test (using the function `shapiro_test()` which is in the package `rstatix` to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function [`shapiro.test()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test), which just means you can use it with pipes.
+```{r}
+penguins %>%
+  drop_na() %>%
+  rstatix::shapiro_test(bill_length_mm)
+
+penguins %>%
+  drop_na() %>%
+  group_by(species, sex) %>%
+  rstatix::shapiro_test(bill_length_mm)
+```
+
+Can we visualize normality in another way?
+```{r}
+penguins %>%
+  drop_na() %>%
+  ggplot(aes(x = bill_length_mm)) +
+  geom_histogram() +
+  facet_grid(cols = vars(species),
+             rows = vars(sex))
+```
+
+### Equal variance
+We can test for equal variance using Levene's test, [`levene_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/levene_test) which is part of the `rstatix` package.  Again, this is a pipe-friendly wrapper for the function [`levene.test()`](https://www.rdocumentation.org/packages/lawstat/versions/3.4/topics/levene.test).
+```{r}
+rstatix::levene_test(data = penguins %>% drop_na(),
+                       bill_length_mm ~ species*sex)
+```
+
+## 5. Bringing it together in a plot
+
+We already looked at a first-pass plot, but let's customize it now, and add our statistical info.  Here is our base plot.
+```{r}
+penguins %>%
+  drop_na() %>%
+  ggplot(aes(x = species, y = bill_length_mm, color = sex)) +
+  geom_boxplot()
+```
+
+First let's make the plot more aesthetically pleasing.
+```{r}
+(bill_length_plot <- penguins %>%
+  drop_na() %>%
+  ggplot(aes(x = species, y = bill_length_mm, color = sex)) +
+  geom_boxplot() +
+  theme_classic() + 
+  labs(x = "Species",
+       y = "Bill Length, in mm",
+       color = "Sex",
+       title = "Penguin Culmen Bill Length Among Different Species, and by Sex",
+       subtitle = "Data collected from Palmer LTER, Antarctica"))
+```
+
+We want to add the letters to this plot, so we can tell which groups of species by sex are significantly different.  We are going to figure out what the maximum `bill_length_mm` for each species by sex is, so it will help us determine where to put our letter labels.  Then, we cna add our labels to be higher than the largest data point.
+```{r}
+bill_length_max <- penguins %>%
+  drop_na() %>%
+  group_by(species, sex) %>%
+  summarize(max_bill_length_mm = max(bill_length_mm))
+
+bill_length_max
+```
+
+Let's add our post-hoc group info to `bill_length_max`, since those two dataframes are not in the same order.  We are going to use the function `separate()` which we used back in a [previous code club](https://biodash.github.io/codeclub/20_cleaning-up/#5---separate-character-columns).
+```{r}
+tidier_tukey <- tidy_tukey %>%
+  rownames_to_column() %>%
+  separate(col = rowname,
+           into = c("species", "sex"),
+           sep = ":")
+  
+
+bill_for_plotting <- full_join(tidier_tukey, bill_length_max,
+                               by = c("species", "sex"))
+```
+
+Let's plot.
+```{r}
+bill_length_plot +
+  geom_text(data = bill_for_plotting,
+            aes(x = species,
+                y = 5 + max_bill_length_mm, 
+                color = sex,
+                label = groups))
+```
+
+Almost there. We want the letters to be over the right box plot (coloring here by `sex` helps us to see what is going on better).  Let's fix it.
+```{r}
+bill_length_plot +
+  geom_text(data = bill_for_plotting,
+            aes(x = species,
+                y = 3 + max_bill_length_mm, 
+                color = sex,
+                label = groups),
+            position = position_dodge(width = 0.75),
+            show.legend = FALSE) +
+  labs(caption = "Groups with different letters are statistically different using a\n two way ANOVA and Tukey's post-hoc test")
+```
+
+Also remember Daniel showed us how we can do [somthing similar](https://biodash.github.io/codeclub/s02e10_ggpubr/) using the package `ggpubr`.
+
+# Breakout rooms
+We have investigated `bill_length_mm` - but what about `body_mass_g`?  Let's investigate only the male penguins.
+
+### Exercise 1
+Test the assumptions used by ANOVA to see if it is an appropriate test for you to use in this case.  If it is not, find out what the appropriate test to use is, and then use it!
+
+Testing for normality:
+```{r}
+penguins %>%
+  drop_na() %>%
+  filter(sex == "male") %>%
+  group_by(species) %>%
+  rstatix::shapiro_test(bill_depth_mm)
+```
+
+Testing for equal variance:
+```{r}
+rstatix::levene_test(data = penguins %>% drop_na() %>% filter(sex == "male"),
+                       bill_depth_mm ~ species*sex)
+```
+We are finding non-normal distribution of the male, Adelie penguins.  I will take this opportunity to show you how to run non-parametric tests as well.
+
+### Exercise 2
+Conduct ANOVA or another relevant test to see if there are significant differences in `bill_depth_mm` in the Palmer penguins by by `species`.
+
+```{r}
+bill_depth_kruskal <- penguins %>%
+  drop_na() %>%
+  filter(sex == "male") %>%
+  kruskal_test(bill_depth_mm ~ species)
+
+bill_depth_kruskal
+```
+
+If this were a parametric test, we could do it like this.  `aov()` is not a very pipe friendly function.
+```{r}
+bill_depth_anova <- 
+  aov(data = penguins %>% drop_na() %>% filter(sex == "male"),
+      bill_depth_mm ~ species)
+
+summary(bill_depth_anova)
+```
+
+
+### Exercise 3
+Conduct post-hoc tests to see where significant differences exist between your `species`.  You can use any post-hoc test you like.
+
+Hint: check out the function [`LSD.test`](https://www.rdocumentation.org/packages/agricolae/versions/1.3-5/topics/LSD.test) and the p-value adjustment procedures.
+```{r}
+bonferroni_bill_length <- LSD.test(bill_depth_anova, 
+                      trt = "species", 
+                      p.adj = "bonferroni",
+                      console = TRUE)
+```
+
+Using Tukey's posthoc test
+```{r}
+tukey_bill_length <- HSD.test(bill_depth_anova, 
+                      trt = "species", 
+                      console = TRUE) # prints the results to console
+```
+
+### Exercise 4
+Make a plot to express your findings.  I will leave it up to you to decide what this plot will look like.  Add your statistical findings.
+
+Preparing to plot.
+```{r}
+bill_depth_max <- penguins %>%
+  drop_na() %>%
+  filter(sex == "male") %>%
+  group_by(species) %>%
+  summarize(max_bill_depth_mm = max(bill_depth_mm))
+
+bill_depth_max
+```
+
+```{r}
+# grab group information from bonferroni test
+# species is a rowname instead of column so lets change that
+bonferroni_bill_depth_groups <- as.data.frame(bonferroni_bill_depth$groups %>%
+                                                rownames_to_column(var = "species"))
+
+# join dfs
+bill_depth_for_plotting <- full_join(bill_depth_max, bonferroni_bill_depth_groups,
+                                     by = "species")
+
+# check
+bill_depth_for_plotting
+```
+
+
+```{r}
+(bill_depth_plot <- penguins %>%
+  drop_na() %>%
+  filter(sex == "male") %>%
+  ggplot(aes(x = species, y = bill_depth_mm, color = species)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.2) +
+  geom_text(data = bill_depth_for_plotting,
+            aes(x = species, y = 1 + max_bill_depth_mm,
+                label = groups), color = "black") +
+  theme_classic() + 
+  theme(legend.position = "none",
+        plot.caption = element_text(hjust = 0)) +
+  labs(x = "Species",
+       y = "Bill Depth, in mm",
+       title = "Penguin Culmen Bill Depth Among Different Species",
+       subtitle = "Data collected from Palmer LTER, Antarctica",
+       caption = "Species significantly affects bill depth as determined by the Kruskal-Wallis test \nwith significantly different species using Bonferroni post-hoc test at P < 0.05 indicated with different letters."))
+```
+
