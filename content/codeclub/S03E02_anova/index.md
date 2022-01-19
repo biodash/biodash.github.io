@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: a89c8edb8e479478
+rmd_hash: 15663c8947890f78
 
 ---
 
@@ -84,7 +84,6 @@ Click here to get an Rmd (optional)
 
 </details>
 <br>
-<div class="alert alert-note">
 <div>
 
 <br>
