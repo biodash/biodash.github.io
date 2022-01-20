@@ -17,7 +17,7 @@ Today, we are going to go over how to:
 
 The purpose of today's session is more to give you practical experience with running and retrieving ANOVA analysis output, than teaching about the assumptions and background of the test itself.
 
-If you are looking for a good statistics test, I would recommend Dr. Kristin Mercer's [HCS 8887 Experimental Design](https://hcs.osu.edu/courses/hcs-8887).
+If you are looking for a good statistics class, I would recommend Dr. Kristin Mercer's [HCS 8887 Experimental Design](https://hcs.osu.edu/courses/hcs-8887).
 
 ### Load libraries
 
@@ -36,6 +36,7 @@ Some words on syntax: the dataset `penguins` is an object within the `palmerpeng
 ```{r}
 penguins
 ```
+
 However, `penguins` will not be in your environment tab because it is not in your local environment. You can use it without it being in your local environment, but if you are bothered by this, you can save a copy in your local environment such it shows up in that top right pane.
 ```{r}
 penguins <- penguins
@@ -108,43 +109,7 @@ Here, instead of using the `broom` package, you can convert the part of the `tuk
 tidy_tukey <- as.data.frame(tukey_bill_length$groups)
 ```
 
-## 4. Testing assumptions
-
-I know I said we weren't going to talk about this, but I thought I'd be remiss if I didn't show you how to test that you aren't violating any of the assumptions needed to conduct an ANOVA.  We went over this a little bit back in the session put together by Daniel Quiroz on [ggpubr](https://biodash.github.io/codeclub/s02e10_ggpubr/) and adding statistical results to ggplots.
-
-Briefly, in order to use parametric procedures (like ANOVA), we need to be sure our data meets the assumptions for 1) normality and 2) constant variance. This can be done in a few different ways.
-
-### Shapiro-Wilk test for normality
-We are going to use the Shapiro-Wilk test (using the function `shapiro_test()` which is in the package `rstatix` to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function [`shapiro.test()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test), which just means you can use it with pipes.
-```{r}
-penguins %>%
-  drop_na() %>%
-  rstatix::shapiro_test(bill_length_mm)
-
-penguins %>%
-  drop_na() %>%
-  group_by(species, sex) %>%
-  rstatix::shapiro_test(bill_length_mm)
-```
-
-Can we visualize normality in another way?
-```{r}
-penguins %>%
-  drop_na() %>%
-  ggplot(aes(x = bill_length_mm)) +
-  geom_histogram() +
-  facet_grid(cols = vars(species),
-             rows = vars(sex))
-```
-
-### Equal variance
-We can test for equal variance using Levene's test, [`levene_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/levene_test) which is part of the `rstatix` package.  Again, this is a pipe-friendly wrapper for the function [`levene.test()`](https://www.rdocumentation.org/packages/lawstat/versions/3.4/topics/levene.test).
-```{r}
-rstatix::levene_test(data = penguins %>% drop_na(),
-                       bill_length_mm ~ species*sex)
-```
-
-## 5. Bringing it together in a plot
+## 4. Bringing it together in a plot
 
 We already looked at a first-pass plot, but let's customize it now, and add our statistical info.  Here is our base plot.
 ```{r}
@@ -220,33 +185,14 @@ Also remember Daniel showed us how we can do [somthing similar](https://biodash.
 We have investigated `bill_length_mm` - but what about `body_mass_g`?  Let's investigate only the male penguins.
 
 ### Exercise 1
-Test the assumptions used by ANOVA to see if it is an appropriate test for you to use in this case.  If it is not, find out what the appropriate test to use is, and then use it!
+Conduct ANOVA oto see if there are significant differences in `bill_depth_mm` in the Palmer penguins by `species`.
 
-Testing for normality:
 ```{r}
 
 ```
 
-Testing for equal variance:
-```{r}
-
-```
-We are finding non-normal distribution of the male, Adelie penguins.  I will take this opportunity to show you how to run non-parametric tests as well.
 
 ### Exercise 2
-Conduct ANOVA or another relevant test to see if there are significant differences in `bill_depth_mm` in the Palmer penguins by by `species`.
-
-```{r}
-
-```
-
-If this were a parametric test, we could do it like this.  `aov()` is not a very pipe friendly function.
-```{r}
-
-```
-
-
-### Exercise 3
 Conduct post-hoc tests to see where significant differences exist between your `species`.  You can use any post-hoc test you like.
 
 Hint: check out the function [`LSD.test`](https://www.rdocumentation.org/packages/agricolae/versions/1.3-5/topics/LSD.test) and the p-value adjustment procedures.
@@ -259,7 +205,7 @@ Using Tukey's posthoc test
 
 ```
 
-### Exercise 4
+### Exercise 3
 Make a plot to express your findings.  I will leave it up to you to decide what this plot will look like.  Add your statistical findings.
 
 Preparing to plot.
@@ -283,3 +229,54 @@ Plot.
 
 ```
 
+## Extra material
+### Testing assumptions
+
+I know I said we weren't going to talk about this, but I thought I'd be remiss if I didn't show you how to test that you aren't violating any of the assumptions needed to conduct an ANOVA.  We went over this a little bit back in the session put together by Daniel Quiroz on [ggpubr](https://biodash.github.io/codeclub/s02e10_ggpubr/) and adding statistical results to ggplots.
+
+Briefly, in order to use parametric procedures (like ANOVA), we need to be sure our data meets the assumptions for 1) normality and 2) constant variance. This can be done in a few different ways.
+
+#### Shapiro-Wilk test for normality
+We are going to use the Shapiro-Wilk test (using the function `shapiro_test()` which is in the package `rstatix` to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function [`shapiro.test()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test), which just means you can use it with pipes.
+```{r}
+penguins %>%
+  drop_na() %>%
+  rstatix::shapiro_test(bill_length_mm)
+
+penguins %>%
+  drop_na() %>%
+  group_by(species, sex) %>%
+  rstatix::shapiro_test(bill_length_mm)
+```
+
+Can we visualize normality in another way?
+```{r}
+penguins %>%
+  drop_na() %>%
+  ggplot(aes(x = bill_length_mm)) +
+  geom_histogram() +
+  facet_grid(cols = vars(species),
+             rows = vars(sex))
+```
+
+#### Equal variance
+We can test for equal variance using Levene's test, [`levene_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/levene_test) which is part of the `rstatix` package.  Again, this is a pipe-friendly wrapper for the function [`levene.test()`](https://www.rdocumentation.org/packages/lawstat/versions/3.4/topics/levene.test).
+```{r}
+rstatix::levene_test(data = penguins %>% drop_na(),
+                       bill_length_mm ~ species*sex)
+```
+
+
+### Exercise 1
+You want to know if there are significant differences in `bill_depth_mm` in the Palmer penguins by `species`.  Test the assumptions used by ANOVA to see if it is an appropriate test for you to use in this case.  If it is not, find out what the appropriate test to use is, and then use it!
+
+Testing for normality:
+```{r}
+
+```
+
+Testing for equal variance:
+```{r}
+
+```
+We are finding non-normal distribution of the male, Adelie penguins.  I will take this opportunity to show you how to run non-parametric tests as well.
