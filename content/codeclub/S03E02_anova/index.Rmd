@@ -99,7 +99,7 @@ Today, we are going to go over how to:
 
 The purpose of today's session is more to give you practical experience with running and retrieving ANOVA analysis output, than teaching about the assumptions and background of the test itself.
 
-If you are looking for a good statistics test, I would recommend Dr. Kristin Mercer's [HCS 8887 Experimental Design](https://hcs.osu.edu/courses/hcs-8887).
+If you are looking for a good statistics class, I would recommend Dr. Kristin Mercer's [HCS 8887 Experimental Design](https://hcs.osu.edu/courses/hcs-8887).
 
 <br>
 
@@ -107,6 +107,8 @@ If you are looking for a good statistics test, I would recommend Dr. Kristin Mer
 
 #### - Load libraries, get data
 We are going to start with our favorite dataset `palmerpenguins` to provide the input data for our analysis.
+
+If you don't have any of the packages below, use `install.packages()` to download them.  
 ```{r, message = FALSE}
 library(tidyverse)
 library(palmerpenguins) # for data
@@ -146,7 +148,7 @@ Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/ar
 
 ## 2. ANOVA function
 
-We want to see if there are any differences in bill length (`bill_length_mm`) in penguins by `sex` or by `species`.  We do this using ANOVA.
+We want to see if there are any differences in bill length (`bill_length_mm`) in penguins by `sex`,  by `species`, or by their interaction.  We do this using ANOVA.
 
 <p align="center"> 
 <img src=lter_penguins.png width="50%" alt="a cute image of three penguins, the species adelie, chinstrap, and gentoo as a part of the palmer penguins package">
@@ -185,7 +187,7 @@ summary(bill_length_anova)
 </p>
 Illustration by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)
 
-We can take the output of our ANOVA and use the function `tidy()` within the `broom` package to turn our output into a tidy table.
+We can take the output of our ANOVA and use the function `tidy()` within the `broom` package to turn our output into a tidy table.  Here, the notation `broom::tidy()` means I want to use the function `tidy()` that is a part of the `broom` package.  This works even though I haven't called `library(broom)` at the beginning of my script.
 ```{r}
 tidy_anova <- broom::tidy(bill_length_anova)
 
@@ -221,48 +223,7 @@ tidy_tukey <- as.data.frame(tukey_bill_length$groups)
 
 ----
 
-## 4. Testing assumptions
-
-I know I said we weren't going to talk about this, but I thought I'd be remiss if I didn't show you how to test that you aren't violating any of the assumptions needed to conduct an ANOVA.  We went over this a little bit back in the session put together by Daniel Quiroz on [ggpubr](https://biodash.github.io/codeclub/s02e10_ggpubr/) and adding statistical results to ggplots.
-
-Briefly, in order to use parametric procedures (like ANOVA), we need to be sure our data meets the assumptions for 1) normality and 2) constant variance. This can be done in a few different ways.
-
-### Shapiro-Wilk test for normality
-We are going to use the Shapiro-Wilk test (using the function `shapiro_test()` which is in the package `rstatix` to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function [`shapiro.test()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test), which just means you can use it with pipes.
-```{r}
-penguins %>%
-  drop_na() %>%
-  rstatix::shapiro_test(bill_length_mm)
-
-penguins %>%
-  drop_na() %>%
-  group_by(species, sex) %>%
-  rstatix::shapiro_test(bill_length_mm)
-```
-
-Can we visualize normality in another way?
-```{r}
-penguins %>%
-  drop_na() %>%
-  ggplot(aes(x = bill_length_mm)) +
-  geom_histogram() +
-  facet_grid(cols = vars(species),
-             rows = vars(sex))
-```
-
-### Equal variance
-We can test for equal variance using Levene's test, [`levene_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/levene_test) which is part of the `rstatix` package.  Again, this is a pipe-friendly wrapper for the function [`levene.test()`](https://www.rdocumentation.org/packages/lawstat/versions/3.4/topics/levene.test).
-```{r}
-rstatix::levene_test(data = penguins %>% drop_na(),
-                       bill_length_mm ~ species*sex)
-```
-
-
-<br>
-
-----
-
-## 5. Bringing it together in a plot
+## 4. Bringing it together in a plot
 
 We already looked at a first-pass plot, but let's customize it now, and add our statistical info.  Here is our base plot.
 ```{r}
@@ -286,7 +247,7 @@ First let's make the plot more aesthetically pleasing.
        subtitle = "Data collected from Palmer LTER, Antarctica"))
 ```
 
-We want to add the letters to this plot, so we can tell which groups of species by sex are significantly different.  We are going to figure out what the maximum `bill_length_mm` for each species by sex is, so it will help us determine where to put our letter labels.  Then, we cna add our labels to be higher than the largest data point.
+We want to add the letters to this plot, so we can tell which groups of species by sex are significantly different.  We are going to figure out what the maximum `bill_length_mm` for each species by sex is, so it will help us determine where to put our letter labels.  Then, we can add our labels to be higher than the largest data point.
 ```{r}
 bill_length_max <- penguins %>%
   drop_na() %>%
@@ -348,12 +309,11 @@ library(palmerpenguins)
 head(penguins)
 ```
 
-
 ### Exercise 1
 
 <div class="puzzle">
 <div>
-Test the assumptions used by ANOVA to see if it is an appropriate test for you to use in this case.  If it is not, find out what the appropriate test to use is, and then use it!
+Conduct an ANOVA to see if there are significant differences in `bill_depth_mm` in the Palmer penguins by by `species`.
 
 <details>
   <summary>
@@ -361,54 +321,7 @@ Test the assumptions used by ANOVA to see if it is an appropriate test for you t
   </summary>
 
 
-  Test for normality and equal variance using `shapiro_test()` and `levene_test()` respectively. 
-<br>
-</details>
-
-<br>
-
-<details>
-  <summary>
-  Solutions (click here)
-  </summary>
-
-Testing for normality:
-```{r}
-penguins %>%
-  drop_na() %>%
-  filter(sex == "male") %>%
-  group_by(species) %>%
-  rstatix::shapiro_test(bill_depth_mm)
-```
-
-Testing for equal variance:
-```{r}
-rstatix::levene_test(data = penguins %>% drop_na() %>% filter(sex == "male"),
-                       bill_depth_mm ~ species*sex)
-```
-We are finding non-normal distribution of the male, Adelie penguins.  I will take this opportunity to show you how to run non-parametric tests as well.
-
-</details>
-<br>
-
-</div>
-</div>
-
-----
-
-### Exercise 2
-
-<div class="puzzle">
-<div>
-Conduct ANOVA or another relevant test to see if there are significant differences in `bill_depth_mm` in the Palmer penguins by by `species`.
-
-<details>
-  <summary>
-  Hints (click here)
-  </summary>
-
-
-  The non-parametric version of a one-way ANOVA is the Kruskal-Wallis test, and you can use the `rstatix` function [`kruskal_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/kruskal_test).
+  Use the function `aov()`. Make sure you provide a model formula.
 <br>
 </details>
 
@@ -419,16 +332,7 @@ Conduct ANOVA or another relevant test to see if there are significant differenc
   Solutions (click here)
   </summary>
   
-```{r}
-bill_depth_kruskal <- penguins %>%
-  drop_na() %>%
-  filter(sex == "male") %>%
-  kruskal_test(bill_depth_mm ~ species)
 
-bill_depth_kruskal
-```
-
-If this were a parametric test, we could do it like this.  `aov()` is not a very pipe friendly function.
 ```{r}
 bill_depth_anova <- 
   aov(data = penguins %>% drop_na() %>% filter(sex == "male"),
@@ -445,7 +349,7 @@ summary(bill_depth_anova)
 
 ----
 
-### Exercise 3
+### Exercise 2
 
 <div class="puzzle">
 <div>
@@ -492,7 +396,7 @@ tukey_bill_length <- HSD.test(bill_depth_anova,
 
 ----
 
-### Exercise 4
+### Exercise 3
 
 <div class="puzzle">
 <div>
@@ -570,3 +474,131 @@ bill_depth_for_plotting
 
 ----
 
+## Extra material
+This session was getting a bit long so I'm putting a section about testing assumptions here.
+### Testing assumptions
+
+I know I said we weren't going to talk about this, but I thought I'd be remiss if I didn't show you how to test that you aren't violating any of the assumptions needed to conduct an ANOVA.  We went over this a little bit back in the session put together by Daniel Quiroz on [ggpubr](https://biodash.github.io/codeclub/s02e10_ggpubr/) and adding statistical results to ggplots.
+
+Briefly, in order to use parametric procedures (like ANOVA), we need to be sure our data meets the assumptions for 1) normality and 2) constant variance. This can be done in a few different ways.
+
+#### Shapiro-Wilk test for normality
+We are going to use the Shapiro-Wilk test (using the function `shapiro_test()` which is in the package `rstatix` to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function [`shapiro.test()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test), which just means you can use it with pipes.
+```{r}
+penguins %>%
+  drop_na() %>%
+  rstatix::shapiro_test(bill_length_mm)
+
+penguins %>%
+  drop_na() %>%
+  group_by(species, sex) %>%
+  rstatix::shapiro_test(bill_length_mm)
+```
+
+Can we visualize normality in another way?
+```{r}
+penguins %>%
+  drop_na() %>%
+  ggplot(aes(x = bill_length_mm)) +
+  geom_histogram() +
+  facet_grid(cols = vars(species),
+             rows = vars(sex))
+```
+
+#### Equal variance
+We can test for equal variance using Levene's test, [`levene_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/levene_test) which is part of the `rstatix` package.  Again, this is a pipe-friendly wrapper for the function [`levene.test()`](https://www.rdocumentation.org/packages/lawstat/versions/3.4/topics/levene.test).
+```{r}
+rstatix::levene_test(data = penguins %>% drop_na(),
+                       bill_length_mm ~ species*sex)
+```
+
+
+<br>
+
+### Extra exercise 1
+
+<div class="puzzle">
+<div>
+Test the assumptions used by ANOVA to see if it is an appropriate test for you to use in this case.  If it is not, find out what the appropriate test to use is, and then use it!
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+
+
+  Test for normality and equal variance using `shapiro_test()` and `levene_test()` respectively. 
+<br>
+</details>
+
+<br>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+
+Testing for normality:
+```{r}
+penguins %>%
+  drop_na() %>%
+  filter(sex == "male") %>%
+  group_by(species) %>%
+  rstatix::shapiro_test(bill_depth_mm)
+```
+
+Testing for equal variance:
+```{r}
+rstatix::levene_test(data = penguins %>% drop_na() %>% filter(sex == "male"),
+                       bill_depth_mm ~ species*sex)
+```
+We are finding non-normal distribution of the male, Adelie penguins.  I will take this opportunity to show you how to run non-parametric tests as well.
+
+</details>
+<br>
+
+</div>
+</div>
+
+----
+
+### Extra exercise 2
+
+<div class="puzzle">
+<div>
+Conduct an non-parametric ANOVA to see if there are significant differences in `bill_depth_mm` in the Palmer penguins by by `species`.
+
+<details>
+  <summary>
+  Hints (click here)
+  </summary>
+
+
+  The non-parametric version of a one-way ANOVA is the Kruskal-Wallis test, and you can use the `rstatix` function [`kruskal_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/kruskal_test).
+<br>
+</details>
+
+<br>
+
+<details>
+  <summary>
+  Solutions (click here)
+  </summary>
+  
+```{r}
+bill_depth_kruskal <- penguins %>%
+  drop_na() %>%
+  filter(sex == "male") %>%
+  kruskal_test(bill_depth_mm ~ species)
+
+bill_depth_kruskal
+```
+
+
+</details>
+<br>
+
+</div>
+</div>
+
+----
