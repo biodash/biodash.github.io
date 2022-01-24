@@ -13,6 +13,737 @@
     </image>
     
     <item>
+      <title>S03E03: Principal Component Analysis (PCA)</title>
+      <link>https://biodash.github.io/codeclub/s03e03_pca/</link>
+      <pubDate>Mon, 24 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/s03e03_pca/</guid>
+      <description>&lt;figure&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img src=PCA.png width=&#34;75%&#34;&gt;
+&lt;figcaption&gt;
+A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nature.com/articles/nature07331&#34;&gt;Novembre et al 2008&lt;/a&gt;: &#34;Genes mirror geography within Europe&#34;
+&lt;/figcaption&gt;
+&lt;/p&gt;
+&lt;/figure&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;housekeeping&#34;&gt;Housekeeping&lt;/h2&gt;
+&lt;h4 id=&#34;new-to-code-club&#34;&gt;New to Code Club?&lt;/h4&gt;
+&lt;p&gt;Check out the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has pointers for if you&amp;rsquo;re new to R or RStudio. A few related Code Club sessions include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e01_ttests/&#34;&gt;S03E01&lt;/a&gt;: T-tests&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e02_anova/&#34;&gt;S03E01&lt;/a&gt;: ANOVA&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s02e06_ggplot2/&#34;&gt;S02E06&lt;/a&gt;: Intro to &lt;em&gt;ggplot2&lt;/em&gt;, part I&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s02e07_ggplot2_part2/&#34;&gt;S02E07&lt;/a&gt;: Intro to &lt;em&gt;ggplot2&lt;/em&gt;, part II&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;session-goals&#34;&gt;Session goals&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Learn &lt;strong&gt;how to perform a PCA&lt;/strong&gt; in R using the &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt; function.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Understand what is represented by the &lt;strong&gt;different components of the output&lt;/strong&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Learn about &lt;strong&gt;three kinds of plots&lt;/strong&gt; commonly used to visualize PCA results, and how to create them.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
+&lt;h4 id=&#34;r-packages-we-will-use&#34;&gt;R packages we will use&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;palmerpenguins&lt;/em&gt; &amp;ndash; A data package containing the data we will explore&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;tidyverse&lt;/em&gt; &amp;ndash; As metapackage that includes &lt;em&gt;ggplot2&lt;/em&gt; which we&amp;rsquo;ll use for plotting, access to the &lt;code&gt;%&amp;gt;%&lt;/code&gt; pipe, etc.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;broom&lt;/em&gt; &amp;ndash; We&amp;rsquo;ll again use the &lt;a href=&#34;https://generics.r-lib.org/reference/tidy.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tidy()&lt;/code&gt;&lt;/a&gt; function in &lt;em&gt;broom&lt;/em&gt; to create tidy dataframes from untidy statistical function output&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;glue&lt;/em&gt; &amp;ndash; For pasting strings with variables&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;factoextra&lt;/em&gt; &amp;ndash; For easily creating a PCA biplot (and other PCA plots)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h4 id=&#34;getting-set-up&#34;&gt;Getting set up&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;If you plan to just listen during the first part,&lt;/em&gt; &lt;em&gt;you can wait until the Breakout Rooms to do the following.&lt;/em&gt; &lt;em&gt;Also, instead of copying-and-pasting code,&lt;/em&gt; &lt;em&gt;you could download this &lt;a href=&#34;TBA&#34;&gt;R script - TBA&lt;/a&gt; with today&amp;rsquo;s code.&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Open a new R script in RStudio (&lt;code&gt;File&lt;/code&gt; =&amp;gt; &lt;code&gt;New File&lt;/code&gt; =&amp;gt; &lt;code&gt;R Script&lt;/code&gt;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Save the script, as something along the lines of &lt;code&gt;codeclub_S03E03_PCA.R&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Copy the following code into the script, for installing packages where needed:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## `require(glue)` returns FALSE if glue isn&#39;t installed; therefore,&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## these lines will only try to install packages that aren&#39;t already installed.&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://broom.tidymodels.org/&#39;&gt;broom&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;broom&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;glue&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://www.sthda.com/english/rpkgs/factoextra&#39;&gt;factoextra&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;factoextra&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Also copy the following code to load the packages into your R session:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://broom.tidymodels.org/&#39;&gt;broom&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://www.sthda.com/english/rpkgs/factoextra&#39;&gt;factoextra&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Run the code above in the R console.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1---a-brief-intro-to-pca&#34;&gt;1 - A brief intro to PCA&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Principal Component Analysis (PCA)&lt;/strong&gt; is a popular method that creates &lt;em&gt;&amp;ldquo;summary variables&amp;rdquo; (Principal Components)&lt;/em&gt; which represent as much of the information as possible from a high-dimensional dataset.&lt;/p&gt;
+&lt;p&gt;A &lt;em&gt;high-dimensional dataset&lt;/em&gt; is a dataset with measurements for many variables, such as expression levels for thousands of genes.&lt;/p&gt;
+&lt;p&gt;PCA and similar methods like PCoA and nMDS (see box below) are also called &amp;ldquo;&lt;strong&gt;dimension reduction&lt;/strong&gt;&amp;rdquo; or &amp;ldquo;&lt;strong&gt;ordination&lt;/strong&gt;&amp;rdquo; methods, and can be classified as a type of &lt;em&gt;unsupervised learning&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;PCA is most commonly used for &lt;strong&gt;exploratory data visualization&lt;/strong&gt; to see overall patterns in datasets, though you could also use the resulting Principal Components as response variables in a statistical model.&lt;/p&gt;
+&lt;br&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
+&lt;h4 id=&#34;glossary&#34;&gt;Glossary&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Principal Components (PCs)&lt;/strong&gt; &amp;ndash; the summary variables that a PCA produces.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Loadings&lt;/strong&gt; (&lt;em&gt;rotations&lt;/em&gt;) &amp;ndash; Loadings apply to the &lt;em&gt;original variables&lt;/em&gt;. They are the contributions of variables to PCs, which form the &amp;ldquo;recipes&amp;rdquo; used to create the PCs.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scores&lt;/strong&gt; (&lt;em&gt;coordinates&lt;/em&gt;) &amp;ndash; Scores apply to the &lt;em&gt;samples&lt;/em&gt;. These scores, for each PC, are coordinates that can be used to create a score plot which is the &amp;ldquo;classic&amp;rdquo; PCA plot.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Eigenvalue&lt;/strong&gt; &amp;ndash; The amount of variation explained by a PC.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
+&lt;h4 id=&#34;similar-ordination-methods&#34;&gt;Similar ordination methods&lt;/h4&gt;
+&lt;p&gt;Besides PCA, other commonly used ordination methods that are also unconstrained (i.e., with no response variable) include the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;Principal Coordinate Analysis&lt;/em&gt; (&lt;strong&gt;PCoA&lt;/strong&gt;) is also known as &lt;em&gt;Metric Multidimensional Scaling&lt;/em&gt; (&lt;strong&gt;MDS&lt;/strong&gt; / mMDS). PCoA allows you to use distance measures other than Euclidean distance and can be run e.g. with &lt;a href=&#34;https://rdrr.io/r/stats/cmdscale.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;stats::cmdscale()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;Non-metric Multidimensional Scaling&lt;/em&gt; (&lt;strong&gt;nMDS&lt;/strong&gt;) is a non-metric method with quite different inner workings from PCA and PCoA that is especially suitable when you have low confidence in distance values. It can be run e.g. with &lt;a href=&#34;https://rdrr.io/pkg/vegan/man/metaMDS.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;vegan::metaMDS()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you&amp;rsquo;re struggling to pick a suitable ordination approach for your data, take a look at &lt;a href=&#34;https://journals.plos.org/ploscompbiol/article/figure?id=10.1371/journal.pcbi.1006907.t001&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Table 1&lt;/a&gt; in &lt;a href=&#34;https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Nguyen &amp;amp; Holmes 2019&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2---prcomp-scaling-and-centering&#34;&gt;2 - &lt;code&gt;prcomp()&lt;/code&gt;, scaling, and centering&lt;/h2&gt;
+&lt;p&gt;To perform a PCA analysis in R, there are two functions that can be used without the need to load any packages: &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://rdrr.io/r/stats/princomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;princomp()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;(Like last week&amp;rsquo;s &lt;a href=&#34;https://rdrr.io/r/stats/aov.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;aov()&lt;/code&gt;&lt;/a&gt; function, these are in the &lt;em&gt;stats&lt;/em&gt; package, which is loaded into your R session by default. More PCA functions are available in other packages but these tend to be very similar and/or simply wrap the two base R functions.)&lt;/p&gt;
+&lt;p&gt;We will use &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;, which is preferred among these two due to its slightly better accuracy&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;two-important-data-pre-processing-steps&#34;&gt;Two important data pre-processing steps&amp;hellip;&lt;/h4&gt;
+&lt;p&gt;&amp;hellip;need to be done for many PCA analyses. Luckily, these can be done alongside the PCA computation in a single call to &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Centering the data&lt;/strong&gt; &amp;ndash; &lt;em&gt;Centering&lt;/em&gt; the data around the origin (subtracting the mean of variables) is basically always advisable and is controlled by the &lt;code&gt;center&lt;/code&gt; argument of &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt;, which is &lt;em&gt;set to &lt;code&gt;TRUE&lt;/code&gt; by default&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Scaling the data&lt;/strong&gt; &amp;ndash; Standardizing the standard deviation across the variables in the data (i.e., scaling) is advisable when variables are in different units or on different scales but is generally not recommended when all variables are of the same type and in the same units (e.g., gene counts&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;). Whether or not to scale the data is controlled by the &lt;code&gt;scale.&lt;/code&gt; argument of &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt;, which is &lt;em&gt;set to &lt;code&gt;FALSE&lt;/code&gt; by default&lt;/em&gt;.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3---our-first-pca&#34;&gt;3 - Our first PCA&lt;/h2&gt;
+&lt;p&gt;As a simple example, we want to &lt;em&gt;run a PCA summarizing the four numerical measurements taken for each penguin&lt;/em&gt; (bill length, bill depth, flipper length, and body mass) in the &lt;em&gt;palmerpenguins&lt;/em&gt; dataset.&lt;/p&gt;
+&lt;p&gt;First, we&amp;rsquo;ll subset the &lt;code&gt;penguins&lt;/code&gt; dataframe to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Remove rows with &lt;code&gt;NA&lt;/code&gt;s (&lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt; will return an error if any of our variables contain &lt;code&gt;NA&lt;/code&gt;s)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Select only the columns that we want to include in the PCA&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Remove rows with NAs&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## Select columns&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins_for_pca&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Let&amp;rsquo;s take a look at the resulting dataframe:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins_for_pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;           39.1          18.7               181        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;750&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;           39.5          17.4               186        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;800&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;           40.3          18                 195        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;250&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;           36.7          19.3               193        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;450&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt;           39.3          20.6               190        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;650&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt;           38.9          17.8               181        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;625&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/dim.html&#39;&gt;dim&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins_for_pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 333   4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h4 id=&#34;run-the-pca&#34;&gt;Run the PCA!&lt;/h4&gt;
+&lt;p&gt;Now, we are ready to run the PCA:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/prcomp.html&#39;&gt;prcomp&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins_for_pca&lt;/span&gt;, scale &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# (Because `center = TRUE` by default, we don&#39;t have to include that.)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Scaling is desirable here because as we saw above, the variables we use in our PCA are in different units (&lt;code&gt;mm&lt;/code&gt; and &lt;code&gt;g&lt;/code&gt;).&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;More on scaling&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Because our variables are in different units, standard deviations for those variables may differ dramatically. This would lead the PCA to put more weight on variables with a higher standard deviation, which we don&amp;rsquo;t want if those differences are merely a consequence of different units.&lt;/p&gt;
+&lt;p&gt;If we check the standard deviations in our dataset, we can indeed see large differences:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;map&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins_for_pca&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;sd&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $bill_length_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 5.468668&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $bill_depth_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1.969235&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $flipper_length_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 14.01577&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $body_mass_g&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 805.2158&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4---exploring-the-output-i&#34;&gt;4 - Exploring the output I&lt;/h2&gt;
+&lt;p&gt;Like with objects returned by the statistical tests we saw in the previous weeks, the object returned by &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt; is not just a dataframe or even a regular list&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;prcomp&#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&amp;hellip; and trying to print the object to screen will only give you a summary of sorts:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Standard deviations (1, .., p=4):&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1.6569115 0.8821095 0.6071594 0.3284579&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Rotation (n x k) = (4 x 4):&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                          PC1         PC2        PC3        PC4&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_length_mm     0.4537532 -0.60019490 -0.6424951  0.1451695&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_depth_mm     -0.3990472 -0.79616951  0.4258004 -0.1599044&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; flipper_length_mm  0.5768250 -0.00578817  0.2360952 -0.7819837&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; body_mass_g        0.5496747 -0.07646366  0.5917374  0.5846861&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Like we saw last week with &lt;a href=&#34;https://rdrr.io/r/stats/aov.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;aov()&lt;/code&gt;&lt;/a&gt;, we can get a more useful summary of the results with the &lt;a href=&#34;https://rdrr.io/r/base/summary.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summary()&lt;/code&gt;&lt;/a&gt; function:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/summary.html&#39;&gt;summary&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Importance of components:&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                           PC1    PC2     PC3     PC4&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Standard deviation     1.6569 0.8821 0.60716 0.32846&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Proportion of Variance 0.6863 0.1945 0.09216 0.02697&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Cumulative Proportion  0.6863 0.8809 0.97303 1.00000&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This shows us the &amp;ldquo;importance&amp;rdquo; of the 4 principal components that our PCA returned, i.e. the amount of variation they explain.&lt;/p&gt;
+&lt;p&gt;PC1, the first principal component, explains a whopping 68.8% of the variation, whereas PC4 explains merely 2.7% of the variation in the dataset. (Principal components are always ordered by the amount of variation they explain, with PC1 explaining most.)&lt;/p&gt;
+&lt;h4 id=&#34;seeing-all-elements-with-str&#34;&gt;Seeing all elements with &lt;code&gt;str()&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;These summaries are nice and all but like we saw in previous weeks, they don&amp;rsquo;t make it obvious where and how to access &lt;em&gt;all&lt;/em&gt; the information contained in the object.&lt;/p&gt;
+&lt;p&gt;Running the &lt;a href=&#34;https://rdrr.io/r/utils/str.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;str()&lt;/code&gt;&lt;/a&gt; function is a good start for getting the raw contents of the object, even though the information printed isn&amp;rsquo;t easy to look at:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/str.html&#39;&gt;str&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; List of 5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ sdev    : num [1:4] 1.657 0.882 0.607 0.328&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ rotation: num [1:4, 1:4] 0.454 -0.399 0.577 0.55 -0.6 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   ..- attr(*, &#34;dimnames&#34;)=List of 2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   .. ..$ : chr [1:4] &#34;bill_length_mm&#34; &#34;bill_depth_mm&#34; &#34;flipper_length_mm&#34; &#34;body_mass_g&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   .. ..$ : chr [1:4] &#34;PC1&#34; &#34;PC2&#34; &#34;PC3&#34; &#34;PC4&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ center  : Named num [1:4] 44 17.2 201 4207.1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   ..- attr(*, &#34;names&#34;)= chr [1:4] &#34;bill_length_mm&#34; &#34;bill_depth_mm&#34; &#34;flipper_length_mm&#34; &#34;body_mass_g&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ scale   : Named num [1:4] 5.47 1.97 14.02 805.22&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   ..- attr(*, &#34;names&#34;)= chr [1:4] &#34;bill_length_mm&#34; &#34;bill_depth_mm&#34; &#34;flipper_length_mm&#34; &#34;body_mass_g&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ x       : num [1:333, 1:4] -1.85 -1.31 -1.37 -1.88 -1.92 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   ..- attr(*, &#34;dimnames&#34;)=List of 2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   .. ..$ : NULL&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   .. ..$ : chr [1:4] &#34;PC1&#34; &#34;PC2&#34; &#34;PC3&#34; &#34;PC4&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  - attr(*, &#34;class&#34;)= chr &#34;prcomp&#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;In the first breakout room session, you&amp;rsquo;ll explore the contents of our &lt;code&gt;pca&lt;/code&gt; object a bit more.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;breakout-rooms-i&#34;&gt;Breakout Rooms I&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;p&gt;If you didn&amp;rsquo;t do so already, get set up for the remaining exercises. Either download this &lt;a href=&#34;TBA&#34;&gt;R script - TBA&lt;/a&gt;, open it in RStudio, and run the code, or:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Open a new R script in RStudio (&lt;code&gt;File&lt;/code&gt; =&amp;gt; &lt;code&gt;New File&lt;/code&gt; =&amp;gt; &lt;code&gt;R Script&lt;/code&gt;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Save the script, as something along the lines of &lt;code&gt;codeclub_S03E03_PCA.R&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Copy the following code into the script:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Install packages if needed&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;## (`require(glue)` returns FALSE if glue isn&#39;t installed; therefore,&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;##  these lines will only try to install packages that aren&#39;t already installed.)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://broom.tidymodels.org/&#39;&gt;broom&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;broom&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;glue&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://www.sthda.com/english/rpkgs/factoextra&#39;&gt;factoextra&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;factoextra&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## Load the packages into your R session&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://broom.tidymodels.org/&#39;&gt;broom&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;http://www.sthda.com/english/rpkgs/factoextra&#39;&gt;factoextra&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## Prep the penguin data for the PCA&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins_for_pca&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## Run the PCA&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/prcomp.html&#39;&gt;prcomp&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins_for_pca&lt;/span&gt;, scale &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Run the code above in the R console.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;p&gt;How can you access the different components in the &lt;code&gt;List of 5&lt;/code&gt; that is summarized when running &lt;a href=&#34;https://rdrr.io/r/utils/str.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;str(pca)&lt;/code&gt;&lt;/a&gt;? For example, say you wanted to see the &lt;code&gt;rotation&lt;/code&gt; element in its entirety, how could you do this?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hints&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;The &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Extract.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;$&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; (dollar sign) operator can be used to access the different elements (as implied by the dollar signs shown in front of the names of the elements).&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;To see the &lt;code&gt;rotation&lt;/code&gt; element, type &lt;strong&gt;&lt;code&gt;pca$rotation&lt;/code&gt;&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rotation&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                          PC1         PC2        PC3        PC4&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_length_mm     0.4537532 -0.60019490 -0.6424951  0.1451695&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_depth_mm     -0.3990472 -0.79616951  0.4258004 -0.1599044&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; flipper_length_mm  0.5768250 -0.00578817  0.2360952 -0.7819837&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; body_mass_g        0.5496747 -0.07646366  0.5917374  0.5846861&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-3-bonus&#34;&gt;Exercise 3 (bonus)&lt;/h3&gt;
+&lt;p&gt;Take a look at the contents of all five elements in the &lt;code&gt;pca&lt;/code&gt; object. Do you have a (rough) understanding of what each represents?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hints&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Take a look at the &lt;a href=&#34;#glossary&#34;&gt;Glossary&lt;/a&gt;.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;All elements of the output are explained in the next section of this page.&lt;/p&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5---exploring-the-output-ii&#34;&gt;5 - Exploring the output II&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s take a quick look together at the three most important elements in the object returned by &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt;, which we named &lt;code&gt;pca&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$sdev&lt;/code&gt;&lt;/strong&gt; is a vector of standard deviations associated with each principal component (PC), i.e. it is the &lt;strong&gt;amount of variation explained by each PC&lt;/strong&gt;. (This is also known as the &lt;em&gt;eigenvector&lt;/em&gt;, which contains &lt;em&gt;eigenvalues&lt;/em&gt;.)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sdev&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1.6569115 0.8821095 0.6071594 0.3284579&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We also saw this information when running &lt;a href=&#34;https://rdrr.io/r/base/summary.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summary(pca)&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$rotation&lt;/code&gt;&lt;/strong&gt; is a matrix that contains the &lt;strong&gt;loadings&lt;/strong&gt; for each variable in each PC.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rotation&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt;                          PC1         PC2        PC3        PC4&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_length_mm     0.4537532 -0.60019490 -0.6424951  0.1451695&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_depth_mm     -0.3990472 -0.79616951  0.4258004 -0.1599044&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; flipper_length_mm  0.5768250 -0.00578817  0.2360952 -0.7819837&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; body_mass_g        0.5496747 -0.07646366  0.5917374  0.5846861&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;These are the &amp;ldquo;recipes&amp;rdquo; for creating each PC, with &lt;em&gt;higher absolute values&lt;/em&gt; indicating a larger influence of the variable on the value of the PC. The &lt;em&gt;sign&lt;/em&gt; (- or +) matters too: in PC1, larger values of bill length, flipper length, and body mass all contribute to a larger value of PC1, and vice versa for bill depth.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$x&lt;/code&gt;&lt;/strong&gt; is the most important part of the output: a matrix containing the &lt;strong&gt;scores (or coordinates)&lt;/strong&gt; for each sample for each PC, used to create a score plot.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt;            PC1         PC2         PC3        PC4&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,] -1.850808 -0.03202119  0.23454869  0.5276026&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,] -1.314276  0.44286031  0.02742880  0.4011230&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,] -1.374537  0.16098821 -0.18940423 -0.5278675&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,] -1.882455  0.01233268  0.62792772 -0.4721826&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,] -1.917096 -0.81636958  0.69999797 -0.1961213&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; [6,] -1.770356  0.36567266 -0.02841769  0.5046092&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;...And the remaining two elements&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$center&lt;/code&gt;&lt;/strong&gt; is a vector containing the means for each variable (column), which was subsequently used for centering the data (this would simply be &lt;code&gt;FALSE&lt;/code&gt; if the data wasn&amp;rsquo;t centered).&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;center&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt;    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g &lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt;          43.99279          17.16486         200.96697        4207.05706&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$scale&lt;/code&gt;&lt;/strong&gt; similarly is a vector containing the scaling constant for each variable (column) in the data.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;scale&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt;    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g &lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt;          5.468668          1.969235         14.015765        805.215802&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;6---scree-plot&#34;&gt;6 - Scree plot&lt;/h2&gt;
+&lt;p&gt;A &amp;ldquo;scree plot&amp;rdquo;&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; is a barplot that shows &lt;strong&gt;the amount of variation (&lt;em&gt;eigenvalues&lt;/em&gt;) explained by each PC.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll make a base R version of this plot (gasp!) because it is so quick to make, and we don&amp;rsquo;t need this figure to be fancy:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/graphics/plot.default.html&#39;&gt;plot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-18-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
+&lt;h4 id=&#34;interpretation&#34;&gt;Interpretation&lt;/h4&gt;
+&lt;p&gt;This gives us a quick visual overview of what we saw earlier: PC1 is &lt;em&gt;by far&lt;/em&gt; the most important, and PC4 doesn&amp;rsquo;t do much at all. PC3 may still be worth plotting but &amp;ldquo;luckily&amp;rdquo; we have a decent gap between PC2 and PC3, such that a plot of the first two PCs will be a very logical choice.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;7---score-classic-pca-plot&#34;&gt;7 - Score (classic PCA) plot&lt;/h2&gt;
+&lt;p&gt;A &amp;ldquo;score plot&amp;rdquo; shows &lt;strong&gt;the scores (coordinates) for each sample for two PCs&lt;/strong&gt;, typically the first two.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;re going to need a dataframe to plot. But if we were to &lt;a href=&#34;https://generics.r-lib.org/reference/tidy.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;broom::tidy()&lt;/code&gt;&lt;/a&gt; the matrix with scores (&lt;code&gt;pca$x&lt;/code&gt;) like we&amp;rsquo;ve done with t-test and ANOVA output in previous weeks, we would get a dataframe with all PCs in one column that wouldn&amp;rsquo;t be that easy to plot.&lt;/p&gt;
+&lt;p&gt;So in this case, we&amp;rsquo;ll just manipulate &lt;code&gt;pca$x&lt;/code&gt; ourselves &amp;ndash; in particular, we want to add the source penguins dataframe back to it, which will allow us to color points by, say, species.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Column-bind (= put side-by-side) the scores and the source dataframe&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;pca_scores&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;bind_cols&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca_scores&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;         PC1         PC2         PC3        PC4 species    island bill_length_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 -1.850808 -0.03202119  0.23454869  0.5276026  Adelie Torgersen           39.1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2 -1.314276  0.44286031  0.02742880  0.4011230  Adelie Torgersen           39.5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3 -1.374537  0.16098821 -0.18940423 -0.5278675  Adelie Torgersen           40.3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4 -1.882455  0.01233268  0.62792772 -0.4721826  Adelie Torgersen           36.7&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5 -1.917096 -0.81636958  0.69999797 -0.1961213  Adelie Torgersen           39.3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6 -1.770356  0.36567266 -0.02841769  0.5046092  Adelie Torgersen           38.9&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   bill_depth_mm flipper_length_mm body_mass_g    sex year&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1          18.7               181        3750   male 2007&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2          17.4               186        3800 female 2007&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3          18.0               195        3250 female 2007&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4          19.3               193        3450 female 2007&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 5          20.6               190        3650   male 2007&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 6          17.8               181        3625 female 2007&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Now we&amp;rsquo;re ready to create the plot:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;score_plot&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca_scores&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC1&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC2&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;theme_classic&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;score_plot&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-20-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;a-better-aspect-ratio&#34;&gt;A better aspect ratio&lt;/h3&gt;
+&lt;p&gt;One way to improve our plot is to set the aspect ratio (the proportional relationship between the height and the width) according to the relative percentages of variation explained by the two plotted PCs: because PC1 on the x-axis explains more variation, we want the plot to be wide.&lt;/p&gt;
+&lt;p&gt;To get the percentages in a dataframe, we will use the &lt;a href=&#34;https://generics.r-lib.org/reference/tidy.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tidy()&lt;/code&gt;&lt;/a&gt; function like in previous weeks. Because the output of &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt; contains multiple matrices, we&amp;rsquo;ll have to point it to the eigenvalues using the &lt;code&gt;matrix&lt;/code&gt; argument (see the &lt;a href=&#34;%28https://broom.tidymodels.org/reference/tidy.prcomp.html%29&#34;&gt;docs&lt;/a&gt;):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca_eigen&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://generics.r-lib.org/reference/tidy.html&#39;&gt;tidy&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;, matrix &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;eigenvalues&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;pca_eigen&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 4 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;      PC std.dev percent cumulative&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;      &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;     1   1.66   0.686       0.686&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt;     2   0.882  0.195       0.881&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt;     3   0.607  0.092&lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;      0.973&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt;     4   0.328  0.027&lt;span style=&#39;text-decoration: underline;&#39;&gt;0&lt;/span&gt;      1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Now, we&amp;rsquo;ll store the percentages explained by the first two PCs (rounded to one decimal):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# (Note: pca_eigen$percent contains proportions, not percentages...)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;PC1_percent&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Round.html&#39;&gt;round&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca_eigen&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;percent&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 68.6&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;PC2_percent&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Round.html&#39;&gt;round&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca_eigen&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;percent&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 19.5&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Finally, we can modify the aspect ratio, which is &lt;code&gt;height / width&lt;/code&gt; &amp;ndash; and we&amp;rsquo;ll also move the legend to the top, and add the percentages to the axis titles:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;score_plot&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;theme&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;aspect.ratio &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC2_percent&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC1_percent&lt;/span&gt;,
+        legend.position &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;top&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;PC1 (&amp;#123;PC1_percent&amp;#125;%)&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+       y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;PC2 (&amp;#123;PC2_percent&amp;#125;%)&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-23-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
+&lt;h4 id=&#34;interpretation-1&#34;&gt;Interpretation&lt;/h4&gt;
+&lt;p&gt;Across these four measurements, Gentoo penguins can be very clearly distinguished from the other two species, whereas Adelie and Chinstrap penguins differ on average but are not fully separated.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;8---biplot&#34;&gt;8 - Biplot&lt;/h2&gt;
+&lt;p&gt;A &amp;ldquo;biplot&amp;rdquo; shows the scores of samples for two PCs, like in the score plot above, &lt;em&gt;and&lt;/em&gt; shows the loadings for the original variables along the two PCs.&lt;/p&gt;
+&lt;p&gt;Because biplots are more complicated to make &amp;ldquo;from scratch&amp;rdquo; using &lt;em&gt;ggplot2&lt;/em&gt;, we will turn to the package &lt;em&gt;factoextra&lt;/em&gt;, which has a convenient function for making biplots, &lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fviz_pca_biplot()&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#39;&gt;fviz_pca_biplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;,
+                label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;var&#34;&lt;/span&gt;,   &lt;span class=&#39;c&#39;&gt;# Show labels for variables only&lt;/span&gt;
+                habillage &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# color by / shape by&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;theme&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;legend.position &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;top&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-24-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;While this plot can certainly be improved upon, &lt;em&gt;biplots are by their nature a little unwieldy&lt;/em&gt;.&lt;/p&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
+&lt;h4 id=&#34;interpretation-2&#34;&gt;Interpretation&lt;/h4&gt;
+&lt;p&gt;Biplots can be especially useful when you have a modest number of original variables, like here. With many variables, dimensionality again becomes a problem but they may e.g. reveal whether only a small number of variables strongly influence your PCs.&lt;/p&gt;
+&lt;p&gt;Some information we can glean from this particular biplot:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Flipper length and body mass are highly correlated among individuals, even across species. So flipper length relative to body mass is similar across species.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gentoo penguins are larger and with narrower bills than the other two species.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;While we made a scree plot with base R and a score plot with &amp;ldquo;base &lt;em&gt;ggplot2&lt;/em&gt;&amp;rdquo;, there are also &lt;em&gt;factoextra&lt;/em&gt; functions for these and other PCA plots:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/eigenvalue.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fviz_eig()&lt;/code&gt;&lt;/a&gt; &amp;ndash; scree plots&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fviz_pca_ind()&lt;/code&gt;&lt;/a&gt; &amp;ndash; score plots&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fviz_pca_var()&lt;/code&gt;&lt;/a&gt; &amp;ndash; &amp;ldquo;correlation circles&amp;rdquo;; plots showing loadings only (&lt;a href=&#34;https://journals.plos.org/ploscompbiol/article/figure?id=10.1371/journal.pcbi.1006907.g003&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example&lt;/a&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_contrib.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fviz_contrib()&lt;/code&gt;&lt;/a&gt; &amp;ndash; a barplot with the contribution of variables to 1 PC (&lt;a href=&#34;https://journals.plos.org/ploscompbiol/article/figure?id=10.1371/journal.pcbi.1006907.g003&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example&lt;/a&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Or, to create a biplot from scratch...&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;First, let&amp;rsquo;s save the loadings in a dataframe:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca_loadings&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rotation&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;rownames_to_column&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;var&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Next, we start with the score plot object &lt;code&gt;score_plot&lt;/code&gt; we created above.&lt;/p&gt;
+&lt;p&gt;What we need to add are the variable loading, which we&amp;rsquo;ll do with &lt;code&gt;geom_segment()&lt;/code&gt; to draw arrows, and &lt;code&gt;geom_text()&lt;/code&gt; to add text labels near the tips of the arrows:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## To make the arrows longer (all by the same amount),&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;## just to improve the visualization,&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;## we use a multiplication factor:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;mult&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;2.5&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;score_plot&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## geom_segment draws lines&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_segment&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;pca_loadings&lt;/span&gt;,
+               &lt;span class=&#39;c&#39;&gt;## The lines should start from the origin:&lt;/span&gt;
+               &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0&lt;/span&gt;, xend &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC1&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mult&lt;/span&gt;, yend &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC2&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mult&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+               &lt;span class=&#39;c&#39;&gt;## We turn the line into an arrow:&lt;/span&gt;
+               arrow &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;arrow&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+               &lt;span class=&#39;c&#39;&gt;## A gray-tone might work better than black:&lt;/span&gt;
+               color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;grey30&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_text&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;pca_loadings&lt;/span&gt;,
+            &lt;span class=&#39;c&#39;&gt;## The text labels go at the end of the arrows:&lt;/span&gt;
+            &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC1&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mult&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC2&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mult&lt;/span&gt;, label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;var&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+            &lt;span class=&#39;c&#39;&gt;## We left-align (hjust = 0) and lower (vjust = 1) the labels&lt;/span&gt;
+            hjust &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0&lt;/span&gt;, vjust &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;,
+            &lt;span class=&#39;c&#39;&gt;## Again, we use a gray color:&lt;/span&gt;
+            color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;grey30&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-26-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;breakout-rooms-ii&#34;&gt;Breakout Rooms II&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-4&#34;&gt;Exercise 4&lt;/h3&gt;
+&lt;p&gt;Above, we plotted the scores for the first two PCs in our score plot and biplot. Now, &lt;em&gt;create a biplot with another combination of PCSs&lt;/em&gt; (e.g., PC3 &amp;amp; PC4, or PC1 &amp;amp; PC3).&lt;/p&gt;
+&lt;p&gt;Take a look at the help for the &lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fviz_pca_biplot()&lt;/code&gt;&lt;/a&gt; function by typing&lt;br&gt;
+&lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;?fviz_pca_biplot&lt;/code&gt;&lt;/a&gt; to find out how you might be able to plot different PCs.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hints&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;The &lt;code&gt;axes&lt;/code&gt; argument to &lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fviz_pca_biplot()&lt;/code&gt;&lt;/a&gt; controls which axes will be plotted; this argument accepts a vector of two numbers.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;To plot PC1 &amp;amp; PC3 (which may be a better choice than including PC4 because it explains so little variation):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#39;&gt;fviz_pca_biplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;,
+                axes &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;var&#34;&lt;/span&gt;,
+                habillage &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;theme&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;legend.position &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;top&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-27-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-5&#34;&gt;Exercise 5&lt;/h3&gt;
+&lt;p&gt;Run the PCA for just one of the three penguin species.&lt;/p&gt;
+&lt;p&gt;Then, make a biplot of the results, in which you color by something else than &lt;code&gt;species&lt;/code&gt;, e.g. by &lt;code&gt;sex&lt;/code&gt;. (If you want, also make a scree plot and/or a score plot.)&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hints&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Use the &lt;em&gt;dplyr&lt;/em&gt; function &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; on &lt;code&gt;penguins_noNA&lt;/code&gt; object to select rows corresponding to one penguin species.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;After that, the code will be nearly identical to that used before; just make sure to refer to the correct objects if you copy-and-paste code.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;This example solution runs a PCA for &lt;em&gt;Gentoo Penguins only&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;First, select rows corresponding to our focal penguin species, and run the PCA:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## (Save this object rather than using one pipeline,&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;## because you&#39;ll need it color the biplot by a factor)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;onepenguin_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Gentoo&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;onepenguin_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/prcomp.html&#39;&gt;prcomp&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;scale &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Next, we create the biplot:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#39;&gt;fviz_pca_biplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;,
+                label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;var&#34;&lt;/span&gt;,
+                habillage &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;onepenguin_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;theme&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;legend.position &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;top&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-29-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;To create a scree plot:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/graphics/plot.default.html&#39;&gt;plot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-30-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;To create a quick score plot (no aspect ratio manipulation):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;bind_cols&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;onepenguin_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC1&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC2&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;theme_classic&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-31-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-6-bonus&#34;&gt;Exercise 6 (bonus)&lt;/h3&gt;
+&lt;p&gt;Make a scree plot of our original PCA results with &lt;em&gt;ggplot2&lt;/em&gt; instead of base R.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hints&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Use the &lt;code&gt;pca_eigen&lt;/code&gt; dataframe that we created above for plotting, and use the geom &lt;code&gt;geom_col()&lt;/code&gt;.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca_eigen&lt;/span&gt;, &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;percent&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_col&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Proportion of the variation explained&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;theme_minimal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-32-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;going-further&#34;&gt;Going further&lt;/h2&gt;
+&lt;h4 id=&#34;further-watching-and-reading&#34;&gt;Further watching and reading&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;StatQuest&amp;rdquo; videos on:
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=FgakZw6K1QQ&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;PCA (22 minutes)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=oRvgq966yZg&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;PCA follow-up: practical tips (8 minutes)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=GEn-_dAyYME&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;MDS and PCoA&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://web.stanford.edu/class/bios221/book/Chap-Multivariate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Chapter on Multivariate Analysis from the book &amp;ldquo;Modern Statistics for Modern Biology&amp;rdquo;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Nguyen &amp;amp; Holmes 2019: Ten quick tips for effective dimensionality reduction&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;Crawley 2012 &amp;ndash; &amp;ldquo;The R Book&amp;rdquo; &amp;ndash; &lt;a href=&#34;https://www.cs.upc.edu/~robert/teaching/estadistica/TheRBook.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;pdf&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;However, high-throughput sequencing results such as gene counts do need to be normalized by sample sequencing depth (&amp;ldquo;library size&amp;rdquo;) and subjected to a variance stabilizing normalization. &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;As &amp;ldquo;The R Book&amp;rdquo; (Crawley 2012) explains: &amp;ldquo;&lt;em&gt;This is called a scree plot in PCA because it is supposed to look like a cliff face on a mountainside (on the left), with a scree slope below it (the tail on the right).&lt;/em&gt;&amp;rdquo; &lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
+    
+    <item>
       <title>S03E02: ANOVA</title>
       <link>https://biodash.github.io/codeclub/s03e02_anova/</link>
       <pubDate>Thu, 20 Jan 2022 00:00:00 +0000</pubDate>
@@ -1332,7 +2063,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-345869712&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-384592167&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1342,7 +2073,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-345869712&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-384592167&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1529,7 +2260,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-851649273&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-783456291&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1539,7 +2270,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-851649273&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-783456291&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1575,7 +2306,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-489127536&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-518347269&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1585,7 +2316,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-489127536&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-518347269&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1617,7 +2348,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-965817432&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-593481267&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1627,7 +2358,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-965817432&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-593481267&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1658,7 +2389,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-936518247&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-768239415&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1668,7 +2399,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-936518247&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-768239415&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1802,7 +2533,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-694278513&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-276981435&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1812,7 +2543,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-694278513&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-276981435&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1869,7 +2600,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-852169734&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-712948563&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1879,7 +2610,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-852169734&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-712948563&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9411,7 +10142,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-265317948&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-945672138&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9421,7 +10152,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-265317948&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-945672138&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9497,7 +10228,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-361942857&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-482163957&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9507,7 +10238,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-361942857&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-482163957&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9528,7 +10259,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-819654327&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-147563829&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9538,7 +10269,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-819654327&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-147563829&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9565,7 +10296,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-718495326&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-487695213&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9575,7 +10306,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-718495326&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-487695213&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9602,7 +10333,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-982645731&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-425689173&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9612,7 +10343,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-982645731&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-425689173&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9635,7 +10366,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-986275431&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-834521796&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9645,7 +10376,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-986275431&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-834521796&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9686,7 +10417,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-349851267&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-745926381&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9696,7 +10427,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-349851267&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-745926381&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9715,7 +10446,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-918627354&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-725936481&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9725,7 +10456,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-918627354&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-725936481&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9751,7 +10482,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-431568279&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-152687493&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9761,7 +10492,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-431568279&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-152687493&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -9791,7 +10522,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-129746835&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-432587169&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -9801,7 +10532,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-129746835&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-432587169&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10015,7 +10746,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-923746815&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-832495167&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10025,7 +10756,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-923746815&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-832495167&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10086,7 +10817,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-927146358&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-291784365&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10096,7 +10827,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-927146358&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-291784365&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10171,7 +10902,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-143768952&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-396217584&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10181,7 +10912,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-143768952&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-396217584&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
