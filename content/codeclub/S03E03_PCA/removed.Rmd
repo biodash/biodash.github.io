@@ -1,0 +1,106 @@
+<br>
+
+On another note, here is what the textbook
+"[An Introduction to Statistical Learning](https://www.statlearning.com/)"
+has to say about scaling in PCAs:
+
+> Because it is undesirable for the
+principal components obtained to depend on an arbitrary choice of scaling,
+we typically scale each variable to have standard deviation one before we
+perform PCA.
+In certain settings, however, the variables may be measured in the same
+units. In this case, we might not wish to scale the variables to have stan-
+dard deviation one before performing PCA. For instance, suppose that the
+variables in a given data set correspond to expression levels for p genes.
+Then since expression is measured in the same “units” for each gene, we
+might choose not to scale the genes to each have standard deviation one.
+
+I would add that even in the latter case discussed in the quote,
+where all variables are gene expression levels in the same units,
+you *may still* want to scale your data.
+Without scaling, more highly expressed genes will vary likely have a larger influence
+on the PCA (for counts, variance increases along with the mean),
+which may or may not be what you want.
+
+
+
+-----
+
+
+While we're messing around with these percentages,
+let's also include the values in the axis titles.
+
+To get the percentages,
+now we will use the `tidy()` function to create a “long-format” (tidy) dataframe.
+
+The output of `prcomp()` contains multiple matrices,
+and those can't all be reasonably put in a single dataframe.
+As the [reference page for the `tidy` method for `prcomp` objects](https://broom.tidymodels.org/reference/tidy.prcomp.html)
+explains, the _score matrix_ will be tidied by default --
+but because we want the eigenvalues, we need to tell it about this:
+
+```{r}
+pca_eigen <- tidy(pca, matrix = "eigenvalues")
+
+pca_eigen
+```
+
+Now, we'll store the percentages explained by the first two PCs
+(rounded to one decimal):
+
+```{r}
+(PC1_percent <- round(pca_eigen$percent[1] * 100, 1))
+(PC2_percent <- round(pca_eigen$percent[2] * 100, 1))
+```
+
+Finally, we can modify the axis titles:
+
+```{r}
+score_plot +
+  labs(x = glue("PC1 ({PC1_percent}%)"),
+       y = glue("PC2 ({PC2_percent}%)"))
+```
+
+
+
+
+-----
+
+
+
+<details><summary><b>Another improvement: include the % of variation in axis titles</b> (click here)</summary>
+
+Including the percentage of variation for each axis programmatically
+(rather than looking up the value and hard-coding it) requires a few steps.
+
+First, to get the percentages,
+we will use the `tidy()` function to create a “long-format” (tidy) dataframe,
+
+The output of `prcomp()` contains multiple matrices,
+and those can't all be reasonably put in a single dataframe.
+As the [reference page for the `tidy` method for `prcomp` objects](https://broom.tidymodels.org/reference/tidy.prcomp.html)
+explains, the _score matrix_ will be tidied by default --
+but because we want the eigenvalues, we need to tell it about this:
+
+```{r}
+pca_eigen <- tidy(pca, matrix = "eigenvalues")
+pca_eigen
+```
+
+Now, we'll store the percentages explained by the first two PCs
+(rounded to one decimal):
+
+```{r}
+(PC1_percent <- round(pca_eigen$percent[1] * 100, 1))
+(PC2_percent <- round(pca_eigen$percent[2] * 100, 1))
+```
+
+Finally, we can modify the axis titles:
+
+```{r}
+score_plot +
+  labs(x = glue("PC1 ({PC1_percent}%)"),
+       y = glue("PC2 ({PC2_percent}%)"))
+```
+
+</details>

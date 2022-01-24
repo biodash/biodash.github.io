@@ -1,0 +1,850 @@
+---
+title: "S03E03: Principal Component Analysis (PCA)"
+subtitle: "How to run a PCA in R and plot the results"
+summary: "Today, we'll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot and a biplot."
+authors: [admin]
+date: "`r Sys.Date()`"
+output: hugodown::md_document
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<figure>
+<p align="center">
+<img src=PCA.png width="75%">
+<figcaption>A PCA of genetic variation among Europeans, from <a href="https://www.nature.com/articles/nature07331">Novembre et al 2008</a>: "Genes mirror geography within Europe" </figcaption>
+</p>
+</figure>
+
+-----
+
+## Housekeeping
+
+#### New to Code Club?
+
+Check out the [Code Club Computer Setup](/codeclub-setup/) instructions,
+which also has pointers for if you're new to R or RStudio.
+A few related Code Club sessions include:
+
+- [S03E01](/codeclub/s03e01_ttests/): T-tests
+- [S03E01](/codeclub/s03e02_anova/): ANOVA
+- [S02E06](/codeclub/s02e06_ggplot2/): Intro to *ggplot2*, part I
+- [S02E07](/codeclub/s02e07_ggplot2_part2/): Intro to *ggplot2*, part II
+
+#### Session goals
+
+- Learn **how to perform a PCA** in R using the `prcomp()` function.
+
+- Understand what is represented by the **different components of the output**.
+
+- Learn about **three kinds of plots** commonly used to visualize PCA results,
+  and how to create them.
+
+<div class="alert alert-note"><div>
+
+#### R packages we will use
+
+- _palmerpenguins_ -- A data package containing the data we will explore
+- _tidyverse_ -- As metapackage that includes _ggplot2_ which we'll use for
+                 plotting, access to the `%>%` pipe, etc.
+- _broom_ -- We'll again use the `tidy()` function in _broom_ to create tidy
+             dataframes from untidy statistical function output
+- _glue_ -- For pasting strings with variables
+- _factoextra_ -- For easily creating a PCA biplot (and other PCA plots)
+
+</div></div>
+
+#### Getting set up
+
+_If you plan to just listen during the first part,_
+_you can wait until the Breakout Rooms to do the following._
+_Also, instead of copying-and-pasting code,_
+_you could download this [R script - TBA](TBA) with today's code._
+
+- Open a new R script in RStudio (`File` => `New File` => `R Script`)
+
+- Save the script, as something along the lines of `codeclub_S03E03_PCA.R`
+
+- Copy the following code into the script,
+  for installing packages where needed:
+ 
+    ```{r, eval = FALSE}
+    ## `require(glue)` returns FALSE if glue isn't installed; therefore,
+    ## these lines will only try to install packages that aren't already installed.
+    if (!require(palmerpenguins)) install.packages("palmerpenguins")
+    if (!require(tidyverse)) install.packages("tidyverse")
+    if (!require(broom)) install.packages("broom")
+    if (!require(glue)) install.packages("glue")
+    if (!require(factoextra)) install.packages("factoextra")
+    ```
+
+- Also copy the following code to load the packages into your R session:
+    ```{r, results="hide", message=FALSE}
+    library(palmerpenguins)
+    library(tidyverse)
+    library(broom)
+    library(glue)
+    library(factoextra)
+    ```
+
+- Run the code above in the R console.
+
+<br>
+
+----
+
+## 1 - A brief intro to PCA
+
+**Principal Component Analysis (PCA)** is
+a popular method that creates _"summary variables" (Principal Components)_
+which represent as much of the information as possible
+from a high-dimensional dataset.
+
+A _high-dimensional dataset_ is a dataset with measurements for many variables,
+such as expression levels for thousands of genes.
+
+PCA and similar methods like PCoA and nMDS (see box below)
+are also called "**dimension reduction**" or "**ordination**" methods,
+and can be classified as a type of _unsupervised learning_.
+
+PCA is most commonly used for **exploratory data visualization**
+to see overall patterns in datasets,
+though you could also use the resulting Principal Components as response
+variables in a statistical model.
+
+<br>
+
+<div class="alert alert-note"><div>
+
+#### Glossary
+
+- **Principal Components (PCs)** -- the summary variables that a PCA produces.
+- **Loadings** (_rotations_) -- Loadings apply to the _original variables_.
+  They are the contributions of variables to PCs,
+  which form the "recipes" used to create the PCs.
+- **Scores** (_coordinates_) -- Scores apply to the _samples_.
+  These scores, for each PC, are coordinates that can be used to create a
+  score plot which is the "classic" PCA plot.
+- **Eigenvalue** -- The amount of variation explained by a PC.
+
+</div></div>
+
+<br>
+
+<div class="alert alert-note"><div>
+
+#### Similar ordination methods
+
+Besides PCA, other commonly used ordination methods that are also unconstrained
+(i.e., with no response variable) include the following:
+
+- _Principal Coordinate Analysis_ (**PCoA**) is also known as
+  _Metric Multidimensional Scaling_ (**MDS** / mMDS).
+  PCoA allows you to use distance measures other than Euclidean distance
+  and can be run e.g. with `stats::cmdscale()`.
+  
+- _Non-metric Multidimensional Scaling_ (**nMDS**)
+  is a non-metric method with quite different inner workings from PCA and PCoA
+  that is especially suitable when you have low confidence in distance values.
+  It can be run e.g. with `vegan::metaMDS()`.
+
+If you're struggling to pick a suitable ordination approach for your data,
+take a look at [Table 1](https://journals.plos.org/ploscompbiol/article/figure?id=10.1371/journal.pcbi.1006907.t001)
+in [Nguyen & Holmes 2019](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907).
+
+</div></div>
+
+<br>
+
+----
+
+## 2 - `prcomp()`, scaling, and centering
+
+To perform a PCA analysis in R,
+there are two functions that can be used without the need to load any packages:
+`prcomp()` and `princomp()`.
+
+(Like last week's `aov()` function, these are in the *stats* package,
+which is loaded into your R session by default.
+More PCA functions are available in other packages but these tend to be very
+similar and/or simply wrap the two base R functions.)
+
+We will use **`prcomp()`**, which is preferred among these two
+due to its slightly better accuracy^[Crawley 2012 -- "The R Book" -- [pdf](https://www.cs.upc.edu/~robert/teaching/estadistica/TheRBook.pdf)].
+
+#### Two important data pre-processing steps...
+
+...need to be done for many PCA analyses.
+Luckily, these can be done
+alongside the PCA computation in a single call to `prcomp()`:
+
+**Centering the data** -- _Centering_ the data around the origin
+(subtracting the mean of variables) is basically always advisable
+and is controlled by the `center` argument of `prcomp()`,
+which is _set to `TRUE` by default_.
+
+**Scaling the data** -- Standardizing the standard deviation across the variables
+in the data (i.e., scaling) is advisable when variables are in different units
+or on different scales
+but is generally not recommended when all variables are of the same type and
+in the same units (e.g., gene counts^[However, high-throughput sequencing
+results such as gene counts do need to be normalized by sample sequencing
+depth ("library size") and subjected to a variance stabilizing normalization.]).
+Whether or not to scale the data is controlled by the `scale.` argument of
+`prcomp()`, which is _set to `FALSE` by default_.
+
+<br>
+
+----
+
+## 3 - Our first PCA
+
+As a simple example, we want to
+_run a PCA summarizing the four numerical measurements taken for each penguin_
+(bill length, bill depth, flipper length, and body mass) in the _palmerpenguins_
+dataset.
+
+First, we'll subset the `penguins` dataframe to:
+
+- Remove rows with `NA`s 
+  (`prcomp()` will return an error if any of our variables contain `NA`s)
+  
+- Select only the columns that we want to include in the PCA
+
+```{r}
+## Remove rows with NAs
+penguins_noNA <- drop_na(penguins)
+
+## Select columns
+penguins_for_pca <- penguins_noNA %>% 
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)
+```
+
+Let's take a look at the resulting dataframe:
+
+```{r}
+head(penguins_for_pca)
+
+dim(penguins_for_pca)
+```
+
+#### Run the PCA!
+
+Now, we are ready to run the PCA:
+
+```{r}
+pca <- prcomp(penguins_for_pca, scale = TRUE)
+# (Because `center = TRUE` by default, we don't have to include that.)
+```
+
+Scaling is desirable here because as we saw above,
+the variables we use in our PCA are in different units (`mm` and `g`).
+
+<details><summary><b>More on scaling</b> (click here)</summary>
+<br>
+
+Because our variables are in different units,
+standard deviations for those variables may differ dramatically.
+This would lead the PCA to put more weight on variables with a higher
+standard deviation, which we don't want if those differences
+are merely a consequence of different units.
+
+If we check the standard deviations in our dataset,
+we can indeed see large differences:
+
+```{r}
+map(penguins_for_pca, sd)
+```
+
+</details>
+
+<br>
+
+----
+
+## 4 - Exploring the output I
+
+Like with objects returned by the statistical tests we saw in the previous weeks,
+the object returned by `prcomp()` is not just a dataframe or even a regular list...
+
+```{r}
+class(pca)
+```
+
+... and trying to print the object to screen will only give you a summary of sorts:
+
+```{r}
+pca
+```
+
+Like we saw last week with `aov()`,
+we can get a more useful summary of the results with the `summary()` function:
+
+```{r}
+summary(pca)
+```
+
+This shows us the "importance" of the 4 principal components that our PCA returned,
+i.e. the amount of variation they explain.
+
+PC1, the first principal component, explains a whopping 68.8% of the variation,
+whereas PC4 explains merely 2.7% of the variation in the dataset.
+(Principal components are always ordered by the amount of variation they explain,
+with PC1 explaining most.)
+
+#### Seeing all elements with `str()`
+
+These summaries are nice and all but like we saw in previous weeks,
+they don't make it obvious where and how to access _all_ the information contained
+in the object.
+
+Running the `str()` function is a good start for getting the raw contents of
+the object,
+even though the information printed isn't easy to look at: 
+
+```{r}
+str(pca)
+```
+
+In the first breakout room session,
+you'll explore the contents of our `pca` object a bit more.
+
+<br>
+
+----
+
+## Breakout Rooms I
+
+<div class="puzzle"><div>
+
+### Exercise 1
+
+If you didn't do so already, get set up for the remaining exercises.
+Either download this [R script - TBA](TBA), open it in RStudio, and run the code,
+or:
+
+- Open a new R script in RStudio (`File` => `New File` => `R Script`)
+
+- Save the script, as something along the lines of `codeclub_S03E03_PCA.R`
+
+- Copy the following code into the script:
+
+```{r}
+## Install packages if needed
+## (`require(glue)` returns FALSE if glue isn't installed; therefore,
+##  these lines will only try to install packages that aren't already installed.)
+if (!require(palmerpenguins)) install.packages("palmerpenguins")
+if (!require(tidyverse)) install.packages("tidyverse")
+if (!require(broom)) install.packages("broom")
+if (!require(glue)) install.packages("glue")
+if (!require(factoextra)) install.packages("factoextra")
+
+## Load the packages into your R session
+library(palmerpenguins)
+library(tidyverse)
+library(broom)
+library(glue)
+library(factoextra)
+
+## Prep the penguin data for the PCA
+penguins_noNA <- drop_na(penguins)
+penguins_for_pca <- penguins_noNA %>% 
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)
+
+## Run the PCA
+pca <- prcomp(penguins_for_pca, scale = TRUE)
+```
+
+- Run the code above in the R console.
+
+</div></div>
+
+<br>
+
+<div class="puzzle"><div>
+
+### Exercise 2
+
+How can you access the different components in the `List of 5` that is summarized
+when running `str(pca)`?
+For example, say you wanted to see the `rotation` element in its entirety,
+how could you do this?
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+The **`$`** (dollar sign) operator can be used to access the different elements
+(as implied by the dollar signs shown in front of the names of the elements).
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+To see the `rotation` element, type **`pca$rotation`**:
+
+```{r}
+pca$rotation
+```
+
+</div></div>
+
+<br>
+
+<div class="puzzle"><div>
+
+### Exercise 3 (bonus)
+
+Take a look at the contents of all five elements in the `pca` object.
+Do you have a (rough) understanding of what each represents?
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+Take a look at the [Glossary](#glossary).
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+All elements of the output are explained in the next section of this page.
+
+</details>
+
+</div></div>
+
+<br>
+
+----
+
+## 5 - Exploring the output II
+
+Let's take a quick look together at the three most important elements in the object
+returned by `prcomp()`, which we named `pca`:
+
+- **`pca$sdev`** is a vector of standard deviations
+  associated with each principal component (PC),
+  i.e. it is the **amount of variation explained by each PC**.
+  (This is also known as the _eigenvector_, which contains _eigenvalues_.)
+  We also saw this information when running `summary(pca)`.
+  
+    ```{r}
+    pca$sdev
+    ```
+  
+- **`pca$rotation`** is a matrix that contains the **loadings** for each variable
+  in each PC.
+  These are the "recipes" for creating each PC,
+  with _higher absolute values_ indicating a larger influence of the variable
+  on the PC.
+  The _sign_ (- or +) matters too:
+  in PC1, larger values of bill depth lower the PC value,
+  and vice versa for the other three variables.
+    ```{r}
+    pca$rotation
+    ```
+  
+- **`pca$x`** is the most-used part of the output:
+  a matrix containing the **scores (or coordinates)** for each sample
+  for each PC, used to create a score plot.
+    ```{r}
+    head(pca$x)
+    ```
+
+<br>
+
+<details><summary><b>...And the remaining two elements</b> (click here)</summary>
+- **`pca$center`** is a vector containing the means for each variable,
+  which was subsequently used for centering the data
+  (this would contain just `FALSE` if the data wasn't centered).
+    ```{r}
+    pca$center
+    ```
+
+- **`pca$scale`** similarly is a vector containing the scaling constant
+  for each variable (column) in the data,
+  and would be `FALSE` if the data wasn't scaled.
+    ```{r}
+    pca$scale
+    ```
+
+</details>
+
+<br>
+
+----
+
+## 6 - Scree plot
+
+A "scree plot"^[As "The R Book" (Crawley 2012) explains: "_This is called a scree plot in PCA because it is supposed to look like a cliff face on a mountainside (on the left), with a scree slope below it (the tail on the right)._"]
+is a barplot that shows
+the **amount of variation (_eigenvalues_) explained by each PC.**
+
+We'll make a base R version of this plot (gasp!)
+because it is so quick to make, and we don't need this figure to be fancy:
+
+```{r}
+plot(pca)
+```
+
+<div class="alert alert-note"><div>
+
+#### Interpretation
+This gives us a quick visual overview of what we saw earlier:
+PC1 is _by far_ the most important, and PC4 doesn't do much at all.
+PC3 may still be worth plotting but "luckily" we have a decent gap between PC2
+and PC3, such that a plot of the first two PCs will be a very logical choice.
+
+</div></div>
+
+<br>
+
+----
+
+## 7 - Score (classic PCA) plot
+
+A "score plot" shows **the scores (coordinates) for each sample for two PCs**,
+typically the first two.
+
+We're going to need a dataframe to plot.
+But if we were to `broom::tidy()` the matrix with scores (`pca$x`) like we've
+done with t-test and ANOVA output in previous weeks,
+we would get a dataframe with all PCs in one column
+that wouldn't be that easy to plot.
+
+So in this case, we'll just manipulate `pca$x` ourselves --
+in particular, we want to add the source `penguins_noNA` dataframe back to it,
+which will allow us to color points by, say, `species`.
+
+```{r}
+## Column-bind (= put side-by-side) the scores and the source dataframe
+pca_scores <- bind_cols(data.frame(pca$x), penguins_noNA)
+
+head(pca_scores)
+```
+
+Now we're ready to create the plot:
+
+```{r}
+score_plot <- ggplot(pca_scores) +
+  geom_point(aes(x = PC1, y = PC2, color = species)) +
+  theme_classic()
+
+score_plot
+```
+
+### A better aspect ratio
+
+One way to improve our plot is to set the aspect ratio
+(the proportional relationship between the height and the width)
+according to the relative percentages of variation explained by the two 
+plotted PCs:
+because PC1 on the x-axis explains more variation, we want the plot to be wide.
+
+To get the percentages in a dataframe,
+we will use the `tidy()` function like in previous weeks.
+Because the output of `prcomp()` contains multiple matrices,
+we'll have to point it to the eigenvalues using the `matrix` argument
+(see the [docs]((https://broom.tidymodels.org/reference/tidy.prcomp.html))):
+
+```{r}
+pca_eigen <- tidy(pca, matrix = "eigenvalues")
+pca_eigen
+```
+
+Now, we'll store the percentages explained by the first two PCs
+(rounded to one decimal):
+
+```{r}
+# (Note: pca_eigen$percent contains proportions, not percentages...)
+PC1_percent <- round(pca_eigen$percent[1] * 100, 1)
+PC2_percent <- round(pca_eigen$percent[2] * 100, 1)
+
+PC1_percent
+PC2_percent
+```
+
+Finally, we can modify the aspect ratio, which is `height / width` --
+and we'll also move the legend to the top,
+and add the percentages to the axis titles:
+
+```{r}
+score_plot <- score_plot +
+  theme(aspect.ratio = PC2_percent / PC1_percent,
+        legend.position = "top") +
+  labs(x = glue("PC1 ({PC1_percent}%)"),
+       y = glue("PC2 ({PC2_percent}%)"))
+
+score_plot
+```
+
+<div class="alert alert-note"><div>
+
+#### Interpretation
+
+Across these four measurements,
+Gentoo Penguins can be very clearly distinguished from the other two species,
+whereas among Adelie and Chinstrap Penguins, there are average differences
+but they are not fully separable.
+
+</div></div>
+
+<br>
+
+----
+
+## 8 - Biplot
+
+A "biplot" shows the
+**scores of samples for two PCs _and_ the loadings for the original variables**
+along the two PCs.
+
+Because biplots are more complicated to make "from scratch" using _ggplot2_,
+we will turn to the package _factoextra_,
+which has a convenient function for making biplots, `fviz_pca_biplot()`:
+
+```{r}
+fviz_pca_biplot(pca,
+                label = "var",   # Show labels for variables only
+                habillage = penguins_noNA$species) + # color by / shape by
+  theme(legend.position = "top")
+```
+
+While this plot can certainly be improved upon,
+_biplots are by their nature a little unwieldy_.
+
+<div class="alert alert-note"><div>
+
+#### Interpretation
+
+Biplots can be especially useful when you have a modest number of original
+variables, like here.
+Some information we can glean from this particular biplot:
+
+- Flipper length and body mass are highly correlated among individuals,
+  even across species.
+  So flipper length relative to body mass is similar across species.
+
+- Gentoo penguins are larger and with narrower bills than the other two species.
+
+</div></div>
+
+<div class="alert alert-note"><div>
+
+While we made a scree plot with base R and a score plot with "base _ggplot2_",
+there are also _factoextra_ functions for these and other PCA plots:
+
+- `fviz_eig()` -- scree plots
+- `fviz_pca_ind()` -- score plots
+- `fviz_pca_var()` -- "correlation circles";
+  plots showing loadings only
+  ([example](https://journals.plos.org/ploscompbiol/article/figure?id=10.1371/journal.pcbi.1006907.g003)).
+- `fviz_contrib()` -- a barplot with the contribution of variables to 1 PC
+  ([example](https://journals.plos.org/ploscompbiol/article/figure?id=10.1371/journal.pcbi.1006907.g003)).
+
+</div></div>
+
+<details><summary><b>Or, to create a biplot from scratch...</b> (click here)</summary>
+<br>
+
+First, let's save the loadings in a dataframe:
+
+```{r}
+pca_loadings <- data.frame(pca$rotation) %>%
+  rownames_to_column("var")
+```
+
+Next, we start with the score plot object `score_plot` we created above.
+
+What we need to add are the variable loading,
+which we'll do with `geom_segment()` to draw arrows,
+and `geom_text()` to add text labels near the tips of the arrows:
+
+```{r}
+## To make the arrows longer (all by the same amount),
+## just to improve the visualization,
+## we use a multiplication factor:
+mult <- 2.5
+
+score_plot +
+  ## geom_segment draws lines
+  geom_segment(data = pca_loadings,
+               ## The lines should start from the origin:
+               aes(x = 0, y = 0, xend = PC1 * mult, yend = PC2 * mult),
+               ## We turn the line into an arrow:
+               arrow = arrow(),
+               ## A gray-tone might work better than black:
+               color = "grey40") +
+  geom_text(data = pca_loadings,
+            ## The text labels go at the end of the arrows:
+            aes(x = PC1 * mult, y = PC2 * mult, label = var),
+            ## We left-align (hjust = 0) and lower (vjust = 1) the labels
+            hjust = 0, vjust = 1,
+            ## Again, we use a gray color:
+            color = "grey40")
+```
+
+</details>
+
+<br>
+
+----
+
+## Breakout Rooms II
+
+<div class="puzzle"><div>
+
+### Exercise 4
+
+Above, we plotted the scores for the first two PCs in our
+score plot and biplot.
+Now, _create a biplot with another combination of PCSs_
+(e.g., PC3 & PC4, or PC1 & PC3).
+
+Take a look at the help for the `fviz_pca_biplot()` function by typing  
+`?fviz_pca_biplot` to find out how you might be able to plot different PCs.
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+The `axes` argument to `fviz_pca_biplot()` controls which axes will be plotted;
+this argument accepts a vector of two numbers.
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+To plot PC1 & PC3
+(which may be a better choice than including PC4 because it explains so little
+variation):
+
+```{r}
+fviz_pca_biplot(pca,
+                axes = c(1, 3),
+                label = "var",
+                habillage = penguins_noNA$species) +
+  theme(legend.position = "top")
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+<div class="puzzle"><div>
+
+### Exercise 5
+
+Run the PCA for just one of the three penguin species.
+
+Then, make a biplot of the results,
+in which you color by something else than `species`, e.g. by `sex`.
+(If you want, also make a scree plot and/or a score plot.)
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- Use the _dplyr_ function `filter()` on `penguins_noNA` object
+  to select rows corresponding to one penguin species.
+  
+- After that, the code will be nearly identical to that used before;
+  just make sure to refer to the correct objects if you copy-and-paste code.
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+This example solution runs a PCA for _Gentoo Penguins only_.
+
+First, select rows corresponding to our focal penguin species,
+and run the PCA:
+
+```{r}
+## (Save this object rather than using one pipeline,
+## because you'll need it color the biplot by a factor)
+onepenguin_noNA <- penguins_noNA %>% filter(species == "Gentoo")
+
+pca <- onepenguin_noNA %>%
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %>% 
+  prcomp(scale = TRUE)
+```
+
+Next, we create the biplot:
+
+```{r}
+fviz_pca_biplot(pca,
+                label = "var",
+                habillage = onepenguin_noNA$sex) +
+  theme(legend.position = "top")
+```
+
+To create a scree plot:
+
+```{r}
+plot(pca)
+```
+
+To create a quick score plot (no aspect ratio manipulation):
+
+```{r}
+bind_cols(data.frame(pca$x), onepenguin_noNA) %>%
+  ggplot() +
+  geom_point(aes(x = PC1, y = PC2, color = sex)) +
+  theme_classic()
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+<div class="puzzle"><div>
+
+### Exercise 6 (bonus)
+
+Make a scree plot of our original PCA results with _ggplot2_ instead of base R.
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+Use the `pca_eigen` dataframe that we created above for plotting,
+and use the geom `geom_col()`.
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r}
+ggplot(pca_eigen, aes(x = PC, y = percent)) +
+  geom_col() +
+  labs(y = "Proportion of the variation explained") +
+  theme_minimal()
+```
+
+</div></div>
+
+<br>
+
+----
+
+## Going further
+
+#### Further watching and reading
+
+- "StatQuest" videos on:
+  - [PCA (22 minutes)](https://www.youtube.com/watch?v=FgakZw6K1QQ)
+  - [PCA follow-up: practical tips (8 minutes)](https://www.youtube.com/watch?v=oRvgq966yZg)
+  - [MDS and PCoA](https://www.youtube.com/watch?v=GEn-_dAyYME)
+- [Chapter on Multivariate Analysis from the book "Modern Statistics for Modern Biology"](http://web.stanford.edu/class/bios221/book/Chap-Multivariate.html)
+- [Nguyen & Holmes 2019: "Ten quick tips for effective dimensionality reduction"](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907)
+
+<br>
