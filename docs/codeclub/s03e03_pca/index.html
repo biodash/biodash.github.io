@@ -33,7 +33,7 @@
   
     
   
-  <meta name="description" content="Today, we&#39;ll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot and a biplot." />
+  <meta name="description" content="Today, we&#39;ll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot, and a biplot." />
 
   
   <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s03e03_pca/" />
@@ -333,7 +333,7 @@
   <meta property="og:site_name" content="BioDASH" />
   <meta property="og:url" content="https://biodash.github.io/codeclub/s03e03_pca/" />
   <meta property="og:title" content="S03E03: Principal Component Analysis (PCA) | BioDASH" />
-  <meta property="og:description" content="Today, we&#39;ll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot and a biplot." /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
+  <meta property="og:description" content="Today, we&#39;ll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot, and a biplot." /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
     <meta property="twitter:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" /><meta property="og:locale" content="en-us" />
   
     
@@ -342,7 +342,7 @@
         content="2022-01-24T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-01-24T13:19:32-05:00">
+    <meta property="article:modified_time" content="2022-01-24T20:25:04-05:00">
   
 
   
@@ -792,11 +792,7 @@
         <li><a href="#exercise-6-bonus">Exercise 6 (bonus)</a></li>
       </ul>
     </li>
-    <li><a href="#going-further">Going further</a>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
+    <li><a href="#further-watching--reading">Further watching &amp; reading</a></li>
   </ul>
 </nav>
         </div>
@@ -992,7 +988,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <p><em>Principal Coordinate Analysis</em> (<strong>PCoA</strong>) is also known as <em>Metric Multidimensional Scaling</em> (<strong>MDS</strong> / mMDS). PCoA allows you to use distance measures other than Euclidean distance and can be run e.g. with <a href="https://rdrr.io/r/stats/cmdscale.html" target="_blank" rel="noopener"><code>stats::cmdscale()</code></a>.</p>
 </li>
 <li>
-<p><em>Non-metric Multidimensional Scaling</em> (<strong>nMDS</strong>) is a non-metric method with quite different inner workings from PCA and PCoA that is especially suitable when you have low confidence in distance values. It can be run e.g. with <a href="https://rdrr.io/pkg/vegan/man/metaMDS.html" target="_blank" rel="noopener"><code>vegan::metaMDS()</code></a>.</p>
+<p><em>Non-metric Multidimensional Scaling</em> (<strong>nMDS</strong>) is a non-metric method with quite different inner workings from PCA and PCoA that is especially suitable when your distance values are imprecise. It can be run e.g. with <a href="https://rdrr.io/pkg/vegan/man/metaMDS.html" target="_blank" rel="noopener"><code>vegan::metaMDS()</code></a>.</p>
 </li>
 </ul>
 <p>If you&rsquo;re struggling to pick a suitable ordination approach for your data, take a look at <a href="https://journals.plos.org/ploscompbiol/article/figure?id=10.1371/journal.pcbi.1006907.t001" target="_blank" rel="noopener">Table 1</a> in <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907" target="_blank" rel="noopener">Nguyen &amp; Holmes 2019</a>.</p>
@@ -1002,7 +998,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <hr>
 <h2 id="2---prcomp-scaling-and-centering">2 - <code>prcomp()</code>, scaling, and centering</h2>
 <p>To perform a PCA analysis in R, there are two functions that can be used without the need to load any packages: <a href="https://rdrr.io/r/stats/prcomp.html" target="_blank" rel="noopener"><code>prcomp()</code></a> and <a href="https://rdrr.io/r/stats/princomp.html" target="_blank" rel="noopener"><code>princomp()</code></a>.</p>
-<p>(Like last week&rsquo;s <a href="https://rdrr.io/r/stats/aov.html" target="_blank" rel="noopener"><code>aov()</code></a> function, these are in the <em>stats</em> package, which is loaded into your R session by default. More PCA functions are available in other packages but these tend to be very similar and/or simply wrap the two base R functions.)</p>
+<p>(Like last week&rsquo;s <a href="https://rdrr.io/r/stats/aov.html" target="_blank" rel="noopener"><code>aov()</code></a> function, these functions are in the <em>stats</em> package, which is loaded into your R session by default. More PCA functions are available in other packages but these tend to be very similar and/or simply wrap the two base R functions.)</p>
 <p>We will use <strong><a href="https://rdrr.io/r/stats/prcomp.html" target="_blank" rel="noopener"><code>prcomp()</code></a></strong>, which is preferred among these two due to its slightly better accuracy<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.</p>
 <h4 id="two-important-data-pre-processing-steps">Two important data pre-processing steps&hellip;</h4>
 <p>&hellip;need to be done for many PCA analyses. Luckily, these can be done alongside the PCA computation in a single call to <a href="https://rdrr.io/r/stats/prcomp.html" target="_blank" rel="noopener"><code>prcomp()</code></a>:</p>
@@ -1105,10 +1101,9 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <span class='c'>#&gt; Cumulative Proportion  0.6863 0.8809 0.97303 1.00000</span></code></pre>
 </div>
 <p>This shows us the &ldquo;importance&rdquo; of the 4 principal components that our PCA returned, i.e. the amount of variation they explain.</p>
-<p>PC1, the first principal component, explains a whopping 68.8% of the variation, whereas PC4 explains merely 2.7% of the variation in the dataset. (Principal components are always ordered by the amount of variation they explain, with PC1 explaining most.)</p>
 <h4 id="seeing-all-elements-with-str">Seeing all elements with <code>str()</code></h4>
-<p>These summaries are nice and all but like we saw in previous weeks, they don&rsquo;t make it obvious where and how to access <em>all</em> the information contained in the object.</p>
-<p>Running the <a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> function is a good start for getting the raw contents of the object, even though the information printed isn&rsquo;t easy to look at:</p>
+<p>These summaries are nice and all, but like we saw in previous weeks, they don&rsquo;t make it obvious where and how to access <em>all</em> the information contained in the object.</p>
+<p>Running the <a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> function is a good start for getting to the raw contents of the object, even though the information printed isn&rsquo;t easy to look at:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>pca</span><span class='o'>)</span>
 <span class='c'>#&gt; List of 5</span>
@@ -1231,15 +1226,14 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <p>Let&rsquo;s take a quick look together at the three most important elements in the object returned by <a href="https://rdrr.io/r/stats/prcomp.html" target="_blank" rel="noopener"><code>prcomp()</code></a>, which we named <code>pca</code>:</p>
 <ul>
 <li>
-<p><strong><code>pca$sdev</code></strong> is a vector of standard deviations associated with each principal component (PC), i.e. it is the <strong>amount of variation explained by each PC</strong>. (This is also known as the <em>eigenvector</em>, which contains <em>eigenvalues</em>.)</p>
+<p><strong><code>pca$sdev</code></strong> is a vector of standard deviations associated with each principal component (PC), i.e. it is the <strong>amount of variation explained by each PC</strong>. (This is also known as the <em>eigenvector</em>, which contains <em>eigenvalues</em>.) We also saw this information when running <a href="https://rdrr.io/r/base/summary.html" target="_blank" rel="noopener"><code>summary(pca)</code></a>.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>sdev</span>
   <span class='c'>#&gt; [1] 1.6569115 0.8821095 0.6071594 0.3284579</span></code></pre>
 </div>
-<p>We also saw this information when running <a href="https://rdrr.io/r/base/summary.html" target="_blank" rel="noopener"><code>summary(pca)</code></a>.</p>
 </li>
 <li>
-<p><strong><code>pca$rotation</code></strong> is a matrix that contains the <strong>loadings</strong> for each variable in each PC.</p>
+<p><strong><code>pca$rotation</code></strong> is a matrix that contains the <strong>loadings</strong> for each variable in each PC. These are the &ldquo;recipes&rdquo; for creating each PC, with <em>higher absolute values</em> indicating a larger influence of the variable on the PC. The <em>sign</em> (- or +) matters too: in PC1, larger values of bill depth lower the PC value, and vice versa for the other three variables.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>rotation</span>
   <span class='c'>#&gt;                          PC1         PC2        PC3        PC4</span>
@@ -1248,10 +1242,9 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
   <span class='c'>#&gt; flipper_length_mm  0.5768250 -0.00578817  0.2360952 -0.7819837</span>
   <span class='c'>#&gt; body_mass_g        0.5496747 -0.07646366  0.5917374  0.5846861</span></code></pre>
 </div>
-<p>These are the &ldquo;recipes&rdquo; for creating each PC, with <em>higher absolute values</em> indicating a larger influence of the variable on the value of the PC. The <em>sign</em> (- or +) matters too: in PC1, larger values of bill length, flipper length, and body mass all contribute to a larger value of PC1, and vice versa for bill depth.</p>
 </li>
 <li>
-<p><strong><code>pca$x</code></strong> is the most important part of the output: a matrix containing the <strong>scores (or coordinates)</strong> for each sample for each PC, used to create a score plot.</p>
+<p><strong><code>pca$x</code></strong> is the most-used part of the output: a matrix containing the <strong>scores (or coordinates)</strong> for each sample for each PC, used to create a score plot.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>x</span><span class='o'>)</span>
   <span class='c'>#&gt;            PC1         PC2         PC3        PC4</span>
@@ -1271,7 +1264,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 </summary>
 <ul>
 <li>
-<p><strong><code>pca$center</code></strong> is a vector containing the means for each variable (column), which was subsequently used for centering the data (this would simply be <code>FALSE</code> if the data wasn&rsquo;t centered).</p>
+<p><strong><code>pca$center</code></strong> is a vector containing the means for each variable, which was subsequently used for centering the data (this would contain just <code>FALSE</code> if the data wasn&rsquo;t centered).</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>center</span>
   <span class='c'>#&gt;    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g </span>
@@ -1279,7 +1272,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 </div>
 </li>
 <li>
-<p><strong><code>pca$scale</code></strong> similarly is a vector containing the scaling constant for each variable (column) in the data.</p>
+<p><strong><code>pca$scale</code></strong> similarly is a vector containing the scaling constant for each variable (column) in the data, and would be <code>FALSE</code> if the data wasn&rsquo;t scaled.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>scale</span>
   <span class='c'>#&gt;    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g </span>
@@ -1291,7 +1284,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <br>
 <hr>
 <h2 id="6---scree-plot">6 - Scree plot</h2>
-<p>A &ldquo;scree plot&rdquo;<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> is a barplot that shows <strong>the amount of variation (<em>eigenvalues</em>) explained by each PC.</strong></p>
+<p>A &ldquo;scree plot&rdquo;<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> is a barplot that shows the <strong>amount of variation (<em>eigenvalues</em>) explained by each PC.</strong></p>
 <p>We&rsquo;ll make a base R version of this plot (gasp!) because it is so quick to make, and we don&rsquo;t need this figure to be fancy:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='o'>(</span><span class='nv'>pca</span><span class='o'>)</span>
@@ -1301,15 +1294,15 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <div class="alert alert-note">
 <div>
 <h4 id="interpretation">Interpretation</h4>
-<p>This gives us a quick visual overview of what we saw earlier: PC1 is <em>by far</em> the most important, and PC4 doesn&rsquo;t do much at all. PC3 may still be worth plotting but &ldquo;luckily&rdquo; we have a decent gap between PC2 and PC3, such that a plot of the first two PCs will be a very logical choice.</p>
+<p>This gives us a quick visual overview of the importance of the PCs: PC1 is <em>by far</em> the most important, and PC4 doesn&rsquo;t do much at all. (PCs are always ordered by the amount of variation they explain, with PC1 explaining most.)</p>
 </div>
 </div>
 <br>
 <hr>
 <h2 id="7---score-classic-pca-plot">7 - Score (classic PCA) plot</h2>
 <p>A &ldquo;score plot&rdquo; shows <strong>the scores (coordinates) for each sample for two PCs</strong>, typically the first two.</p>
-<p>We&rsquo;re going to need a dataframe to plot. But if we were to <a href="https://generics.r-lib.org/reference/tidy.html" target="_blank" rel="noopener"><code>broom::tidy()</code></a> the matrix with scores (<code>pca$x</code>) like we&rsquo;ve done with t-test and ANOVA output in previous weeks, we would get a dataframe with all PCs in one column that wouldn&rsquo;t be that easy to plot.</p>
-<p>So in this case, we&rsquo;ll just manipulate <code>pca$x</code> ourselves &ndash; in particular, we want to add the source penguins dataframe back to it, which will allow us to color points by, say, species.</p>
+<p>We&rsquo;re going to need a dataframe to plot. But if we were to <a href="https://generics.r-lib.org/reference/tidy.html" target="_blank" rel="noopener"><code>broom::tidy()</code></a> the scores matrix (<code>pca$x</code>), akin to what we&rsquo;ve done with t-test and ANOVA output in previous weeks, we would get a dataframe with all PCs in one column that wouldn&rsquo;t be that easy to plot.</p>
+<p>So in this case, we&rsquo;ll just manipulate <code>pca$x</code> ourselves &ndash; in particular, we want to add the source <code>penguins_noNA</code> dataframe back to it, which will allow us to color points by, say, <code>species</code>.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Column-bind (= put side-by-side) the scores and the source dataframe</span>
 <span class='nv'>pca_scores</span> <span class='o'>&lt;-</span> <span class='nf'>bind_cols</span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>x</span><span class='o'>)</span>, <span class='nv'>penguins_noNA</span><span class='o'>)</span>
@@ -1342,7 +1335,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 </div>
 <h3 id="a-better-aspect-ratio">A better aspect ratio</h3>
 <p>One way to improve our plot is to set the aspect ratio (the proportional relationship between the height and the width) according to the relative percentages of variation explained by the two plotted PCs: because PC1 on the x-axis explains more variation, we want the plot to be wide.</p>
-<p>To get the percentages in a dataframe, we will use the <a href="https://generics.r-lib.org/reference/tidy.html" target="_blank" rel="noopener"><code>tidy()</code></a> function like in previous weeks. Because the output of <a href="https://rdrr.io/r/stats/prcomp.html" target="_blank" rel="noopener"><code>prcomp()</code></a> contains multiple matrices, we&rsquo;ll have to point it to the eigenvalues using the <code>matrix</code> argument (see the <a href="%28https://broom.tidymodels.org/reference/tidy.prcomp.html%29">docs</a>):</p>
+<p>To get the percentages in a dataframe, now we <em>will</em> use the <a href="https://generics.r-lib.org/reference/tidy.html" target="_blank" rel="noopener"><code>tidy()</code></a> function. But because the output of <a href="https://rdrr.io/r/stats/prcomp.html" target="_blank" rel="noopener"><code>prcomp()</code></a> contains multiple matrices, we&rsquo;ll have to point <a href="https://generics.r-lib.org/reference/tidy.html" target="_blank" rel="noopener"><code>tidy()</code></a> to the eigenvalues using the <code>matrix</code> argument (see the <a href="%28https://broom.tidymodels.org/reference/tidy.prcomp.html%29">docs</a>):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca_eigen</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='o'>(</span><span class='nv'>pca</span>, matrix <span class='o'>=</span> <span class='s'>"eigenvalues"</span><span class='o'>)</span>
 <span class='nv'>pca_eigen</span>
@@ -1357,36 +1350,41 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <p>Now, we&rsquo;ll store the percentages explained by the first two PCs (rounded to one decimal):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># (Note: pca_eigen$percent contains proportions, not percentages...)</span>
-<span class='o'>(</span><span class='nv'>PC1_percent</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='o'>(</span><span class='nv'>pca_eigen</span><span class='o'>$</span><span class='nv'>percent</span><span class='o'>[</span><span class='m'>1</span><span class='o'>]</span> <span class='o'>*</span> <span class='m'>100</span>, <span class='m'>1</span><span class='o'>)</span><span class='o'>)</span>
+<span class='nv'>PC1_percent</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='o'>(</span><span class='nv'>pca_eigen</span><span class='o'>$</span><span class='nv'>percent</span><span class='o'>[</span><span class='m'>1</span><span class='o'>]</span> <span class='o'>*</span> <span class='m'>100</span>, <span class='m'>1</span><span class='o'>)</span>
+<span class='nv'>PC2_percent</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='o'>(</span><span class='nv'>pca_eigen</span><span class='o'>$</span><span class='nv'>percent</span><span class='o'>[</span><span class='m'>2</span><span class='o'>]</span> <span class='o'>*</span> <span class='m'>100</span>, <span class='m'>1</span><span class='o'>)</span>
+
+<span class='nv'>PC1_percent</span>
 <span class='c'>#&gt; [1] 68.6</span>
-<span class='o'>(</span><span class='nv'>PC2_percent</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='o'>(</span><span class='nv'>pca_eigen</span><span class='o'>$</span><span class='nv'>percent</span><span class='o'>[</span><span class='m'>2</span><span class='o'>]</span> <span class='o'>*</span> <span class='m'>100</span>, <span class='m'>1</span><span class='o'>)</span><span class='o'>)</span>
+<span class='nv'>PC2_percent</span>
 <span class='c'>#&gt; [1] 19.5</span></code></pre>
 </div>
-<p>Finally, we can modify the aspect ratio, which is <code>height / width</code> &ndash; and we&rsquo;ll also move the legend to the top, and add the percentages to the axis titles:</p>
+<p>Finally, we can modify the aspect ratio, which is expressed as <code>height / width</code> &ndash; and we&rsquo;ll also move the legend to the top, and add the percentages to the axis titles:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>score_plot</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>score_plot</span> <span class='o'>&lt;-</span> <span class='nv'>score_plot</span> <span class='o'>+</span>
   <span class='nf'>theme</span><span class='o'>(</span>aspect.ratio <span class='o'>=</span> <span class='nv'>PC2_percent</span> <span class='o'>/</span> <span class='nv'>PC1_percent</span>,
         legend.position <span class='o'>=</span> <span class='s'>"top"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nf'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='o'>(</span><span class='s'>"PC1 (&#123;PC1_percent&#125;%)"</span><span class='o'>)</span>,
        y <span class='o'>=</span> <span class='nf'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='o'>(</span><span class='s'>"PC2 (&#123;PC2_percent&#125;%)"</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='nv'>score_plot</span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <div class="alert alert-note">
 <div>
 <h4 id="interpretation-1">Interpretation</h4>
-<p>Across these four measurements, Gentoo penguins can be very clearly distinguished from the other two species, whereas Adelie and Chinstrap penguins differ on average but are not fully separated.</p>
+<p>Across these four measurements, Gentoo Penguins can be very clearly distinguished from the other two species, whereas among Adelie and Chinstrap Penguins, there are average differences but they are not fully separable.</p>
 </div>
 </div>
 <br>
 <hr>
 <h2 id="8---biplot">8 - Biplot</h2>
-<p>A &ldquo;biplot&rdquo; shows the scores of samples for two PCs, like in the score plot above, <em>and</em> shows the loadings for the original variables along the two PCs.</p>
-<p>Because biplots are more complicated to make &ldquo;from scratch&rdquo; using <em>ggplot2</em>, we will turn to the package <em>factoextra</em>, which has a convenient function for making biplots, <a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>fviz_pca_biplot()</code></a>:</p>
+<p>A &ldquo;biplot&rdquo; shows the <strong>scores of samples for two PCs <em>and</em> the loadings for the original variables</strong> along the two PCs.</p>
+<p>Because biplots are more complicated to make &ldquo;from scratch&rdquo; using <em>ggplot2</em>, we will turn to the package <em>factoextra</em>, which has a convenient function for making biplots, <a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>fviz_pca()</code></a>:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca_biplot</a></span><span class='o'>(</span><span class='nv'>pca</span>,
-                label <span class='o'>=</span> <span class='s'>"var"</span>,   <span class='c'># Show labels for variables only</span>
-                habillage <span class='o'>=</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># color by / shape by</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca</a></span><span class='o'>(</span><span class='nv'>pca</span>,
+         label <span class='o'>=</span> <span class='s'>"var"</span>,                       <span class='c'># Show labels for variables only</span>
+         habillage <span class='o'>=</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># color by / shape by</span>
   <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"top"</span><span class='o'>)</span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" /></p>
@@ -1395,8 +1393,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <div class="alert alert-note">
 <div>
 <h4 id="interpretation-2">Interpretation</h4>
-<p>Biplots can be especially useful when you have a modest number of original variables, like here. With many variables, dimensionality again becomes a problem but they may e.g. reveal whether only a small number of variables strongly influence your PCs.</p>
-<p>Some information we can glean from this particular biplot:</p>
+<p>Biplots can be especially useful when you have a modest number of original variables, like here. Some information we can glean from this particular biplot:</p>
 <ul>
 <li>
 <p>Flipper length and body mass are highly correlated among individuals, even across species. So flipper length relative to body mass is similar across species.</p>
@@ -1409,7 +1406,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 </div>
 <div class="alert alert-note">
 <div>
-<p>While we made a scree plot with base R and a score plot with &ldquo;base <em>ggplot2</em>&rdquo;, there are also <em>factoextra</em> functions for these and other PCA plots:</p>
+<p>While we made a scree plot with base R and a score plot with &ldquo;base <em>ggplot2</em>&rdquo;, there are also <em>factoextra</em> functions for these for and other PCA plots:</p>
 <ul>
 <li><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html" target="_blank" rel="noopener"><code>fviz_eig()</code></a> &ndash; scree plots</li>
 <li><a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>fviz_pca_ind()</code></a> &ndash; score plots</li>
@@ -1432,8 +1429,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <p>What we need to add are the variable loading, which we&rsquo;ll do with <code>geom_segment()</code> to draw arrows, and <code>geom_text()</code> to add text labels near the tips of the arrows:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## To make the arrows longer (all by the same amount),</span>
-<span class='c'>## just to improve the visualization,</span>
-<span class='c'>## we use a multiplication factor:</span>
+<span class='c'>## just to improve the visualization, we use a multiplication factor:</span>
 <span class='nv'>mult</span> <span class='o'>&lt;-</span> <span class='m'>2.5</span>
 
 <span class='nv'>score_plot</span> <span class='o'>+</span>
@@ -1444,14 +1440,14 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
                <span class='c'>## We turn the line into an arrow:</span>
                arrow <span class='o'>=</span> <span class='nf'>arrow</span><span class='o'>(</span><span class='o'>)</span>,
                <span class='c'>## A gray-tone might work better than black:</span>
-               color <span class='o'>=</span> <span class='s'>"grey30"</span><span class='o'>)</span> <span class='o'>+</span>
+               color <span class='o'>=</span> <span class='s'>"grey40"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_text</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>pca_loadings</span>,
             <span class='c'>## The text labels go at the end of the arrows:</span>
             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>PC1</span> <span class='o'>*</span> <span class='nv'>mult</span>, y <span class='o'>=</span> <span class='nv'>PC2</span> <span class='o'>*</span> <span class='nv'>mult</span>, label <span class='o'>=</span> <span class='nv'>var</span><span class='o'>)</span>,
             <span class='c'>## We left-align (hjust = 0) and lower (vjust = 1) the labels</span>
             hjust <span class='o'>=</span> <span class='m'>0</span>, vjust <span class='o'>=</span> <span class='m'>1</span>,
             <span class='c'>## Again, we use a gray color:</span>
-            color <span class='o'>=</span> <span class='s'>"grey30"</span><span class='o'>)</span>
+            color <span class='o'>=</span> <span class='s'>"grey40"</span><span class='o'>)</span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
@@ -1462,15 +1458,15 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <div class="puzzle">
 <div>
 <h3 id="exercise-4">Exercise 4</h3>
-<p>Above, we plotted the scores for the first two PCs in our score plot and biplot. Now, <em>create a biplot with another combination of PCSs</em> (e.g., PC3 &amp; PC4, or PC1 &amp; PC3).</p>
-<p>Take a look at the help for the <a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>fviz_pca_biplot()</code></a> function by typing<br>
-<a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>?fviz_pca_biplot</code></a> to find out how you might be able to plot different PCs.</p>
+<p>Above, we plotted the scores for the first two PCs in our score plot and biplot. Now, <em>create a biplot with another combination of PCSs</em> (e.g., PC1 &amp; PC3, or PC3 &amp; PC4 &ndash; whatever you think will be more informative).</p>
+<p>Take a look at the help for the <a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>fviz_pca()</code></a> function by typing<br>
+<a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>?fviz_pca</code></a> to find out how you might be able to plot different PCs.</p>
 <details>
 <summary>
 <b>Hints</b> (click here)
 </summary>
 <br>
-<p>The <code>axes</code> argument to <a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>fviz_pca_biplot()</code></a> controls which axes will be plotted; this argument accepts a vector of two numbers.</p>
+<p>The <code>axes</code> argument to <a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>fviz_pca()</code></a> controls which axes will be plotted; this argument accepts a vector of two numbers.</p>
 </details>
 <details>
 <summary>
@@ -1479,14 +1475,15 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <br>
 <p>To plot PC1 &amp; PC3 (which may be a better choice than including PC4 because it explains so little variation):</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca_biplot</a></span><span class='o'>(</span><span class='nv'>pca</span>,
-                axes <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>3</span><span class='o'>)</span>,
-                label <span class='o'>=</span> <span class='s'>"var"</span>,
-                habillage <span class='o'>=</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca</a></span><span class='o'>(</span><span class='nv'>pca</span>,
+         axes <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>3</span><span class='o'>)</span>,
+         label <span class='o'>=</span> <span class='s'>"var"</span>,
+         habillage <span class='o'>=</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"top"</span><span class='o'>)</span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
+<p>Behold, now we can distinguish much better between Adelie and Chinstrap Penguins!</p>
 </details>
 </div>
 </div>
@@ -1528,9 +1525,9 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 </div>
 <p>Next, we create the biplot:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca_biplot</a></span><span class='o'>(</span><span class='nv'>pca</span>,
-                label <span class='o'>=</span> <span class='s'>"var"</span>,
-                habillage <span class='o'>=</span> <span class='nv'>onepenguin_noNA</span><span class='o'>$</span><span class='nv'>sex</span><span class='o'>)</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca</a></span><span class='o'>(</span><span class='nv'>pca</span>,
+         label <span class='o'>=</span> <span class='s'>"var"</span>,
+         habillage <span class='o'>=</span> <span class='nv'>onepenguin_noNA</span><span class='o'>$</span><span class='nv'>sex</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"top"</span><span class='o'>)</span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" /></p>
@@ -1541,6 +1538,12 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 </code></pre>
 <p><img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
+<p>Or a scree plot with <a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html" target="_blank" rel="noopener"><code>fviz_eig()</code></a>:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/eigenvalue.html'>fviz_eig</a></span><span class='o'>(</span><span class='nv'>pca</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
 <p>To create a quick score plot (no aspect ratio manipulation):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>bind_cols</span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>x</span><span class='o'>)</span>, <span class='nv'>onepenguin_noNA</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
@@ -1548,7 +1551,13 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>PC1</span>, y <span class='o'>=</span> <span class='nv'>PC2</span>, color <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-32-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Or a score plot with <a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html" target="_blank" rel="noopener"><code>fviz_pca_ind()</code></a>:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca_ind</a></span><span class='o'>(</span><span class='nv'>pca</span>, geom <span class='o'>=</span> <span class='s'>"point"</span>, habillage <span class='o'>=</span> <span class='nv'>onepenguin_noNA</span><span class='o'>$</span><span class='nv'>sex</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-33-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </details>
 </div>
@@ -1576,14 +1585,13 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
   <span class='nf'>labs</span><span class='o'>(</span>y <span class='o'>=</span> <span class='s'>"Proportion of the variation explained"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-32-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-34-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
 <br>
 <hr>
-<h2 id="going-further">Going further</h2>
-<h4 id="further-watching-and-reading">Further watching and reading</h4>
+<h2 id="further-watching--reading">Further watching &amp; reading</h2>
 <ul>
 <li>&ldquo;StatQuest&rdquo; videos on:
 <ul>
@@ -1593,8 +1601,9 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 </ul>
 </li>
 <li><a href="http://web.stanford.edu/class/bios221/book/Chap-Multivariate.html" target="_blank" rel="noopener">Chapter on Multivariate Analysis from the book &ldquo;Modern Statistics for Modern Biology&rdquo;</a></li>
-<li><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907" target="_blank" rel="noopener">Nguyen &amp; Holmes 2019: Ten quick tips for effective dimensionality reduction</a></li>
+<li><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907" target="_blank" rel="noopener">Nguyen &amp; Holmes 2019: &ldquo;Ten quick tips for effective dimensionality reduction&rdquo;</a></li>
 </ul>
+<br>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
