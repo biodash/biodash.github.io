@@ -3,10 +3,10 @@ title: "S03E03: Principal Component Analysis (PCA)"
 subtitle: "How to run a PCA in R and plot the results"
 summary: "Today, we'll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot, and a biplot."
 authors: [admin]
-date: "2022-01-24"
+date: "2022-01-25"
 output: hugodown::md_document
 toc: true
-rmd_hash: 23270538052f4fc0
+rmd_hash: ca0d452263c23515
 
 ---
 
@@ -47,7 +47,7 @@ Check out the [Code Club Computer Setup](/codeclub-setup/) instructions, which a
 #### R packages we will use
 
 -   *palmerpenguins* -- A data package containing the data we will explore
--   *tidyverse* -- As metapackage that includes *ggplot2* which we'll use for plotting, access to the `%>%` pipe, etc.
+-   *tidyverse* -- A metapackage that includes *ggplot2* which we'll use for plotting, access to the `%>%` pipe, etc.
 -   *broom* -- We'll again use the [`tidy()`](https://generics.r-lib.org/reference/tidy.html) function in *broom* to create tidy dataframes from untidy statistical function output
 -   *glue* -- For pasting strings with variables
 -   *factoextra* -- For easily creating a PCA biplot (and other PCA plots)
@@ -714,7 +714,7 @@ Biplots can be especially useful when you have a modest number of original varia
 
 <div>
 
-While we made a scree plot with base R and a score plot with "base *ggplot2*", there are also *factoextra* functions for these for and other PCA plots:
+While we made a scree plot with base R and a score plot with "base *ggplot2*", there are also *factoextra* functions for these and for other PCA plots:
 
 -   [`fviz_eig()`](https://rdrr.io/pkg/factoextra/man/eigenvalue.html) -- scree plots
 -   [`fviz_pca_ind()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) -- score plots
