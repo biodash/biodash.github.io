@@ -1,12 +1,12 @@
 ---
 title: "S03E03: Principal Component Analysis (PCA)"
 subtitle: "How to run a PCA in R and plot the results"
-summary: "Today, we'll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot and a biplot."
+summary: "Today, we'll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot, and a biplot."
 authors: [admin]
 date: "2022-01-24"
 output: hugodown::md_document
 toc: true
-rmd_hash: 91692896b6a7cd2c
+rmd_hash: 23270538052f4fc0
 
 ---
 
@@ -135,7 +135,7 @@ Besides PCA, other commonly used ordination methods that are also unconstrained 
 
 -   *Principal Coordinate Analysis* (**PCoA**) is also known as *Metric Multidimensional Scaling* (**MDS** / mMDS). PCoA allows you to use distance measures other than Euclidean distance and can be run e.g. with [`stats::cmdscale()`](https://rdrr.io/r/stats/cmdscale.html).
 
--   *Non-metric Multidimensional Scaling* (**nMDS**) is a non-metric method with quite different inner workings from PCA and PCoA that is especially suitable when you have low confidence in distance values. It can be run e.g. with [`vegan::metaMDS()`](https://rdrr.io/pkg/vegan/man/metaMDS.html).
+-   *Non-metric Multidimensional Scaling* (**nMDS**) is a non-metric method with quite different inner workings from PCA and PCoA that is especially suitable when your distance values are imprecise. It can be run e.g. with [`vegan::metaMDS()`](https://rdrr.io/pkg/vegan/man/metaMDS.html).
 
 If you're struggling to pick a suitable ordination approach for your data, take a look at [Table 1](https://journals.plos.org/ploscompbiol/article/figure?id=10.1371/journal.pcbi.1006907.t001) in [Nguyen & Holmes 2019](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907).
 
@@ -151,7 +151,7 @@ If you're struggling to pick a suitable ordination approach for your data, take 
 
 To perform a PCA analysis in R, there are two functions that can be used without the need to load any packages: [`prcomp()`](https://rdrr.io/r/stats/prcomp.html) and [`princomp()`](https://rdrr.io/r/stats/princomp.html).
 
-(Like last week's [`aov()`](https://rdrr.io/r/stats/aov.html) function, these are in the *stats* package, which is loaded into your R session by default. More PCA functions are available in other packages but these tend to be very similar and/or simply wrap the two base R functions.)
+(Like last week's [`aov()`](https://rdrr.io/r/stats/aov.html) function, these functions are in the *stats* package, which is loaded into your R session by default. More PCA functions are available in other packages but these tend to be very similar and/or simply wrap the two base R functions.)
 
 We will use **[`prcomp()`](https://rdrr.io/r/stats/prcomp.html)**, which is preferred among these two due to its slightly better accuracy[^1].
 
@@ -298,13 +298,11 @@ Like we saw last week with [`aov()`](https://rdrr.io/r/stats/aov.html), we can g
 
 This shows us the "importance" of the 4 principal components that our PCA returned, i.e. the amount of variation they explain.
 
-PC1, the first principal component, explains a whopping 68.8% of the variation, whereas PC4 explains merely 2.7% of the variation in the dataset. (Principal components are always ordered by the amount of variation they explain, with PC1 explaining most.)
-
 #### Seeing all elements with `str()`
 
-These summaries are nice and all but like we saw in previous weeks, they don't make it obvious where and how to access *all* the information contained in the object.
+These summaries are nice and all, but like we saw in previous weeks, they don't make it obvious where and how to access *all* the information contained in the object.
 
-Running the [`str()`](https://rdrr.io/r/utils/str.html) function is a good start for getting the raw contents of the object, even though the information printed isn't easy to look at:
+Running the [`str()`](https://rdrr.io/r/utils/str.html) function is a good start for getting to the raw contents of the object, even though the information printed isn't easy to look at:
 
 <div class="highlight">
 
@@ -468,7 +466,7 @@ All elements of the output are explained in the next section of this page.
 
 Let's take a quick look together at the three most important elements in the object returned by [`prcomp()`](https://rdrr.io/r/stats/prcomp.html), which we named `pca`:
 
--   **`pca$sdev`** is a vector of standard deviations associated with each principal component (PC), i.e. it is the **amount of variation explained by each PC**. (This is also known as the *eigenvector*, which contains *eigenvalues*.)
+-   **`pca$sdev`** is a vector of standard deviations associated with each principal component (PC), i.e. it is the **amount of variation explained by each PC**. (This is also known as the *eigenvector*, which contains *eigenvalues*.) We also saw this information when running [`summary(pca)`](https://rdrr.io/r/base/summary.html).
 
     <div class="highlight">
 
@@ -477,9 +475,7 @@ Let's take a quick look together at the three most important elements in the obj
 
     </div>
 
-    We also saw this information when running [`summary(pca)`](https://rdrr.io/r/base/summary.html).
-
--   **`pca$rotation`** is a matrix that contains the **loadings** for each variable in each PC.
+-   **`pca$rotation`** is a matrix that contains the **loadings** for each variable in each PC. These are the "recipes" for creating each PC, with *higher absolute values* indicating a larger influence of the variable on the PC. The *sign* (- or +) matters too: in PC1, larger values of bill depth lower the PC value, and vice versa for the other three variables.
 
     <div class="highlight">
 
@@ -492,9 +488,7 @@ Let's take a quick look together at the three most important elements in the obj
 
     </div>
 
-    These are the "recipes" for creating each PC, with *higher absolute values* indicating a larger influence of the variable on the value of the PC. The *sign* (- or +) matters too: in PC1, larger values of bill length, flipper length, and body mass all contribute to a larger value of PC1, and vice versa for bill depth.
-
--   **`pca$x`** is the most important part of the output: a matrix containing the **scores (or coordinates)** for each sample for each PC, used to create a score plot.
+-   **`pca$x`** is the most-used part of the output: a matrix containing the **scores (or coordinates)** for each sample for each PC, used to create a score plot.
 
     <div class="highlight">
 
@@ -516,7 +510,7 @@ Let's take a quick look together at the three most important elements in the obj
 <b>...And the remaining two elements</b> (click here)
 </summary>
 
--   **`pca$center`** is a vector containing the means for each variable (column), which was subsequently used for centering the data (this would simply be `FALSE` if the data wasn't centered).
+-   **`pca$center`** is a vector containing the means for each variable, which was subsequently used for centering the data (this would contain just `FALSE` if the data wasn't centered).
     <div class="highlight">
 
     <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>center</span>
@@ -524,7 +518,7 @@ Let's take a quick look together at the three most important elements in the obj
       <span class='c'>#&gt;          43.99279          17.16486         200.96697        4207.05706</span></code></pre>
 
     </div>
--   **`pca$scale`** similarly is a vector containing the scaling constant for each variable (column) in the data.
+-   **`pca$scale`** similarly is a vector containing the scaling constant for each variable (column) in the data, and would be `FALSE` if the data wasn't scaled.
     <div class="highlight">
 
     <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>scale</span>
@@ -541,7 +535,7 @@ Let's take a quick look together at the three most important elements in the obj
 
 ## 6 - Scree plot
 
-A "scree plot"[^3] is a barplot that shows **the amount of variation (*eigenvalues*) explained by each PC.**
+A "scree plot"[^3] is a barplot that shows the **amount of variation (*eigenvalues*) explained by each PC.**
 
 We'll make a base R version of this plot (gasp!) because it is so quick to make, and we don't need this figure to be fancy:
 
@@ -559,7 +553,7 @@ We'll make a base R version of this plot (gasp!) because it is so quick to make,
 
 #### Interpretation
 
-This gives us a quick visual overview of what we saw earlier: PC1 is *by far* the most important, and PC4 doesn't do much at all. PC3 may still be worth plotting but "luckily" we have a decent gap between PC2 and PC3, such that a plot of the first two PCs will be a very logical choice.
+This gives us a quick visual overview of the importance of the PCs: PC1 is *by far* the most important, and PC4 doesn't do much at all. (PCs are always ordered by the amount of variation they explain, with PC1 explaining most.)
 
 </div>
 
@@ -573,9 +567,9 @@ This gives us a quick visual overview of what we saw earlier: PC1 is *by far* th
 
 A "score plot" shows **the scores (coordinates) for each sample for two PCs**, typically the first two.
 
-We're going to need a dataframe to plot. But if we were to [`broom::tidy()`](https://generics.r-lib.org/reference/tidy.html) the matrix with scores (`pca$x`) like we've done with t-test and ANOVA output in previous weeks, we would get a dataframe with all PCs in one column that wouldn't be that easy to plot.
+We're going to need a dataframe to plot. But if we were to [`broom::tidy()`](https://generics.r-lib.org/reference/tidy.html) the scores matrix (`pca$x`), akin to what we've done with t-test and ANOVA output in previous weeks, we would get a dataframe with all PCs in one column that wouldn't be that easy to plot.
 
-So in this case, we'll just manipulate `pca$x` ourselves -- in particular, we want to add the source penguins dataframe back to it, which will allow us to color points by, say, species.
+So in this case, we'll just manipulate `pca$x` ourselves -- in particular, we want to add the source `penguins_noNA` dataframe back to it, which will allow us to color points by, say, `species`.
 
 <div class="highlight">
 
@@ -618,7 +612,7 @@ Now we're ready to create the plot:
 
 One way to improve our plot is to set the aspect ratio (the proportional relationship between the height and the width) according to the relative percentages of variation explained by the two plotted PCs: because PC1 on the x-axis explains more variation, we want the plot to be wide.
 
-To get the percentages in a dataframe, we will use the [`tidy()`](https://generics.r-lib.org/reference/tidy.html) function like in previous weeks. Because the output of [`prcomp()`](https://rdrr.io/r/stats/prcomp.html) contains multiple matrices, we'll have to point it to the eigenvalues using the `matrix` argument (see the [docs]((https://broom.tidymodels.org/reference/tidy.prcomp.html))):
+To get the percentages in a dataframe, now we *will* use the [`tidy()`](https://generics.r-lib.org/reference/tidy.html) function. But because the output of [`prcomp()`](https://rdrr.io/r/stats/prcomp.html) contains multiple matrices, we'll have to point [`tidy()`](https://generics.r-lib.org/reference/tidy.html) to the eigenvalues using the `matrix` argument (see the [docs]((https://broom.tidymodels.org/reference/tidy.prcomp.html))):
 
 <div class="highlight">
 
@@ -639,22 +633,27 @@ Now, we'll store the percentages explained by the first two PCs (rounded to one 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># (Note: pca_eigen$percent contains proportions, not percentages...)</span>
-<span class='o'>(</span><span class='nv'>PC1_percent</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='o'>(</span><span class='nv'>pca_eigen</span><span class='o'>$</span><span class='nv'>percent</span><span class='o'>[</span><span class='m'>1</span><span class='o'>]</span> <span class='o'>*</span> <span class='m'>100</span>, <span class='m'>1</span><span class='o'>)</span><span class='o'>)</span>
+<span class='nv'>PC1_percent</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='o'>(</span><span class='nv'>pca_eigen</span><span class='o'>$</span><span class='nv'>percent</span><span class='o'>[</span><span class='m'>1</span><span class='o'>]</span> <span class='o'>*</span> <span class='m'>100</span>, <span class='m'>1</span><span class='o'>)</span>
+<span class='nv'>PC2_percent</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='o'>(</span><span class='nv'>pca_eigen</span><span class='o'>$</span><span class='nv'>percent</span><span class='o'>[</span><span class='m'>2</span><span class='o'>]</span> <span class='o'>*</span> <span class='m'>100</span>, <span class='m'>1</span><span class='o'>)</span>
+
+<span class='nv'>PC1_percent</span>
 <span class='c'>#&gt; [1] 68.6</span>
-<span class='o'>(</span><span class='nv'>PC2_percent</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='o'>(</span><span class='nv'>pca_eigen</span><span class='o'>$</span><span class='nv'>percent</span><span class='o'>[</span><span class='m'>2</span><span class='o'>]</span> <span class='o'>*</span> <span class='m'>100</span>, <span class='m'>1</span><span class='o'>)</span><span class='o'>)</span>
+<span class='nv'>PC2_percent</span>
 <span class='c'>#&gt; [1] 19.5</span></code></pre>
 
 </div>
 
-Finally, we can modify the aspect ratio, which is `height / width` -- and we'll also move the legend to the top, and add the percentages to the axis titles:
+Finally, we can modify the aspect ratio, which is expressed as `height / width` -- and we'll also move the legend to the top, and add the percentages to the axis titles:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>score_plot</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>score_plot</span> <span class='o'>&lt;-</span> <span class='nv'>score_plot</span> <span class='o'>+</span>
   <span class='nf'>theme</span><span class='o'>(</span>aspect.ratio <span class='o'>=</span> <span class='nv'>PC2_percent</span> <span class='o'>/</span> <span class='nv'>PC1_percent</span>,
         legend.position <span class='o'>=</span> <span class='s'>"top"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nf'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='o'>(</span><span class='s'>"PC1 (&#123;PC1_percent&#125;%)"</span><span class='o'>)</span>,
        y <span class='o'>=</span> <span class='nf'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='o'>(</span><span class='s'>"PC2 (&#123;PC2_percent&#125;%)"</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='nv'>score_plot</span>
 </code></pre>
 <img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
 
@@ -666,7 +665,7 @@ Finally, we can modify the aspect ratio, which is `height / width` -- and we'll 
 
 #### Interpretation
 
-Across these four measurements, Gentoo penguins can be very clearly distinguished from the other two species, whereas Adelie and Chinstrap penguins differ on average but are not fully separated.
+Across these four measurements, Gentoo Penguins can be very clearly distinguished from the other two species, whereas among Adelie and Chinstrap Penguins, there are average differences but they are not fully separable.
 
 </div>
 
@@ -678,15 +677,15 @@ Across these four measurements, Gentoo penguins can be very clearly distinguishe
 
 ## 8 - Biplot
 
-A "biplot" shows the scores of samples for two PCs, like in the score plot above, *and* shows the loadings for the original variables along the two PCs.
+A "biplot" shows the **scores of samples for two PCs *and* the loadings for the original variables** along the two PCs.
 
-Because biplots are more complicated to make "from scratch" using *ggplot2*, we will turn to the package *factoextra*, which has a convenient function for making biplots, [`fviz_pca_biplot()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html):
+Because biplots are more complicated to make "from scratch" using *ggplot2*, we will turn to the package *factoextra*, which has a convenient function for making biplots, [`fviz_pca()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html):
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca_biplot</a></span><span class='o'>(</span><span class='nv'>pca</span>,
-                label <span class='o'>=</span> <span class='s'>"var"</span>,   <span class='c'># Show labels for variables only</span>
-                habillage <span class='o'>=</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># color by / shape by</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca</a></span><span class='o'>(</span><span class='nv'>pca</span>,
+         label <span class='o'>=</span> <span class='s'>"var"</span>,                       <span class='c'># Show labels for variables only</span>
+         habillage <span class='o'>=</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># color by / shape by</span>
   <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"top"</span><span class='o'>)</span>
 </code></pre>
 <img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" />
@@ -701,9 +700,7 @@ While this plot can certainly be improved upon, *biplots are by their nature a l
 
 #### Interpretation
 
-Biplots can be especially useful when you have a modest number of original variables, like here. With many variables, dimensionality again becomes a problem but they may e.g. reveal whether only a small number of variables strongly influence your PCs.
-
-Some information we can glean from this particular biplot:
+Biplots can be especially useful when you have a modest number of original variables, like here. Some information we can glean from this particular biplot:
 
 -   Flipper length and body mass are highly correlated among individuals, even across species. So flipper length relative to body mass is similar across species.
 
@@ -717,7 +714,7 @@ Some information we can glean from this particular biplot:
 
 <div>
 
-While we made a scree plot with base R and a score plot with "base *ggplot2*", there are also *factoextra* functions for these and other PCA plots:
+While we made a scree plot with base R and a score plot with "base *ggplot2*", there are also *factoextra* functions for these for and other PCA plots:
 
 -   [`fviz_eig()`](https://rdrr.io/pkg/factoextra/man/eigenvalue.html) -- scree plots
 -   [`fviz_pca_ind()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) -- score plots
@@ -751,8 +748,7 @@ What we need to add are the variable loading, which we'll do with `geom_segment(
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## To make the arrows longer (all by the same amount),</span>
-<span class='c'>## just to improve the visualization,</span>
-<span class='c'>## we use a multiplication factor:</span>
+<span class='c'>## just to improve the visualization, we use a multiplication factor:</span>
 <span class='nv'>mult</span> <span class='o'>&lt;-</span> <span class='m'>2.5</span>
 
 <span class='nv'>score_plot</span> <span class='o'>+</span>
@@ -763,14 +759,14 @@ What we need to add are the variable loading, which we'll do with `geom_segment(
                <span class='c'>## We turn the line into an arrow:</span>
                arrow <span class='o'>=</span> <span class='nf'>arrow</span><span class='o'>(</span><span class='o'>)</span>,
                <span class='c'>## A gray-tone might work better than black:</span>
-               color <span class='o'>=</span> <span class='s'>"grey30"</span><span class='o'>)</span> <span class='o'>+</span>
+               color <span class='o'>=</span> <span class='s'>"grey40"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_text</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>pca_loadings</span>,
             <span class='c'>## The text labels go at the end of the arrows:</span>
             <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>PC1</span> <span class='o'>*</span> <span class='nv'>mult</span>, y <span class='o'>=</span> <span class='nv'>PC2</span> <span class='o'>*</span> <span class='nv'>mult</span>, label <span class='o'>=</span> <span class='nv'>var</span><span class='o'>)</span>,
             <span class='c'>## We left-align (hjust = 0) and lower (vjust = 1) the labels</span>
             hjust <span class='o'>=</span> <span class='m'>0</span>, vjust <span class='o'>=</span> <span class='m'>1</span>,
             <span class='c'>## Again, we use a gray color:</span>
-            color <span class='o'>=</span> <span class='s'>"grey30"</span><span class='o'>)</span>
+            color <span class='o'>=</span> <span class='s'>"grey40"</span><span class='o'>)</span>
 </code></pre>
 <img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" />
 
@@ -790,10 +786,10 @@ What we need to add are the variable loading, which we'll do with `geom_segment(
 
 ### Exercise 4
 
-Above, we plotted the scores for the first two PCs in our score plot and biplot. Now, *create a biplot with another combination of PCSs* (e.g., PC3 & PC4, or PC1 & PC3).
+Above, we plotted the scores for the first two PCs in our score plot and biplot. Now, *create a biplot with another combination of PCSs* (e.g., PC1 & PC3, or PC3 & PC4 -- whatever you think will be more informative).
 
-Take a look at the help for the [`fviz_pca_biplot()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) function by typing  
-[`?fviz_pca_biplot`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) to find out how you might be able to plot different PCs.
+Take a look at the help for the [`fviz_pca()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) function by typing  
+[`?fviz_pca`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) to find out how you might be able to plot different PCs.
 
 <details>
 <summary>
@@ -802,7 +798,7 @@ Take a look at the help for the [`fviz_pca_biplot()`](https://rdrr.io/pkg/factoe
 
 <br>
 
-The `axes` argument to [`fviz_pca_biplot()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) controls which axes will be plotted; this argument accepts a vector of two numbers.
+The `axes` argument to [`fviz_pca()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) controls which axes will be plotted; this argument accepts a vector of two numbers.
 
 </details>
 <details>
@@ -816,15 +812,17 @@ To plot PC1 & PC3 (which may be a better choice than including PC4 because it ex
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca_biplot</a></span><span class='o'>(</span><span class='nv'>pca</span>,
-                axes <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>3</span><span class='o'>)</span>,
-                label <span class='o'>=</span> <span class='s'>"var"</span>,
-                habillage <span class='o'>=</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca</a></span><span class='o'>(</span><span class='nv'>pca</span>,
+         axes <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>3</span><span class='o'>)</span>,
+         label <span class='o'>=</span> <span class='s'>"var"</span>,
+         habillage <span class='o'>=</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"top"</span><span class='o'>)</span>
 </code></pre>
 <img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
+
+Behold, now we can distinguish much better between Adelie and Chinstrap Penguins!
 
 </details>
 
@@ -883,9 +881,9 @@ Next, we create the biplot:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca_biplot</a></span><span class='o'>(</span><span class='nv'>pca</span>,
-                label <span class='o'>=</span> <span class='s'>"var"</span>,
-                habillage <span class='o'>=</span> <span class='nv'>onepenguin_noNA</span><span class='o'>$</span><span class='nv'>sex</span><span class='o'>)</span> <span class='o'>+</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca</a></span><span class='o'>(</span><span class='nv'>pca</span>,
+         label <span class='o'>=</span> <span class='s'>"var"</span>,
+         habillage <span class='o'>=</span> <span class='nv'>onepenguin_noNA</span><span class='o'>$</span><span class='nv'>sex</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"top"</span><span class='o'>)</span>
 </code></pre>
 <img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" />
@@ -902,6 +900,16 @@ To create a scree plot:
 
 </div>
 
+Or a scree plot with [`fviz_eig()`](https://rdrr.io/pkg/factoextra/man/eigenvalue.html):
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/eigenvalue.html'>fviz_eig</a></span><span class='o'>(</span><span class='nv'>pca</span><span class='o'>)</span>
+</code></pre>
+<img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
 To create a quick score plot (no aspect ratio manipulation):
 
 <div class="highlight">
@@ -911,7 +919,17 @@ To create a quick score plot (no aspect ratio manipulation):
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>PC1</span>, y <span class='o'>=</span> <span class='nv'>PC2</span>, color <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-32-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
+Or a score plot with [`fviz_pca_ind()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html):
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/pkg/factoextra/man/fviz_pca.html'>fviz_pca_ind</a></span><span class='o'>(</span><span class='nv'>pca</span>, geom <span class='o'>=</span> <span class='s'>"point"</span>, habillage <span class='o'>=</span> <span class='nv'>onepenguin_noNA</span><span class='o'>$</span><span class='nv'>sex</span><span class='o'>)</span>
+</code></pre>
+<img src="figs/unnamed-chunk-33-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -954,7 +972,7 @@ Use the `pca_eigen` dataframe that we created above for plotting, and use the ge
   <span class='nf'>labs</span><span class='o'>(</span>y <span class='o'>=</span> <span class='s'>"Proportion of the variation explained"</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-32-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-34-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -965,16 +983,16 @@ Use the `pca_eigen` dataframe that we created above for plotting, and use the ge
 
 ------------------------------------------------------------------------
 
-## Going further
-
-#### Further watching and reading
+## Further watching & reading
 
 -   "StatQuest" videos on:
     -   [PCA (22 minutes)](https://www.youtube.com/watch?v=FgakZw6K1QQ)
     -   [PCA follow-up: practical tips (8 minutes)](https://www.youtube.com/watch?v=oRvgq966yZg)
     -   [MDS and PCoA](https://www.youtube.com/watch?v=GEn-_dAyYME)
 -   [Chapter on Multivariate Analysis from the book "Modern Statistics for Modern Biology"](http://web.stanford.edu/class/bios221/book/Chap-Multivariate.html)
--   [Nguyen & Holmes 2019: Ten quick tips for effective dimensionality reduction](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907)
+-   [Nguyen & Holmes 2019: "Ten quick tips for effective dimensionality reduction"](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006907)
+
+<br>
 
 [^1]: Crawley 2012 -- "The R Book" -- [pdf](https://www.cs.upc.edu/~robert/teaching/estadistica/TheRBook.pdf)
 

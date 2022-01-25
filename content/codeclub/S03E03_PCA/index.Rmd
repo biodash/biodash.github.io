@@ -1,7 +1,7 @@
 ---
 title: "S03E03: Principal Component Analysis (PCA)"
 subtitle: "How to run a PCA in R and plot the results"
-summary: "Today, we'll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot and a biplot."
+summary: "Today, we'll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot, and a biplot."
 authors: [admin]
 date: "`r Sys.Date()`"
 output: hugodown::md_document
@@ -148,7 +148,7 @@ Besides PCA, other commonly used ordination methods that are also unconstrained
   
 - _Non-metric Multidimensional Scaling_ (**nMDS**)
   is a non-metric method with quite different inner workings from PCA and PCoA
-  that is especially suitable when you have low confidence in distance values.
+  that is especially suitable when your distance values are imprecise.
   It can be run e.g. with `vegan::metaMDS()`.
 
 If you're struggling to pick a suitable ordination approach for your data,
@@ -167,7 +167,7 @@ To perform a PCA analysis in R,
 there are two functions that can be used without the need to load any packages:
 `prcomp()` and `princomp()`.
 
-(Like last week's `aov()` function, these are in the *stats* package,
+(Like last week's `aov()` function, these functions are in the *stats* package,
 which is loaded into your R session by default.
 More PCA functions are available in other packages but these tend to be very
 similar and/or simply wrap the two base R functions.)
@@ -290,18 +290,13 @@ summary(pca)
 This shows us the "importance" of the 4 principal components that our PCA returned,
 i.e. the amount of variation they explain.
 
-PC1, the first principal component, explains a whopping 68.8% of the variation,
-whereas PC4 explains merely 2.7% of the variation in the dataset.
-(Principal components are always ordered by the amount of variation they explain,
-with PC1 explaining most.)
-
 #### Seeing all elements with `str()`
 
-These summaries are nice and all but like we saw in previous weeks,
+These summaries are nice and all, but like we saw in previous weeks,
 they don't make it obvious where and how to access _all_ the information contained
 in the object.
 
-Running the `str()` function is a good start for getting the raw contents of
+Running the `str()` function is a good start for getting to the raw contents of
 the object,
 even though the information printed isn't easy to look at: 
 
@@ -494,10 +489,10 @@ plot(pca)
 <div class="alert alert-note"><div>
 
 #### Interpretation
-This gives us a quick visual overview of what we saw earlier:
+This gives us a quick visual overview of the importance of the PCs:
 PC1 is _by far_ the most important, and PC4 doesn't do much at all.
-PC3 may still be worth plotting but "luckily" we have a decent gap between PC2
-and PC3, such that a plot of the first two PCs will be a very logical choice.
+(PCs are always ordered by the amount of variation they explain,
+with PC1 explaining most.)
 
 </div></div>
 
@@ -511,8 +506,8 @@ A "score plot" shows **the scores (coordinates) for each sample for two PCs**,
 typically the first two.
 
 We're going to need a dataframe to plot.
-But if we were to `broom::tidy()` the matrix with scores (`pca$x`) like we've
-done with t-test and ANOVA output in previous weeks,
+But if we were to `broom::tidy()` the scores matrix (`pca$x`),
+akin to what we've done with t-test and ANOVA output in previous weeks,
 we would get a dataframe with all PCs in one column
 that wouldn't be that easy to plot.
 
@@ -546,9 +541,9 @@ plotted PCs:
 because PC1 on the x-axis explains more variation, we want the plot to be wide.
 
 To get the percentages in a dataframe,
-we will use the `tidy()` function like in previous weeks.
-Because the output of `prcomp()` contains multiple matrices,
-we'll have to point it to the eigenvalues using the `matrix` argument
+now we _will_ use the `tidy()` function.
+But because the output of `prcomp()` contains multiple matrices,
+we'll have to point `tidy()` to the eigenvalues using the `matrix` argument
 (see the [docs]((https://broom.tidymodels.org/reference/tidy.prcomp.html))):
 
 ```{r}
@@ -568,7 +563,8 @@ PC1_percent
 PC2_percent
 ```
 
-Finally, we can modify the aspect ratio, which is `height / width` --
+Finally, we can modify the aspect ratio,
+which is expressed as `height / width` --
 and we'll also move the legend to the top,
 and add the percentages to the axis titles:
 
@@ -605,12 +601,12 @@ along the two PCs.
 
 Because biplots are more complicated to make "from scratch" using _ggplot2_,
 we will turn to the package _factoextra_,
-which has a convenient function for making biplots, `fviz_pca_biplot()`:
+which has a convenient function for making biplots, `fviz_pca()`:
 
 ```{r}
-fviz_pca_biplot(pca,
-                label = "var",   # Show labels for variables only
-                habillage = penguins_noNA$species) + # color by / shape by
+fviz_pca(pca,
+         label = "var",                       # Show labels for variables only
+         habillage = penguins_noNA$species) + # color by / shape by
   theme(legend.position = "top")
 ```
 
@@ -636,7 +632,7 @@ Some information we can glean from this particular biplot:
 <div class="alert alert-note"><div>
 
 While we made a scree plot with base R and a score plot with "base _ggplot2_",
-there are also _factoextra_ functions for these and other PCA plots:
+there are also _factoextra_ functions for these for and other PCA plots:
 
 - `fviz_eig()` -- scree plots
 - `fviz_pca_ind()` -- score plots
@@ -666,8 +662,7 @@ and `geom_text()` to add text labels near the tips of the arrows:
 
 ```{r}
 ## To make the arrows longer (all by the same amount),
-## just to improve the visualization,
-## we use a multiplication factor:
+## just to improve the visualization, we use a multiplication factor:
 mult <- 2.5
 
 score_plot +
@@ -703,15 +698,15 @@ score_plot +
 Above, we plotted the scores for the first two PCs in our
 score plot and biplot.
 Now, _create a biplot with another combination of PCSs_
-(e.g., PC3 & PC4, or PC1 & PC3).
+(e.g., PC1 & PC3, or PC3 & PC4 -- whatever you think will be more informative).
 
-Take a look at the help for the `fviz_pca_biplot()` function by typing  
-`?fviz_pca_biplot` to find out how you might be able to plot different PCs.
+Take a look at the help for the `fviz_pca()` function by typing  
+`?fviz_pca` to find out how you might be able to plot different PCs.
 
 <details><summary><b>Hints</b> (click here)</summary>
 <br>
 
-The `axes` argument to `fviz_pca_biplot()` controls which axes will be plotted;
+The `axes` argument to `fviz_pca()` controls which axes will be plotted;
 this argument accepts a vector of two numbers.
 
 </details>
@@ -724,12 +719,14 @@ To plot PC1 & PC3
 variation):
 
 ```{r}
-fviz_pca_biplot(pca,
-                axes = c(1, 3),
-                label = "var",
-                habillage = penguins_noNA$species) +
+fviz_pca(pca,
+         axes = c(1, 3),
+         label = "var",
+         habillage = penguins_noNA$species) +
   theme(legend.position = "top")
 ```
+
+Behold, now we can distinguish much better between Adelie and Chinstrap Penguins!
 
 </details>
 
@@ -779,9 +776,9 @@ pca <- onepenguin_noNA %>%
 Next, we create the biplot:
 
 ```{r}
-fviz_pca_biplot(pca,
-                label = "var",
-                habillage = onepenguin_noNA$sex) +
+fviz_pca(pca,
+         label = "var",
+         habillage = onepenguin_noNA$sex) +
   theme(legend.position = "top")
 ```
 
@@ -791,6 +788,12 @@ To create a scree plot:
 plot(pca)
 ```
 
+Or a scree plot with `fviz_eig()`: 
+
+```{r}
+fviz_eig(pca)
+```
+
 To create a quick score plot (no aspect ratio manipulation):
 
 ```{r}
@@ -798,6 +801,12 @@ bind_cols(data.frame(pca$x), onepenguin_noNA) %>%
   ggplot() +
   geom_point(aes(x = PC1, y = PC2, color = sex)) +
   theme_classic()
+```
+
+Or a score plot with `fviz_pca_ind()`:
+
+```{r}
+fviz_pca_ind(pca, geom = "point", habillage = onepenguin_noNA$sex)
 ```
 
 </details>
@@ -836,9 +845,7 @@ ggplot(pca_eigen, aes(x = PC, y = percent)) +
 
 ----
 
-## Going further
-
-#### Further watching and reading
+## Further watching & reading
 
 - "StatQuest" videos on:
   - [PCA (22 minutes)](https://www.youtube.com/watch?v=FgakZw6K1QQ)
