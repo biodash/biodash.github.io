@@ -3,10 +3,10 @@ title: "S03E03: Principal Component Analysis (PCA)"
 subtitle: "How to run a PCA in R and plot the results"
 summary: "Today, we'll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot, and a biplot."
 authors: [admin]
-date: "2022-01-25"
+date: "2022-01-26"
 output: hugodown::md_document
 toc: true
-rmd_hash: ca0d452263c23515
+rmd_hash: 20ead19317a08b26
 
 ---
 
@@ -58,7 +58,7 @@ Check out the [Code Club Computer Setup](/codeclub-setup/) instructions, which a
 
 #### Getting set up
 
-*If you plan to just listen during the first part,* *you can wait until the Breakout Rooms to do the following.* *Also, instead of copying-and-pasting code,* *you could download this [R script - TBA](TBA) with today's code.*
+*If you plan to just listen during the first part,* *you can wait until the Breakout Rooms to do the following.* *Also, instead of copying-and-pasting code,* *you could download this [R script](https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E02_anova/anova.Rmd)* *with today's code.*
 
 -   Open a new R script in RStudio (`File` => `New File` => `R Script`)
 
@@ -339,7 +339,7 @@ In the first breakout room session, you'll explore the contents of our `pca` obj
 
 ### Exercise 1
 
-If you didn't do so already, get set up for the remaining exercises. Either download this [R script - TBA](TBA), open it in RStudio, and run the code, or:
+If you didn't do so already, get set up for the remaining exercises. Either download this [R script](https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E02_anova/anova.Rmd), open it in RStudio, and run the code, or:
 
 -   Open a new R script in RStudio (`File` => `New File` => `R Script`)
 
@@ -475,7 +475,7 @@ Let's take a quick look together at the three most important elements in the obj
 
     </div>
 
--   **`pca$rotation`** is a matrix that contains the **loadings** for each variable in each PC. These are the "recipes" for creating each PC, with *higher absolute values* indicating a larger influence of the variable on the PC. The *sign* (- or +) matters too: in PC1, larger values of bill depth lower the PC value, and vice versa for the other three variables.
+-   **`pca$rotation`** is a matrix that contains the **loadings** for each variable in each PC. These are the "recipes" for creating each PC, with *higher absolute values* indicating a larger influence of the variable on the PC. The *sign* (- or +) matters too: in PC1, larger values of `bill_depth_mm` lower the PC value, and vice versa for the other three variables.
 
     <div class="highlight">
 
