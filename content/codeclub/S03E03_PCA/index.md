@@ -6,7 +6,7 @@ authors: [admin]
 date: "2022-01-26"
 output: hugodown::md_document
 toc: true
-rmd_hash: 20ead19317a08b26
+rmd_hash: bdf9d19cd01783c5
 
 ---
 
@@ -58,7 +58,7 @@ Check out the [Code Club Computer Setup](/codeclub-setup/) instructions, which a
 
 #### Getting set up
 
-*If you plan to just listen during the first part,* *you can wait until the Breakout Rooms to do the following.* *Also, instead of copying-and-pasting code,* *you could download this [R script](https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E02_anova/anova.Rmd)* *with today's code.*
+*If you plan to just listen during the first part,* *you can wait until the Breakout Rooms to do the following.* *Also, instead of copying-and-pasting code, you could download this* *[R script](https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E03_PCA/S03E03_PCA.R)* *with today's code.*
 
 -   Open a new R script in RStudio (`File` => `New File` => `R Script`)
 
@@ -339,7 +339,7 @@ In the first breakout room session, you'll explore the contents of our `pca` obj
 
 ### Exercise 1
 
-If you didn't do so already, get set up for the remaining exercises. Either download this [R script](https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E02_anova/anova.Rmd), open it in RStudio, and run the code, or:
+If you didn't do so already, get set up for the remaining exercises. Either download this [R script](https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E03_PCA/S03E03_PCA.R), open it in RStudio, and run the code, or:
 
 -   Open a new R script in RStudio (`File` => `New File` => `R Script`)
 
