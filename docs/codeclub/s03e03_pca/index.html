@@ -339,10 +339,10 @@
     
       <meta
         property="article:published_time"
-        content="2022-01-26T00:00:00&#43;00:00"
+        content="2022-01-27T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-01-26T08:53:20-05:00">
+    <meta property="article:modified_time" content="2022-01-27T08:40:51-05:00">
   
 
   
@@ -850,7 +850,7 @@
   <span class="article-date">
     
     
-    Jan 26, 2022
+    Jan 27, 2022
   </span>
   
 
@@ -974,7 +974,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <li><strong>Principal Components (PCs)</strong> &ndash; the summary variables that a PCA produces.</li>
 <li><strong>Loadings</strong> (<em>rotations</em>) &ndash; Loadings apply to the <em>original variables</em>. They are the contributions of variables to PCs, which form the &ldquo;recipes&rdquo; used to create the PCs.</li>
 <li><strong>Scores</strong> (<em>coordinates</em>) &ndash; Scores apply to the <em>samples</em>. These scores, for each PC, are coordinates that can be used to create a score plot which is the &ldquo;classic&rdquo; PCA plot.</li>
-<li><strong>Eigenvalue</strong> &ndash; The amount of variation explained by a PC.</li>
+<li><strong>Eigenvalue</strong> &ndash; The variance (amount of variation) explained by a PC.</li>
 </ul>
 </div>
 </div>
@@ -1226,7 +1226,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <p>Let&rsquo;s take a quick look together at the three most important elements in the object returned by <a href="https://rdrr.io/r/stats/prcomp.html" target="_blank" rel="noopener"><code>prcomp()</code></a>, which we named <code>pca</code>:</p>
 <ul>
 <li>
-<p><strong><code>pca$sdev</code></strong> is a vector of standard deviations associated with each principal component (PC), i.e. it is the <strong>amount of variation explained by each PC</strong>. (This is also known as the <em>eigenvector</em>, which contains <em>eigenvalues</em>.) We also saw this information when running <a href="https://rdrr.io/r/base/summary.html" target="_blank" rel="noopener"><code>summary(pca)</code></a>.</p>
+<p><strong><code>pca$sdev</code></strong> is a vector of standard deviations associated with each principal component (PC), i.e. it is the <strong>amount of variation explained by each PC</strong>. We also saw this information when running <a href="https://rdrr.io/r/base/summary.html" target="_blank" rel="noopener"><code>summary(pca)</code></a>.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>sdev</span>
   <span class='c'>#&gt; [1] 1.6569115 0.8821095 0.6071594 0.3284579</span></code></pre>
@@ -1284,7 +1284,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <br>
 <hr>
 <h2 id="6---scree-plot">6 - Scree plot</h2>
-<p>A &ldquo;scree plot&rdquo;<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> is a barplot that shows the <strong>amount of variation (<em>eigenvalues</em>) explained by each PC.</strong></p>
+<p>A &ldquo;scree plot&rdquo;<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> is a barplot that shows the <strong>amount of variance (the <em>eigenvalue</em>) explained by each PC.</strong> (These are the square roots of the standard deviations in <code>pca$sdev</code>.)</p>
 <p>We&rsquo;ll make a base R version of this plot (gasp!) because it is so quick to make, and we don&rsquo;t need this figure to be fancy:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='o'>(</span><span class='nv'>pca</span><span class='o'>)</span>
@@ -1300,7 +1300,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 <br>
 <hr>
 <h2 id="7---score-classic-pca-plot">7 - Score (classic PCA) plot</h2>
-<p>A &ldquo;score plot&rdquo; shows <strong>the scores (coordinates) for each sample for two PCs</strong>, typically the first two.</p>
+<p>A &ldquo;score plot&rdquo; shows <strong>the scores (coordinates) for each sample along two PCs</strong>, typically the first two.</p>
 <p>We&rsquo;re going to need a dataframe to plot. But if we were to <a href="https://generics.r-lib.org/reference/tidy.html" target="_blank" rel="noopener"><code>broom::tidy()</code></a> the scores matrix (<code>pca$x</code>), akin to what we&rsquo;ve done with t-test and ANOVA output in previous weeks, we would get a dataframe with all PCs in one column that wouldn&rsquo;t be that easy to plot.</p>
 <p>So in this case, we&rsquo;ll just manipulate <code>pca$x</code> ourselves &ndash; in particular, we want to add the source <code>penguins_noNA</code> dataframe back to it, which will allow us to color points by, say, <code>species</code>.</p>
 <div class="highlight">
