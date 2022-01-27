@@ -3,10 +3,10 @@ title: "S03E03: Principal Component Analysis (PCA)"
 subtitle: "How to run a PCA in R and plot the results"
 summary: "Today, we'll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot, and a biplot."
 authors: [admin]
-date: "2022-01-26"
+date: "2022-01-27"
 output: hugodown::md_document
 toc: true
-rmd_hash: bdf9d19cd01783c5
+rmd_hash: 4d96407b375060fc
 
 ---
 
@@ -117,7 +117,7 @@ PCA is most commonly used for **exploratory data visualization** to see overall 
 -   **Principal Components (PCs)** -- the summary variables that a PCA produces.
 -   **Loadings** (*rotations*) -- Loadings apply to the *original variables*. They are the contributions of variables to PCs, which form the "recipes" used to create the PCs.
 -   **Scores** (*coordinates*) -- Scores apply to the *samples*. These scores, for each PC, are coordinates that can be used to create a score plot which is the "classic" PCA plot.
--   **Eigenvalue** -- The amount of variation explained by a PC.
+-   **Eigenvalue** -- The variance (amount of variation) explained by a PC.
 
 </div>
 
@@ -466,7 +466,7 @@ All elements of the output are explained in the next section of this page.
 
 Let's take a quick look together at the three most important elements in the object returned by [`prcomp()`](https://rdrr.io/r/stats/prcomp.html), which we named `pca`:
 
--   **`pca$sdev`** is a vector of standard deviations associated with each principal component (PC), i.e. it is the **amount of variation explained by each PC**. (This is also known as the *eigenvector*, which contains *eigenvalues*.) We also saw this information when running [`summary(pca)`](https://rdrr.io/r/base/summary.html).
+-   **`pca$sdev`** is a vector of standard deviations associated with each principal component (PC), i.e. it is the **amount of variation explained by each PC**. We also saw this information when running [`summary(pca)`](https://rdrr.io/r/base/summary.html).
 
     <div class="highlight">
 
@@ -535,7 +535,7 @@ Let's take a quick look together at the three most important elements in the obj
 
 ## 6 - Scree plot
 
-A "scree plot"[^3] is a barplot that shows the **amount of variation (*eigenvalues*) explained by each PC.**
+A "scree plot"[^3] is a barplot that shows the **amount of variance (the *eigenvalue*) explained by each PC.** (These are the square roots of the standard deviations in `pca$sdev`.)
 
 We'll make a base R version of this plot (gasp!) because it is so quick to make, and we don't need this figure to be fancy:
 
@@ -565,7 +565,7 @@ This gives us a quick visual overview of the importance of the PCs: PC1 is *by f
 
 ## 7 - Score (classic PCA) plot
 
-A "score plot" shows **the scores (coordinates) for each sample for two PCs**, typically the first two.
+A "score plot" shows **the scores (coordinates) for each sample along two PCs**, typically the first two.
 
 We're going to need a dataframe to plot. But if we were to [`broom::tidy()`](https://generics.r-lib.org/reference/tidy.html) the scores matrix (`pca$x`), akin to what we've done with t-test and ANOVA output in previous weeks, we would get a dataframe with all PCs in one column that wouldn't be that easy to plot.
 
