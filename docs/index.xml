@@ -264,7 +264,7 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
 &lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
-&lt;p&gt;If you didn&amp;rsquo;t do so already, get set up for the remaining exercises. Either download this &lt;a href=&#34;https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E03_PCA/S03E03_PCA.R&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;R script&lt;/a&gt;, open it in RStudio, and run the code, or:&lt;/p&gt;
+&lt;p&gt;If you didn&amp;rsquo;t do so already, get set up for the remaining exercises. Either &lt;a href=&#34;https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E03_PCA/S03E03_PCA.R&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;download this R script&lt;/a&gt;, open it in RStudio, and run the code, or:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Open a new R script in RStudio (&lt;code&gt;File&lt;/code&gt; =&amp;gt; &lt;code&gt;New File&lt;/code&gt; =&amp;gt; &lt;code&gt;R Script&lt;/code&gt;)&lt;/p&gt;
@@ -273,7 +273,7 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;p&gt;Save the script, as something along the lines of &lt;code&gt;codeclub_S03E03_PCA.R&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Copy the following code into the script:&lt;/p&gt;
+&lt;p&gt;Copy the following code into the script and then run it in the R console:&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -301,9 +301,6 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;span class=&#39;c&#39;&gt;## Run the PCA&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/prcomp.html&#39;&gt;prcomp&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins_for_pca&lt;/span&gt;, scale &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;Run the code above in the R console.&lt;/li&gt;
-&lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;br&gt;
@@ -361,25 +358,14 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;p&gt;Let&amp;rsquo;s take a quick look together at the three most important elements in the object returned by &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt;, which we named &lt;code&gt;pca&lt;/code&gt;:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$sdev&lt;/code&gt;&lt;/strong&gt; is a vector of standard deviations associated with each principal component (PC), i.e. it is the &lt;strong&gt;amount of variation explained by each PC&lt;/strong&gt;. We also saw this information when running &lt;a href=&#34;https://rdrr.io/r/base/summary.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summary(pca)&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$sdev&lt;/code&gt;&lt;/strong&gt; is a vector of standard deviations associated with each principal component (PC), i.e. it is the &lt;strong&gt;amount of variation explained by each PC&lt;/strong&gt;. We also saw this information when running &lt;a href=&#34;https://rdrr.io/r/base/summary.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summary(pca)&lt;/code&gt;&lt;/a&gt; and we&amp;rsquo;ll use it to create the &lt;em&gt;scree plot&lt;/em&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sdev&lt;/span&gt;
   &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1.6569115 0.8821095 0.6071594 0.3284579&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$rotation&lt;/code&gt;&lt;/strong&gt; is a matrix that contains the &lt;strong&gt;loadings&lt;/strong&gt; for each variable in each PC. These are the &amp;ldquo;recipes&amp;rdquo; for creating each PC, with &lt;em&gt;higher absolute values&lt;/em&gt; indicating a larger influence of the variable on the PC. The &lt;em&gt;sign&lt;/em&gt; (- or +) matters too: in PC1, larger values of &lt;code&gt;bill_depth_mm&lt;/code&gt; lower the PC value, and vice versa for the other three variables.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rotation&lt;/span&gt;
-  &lt;span class=&#39;c&#39;&gt;#&amp;gt;                          PC1         PC2        PC3        PC4&lt;/span&gt;
-  &lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_length_mm     0.4537532 -0.60019490 -0.6424951  0.1451695&lt;/span&gt;
-  &lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_depth_mm     -0.3990472 -0.79616951  0.4258004 -0.1599044&lt;/span&gt;
-  &lt;span class=&#39;c&#39;&gt;#&amp;gt; flipper_length_mm  0.5768250 -0.00578817  0.2360952 -0.7819837&lt;/span&gt;
-  &lt;span class=&#39;c&#39;&gt;#&amp;gt; body_mass_g        0.5496747 -0.07646366  0.5917374  0.5846861&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$x&lt;/code&gt;&lt;/strong&gt; is the most-used part of the output: a matrix containing the &lt;strong&gt;scores (or coordinates)&lt;/strong&gt; for each sample for each PC, used to create a score plot.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$x&lt;/code&gt;&lt;/strong&gt; is the most-used part of the output: a matrix containing the &lt;strong&gt;scores (or coordinates)&lt;/strong&gt; for each sample for each PC, used to create a &lt;em&gt;score plot&lt;/em&gt; and part of the &lt;em&gt;biplot&lt;/em&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
   &lt;span class=&#39;c&#39;&gt;#&amp;gt;            PC1         PC2         PC3        PC4&lt;/span&gt;
@@ -389,6 +375,17 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
   &lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,] -1.882455  0.01233268  0.62792772 -0.4721826&lt;/span&gt;
   &lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,] -1.917096 -0.81636958  0.69999797 -0.1961213&lt;/span&gt;
   &lt;span class=&#39;c&#39;&gt;#&amp;gt; [6,] -1.770356  0.36567266 -0.02841769  0.5046092&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;pca$rotation&lt;/code&gt;&lt;/strong&gt; is a matrix that contains the &lt;strong&gt;loadings&lt;/strong&gt; for each variable in each PC. These are the &amp;ldquo;recipes&amp;rdquo; for creating each PC, with &lt;em&gt;higher absolute values&lt;/em&gt; indicating a larger effect of the variable on the PC. The &lt;em&gt;sign&lt;/em&gt; (- or +) matters too: in PC1, larger values of &lt;code&gt;bill_depth_mm&lt;/code&gt; lower the PC value, and vice versa for the other three variables. This matrix will be used in creating the &lt;em&gt;biplot&lt;/em&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rotation&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt;                          PC1         PC2        PC3        PC4&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_length_mm     0.4537532 -0.60019490 -0.6424951  0.1451695&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; bill_depth_mm     -0.3990472 -0.79616951  0.4258004 -0.1599044&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; flipper_length_mm  0.5768250 -0.00578817  0.2360952 -0.7819837&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;#&amp;gt; body_mass_g        0.5496747 -0.07646366  0.5917374  0.5846861&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -419,13 +416,14 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;6---scree-plot&#34;&gt;6 - Scree plot&lt;/h2&gt;
-&lt;p&gt;A &amp;ldquo;scree plot&amp;rdquo;&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; is a barplot that shows the &lt;strong&gt;amount of variance (the &lt;em&gt;eigenvalue&lt;/em&gt;) explained by each PC.&lt;/strong&gt; (These are the square roots of the standard deviations in &lt;code&gt;pca$sdev&lt;/code&gt;.)&lt;/p&gt;
+&lt;p&gt;A &amp;ldquo;scree plot&amp;rdquo;&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; is a barplot that shows the &lt;strong&gt;amount of variation explained by each PC.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;We&amp;rsquo;ll make a base R version of this plot (gasp!) because it is so quick to make, and we don&amp;rsquo;t need this figure to be fancy:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/graphics/plot.default.html&#39;&gt;plot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-18-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
+&lt;p&gt;In this scree plot, we show the variance (i.e. the &lt;em&gt;eigenvalue&lt;/em&gt;) associated with each PC (these are the square roots of the standard deviations in &lt;code&gt;pca$sdev&lt;/code&gt;.)&lt;/p&gt;
 &lt;div class=&#34;alert alert-note&#34;&gt;
 &lt;div&gt;
 &lt;h4 id=&#34;interpretation&#34;&gt;Interpretation&lt;/h4&gt;
@@ -437,7 +435,7 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;h2 id=&#34;7---score-classic-pca-plot&#34;&gt;7 - Score (classic PCA) plot&lt;/h2&gt;
 &lt;p&gt;A &amp;ldquo;score plot&amp;rdquo; shows &lt;strong&gt;the scores (coordinates) for each sample along two PCs&lt;/strong&gt;, typically the first two.&lt;/p&gt;
 &lt;p&gt;We&amp;rsquo;re going to need a dataframe to plot. But if we were to &lt;a href=&#34;https://generics.r-lib.org/reference/tidy.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;broom::tidy()&lt;/code&gt;&lt;/a&gt; the scores matrix (&lt;code&gt;pca$x&lt;/code&gt;), akin to what we&amp;rsquo;ve done with t-test and ANOVA output in previous weeks, we would get a dataframe with all PCs in one column that wouldn&amp;rsquo;t be that easy to plot.&lt;/p&gt;
-&lt;p&gt;So in this case, we&amp;rsquo;ll just manipulate &lt;code&gt;pca$x&lt;/code&gt; ourselves &amp;ndash; in particular, we want to add the source &lt;code&gt;penguins_noNA&lt;/code&gt; dataframe back to it, which will allow us to color points by, say, &lt;code&gt;species&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;So in this case, we&amp;rsquo;ll just manipulate &lt;code&gt;pca$x&lt;/code&gt; ourselves &amp;ndash; in particular, we want to add the source &lt;code&gt;penguins_noNA&lt;/code&gt; dataframe back to it, which will allow us to color the points by, say, &lt;code&gt;species&lt;/code&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Column-bind (= put side-by-side) the scores and the source dataframe&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;pca_scores&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;bind_cols&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
@@ -468,9 +466,15 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-20-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
+&lt;h4 id=&#34;interpretation-1&#34;&gt;Interpretation&lt;/h4&gt;
+&lt;p&gt;Across these four measurements, Gentoo Penguins can be very clearly distinguished from the other two species, whereas among Adelie and Chinstrap Penguins, there are average differences but they are not fully separable.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 &lt;h3 id=&#34;a-better-aspect-ratio&#34;&gt;A better aspect ratio&lt;/h3&gt;
 &lt;p&gt;One way to improve our plot is to set the aspect ratio (the proportional relationship between the height and the width) according to the relative percentages of variation explained by the two plotted PCs: because PC1 on the x-axis explains more variation, we want the plot to be wide.&lt;/p&gt;
-&lt;p&gt;To get the percentages in a dataframe, now we &lt;em&gt;will&lt;/em&gt; use the &lt;a href=&#34;https://generics.r-lib.org/reference/tidy.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tidy()&lt;/code&gt;&lt;/a&gt; function. But because the output of &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt; contains multiple matrices, we&amp;rsquo;ll have to point &lt;a href=&#34;https://generics.r-lib.org/reference/tidy.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tidy()&lt;/code&gt;&lt;/a&gt; to the eigenvalues using the &lt;code&gt;matrix&lt;/code&gt; argument (see the &lt;a href=&#34;%28https://broom.tidymodels.org/reference/tidy.prcomp.html%29&#34;&gt;docs&lt;/a&gt;):&lt;/p&gt;
+&lt;p&gt;To get the percentages in a dataframe, now we &lt;em&gt;will&lt;/em&gt; use the &lt;a href=&#34;https://generics.r-lib.org/reference/tidy.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tidy()&lt;/code&gt;&lt;/a&gt; function. But because the output of &lt;a href=&#34;https://rdrr.io/r/stats/prcomp.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;prcomp()&lt;/code&gt;&lt;/a&gt; contains multiple elements, we&amp;rsquo;ll have to point &lt;a href=&#34;https://generics.r-lib.org/reference/tidy.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tidy()&lt;/code&gt;&lt;/a&gt; to the &lt;code&gt;$sdev&lt;/code&gt; element using the &lt;code&gt;matrix&lt;/code&gt; argument (see the &lt;a href=&#34;%28https://broom.tidymodels.org/reference/tidy.prcomp.html%29&#34;&gt;docs&lt;/a&gt;):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;pca_eigen&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://generics.r-lib.org/reference/tidy.html&#39;&gt;tidy&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca&lt;/span&gt;, matrix &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;eigenvalues&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;pca_eigen&lt;/span&gt;
@@ -505,13 +509,6 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-23-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
-&lt;div class=&#34;alert alert-note&#34;&gt;
-&lt;div&gt;
-&lt;h4 id=&#34;interpretation-1&#34;&gt;Interpretation&lt;/h4&gt;
-&lt;p&gt;Across these four measurements, Gentoo Penguins can be very clearly distinguished from the other two species, whereas among Adelie and Chinstrap Penguins, there are average differences but they are not fully separable.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;8---biplot&#34;&gt;8 - Biplot&lt;/h2&gt;
 &lt;p&gt;A &amp;ldquo;biplot&amp;rdquo; shows the &lt;strong&gt;scores of samples for two PCs &lt;em&gt;and&lt;/em&gt; the loadings for the original variables&lt;/strong&gt; along the two PCs.&lt;/p&gt;
@@ -593,7 +590,7 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
 &lt;h3 id=&#34;exercise-4&#34;&gt;Exercise 4&lt;/h3&gt;
-&lt;p&gt;Above, we plotted the scores for the first two PCs in our score plot and biplot. Now, &lt;em&gt;create a biplot with another combination of PCSs&lt;/em&gt; (e.g., PC1 &amp;amp; PC3, or PC3 &amp;amp; PC4 &amp;ndash; whatever you think will be more informative).&lt;/p&gt;
+&lt;p&gt;Above, we plotted the scores for the first two PCs (PC1 and PC2) in our score plot and biplot. Now, create a biplot with another combination of two PCs.&lt;/p&gt;
 &lt;p&gt;Take a look at the help for the &lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fviz_pca()&lt;/code&gt;&lt;/a&gt; function by typing&lt;br&gt;
 &lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;?fviz_pca&lt;/code&gt;&lt;/a&gt; to find out how you might be able to plot different PCs.&lt;/p&gt;
 &lt;details&gt;
@@ -601,7 +598,14 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;b&gt;Hints&lt;/b&gt; (click here)
 &lt;/summary&gt;
 &lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
 &lt;p&gt;The &lt;code&gt;axes&lt;/code&gt; argument to &lt;a href=&#34;https://rdrr.io/pkg/factoextra/man/fviz_pca.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fviz_pca()&lt;/code&gt;&lt;/a&gt; controls which axes will be plotted; this argument accepts a vector of two numbers.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Do you think it would be worth plotting PC4, which explains &amp;lt;3% of the variation? Would plotting PC3 with one of the PCs we already plotted be informative?&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;/details&gt;
 &lt;details&gt;
 &lt;summary&gt;
@@ -627,7 +631,7 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;div&gt;
 &lt;h3 id=&#34;exercise-5&#34;&gt;Exercise 5&lt;/h3&gt;
 &lt;p&gt;Run the PCA for just one of the three penguin species.&lt;/p&gt;
-&lt;p&gt;Then, make a biplot of the results, in which you color by something else than &lt;code&gt;species&lt;/code&gt;, e.g. by &lt;code&gt;sex&lt;/code&gt;. (If you want, also make a scree plot and/or a score plot.)&lt;/p&gt;
+&lt;p&gt;Then, make a biplot of the results, in which you color the points by something else than &lt;code&gt;species&lt;/code&gt;, e.g. by &lt;code&gt;sex&lt;/code&gt;. (If you want, also make a scree plot and/or a score plot.)&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Hints&lt;/b&gt; (click here)
@@ -635,7 +639,7 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;br&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;Use the &lt;em&gt;dplyr&lt;/em&gt; function &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; on &lt;code&gt;penguins_noNA&lt;/code&gt; object to select rows corresponding to one penguin species.&lt;/p&gt;
+&lt;p&gt;Use the &lt;em&gt;dplyr&lt;/em&gt; function &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; on the &lt;code&gt;penguins_noNA&lt;/code&gt; object to select rows corresponding to one penguin species.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;After that, the code will be nearly identical to that used before; just make sure to refer to the correct objects if you copy-and-paste code.&lt;/p&gt;
@@ -707,13 +711,21 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;b&gt;Hints&lt;/b&gt; (click here)
 &lt;/summary&gt;
 &lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
 &lt;p&gt;Use the &lt;code&gt;pca_eigen&lt;/code&gt; dataframe that we created above for plotting, and use the geom &lt;code&gt;geom_col()&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Think about what exactly you want to plot on the y-axis. The variance, like in the base R scree plot? Or the proportion/percentage of the variance explained?&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;/details&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Solution&lt;/b&gt; (click here)
 &lt;/summary&gt;
 &lt;br&gt;
+&lt;p&gt;There are a couple of different things that could reasonably be put on the y-axis, but perhaps the clearest option is to put the proportion or percentage of variation (=variance) explained, like below:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;pca_eigen&lt;/span&gt;, &lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;PC&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;percent&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_col&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
@@ -722,6 +734,7 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-34-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
+&lt;p&gt;(Note once again that the column in &lt;code&gt;pca_eigen&lt;/code&gt; is called &lt;code&gt;percent&lt;/code&gt;, but it actually contains proportions.)&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;br&gt;
@@ -2076,7 +2089,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-845726319&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-638175924&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2086,7 +2099,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-845726319&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-638175924&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2273,7 +2286,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-247536981&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-135629847&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2283,7 +2296,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-247536981&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-135629847&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2319,7 +2332,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-927416358&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-184579263&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2329,7 +2342,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-927416358&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-184579263&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2361,7 +2374,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-827614953&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-475216983&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2371,7 +2384,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-827614953&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-475216983&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2402,7 +2415,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-319458267&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-735291648&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2412,7 +2425,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-319458267&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-735291648&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2546,7 +2559,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-318745692&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-198726345&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2556,7 +2569,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-318745692&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-198726345&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2613,7 +2626,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-718642953&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-259486371&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2623,7 +2636,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-718642953&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-259486371&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10343,7 +10356,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-413895672&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-157346298&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10353,7 +10366,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-413895672&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-157346298&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10429,7 +10442,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-572386419&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-975831246&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10439,7 +10452,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-572386419&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-975831246&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10460,7 +10473,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-346287519&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-631479825&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10470,7 +10483,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-346287519&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-631479825&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10497,7 +10510,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-573214689&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-548376912&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10507,7 +10520,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-573214689&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-548376912&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10534,7 +10547,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-215347986&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-342657891&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10544,7 +10557,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-215347986&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-342657891&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10567,7 +10580,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-987325416&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-957341628&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10577,7 +10590,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-987325416&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-957341628&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10618,7 +10631,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-346857192&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-367489521&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10628,7 +10641,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-346857192&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-367489521&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10647,7 +10660,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-367219548&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-752468193&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10657,7 +10670,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-367219548&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-752468193&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10683,7 +10696,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-523149687&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-946183275&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10693,7 +10706,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-523149687&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-946183275&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10723,7 +10736,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-672358149&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-592786341&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10733,7 +10746,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-672358149&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-592786341&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10947,7 +10960,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-876495132&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-317549682&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10957,7 +10970,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-876495132&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-317549682&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11018,7 +11031,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-465792381&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-538271469&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11028,7 +11041,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-465792381&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-538271469&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11103,7 +11116,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-672941583&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-518963472&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11113,7 +11126,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-672941583&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-518963472&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
