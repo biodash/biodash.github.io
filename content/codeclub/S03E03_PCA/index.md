@@ -6,7 +6,7 @@ authors: [admin]
 date: "2022-01-27"
 output: hugodown::md_document
 toc: true
-rmd_hash: 4d96407b375060fc
+rmd_hash: bd1f60e83e024122
 
 ---
 
@@ -339,13 +339,13 @@ In the first breakout room session, you'll explore the contents of our `pca` obj
 
 ### Exercise 1
 
-If you didn't do so already, get set up for the remaining exercises. Either download this [R script](https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E03_PCA/S03E03_PCA.R), open it in RStudio, and run the code, or:
+If you didn't do so already, get set up for the remaining exercises. Either [download this R script](https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E03_PCA/S03E03_PCA.R), open it in RStudio, and run the code, or:
 
 -   Open a new R script in RStudio (`File` => `New File` => `R Script`)
 
 -   Save the script, as something along the lines of `codeclub_S03E03_PCA.R`
 
--   Copy the following code into the script:
+-   Copy the following code into the script and then run it in the R console:
 
 <div class="highlight">
 
@@ -374,8 +374,6 @@ If you didn't do so already, get set up for the remaining exercises. Either down
 <span class='nv'>pca</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/prcomp.html'>prcomp</a></span><span class='o'>(</span><span class='nv'>penguins_for_pca</span>, scale <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span></code></pre>
 
 </div>
-
--   Run the code above in the R console.
 
 </div>
 
@@ -466,7 +464,7 @@ All elements of the output are explained in the next section of this page.
 
 Let's take a quick look together at the three most important elements in the object returned by [`prcomp()`](https://rdrr.io/r/stats/prcomp.html), which we named `pca`:
 
--   **`pca$sdev`** is a vector of standard deviations associated with each principal component (PC), i.e. it is the **amount of variation explained by each PC**. We also saw this information when running [`summary(pca)`](https://rdrr.io/r/base/summary.html).
+-   **`pca$sdev`** is a vector of standard deviations associated with each principal component (PC), i.e. it is the **amount of variation explained by each PC**. We also saw this information when running [`summary(pca)`](https://rdrr.io/r/base/summary.html) and we'll use it to create the *scree plot*.
 
     <div class="highlight">
 
@@ -475,20 +473,7 @@ Let's take a quick look together at the three most important elements in the obj
 
     </div>
 
--   **`pca$rotation`** is a matrix that contains the **loadings** for each variable in each PC. These are the "recipes" for creating each PC, with *higher absolute values* indicating a larger influence of the variable on the PC. The *sign* (- or +) matters too: in PC1, larger values of `bill_depth_mm` lower the PC value, and vice versa for the other three variables.
-
-    <div class="highlight">
-
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>rotation</span>
-      <span class='c'>#&gt;                          PC1         PC2        PC3        PC4</span>
-      <span class='c'>#&gt; bill_length_mm     0.4537532 -0.60019490 -0.6424951  0.1451695</span>
-      <span class='c'>#&gt; bill_depth_mm     -0.3990472 -0.79616951  0.4258004 -0.1599044</span>
-      <span class='c'>#&gt; flipper_length_mm  0.5768250 -0.00578817  0.2360952 -0.7819837</span>
-      <span class='c'>#&gt; body_mass_g        0.5496747 -0.07646366  0.5917374  0.5846861</span></code></pre>
-
-    </div>
-
--   **`pca$x`** is the most-used part of the output: a matrix containing the **scores (or coordinates)** for each sample for each PC, used to create a score plot.
+-   **`pca$x`** is the most-used part of the output: a matrix containing the **scores (or coordinates)** for each sample for each PC, used to create a *score plot* and part of the *biplot*.
 
     <div class="highlight">
 
@@ -500,6 +485,19 @@ Let's take a quick look together at the three most important elements in the obj
       <span class='c'>#&gt; [4,] -1.882455  0.01233268  0.62792772 -0.4721826</span>
       <span class='c'>#&gt; [5,] -1.917096 -0.81636958  0.69999797 -0.1961213</span>
       <span class='c'>#&gt; [6,] -1.770356  0.36567266 -0.02841769  0.5046092</span></code></pre>
+
+    </div>
+
+-   **`pca$rotation`** is a matrix that contains the **loadings** for each variable in each PC. These are the "recipes" for creating each PC, with *higher absolute values* indicating a larger effect of the variable on the PC. The *sign* (- or +) matters too: in PC1, larger values of `bill_depth_mm` lower the PC value, and vice versa for the other three variables. This matrix will be used in creating the *biplot*.
+
+    <div class="highlight">
+
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>pca</span><span class='o'>$</span><span class='nv'>rotation</span>
+      <span class='c'>#&gt;                          PC1         PC2        PC3        PC4</span>
+      <span class='c'>#&gt; bill_length_mm     0.4537532 -0.60019490 -0.6424951  0.1451695</span>
+      <span class='c'>#&gt; bill_depth_mm     -0.3990472 -0.79616951  0.4258004 -0.1599044</span>
+      <span class='c'>#&gt; flipper_length_mm  0.5768250 -0.00578817  0.2360952 -0.7819837</span>
+      <span class='c'>#&gt; body_mass_g        0.5496747 -0.07646366  0.5917374  0.5846861</span></code></pre>
 
     </div>
 
@@ -535,7 +533,7 @@ Let's take a quick look together at the three most important elements in the obj
 
 ## 6 - Scree plot
 
-A "scree plot"[^3] is a barplot that shows the **amount of variance (the *eigenvalue*) explained by each PC.** (These are the square roots of the standard deviations in `pca$sdev`.)
+A "scree plot"[^3] is a barplot that shows the **amount of variation explained by each PC.**
 
 We'll make a base R version of this plot (gasp!) because it is so quick to make, and we don't need this figure to be fancy:
 
@@ -546,6 +544,8 @@ We'll make a base R version of this plot (gasp!) because it is so quick to make,
 <img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
+
+In this scree plot, we show the variance (i.e. the *eigenvalue*) associated with each PC (these are the square roots of the standard deviations in `pca$sdev`.)
 
 <div class="alert alert-note">
 
@@ -569,7 +569,7 @@ A "score plot" shows **the scores (coordinates) for each sample along two PCs**,
 
 We're going to need a dataframe to plot. But if we were to [`broom::tidy()`](https://generics.r-lib.org/reference/tidy.html) the scores matrix (`pca$x`), akin to what we've done with t-test and ANOVA output in previous weeks, we would get a dataframe with all PCs in one column that wouldn't be that easy to plot.
 
-So in this case, we'll just manipulate `pca$x` ourselves -- in particular, we want to add the source `penguins_noNA` dataframe back to it, which will allow us to color points by, say, `species`.
+So in this case, we'll just manipulate `pca$x` ourselves -- in particular, we want to add the source `penguins_noNA` dataframe back to it, which will allow us to color the points by, say, `species`.
 
 <div class="highlight">
 
@@ -608,11 +608,23 @@ Now we're ready to create the plot:
 
 </div>
 
+<div class="alert alert-note">
+
+<div>
+
+#### Interpretation
+
+Across these four measurements, Gentoo Penguins can be very clearly distinguished from the other two species, whereas among Adelie and Chinstrap Penguins, there are average differences but they are not fully separable.
+
+</div>
+
+</div>
+
 ### A better aspect ratio
 
 One way to improve our plot is to set the aspect ratio (the proportional relationship between the height and the width) according to the relative percentages of variation explained by the two plotted PCs: because PC1 on the x-axis explains more variation, we want the plot to be wide.
 
-To get the percentages in a dataframe, now we *will* use the [`tidy()`](https://generics.r-lib.org/reference/tidy.html) function. But because the output of [`prcomp()`](https://rdrr.io/r/stats/prcomp.html) contains multiple matrices, we'll have to point [`tidy()`](https://generics.r-lib.org/reference/tidy.html) to the eigenvalues using the `matrix` argument (see the [docs]((https://broom.tidymodels.org/reference/tidy.prcomp.html))):
+To get the percentages in a dataframe, now we *will* use the [`tidy()`](https://generics.r-lib.org/reference/tidy.html) function. But because the output of [`prcomp()`](https://rdrr.io/r/stats/prcomp.html) contains multiple elements, we'll have to point [`tidy()`](https://generics.r-lib.org/reference/tidy.html) to the `$sdev` element using the `matrix` argument (see the [docs]((https://broom.tidymodels.org/reference/tidy.prcomp.html))):
 
 <div class="highlight">
 
@@ -658,20 +670,6 @@ Finally, we can modify the aspect ratio, which is expressed as `height / width` 
 <img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
-
-<div class="alert alert-note">
-
-<div>
-
-#### Interpretation
-
-Across these four measurements, Gentoo Penguins can be very clearly distinguished from the other two species, whereas among Adelie and Chinstrap Penguins, there are average differences but they are not fully separable.
-
-</div>
-
-</div>
-
-<br>
 
 ------------------------------------------------------------------------
 
@@ -786,7 +784,7 @@ What we need to add are the variable loading, which we'll do with `geom_segment(
 
 ### Exercise 4
 
-Above, we plotted the scores for the first two PCs in our score plot and biplot. Now, *create a biplot with another combination of PCSs* (e.g., PC1 & PC3, or PC3 & PC4 -- whatever you think will be more informative).
+Above, we plotted the scores for the first two PCs (PC1 and PC2) in our score plot and biplot. Now, create a biplot with another combination of two PCs.
 
 Take a look at the help for the [`fviz_pca()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) function by typing  
 [`?fviz_pca`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) to find out how you might be able to plot different PCs.
@@ -798,7 +796,9 @@ Take a look at the help for the [`fviz_pca()`](https://rdrr.io/pkg/factoextra/ma
 
 <br>
 
-The `axes` argument to [`fviz_pca()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) controls which axes will be plotted; this argument accepts a vector of two numbers.
+-   The `axes` argument to [`fviz_pca()`](https://rdrr.io/pkg/factoextra/man/fviz_pca.html) controls which axes will be plotted; this argument accepts a vector of two numbers.
+
+-   Do you think it would be worth plotting PC4, which explains \<3% of the variation? Would plotting PC3 with one of the PCs we already plotted be informative?
 
 </details>
 <details>
@@ -840,7 +840,7 @@ Behold, now we can distinguish much better between Adelie and Chinstrap Penguins
 
 Run the PCA for just one of the three penguin species.
 
-Then, make a biplot of the results, in which you color by something else than `species`, e.g. by `sex`. (If you want, also make a scree plot and/or a score plot.)
+Then, make a biplot of the results, in which you color the points by something else than `species`, e.g. by `sex`. (If you want, also make a scree plot and/or a score plot.)
 
 <details>
 <summary>
@@ -849,7 +849,7 @@ Then, make a biplot of the results, in which you color by something else than `s
 
 <br>
 
--   Use the *dplyr* function [`filter()`](https://rdrr.io/r/stats/filter.html) on `penguins_noNA` object to select rows corresponding to one penguin species.
+-   Use the *dplyr* function [`filter()`](https://rdrr.io/r/stats/filter.html) on the `penguins_noNA` object to select rows corresponding to one penguin species.
 
 -   After that, the code will be nearly identical to that used before; just make sure to refer to the correct objects if you copy-and-paste code.
 
@@ -955,7 +955,9 @@ Make a scree plot of our original PCA results with *ggplot2* instead of base R.
 
 <br>
 
-Use the `pca_eigen` dataframe that we created above for plotting, and use the geom `geom_col()`.
+-   Use the `pca_eigen` dataframe that we created above for plotting, and use the geom `geom_col()`.
+
+-   Think about what exactly you want to plot on the y-axis. The variance, like in the base R scree plot? Or the proportion/percentage of the variance explained?
 
 </details>
 <details>
@@ -964,6 +966,8 @@ Use the `pca_eigen` dataframe that we created above for plotting, and use the ge
 </summary>
 
 <br>
+
+There are a couple of different things that could reasonably be put on the y-axis, but perhaps the clearest option is to put the proportion or percentage of variation (=variance) explained, like below:
 
 <div class="highlight">
 
@@ -975,6 +979,8 @@ Use the `pca_eigen` dataframe that we created above for plotting, and use the ge
 <img src="figs/unnamed-chunk-34-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
+
+(Note once again that the column in `pca_eigen` is called `percent`, but it actually contains proportions.)
 
 </div>
 </div>
