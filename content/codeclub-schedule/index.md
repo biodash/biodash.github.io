@@ -13,25 +13,40 @@ We will meet on **Thursdays at 2 pm** starting on January 13th, 2022.
 [Sign up using the form](/codeclub-about/#sign-up)!
 
 We will be meeting over Zoom (sign up for the link),
-but you can also join Jessica, who will connect from Howlett 340, in person.
+but you can also join Jessica in person in Howlett 340.
 
 We have also included these sessions in the [BioDASH calendar](/events/#calendar).
 
-Here is the schedule for the first several sessions:
+### Upcoming sessions
+
+| Session     | Date      | Presenter    | Topic (+ link)                                                   | Topic block              |
+|-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
+| **S03E04**  | Feb 03    | Stephen      | **Correlation and regression**                                   | Basic statistics in R    |
+| **S03E05**  | Feb 10    | Michael B.   | **Working with data structures returned by stats functions**     | Basic statistics in R    |
+| **S03E06**  | Feb 17    | TBA          | TBA                                                              | TBA                      |
+| **S03E07**  | Feb 24    | TBA          | TBA                                                              | TBA                      |
+| **S03E08**  | Mar 03    | TBA          | TBA                                                              | TBA                      |
+| **S03E09**  | Mar 10    | TBA          | TBA                                                              | TBA                      |
+| -           | Mar 17    | -            | _(Spring Break)_                                                 | -                        |
+| **S03E10**  | Mar 24    | TBA          | TBA                                                              | TBA                      |
+| **S03E11**  | Mar 31    | TBA          | TBA                                                              | TBA                      |
+| **S03E12**  | Apr 07    | TBA          | TBA                                                              | TBA                      |
+| **S03E13**  | Apr 14    | TBA          | TBA                                                              | TBA                      |
+| **S03E14**  | Apr 21    | TBA          | TBA                                                              | TBA                      |
+
+### Previous sessions
 
 | Session     | Date      | Presenter    | Topic (+ link)                                                   | Topic block              |
 |-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
 | **S03E01**  | Jan 13    | Mike S.      | [**T-tests**](/codeclub/s03e01_ttests/)                          | Basic statistics in R    |
-| **S03E02**  | Jan 20    | Jessica      | **ANOVA**                                                        | Basic statistics in R    |
-| **S03E03**  | Jan 27    | Jelmer       | **Principal Component Analysis**                                 | Basic statistics in R    |
-| **S03E04**  | Feb 03    | Stephen      | **Correlation and regression**                                   | Basic statistics in R    |
-| **S03E05**  | Feb 10    | Michael B.   | **Working with data structures returned by stats functions**     | Basic statistics in R    |
+| **S03E02**  | Jan 20    | Jessica      | [**ANOVA**](/codeclub/s03e02_anova/)                             | Basic statistics in R    |
+| **S03E03**  | Jan 27    | Jelmer       | [**Principal Component Analysis**](/codeclub/s03e03_pca/)        | Basic statistics in R    |
 
 <br>
 
 ------------------------------------------------------------------------
 
-## Past sessions
+## Previous semesters
 
 Ask us for access to the Zoom recordings of previous Code Club sessions!
 
@@ -54,7 +69,7 @@ Ask us for access to the Zoom recordings of previous Code Club sessions!
 | **S02E13**  | Dec 09 | Jessica                    | [**Interactive plots with _Plotly_**](/codeclub/s02e12_plotly/)                          | Plotting in R |
 
 
-### Season 1: '20-'21
+### Fall '20 - Spring '21
 
 | Session nr. | Date         | Presenter  | Topic (+ link)                                                                   | Other                   |
 |-------------|--------------|------------|----------------------------------------------------------------------------------|-------------------------|
