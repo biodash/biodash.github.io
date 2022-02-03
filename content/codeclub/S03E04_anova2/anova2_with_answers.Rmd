@@ -1,0 +1,449 @@
+---
+title: "ANOVA Part 2"
+author: "Jessica Cooperstone"
+date: "2/2/2022"
+output: html_document
+---
+
+# Introduction
+We have gone through a first pass of running ANOVAs in [Code Club a couple weeks ago](/content/S03E02_anova/) but didn't have the time to go through all of the content.  We are going to re-visit that material today.
+
+Often people are first introduced to the R programming language when they are wanting to conduct statistical analyses. My experience is that beginners are often able to conduct the analysis they want, and print their results to the console. But, the process of locating and then using the output of their analysis tends to be more complex.
+
+Today, we are going to go over how to:
+
+* test if our data is suitable for running ANOVA
+* run an ANOVA (parametric) or Kruskal Wallis (non-parametric) test
+* run posthoc tests to understand group differences
+* use the ANOVA data output object as a means to understand R data structure.
+
+The purpose of today's session is more to give you practical experience with running and retrieving ANOVA analysis output, than teaching about the assumptions and background of the test itself.
+
+If you are looking for a good statistics class, I would recommend Dr. Kristin Mercer's [HCS 8887 Experimental Design](https://hcs.osu.edu/courses/hcs-8887).
+
+### Load libraries
+
+We are going to start with our favorite dataset `palmerpenguins` to provide the input data for our analysis.
+
+```{r}
+library(tidyverse)
+library(palmerpenguins) # for data
+library(rstatix) # for testing assumptions
+library(agricolae) # for post-hoc comparison of groups
+```
+
+## 1. Getting acclimated
+
+Some words on syntax: the dataset `penguins` is an object within the `palmerpenguins` package.  If you call the object `penguins` (after executing `library(palmerpenguins)`), you will be able to see what is contained within that dataframe.
+```{r}
+penguins
+```
+
+However, `penguins` will not be in your environment tab because it is not in your local environment. You can use it without it being in your local environment, but if you are bothered by this, you can save a copy in your local environment such it shows up in that top right pane.
+```{r}
+penguins <- penguins
+```
+
+What is within this dataset?
+```{r}
+glimpse(penguins)
+```
+
+## 2. Testing assumptions
+I know I said we weren't going to talk about this, but I thought I'd be remiss if I didn't show you how to test that you aren't violating any of the assumptions needed to conduct an ANOVA.  We went over this a little bit back in the session put together by Daniel Quiroz on [ggpubr](https://biodash.github.io/codeclub/s02e10_ggpubr/) and adding statistical results to ggplots.
+
+Briefly, in order to use parametric procedures (like ANOVA), we need to be sure our data meets the assumptions for 1) normality and 2) constant variance. This can be done in a few different ways.
+
+#### Shapiro-Wilk test for normality
+We are going to use the Shapiro-Wilk test (using the function `shapiro_test()` which is in the package `rstatix` to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function [`shapiro.test()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test), which just means you can use it with pipes.
+
+Our question is:
+
+* Does`bill_length_mm` vary by `species` in female penguins?
+```{r}
+penguins %>%
+  filter(sex == "female") %>%
+  drop_na() %>%
+  rstatix::shapiro_test(bill_length_mm)
+
+penguins %>%
+  drop_na() %>%
+  filter(sex == "female") %>%
+  group_by(species) %>%
+  rstatix::shapiro_test(bill_length_mm)
+```
+
+Can we visualize normality in another way?
+
+Let's quick make a new dataframe that includes only the female penguins, and drop missing values, so that we don't have to keep including the `filter()` and `drop_na()` statements.
+```{r}
+female_penguins <- penguins %>%
+  filter(sex == "female") %>%
+  drop_na()
+```
+
+Visualizing with a histogram by `species`.
+```{r}
+female_penguins %>%
+  ggplot(aes(x = bill_length_mm)) +
+  geom_histogram() +
+  facet_grid(cols = vars(species))
+```
+We can see here too that the Chinstrap penguins look maybe not that normal.  This is consistent with the results from the Shapiro test.
+
+##### Log transforming
+Would our data look more normal if we log transformed it?  Let's see.  We can use the function [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) to create a new column called `bill_length_mm_log2` which will have the data from `bill_length_mm` but log transformed using base 2 (using the base R function [`log2()`](https://www.rdocumentation.org/packages/SparkR/versions/2.1.2/topics/log2)).
+
+The syntax of `mutate()` is like this:
+
+* `mutate(new_variable = function(existing_variable))`
+```{r}
+log_female_penguins <- female_penguins %>%
+  mutate(bill_length_mm_log2 = log2(bill_length_mm))
+```
+
+Testing using `shapiro_test()` again.
+```{r}
+log_female_penguins %>% 
+  # don't need drop_na() because we already did that
+  group_by(species) %>%
+  shapiro_test(bill_length_mm_log2)
+```
+
+Still not passing the Shapiro Test.  Let's still look at this visually.
+```{r}
+log_female_penguins %>%
+  ggplot(aes(x = bill_length_mm_log2)) +
+  geom_histogram() +
+  facet_grid(cols = vars(species))
+```
+
+Doesn't look very different from the non-log2 transformed data.  Ok, well we tried.
+
+#### Equal variance
+We can test for equal variance using Levene's test, [`levene_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/levene_test) which is part of the `rstatix` package.  Again, this is a pipe-friendly wrapper for the function [`levene.test()`](https://www.rdocumentation.org/packages/lawstat/versions/3.4/topics/levene.test).
+```{r}
+female_penguins %>%
+  levene_test(bill_length_mm ~ species)
+```
+Our data meets the assumption for equal variance, but not for normality, so we will need to be sure to select a test that does not have an assumption of normality.
+
+### 3. Kruskal Wallis test function
+
+The Kruskal Wallis test is the non-parametric version of a one-way ANOVA.  This non-parametric test tests whether samples are coming from the same distribution, but uses ranks instead of means.
+
+We want to see if there are any differences in bill length (`bill_length_mm`) in penguins by `species`.  Since our data violates the assumptions of normality, we should do this using a test that does not require normality, and we can use the [Kruskal Wallis test](https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance).  The Kruskal-Wallis test, can be run using the `rstatix` function [`kruskal_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/kruskal_test).
+
+First let's get some descriptive information about our data.
+
+```{r}
+female_penguins %>%
+  group_by(species) %>%
+  count()
+```
+
+If we want to learn more about the function `kruskal_test()` we can do so using the code below. The help documentation will show up in the bottom right quadrant of your RStudio.
+```{r}
+?kruskal_test()
+```
+
+We can run a Kruskal-Wallis test by indicating our model.
+```{r}
+bill_length_kruskal <- female_penguins %>%
+  kruskal_test(bill_length_mm ~ species)
+```
+
+Looking at the output using `summary()`.
+```{r}
+summary(bill_length_kruskal)
+```
+
+The function `kruskal_test()` already puts the output of the function into a tidy format, so we can simply view it.
+```{r}
+View(bill_length_kruskal)
+```
+
+We can also look at our data by visually plotting it, as below.
+```{r}
+female_penguins %>%
+  ggplot(aes(x = species, y = bill_length_mm)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.3)
+```
+
+# Breakout room 1
+We want to know if there are any significant differences in `bill_depth_mm` by `species` in male penguins.
+
+#### Exercise 1
+Test your assumptions for normality to determine what would be the appropriate test to do to assess means separation.
+
+Shapiro-Wilk Test
+```{r}
+# create df with male penguins and no NAs
+male_penguins <- penguins %>%
+  filter(sex == "male") %>%
+  drop_na()
+```
+
+```{r}
+male_penguins %>%
+  group_by(species) %>%
+  rstatix::shapiro_test(bill_depth_mm)
+```
+
+Visualize
+```{r}
+male_penguins %>%
+  ggplot(aes(x = bill_depth_mm)) +
+  geom_histogram() +
+  facet_grid(cols = vars(species))
+```
+
+See if log-transforming your data would allow you to use parametric tests.
+```{r}
+log_male_penguins <- male_penguins %>%
+  mutate(bill_depth_mm_log2 = log2(bill_depth_mm))
+```
+
+Testing using `shapiro_test()` again.
+```{r}
+log_male_penguins %>% 
+  # don't need drop_na() because we already did that
+  group_by(species) %>%
+  shapiro_test(bill_depth_mm_log2)
+```
+Ok!  We could use log2 transformed data
+
+Visualize.
+```{r}
+log_male_penguins %>%
+  ggplot(aes(x = bill_depth_mm_log2)) +
+  geom_histogram() +
+  facet_grid(cols = vars(species))
+```
+
+#### Exercise 2 
+Test your assumptions for equal variance to determine what would be the appropriate test to do to assess means separation.
+
+Equal variance
+```{r}
+male_penguins %>%
+  levene_test(bill_depth_mm ~ species)
+```
+
+#### Exercise 3
+Conduct your Kruskal-Wallis test or ANOVA to see if there is any overall significant effect of `species` on `bill_depth_mm` of male penguins.
+
+Kruskal-Wallis
+```{r}
+bill_depth_kruskal <- male_penguins %>%
+  kruskal_test(bill_depth_mm ~ species)
+```
+
+The function `kruskal_test()` already puts the output of the function into a tidy format, so we can simply view it.
+```{r}
+View(bill_depth_kruskal)
+```
+
+ANOVA - to use this you need to be using normal data (here, the log transformed data).
+```{r}
+bill_depth_anova <- 
+  aov(data = log_male_penguins,
+      formula = bill_depth_mm_log2 ~ species)
+```
+
+```{r}
+summary(bill_depth_anova)
+```
+
+## 4. Posthoc group analysis
+
+Now that we've seen that `species` are significant effectors of `bill_length_mm`, our next logical question might be, which species specifically are different from each other?  We can determine this by conducting a post-hoc test. We will do our post-hoc analysis using Dunn's test (which is for specifically ranked data) and the function [`dunn_test()`](https://rdrr.io/cran/rstatix/man/dunn_test.html) which is a part of `rstatix`.
+```{r}
+dunn_bill_length <- female_penguins %>%
+  dunn_test(bill_length_mm ~ species,
+            p.adjust.method = "BH")
+```
+
+Like we did with t-tests, you can also look at the resulting `dunn_test()` object (here, `dunn_bill_length`) in your environment pane.
+
+```{r}
+View(dunn_bill_length)
+```
+
+From this result, we can see that Adelie is significantly different than Chinstrap and Gentoo, but Chinstrap and Gentoo are not significantly different from each other.
+
+The structure of this resulting object `dunn_bill_length` can be determined using the code below.
+```{r}
+class(dunn_bill_length)
+```
+
+This df does not have a 'groups' column, but if we want to plot in the same way, we can make a new object which we use for plotting.  I'm going to show you here how to do this manually.
+```{r}
+dunn_for_plotting <- data.frame(species = c("Adelie", "Chinstrap", "Gentoo"),
+                                groups = c("a", "c", "b"))
+```
+
+
+## 5. Bringing it together in a plot
+
+We already looked at a first-pass plot, but let's customize it now, and add our statistical info.  Here is our base plot.
+```{r}
+female_penguins %>%
+  ggplot(aes(x = species, y = bill_length_mm)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.3)
+```
+
+First let's make the plot more aesthetically pleasing.
+```{r}
+(bill_length_plot <- female_penguins %>%
+  ggplot(aes(x = species, y = bill_length_mm, color = species)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.3) +
+  theme_classic() +
+  theme(legend.position = "none") + # remove legend bc we don't need it
+  labs(x = "Species",
+       y = "Bill Length, in mm",
+       title = "Penguin Culmen Bill Length Among Different Species",
+       subtitle = "Data collected from Palmer LTER, Antarctica"))
+```
+
+We want to add the letters to this plot, so we can tell which groups of species by sex are significantly different.  We are going to figure out what the maximum `bill_length_mm` for each species by sex is, so it will help us determine where to put our letter labels.  Then, we cna add our labels to be higher than the largest data point.
+```{r}
+bill_length_max <- female_penguins %>%
+  group_by(species) %>%
+  summarize(max_bill_length_mm = max(bill_length_mm))
+
+bill_length_max
+```
+
+Let's add our `bill_length_max` back to the df with our post-hoc groups `dunn_for_plotting`.
+```{r}
+bill_for_plotting <- full_join(dunn_for_plotting, bill_length_max,
+                               by = "species")
+
+bill_for_plotting
+```
+
+Let's plot.
+```{r}
+bill_length_plot +
+  geom_text(data = bill_for_plotting,
+            aes(x = species,
+                y = 3 + max_bill_length_mm, 
+                color = species,
+                label = groups)) +
+    labs(caption = "Different letters indicate significant difference as determined by \noa Kruskal-Wallis with Dunn's post-hoc means separation")
+```
+
+Also remember Daniel showed us how we can do [somthing similar](https://biodash.github.io/codeclub/s02e10_ggpubr/) using the package `ggpubr`.
+
+# Breakout rooms 2 
+
+### Exercise 1
+Conduct a post-hoc analysis to understand which male penguin `species` have significantly different `bill_depth_mm`.
+
+#### Dunn's test
+```{r}
+dunn_bill_depth <- male_penguins %>%
+  dunn_test(bill_depth_mm ~ species,
+            p.adjust.method = "BH")
+```
+
+```{r}
+View(dunn_bill_depth)
+```
+
+#### Parametric post-hoc test
+```{r}
+bonferroni_bill_depth <- agricolae::LSD.test(bill_depth_anova, 
+                                             trt = "species", 
+                                             p.adj = "bonferroni",
+                                             console = TRUE)
+```
+
+### Exercise 2
+Bring it all together in a plot.
+
+#### Kruskal-Wallis and Dunn's post-hoc test
+```{r}
+(bill_depth_plot_kruskal <- male_penguins %>%
+  ggplot(aes(x = species, y = bill_depth_mm, color = species)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.3) +
+  theme_classic() +
+  theme(legend.position = "none") + # remove legend bc we don't need it
+  labs(x = "Species",
+       y = "Bill Depth, in mm",
+       title = "Penguin Culmen Bill Depth Among Different Species",
+       subtitle = "Data collected from Palmer LTER, Antarctica"))
+```
+
+```{r}
+bill_depth_max <- male_penguins %>%
+  group_by(species) %>%
+  summarize(max_bill_depth_mm = max(bill_depth_mm))
+
+bill_depth_max
+```
+
+```{r}
+View(dunn_bill_depth)
+
+dunn_depth_for_plotting <- data.frame(species = c("Adelie", "Chinstrap", "Gentoo"),
+                                groups = c("a", "a", "b"))
+
+depth_for_plotting_kruskal <- full_join(dunn_depth_for_plotting, bill_depth_max,
+                               by = "species")
+
+depth_for_plotting_kruskal
+```
+
+Let's plot.
+```{r}
+bill_depth_plot_kruskal +
+  geom_text(data = depth_for_plotting_kruskal,
+            aes(x = species,
+                y = 1 + max_bill_depth_mm, 
+                color = species,
+                label = groups)) +
+  labs(caption = "Different letters indicate significant difference as determined by \nthe Kruskal Wallis with Dunn's test for post-hoc means separation")
+```
+
+#### ANOVA and Bonferroni post-hoc test
+```{r}
+bonferroni_bill_depth$groups
+
+bonferroni_bill_depth_plotting <- bonferroni_bill_depth$groups %>%
+  rownames_to_column(var = "species")
+
+bonferroni_bill_depth_plotting
+```
+
+```{r}
+bonferroni_bill_depth_plotting <- full_join(bonferroni_bill_depth_plotting, bill_depth_max,
+                               by = "species")
+
+bonferroni_bill_depth_plotting
+```
+
+```{r}
+(bill_depth_plot_bonf <- male_penguins %>%
+  ggplot(aes(x = species, y = bill_depth_mm, color = species)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.3) +
+  geom_text(data = bonferroni_bill_depth_plotting,
+            aes(x = species,
+                y = 1 + max_bill_depth_mm, 
+                color = species,
+                label = groups))) +
+  theme_classic() +
+  theme(legend.position = "none") + # remove legend bc we don't need it
+  labs(x = "Species",
+       y = "Bill Depth, in mm",
+       title = "Penguin Culmen Bill Depth Among Different Species",
+       subtitle = "Data collected from Palmer LTER, Antarctica",
+       caption = "Different letters indicate significant difference as determined by \none-way ANOVA with Bonferroni post-hoc means separation")
+```
+
