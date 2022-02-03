@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: 3bbd7d41454b9703
+rmd_hash: e3754d4e51713264
 
 ---
 
@@ -456,7 +456,12 @@ Test your assumptions for normality to determine what would be the appropriate t
 <summary>
 Hints (click here)
 </summary>
-<br> Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal. <br>
+
+<br>
+
+Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal.
+
+<br>
 </details>
 
 <br>
@@ -569,7 +574,12 @@ Test your assumptions for equal variance to determine what would be the appropri
 <summary>
 Hints (click here)
 </summary>
-<br> You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance. <br>
+
+<br>
+
+You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance.
+
+<br>
 </details>
 
 <br>
@@ -740,7 +750,7 @@ The structure of this resulting object `dunn_bill_length` can be determined usin
 <span class='c'>#&gt;   .. ..$ sex              : Factor w/ 2 levels "female","male": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class='c'>#&gt;   .. ..$ year             : int [1:165] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span>
 <span class='c'>#&gt;   ..$ formula        :Class 'formula'  language bill_length_mm ~ species</span>
-<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x561e79ddb100&gt; </span>
+<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x55a775e9b4b8&gt; </span>
 <span class='c'>#&gt;   ..$ p.adjust.method: chr "BH"</span>
 <span class='c'>#&gt;   ..$ detailed       : logi FALSE</span>
 <span class='c'>#&gt;   ..$ method         : chr "dunn_test"</span></code></pre>
