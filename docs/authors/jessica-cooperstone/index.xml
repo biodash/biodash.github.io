@@ -13,6 +13,763 @@
     </image>
     
     <item>
+      <title>S03E04: ANOVA 2</title>
+      <link>https://biodash.github.io/codeclub/s03e04_anova2/</link>
+      <pubDate>Wed, 02 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/s03e04_anova2/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;prep-homework&#34;&gt;Prep homework&lt;/h2&gt;
+&lt;h3 id=&#34;basic-computer-setup&#34;&gt;Basic computer setup&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;If you didn&amp;rsquo;t already do this, please follow the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/04_ggplot2/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has pointers for if you&amp;rsquo;re new to R or RStudio.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;If you&amp;rsquo;re able to do so, please open RStudio a bit before Code Club starts &amp;ndash; and in case you run into issues, please join the Zoom call early and we&amp;rsquo;ll help you troubleshoot.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;new-to-ggplot&#34;&gt;New to ggplot?&lt;/h3&gt;
+&lt;p&gt;This isn&amp;rsquo;t a ggplot specific session, though we will be using it a bit. Check out the past Code Club sessions covering &lt;code&gt;ggplot2&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/04_ggplot2/&#34;&gt;S01E04&lt;/a&gt;: intro to ggplot2&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/05_ggplot-round-2/&#34;&gt;S01E05&lt;/a&gt;: intro to ggplot2 round 2&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/10_faceting-animating/&#34;&gt;S01E10&lt;/a&gt;: faceting and animating&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s02e06_ggplot2/&#34;&gt;S02E06&lt;/a&gt;: another intro to ggplot2&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s02e07_ggplot2_part2/&#34;&gt;S02E07&lt;/a&gt;: a second intro to ggplot2 round 2&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s02e08_multiple_plots/&#34;&gt;S02E08&lt;/a&gt;: combining plots using faceting&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s02e09_multiple_plots_part2/&#34;&gt;S02E09&lt;/a&gt;: combining plots using faceting and patchwork&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s02e10_ggpubr/&#34;&gt;S02E10&lt;/a&gt;: adding statistics to plots&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s02e12_plotly/&#34;&gt;S02E11&lt;/a&gt;: making interactive plots with plotly&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you&amp;rsquo;ve never used &lt;code&gt;ggplot2&lt;/code&gt; before (or even if you have), you may find &lt;a href=&#34;https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this cheat sheet&lt;/a&gt; useful.&lt;/p&gt;
+&lt;h3 id=&#34;adding-statistics-to-plots&#34;&gt;Adding statistics to plots&lt;/h3&gt;
+&lt;p&gt;We had a previous session &lt;a href=&#34;https://biodash.github.io/codeclub/s02e10_ggpubr/&#34;&gt;S02E10&lt;/a&gt; developed by Daniel Quiroz that covers the package &lt;code&gt;ggpubr&lt;/code&gt; and adding statistics to ggplots.&lt;/p&gt;
+&lt;h3 id=&#34;we-already-did-t-tests-and-anova-part-1&#34;&gt;We already did t-tests and ANOVA part 1&lt;/h3&gt;
+&lt;p&gt;Mike Sovic covered in the last code club &lt;a href=&#34;https://biodash.github.io/codeclub/s03e01_ttests/&#34;&gt;S03E01&lt;/a&gt; how to run t-tests in R. We will be building on what we learned last week.&lt;/p&gt;
+&lt;p&gt;I covered ANOVA two weeks ago &lt;a href=&#34;https://biodash.github.io/codeclub/s03e02_anova/&#34;&gt;S03E02&lt;/a&gt; and we will be building off that session today.&lt;/p&gt;
+&lt;br&gt;
+&lt;h2 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h2&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Click here to get an Rmd (optional)
+&lt;/summary&gt;
+&lt;h3 id=&#34;rmarkdown-for-today&#34;&gt;RMarkdown for today&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# directory &lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/files2.html&#39;&gt;dir.create&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;S03E04&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# directory for our RMarkdown&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# (&#34;recursive&#34; to create two levels at once.)&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/files2.html&#39;&gt;dir.create&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;S03E04/Rmd/&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# save the url location for today&#39;s script&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;todays_Rmd&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; 
+  &lt;span class=&#39;s&#39;&gt;&#34;https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S03E04_anova2/anova2.Rmd&#34;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# indicate the name of the new Rmd&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;S03E04_Rmd&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;S03E04/Rmd/S03E04_anova2.Rmd&#34;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# go get that file! &lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;todays_Rmd&lt;/span&gt;,
+              destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;S03E04_Rmd&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;We have gone through a first pass of running ANOVAs in &lt;a href=&#34;https://biodash.github.io/codeclub/content/S03E02_anova/&#34;&gt;Code Club a couple weeks ago&lt;/a&gt; but didn&amp;rsquo;t have the time to go through all of the content. We are going to re-visit that material today.&lt;/p&gt;
+&lt;p&gt;Often people are first introduced to the R programming language when they are wanting to conduct statistical analyses. My experience is that beginners are often able to conduct the analysis they want, and print their results to the console. But, the process of locating and then using the output of their analysis tends to be more complex.&lt;/p&gt;
+&lt;p&gt;Today, we are going to go over how to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;test if our data is suitable for running ANOVA&lt;/li&gt;
+&lt;li&gt;run an ANOVA (parametric) or Kruskal Wallis (non-parametric) test&lt;/li&gt;
+&lt;li&gt;run posthoc tests to understand group differences&lt;/li&gt;
+&lt;li&gt;use the ANOVA data output object as a means to understand R data structure.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you are looking for a good statistics class, I would recommend Dr. Kristin Mercer&amp;rsquo;s &lt;a href=&#34;https://hcs.osu.edu/courses/hcs-8887&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;HCS 8887 Experimental Design&lt;/a&gt;.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;--load-libraries-get-data&#34;&gt;- Load libraries, get data&lt;/h4&gt;
+&lt;p&gt;We are going to start with our favorite dataset &lt;code&gt;palmerpenguins&lt;/code&gt; to provide the input data for our analysis.&lt;/p&gt;
+&lt;p&gt;If you don&amp;rsquo;t have any of the packages below, use &lt;a href=&#34;https://rdrr.io/r/utils/install.packages.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;install.packages()&lt;/code&gt;&lt;/a&gt; to download them.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# for data&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/&#39;&gt;rstatix&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# for testing assumptions&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;agricolae&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# for post-hoc comparison of groups&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1---getting-acclimated&#34;&gt;1 - Getting acclimated&lt;/h2&gt;
+&lt;p&gt;Some words on syntax: the dataset &lt;code&gt;penguins&lt;/code&gt; is an object within the &lt;code&gt;palmerpenguins&lt;/code&gt; package. If you call the object &lt;code&gt;penguins&lt;/code&gt; (after executing &lt;a href=&#34;https://allisonhorst.github.io/palmerpenguins/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library(palmerpenguins)&lt;/code&gt;&lt;/a&gt;), you will be able to see what is contained within that dataframe.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 344 × 8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; Adelie  Torgersen           39.1          18.7               181        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;750&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; Adelie  Torgersen           39.5          17.4               186        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;800&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; Adelie  Torgersen           40.3          18                 195        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;250&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; Adelie  Torgersen           &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                  &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;          &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; Adelie  Torgersen           36.7          19.3               193        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;450&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; Adelie  Torgersen           39.3          20.6               190        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;650&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; Adelie  Torgersen           38.9          17.8               181        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;625&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; Adelie  Torgersen           39.2          19.6               195        &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;675&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; Adelie  Torgersen           34.1          18.1               193        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;475&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; Adelie  Torgersen           42            20.2               190        &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;250&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 334 more rows, and 2 more variables: sex &amp;lt;fct&amp;gt;, year &amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;However, &lt;code&gt;penguins&lt;/code&gt; will not be in your environment tab because it is not in your local environment. You can use it without it being in your local environment, but if you are bothered by this, you can save a copy in your local environment such it shows up in that top right pane.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;What is within this dataset?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://pillar.r-lib.org/reference/glimpse.html&#39;&gt;glimpse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Rows: 344&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Columns: 8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ species           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ island            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_length_mm    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_depth_mm     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ flipper_length_mm &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ body_mass_g       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ sex               &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; male, female, female, NA, female, male, female, male…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ year              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img src=palmerpenguins_hex.png width=&#34;30%&#34; alt=&#34;a cute hexagon image of three penguins as a part of the palmer penguins package&#34;&gt;
+&lt;/p&gt;
+&lt;p&gt;Illustration by &lt;a href=&#34;https://allisonhorst.github.io/palmerpenguins/articles/art.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Allison Horst&lt;/a&gt;&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-testing-assumptions&#34;&gt;2. Testing assumptions&lt;/h2&gt;
+&lt;p&gt;I&amp;rsquo;d be remiss if I didn&amp;rsquo;t show you how to test that you aren&amp;rsquo;t violating any of the assumptions needed to conduct an ANOVA. We went over this a little bit back in the session put together by Daniel Quiroz on &lt;a href=&#34;https://biodash.github.io/codeclub/s02e10_ggpubr/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ggpubr&lt;/a&gt; and adding statistical results to ggplots.&lt;/p&gt;
+&lt;p&gt;Briefly, in order to use parametric procedures (like ANOVA), we need to be sure our data meets the assumptions for 1) normality and 2) constant variance. This can be done in a few different ways.&lt;/p&gt;
+&lt;h4 id=&#34;shapiro-wilk-test-for-normality&#34;&gt;Shapiro-Wilk test for normality&lt;/h4&gt;
+&lt;p&gt;We are going to use the Shapiro-Wilk test (using the function &lt;a href=&#34;https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shapiro_test()&lt;/code&gt;&lt;/a&gt; which is in the package &lt;code&gt;rstatix&lt;/code&gt; to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function &lt;a href=&#34;https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shapiro.test()&lt;/code&gt;&lt;/a&gt;, which just means you can use it with pipes.&lt;/p&gt;
+&lt;p&gt;Our question is:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Does&lt;code&gt;bill_length_mm&lt;/code&gt; vary by &lt;code&gt;species&lt;/code&gt; in female penguins?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img src=culmen_depth.png width=&#34;50%&#34; alt=&#34;a cute image showing the bill length as the horizontal (sticking out from the face) length of the penguin bill, and the bill depth as the vertical (perpendicular to the ground) bill depth&#34;&gt;
+&lt;/p&gt;
+&lt;p&gt;Illustration by &lt;a href=&#34;https://allisonhorst.github.io/palmerpenguins/articles/art.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Allison Horst&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# testing for all female penguins together&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;female&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;rstatix&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html&#39;&gt;shapiro_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 × 3&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   variable       statistic         p&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm     0.950 0.000&lt;span style=&#39;text-decoration: underline;&#39;&gt;014&lt;/span&gt;0&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# testing by species&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;female&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;rstatix&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html&#39;&gt;shapiro_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   variable       statistic       p&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie    bill_length_mm     0.991 0.895  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap bill_length_mm     0.883 0.001&lt;span style=&#39;text-decoration: underline;&#39;&gt;70&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo    bill_length_mm     0.989 0.895&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Note that if we test all the penguins together, it looks like we do not have normal data. If we test by species, we see that two speces have normal data distribution and one (Chinstrap) does not.&lt;/p&gt;
+&lt;p&gt;Can we visualize normality in another way?&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s quick make a new dataframe that includes only the female penguins, and drop missing values, so that we don&amp;rsquo;t have to keep including the &lt;a href=&#34;https://dplyr.tidyverse.org/reference/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://tidyr.tidyverse.org/reference/drop_na.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;drop_na()&lt;/code&gt;&lt;/a&gt; statements.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;female&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Visualizing with a histogram by &lt;code&gt;species&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_histogram.html&#39;&gt;geom_histogram&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/facet_grid.html&#39;&gt;facet_grid&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cols &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/vars.html&#39;&gt;vars&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-8-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;We can see here too that the Chinstrap penguins look maybe not that normal (and we saw earlier they have the fewest numbers of observations). This is consistent with the results from the Shapiro test.&lt;/p&gt;
+&lt;h5 id=&#34;log-transforming&#34;&gt;Log transforming&lt;/h5&gt;
+&lt;p&gt;Would our data look more normal if we log transformed it? Let&amp;rsquo;s see. We can use the function &lt;a href=&#34;https://dplyr.tidyverse.org/reference/mutate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mutate()&lt;/code&gt;&lt;/a&gt; to create a new column called &lt;code&gt;bill_length_mm_log2&lt;/code&gt; which will have the data from &lt;code&gt;bill_length_mm&lt;/code&gt; but log transformed using base 2 (using the base R function &lt;a href=&#34;https://www.rdocumentation.org/packages/SparkR/versions/2.1.2/topics/log2&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;log2()&lt;/code&gt;&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;The syntax of &lt;a href=&#34;https://dplyr.tidyverse.org/reference/mutate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mutate()&lt;/code&gt;&lt;/a&gt; is like this:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mutate(new_variable = function(existing_variable))&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;log_female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/mutate.html&#39;&gt;mutate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;bill_length_mm_log2 &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Log.html&#39;&gt;log2&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Testing using &lt;a href=&#34;https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shapiro_test()&lt;/code&gt;&lt;/a&gt; again.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;log_female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; 
+  &lt;span class=&#39;c&#39;&gt;# don&#39;t need drop_na() because we already did that&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html&#39;&gt;shapiro_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm_log2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   variable            statistic       p&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie    bill_length_mm_log2     0.991 0.868  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap bill_length_mm_log2     0.911 0.009&lt;span style=&#39;text-decoration: underline;&#39;&gt;00&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo    bill_length_mm_log2     0.988 0.841&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Still not passing the Shapiro Test. Let&amp;rsquo;s still look at this visually.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;log_female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm_log2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_histogram.html&#39;&gt;geom_histogram&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/facet_grid.html&#39;&gt;facet_grid&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cols &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/vars.html&#39;&gt;vars&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-11-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Doesn&amp;rsquo;t look very different from the non-log2 transformed data. Ok, well we tried.&lt;/p&gt;
+&lt;h4 id=&#34;equal-variance&#34;&gt;Equal variance&lt;/h4&gt;
+&lt;p&gt;We can test for equal variance using Levene&amp;rsquo;s test, &lt;a href=&#34;https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/levene_test&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;levene_test()&lt;/code&gt;&lt;/a&gt; which is part of the &lt;code&gt;rstatix&lt;/code&gt; package. Again, this is a pipe-friendly wrapper for the function &lt;a href=&#34;https://www.rdocumentation.org/packages/lawstat/versions/3.4/topics/levene.test&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;levene.test()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/levene_test.html&#39;&gt;levene_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;~&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;     df1   df2 statistic     p&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;     2   162     0.819 0.442&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Our data meets the assumption for equal variance, but not for normality, so we will need to be sure to select a test that does not have an assumption of normality.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3-kruskal-wallis-test&#34;&gt;3. Kruskal Wallis test&lt;/h2&gt;
+&lt;p&gt;The Kruskal Wallis test is the non-parametric version of a one-way ANOVA. This non-parametric test tests whether samples are coming from the same distribution, but uses ranks instead of means.&lt;/p&gt;
+&lt;p&gt;We want to see if there are any differences in bill length (&lt;code&gt;bill_length_mm&lt;/code&gt;) in penguins by &lt;code&gt;species&lt;/code&gt;. Since our data violates the assumptions of normality, we should do this using a test that does not require normality, and we can use the &lt;a href=&#34;https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Kruskal Wallis test&lt;/a&gt;. The Kruskal-Wallis test, can be run using the &lt;code&gt;rstatix&lt;/code&gt; function &lt;a href=&#34;https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/kruskal_test&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;kruskal_test()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;First let&amp;rsquo;s get some descriptive information about our data.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/count.html&#39;&gt;count&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# Groups:   species [3]&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species       n&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie       73&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap    34&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo       58&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;If we want to learn more about the function &lt;a href=&#34;https://rpkgs.datanovia.com/rstatix/reference/kruskal_test.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;kruskal_test()&lt;/code&gt;&lt;/a&gt; we can do so using the code below. The help documentation will show up in the bottom right quadrant of your RStudio.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;o&#39;&gt;?&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/kruskal_test.html&#39;&gt;kruskal_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We can run a Kruskal-Wallis test by indicating our model.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_kruskal&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/kruskal_test.html&#39;&gt;kruskal_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;~&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The function &lt;a href=&#34;https://rpkgs.datanovia.com/rstatix/reference/kruskal_test.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;kruskal_test()&lt;/code&gt;&lt;/a&gt; already puts the output of the function into a tidy format, so we can simply view it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/View.html&#39;&gt;View&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_kruskal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We can also look at our data by visually plotting it, as below.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;outlier.shape &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;NA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_jitter.html&#39;&gt;geom_jitter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-17-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;breakout-rooms-1&#34;&gt;Breakout rooms 1&lt;/h1&gt;
+&lt;p&gt;We want to know if there are any significant differences in &lt;code&gt;bill_depth_mm&lt;/code&gt; by &lt;code&gt;species&lt;/code&gt; in male penguins.&lt;/p&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Test your assumptions for normality to determine what would be the appropriate test to do to assess means separation.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal. &lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solutions (click here)
+&lt;/summary&gt;
+Shapiro-Wilk Test
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# create df with male penguins and no NAs&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;male&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# run shapiro test&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;rstatix&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html&#39;&gt;shapiro_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   variable      statistic      p&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;  &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie    bill_depth_mm     0.964 0.033&lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap bill_depth_mm     0.983 0.863 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo    bill_depth_mm     0.980 0.401&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Visualize&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_histogram.html&#39;&gt;geom_histogram&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/facet_grid.html&#39;&gt;facet_grid&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cols &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/vars.html&#39;&gt;vars&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-20-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;See if log-transforming your data would allow you to use parametric tests.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;log_male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/mutate.html&#39;&gt;mutate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;bill_depth_mm_log2 &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Log.html&#39;&gt;log2&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Testing using &lt;a href=&#34;https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shapiro_test()&lt;/code&gt;&lt;/a&gt; again.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;log_male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; 
+  &lt;span class=&#39;c&#39;&gt;# don&#39;t need drop_na() because we already did that&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html&#39;&gt;shapiro_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_mm_log2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   variable           statistic      p&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                  &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;  &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie    bill_depth_mm_log2     0.971 0.091&lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap bill_depth_mm_log2     0.981 0.814 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo    bill_depth_mm_log2     0.980 0.438&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Ok! We could use log2 transformed data&lt;/p&gt;
+&lt;p&gt;Visualize.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;log_male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm_log2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_histogram.html&#39;&gt;geom_histogram&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/facet_grid.html&#39;&gt;facet_grid&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;cols &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/vars.html&#39;&gt;vars&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-23-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Test your assumptions for equal variance to determine what would be the appropriate test to do to assess means separation.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance. &lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solutions (click here)
+&lt;/summary&gt;
+Equal variance
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/levene_test.html&#39;&gt;levene_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;~&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;     df1   df2 statistic     p&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;     2   165      2.30 0.103&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-3&#34;&gt;Exercise 3&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Conduct your Kruskal-Wallis test or ANOVA to see if there is any overall significant effect of &lt;code&gt;species&lt;/code&gt; on &lt;code&gt;bill_depth_mm&lt;/code&gt; of male penguins.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+Review the information in section 3 of this post. You could also use the package `ggpubr`. &lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solutions (click here)
+&lt;/summary&gt;
+Kruskal-Wallis
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_kruskal&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/kruskal_test.html&#39;&gt;kruskal_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;~&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/View.html&#39;&gt;View&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_kruskal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;ANOVA - to use this you need to be using normal data (here, the log transformed data).&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_anova&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/aov.html&#39;&gt;aov&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;log_male_penguins&lt;/span&gt;,
+      formula &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm_log2&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;~&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/summary.html&#39;&gt;summary&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_anova&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;              Df Sum Sq Mean Sq F value Pr(&amp;gt;F)    &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; species       2 3.1221  1.5610   319.8 &amp;lt;2e-16 ***&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Residuals   165 0.8053  0.0049                   &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ---&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4-posthoc-group-analysis&#34;&gt;4. Posthoc group analysis&lt;/h2&gt;
+&lt;p&gt;Now that we&amp;rsquo;ve seen that &lt;code&gt;species&lt;/code&gt; are significant effectors of &lt;code&gt;bill_length_mm&lt;/code&gt;, our next logical question might be, which species specifically are different from each other? We can determine this by conducting a post-hoc test. We will do our post-hoc analysis using Dunn&amp;rsquo;s test (which is for specifically ranked data) and the function &lt;a href=&#34;https://rdrr.io/cran/rstatix/man/dunn_test.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dunn_test()&lt;/code&gt;&lt;/a&gt; which is a part of &lt;code&gt;rstatix&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dunn_bill_length&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/dunn_test.html&#39;&gt;dunn_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;~&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;,
+            p.adjust.method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;BH&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Like we did with t-tests, you can also look at the resulting &lt;a href=&#34;https://rpkgs.datanovia.com/rstatix/reference/dunn_test.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;dunn_test()&lt;/code&gt;&lt;/a&gt; object (here, &lt;code&gt;dunn_bill_length&lt;/code&gt;) in your environment pane.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/View.html&#39;&gt;View&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dunn_bill_length&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;.y.&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;group1&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;group2&lt;/th&gt;
+&lt;th style=&#34;text-align:right&#34;&gt;n1&lt;/th&gt;
+&lt;th style=&#34;text-align:right&#34;&gt;n2&lt;/th&gt;
+&lt;th style=&#34;text-align:right&#34;&gt;statistic&lt;/th&gt;
+&lt;th style=&#34;text-align:right&#34;&gt;p&lt;/th&gt;
+&lt;th style=&#34;text-align:right&#34;&gt;p.adj&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;p.adj.signif&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;bill_length_mm&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Adelie&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Chinstrap&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;73&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;34&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;8.8609532&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;0.0000000&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;0.0000000&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;****&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;bill_length_mm&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Adelie&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Gentoo&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;73&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;58&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;9.4096815&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;0.0000000&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;0.0000000&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;****&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;bill_length_mm&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Chinstrap&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;Gentoo&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;34&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;58&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;-0.8549426&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;0.3925829&lt;/td&gt;
+&lt;td style=&#34;text-align:right&#34;&gt;0.3925829&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;ns&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;p&gt;From this result, we can see that Adelie is significantly different than Chinstrap and Gentoo, but Chinstrap and Gentoo are not significantly different from each other.&lt;/p&gt;
+&lt;p&gt;The structure of this resulting object &lt;code&gt;dunn_bill_length&lt;/code&gt; can be determined using the code below.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/class.html&#39;&gt;class&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dunn_bill_length&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;rstatix_test&#34; &#34;dunn_test&#34;    &#34;tbl_df&#34;       &#34;tbl&#34;          &#34;data.frame&#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This df does not have a &amp;lsquo;groups&amp;rsquo; column, but if we want to plot in the same way, we can make a new object which we use for plotting. I&amp;rsquo;m going to show you here how to do this manually.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dunn_for_plotting&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;species &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Adelie&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Chinstrap&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Gentoo&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                                groups &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;a&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;c&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;b&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5-bringing-it-together-in-a-plot&#34;&gt;5. Bringing it together in a plot&lt;/h2&gt;
+&lt;p&gt;We already looked at a first-pass plot, but let&amp;rsquo;s customize it now, and add our statistical info. Here is our base plot.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;outlier.shape &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;NA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_jitter.html&#39;&gt;geom_jitter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-34-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;First let&amp;rsquo;s make the plot more aesthetically pleasing.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_plot&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;outlier.shape &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;NA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_jitter.html&#39;&gt;geom_jitter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggtheme.html&#39;&gt;theme_classic&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/theme.html&#39;&gt;theme&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;legend.position &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;none&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# remove legend bc we don&#39;t need it&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/labs.html&#39;&gt;labs&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Species&#34;&lt;/span&gt;,
+       y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Bill Length, in mm&#34;&lt;/span&gt;,
+       title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Penguin Culmen Bill Length Among Different Species&#34;&lt;/span&gt;,
+       subtitle &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Data collected from Palmer LTER, Antarctica&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-35-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;We want to add the letters to this plot, so we can tell which groups of species by sex are significantly different. We are going to figure out what the maximum &lt;code&gt;bill_length_mm&lt;/code&gt; for each species by sex is, so it will help us determine where to put our letter labels. Then, we cna add our labels to be higher than the largest data point.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_max&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;female_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;max_bill_length_mm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;bill_length_max&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   max_bill_length_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;                  &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie                  42.2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap               58  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo                  50.5&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Let&amp;rsquo;s add our &lt;code&gt;bill_length_max&lt;/code&gt; back to the df with our post-hoc groups &lt;code&gt;dunn_for_plotting&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_for_plotting&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/mutate-joins.html&#39;&gt;full_join&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dunn_for_plotting&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_length_max&lt;/span&gt;,
+                               by &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;bill_for_plotting&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;     species groups max_bill_length_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1    Adelie      a               42.2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2 Chinstrap      c               58.0&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3    Gentoo      b               50.5&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Let&amp;rsquo;s plot.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_plot&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_text.html&#39;&gt;geom_text&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_for_plotting&lt;/span&gt;,
+            &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;,
+                y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;max_bill_length_mm&lt;/span&gt;, 
+                color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;,
+                label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;groups&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/labs.html&#39;&gt;labs&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;caption &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Different letters indicate significant difference as determined by \na Kruskal-Wallis test with Dunn&#39;s post-hoc means separation&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-38-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Also remember Daniel showed us how we can do &lt;a href=&#34;https://biodash.github.io/codeclub/s02e10_ggpubr/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;somthing similar&lt;/a&gt; using the package &lt;code&gt;ggpubr&lt;/code&gt;.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;breakout-rooms-2&#34;&gt;Breakout rooms 2&lt;/h1&gt;
+&lt;h3 id=&#34;exercise-4&#34;&gt;Exercise 4&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Conduct a post-hoc analysis to understand which male penguin &lt;code&gt;species&lt;/code&gt; have significantly different &lt;code&gt;bill_depth_mm&lt;/code&gt;.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+Using the results from your assumption testing in Exercise 3, pick an appropriate post-hoc test to answer your question. &lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solutions (click here)
+&lt;/summary&gt;
+Dunn&#39;s test
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;dunn_bill_depth&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/dunn_test.html&#39;&gt;dunn_test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;~&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;,
+            p.adjust.method &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;BH&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/View.html&#39;&gt;View&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dunn_bill_depth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Parametric post-hoc test&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bonferroni_bill_depth&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;agricolae&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/pkg/agricolae/man/LSD.test.html&#39;&gt;LSD.test&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_anova&lt;/span&gt;, 
+                                             trt &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;, 
+                                             p.adj &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;bonferroni&#34;&lt;/span&gt;,
+                                             console &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Study: bill_depth_anova ~ &#34;species&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; LSD t Test for bill_depth_mm_log2 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; P value adjustment method: bonferroni &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Mean Square Error:  0.004880851 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; species,  means and individual ( 95 %) CI&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;           bill_depth_mm_log2        std  r      LCL      UCL      Min      Max&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Adelie              4.251426 0.07632273 73 4.235282 4.267571 4.087463 4.426265&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Chinstrap           4.265907 0.05726112 34 4.242250 4.289564 4.129283 4.378512&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Gentoo              3.972772 0.06803521 61 3.955110 3.990433 3.817623 4.112700&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Alpha: 0.05 ; DF Error: 165&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Critical Value of t: 2.418634 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Groups according to probability of means differences and alpha level( 0.05 )&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Treatments with the same letter are not significantly different.&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;           bill_depth_mm_log2 groups&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Chinstrap           4.265907      a&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Adelie              4.251426      a&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Gentoo              3.972772      b&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-5&#34;&gt;Exercise 5&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Bring it all together in a plot.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+The non-parametric version of a one-way ANOVA is the Kruskal-Wallis test, and you can use the `rstatix` function [`kruskal_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/kruskal_test). &lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solutions (click here)
+&lt;/summary&gt;
+Using Kruskal-Wallis and Dunn&#39;s post-hoc test
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_plot_kruskal&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;outlier.shape &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;NA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_jitter.html&#39;&gt;geom_jitter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggtheme.html&#39;&gt;theme_classic&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/theme.html&#39;&gt;theme&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;legend.position &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;none&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# remove legend bc we don&#39;t need it&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/labs.html&#39;&gt;labs&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Species&#34;&lt;/span&gt;,
+       y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Bill Depth, in mm&#34;&lt;/span&gt;,
+       title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Penguin Culmen Bill Depth Among Different Species&#34;&lt;/span&gt;,
+       subtitle &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Data collected from Palmer LTER, Antarctica&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-42-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_max&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;max_bill_depth_mm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;bill_depth_max&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   max_bill_depth_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;                 &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie                 21.5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap              20.8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo                 17.3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/View.html&#39;&gt;View&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dunn_bill_depth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;dunn_depth_for_plotting&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/data.frame.html&#39;&gt;data.frame&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;species &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Adelie&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Chinstrap&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Gentoo&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+                                groups &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;a&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;a&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;b&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;depth_for_plotting_kruskal&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/mutate-joins.html&#39;&gt;full_join&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dunn_depth_for_plotting&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_max&lt;/span&gt;,
+                               by &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;depth_for_plotting_kruskal&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;     species groups max_bill_depth_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1    Adelie      a              21.5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2 Chinstrap      a              20.8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3    Gentoo      b              17.3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Let&amp;rsquo;s plot.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_plot_kruskal&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_text.html&#39;&gt;geom_text&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;depth_for_plotting_kruskal&lt;/span&gt;,
+            &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;,
+                y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;max_bill_depth_mm&lt;/span&gt;, 
+                color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;,
+                label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;groups&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/labs.html&#39;&gt;labs&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;caption &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Different letters indicate significant difference as determined by \nthe Kruskal Wallis with Dunn&#39;s test for post-hoc means separation&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-45-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Using ANOVA and Bonferroni post-hoc test&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bonferroni_bill_depth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;groups&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;           bill_depth_mm_log2 groups&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Chinstrap           4.265907      a&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Adelie              4.251426      a&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Gentoo              3.972772      b&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;bonferroni_bill_depth_plotting&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bonferroni_bill_depth&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;groups&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tibble.tidyverse.org/reference/rownames.html&#39;&gt;rownames_to_column&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;var &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;bonferroni_bill_depth_plotting&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;     species bill_depth_mm_log2 groups&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 Chinstrap           4.265907      a&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2    Adelie           4.251426      a&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3    Gentoo           3.972772      b&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bonferroni_bill_depth_plotting&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/mutate-joins.html&#39;&gt;full_join&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bonferroni_bill_depth_plotting&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_max&lt;/span&gt;,
+                               by &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;bonferroni_bill_depth_plotting&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;     species bill_depth_mm_log2 groups max_bill_depth_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 Chinstrap           4.265907      a              20.8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2    Adelie           4.251426      a              21.5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3    Gentoo           3.972772      b              17.3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_plot_bonf&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;male_penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://rpkgs.datanovia.com/rstatix/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;outlier.shape &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;NA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_jitter.html&#39;&gt;geom_jitter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_text.html&#39;&gt;geom_text&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bonferroni_bill_depth_plotting&lt;/span&gt;,
+            &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;,
+                y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;max_bill_depth_mm&lt;/span&gt;, 
+                color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;,
+                label &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;groups&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggtheme.html&#39;&gt;theme_classic&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/theme.html&#39;&gt;theme&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;legend.position &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;none&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# remove legend bc we don&#39;t need it&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/labs.html&#39;&gt;labs&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Species&#34;&lt;/span&gt;,
+       y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Bill Depth, in mm&#34;&lt;/span&gt;,
+       title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Penguin Culmen Bill Depth Among Different Species&#34;&lt;/span&gt;,
+       subtitle &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Data collected from Palmer LTER, Antarctica&#34;&lt;/span&gt;,
+       caption &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Different letters indicate significant difference as determined by \none-way ANOVA with Bonferroni post-hoc means separation&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-48-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+</description>
+    </item>
+    
+    <item>
       <title>S03E02: ANOVA</title>
       <link>https://biodash.github.io/codeclub/s03e02_anova/</link>
       <pubDate>Thu, 20 Jan 2022 00:00:00 +0000</pubDate>
@@ -771,7 +1528,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-374951862&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-546182739&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -781,7 +1538,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-374951862&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-546182739&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -968,7 +1725,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-245769318&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-738624195&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -978,7 +1735,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-245769318&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-738624195&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1014,7 +1771,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-495236781&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-439615278&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1024,7 +1781,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-495236781&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-439615278&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1056,7 +1813,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-918354672&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-875431296&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1066,7 +1823,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-918354672&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-875431296&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1097,7 +1854,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-895632741&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-194723856&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1107,7 +1864,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-895632741&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-194723856&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1241,7 +1998,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-274169538&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-935721648&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1251,7 +2008,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-274169538&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-935721648&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -1308,7 +2065,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-829371564&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-961275384&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1318,7 +2075,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-829371564&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-961275384&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2575,7 +3332,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-416723589&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-625943178&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2585,7 +3342,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-416723589&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-625943178&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2661,7 +3418,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-846521397&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-359182674&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2671,7 +3428,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-846521397&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-359182674&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2692,7 +3449,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-495271386&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-765294813&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2702,7 +3459,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-495271386&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-765294813&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2729,7 +3486,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-867145239&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-815493276&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2739,7 +3496,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-867145239&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-815493276&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2766,7 +3523,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-495782136&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-725896134&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2776,7 +3533,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-495782136&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-725896134&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2799,7 +3556,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-532871649&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-419576832&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2809,7 +3566,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-532871649&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-419576832&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2850,7 +3607,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-754326918&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-468319752&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2860,7 +3617,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-754326918&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-468319752&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2879,7 +3636,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-542179638&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-514873269&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2889,7 +3646,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-542179638&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-514873269&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2915,7 +3672,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-653482791&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-348152796&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2925,7 +3682,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-653482791&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-348152796&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2955,7 +3712,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-538792164&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-593417682&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2965,7 +3722,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-538792164&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-593417682&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3179,7 +3936,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-478235691&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-471692835&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3189,7 +3946,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-478235691&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-471692835&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3250,7 +4007,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-436592817&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-594872613&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3260,7 +4017,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-436592817&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-594872613&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3335,7 +4092,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-732648519&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-978432561&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3345,7 +4102,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-732648519&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-978432561&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
