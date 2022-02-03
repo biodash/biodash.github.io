@@ -3,7 +3,7 @@ title: "S03E04: ANOVA 2"
 subtitle: "Testing assumptions, non-parametric ANOVA, utilizing the R output, and 🐧"
 summary: "During this second session of Code Club on ANOVA, we will learn to test whether our data meetings assumptions needed for ANOVA, run non-parametric ANOVA tests and use the output for creating plots with our statistical findings."  
 authors: [jessica-cooperstone]
-date: "2022-02-02"
+date: "2022-02-03"
 output: hugodown::md_document
 toc: true
 
@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: 67751cd55da835e5
+rmd_hash: 3bbd7d41454b9703
 
 ---
 
@@ -113,7 +113,7 @@ If you are looking for a good statistics class, I would recommend Dr. Kristin M
 
 We are going to start with our favorite dataset `palmerpenguins` to provide the input data for our analysis.
 
-If you don't have any of the packages below, use [`install.packages()`](https://rdrr.io/r/utils/install.packages.html) to download them.  
+If you don't have any of the packages below, use [`install.packages()`](https://rdrr.io/r/utils/install.packages.html) to download them.
 
 <div class="highlight">
 
@@ -194,6 +194,12 @@ I'd be remiss if I didn't show you how to test that you aren't violating any of 
 
 Briefly, in order to use parametric procedures (like ANOVA), we need to be sure our data meets the assumptions for 1) normality and 2) constant variance. This can be done in a few different ways.
 
+<p align="center">
+<img src=featured.png width="70%" alt="a cartoon of two distributions, one is normal (bell shaped curve) and one is not (dimodal, two peaks, with the one on the right being higher">
+</p>
+
+Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
+
 #### Shapiro-Wilk test for normality
 
 We are going to use the Shapiro-Wilk test (using the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) which is in the package `rstatix` to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function [`shapiro.test()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test), which just means you can use it with pipes.
@@ -210,6 +216,24 @@ Illustration by <a href="https://allisonhorst.github.io/palmerpenguins/articles/
 </figcaption>
 </p>
 </figure>
+Caputuring some descriptive statistics
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>count</span><span class='o'>(</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'># Groups:   species [3]</span></span>
+<span class='c'>#&gt;   species       n</span>
+<span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span> Adelie       73</span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span> Chinstrap    34</span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span> Gentoo       58</span></code></pre>
+
+</div>
 
 <div class="highlight">
 
@@ -262,7 +286,7 @@ Visualizing with a histogram by `species`.
   <span class='nf'>facet_grid</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
 </code></pre>
-<img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -271,6 +295,12 @@ We can see here too that the Chinstrap penguins look maybe not that normal (and 
 ##### Log transforming
 
 Would our data look more normal if we log transformed it? Let's see. We can use the function [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) to create a new column called `bill_length_mm_log2` which will have the data from `bill_length_mm` but log transformed using base 2 (using the base R function [`log2()`](https://www.rdocumentation.org/packages/SparkR/versions/2.1.2/topics/log2)).
+
+<p align="center">
+<img src=dplyr_mutate.png width="50%" alt="Cartoon of cute fuzzy monsters dressed up as different X-men characters, working together to add a new column to an existing data frame. Stylized title text reads “dplyr::mutate - add columns, keep existing.">
+</p>
+
+Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
 
 The syntax of [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) is like this:
 
@@ -300,7 +330,7 @@ Testing using [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/s
 
 </div>
 
-Still not passing the Shapiro Test. Let's still look at this visually.
+Still not passing the test for normality. Let's still look at this visually.
 
 <div class="highlight">
 
@@ -310,7 +340,7 @@ Still not passing the Shapiro Test. Let's still look at this visually.
   <span class='nf'>facet_grid</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
 </code></pre>
-<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -402,7 +432,7 @@ We can also look at our data visually by plotting it, as below.
   <span class='nf'>geom_boxplot</span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_jitter</span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -426,10 +456,7 @@ Test your assumptions for normality to determine what would be the appropriate t
 <summary>
 Hints (click here)
 </summary>
-
-<br>
-
-Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal. <br>
+<br> Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal. <br>
 </details>
 
 <br>
@@ -474,7 +501,7 @@ Visualize
   <span class='nf'>facet_grid</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
 </code></pre>
-<img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -516,7 +543,7 @@ Visualize.
   <span class='nf'>facet_grid</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
 </code></pre>
-<img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -542,10 +569,7 @@ Test your assumptions for equal variance to determine what would be the appropri
 <summary>
 Hints (click here)
 </summary>
-
-<br>
-
-You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance. <br>
+<br> You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance. <br>
 </details>
 
 <br>
@@ -589,10 +613,7 @@ Conduct your Kruskal-Wallis test or ANOVA to see if there is any overall signifi
 <summary>
 Hints (click here)
 </summary>
-
-<br>
-
-Review the information in section 3 of this post. You could also use the package `ggpubr`. <br>
+<br> Review the information in section 3 of this post. You could also use the package `ggpubr`. <br>
 </details>
 
 <br>
@@ -659,13 +680,13 @@ ANOVA - to use this you need to be using normal data (here, the log transformed 
 
 ## 4. Posthoc group analysis
 
-Now that we've seen that `species` are significant effectors of `bill_length_mm`, our next logical question might be, which species specifically are different from each other? We can determine this by conducting a post-hoc test. We will do our post-hoc analysis using Dunn's test (which is for specifically ranked data) and the function [`dunn_test()`](https://rdrr.io/cran/rstatix/man/dunn_test.html) which is a part of `rstatix`.
+Now that we've seen that `species` are significant effectors of `bill_length_mm`, our next logical question might be, which species specifically are different from each other? We can determine this by conducting a post-hoc test. We will do our post-hoc analysis using Dunn's test (which is for specifically ranked data) and the function [`dunn_test()`](https://rdrr.io/cran/rstatix/man/dunn_test.html) which is a part of `rstatix`. In the example below, we are using the Benjamini Hochberg method of pvalue adjustment for multiple corrections.
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dunn_bill_length</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/dunn_test.html'>dunn_test</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span> <span class='o'>~</span> <span class='nv'>species</span>,
-            p.adjust.method <span class='o'>=</span> <span class='s'>"BH"</span><span class='o'>)</span></code></pre>
+            p.adjust.method <span class='o'>=</span> <span class='s'>"BH"</span><span class='o'>)</span> <span class='c'># there are others too</span></code></pre>
 
 </div>
 
@@ -719,7 +740,7 @@ The structure of this resulting object `dunn_bill_length` can be determined usin
 <span class='c'>#&gt;   .. ..$ sex              : Factor w/ 2 levels "female","male": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class='c'>#&gt;   .. ..$ year             : int [1:165] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span>
 <span class='c'>#&gt;   ..$ formula        :Class 'formula'  language bill_length_mm ~ species</span>
-<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x55ed3c58e878&gt; </span>
+<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x561e79ddb100&gt; </span>
 <span class='c'>#&gt;   ..$ p.adjust.method: chr "BH"</span>
 <span class='c'>#&gt;   ..$ detailed       : logi FALSE</span>
 <span class='c'>#&gt;   ..$ method         : chr "dunn_test"</span></code></pre>
@@ -731,7 +752,7 @@ This df does not have a 'groups' column, but if we want to plot in the same way,
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dunn_for_plotting</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span>species <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"Adelie"</span>, <span class='s'>"Chinstrap"</span>, <span class='s'>"Gentoo"</span><span class='o'>)</span>,
-                                groups <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"a"</span>, <span class='s'>"c"</span>, <span class='s'>"b"</span><span class='o'>)</span><span class='o'>)</span></code></pre>
+                                groups <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"a"</span>, <span class='s'>"b"</span>, <span class='s'>"b"</span><span class='o'>)</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -750,7 +771,7 @@ We already looked at a first-pass plot, but let's customize it now, and add our 
   <span class='nf'>geom_boxplot</span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_jitter</span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-36-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-37-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -769,7 +790,7 @@ First let's make the plot more aesthetically pleasing.
        title <span class='o'>=</span> <span class='s'>"Penguin Culmen Bill Length Among Different Species"</span>,
        subtitle <span class='o'>=</span> <span class='s'>"Data collected from Palmer LTER, Antarctica"</span><span class='o'>)</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-37-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-38-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -801,7 +822,7 @@ Let's add our `bill_length_max` back to the df with our post-hoc groups `dunn_fo
 <span class='nv'>bill_for_plotting</span>
 <span class='c'>#&gt;     species groups max_bill_length_mm</span>
 <span class='c'>#&gt; 1    Adelie      a               42.2</span>
-<span class='c'>#&gt; 2 Chinstrap      c               58.0</span>
+<span class='c'>#&gt; 2 Chinstrap      b               58.0</span>
 <span class='c'>#&gt; 3    Gentoo      b               50.5</span></code></pre>
 
 </div>
@@ -818,7 +839,7 @@ Let's plot.
                 label <span class='o'>=</span> <span class='nv'>groups</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>caption <span class='o'>=</span> <span class='s'>"Different letters indicate significant difference as determined by \na Kruskal-Wallis test with Dunn's post-hoc means separation"</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-40-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-41-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -842,7 +863,7 @@ Conduct a post-hoc analysis to understand which male penguin `species` have sign
 <summary>
 Hints (click here)
 </summary>
-Using the results from your assumption testing in Exercise 3, pick an appropriate post-hoc test to answer your question. <br>
+<br> Using the results from your assumption testing in Exercise 3, pick an appropriate post-hoc test to answer your question. <br>
 </details>
 
 <br>
@@ -869,9 +890,11 @@ Dunn's test
 
 <div class="highlight">
 
-| .y.            |   n | statistic |  df |   p | method         |
-|:---------------|----:|----------:|----:|----:|:---------------|
-| bill_length_mm | 165 |  121.6214 |   2 |   0 | Kruskal-Wallis |
+| .y.           | group1    | group2    |  n1 |  n2 |  statistic |        p |    p.adj | p.adj.signif |
+|:--------------|:----------|:----------|----:|----:|-----------:|---------:|---------:|:-------------|
+| bill_depth_mm | Adelie    | Chinstrap |  73 |  34 |  0.9039517 | 0.366021 | 0.366021 | ns           |
+| bill_depth_mm | Adelie    | Gentoo    |  73 |  61 | -9.5885513 | 0.000000 | 0.000000 | \*\*\*\*     |
+| bill_depth_mm | Chinstrap | Gentoo    |  34 |  61 | -8.6487581 | 0.000000 | 0.000000 | \*\*\*\*     |
 
 </div>
 
@@ -934,7 +957,7 @@ Bring it all together in a plot.
 <summary>
 Hints (click here)
 </summary>
-The non-parametric version of a one-way ANOVA is the Kruskal-Wallis test, and you can use the `rstatix` function [`kruskal_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/kruskal_test). <br>
+<br> Think about what you'd like to display and go back to section 5 for more help. <br>
 </details>
 
 <br>
@@ -958,7 +981,7 @@ Using Kruskal-Wallis and Dunn's post-hoc test
        title <span class='o'>=</span> <span class='s'>"Penguin Culmen Bill Depth Among Different Species"</span>,
        subtitle <span class='o'>=</span> <span class='s'>"Data collected from Palmer LTER, Antarctica"</span><span class='o'>)</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-45-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-46-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -975,6 +998,22 @@ Using Kruskal-Wallis and Dunn's post-hoc test
 <span class='c'>#&gt; <span style='color: #555555;'>1</span> Adelie                 21.5</span>
 <span class='c'>#&gt; <span style='color: #555555;'>2</span> Chinstrap              20.8</span>
 <span class='c'>#&gt; <span style='color: #555555;'>3</span> Gentoo                 17.3</span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>dunn_bill_depth</span><span class='o'>)</span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+| .y.           | group1    | group2    |  n1 |  n2 |  statistic |        p |    p.adj | p.adj.signif |
+|:--------------|:----------|:----------|----:|----:|-----------:|---------:|---------:|:-------------|
+| bill_depth_mm | Adelie    | Chinstrap |  73 |  34 |  0.9039517 | 0.366021 | 0.366021 | ns           |
+| bill_depth_mm | Adelie    | Gentoo    |  73 |  61 | -9.5885513 | 0.000000 | 0.000000 | \*\*\*\*     |
+| bill_depth_mm | Chinstrap | Gentoo    |  34 |  61 | -8.6487581 | 0.000000 | 0.000000 | \*\*\*\*     |
 
 </div>
 
@@ -1006,7 +1045,7 @@ Let's plot.
                 label <span class='o'>=</span> <span class='nv'>groups</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>caption <span class='o'>=</span> <span class='s'>"Different letters indicate significant difference as determined by \nthe Kruskal Wallis with Dunn's test for post-hoc means separation"</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-48-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-51-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -1063,7 +1102,7 @@ Using ANOVA and Bonferroni post-hoc test
        subtitle <span class='o'>=</span> <span class='s'>"Data collected from Palmer LTER, Antarctica"</span>,
        caption <span class='o'>=</span> <span class='s'>"Different letters indicate significant difference as determined by \none-way ANOVA with Bonferroni post-hoc means separation"</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-51-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-54-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 

@@ -108,9 +108,11 @@ If you are looking for a good statistics class, I would recommend Dr. Kristin Me
 ----
 
 #### Load packages, get data
+
 We are going to start with our favorite dataset `palmerpenguins` to provide the input data for our analysis.
 
-If you don't have any of the packages below, use `install.packages()` to download them.  
+If you don't have any of the packages below, use `install.packages()` to download them. 
+ 
 ```{r, message = FALSE}
 library(tidyverse)
 library(palmerpenguins) # for data
@@ -153,6 +155,11 @@ I'd be remiss if I didn't show you how to test that you aren't violating any of 
 
 Briefly, in order to use parametric procedures (like ANOVA), we need to be sure our data meets the assumptions for 1) normality and 2) constant variance. This can be done in a few different ways.
 
+<p align="center"> 
+<img src=featured.png width="70%" alt="a cartoon of two distributions, one is normal (bell shaped curve) and one is not (dimodal, two peaks, with the one on the right being higher">
+</p>
+Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
+
 #### Shapiro-Wilk test for normality
 We are going to use the Shapiro-Wilk test (using the function `shapiro_test()` which is in the package `rstatix` to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function [`shapiro.test()`](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test), which just means you can use it with pipes.
 
@@ -166,6 +173,16 @@ Our question is:
 <figcaption>Illustration by <a href="https://allisonhorst.github.io/palmerpenguins/articles/art.html">Allison Horst</a></figcaption>
 </p>
 </figure>
+
+Caputuring some descriptive statistics
+```{r}
+penguins %>%
+  filter(sex == "female") %>%
+  drop_na() %>%
+  group_by(species) %>%
+  count()
+```
+
 
 ```{r}
 # testing for all female penguins together
@@ -206,6 +223,11 @@ We can see here too that the Chinstrap penguins look maybe not that normal (and 
 ##### Log transforming
 Would our data look more normal if we log transformed it?  Let's see.  We can use the function [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) to create a new column called `bill_length_mm_log2` which will have the data from `bill_length_mm` but log transformed using base 2 (using the base R function [`log2()`](https://www.rdocumentation.org/packages/SparkR/versions/2.1.2/topics/log2)).
 
+<p align="center"> 
+<img src=dplyr_mutate.png width="50%" alt="Cartoon of cute fuzzy monsters dressed up as different X-men characters, working together to add a new column to an existing data frame. Stylized title text reads “dplyr::mutate - add columns, keep existing.">
+</p>
+Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
+
 The syntax of `mutate()` is like this:
 
 * `mutate(new_variable = function(existing_variable))`
@@ -223,7 +245,7 @@ log_female_penguins %>%
   shapiro_test(bill_length_mm_log2)
 ```
 
-Still not passing the Shapiro Test.  Let's still look at this visually.
+Still not passing the test for normality.  Let's still look at this visually.
 ```{r}
 log_female_penguins %>%
   ggplot(aes(x = bill_length_mm_log2)) +
@@ -281,6 +303,7 @@ knitr::kable(bill_length_kruskal)
 ```
 
 We can also look at our data visually by plotting it, as below.
+
 ```{r}
 female_penguins %>%
   ggplot(aes(x = species, y = bill_length_mm)) +
@@ -307,8 +330,8 @@ Test your assumptions for normality to determine what would be the appropriate t
   <summary>
   Hints (click here)
   </summary>
-<br>
 
+<br>
   Use the function `shapiro_test()` to test normality.  If your data is non-normal, you can check to see if log transforming it makes it normal.
 <br>
 </details>
@@ -385,8 +408,8 @@ Test your assumptions for equal variance to determine what would be the appropri
   <summary>
   Hints (click here)
   </summary>
-<br>
 
+<br>
 You can use the function `levene_test()` to test for equal variance.
 <br>
 </details>
@@ -423,7 +446,6 @@ Conduct your Kruskal-Wallis test or ANOVA to see if there is any overall signifi
   Hints (click here)
   </summary>
 <br>
-
   Review the information in section 3 of this post.  You could also use the package `ggpubr`.
 <br>
 </details>
@@ -441,10 +463,9 @@ bill_depth_kruskal <- male_penguins %>%
   kruskal_test(bill_depth_mm ~ species)
 ```
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 View(bill_depth_kruskal)
 ```
-
 
 ```{r, echo = FALSE}
 knitr::kable(bill_depth_kruskal)
@@ -473,11 +494,11 @@ summary(bill_depth_anova)
 
 ## 4. Posthoc group analysis
 
-Now that we've seen that `species` are significant effectors of `bill_length_mm`, our next logical question might be, which species specifically are different from each other?  We can determine this by conducting a post-hoc test. We will do our post-hoc analysis using Dunn's test (which is for specifically ranked data) and the function [`dunn_test()`](https://rdrr.io/cran/rstatix/man/dunn_test.html) which is a part of `rstatix`.
+Now that we've seen that `species` are significant effectors of `bill_length_mm`, our next logical question might be, which species specifically are different from each other?  We can determine this by conducting a post-hoc test. We will do our post-hoc analysis using Dunn's test (which is for specifically ranked data) and the function [`dunn_test()`](https://rdrr.io/cran/rstatix/man/dunn_test.html) which is a part of `rstatix`.  In the example below, we are using the Benjamini Hochberg method of pvalue adjustment for multiple corrections.
 ```{r}
 dunn_bill_length <- female_penguins %>%
   dunn_test(bill_length_mm ~ species,
-            p.adjust.method = "BH")
+            p.adjust.method = "BH") # there are others too
 ```
 
 Like we did with t-tests, you can also look at the resulting `dunn_test()` object (here, `dunn_bill_length`) in your environment pane.
@@ -500,7 +521,7 @@ str(dunn_bill_length)
 This df does not have a 'groups' column, but if we want to plot in the same way, we can make a new object which we use for plotting.  I'm going to show you here how to do this manually.
 ```{r}
 dunn_for_plotting <- data.frame(species = c("Adelie", "Chinstrap", "Gentoo"),
-                                groups = c("a", "c", "b"))
+                                groups = c("a", "b", "b"))
 ```
 
 
@@ -580,7 +601,7 @@ Conduct a post-hoc analysis to understand which male penguin `species` have sign
   Hints (click here)
   </summary>
 
-
+<br>
   Using the results from your assumption testing in Exercise 3, pick an appropriate post-hoc test to answer your question.
 <br>
 </details>
@@ -599,13 +620,14 @@ dunn_bill_depth <- male_penguins %>%
             p.adjust.method = "BH")
 ```
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 View(dunn_bill_depth)
 ```
 
 ```{r, echo = FALSE}
-knitr::kable(bill_length_kruskal)
+knitr::kable(dunn_bill_depth)
 ```
+
 
 Parametric post-hoc test
 
@@ -635,8 +657,8 @@ Bring it all together in a plot.
   Hints (click here)
   </summary>
 
-
-  The non-parametric version of a one-way ANOVA is the Kruskal-Wallis test, and you can use the `rstatix` function [`kruskal_test()`](https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/kruskal_test).
+<br>
+  Think about what you'd like to display and go back to section 5 for more help.
 <br>
 </details>
 
@@ -667,6 +689,14 @@ bill_depth_max <- male_penguins %>%
   summarize(max_bill_depth_mm = max(bill_depth_mm))
 
 bill_depth_max
+```
+
+```{r, eval = FALSE}
+View(dunn_bill_depth)
+```
+
+```{r, echo = FALSE}
+knitr::kable(dunn_bill_depth)
 ```
 
 ```{r}
