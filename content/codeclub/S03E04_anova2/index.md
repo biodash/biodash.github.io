@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: cdbde7403cff8e30
+rmd_hash: 67751cd55da835e5
 
 ---
 
@@ -19,13 +19,13 @@ rmd_hash: cdbde7403cff8e30
 
 ## Prep homework
 
-### Basic computer setup
+#### Basic computer setup
 
 -   If you didn't already do this, please follow the [Code Club Computer Setup](/codeclub-setup/04_ggplot2/) instructions, which also has pointers for if you're new to R or RStudio.
 
 -   If you're able to do so, please open RStudio a bit before Code Club starts -- and in case you run into issues, please join the Zoom call early and we'll help you troubleshoot.
 
-### New to ggplot?
+#### New to ggplot?
 
 This isn't a ggplot specific session, though we will be using it a bit. Check out the past Code Club sessions covering `ggplot2`:
 
@@ -41,24 +41,24 @@ This isn't a ggplot specific session, though we will be using it a bit. Check ou
 
 If you've never used `ggplot2` before (or even if you have), you may find [this cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) useful.
 
-### Adding statistics to plots
+#### Adding statistics to plots
 
 We had a previous session [S02E10](/codeclub/s02e10_ggpubr/) developed by Daniel Quiroz that covers the package `ggpubr` and adding statistics to ggplots.
 
-### We already did t-tests and ANOVA part 1
+#### We already did t-tests and ANOVA part 1
 
 Mike Sovic covered in code club [S03E01](/codeclub/s03e01_ttests/) how to run t-tests in R. I covered ANOVA two weeks ago [S03E02](/codeclub/s03e02_anova/) and we will be building off that session today.
 
 <br>
 
-### Getting an R Markdown
+#### Getting an R Markdown
 
 <details>
 <summary>
 Click here to get an Rmd (optional)
 </summary>
 
-### RMarkdown for today
+#### RMarkdown for today
 
 <div class="highlight">
 
@@ -90,7 +90,7 @@ Click here to get an Rmd (optional)
 
 ------------------------------------------------------------------------
 
-### Introduction
+## Introduction
 
 We have gone through a first pass of running ANOVAs in [Code Club a couple weeks ago](/codeclub/content/S03E02_anova/) but didn't have the time to go through all of the content. We are going to re-visit that material today.
 
@@ -410,7 +410,7 @@ We can also look at our data visually by plotting it, as below.
 
 ------------------------------------------------------------------------
 
-# Breakout rooms 1
+## Breakout rooms 1
 
 We want to know if there are any significant differences in `bill_depth_mm` by `species` in male penguins.
 
@@ -719,7 +719,7 @@ The structure of this resulting object `dunn_bill_length` can be determined usin
 <span class='c'>#&gt;   .. ..$ sex              : Factor w/ 2 levels "female","male": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class='c'>#&gt;   .. ..$ year             : int [1:165] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span>
 <span class='c'>#&gt;   ..$ formula        :Class 'formula'  language bill_length_mm ~ species</span>
-<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x562be8f2f618&gt; </span>
+<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x55ed3c58e878&gt; </span>
 <span class='c'>#&gt;   ..$ p.adjust.method: chr "BH"</span>
 <span class='c'>#&gt;   ..$ detailed       : logi FALSE</span>
 <span class='c'>#&gt;   ..$ method         : chr "dunn_test"</span></code></pre>
@@ -828,7 +828,7 @@ Also remember Daniel showed us how we can do [somthing similar](https://biodash.
 
 ------------------------------------------------------------------------
 
-# Breakout rooms 2
+## Breakout rooms 2
 
 ### Exercise 4
 
