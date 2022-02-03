@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: 662ef60e4397d131
+rmd_hash: 70bfcf6ae3af1e58
 
 ---
 
@@ -121,7 +121,7 @@ If you don't have any of the packages below, use [`install.packages()`](https://
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span> <span class='c'># for data</span>
-<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://rpkgs.datanovia.com/rstatix/'>rstatix</a></span><span class='o'>)</span> <span class='c'># for testing assumptions</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://rpkgs.datanovia.com/rstatix/'>rstatix</a></span><span class='o'>)</span> <span class='c'># for testing assumptions and running tests</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'>agricolae</span><span class='o'>)</span> <span class='c'># for post-hoc comparison of groups</span></code></pre>
 
 </div>
@@ -210,12 +210,14 @@ Our question is:
 
 -   Does `bill_length_mm` vary by `species` in female penguins?
 
+<figure>
 <p align="center">
 <img src=culmen_depth.png width="50%" alt="a cute image showing the bill length as the horizontal (sticking out from the face) length of the penguin bill, and the bill depth as the vertical (perpendicular to the ground) bill depth">
+<figcaption>
+Illustration by <a href="https://allisonhorst.github.io/palmerpenguins/articles/art.html">Allison Horst</a>
+</figcaption>
 </p>
-
-Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
-
+</figure>
 Caputuring some descriptive statistics
 
 <div class="highlight">
@@ -266,7 +268,7 @@ Note that if we test all the penguins together, it looks like we do not have nor
 
 Can we visualize normality in another way?
 
-Let's quick make a new dataframe that includes only the female penguins, and drop missing values, so that we don't have to keep including the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) and [`drop_na()`](https://tidyr.tidyverse.org/reference/drop_na.html) statements.
+Let's quickly make a new dataframe that includes only the female penguins, and drop missing values, so that we don't have to keep including the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) and [`drop_na()`](https://tidyr.tidyverse.org/reference/drop_na.html) statements.
 
 <div class="highlight">
 
@@ -456,7 +458,10 @@ Test your assumptions for normality to determine what would be the appropriate t
 <summary>
 Hints (click here)
 </summary>
-<br> Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal. <br>
+
+<br>
+
+Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal. <br>
 </details>
 
 <br>
@@ -569,7 +574,10 @@ Test your assumptions for equal variance to determine what would be the appropri
 <summary>
 Hints (click here)
 </summary>
-<br> You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance. <br>
+
+<br>
+
+You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance. <br>
 </details>
 
 <br>
@@ -613,7 +621,10 @@ Conduct your Kruskal-Wallis test or ANOVA to see if there is any overall signifi
 <summary>
 Hints (click here)
 </summary>
-<br> Review the information in section 3 of this post. You could also use the package `ggpubr`. <br>
+
+<br>
+
+Review the information in section 3 of this post. You could also use the package `ggpubr`. <br>
 </details>
 
 <br>
@@ -740,7 +751,7 @@ The structure of this resulting object `dunn_bill_length` can be determined usin
 <span class='c'>#&gt;   .. ..$ sex              : Factor w/ 2 levels "female","male": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class='c'>#&gt;   .. ..$ year             : int [1:165] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span>
 <span class='c'>#&gt;   ..$ formula        :Class 'formula'  language bill_length_mm ~ species</span>
-<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7f98c644a270&gt; </span>
+<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fb80d5a2188&gt; </span>
 <span class='c'>#&gt;   ..$ p.adjust.method: chr "BH"</span>
 <span class='c'>#&gt;   ..$ detailed       : logi FALSE</span>
 <span class='c'>#&gt;   ..$ method         : chr "dunn_test"</span></code></pre>
@@ -863,7 +874,10 @@ Conduct a post-hoc analysis to understand which male penguin `species` have sign
 <summary>
 Hints (click here)
 </summary>
-<br> Using the results from your assumption testing in Exercise 3, pick an appropriate post-hoc test to answer your question. <br>
+
+<br>
+
+Using the results from your assumption testing in Exercise 3, pick an appropriate post-hoc test to answer your question. <br>
 </details>
 
 <br>
@@ -957,7 +971,10 @@ Bring it all together in a plot.
 <summary>
 Hints (click here)
 </summary>
-<br> Think about what you'd like to display and go back to section 5 for more help. <br>
+
+<br>
+
+Think about what you'd like to display and go back to section 5 for more help. <br>
 </details>
 
 <br>
