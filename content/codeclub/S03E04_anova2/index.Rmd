@@ -47,13 +47,12 @@ If you've never used `ggplot2` before (or even if you have), you may find [this 
 We had a previous session [S02E10](/codeclub/s02e10_ggpubr/) developed by Daniel Quiroz that covers the package `ggpubr` and adding statistics to ggplots.
 
 ### We already did t-tests and ANOVA part 1
-Mike Sovic covered in the last code club [S03E01](/codeclub/s03e01_ttests/) how to run t-tests in R.  We will be building on what we learned last week.
-
+Mike Sovic covered in code club [S03E01](/codeclub/s03e01_ttests/) how to run t-tests in R.
 I covered ANOVA two weeks ago [S03E02](/codeclub/s03e02_anova/) and we will be building off that session today.
 
 <br>
 
-## Getting Started
+### Getting an R Markdown
 
 <details>
 <summary>Click here to get an Rmd (optional)</summary>
@@ -107,14 +106,14 @@ If you are looking for a good statistics class, I would recommend Dr. Kristin Me
 
 ----
 
-#### - Load libraries, get data
+#### Load packages, get data
 We are going to start with our favorite dataset `palmerpenguins` to provide the input data for our analysis.
 
 If you don't have any of the packages below, use `install.packages()` to download them.  
 ```{r, message = FALSE}
 library(tidyverse)
 library(palmerpenguins) # for data
-library(rstatix) # for testing assumptions
+library(rstatix) # for testing assumptions and running tests
 library(agricolae) # for post-hoc comparison of groups
 ```
 
@@ -158,12 +157,14 @@ We are going to use the Shapiro-Wilk test (using the function `shapiro_test()` w
 
 Our question is:
 
-* Does`bill_length_mm` vary by `species` in female penguins?
+* Does `bill_length_mm` vary by `species` in female penguins?
 
+<figure>
 <p align="center"> 
 <img src=culmen_depth.png width="50%" alt="a cute image showing the bill length as the horizontal (sticking out from the face) length of the penguin bill, and the bill depth as the vertical (perpendicular to the ground) bill depth">
+<figcaption>Illustration by <a href="https://allisonhorst.github.io/palmerpenguins/articles/art.html">Allison Horst</a></figcaption>
 </p>
-Illustration by [Allison Horst](https://allisonhorst.github.io/palmerpenguins/articles/art.html)
+</figure>
 
 ```{r}
 # testing for all female penguins together
@@ -184,7 +185,7 @@ Note that if we test all the penguins together, it looks like we do not have nor
 
 Can we visualize normality in another way?
 
-Let's quick make a new dataframe that includes only the female penguins, and drop missing values, so that we don't have to keep including the `filter()` and `drop_na()` statements.
+Let's quickly make a new dataframe that includes only the female penguins, and drop missing values, so that we don't have to keep including the `filter()` and `drop_na()` statements.
 ```{r}
 female_penguins <- penguins %>%
   filter(sex == "female") %>%
@@ -269,11 +270,16 @@ bill_length_kruskal <- female_penguins %>%
 ```
 
 The function `kruskal_test()` already puts the output of the function into a tidy format, so we can simply view it.
-```{r}
+
+```{r, eval=FALSE}
 View(bill_length_kruskal)
 ```
 
-We can also look at our data by visually plotting it, as below.
+```{r, echo = FALSE}
+knitr::kable(bill_length_kruskal)
+```
+
+We can also look at our data visually by plotting it, as below.
 ```{r}
 female_penguins %>%
   ggplot(aes(x = species, y = bill_length_mm)) +
@@ -299,7 +305,7 @@ Test your assumptions for normality to determine what would be the appropriate t
   <summary>
   Hints (click here)
   </summary>
-
+<br>
 
   Use the function `shapiro_test()` to test normality.  If your data is non-normal, you can check to see if log transforming it makes it normal.
 <br>
@@ -377,7 +383,7 @@ Test your assumptions for equal variance to determine what would be the appropri
   <summary>
   Hints (click here)
   </summary>
-
+<br>
 
 You can use the function `levene_test()` to test for equal variance.
 <br>
@@ -414,6 +420,7 @@ Conduct your Kruskal-Wallis test or ANOVA to see if there is any overall signifi
   <summary>
   Hints (click here)
   </summary>
+<br>
 
   Review the information in section 3 of this post.  You could also use the package `ggpubr`.
 <br>
@@ -432,8 +439,13 @@ bill_depth_kruskal <- male_penguins %>%
   kruskal_test(bill_depth_mm ~ species)
 ```
 
-```{r}
+```{r, eval=FALSE}
 View(bill_depth_kruskal)
+```
+
+
+```{r, echo = FALSE}
+knitr::kable(bill_depth_kruskal)
 ```
 
 ANOVA - to use this you need to be using normal data (here, the log transformed data).
@@ -476,12 +488,11 @@ View(dunn_bill_length)
 knitr::kable(dunn_bill_length)
 ```
 
-
 From this result, we can see that Adelie is significantly different than Chinstrap and Gentoo, but Chinstrap and Gentoo are not significantly different from each other.
 
 The structure of this resulting object `dunn_bill_length` can be determined using the code below.
 ```{r}
-class(dunn_bill_length)
+str(dunn_bill_length)
 ```
 
 This df does not have a 'groups' column, but if we want to plot in the same way, we can make a new object which we use for plotting.  I'm going to show you here how to do this manually.
@@ -588,11 +599,16 @@ dunn_bill_depth <- male_penguins %>%
             p.adjust.method = "BH")
 ```
 
-```{r}
+```{r, eval=FALSE}
 View(dunn_bill_depth)
 ```
 
+```{r, echo = FALSE}
+knitr::kable(bill_length_kruskal)
+```
+
 Parametric post-hoc test
+
 ```{r}
 bonferroni_bill_depth <- agricolae::LSD.test(bill_depth_anova, 
                                              trt = "species", 
@@ -654,8 +670,6 @@ bill_depth_max
 ```
 
 ```{r}
-View(dunn_bill_depth)
-
 dunn_depth_for_plotting <- data.frame(species = c("Adelie", "Chinstrap", "Gentoo"),
                                 groups = c("a", "a", "b"))
 
