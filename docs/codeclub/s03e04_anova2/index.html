@@ -341,7 +341,7 @@
         content="2022-02-02T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-02-02T17:46:54-05:00">
+    <meta property="article:modified_time" content="2022-02-02T21:01:14-05:00">
   
 
   
@@ -742,10 +742,7 @@
         <li><a href="#new-to-ggplot">New to ggplot?</a></li>
         <li><a href="#adding-statistics-to-plots">Adding statistics to plots</a></li>
         <li><a href="#we-already-did-t-tests-and-anova-part-1">We already did t-tests and ANOVA part 1</a></li>
-      </ul>
-    </li>
-    <li><a href="#getting-started">Getting Started</a>
-      <ul>
+        <li><a href="#getting-an-r-markdown">Getting an R Markdown</a></li>
         <li><a href="#rmarkdown-for-today">RMarkdown for today</a></li>
         <li><a href="#introduction">Introduction</a></li>
       </ul>
@@ -910,10 +907,9 @@
 <h3 id="adding-statistics-to-plots">Adding statistics to plots</h3>
 <p>We had a previous session <a href="/codeclub/s02e10_ggpubr/">S02E10</a> developed by Daniel Quiroz that covers the package <code>ggpubr</code> and adding statistics to ggplots.</p>
 <h3 id="we-already-did-t-tests-and-anova-part-1">We already did t-tests and ANOVA part 1</h3>
-<p>Mike Sovic covered in the last code club <a href="/codeclub/s03e01_ttests/">S03E01</a> how to run t-tests in R. We will be building on what we learned last week.</p>
-<p>I covered ANOVA two weeks ago <a href="/codeclub/s03e02_anova/">S03E02</a> and we will be building off that session today.</p>
+<p>Mike Sovic covered in code club <a href="/codeclub/s03e01_ttests/">S03E01</a> how to run t-tests in R. I covered ANOVA two weeks ago <a href="/codeclub/s03e02_anova/">S03E02</a> and we will be building off that session today.</p>
 <br>
-<h2 id="getting-started">Getting Started</h2>
+<h3 id="getting-an-r-markdown">Getting an R Markdown</h3>
 <details>
 <summary>
 Click here to get an Rmd (optional)
@@ -956,13 +952,13 @@ Click here to get an Rmd (optional)
 <p>If you are looking for a good statistics class, I would recommend Dr. Kristin Mercer&rsquo;s <a href="https://hcs.osu.edu/courses/hcs-8887" target="_blank" rel="noopener">HCS 8887 Experimental Design</a>.</p>
 <br>
 <hr>
-<h4 id="--load-libraries-get-data">- Load libraries, get data</h4>
+<h4 id="load-packages-get-data">Load packages, get data</h4>
 <p>We are going to start with our favorite dataset <code>palmerpenguins</code> to provide the input data for our analysis.</p>
 <p>If you don&rsquo;t have any of the packages below, use <a href="https://rdrr.io/r/utils/install.packages.html" target="_blank" rel="noopener"><code>install.packages()</code></a> to download them.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span> <span class='c'># for data</span>
-<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://rpkgs.datanovia.com/rstatix/'>rstatix</a></span><span class='o'>)</span> <span class='c'># for testing assumptions</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://rpkgs.datanovia.com/rstatix/'>rstatix</a></span><span class='o'>)</span> <span class='c'># for testing assumptions and running tests</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'>agricolae</span><span class='o'>)</span> <span class='c'># for post-hoc comparison of groups</span></code></pre>
 </div>
 <br>
@@ -992,7 +988,7 @@ Click here to get an Rmd (optional)
 </div>
 <p>What is within this dataset?</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
 <span class='c'>#&gt; Rows: 344</span>
 <span class='c'>#&gt; Columns: 8</span>
 <span class='c'>#&gt; $ species           <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span> Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…</span>
@@ -1017,17 +1013,21 @@ Click here to get an Rmd (optional)
 <p>We are going to use the Shapiro-Wilk test (using the function <a href="https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html" target="_blank" rel="noopener"><code>shapiro_test()</code></a> which is in the package <code>rstatix</code> to determine normality, but will do it groupwise. This function is a pipe-friendly wrapper for the function <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/shapiro.test" target="_blank" rel="noopener"><code>shapiro.test()</code></a>, which just means you can use it with pipes.</p>
 <p>Our question is:</p>
 <ul>
-<li>Does<code>bill_length_mm</code> vary by <code>species</code> in female penguins?</li>
+<li>Does <code>bill_length_mm</code> vary by <code>species</code> in female penguins?</li>
 </ul>
+<figure>
 <p align="center">
 <img src=culmen_depth.png width="50%" alt="a cute image showing the bill length as the horizontal (sticking out from the face) length of the penguin bill, and the bill depth as the vertical (perpendicular to the ground) bill depth">
+<figcaption>
+Illustration by <a href="https://allisonhorst.github.io/palmerpenguins/articles/art.html">Allison Horst</a>
+</figcaption>
 </p>
-<p>Illustration by <a href="https://allisonhorst.github.io/palmerpenguins/articles/art.html" target="_blank" rel="noopener">Allison Horst</a></p>
+</figure>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># testing for all female penguins together</span>
-<span class='nv'>penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>rstatix</span><span class='nf'>::</span><span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html'>shapiro_test</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 × 3</span></span>
 <span class='c'>#&gt;   variable       statistic         p</span>
@@ -1035,10 +1035,10 @@ Click here to get an Rmd (optional)
 <span class='c'>#&gt; <span style='color: #555555;'>1</span> bill_length_mm     0.950 0.000<span style='text-decoration: underline;'>014</span>0</span>
 
 <span class='c'># testing by species</span>
-<span class='nv'>penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>rstatix</span><span class='nf'>::</span><span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html'>shapiro_test</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 4</span></span>
 <span class='c'>#&gt;   species   variable       statistic       p</span>
@@ -1049,18 +1049,18 @@ Click here to get an Rmd (optional)
 </div>
 <p>Note that if we test all the penguins together, it looks like we do not have normal data. If we test by species, we see that two speces have normal data distribution and one (Chinstrap) does not.</p>
 <p>Can we visualize normality in another way?</p>
-<p>Let&rsquo;s quick make a new dataframe that includes only the female penguins, and drop missing values, so that we don&rsquo;t have to keep including the <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> and <a href="https://tidyr.tidyverse.org/reference/drop_na.html" target="_blank" rel="noopener"><code>drop_na()</code></a> statements.</p>
+<p>Let&rsquo;s quickly make a new dataframe that includes only the female penguins, and drop missing values, so that we don&rsquo;t have to keep including the <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> and <a href="https://tidyr.tidyverse.org/reference/drop_na.html" target="_blank" rel="noopener"><code>drop_na()</code></a> statements.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"female"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='o'>)</span></code></pre>
 </div>
 <p>Visualizing with a histogram by <code>species</code>.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/vars.html'>vars</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_histogram</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_grid</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" /></p>
@@ -1073,14 +1073,14 @@ Click here to get an Rmd (optional)
 <li><code>mutate(new_variable = function(existing_variable))</code></li>
 </ul>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_female_penguins</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_female_penguins</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>bill_length_mm_log2 <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/Log.html'>log2</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span></code></pre>
 </div>
 <p>Testing using <a href="https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html" target="_blank" rel="noopener"><code>shapiro_test()</code></a> again.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span> 
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_female_penguins</span> <span class='o'>%&gt;%</span> 
   <span class='c'># don't need drop_na() because we already did that</span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html'>shapiro_test</a></span><span class='o'>(</span><span class='nv'>bill_length_mm_log2</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 4</span></span>
 <span class='c'>#&gt;   species   variable            statistic       p</span>
@@ -1091,10 +1091,10 @@ Click here to get an Rmd (optional)
 </div>
 <p>Still not passing the Shapiro Test. Let&rsquo;s still look at this visually.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm_log2</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/vars.html'>vars</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_female_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm_log2</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_histogram</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_grid</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" /></p>
@@ -1103,7 +1103,7 @@ Click here to get an Rmd (optional)
 <h4 id="equal-variance">Equal variance</h4>
 <p>We can test for equal variance using Levene&rsquo;s test, <a href="https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/levene_test" target="_blank" rel="noopener"><code>levene_test()</code></a> which is part of the <code>rstatix</code> package. Again, this is a pipe-friendly wrapper for the function <a href="https://www.rdocumentation.org/packages/lawstat/versions/3.4/topics/levene.test" target="_blank" rel="noopener"><code>levene.test()</code></a>.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/levene_test.html'>levene_test</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span> <span class='o'>~</span> <span class='nv'>species</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 × 4</span></span>
 <span class='c'>#&gt;     df1   df2 statistic     p</span>
@@ -1118,9 +1118,9 @@ Click here to get an Rmd (optional)
 <p>We want to see if there are any differences in bill length (<code>bill_length_mm</code>) in penguins by <code>species</code>. Since our data violates the assumptions of normality, we should do this using a test that does not require normality, and we can use the <a href="https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance" target="_blank" rel="noopener">Kruskal Wallis test</a>. The Kruskal-Wallis test, can be run using the <code>rstatix</code> function <a href="https://www.rdocumentation.org/packages/rstatix/versions/0.7.0/topics/kruskal_test" target="_blank" rel="noopener"><code>kruskal_test()</code></a>.</p>
 <p>First let&rsquo;s get some descriptive information about our data.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>count</span><span class='o'>(</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
 <span class='c'>#&gt; <span style='color: #555555;'># Groups:   species [3]</span></span>
 <span class='c'>#&gt;   species       n</span>
@@ -1135,21 +1135,45 @@ Click here to get an Rmd (optional)
 </div>
 <p>We can run a Kruskal-Wallis test by indicating our model.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_length_kruskal</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_length_kruskal</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/kruskal_test.html'>kruskal_test</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span> <span class='o'>~</span> <span class='nv'>species</span><span class='o'>)</span></code></pre>
 </div>
 <p>The function <a href="https://rpkgs.datanovia.com/rstatix/reference/kruskal_test.html" target="_blank" rel="noopener"><code>kruskal_test()</code></a> already puts the output of the function into a tidy format, so we can simply view it.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>bill_length_kruskal</span><span class='o'>)</span></code></pre>
 </div>
-<p>We can also look at our data by visually plotting it, as below.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_jitter.html'>geom_jitter</a></span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">.y.</th>
+<th style="text-align:right">n</th>
+<th style="text-align:right">statistic</th>
+<th style="text-align:right">df</th>
+<th style="text-align:right">p</th>
+<th style="text-align:left">method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">bill_length_mm</td>
+<td style="text-align:right">165</td>
+<td style="text-align:right">121.6214</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:left">Kruskal-Wallis</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can also look at our data visually by plotting it, as below.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_jitter</span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <br>
 <hr>
@@ -1163,7 +1187,8 @@ Click here to get an Rmd (optional)
 <summary>
 Hints (click here)
 </summary>
-Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal. <br>
+<br>
+<p>Use the function <a href="https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html" target="_blank" rel="noopener"><code>shapiro_test()</code></a> to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal. <br></p>
 </details>
 <br>
 <details>
@@ -1173,14 +1198,14 @@ Solutions (click here)
 Shapiro-Wilk Test
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># create df with male penguins and no NAs</span>
-<span class='nv'>male_penguins</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"male"</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<span class='nv'>male_penguins</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>sex</span> <span class='o'>==</span> <span class='s'>"male"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='o'>)</span></code></pre>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># run shapiro test</span>
-<span class='nv'>male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<span class='nv'>male_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>rstatix</span><span class='nf'>::</span><span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html'>shapiro_test</a></span><span class='o'>(</span><span class='nv'>bill_depth_mm</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 4</span></span>
 <span class='c'>#&gt;   species   variable      statistic      p</span>
@@ -1191,24 +1216,24 @@ Shapiro-Wilk Test
 </div>
 <p>Visualize</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/vars.html'>vars</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>male_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_histogram</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_grid</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>See if log-transforming your data would allow you to use parametric tests.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_male_penguins</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_male_penguins</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>bill_depth_mm_log2 <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/Log.html'>log2</a></span><span class='o'>(</span><span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span></code></pre>
 </div>
 <p>Testing using <a href="https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html" target="_blank" rel="noopener"><code>shapiro_test()</code></a> again.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span> 
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_male_penguins</span> <span class='o'>%&gt;%</span> 
   <span class='c'># don't need drop_na() because we already did that</span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html'>shapiro_test</a></span><span class='o'>(</span><span class='nv'>bill_depth_mm_log2</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 4</span></span>
 <span class='c'>#&gt;   species   variable           statistic      p</span>
@@ -1220,13 +1245,13 @@ Shapiro-Wilk Test
 <p>Ok! We could use log2 transformed data</p>
 <p>Visualize.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_depth_mm_log2</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/vars.html'>vars</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>log_male_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_depth_mm_log2</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_histogram</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>facet_grid</span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>vars</span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </details>
 <br>
@@ -1241,7 +1266,8 @@ Shapiro-Wilk Test
 <summary>
 Hints (click here)
 </summary>
-You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance. <br>
+<br>
+<p>You can use the function <a href="https://rpkgs.datanovia.com/rstatix/reference/levene_test.html" target="_blank" rel="noopener"><code>levene_test()</code></a> to test for equal variance. <br></p>
 </details>
 <br>
 <details>
@@ -1250,7 +1276,7 @@ Solutions (click here)
 </summary>
 Equal variance
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>male_penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/levene_test.html'>levene_test</a></span><span class='o'>(</span><span class='nv'>bill_depth_mm</span> <span class='o'>~</span> <span class='nv'>species</span><span class='o'>)</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 × 4</span></span>
 <span class='c'>#&gt;     df1   df2 statistic     p</span>
@@ -1270,7 +1296,8 @@ Equal variance
 <summary>
 Hints (click here)
 </summary>
-Review the information in section 3 of this post. You could also use the package `ggpubr`. <br>
+<br>
+<p>Review the information in section 3 of this post. You could also use the package <code>ggpubr</code>. <br></p>
 </details>
 <br>
 <details>
@@ -1279,11 +1306,35 @@ Solutions (click here)
 </summary>
 Kruskal-Wallis
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_depth_kruskal</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_depth_kruskal</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/kruskal_test.html'>kruskal_test</a></span><span class='o'>(</span><span class='nv'>bill_depth_mm</span> <span class='o'>~</span> <span class='nv'>species</span><span class='o'>)</span></code></pre>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>bill_depth_kruskal</span><span class='o'>)</span></code></pre>
+</div>
+<div class="highlight">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">.y.</th>
+<th style="text-align:right">n</th>
+<th style="text-align:right">statistic</th>
+<th style="text-align:right">df</th>
+<th style="text-align:right">p</th>
+<th style="text-align:left">method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">bill_depth_mm</td>
+<td style="text-align:right">168</td>
+<td style="text-align:right">116.152</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:left">Kruskal-Wallis</td>
+</tr>
+</tbody>
+</table>
 </div>
 <p>ANOVA - to use this you need to be using normal data (here, the log transformed data).</p>
 <div class="highlight">
@@ -1308,7 +1359,7 @@ Kruskal-Wallis
 <h2 id="4-posthoc-group-analysis">4. Posthoc group analysis</h2>
 <p>Now that we&rsquo;ve seen that <code>species</code> are significant effectors of <code>bill_length_mm</code>, our next logical question might be, which species specifically are different from each other? We can determine this by conducting a post-hoc test. We will do our post-hoc analysis using Dunn&rsquo;s test (which is for specifically ranked data) and the function <a href="https://rdrr.io/cran/rstatix/man/dunn_test.html" target="_blank" rel="noopener"><code>dunn_test()</code></a> which is a part of <code>rstatix</code>.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dunn_bill_length</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dunn_bill_length</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/dunn_test.html'>dunn_test</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span> <span class='o'>~</span> <span class='nv'>species</span>,
             p.adjust.method <span class='o'>=</span> <span class='s'>"BH"</span><span class='o'>)</span></code></pre>
 </div>
@@ -1371,8 +1422,36 @@ Kruskal-Wallis
 <p>From this result, we can see that Adelie is significantly different than Chinstrap and Gentoo, but Chinstrap and Gentoo are not significantly different from each other.</p>
 <p>The structure of this resulting object <code>dunn_bill_length</code> can be determined using the code below.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='o'>(</span><span class='nv'>dunn_bill_length</span><span class='o'>)</span>
-<span class='c'>#&gt; [1] "rstatix_test" "dunn_test"    "tbl_df"       "tbl"          "data.frame"</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>dunn_bill_length</span><span class='o'>)</span>
+<span class='c'>#&gt; rstatix_test [3 × 9] (S3: rstatix_test/dunn_test/tbl_df/tbl/data.frame)</span>
+<span class='c'>#&gt;  $ .y.         : chr [1:3] "bill_length_mm" "bill_length_mm" "bill_length_mm"</span>
+<span class='c'>#&gt;  $ group1      : chr [1:3] "Adelie" "Adelie" "Chinstrap"</span>
+<span class='c'>#&gt;  $ group2      : chr [1:3] "Chinstrap" "Gentoo" "Gentoo"</span>
+<span class='c'>#&gt;  $ n1          : Named int [1:3] 73 73 34</span>
+<span class='c'>#&gt;   ..- attr(*, "names")= chr [1:3] "Adelie" "Adelie" "Chinstrap"</span>
+<span class='c'>#&gt;  $ n2          : Named int [1:3] 34 58 58</span>
+<span class='c'>#&gt;   ..- attr(*, "names")= chr [1:3] "Chinstrap" "Gentoo" "Gentoo"</span>
+<span class='c'>#&gt;  $ statistic   : num [1:3] 8.861 9.41 -0.855</span>
+<span class='c'>#&gt;  $ p           : num [1:3] 7.93e-19 4.98e-21 3.93e-01</span>
+<span class='c'>#&gt;  $ p.adj       : num [1:3] 1.19e-18 1.49e-20 3.93e-01</span>
+<span class='c'>#&gt;  $ p.adj.signif: chr [1:3] "****" "****" "ns"</span>
+<span class='c'>#&gt;  - attr(*, "na.action")= 'omit' Named int 3</span>
+<span class='c'>#&gt;   ..- attr(*, "names")= chr "3"</span>
+<span class='c'>#&gt;  - attr(*, "args")=List of 5</span>
+<span class='c'>#&gt;   ..$ data           : tibble [165 × 8] (S3: tbl_df/tbl/data.frame)</span>
+<span class='c'>#&gt;   .. ..$ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='c'>#&gt;   .. ..$ island           : Factor w/ 3 levels "Biscoe","Dream",..: 3 3 3 3 3 3 3 3 1 1 ...</span>
+<span class='c'>#&gt;   .. ..$ bill_length_mm   : num [1:165] 39.5 40.3 36.7 38.9 41.1 36.6 38.7 34.4 37.8 35.9 ...</span>
+<span class='c'>#&gt;   .. ..$ bill_depth_mm    : num [1:165] 17.4 18 19.3 17.8 17.6 17.8 19 18.4 18.3 19.2 ...</span>
+<span class='c'>#&gt;   .. ..$ flipper_length_mm: int [1:165] 186 195 193 181 182 185 195 184 174 189 ...</span>
+<span class='c'>#&gt;   .. ..$ body_mass_g      : int [1:165] 3800 3250 3450 3625 3200 3700 3450 3325 3400 3800 ...</span>
+<span class='c'>#&gt;   .. ..$ sex              : Factor w/ 2 levels "female","male": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='c'>#&gt;   .. ..$ year             : int [1:165] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span>
+<span class='c'>#&gt;   ..$ formula        :Class 'formula'  language bill_length_mm ~ species</span>
+<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x562be8f2f618&gt; </span>
+<span class='c'>#&gt;   ..$ p.adjust.method: chr "BH"</span>
+<span class='c'>#&gt;   ..$ detailed       : logi FALSE</span>
+<span class='c'>#&gt;   ..$ method         : chr "dunn_test"</span></code></pre>
 </div>
 <p>This df does not have a &lsquo;groups&rsquo; column, but if we want to plot in the same way, we can make a new object which we use for plotting. I&rsquo;m going to show you here how to do this manually.</p>
 <div class="highlight">
@@ -1384,33 +1463,33 @@ Kruskal-Wallis
 <h2 id="5-bringing-it-together-in-a-plot">5. Bringing it together in a plot</h2>
 <p>We already looked at a first-pass plot, but let&rsquo;s customize it now, and add our statistical info. Here is our base plot.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_jitter.html'>geom_jitter</a></span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_jitter</span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-34-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-36-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>First let&rsquo;s make the plot more aesthetically pleasing.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>bill_length_plot</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, color <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_jitter.html'>geom_jitter</a></span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_classic</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># remove legend bc we don't need it</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Species"</span>,
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>bill_length_plot</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, color <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_jitter</span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># remove legend bc we don't need it</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Species"</span>,
        y <span class='o'>=</span> <span class='s'>"Bill Length, in mm"</span>,
        title <span class='o'>=</span> <span class='s'>"Penguin Culmen Bill Length Among Different Species"</span>,
        subtitle <span class='o'>=</span> <span class='s'>"Data collected from Palmer LTER, Antarctica"</span><span class='o'>)</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-35-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-37-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>We want to add the letters to this plot, so we can tell which groups of species by sex are significantly different. We are going to figure out what the maximum <code>bill_length_mm</code> for each species by sex is, so it will help us determine where to put our letter labels. Then, we cna add our labels to be higher than the largest data point.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_length_max</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='o'>(</span>max_bill_length_mm <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_length_max</span> <span class='o'>&lt;-</span> <span class='nv'>female_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>summarize</span><span class='o'>(</span>max_bill_length_mm <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='o'>(</span><span class='nv'>bill_length_mm</span><span class='o'>)</span><span class='o'>)</span>
 
 <span class='nv'>bill_length_max</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
@@ -1422,7 +1501,7 @@ Kruskal-Wallis
 </div>
 <p>Let&rsquo;s add our <code>bill_length_max</code> back to the df with our post-hoc groups <code>dunn_for_plotting</code>.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_for_plotting</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>full_join</a></span><span class='o'>(</span><span class='nv'>dunn_for_plotting</span>, <span class='nv'>bill_length_max</span>,
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_for_plotting</span> <span class='o'>&lt;-</span> <span class='nf'>full_join</span><span class='o'>(</span><span class='nv'>dunn_for_plotting</span>, <span class='nv'>bill_length_max</span>,
                                by <span class='o'>=</span> <span class='s'>"species"</span><span class='o'>)</span>
 
 <span class='nv'>bill_for_plotting</span>
@@ -1434,14 +1513,14 @@ Kruskal-Wallis
 <p>Let&rsquo;s plot.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_length_plot</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>bill_for_plotting</span>,
-            <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>,
+  <span class='nf'>geom_text</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>bill_for_plotting</span>,
+            <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>,
                 y <span class='o'>=</span> <span class='m'>3</span> <span class='o'>+</span> <span class='nv'>max_bill_length_mm</span>, 
                 color <span class='o'>=</span> <span class='nv'>species</span>,
                 label <span class='o'>=</span> <span class='nv'>groups</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>caption <span class='o'>=</span> <span class='s'>"Different letters indicate significant difference as determined by \na Kruskal-Wallis test with Dunn's post-hoc means separation"</span><span class='o'>)</span>
+  <span class='nf'>labs</span><span class='o'>(</span>caption <span class='o'>=</span> <span class='s'>"Different letters indicate significant difference as determined by \na Kruskal-Wallis test with Dunn's post-hoc means separation"</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-38-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-40-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>Also remember Daniel showed us how we can do <a href="https://biodash.github.io/codeclub/s02e10_ggpubr/" target="_blank" rel="noopener">somthing similar</a> using the package <code>ggpubr</code>.</p>
 <br>
@@ -1464,12 +1543,36 @@ Solutions (click here)
 </summary>
 Dunn's test
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dunn_bill_depth</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dunn_bill_depth</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rpkgs.datanovia.com/rstatix/reference/dunn_test.html'>dunn_test</a></span><span class='o'>(</span><span class='nv'>bill_depth_mm</span> <span class='o'>~</span> <span class='nv'>species</span>,
             p.adjust.method <span class='o'>=</span> <span class='s'>"BH"</span><span class='o'>)</span></code></pre>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>dunn_bill_depth</span><span class='o'>)</span></code></pre>
+</div>
+<div class="highlight">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">.y.</th>
+<th style="text-align:right">n</th>
+<th style="text-align:right">statistic</th>
+<th style="text-align:right">df</th>
+<th style="text-align:right">p</th>
+<th style="text-align:left">method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">bill_length_mm</td>
+<td style="text-align:right">165</td>
+<td style="text-align:right">121.6214</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:left">Kruskal-Wallis</td>
+</tr>
+</tbody>
+</table>
 </div>
 <p>Parametric post-hoc test</p>
 <div class="highlight">
@@ -1526,23 +1629,23 @@ Solutions (click here)
 </summary>
 Using Kruskal-Wallis and Dunn's post-hoc test
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>bill_depth_plot_kruskal</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_jitter.html'>geom_jitter</a></span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_classic</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># remove legend bc we don't need it</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Species"</span>,
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>bill_depth_plot_kruskal</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_jitter</span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># remove legend bc we don't need it</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Species"</span>,
        y <span class='o'>=</span> <span class='s'>"Bill Depth, in mm"</span>,
        title <span class='o'>=</span> <span class='s'>"Penguin Culmen Bill Depth Among Different Species"</span>,
        subtitle <span class='o'>=</span> <span class='s'>"Data collected from Palmer LTER, Antarctica"</span><span class='o'>)</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-42-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-45-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_depth_max</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='o'>(</span>max_bill_depth_mm <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='o'>(</span><span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_depth_max</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>summarize</span><span class='o'>(</span>max_bill_depth_mm <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='o'>(</span><span class='nv'>bill_depth_mm</span><span class='o'>)</span><span class='o'>)</span>
 
 <span class='nv'>bill_depth_max</span>
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 2</span></span>
@@ -1553,12 +1656,10 @@ Using Kruskal-Wallis and Dunn's post-hoc test
 <span class='c'>#&gt; <span style='color: #555555;'>3</span> Gentoo                 17.3</span></code></pre>
 </div>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='o'>(</span><span class='nv'>dunn_bill_depth</span><span class='o'>)</span>
-
-<span class='nv'>dunn_depth_for_plotting</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span>species <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"Adelie"</span>, <span class='s'>"Chinstrap"</span>, <span class='s'>"Gentoo"</span><span class='o'>)</span>,
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>dunn_depth_for_plotting</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span>species <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"Adelie"</span>, <span class='s'>"Chinstrap"</span>, <span class='s'>"Gentoo"</span><span class='o'>)</span>,
                                 groups <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"a"</span>, <span class='s'>"a"</span>, <span class='s'>"b"</span><span class='o'>)</span><span class='o'>)</span>
 
-<span class='nv'>depth_for_plotting_kruskal</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>full_join</a></span><span class='o'>(</span><span class='nv'>dunn_depth_for_plotting</span>, <span class='nv'>bill_depth_max</span>,
+<span class='nv'>depth_for_plotting_kruskal</span> <span class='o'>&lt;-</span> <span class='nf'>full_join</span><span class='o'>(</span><span class='nv'>dunn_depth_for_plotting</span>, <span class='nv'>bill_depth_max</span>,
                                by <span class='o'>=</span> <span class='s'>"species"</span><span class='o'>)</span>
 
 <span class='nv'>depth_for_plotting_kruskal</span>
@@ -1570,14 +1671,14 @@ Using Kruskal-Wallis and Dunn's post-hoc test
 <p>Let&rsquo;s plot.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_depth_plot_kruskal</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>depth_for_plotting_kruskal</span>,
-            <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>,
+  <span class='nf'>geom_text</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>depth_for_plotting_kruskal</span>,
+            <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>,
                 y <span class='o'>=</span> <span class='m'>1</span> <span class='o'>+</span> <span class='nv'>max_bill_depth_mm</span>, 
                 color <span class='o'>=</span> <span class='nv'>species</span>,
                 label <span class='o'>=</span> <span class='nv'>groups</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>caption <span class='o'>=</span> <span class='s'>"Different letters indicate significant difference as determined by \nthe Kruskal Wallis with Dunn's test for post-hoc means separation"</span><span class='o'>)</span>
+  <span class='nf'>labs</span><span class='o'>(</span>caption <span class='o'>=</span> <span class='s'>"Different letters indicate significant difference as determined by \nthe Kruskal Wallis with Dunn's test for post-hoc means separation"</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-45-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-48-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>Using ANOVA and Bonferroni post-hoc test</p>
 <div class="highlight">
@@ -1587,8 +1688,8 @@ Using Kruskal-Wallis and Dunn's post-hoc test
 <span class='c'>#&gt; Adelie              4.251426      a</span>
 <span class='c'>#&gt; Gentoo              3.972772      b</span>
 
-<span class='nv'>bonferroni_bill_depth_plotting</span> <span class='o'>&lt;-</span> <span class='nv'>bonferroni_bill_depth</span><span class='o'>$</span><span class='nv'>groups</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://tibble.tidyverse.org/reference/rownames.html'>rownames_to_column</a></span><span class='o'>(</span>var <span class='o'>=</span> <span class='s'>"species"</span><span class='o'>)</span>
+<span class='nv'>bonferroni_bill_depth_plotting</span> <span class='o'>&lt;-</span> <span class='nv'>bonferroni_bill_depth</span><span class='o'>$</span><span class='nv'>groups</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>rownames_to_column</span><span class='o'>(</span>var <span class='o'>=</span> <span class='s'>"species"</span><span class='o'>)</span>
 
 <span class='nv'>bonferroni_bill_depth_plotting</span>
 <span class='c'>#&gt;     species bill_depth_mm_log2 groups</span>
@@ -1597,7 +1698,7 @@ Using Kruskal-Wallis and Dunn's post-hoc test
 <span class='c'>#&gt; 3    Gentoo           3.972772      b</span></code></pre>
 </div>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bonferroni_bill_depth_plotting</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>full_join</a></span><span class='o'>(</span><span class='nv'>bonferroni_bill_depth_plotting</span>, <span class='nv'>bill_depth_max</span>,
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bonferroni_bill_depth_plotting</span> <span class='o'>&lt;-</span> <span class='nf'>full_join</span><span class='o'>(</span><span class='nv'>bonferroni_bill_depth_plotting</span>, <span class='nv'>bill_depth_max</span>,
                                by <span class='o'>=</span> <span class='s'>"species"</span><span class='o'>)</span>
 
 <span class='nv'>bonferroni_bill_depth_plotting</span>
@@ -1607,24 +1708,24 @@ Using Kruskal-Wallis and Dunn's post-hoc test
 <span class='c'>#&gt; 3    Gentoo           3.972772      b              17.3</span></code></pre>
 </div>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>bill_depth_plot_bonf</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'><a href='https://rpkgs.datanovia.com/rstatix/reference/pipe.html'>%&gt;%</a></span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_jitter.html'>geom_jitter</a></span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>geom_text</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>bonferroni_bill_depth_plotting</span>,
-            <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>,
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='o'>(</span><span class='nv'>bill_depth_plot_bonf</span> <span class='o'>&lt;-</span> <span class='nv'>male_penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>ggplot</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_boxplot</span><span class='o'>(</span>outlier.shape <span class='o'>=</span> <span class='kc'>NA</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_jitter</span><span class='o'>(</span>width <span class='o'>=</span> <span class='m'>0.3</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_text</span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>bonferroni_bill_depth_plotting</span>,
+            <span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>species</span>,
                 y <span class='o'>=</span> <span class='m'>1</span> <span class='o'>+</span> <span class='nv'>max_bill_depth_mm</span>, 
                 color <span class='o'>=</span> <span class='nv'>species</span>,
                 label <span class='o'>=</span> <span class='nv'>groups</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_classic</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># remove legend bc we don't need it</span>
-  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Species"</span>,
+  <span class='nf'>theme_classic</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>theme</span><span class='o'>(</span>legend.position <span class='o'>=</span> <span class='s'>"none"</span><span class='o'>)</span> <span class='o'>+</span> <span class='c'># remove legend bc we don't need it</span>
+  <span class='nf'>labs</span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Species"</span>,
        y <span class='o'>=</span> <span class='s'>"Bill Depth, in mm"</span>,
        title <span class='o'>=</span> <span class='s'>"Penguin Culmen Bill Depth Among Different Species"</span>,
        subtitle <span class='o'>=</span> <span class='s'>"Data collected from Palmer LTER, Antarctica"</span>,
        caption <span class='o'>=</span> <span class='s'>"Different letters indicate significant difference as determined by \none-way ANOVA with Bonferroni post-hoc means separation"</span><span class='o'>)</span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-48-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-51-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </details>
 <br>
