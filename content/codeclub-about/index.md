@@ -10,9 +10,9 @@ toc: true
 
 <div class="alert alert-note">
 <div>
-<b>Code Club restarts for the Spring '22 semester in the week of January 10th &ndash;
+<b>Code Club is currently ongoing for the Spring '22 semester &ndash;
 see the <a href="/codeclub-schedule/">schedule</a>.
-If you're interested in joining us, please fill out the
+You can join us at any point &ndash; to do so, please fill out the
 <a href="#sign-up">form at the bottom of this page!</a></b>
 </div>
 </div>
