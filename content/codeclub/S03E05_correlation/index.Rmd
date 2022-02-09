@@ -1,0 +1,381 @@
+---
+title: "S03E05: Introduction to correlation"
+subtitle: "Using the _corrr_ package"
+summary: "...."
+authors: [stephen-opiyo]
+date: "`r Sys.Date()`"
+output: hugodown::md_document
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+-----
+
+## Housekeeping
+
+#### New to Code Club?
+
+Check out the [Code Club Computer Setup](/codeclub-setup/) instructions,
+which also has pointers for if you're new to R or RStudio.
+A few related Code Club sessions include:
+
+- [S03E01](/codeclub/s03e01_ttests/): T-tests
+- [S03E02](/codeclub/s03e02_anova/): ANOVA
+- [S03E03](/codeclub/s03e03_pca/): PCA
+- [S03E04](/codeclub/s03e04_anova2/): ANOVA part II
+
+#### What will we go over today
+
+-   We will introduce correlation.
+-   Learn using the [`corrr()`](https://cran.r-project.org/web/packages/corrr/index.html)
+    package.
+
+#### R packages we will use
+
+- _corrr_ -- for correlation analysis
+- _palmerpenguins_ -- for the penguins data
+- _tidyverse_ -- for data wrangling
+
+<br>
+
+----
+
+## 1 - What is correlation?
+
+Correlation is a statistical method used to assess a linear association between two continuous variables.
+It is measured by a statistic called the correlation coefficient,
+which represents the strength of the linear association between the variables in question.
+It is a dimensionless quantity that takes a value in the range −1 to +1.
+A correlation coefficient of zero indicates that no linear relationship exists
+between two continuous variables,
+and a correlation coefficient of −1 or +1 indicates a perfect linear relationship. 
+(The stronger the correlation, the closer the correlation coefficient comes to −1 and +1.)
+
+**Positive coefficient**: If the coefficient is a positive number,
+the variables are positively related (i.e., as the value of one variable goes up,
+the value of the other also tends to do so). 
+ 
+**Negative coefficient**: If the coefficient is a negative number,
+the variables are inversely related (i.e., as the value of one variable goes up,
+the value of the other tends to go down).  
+
+**Types of correlation coefficients**:
+There are two main types of correlation coefficients,
+_Pearson's correlation coefficient_ and _Spearman's rank correlation coefficient_.
+The correct usage of correlation coefficient type depends on the types of variables being studied.   
+
+- *Pearson's correlation coefficient*:
+  Pearson's correlation coefficient is denoted as **ϱ** for a population parameter
+  and as **r** for a sample statistic.
+  It is used when both variables being studied are normally distributed.
+
+- *Spearman's rank correlation coefficient*:
+  Spearman's rank correlation coefficient is denoted as **ϱs** for a population
+  parameter and as **rs** for a sample statistic.
+  It is appropriate when one or both variables are skewed or ordinal.
+
+**Rule of thumb for interpreting the size of a correlation coefficient**
+
+- .90 to 1.00 (−.90 to −1.00) -- Very high positive (negative) correlation
+- .70 to .90 (−.70 to −.90) -- High positive (negative) correlation
+- .50 to .70 (−.50 to −.70) -- Moderate positive (negative) correlation
+- .30 to .50 (−.30 to −.50) -- Low positive (negative) correlation
+- .00 to .30 (.00 to −.30) -- Negligible correlation
+
+<br>
+
+------
+
+## 2 - The _corrr_ package and our data
+
+The _corrr_ package is a tool for exploring correlations.
+It makes it easy to perform routine tasks when exploring correlation matrices
+such as ignoring the diagonal,
+focusing on the correlations of certain variables against others,
+or rearranging and visualizing the matrix in terms of the strength of the correlations.
+The _corrr_ package exists within the Comprehensive R Archive Network,
+or [CRAN](https://cran.r-project.org/).
+
+Let's install it -- we only need to do this once:
+
+```{r, eval = FALSE}
+install.packages("corrr")
+```
+
+To use the _corrr_ package, we need to load it up using `library()`.
+We also need to load the _tidyverse_ since we will be using it later:
+
+```{r}
+library(corrr)
+library(tidyverse)
+```
+
+-----
+
+**Let's get set up and grab some data to work with.**
+
+We will use the same dataset [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/)
+used in the previous weeks.
+
+If you didn't install this package previously, please do so now:
+
+```{r, eval = FALSE}
+install.packages("palmerpenguins")
+```
+
+Then, to use the package, we need to use the function `library()` to load it:
+
+```{r}
+library(palmerpenguins)
+```
+
+The data we will use today is a dataframe called `penguins`,
+which we reference after loading the package.
+We will look at the structure of the data:
+
+```{r}
+# look at the first 10 rows, all columns
+head(penguins, 10)
+
+# check the structure of penguins_data
+# glimpse() which is a part of dplyr functions 
+# similarly to str() and can be used interchangeably
+glimpse(penguins)
+```
+
+Okay, now we have a sense of what the `penguins` dataset is.
+
+<br>
+
+------
+
+## 2 - Basic usage of the _corrr_ package
+
+Now we want to use the _corrr_ package to correlate variables in the `penguins`
+dataframe.
+The _corrr_ package uses the `correlate()` function and returns correlation
+results in a tibble output.
+
+Now let select variables from penguins using the pipe operator `%>%` and the
+`select()` function.
+We then specify name of the variables that we want to select.
+In this example, we are selecting variables `bill_length_mm`, `bill_depth_mm`,
+`flipper_length_mm`, and `body_mass_g`.
+
+Then, we will compute correlations among the variables:
+
+```{r}
+penguins_cor <- penguins %>%   # Take penguins_data
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %>%
+  correlate()       # Select variables and calculate their correlations
+
+penguins_cor        # Correlation results in tibble
+```
+
+The output of the `correlate()` function can be piped (`%>%`) to:
+
+- The `shave()` and `rearrange()` functions for internal changes
+- The `focus()`, and `stretch()` functions to reshape the structure
+- And the `rplot()`, `fashion()`, and `network_plot()` for visualizations.
+
+*Let us start with internal changes*.
+
+- The `shave()` function removes values of the upper or lower triangle and sets them to `NA`.
+- The `rearrange()` function arranges the columns and rows based on correlation strengths.
+
+We can apply the `shave()` function remove the top triangle:
+
+```{r}
+penguins_cor %>%   # Take penguins_cor results
+  shave()          # Remove the upper triangle
+```
+
+You can see that values of upper triangle are replaced by `NA`s. 
+Now let us remove `NA`s by using the `fashion()` function:
+
+```{r}
+penguins_cor %>%   # Take penguins_cor results
+  shave %>%        # Remove the upper triangle
+  fashion()        # Remove NAs
+```
+
+You can see that the `NA`s have been removed, and we have a clean tibble (dataframe).
+
+Now, let's rearrange columns based on correlation strengths:
+
+```{r}
+penguins_cor %>%   # Take penguins_cor results
+  rearrange %>%    # Rearrange based on correlation strengths
+  shave %>%        # Remove the upper triangle
+  fashion()        # Remove NAs
+```
+
+You can see that the values are arranged based on correlation strengths.
+
+<br>
+
+-----
+
+<div class="puzzle"><div>
+
+## Breakout session 1
+
+- From the `penguins` dataframe,
+  create a new dataset called `penguins_biscoe` by selecting only the penguins
+  from the island of Biscoe.  
+
+- In the `penguins_biscoe` dataframe,
+  what are the correlations between `bill_length_mm`, `bill_depth_mm`,
+  `flipper_length_mm`, and `year`? 
+
+- Remove the upper triangle and `NA`s from the results,
+  and arrange based on correlation strengths.
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+Use the `filter()` function to only select penguins from the island of Biscoe.
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+Select the penguins from the island of Biscoe:
+
+```{r, eval = TRUE}
+penguins_biscoe <- penguins %>%  # Save results in new object
+  filter(island == "Biscoe")     # Select data from only Biscoe island  
+```
+
+Calculate correlation of the variables in `penguins_biscoe`:
+
+```{r, eval = TRUE}
+biscoe_cor <- penguins_biscoe %>%
+  # select bill_length_mm, bill_depth_mm, flipper_length_mm, and year
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, year) %>%
+  correlate()        # Calculate correlation
+
+biscoe_cor
+```
+
+To remove the upper triangle and rearrange the results:
+
+```{r, eval = TRUE}
+biscoe_cor  %>%      # Take biscoe_cor results
+  rearrange() %>%    # Rearrange based on correlation strengths
+  shave() %>%        # Remove the upper triangle
+  fashion()          # Remove NAs
+  
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+----
+
+## 3 - Reshaping and visualizations
+
+The output of the `correlate()` function can also be piped to:
+
+- The `focus()` and `stretch()` functions to reshape the structure
+- And the `rplot()`, and `network_plot()` for visualizations.
+
+*Reshape structure*:
+
+- The `focus()` function select columns or rows based on the variable specified.
+- The `stretch()` converts correction results from a tibble into a long format. 
+
+*Visualizations*:
+
+- The `rplot()` function plots correlation results
+- The `network_plot()` function plots a point for each variable,
+  joined by paths for correlations
+
+Let use the `stretch()` function to convert our correlation results
+`penguins_cor` into a long format:
+
+```{r}
+penguins_cor %>%
+  stretch()
+```
+
+You can see that the results are coverted into a long format. 
+
+We can also select a column we are interested in.
+Let us select only correlation between "bill_depth_mm" and the rest of the variables.
+
+```{r}
+penguins_cor %>%
+  focus("bill_depth_mm")
+```
+
+You can see that we selected only the correlations between `bill_depth_mm`
+and other variables.
+
+We can now visualize the results:
+
+```{r}
+penguins_cor %>% 
+  rearrange() %>%   # Rearrange based on correlation strengths
+  rplot()           # Plot
+```
+
+We plotted based on correlation strengths.
+
+<br>
+
+-----
+
+<div class="puzzle"><div>
+
+## Breakout session 2 
+
+Use the dataframe (`penguins_biscoe`) you created in Breakout session 1 to:
+
+- Calculate correlations among the variables,
+  and present the results in a long format
+
+- Select the correlations that include `year`
+
+- Plot a correlation graph based on correlation strengths
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r}
+biscoe_cor <- penguins_biscoe %>%
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, year) %>%
+  correlate()
+
+biscoe_cor %>%
+  stretch()
+```
+
+You can see that results are in a long format.
+
+```{r}
+biscoe_cor %>%
+   focus("year")
+```
+
+Correlations with `year`:
+
+```{r}
+biscoe_cor %>%
+  rearrange() %>%
+  rplot()
+```
+
+</details>
+
+</div></div>
+
+<br>
+
