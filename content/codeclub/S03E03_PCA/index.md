@@ -3,10 +3,10 @@ title: "S03E03: Principal Component Analysis (PCA)"
 subtitle: "How to run a PCA in R and plot the results"
 summary: "Today, we'll discuss how you can run a Principal Component Analysis (PCA) in R with the `prcomp()` function and create three types of plots from the results: a score plot, a scree plot, and a biplot."
 authors: [admin]
-date: "2022-01-27"
+date: "2022-02-08"
 output: hugodown::md_document
 toc: true
-rmd_hash: bd1f60e83e024122
+rmd_hash: 7ec8e50cfdd83d3f
 
 ---
 
@@ -28,7 +28,7 @@ A PCA of genetic variation among Europeans, from <a href="https://www.nature.com
 Check out the [Code Club Computer Setup](/codeclub-setup/) instructions, which also has pointers for if you're new to R or RStudio. A few related Code Club sessions include:
 
 -   [S03E01](/codeclub/s03e01_ttests/): T-tests
--   [S03E01](/codeclub/s03e02_anova/): ANOVA
+-   [S03E02](/codeclub/s03e02_anova/): ANOVA
 -   [S02E06](/codeclub/s02e06_ggplot2/): Intro to *ggplot2*, part I
 -   [S02E07](/codeclub/s02e07_ggplot2_part2/): Intro to *ggplot2*, part II
 
