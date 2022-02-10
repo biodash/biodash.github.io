@@ -3,10 +3,10 @@ title: "S03E05: Introduction to correlation"
 subtitle: "Using the _corrr_ package"
 summary: "...."
 authors: [stephen-opiyo]
-date: "2022-02-08"
+date: "2022-02-09"
 output: hugodown::md_document
 toc: true
-rmd_hash: 0c9919ad7ea96930
+rmd_hash: 2e70dfb3f086387a
 
 ---
 
@@ -163,7 +163,7 @@ Okay, now we have a sense of what the `penguins` dataset is.
 
 Now we want to use the *corrr* package to correlate variables in the `penguins` dataframe. The *corrr* package uses the [`correlate()`](https://corrr.tidymodels.org/reference/correlate.html) function and returns correlation results in a tibble output.
 
-Now let select variables from penguins using the pipe operator `%>%` and the `select()` function. We then specify name of the variables that we want to select. In this example, we are selecting variables `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, and `body_mass_g`.
+Now let's select variables from the `penguins` dataframe using the pipe operator `%>%` and the `select()` function. We then specify the name of the variables that we want to select. In this example, we are selecting variables `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, and `body_mass_g`.
 
 Then, we will compute correlations among the variables:
 
@@ -198,7 +198,7 @@ The output of the [`correlate()`](https://corrr.tidymodels.org/reference/correla
 -   The [`shave()`](https://corrr.tidymodels.org/reference/shave.html) function removes values of the upper or lower triangle and sets them to `NA`.
 -   The [`rearrange()`](https://corrr.tidymodels.org/reference/rearrange.html) function arranges the columns and rows based on correlation strengths.
 
-We can apply the [`shave()`](https://corrr.tidymodels.org/reference/shave.html) function remove the top triangle:
+We can apply the [`shave()`](https://corrr.tidymodels.org/reference/shave.html) function to remove the top triangle:
 
 <div class="highlight">
 
@@ -214,7 +214,7 @@ We can apply the [`shave()`](https://corrr.tidymodels.org/reference/shave.html) 
 
 </div>
 
-You can see that values of upper triangle are replaced by `NA`s. Now let us remove `NA`s by using the [`fashion()`](https://corrr.tidymodels.org/reference/fashion.html) function:
+You can see that the values in the upper triangle have been replaced by `NA`s. Now let us remove `NA`s by using the [`fashion()`](https://corrr.tidymodels.org/reference/fashion.html) function:
 
 <div class="highlight">
 
