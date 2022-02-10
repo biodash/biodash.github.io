@@ -13,6 +13,404 @@
     </image>
     
     <item>
+      <title>S03E05: Introduction to correlation</title>
+      <link>https://biodash.github.io/codeclub/s03e05_correlation/</link>
+      <pubDate>Wed, 09 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/s03e05_correlation/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;housekeeping&#34;&gt;Housekeeping&lt;/h2&gt;
+&lt;h4 id=&#34;new-to-code-club&#34;&gt;New to Code Club?&lt;/h4&gt;
+&lt;p&gt;Check out the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has pointers for if you&amp;rsquo;re new to R or RStudio. A few related Code Club sessions include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e01_ttests/&#34;&gt;S03E01&lt;/a&gt;: T-tests&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e02_anova/&#34;&gt;S03E02&lt;/a&gt;: ANOVA&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e03_pca/&#34;&gt;S03E03&lt;/a&gt;: PCA&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e04_anova2/&#34;&gt;S03E04&lt;/a&gt;: ANOVA part II&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;what-will-we-go-over-today&#34;&gt;What will we go over today&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;We will introduce correlation.&lt;/li&gt;
+&lt;li&gt;Learn using the &lt;a href=&#34;https://cran.r-project.org/web/packages/corrr/index.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;corrr()&lt;/code&gt;&lt;/a&gt; package.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;r-packages-we-will-use&#34;&gt;R packages we will use&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;corrr&lt;/em&gt; &amp;ndash; for correlation analysis&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;palmerpenguins&lt;/em&gt; &amp;ndash; for the penguins data&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;tidyverse&lt;/em&gt; &amp;ndash; for data wrangling&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1---what-is-correlation&#34;&gt;1 - What is correlation?&lt;/h2&gt;
+&lt;p&gt;Correlation is a statistical method used to assess a linear association between two continuous variables. It is measured by a statistic called the correlation coefficient, which represents the strength of the linear association between the variables in question. It is a dimensionless quantity that takes a value in the range −1 to +1. A correlation coefficient of zero indicates that no linear relationship exists between two continuous variables, and a correlation coefficient of −1 or +1 indicates a perfect linear relationship. (The stronger the correlation, the closer the correlation coefficient comes to −1 and +1.)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Positive coefficient&lt;/strong&gt;: If the coefficient is a positive number, the variables are positively related (i.e., as the value of one variable goes up, the value of the other also tends to do so).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Negative coefficient&lt;/strong&gt;: If the coefficient is a negative number, the variables are inversely related (i.e., as the value of one variable goes up, the value of the other tends to go down).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Types of correlation coefficients&lt;/strong&gt;: There are two main types of correlation coefficients, &lt;em&gt;Pearson&amp;rsquo;s correlation coefficient&lt;/em&gt; and &lt;em&gt;Spearman&amp;rsquo;s rank correlation coefficient&lt;/em&gt;. The correct usage of correlation coefficient type depends on the types of variables being studied.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;Pearson&amp;rsquo;s correlation coefficient&lt;/em&gt;: Pearson&amp;rsquo;s correlation coefficient is denoted as &lt;strong&gt;ϱ&lt;/strong&gt; for a population parameter and as &lt;strong&gt;r&lt;/strong&gt; for a sample statistic. It is used when both variables being studied are normally distributed.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;em&gt;Spearman&amp;rsquo;s rank correlation coefficient&lt;/em&gt;: Spearman&amp;rsquo;s rank correlation coefficient is denoted as &lt;strong&gt;ϱs&lt;/strong&gt; for a population parameter and as &lt;strong&gt;rs&lt;/strong&gt; for a sample statistic. It is appropriate when one or both variables are skewed or ordinal.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Rule of thumb for interpreting the size of a correlation coefficient&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;.90 to 1.00 (−.90 to −1.00) &amp;ndash; Very high positive (negative) correlation&lt;/li&gt;
+&lt;li&gt;.70 to .90 (−.70 to −.90) &amp;ndash; High positive (negative) correlation&lt;/li&gt;
+&lt;li&gt;.50 to .70 (−.50 to −.70) &amp;ndash; Moderate positive (negative) correlation&lt;/li&gt;
+&lt;li&gt;.30 to .50 (−.30 to −.50) &amp;ndash; Low positive (negative) correlation&lt;/li&gt;
+&lt;li&gt;.00 to .30 (.00 to −.30) &amp;ndash; Negligible correlation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2---the-corrr-package-and-our-data&#34;&gt;2 - The &lt;em&gt;corrr&lt;/em&gt; package and our data&lt;/h2&gt;
+&lt;p&gt;The &lt;em&gt;corrr&lt;/em&gt; package is a tool for exploring correlations. It makes it easy to perform routine tasks when exploring correlation matrices such as ignoring the diagonal, focusing on the correlations of certain variables against others, or rearranging and visualizing the matrix in terms of the strength of the correlations. The &lt;em&gt;corrr&lt;/em&gt; package exists within the Comprehensive R Archive Network, or &lt;a href=&#34;https://cran.r-project.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CRAN&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s install it &amp;ndash; we only need to do this once:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;corrr&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;To use the &lt;em&gt;corrr&lt;/em&gt; package, we need to load it up using &lt;a href=&#34;https://rdrr.io/r/base/library.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library()&lt;/code&gt;&lt;/a&gt;. We also need to load the &lt;em&gt;tidyverse&lt;/em&gt; since we will be using it later:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidymodels/corrr&#39;&gt;corrr&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching packages&lt;/span&gt; ─────────────────────────────────────── tidyverse 1.3.1 ──&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;ggplot2&lt;/span&gt; 3.3.5     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;purrr  &lt;/span&gt; 0.3.4&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tibble &lt;/span&gt; 3.1.6     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr  &lt;/span&gt; 1.0.7&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tidyr  &lt;/span&gt; 1.2.0     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;stringr&lt;/span&gt; 1.4.0&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;readr  &lt;/span&gt; 2.1.2     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;forcats&lt;/span&gt; 0.5.1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Conflicts&lt;/span&gt; ────────────────────────────────────────── tidyverse_conflicts() ──&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;filter()&lt;/span&gt; masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::filter()&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;    masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::lag()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Let&amp;rsquo;s get set up and grab some data to work with.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;We will use the same dataset &lt;a href=&#34;https://allisonhorst.github.io/palmerpenguins/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;palmerpenguins&lt;/code&gt;&lt;/a&gt; used in the previous weeks.&lt;/p&gt;
+&lt;p&gt;If you didn&amp;rsquo;t install this package previously, please do so now:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Then, to use the package, we need to use the function &lt;a href=&#34;https://rdrr.io/r/base/library.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library()&lt;/code&gt;&lt;/a&gt; to load it:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The data we will use today is a dataframe called &lt;code&gt;penguins&lt;/code&gt;, which we reference after loading the package. We will look at the structure of the data:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# look at the first 10 rows, all columns&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 10 × 8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; Adelie  Torgersen           39.1          18.7               181        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;750&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; Adelie  Torgersen           39.5          17.4               186        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;800&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; Adelie  Torgersen           40.3          18                 195        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;250&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; Adelie  Torgersen           &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                  &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;          &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; Adelie  Torgersen           36.7          19.3               193        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;450&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; Adelie  Torgersen           39.3          20.6               190        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;650&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; Adelie  Torgersen           38.9          17.8               181        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;625&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; Adelie  Torgersen           39.2          19.6               195        &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;675&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; Adelie  Torgersen           34.1          18.1               193        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;475&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; Adelie  Torgersen           42            20.2               190        &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;250&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 2 more variables: sex &amp;lt;fct&amp;gt;, year &amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# check the structure of penguins_data&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# glimpse() which is a part of dplyr functions &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# similarly to str() and can be used interchangeably&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;glimpse&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Rows: 344&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Columns: 8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ species           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ island            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_length_mm    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_depth_mm     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ flipper_length_mm &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ body_mass_g       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ sex               &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; male, female, female, NA, female, male, female, male…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ year              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Okay, now we have a sense of what the &lt;code&gt;penguins&lt;/code&gt; dataset is.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2---basic-usage-of-the-corrr-package&#34;&gt;2 - Basic usage of the &lt;em&gt;corrr&lt;/em&gt; package&lt;/h2&gt;
+&lt;p&gt;Now we want to use the &lt;em&gt;corrr&lt;/em&gt; package to correlate variables in the &lt;code&gt;penguins&lt;/code&gt; dataframe. The &lt;em&gt;corrr&lt;/em&gt; package uses the &lt;a href=&#34;https://corrr.tidymodels.org/reference/correlate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;correlate()&lt;/code&gt;&lt;/a&gt; function and returns correlation results in a tibble output.&lt;/p&gt;
+&lt;p&gt;Now let&amp;rsquo;s select variables from the &lt;code&gt;penguins&lt;/code&gt; dataframe using the pipe operator &lt;code&gt;%&amp;gt;%&lt;/code&gt; and the &lt;code&gt;select()&lt;/code&gt; function. We then specify the name of the variables that we want to select. In this example, we are selecting variables &lt;code&gt;bill_length_mm&lt;/code&gt;, &lt;code&gt;bill_depth_mm&lt;/code&gt;, &lt;code&gt;flipper_length_mm&lt;/code&gt;, and &lt;code&gt;body_mass_g&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Then, we will compute correlations among the variables:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Take penguins_data&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/correlate.html&#39;&gt;correlate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;       &lt;span class=&#39;c&#39;&gt;# Select variables and calculate their correlations&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Correlation method: &#39;pearson&#39;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Missing treated using: &#39;pairwise.complete.obs&#39;&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Correlation results in tibble&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 4 × 5&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term              bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                      &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;            -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;             0.656       0.595&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; bill_depth_mm             -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;        &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;      -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; flipper_length_mm          0.656        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;           0.871&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt; body_mass_g                0.595        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;             0.871      &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The output of the &lt;a href=&#34;https://corrr.tidymodels.org/reference/correlate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;correlate()&lt;/code&gt;&lt;/a&gt; function can be piped (&lt;code&gt;%&amp;gt;%&lt;/code&gt;) to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/shave.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shave()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://corrr.tidymodels.org/reference/rearrange.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rearrange()&lt;/code&gt;&lt;/a&gt; functions for internal changes&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/focus.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;focus()&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://corrr.tidymodels.org/reference/stretch.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;stretch()&lt;/code&gt;&lt;/a&gt; functions to reshape the structure&lt;/li&gt;
+&lt;li&gt;And the &lt;a href=&#34;https://corrr.tidymodels.org/reference/rplot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rplot()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;https://corrr.tidymodels.org/reference/fashion.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fashion()&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://corrr.tidymodels.org/reference/network_plot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;network_plot()&lt;/code&gt;&lt;/a&gt; for visualizations.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;Let us start with internal changes&lt;/em&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/shave.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shave()&lt;/code&gt;&lt;/a&gt; function removes values of the upper or lower triangle and sets them to &lt;code&gt;NA&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/rearrange.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rearrange()&lt;/code&gt;&lt;/a&gt; function arranges the columns and rows based on correlation strengths.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We can apply the &lt;a href=&#34;https://corrr.tidymodels.org/reference/shave.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shave()&lt;/code&gt;&lt;/a&gt; function to remove the top triangle:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Take penguins_cor results&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/shave.html&#39;&gt;shave&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;          &lt;span class=&#39;c&#39;&gt;# Remove the upper triangle&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 4 × 5&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term              bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                      &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;              &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; bill_depth_mm             -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;        &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;              &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; flipper_length_mm          0.656        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;              &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt; body_mass_g                0.595        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;             0.871          &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You can see that the values in the upper triangle have been replaced by &lt;code&gt;NA&lt;/code&gt;s. Now let us remove &lt;code&gt;NA&lt;/code&gt;s by using the &lt;a href=&#34;https://corrr.tidymodels.org/reference/fashion.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fashion()&lt;/code&gt;&lt;/a&gt; function:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Take penguins_cor results&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;shave&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove the upper triangle&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/fashion.html&#39;&gt;fashion&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove NAs&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                term bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1    bill_length_mm                                                           &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2     bill_depth_mm           -.24                                            &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3 flipper_length_mm            .66          -.58                              &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4       body_mass_g            .60          -.47               .87&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You can see that the &lt;code&gt;NA&lt;/code&gt;s have been removed, and we have a clean tibble (dataframe).&lt;/p&gt;
+&lt;p&gt;Now, let&amp;rsquo;s rearrange columns based on correlation strengths:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Take penguins_cor results&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;rearrange&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;    &lt;span class=&#39;c&#39;&gt;# Rearrange based on correlation strengths&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;shave&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove the upper triangle&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/fashion.html&#39;&gt;fashion&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove NAs&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                term flipper_length_mm body_mass_g bill_length_mm bill_depth_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 flipper_length_mm                                                           &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2       body_mass_g               .87                                         &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3    bill_length_mm               .66         .60                             &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4     bill_depth_mm              -.58        -.47           -.24&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You can see that the values are arranged based on correlation strengths.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h2 id=&#34;breakout-session-1&#34;&gt;Breakout session 1&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;From the &lt;code&gt;penguins&lt;/code&gt; dataframe, create a new dataset called &lt;code&gt;penguins_biscoe&lt;/code&gt; by selecting only the penguins from the island of Biscoe.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In the &lt;code&gt;penguins_biscoe&lt;/code&gt; dataframe, what are the correlations between &lt;code&gt;bill_length_mm&lt;/code&gt;, &lt;code&gt;bill_depth_mm&lt;/code&gt;, &lt;code&gt;flipper_length_mm&lt;/code&gt;, and &lt;code&gt;year&lt;/code&gt;?&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Remove the upper triangle and &lt;code&gt;NA&lt;/code&gt;s from the results, and arrange based on correlation strengths.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hints&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Use the &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; function to only select penguins from the island of Biscoe.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Select the penguins from the island of Biscoe:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_biscoe&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;  &lt;span class=&#39;c&#39;&gt;# Save results in new object&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Biscoe&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;     &lt;span class=&#39;c&#39;&gt;# Select data from only Biscoe island  &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Calculate correlation of the variables in &lt;code&gt;penguins_biscoe&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_biscoe&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;# select bill_length_mm, bill_depth_mm, flipper_length_mm, and year&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;year&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/correlate.html&#39;&gt;correlate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Calculate correlation&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Correlation method: &#39;pearson&#39;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Missing treated using: &#39;pairwise.complete.obs&#39;&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 4 × 5&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term              bill_length_mm bill_depth_mm flipper_length_mm    year&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                      &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm           &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;             -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.444&lt;/span&gt;             0.866  0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; bill_depth_mm            -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.444&lt;/span&gt;         &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.579&lt;/span&gt;  0.138 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; flipper_length_mm         0.866         -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.579&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;      0.105 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt; year                      0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;         0.138             0.105 &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;To remove the upper triangle and rearrange the results:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt;  &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;      &lt;span class=&#39;c&#39;&gt;# Take biscoe_cor results&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rearrange.html&#39;&gt;rearrange&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;    &lt;span class=&#39;c&#39;&gt;# Rearrange based on correlation strengths&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/shave.html&#39;&gt;shave&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove the upper triangle&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/fashion.html&#39;&gt;fashion&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;          &lt;span class=&#39;c&#39;&gt;# Remove NAs&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;                term flipper_length_mm bill_length_mm year bill_depth_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 flipper_length_mm                                                    &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2    bill_length_mm               .87                                  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3              year               .11            .10                   &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4     bill_depth_mm              -.58           -.44  .14&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3---reshaping-and-visualizations&#34;&gt;3 - Reshaping and visualizations&lt;/h2&gt;
+&lt;p&gt;The output of the &lt;a href=&#34;https://corrr.tidymodels.org/reference/correlate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;correlate()&lt;/code&gt;&lt;/a&gt; function can also be piped to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/focus.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;focus()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://corrr.tidymodels.org/reference/stretch.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;stretch()&lt;/code&gt;&lt;/a&gt; functions to reshape the structure&lt;/li&gt;
+&lt;li&gt;And the &lt;a href=&#34;https://corrr.tidymodels.org/reference/rplot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rplot()&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://corrr.tidymodels.org/reference/network_plot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;network_plot()&lt;/code&gt;&lt;/a&gt; for visualizations.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;Reshape structure&lt;/em&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/focus.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;focus()&lt;/code&gt;&lt;/a&gt; function select columns or rows based on the variable specified.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/stretch.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;stretch()&lt;/code&gt;&lt;/a&gt; converts correction results from a tibble into a long format.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;Visualizations&lt;/em&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/rplot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rplot()&lt;/code&gt;&lt;/a&gt; function plots correlation results&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/network_plot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;network_plot()&lt;/code&gt;&lt;/a&gt; function plots a point for each variable, joined by paths for correlations&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let use the &lt;a href=&#34;https://corrr.tidymodels.org/reference/stretch.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;stretch()&lt;/code&gt;&lt;/a&gt; function to convert our correlation results &lt;code&gt;penguins_cor&lt;/code&gt; into a long format:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/stretch.html&#39;&gt;stretch&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 16 × 3&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    x                 y                      r&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; bill_length_mm    bill_length_mm    &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;    &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; bill_length_mm    bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; bill_length_mm    flipper_length_mm  0.656&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; bill_length_mm    body_mass_g        0.595&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; bill_depth_mm     bill_length_mm    -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; bill_depth_mm     bill_depth_mm     &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;    &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; bill_depth_mm     flipper_length_mm -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; bill_depth_mm     body_mass_g       -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; flipper_length_mm bill_length_mm     0.656&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; flipper_length_mm bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;11&lt;/span&gt; flipper_length_mm flipper_length_mm &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;    &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;12&lt;/span&gt; flipper_length_mm body_mass_g        0.871&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;13&lt;/span&gt; body_mass_g       bill_length_mm     0.595&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;14&lt;/span&gt; body_mass_g       bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;15&lt;/span&gt; body_mass_g       flipper_length_mm  0.871&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;16&lt;/span&gt; body_mass_g       body_mass_g       &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You can see that the results are coverted into a long format.&lt;/p&gt;
+&lt;p&gt;We can also select a column we are interested in. Let us select only correlation between &amp;ldquo;bill_depth_mm&amp;rdquo; and the rest of the variables.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/focus.html&#39;&gt;focus&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;bill_depth_mm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term              bill_depth_mm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm           -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; flipper_length_mm        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; body_mass_g              -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You can see that we selected only the correlations between &lt;code&gt;bill_depth_mm&lt;/code&gt; and other variables.&lt;/p&gt;
+&lt;p&gt;We can now visualize the results:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rearrange.html&#39;&gt;rearrange&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Rearrange based on correlation strengths&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rplot.html&#39;&gt;rplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;           &lt;span class=&#39;c&#39;&gt;# Plot&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Don&#39;t know how to automatically pick scale for object of type noquote. Defaulting to continuous.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-15-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;We plotted based on correlation strengths.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h2 id=&#34;breakout-session-2&#34;&gt;Breakout session 2&lt;/h2&gt;
+&lt;p&gt;Use the dataframe (&lt;code&gt;penguins_biscoe&lt;/code&gt;) you created in Breakout session 1 to:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Calculate correlations among the variables, and present the results in a long format&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Select the correlations that include &lt;code&gt;year&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Plot a correlation graph based on correlation strengths&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_biscoe&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;year&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/correlate.html&#39;&gt;correlate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Correlation method: &#39;pearson&#39;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Missing treated using: &#39;pairwise.complete.obs&#39;&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/stretch.html&#39;&gt;stretch&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 16 × 3&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    x                 y                       r&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;               &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; bill_length_mm    bill_length_mm    &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; bill_length_mm    bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.444&lt;/span&gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; bill_length_mm    flipper_length_mm  0.866 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; bill_length_mm    year               0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; bill_depth_mm     bill_length_mm    -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.444&lt;/span&gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; bill_depth_mm     bill_depth_mm     &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; bill_depth_mm     flipper_length_mm -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.579&lt;/span&gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; bill_depth_mm     year               0.138 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; flipper_length_mm bill_length_mm     0.866 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; flipper_length_mm bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.579&lt;/span&gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;11&lt;/span&gt; flipper_length_mm flipper_length_mm &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;12&lt;/span&gt; flipper_length_mm year               0.105 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;13&lt;/span&gt; year              bill_length_mm     0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;14&lt;/span&gt; year              bill_depth_mm      0.138 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;15&lt;/span&gt; year              flipper_length_mm  0.105 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;16&lt;/span&gt; year              year              &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You can see that results are in a long format.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+   &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/focus.html&#39;&gt;focus&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;year&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 2&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term                year&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm    0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; bill_depth_mm     0.138 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; flipper_length_mm 0.105&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Correlations with &lt;code&gt;year&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rearrange.html&#39;&gt;rearrange&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rplot.html&#39;&gt;rplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Don&#39;t know how to automatically pick scale for object of type noquote. Defaulting to continuous.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-18-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+</description>
+    </item>
+    
+    <item>
       <title>S03E03: Principal Component Analysis (PCA)</title>
       <link>https://biodash.github.io/codeclub/s03e03_pca/</link>
       <pubDate>Tue, 08 Feb 2022 00:00:00 +0000</pubDate>
@@ -766,404 +1164,6 @@ A PCA of genetic variation among Europeans, from &lt;a href=&#34;https://www.nat
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>S03E05: Introduction to correlation</title>
-      <link>https://biodash.github.io/codeclub/s03e05_correlation/</link>
-      <pubDate>Tue, 08 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://biodash.github.io/codeclub/s03e05_correlation/</guid>
-      <description>&lt;hr&gt;
-&lt;h2 id=&#34;housekeeping&#34;&gt;Housekeeping&lt;/h2&gt;
-&lt;h4 id=&#34;new-to-code-club&#34;&gt;New to Code Club?&lt;/h4&gt;
-&lt;p&gt;Check out the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has pointers for if you&amp;rsquo;re new to R or RStudio. A few related Code Club sessions include:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e01_ttests/&#34;&gt;S03E01&lt;/a&gt;: T-tests&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e02_anova/&#34;&gt;S03E02&lt;/a&gt;: ANOVA&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e03_pca/&#34;&gt;S03E03&lt;/a&gt;: PCA&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://biodash.github.io/codeclub/s03e04_anova2/&#34;&gt;S03E04&lt;/a&gt;: ANOVA part II&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;what-will-we-go-over-today&#34;&gt;What will we go over today&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;We will introduce correlation.&lt;/li&gt;
-&lt;li&gt;Learn using the &lt;a href=&#34;https://cran.r-project.org/web/packages/corrr/index.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;corrr()&lt;/code&gt;&lt;/a&gt; package.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;r-packages-we-will-use&#34;&gt;R packages we will use&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;corrr&lt;/em&gt; &amp;ndash; for correlation analysis&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;palmerpenguins&lt;/em&gt; &amp;ndash; for the penguins data&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;tidyverse&lt;/em&gt; &amp;ndash; for data wrangling&lt;/li&gt;
-&lt;/ul&gt;
-&lt;br&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;1---what-is-correlation&#34;&gt;1 - What is correlation?&lt;/h2&gt;
-&lt;p&gt;Correlation is a statistical method used to assess a linear association between two continuous variables. It is measured by a statistic called the correlation coefficient, which represents the strength of the linear association between the variables in question. It is a dimensionless quantity that takes a value in the range −1 to +1. A correlation coefficient of zero indicates that no linear relationship exists between two continuous variables, and a correlation coefficient of −1 or +1 indicates a perfect linear relationship. (The stronger the correlation, the closer the correlation coefficient comes to −1 and +1.)&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Positive coefficient&lt;/strong&gt;: If the coefficient is a positive number, the variables are positively related (i.e., as the value of one variable goes up, the value of the other also tends to do so).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Negative coefficient&lt;/strong&gt;: If the coefficient is a negative number, the variables are inversely related (i.e., as the value of one variable goes up, the value of the other tends to go down).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Types of correlation coefficients&lt;/strong&gt;: There are two main types of correlation coefficients, &lt;em&gt;Pearson&amp;rsquo;s correlation coefficient&lt;/em&gt; and &lt;em&gt;Spearman&amp;rsquo;s rank correlation coefficient&lt;/em&gt;. The correct usage of correlation coefficient type depends on the types of variables being studied.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;em&gt;Pearson&amp;rsquo;s correlation coefficient&lt;/em&gt;: Pearson&amp;rsquo;s correlation coefficient is denoted as &lt;strong&gt;ϱ&lt;/strong&gt; for a population parameter and as &lt;strong&gt;r&lt;/strong&gt; for a sample statistic. It is used when both variables being studied are normally distributed.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;em&gt;Spearman&amp;rsquo;s rank correlation coefficient&lt;/em&gt;: Spearman&amp;rsquo;s rank correlation coefficient is denoted as &lt;strong&gt;ϱs&lt;/strong&gt; for a population parameter and as &lt;strong&gt;rs&lt;/strong&gt; for a sample statistic. It is appropriate when one or both variables are skewed or ordinal.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Rule of thumb for interpreting the size of a correlation coefficient&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;.90 to 1.00 (−.90 to −1.00) &amp;ndash; Very high positive (negative) correlation&lt;/li&gt;
-&lt;li&gt;.70 to .90 (−.70 to −.90) &amp;ndash; High positive (negative) correlation&lt;/li&gt;
-&lt;li&gt;.50 to .70 (−.50 to −.70) &amp;ndash; Moderate positive (negative) correlation&lt;/li&gt;
-&lt;li&gt;.30 to .50 (−.30 to −.50) &amp;ndash; Low positive (negative) correlation&lt;/li&gt;
-&lt;li&gt;.00 to .30 (.00 to −.30) &amp;ndash; Negligible correlation&lt;/li&gt;
-&lt;/ul&gt;
-&lt;br&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;2---the-corrr-package-and-our-data&#34;&gt;2 - The &lt;em&gt;corrr&lt;/em&gt; package and our data&lt;/h2&gt;
-&lt;p&gt;The &lt;em&gt;corrr&lt;/em&gt; package is a tool for exploring correlations. It makes it easy to perform routine tasks when exploring correlation matrices such as ignoring the diagonal, focusing on the correlations of certain variables against others, or rearranging and visualizing the matrix in terms of the strength of the correlations. The &lt;em&gt;corrr&lt;/em&gt; package exists within the Comprehensive R Archive Network, or &lt;a href=&#34;https://cran.r-project.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CRAN&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s install it &amp;ndash; we only need to do this once:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;corrr&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;To use the &lt;em&gt;corrr&lt;/em&gt; package, we need to load it up using &lt;a href=&#34;https://rdrr.io/r/base/library.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library()&lt;/code&gt;&lt;/a&gt;. We also need to load the &lt;em&gt;tidyverse&lt;/em&gt; since we will be using it later:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidymodels/corrr&#39;&gt;corrr&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching packages&lt;/span&gt; ─────────────────────────────────────── tidyverse 1.3.1 ──&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;ggplot2&lt;/span&gt; 3.3.5     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;purrr  &lt;/span&gt; 0.3.4&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tibble &lt;/span&gt; 3.1.6     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr  &lt;/span&gt; 1.0.7&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tidyr  &lt;/span&gt; 1.2.0     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;stringr&lt;/span&gt; 1.4.0&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;readr  &lt;/span&gt; 2.1.2     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;forcats&lt;/span&gt; 0.5.1&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Conflicts&lt;/span&gt; ────────────────────────────────────────── tidyverse_conflicts() ──&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;filter()&lt;/span&gt; masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::filter()&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;    masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::lag()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Let&amp;rsquo;s get set up and grab some data to work with.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;We will use the same dataset &lt;a href=&#34;https://allisonhorst.github.io/palmerpenguins/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;palmerpenguins&lt;/code&gt;&lt;/a&gt; used in the previous weeks.&lt;/p&gt;
-&lt;p&gt;If you didn&amp;rsquo;t install this package previously, please do so now:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;Then, to use the package, we need to use the function &lt;a href=&#34;https://rdrr.io/r/base/library.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library()&lt;/code&gt;&lt;/a&gt; to load it:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;The data we will use today is a dataframe called &lt;code&gt;penguins&lt;/code&gt;, which we reference after loading the package. We will look at the structure of the data:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# look at the first 10 rows, all columns&lt;/span&gt;
-&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 10 × 8&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; Adelie  Torgersen           39.1          18.7               181        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;750&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; Adelie  Torgersen           39.5          17.4               186        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;800&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; Adelie  Torgersen           40.3          18                 195        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;250&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; Adelie  Torgersen           &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                  &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;          &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; Adelie  Torgersen           36.7          19.3               193        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;450&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; Adelie  Torgersen           39.3          20.6               190        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;650&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; Adelie  Torgersen           38.9          17.8               181        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;625&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; Adelie  Torgersen           39.2          19.6               195        &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;675&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; Adelie  Torgersen           34.1          18.1               193        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;475&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; Adelie  Torgersen           42            20.2               190        &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;250&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 2 more variables: sex &amp;lt;fct&amp;gt;, year &amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;
-
-&lt;span class=&#39;c&#39;&gt;# check the structure of penguins_data&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;# glimpse() which is a part of dplyr functions &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;# similarly to str() and can be used interchangeably&lt;/span&gt;
-&lt;span class=&#39;nf&#39;&gt;glimpse&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Rows: 344&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Columns: 8&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ species           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ island            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_length_mm    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_depth_mm     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ flipper_length_mm &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ body_mass_g       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ sex               &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; male, female, female, NA, female, male, female, male…&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ year              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;Okay, now we have a sense of what the &lt;code&gt;penguins&lt;/code&gt; dataset is.&lt;/p&gt;
-&lt;br&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;2---basic-usage-of-the-corrr-package&#34;&gt;2 - Basic usage of the &lt;em&gt;corrr&lt;/em&gt; package&lt;/h2&gt;
-&lt;p&gt;Now we want to use the &lt;em&gt;corrr&lt;/em&gt; package to correlate variables in the &lt;code&gt;penguins&lt;/code&gt; dataframe. The &lt;em&gt;corrr&lt;/em&gt; package uses the &lt;a href=&#34;https://corrr.tidymodels.org/reference/correlate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;correlate()&lt;/code&gt;&lt;/a&gt; function and returns correlation results in a tibble output.&lt;/p&gt;
-&lt;p&gt;Now let select variables from penguins using the pipe operator &lt;code&gt;%&amp;gt;%&lt;/code&gt; and the &lt;code&gt;select()&lt;/code&gt; function. We then specify name of the variables that we want to select. In this example, we are selecting variables &lt;code&gt;bill_length_mm&lt;/code&gt;, &lt;code&gt;bill_depth_mm&lt;/code&gt;, &lt;code&gt;flipper_length_mm&lt;/code&gt;, and &lt;code&gt;body_mass_g&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Then, we will compute correlations among the variables:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Take penguins_data&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/correlate.html&#39;&gt;correlate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;       &lt;span class=&#39;c&#39;&gt;# Select variables and calculate their correlations&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Correlation method: &#39;pearson&#39;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Missing treated using: &#39;pairwise.complete.obs&#39;&lt;/span&gt;
-
-&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Correlation results in tibble&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 4 × 5&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term              bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                      &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;            -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;             0.656       0.595&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; bill_depth_mm             -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;        &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;      -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; flipper_length_mm          0.656        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;           0.871&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt; body_mass_g                0.595        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;             0.871      &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;The output of the &lt;a href=&#34;https://corrr.tidymodels.org/reference/correlate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;correlate()&lt;/code&gt;&lt;/a&gt; function can be piped (&lt;code&gt;%&amp;gt;%&lt;/code&gt;) to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/shave.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shave()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://corrr.tidymodels.org/reference/rearrange.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rearrange()&lt;/code&gt;&lt;/a&gt; functions for internal changes&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/focus.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;focus()&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://corrr.tidymodels.org/reference/stretch.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;stretch()&lt;/code&gt;&lt;/a&gt; functions to reshape the structure&lt;/li&gt;
-&lt;li&gt;And the &lt;a href=&#34;https://corrr.tidymodels.org/reference/rplot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rplot()&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;https://corrr.tidymodels.org/reference/fashion.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fashion()&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://corrr.tidymodels.org/reference/network_plot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;network_plot()&lt;/code&gt;&lt;/a&gt; for visualizations.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;em&gt;Let us start with internal changes&lt;/em&gt;.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/shave.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shave()&lt;/code&gt;&lt;/a&gt; function removes values of the upper or lower triangle and sets them to &lt;code&gt;NA&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/rearrange.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rearrange()&lt;/code&gt;&lt;/a&gt; function arranges the columns and rows based on correlation strengths.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;We can apply the &lt;a href=&#34;https://corrr.tidymodels.org/reference/shave.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;shave()&lt;/code&gt;&lt;/a&gt; function remove the top triangle:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Take penguins_cor results&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/shave.html&#39;&gt;shave&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;          &lt;span class=&#39;c&#39;&gt;# Remove the upper triangle&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 4 × 5&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term              bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                      &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;              &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; bill_depth_mm             -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;        &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;              &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; flipper_length_mm          0.656        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;              &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt; body_mass_g                0.595        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;             0.871          &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;You can see that values of upper triangle are replaced by &lt;code&gt;NA&lt;/code&gt;s. Now let us remove &lt;code&gt;NA&lt;/code&gt;s by using the &lt;a href=&#34;https://corrr.tidymodels.org/reference/fashion.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;fashion()&lt;/code&gt;&lt;/a&gt; function:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Take penguins_cor results&lt;/span&gt;
-  &lt;span class=&#39;nv&#39;&gt;shave&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove the upper triangle&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/fashion.html&#39;&gt;fashion&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove NAs&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;                term bill_length_mm bill_depth_mm flipper_length_mm body_mass_g&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1    bill_length_mm                                                           &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2     bill_depth_mm           -.24                                            &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3 flipper_length_mm            .66          -.58                              &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4       body_mass_g            .60          -.47               .87&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;You can see that the &lt;code&gt;NA&lt;/code&gt;s have been removed, and we have a clean tibble (dataframe).&lt;/p&gt;
-&lt;p&gt;Now, let&amp;rsquo;s rearrange columns based on correlation strengths:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Take penguins_cor results&lt;/span&gt;
-  &lt;span class=&#39;nv&#39;&gt;rearrange&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;    &lt;span class=&#39;c&#39;&gt;# Rearrange based on correlation strengths&lt;/span&gt;
-  &lt;span class=&#39;nv&#39;&gt;shave&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove the upper triangle&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/fashion.html&#39;&gt;fashion&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove NAs&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;                term flipper_length_mm body_mass_g bill_length_mm bill_depth_mm&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 flipper_length_mm                                                           &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2       body_mass_g               .87                                         &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3    bill_length_mm               .66         .60                             &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4     bill_depth_mm              -.58        -.47           -.24&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;You can see that the values are arranged based on correlation strengths.&lt;/p&gt;
-&lt;br&gt;
-&lt;hr&gt;
-&lt;div class=&#34;puzzle&#34;&gt;
-&lt;div&gt;
-&lt;h2 id=&#34;breakout-session-1&#34;&gt;Breakout session 1&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;From the &lt;code&gt;penguins&lt;/code&gt; dataframe, create a new dataset called &lt;code&gt;penguins_biscoe&lt;/code&gt; by selecting only the penguins from the island of Biscoe.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;In the &lt;code&gt;penguins_biscoe&lt;/code&gt; dataframe, what are the correlations between &lt;code&gt;bill_length_mm&lt;/code&gt;, &lt;code&gt;bill_depth_mm&lt;/code&gt;, &lt;code&gt;flipper_length_mm&lt;/code&gt;, and &lt;code&gt;year&lt;/code&gt;?&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Remove the upper triangle and &lt;code&gt;NA&lt;/code&gt;s from the results, and arrange based on correlation strengths.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;details&gt;
-&lt;summary&gt;
-&lt;b&gt;Hints&lt;/b&gt; (click here)
-&lt;/summary&gt;
-&lt;br&gt;
-&lt;p&gt;Use the &lt;a href=&#34;https://rdrr.io/r/stats/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; function to only select penguins from the island of Biscoe.&lt;/p&gt;
-&lt;/details&gt;
-&lt;details&gt;
-&lt;summary&gt;
-&lt;b&gt;Solution&lt;/b&gt; (click here)
-&lt;/summary&gt;
-&lt;br&gt;
-&lt;p&gt;Select the penguins from the island of Biscoe:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_biscoe&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;  &lt;span class=&#39;c&#39;&gt;# Save results in new object&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Biscoe&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;     &lt;span class=&#39;c&#39;&gt;# Select data from only Biscoe island  &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;Calculate correlation of the variables in &lt;code&gt;penguins_biscoe&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_biscoe&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;c&#39;&gt;# select bill_length_mm, bill_depth_mm, flipper_length_mm, and year&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;year&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/correlate.html&#39;&gt;correlate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Calculate correlation&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Correlation method: &#39;pearson&#39;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Missing treated using: &#39;pairwise.complete.obs&#39;&lt;/span&gt;
-
-&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 4 × 5&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term              bill_length_mm bill_depth_mm flipper_length_mm    year&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                      &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm           &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;             -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.444&lt;/span&gt;             0.866  0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; bill_depth_mm            -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.444&lt;/span&gt;         &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.579&lt;/span&gt;  0.138 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; flipper_length_mm         0.866         -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.579&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;      0.105 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt; year                      0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;         0.138             0.105 &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;To remove the upper triangle and rearrange the results:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt;  &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;      &lt;span class=&#39;c&#39;&gt;# Take biscoe_cor results&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rearrange.html&#39;&gt;rearrange&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;    &lt;span class=&#39;c&#39;&gt;# Rearrange based on correlation strengths&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/shave.html&#39;&gt;shave&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# Remove the upper triangle&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/fashion.html&#39;&gt;fashion&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;          &lt;span class=&#39;c&#39;&gt;# Remove NAs&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;                term flipper_length_mm bill_length_mm year bill_depth_mm&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 1 flipper_length_mm                                                    &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 2    bill_length_mm               .87                                  &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 3              year               .11            .10                   &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; 4     bill_depth_mm              -.58           -.44  .14&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/details&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;br&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;3---reshaping-and-visualizations&#34;&gt;3 - Reshaping and visualizations&lt;/h2&gt;
-&lt;p&gt;The output of the &lt;a href=&#34;https://corrr.tidymodels.org/reference/correlate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;correlate()&lt;/code&gt;&lt;/a&gt; function can also be piped to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/focus.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;focus()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://corrr.tidymodels.org/reference/stretch.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;stretch()&lt;/code&gt;&lt;/a&gt; functions to reshape the structure&lt;/li&gt;
-&lt;li&gt;And the &lt;a href=&#34;https://corrr.tidymodels.org/reference/rplot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rplot()&lt;/code&gt;&lt;/a&gt;, and &lt;a href=&#34;https://corrr.tidymodels.org/reference/network_plot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;network_plot()&lt;/code&gt;&lt;/a&gt; for visualizations.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;em&gt;Reshape structure&lt;/em&gt;:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/focus.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;focus()&lt;/code&gt;&lt;/a&gt; function select columns or rows based on the variable specified.&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/stretch.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;stretch()&lt;/code&gt;&lt;/a&gt; converts correction results from a tibble into a long format.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;em&gt;Visualizations&lt;/em&gt;:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/rplot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rplot()&lt;/code&gt;&lt;/a&gt; function plots correlation results&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&#34;https://corrr.tidymodels.org/reference/network_plot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;network_plot()&lt;/code&gt;&lt;/a&gt; function plots a point for each variable, joined by paths for correlations&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Let use the &lt;a href=&#34;https://corrr.tidymodels.org/reference/stretch.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;stretch()&lt;/code&gt;&lt;/a&gt; function to convert our correlation results &lt;code&gt;penguins_cor&lt;/code&gt; into a long format:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/stretch.html&#39;&gt;stretch&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 16 × 3&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;    x                 y                      r&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; bill_length_mm    bill_length_mm    &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;    &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; bill_length_mm    bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; bill_length_mm    flipper_length_mm  0.656&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; bill_length_mm    body_mass_g        0.595&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; bill_depth_mm     bill_length_mm    -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; bill_depth_mm     bill_depth_mm     &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;    &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; bill_depth_mm     flipper_length_mm -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; bill_depth_mm     body_mass_g       -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; flipper_length_mm bill_length_mm     0.656&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; flipper_length_mm bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;11&lt;/span&gt; flipper_length_mm flipper_length_mm &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;    &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;12&lt;/span&gt; flipper_length_mm body_mass_g        0.871&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;13&lt;/span&gt; body_mass_g       bill_length_mm     0.595&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;14&lt;/span&gt; body_mass_g       bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;15&lt;/span&gt; body_mass_g       flipper_length_mm  0.871&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;16&lt;/span&gt; body_mass_g       body_mass_g       &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;You can see that the results are coverted into a long format.&lt;/p&gt;
-&lt;p&gt;We can also select a column we are interested in. Let us select only correlation between &amp;ldquo;bill_depth_mm&amp;rdquo; and the rest of the variables.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/focus.html&#39;&gt;focus&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;bill_depth_mm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 2&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term              bill_depth_mm&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;                     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm           -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.235&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; flipper_length_mm        -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.584&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; body_mass_g              -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.472&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;You can see that we selected only the correlations between &lt;code&gt;bill_depth_mm&lt;/code&gt; and other variables.&lt;/p&gt;
-&lt;p&gt;We can now visualize the results:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; 
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rearrange.html&#39;&gt;rearrange&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Rearrange based on correlation strengths&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rplot.html&#39;&gt;rplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;           &lt;span class=&#39;c&#39;&gt;# Plot&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Don&#39;t know how to automatically pick scale for object of type noquote. Defaulting to continuous.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-15-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;p&gt;We plotted based on correlation strengths.&lt;/p&gt;
-&lt;br&gt;
-&lt;hr&gt;
-&lt;div class=&#34;puzzle&#34;&gt;
-&lt;div&gt;
-&lt;h2 id=&#34;breakout-session-2&#34;&gt;Breakout session 2&lt;/h2&gt;
-&lt;p&gt;Use the dataframe (&lt;code&gt;penguins_biscoe&lt;/code&gt;) you created in Breakout session 1 to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Calculate correlations among the variables, and present the results in a long format&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Select the correlations that include &lt;code&gt;year&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Plot a correlation graph based on correlation strengths&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;details&gt;
-&lt;summary&gt;
-&lt;b&gt;Solution&lt;/b&gt; (click here)
-&lt;/summary&gt;
-&lt;br&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_biscoe&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;select&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;year&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/correlate.html&#39;&gt;correlate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Correlation method: &#39;pearson&#39;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Missing treated using: &#39;pairwise.complete.obs&#39;&lt;/span&gt;
-
-&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/stretch.html&#39;&gt;stretch&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 16 × 3&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;    x                 y                       r&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;               &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; bill_length_mm    bill_length_mm    &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;     &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; bill_length_mm    bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.444&lt;/span&gt; &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; bill_length_mm    flipper_length_mm  0.866 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; bill_length_mm    year               0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; bill_depth_mm     bill_length_mm    -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.444&lt;/span&gt; &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; bill_depth_mm     bill_depth_mm     &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;     &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; bill_depth_mm     flipper_length_mm -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.579&lt;/span&gt; &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; bill_depth_mm     year               0.138 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; flipper_length_mm bill_length_mm     0.866 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; flipper_length_mm bill_depth_mm     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.579&lt;/span&gt; &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;11&lt;/span&gt; flipper_length_mm flipper_length_mm &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;     &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;12&lt;/span&gt; flipper_length_mm year               0.105 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;13&lt;/span&gt; year              bill_length_mm     0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;14&lt;/span&gt; year              bill_depth_mm      0.138 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;15&lt;/span&gt; year              flipper_length_mm  0.105 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;16&lt;/span&gt; year              year              &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;You can see that results are in a long format.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-   &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/focus.html&#39;&gt;focus&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;year&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 2&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   term                year&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; bill_length_mm    0.096&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; bill_depth_mm     0.138 &lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; flipper_length_mm 0.105&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;Correlations with &lt;code&gt;year&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;biscoe_cor&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rearrange.html&#39;&gt;rearrange&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
-  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://corrr.tidymodels.org/reference/rplot.html&#39;&gt;rplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; Don&#39;t know how to automatically pick scale for object of type noquote. Defaulting to continuous.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-18-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;/details&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;br&gt;
 </description>
     </item>
     
@@ -3455,7 +3455,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-956723148&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-759428136&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3465,7 +3465,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-956723148&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-759428136&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3652,7 +3652,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-457963218&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-259364178&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3662,7 +3662,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-457963218&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-259364178&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3698,7 +3698,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-649851237&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-978324651&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3708,7 +3708,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-649851237&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-978324651&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3740,7 +3740,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-156837942&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-736521984&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3750,7 +3750,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-156837942&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-736521984&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3781,7 +3781,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-172549836&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-961573248&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3791,7 +3791,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-172549836&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-961573248&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3925,7 +3925,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-287496153&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-367194285&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3935,7 +3935,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-287496153&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-367194285&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3992,7 +3992,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-721543968&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-416758392&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4002,7 +4002,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-721543968&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-416758392&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11534,7 +11534,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-214365879&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-397654182&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11544,7 +11544,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-214365879&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-397654182&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11620,7 +11620,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-328945716&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-624831957&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11630,7 +11630,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-328945716&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-624831957&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11651,7 +11651,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-317586429&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-396257184&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11661,7 +11661,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-317586429&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-396257184&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11688,7 +11688,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-728136945&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-649517238&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11698,7 +11698,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-728136945&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-649517238&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11725,7 +11725,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-614392857&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-591768432&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11735,7 +11735,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-614392857&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-591768432&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11758,7 +11758,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-893417265&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-361495827&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11768,7 +11768,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-893417265&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-361495827&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11809,7 +11809,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-649587321&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-946387251&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11819,7 +11819,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-649587321&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-946387251&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11838,7 +11838,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-396254871&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-325648791&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11848,7 +11848,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-396254871&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-325648791&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11874,7 +11874,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-785234196&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-748213569&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11884,7 +11884,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-785234196&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-748213569&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11914,7 +11914,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-615394827&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-831257649&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11924,7 +11924,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-615394827&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-831257649&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12138,7 +12138,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-257481396&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-259184736&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12148,7 +12148,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-257481396&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-259184736&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12209,7 +12209,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-971634582&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-719542368&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12219,7 +12219,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-971634582&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-719542368&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12294,7 +12294,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-597361824&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-861247359&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12304,7 +12304,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-597361824&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-861247359&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
