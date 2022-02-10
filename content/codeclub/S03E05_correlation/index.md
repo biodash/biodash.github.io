@@ -1,12 +1,12 @@
 ---
 title: "S03E05: Introduction to correlation"
 subtitle: "Using the _corrr_ package"
-summary: "...."
+summary: "During this second-to-last session in our series on basic stats in R, Stephen will show how to run correlation analyses in R."
 authors: [stephen-opiyo]
-date: "2022-02-09"
+date: "2022-02-10"
 output: hugodown::md_document
 toc: true
-rmd_hash: 2e70dfb3f086387a
+rmd_hash: 395281ac9468cf9e
 
 ---
 
