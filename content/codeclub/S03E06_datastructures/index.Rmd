@@ -1,0 +1,531 @@
+---
+title: "Session S03E06: Data structures and subsetting"
+subtitle: "Overview of data structures and how to access them"
+summary: "In this session of Code Club, we'll move below and beyond the tidyverse to get an overview of accessing various kinds of data structure in R."  
+authors: [michael-broe]
+date: "2022-02-15"
+output: hugodown::md_document
+toc: true
+image: 
+  caption: "Image from https://r4ds.had.co.nz"
+  focal_point: ""
+  preview_only: false
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+------------------------------------------------------------------------
+
+## New To Code Club?
+
+-   First, check out the [Code Club Computer Setup](/codeclub-setup/)
+    instructions, which also has some pointers that might be helpful if
+    you're new to R or RStudio.
+
+-   Please open RStudio before Code Club to test things out -- if you
+    run into issues, join the Zoom call early and we'll troubleshoot.
+
+------------------------------------------------------------------------
+
+## Session Goals
+
+-   Learn the uses of R's three basic subsetting operators: `[ ]`,
+    `[[ ]]`, and `$`.
+-   Learn how the behavior of these operators varies depending on the
+    **data structure** you are subsetting (vector, list, or data frame).
+-   Learn the value of the `str()` command.
+-   Learn how these base-R operators relate to tidyverse commands.
+
+------------------------------------------------------------------------
+
+## Intro: What is 'subsetting' anyway?
+
+Subsetting (also known as indexing) is simply a way of using base-R syntax to extract specific pieces of a data structure. 
+
+We've already seen two **dplyr**
+verbs that perform this kind of operation: `filter` (to extract
+specific rows) and `select` (to extract specific columns). 
+
+But these are tidyverse commands, and only work with data frames.
+
+R has two more basic data structures, from which everything else is built, **vectors** and **lists**, and for
+these we need different subsetting operators (dplyr functions won't work). We'll also see that data
+frames are just a special kind of list, and that base-R subsetting
+operators also work for these, which can often be useful and efficient.
+
+In your R experience you will almost
+certainly come across both code and output which does not adhere to tidyverse
+conventions. We have already come across outputs which are *not* data frames in 
+[SO3E01: t-tests](https://biodash.github.io/codeclub/s03e01_ttests/)
+and [S03E02: ANOVA](https://biodash.github.io/codeclub/s03e02_anova/)
+which we will revisit below.
+
+Since the behavior of these operators depends on the actual data
+structure you are working with, it's useful when experimenting to use
+them in conjunction with the `str()` function, which compactly displays
+the internal structure of an any R object. A knowledge of the make-up of
+these data structures is also important when you come to write your own
+loops, iterations, and functions.
+
+The most important distinction between vectors and lists is within
+vectors *every value must be of the same type*: for example, all
+characters, or all integers, etc. Inside lists, you can *mix values of
+any type*.
+
+In addition, a list is best thought of as a general purpose container,
+which can contain not just mixed values, but entire vectors of any type. 
+
+Since we'll be comparing base-R with tidyverse functions, we need to
+load the tidyverse, and we'll also be using the `palmerpenguins` package to reproduce our previous ANOVA results:
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(palmerpenguins)
+```
+
+------------------------------------------------------------------------
+
+## Vectors
+
+A vector is absolutely the most basic data structure in R. Every value
+in a vector must be of the **same type**.
+
+There are four basic **types** of vector: integer, double, character,
+and logical. Vectors are created by hand with the `c()` (combine,
+concatenate) function. We can check the type with the `typeof()`
+operator. This is totally redundant if you just created the vector
+yourself, but when you are debugging code, or creating a vector using an
+expression, you might want to check exactly what type of vector is being
+used:
+
+```{r}
+vec_dbl <- c(1, 2, 3, 4, 5)
+vec_dbl
+typeof(vec_dbl)
+```
+
+```{r}
+vec_seq <- seq(1, 5)
+vec_seq
+typeof(vec_seq)
+```
+
+```{r}
+vec_which <- 1:5
+vec_which
+typeof(vec_which)
+```
+
+```{r}
+vec_chr <- c("a", "b", "c", "d", "e")
+vec_chr
+typeof(vec_chr)
+```
+
+Vectors have an insanely simple **str**ucture:
+
+```{r}
+str(vec_dbl)
+```
+
+`str()` also displays the type, and RStudio displays the result of
+`str()` in the Values pane. (Note that 'double' and 'num(eric)' mean exactly the same thing in R.)
+
+For such a simple structure, there are a surprisingly large number of
+ways to subset a vector. We'll just look a a small sample here, and use the following example:
+
+```{r}
+x <- c(2.1, 4.2, 3.3, 5.4)
+x
+str(x)
+```
+
+(Notice for this example the *number after the decimal point* indicates
+the position (index) of the element of the vector.)
+
+**Positive integers** return elements at the specified positions. Any
+expression that evaluates to a vector of positions can be used as the
+index. The index operator is `[ ]`:
+
+```{r}
+x[3]
+x[c(3, 1)]
+x[2:4]
+```
+
+**Negative integers** *exclude* elements at the specified positions:
+
+```{r}
+x[-3]
+x[c(-3, -1)]
+```
+
+The bottom line here is that each value in a vector has an implicit index (position), and we can use that index to pull out values of interest. This can be extremely useful when writing for-loops that move through a vector accessing one value at a time.
+
+**Attributes**. One of the unusual features of R as opposed to other
+programming languages is that you can assign metadata of various kinds
+to the elements of vectors (and lists). For example, we can assign a
+**name** to each element, and then use a **character vector** as the
+index expression:
+
+```{r}
+y <- c("a" = 2.1, "b" = 4.2, "c" = 3.3, "d" = 5.4)
+str(y)
+y[c("d", "c", "a")]
+```
+
+The `str()` command now shows us that we now have a 'Named'
+numeric vector, and that we have a "names" attribute, which is itself a
+character vector.
+
+### Exercise 1
+
+:::puzzle
+
+Consider the words "yellow", "red", and "green".
+
+Create a numeric vector called "lengths" which simply shows the *length of the words* (in that order).
+
+Look at its structure using `str()`.
+
+Extract the first and last elements of this vector, indexing by position.
+
+Then, create a second vector called "named_lengths", with the same word-lengths, but now also using a corresponding names attribute: "yellow", "red" and "green".
+
+Look at its structure using `str()`.
+
+Again, extract the first and last elements, but now using a character vector as the index.
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+lengths <- c(6, 3, 5)
+str(lengths)
+lengths[c(1, 3)]
+```
+
+```{r}
+named_lengths <- c("yellow" = 6, "red" = 3, "green" = 5)
+str(named_lengths)
+named_lengths[c("yellow", "green")]
+```
+
+<br>
+
+
+</details>
+
+:::
+
+------------------------------------------------------------------------
+
+## Lists
+
+There are two main differences between vectors and lists: (i) lists can
+contain elements of **different types**; and (ii) lists can contain **entire vectors** as elements (and even 
+other lists: which is why lists are sometimes referred to as
+**recursive**: it can be lists of lists of lists, 'all the way down'.
+This is a topic for another day!). 
+
+Let's directly compare the structure
+of a *list* of numbers to a *vector* of numbers. Just as we create
+vectors by hand with the `c()` function, we create lists with the
+`list()` function.
+
+```{r}
+l <- list(2.1, 4.2, 3.3, 5.4)
+l
+str(l)
+```
+
+Notice the difference between *printing* a list (all those brackets!!)
+and using the `str()` command, which is much more compact and readable.
+
+What if we mix values of different types?
+
+```{r}
+l_mixed <- list(2.1, 2L, T, "a")
+l_mixed
+str(l_mixed)
+```
+
+
+Things get more interesting when we create a **list of vectors**:
+
+```{r}
+mixed_vectors <- list(c("kim", "sandy", "lee"), c(23, 21, 26))
+mixed_vectors
+str(mixed_vectors)
+```
+
+In these examples we  see the appearance of a new subsetting operator
+`[[ ]]`, in addition to `[ ]`. How do they differ? Let's experiment,
+focussing on the second element of the list `c(23, 21, 26)`. Let's try to pull out that vector using the `[2]` notation (it is the second element after all).
+
+```{r}
+mixed_vectors_subset_a <- mixed_vectors[2]
+mixed_vectors_subset_a
+str(mixed_vectors_subset_a)
+```
+
+**This does not pull out the vector!!** Instead, it returns a
+**sublist** which *contains* that vector as the only element (we'll see
+why R does this below...).
+
+So how to we get our hands on the actual vector? This is where the
+`[[ ]]` operator comes in:
+
+```{r}
+mixed_vectors_subset_b <- mixed_vectors[[2]]
+mixed_vectors_subset_b
+str(mixed_vectors_subset_b)
+```
+
+We see that the behavior of the `[ ]` operator is very different for lists: it
+selects the element(s) you request, but *always still wrapped inside a list*. It 'shrinks' the original list. The
+`[[ ]]` operator on the other hand 'drills-down' and just returns the
+'un-listed' vector in that position.
+
+## Data frames
+
+The reason R does things this way is because data frames are so central
+to the language. 
+Let's build a data frame from the ground up to see how
+it works.
+
+Basically the "inside" of a data frame is just a list with name
+attributes:
+
+```{r}
+attr_list <- list(name = c("kim", "sandy", "lee"), age = c(23, 21, 26))
+attr_list
+str(attr_list)
+```
+
+Notice that instead of `str()` displaying `$ : ...` for each entry, we
+now see attributes `$ name: ...` , `$ age: ...` for each entry. Also note that all
+those double `[[ ]]` notations have disappeared when we print. This
+should give you a clue that `$age`, for example, is a kind of alias for
+`[[2]]`.
+
+Finally, we can 'wrap' this into an official data frame structure:
+
+```{r}
+my_df <- as.data.frame(attr_list)
+my_df
+str(my_df)
+```
+
+Or wrap it into a tidyverse tibble:
+
+```{r}
+my_tibble <- as_tibble(attr_list)
+my_tibble
+str(my_tibble)
+```
+
+So a data frame is basically a list (intepreted as columns), with a names attribute
+for the columns (interpreted as headers). And with the extra condition that all the columns
+are of the same length, so it's rectangular. So we should be able to
+use our standard list subsetting operators on it:
+
+```{r}
+col_2 <- my_df[2]
+str(col_2)
+```
+
+Since a data frame is a list, subsetting using `[ ]` returns the
+specified column *still inside a data frame*. What about `[[ ]]`?
+
+```{r}
+vec_2 <- my_df[[2]]
+str(vec_2)
+```
+
+Using `[[ ]]` pulls out the data vector from the column.
+
+Just like vectors, we can also subset a data frame by the name
+attribute, instead of by position:
+
+```{r}
+col_2_by_name <- my_df["age"]
+str(col_2_by_name)
+```
+
+```{r}
+vec_2_by_name <- my_df[["age"]]
+str(vec_2_by_name)
+```
+
+Finally `my_df$age` is simply a shorthand for `my_df[["age"]]` without
+the `[[ ]]` and the `" "`:
+
+```{r}
+vec_2_by_dollar_name <- my_df$age
+str(vec_2_by_dollar_name)
+```
+
+## Direct comparison with tidyverse functions
+
+The dplyr command `select()` over a data frame is exactly analogous to
+the single bracket operator `my_df["age"]`. It returns a data frame with a
+single column:
+
+```{r}
+col_2_select <- select(my_df, "age")
+col_2_select
+str(col_2_select)
+```
+
+The dplyr command `pull()` over a data frame is exactly analogous to the
+double bracket operator `my_df[["age"]]`. It returns the data vector inside
+that column:
+
+```{r}
+col_2_pull <- pull(my_df, "age")
+col_2_pull
+str(col_2_pull)
+```
+
+The 'problem' with these dplyr functions is that they *require* a data frame as 
+input, and we recently saw in [S03E01:
+t-tests](https://biodash.github.io/codeclub/s03e01_ttests/) that the
+statistical t-test output was *not* a data frame:
+
+```{r}
+pop1 <- rnorm(n = 20, mean = 10, sd = 3)
+pop2 <- rnorm(n = 20, mean = 10, sd = 3)
+
+tresult <- t.test(x = pop1, y = pop2)
+str(tresult)
+```
+
+This is not a data frame, but an 'htest' class object. Further, it
+cannot be converted to a data frame in the usual way:
+
+``` r
+as.data.frame(tresult)
+Error in as.data.frame.default(tresult): cannot coerce class ‘"htest"’ to a data.frame
+```
+
+This is precisely why the tidyverse developed the `broom::tidy()` function,
+which works with legacy base-R outputs, and converts them to data frames. But if you have lots of t-tests, the overhead
+of converting all the outputs using broom, then using dplyr functions to
+access data, can be inefficient and overkill.
+
+The t-test output is not a data frame, but it **is** a named list, so we can subset it directly. For example, to pull out the `p.value` we can do either:
+
+```{r}
+tresult[[3]]
+```
+
+or
+
+```{r}
+tresult$p.value
+```
+
+which is really much simpler than going through broom. In addition, we can get extra granularity
+very quickly using this notation. Say we want the lower bound of the
+confidence interval. We can 'stack' indexes:
+
+```{r}
+tresult[[4]][[1]]
+```
+
+or
+
+```{r}
+tresult$conf.int[[1]]
+```
+
+This is saying 'give me the 4th element (or the conf.int element), and then give me the 1st element of that'.
+
+------------------------------------------------------------------------
+
+### Exercise 2
+
+:::puzzle
+
+Reuse the t.test() code above, run `str` on the output, and extract the `stderr` value using the $ indexing approach.
+
+<br>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+tresult$stderr
+```
+
+<br>
+
+</details>
+
+:::
+
+------------------------------------------------------------------------
+
+
+### Exercise 3
+
+:::puzzle
+
+When we ran our first ANOVA, we never actually looked at the data structure that was produced.
+
+Run the following code and inspect the output.
+
+```r
+bill_length_anova <- 
+  aov(data = penguins %>% drop_na(),
+      bill_length_mm ~ species + sex + species*sex)
+
+str(bill_length_anova)
+```
+
+Aieee! 
+
+What happens when you try to turn this into a data frame, using `as.data.frame(bill_length_anova)`?
+
+Now you can see why `broom:tidy()` is so useful! But we can still extract values from this directly.
+
+See if you can extract the residual df from this data structure.
+
+<br>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+bill_length_anova <- 
+  aov(data = penguins %>% drop_na(),
+      bill_length_mm ~ species + sex + species*sex)
+
+str(bill_length_anova)
+```
+
+
+```r
+as.data.frame(bill_length_anova)
+
+Error in as.data.frame.default(bill_length_anova) : 
+  cannot coerce class ‘c("aov", "lm")’ to a data.frame
+```
+
+```{r}
+bill_length_anova$df.residual
+```
+
+<br>
+
+</details>
+
+:::
+
+
+------------------------------------------------------------------------
+
+<br> <br> <br> <br>
