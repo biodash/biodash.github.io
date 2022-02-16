@@ -332,7 +332,7 @@
   
   <meta property="og:site_name" content="BioDASH" />
   <meta property="og:url" content="https://biodash.github.io/codeclub/s03e06_datastructures/" />
-  <meta property="og:title" content="Session S03E06: Data structures and subsetting | BioDASH" />
+  <meta property="og:title" content="S03E06: Data structures and subsetting | BioDASH" />
   <meta property="og:description" content="In this session of Code Club, we&#39;ll move below and beyond the tidyverse to get an overview of accessing various kinds of data structure in R." /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
     <meta property="twitter:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" /><meta property="og:locale" content="en-us" />
   
@@ -342,7 +342,7 @@
         content="2022-02-15T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-02-16T13:43:29-05:00">
+    <meta property="article:modified_time" content="2022-02-16T14:58:46-05:00">
   
 
   
@@ -358,7 +358,7 @@
 
 
 
-  <title>Session S03E06: Data structures and subsetting | BioDASH</title>
+  <title>S03E06: Data structures and subsetting | BioDASH</title>
 </head>
 
 
@@ -780,10 +780,10 @@
   
   
 <div class="article-container pt-3">
-  <h1>Session S03E06: Data structures and subsetting</h1>
+  <h1>S03E06: Data structures and subsetting</h1>
 
   
-  <p class="page-subtitle">Overview of data structures and how to access them.</p>
+  <p class="page-subtitle">Overview of data structures and how to access them</p>
   
 
   
@@ -1170,18 +1170,18 @@ Solution (click here)
 <span class='nv'>tresult</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>pop1</span>, y <span class='o'>=</span> <span class='nv'>pop2</span><span class='o'>)</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>tresult</span><span class='o'>)</span>
 <span class='c'>#&gt; List of 10</span>
-<span class='c'>#&gt;  $ statistic  : Named num -0.961</span>
+<span class='c'>#&gt;  $ statistic  : Named num 0.264</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "t"</span>
-<span class='c'>#&gt;  $ parameter  : Named num 37.6</span>
+<span class='c'>#&gt;  $ parameter  : Named num 35.7</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "df"</span>
-<span class='c'>#&gt;  $ p.value    : num 0.343</span>
-<span class='c'>#&gt;  $ conf.int   : num [1:2] -2.52 0.9</span>
+<span class='c'>#&gt;  $ p.value    : num 0.793</span>
+<span class='c'>#&gt;  $ conf.int   : num [1:2] -1.5 1.95</span>
 <span class='c'>#&gt;   ..- attr(*, "conf.level")= num 0.95</span>
-<span class='c'>#&gt;  $ estimate   : Named num [1:2] 9.07 9.88</span>
+<span class='c'>#&gt;  $ estimate   : Named num [1:2] 9.88 9.66</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr [1:2] "mean of x" "mean of y"</span>
 <span class='c'>#&gt;  $ null.value : Named num 0</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "difference in means"</span>
-<span class='c'>#&gt;  $ stderr     : num 0.845</span>
+<span class='c'>#&gt;  $ stderr     : num 0.852</span>
 <span class='c'>#&gt;  $ alternative: chr "two.sided"</span>
 <span class='c'>#&gt;  $ method     : chr "Welch Two Sample t-test"</span>
 <span class='c'>#&gt;  $ data.name  : chr "pop1 and pop2"</span>
@@ -1194,22 +1194,22 @@ Solution (click here)
 <p>The t-test output is not a data frame, but it <strong>is</strong> a named list, so we can subset it directly. For example, to pull out the <code>p.value</code> we can do either:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>[[</span><span class='m'>3</span><span class='o'>]</span><span class='o'>]</span>
-<span class='c'>#&gt; [1] 0.3428247</span></code></pre>
+<span class='c'>#&gt; [1] 0.7929388</span></code></pre>
 </div>
 <p>or</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>p.value</span>
-<span class='c'>#&gt; [1] 0.3428247</span></code></pre>
+<span class='c'>#&gt; [1] 0.7929388</span></code></pre>
 </div>
 <p>which is really much simpler than going through broom. In addition, we can get extra granularity very quickly using this notation. Say we want the lower bound of the confidence interval. We can &lsquo;stack&rsquo; indexes:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>[[</span><span class='m'>4</span><span class='o'>]</span><span class='o'>]</span><span class='o'>[[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>]</span>
-<span class='c'>#&gt; [1] -2.524074</span></code></pre>
+<span class='c'>#&gt; [1] -1.503177</span></code></pre>
 </div>
 <p>or</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>conf.int</span><span class='o'>[[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>]</span>
-<span class='c'>#&gt; [1] -2.524074</span></code></pre>
+<span class='c'>#&gt; [1] -1.503177</span></code></pre>
 </div>
 <p>This is saying &lsquo;give me the 4th element (or the conf.int element), and then give me the 1st element of that&rsquo;.</p>
 <hr>
@@ -1223,7 +1223,7 @@ Solution (click here)
 </summary>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>stderr</span>
-<span class='c'>#&gt; [1] 0.8453499</span></code></pre>
+<span class='c'>#&gt; [1] 0.8520302</span></code></pre>
 </div>
 <br>
 </details>
@@ -1358,7 +1358,7 @@ Solution (click here)
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s03e06_datastructures/&amp;text=Session%20S03E06:%20Data%20structures%20and%20subsetting" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s03e06_datastructures/&amp;text=S03E06:%20Data%20structures%20and%20subsetting" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -1371,7 +1371,7 @@ Solution (click here)
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s03e06_datastructures/&amp;t=Session%20S03E06:%20Data%20structures%20and%20subsetting" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s03e06_datastructures/&amp;t=S03E06:%20Data%20structures%20and%20subsetting" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -1384,7 +1384,7 @@ Solution (click here)
       
       
       <li>
-        <a href="mailto:?subject=Session%20S03E06:%20Data%20structures%20and%20subsetting&amp;body=https://biodash.github.io/codeclub/s03e06_datastructures/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=S03E06:%20Data%20structures%20and%20subsetting&amp;body=https://biodash.github.io/codeclub/s03e06_datastructures/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -1397,7 +1397,7 @@ Solution (click here)
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s03e06_datastructures/&amp;title=Session%20S03E06:%20Data%20structures%20and%20subsetting" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s03e06_datastructures/&amp;title=S03E06:%20Data%20structures%20and%20subsetting" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -1410,7 +1410,7 @@ Solution (click here)
       
       
       <li>
-        <a href="whatsapp://send?text=Session%20S03E06:%20Data%20structures%20and%20subsetting%20https://biodash.github.io/codeclub/s03e06_datastructures/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=S03E06:%20Data%20structures%20and%20subsetting%20https://biodash.github.io/codeclub/s03e06_datastructures/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -1423,7 +1423,7 @@ Solution (click here)
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s03e06_datastructures/&amp;title=Session%20S03E06:%20Data%20structures%20and%20subsetting" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s03e06_datastructures/&amp;title=S03E06:%20Data%20structures%20and%20subsetting" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
