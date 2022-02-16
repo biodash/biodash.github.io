@@ -1,6 +1,6 @@
 ---
-title: "Session S03E06: Data structures and subsetting"
-subtitle: "Overview of data structures and how to access them."
+title: "S03E06: Data structures and subsetting"
+subtitle: "Overview of data structures and how to access them"
 summary: "In this session of Code Club, we'll move below and beyond the tidyverse to get an overview of accessing various kinds of data structure in R."  
 authors: [michael-broe]
 date: "2022-02-15"
@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: bc26ebe973395e3f
+rmd_hash: f9630d227cce8b17
 
 ---
 
@@ -489,18 +489,18 @@ The 'problem' with these dplyr functions is that they *require* a data frame as 
 <span class='nv'>tresult</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>pop1</span>, y <span class='o'>=</span> <span class='nv'>pop2</span><span class='o'>)</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>tresult</span><span class='o'>)</span>
 <span class='c'>#&gt; List of 10</span>
-<span class='c'>#&gt;  $ statistic  : Named num -0.961</span>
+<span class='c'>#&gt;  $ statistic  : Named num 0.264</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "t"</span>
-<span class='c'>#&gt;  $ parameter  : Named num 37.6</span>
+<span class='c'>#&gt;  $ parameter  : Named num 35.7</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "df"</span>
-<span class='c'>#&gt;  $ p.value    : num 0.343</span>
-<span class='c'>#&gt;  $ conf.int   : num [1:2] -2.52 0.9</span>
+<span class='c'>#&gt;  $ p.value    : num 0.793</span>
+<span class='c'>#&gt;  $ conf.int   : num [1:2] -1.5 1.95</span>
 <span class='c'>#&gt;   ..- attr(*, "conf.level")= num 0.95</span>
-<span class='c'>#&gt;  $ estimate   : Named num [1:2] 9.07 9.88</span>
+<span class='c'>#&gt;  $ estimate   : Named num [1:2] 9.88 9.66</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr [1:2] "mean of x" "mean of y"</span>
 <span class='c'>#&gt;  $ null.value : Named num 0</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "difference in means"</span>
-<span class='c'>#&gt;  $ stderr     : num 0.845</span>
+<span class='c'>#&gt;  $ stderr     : num 0.852</span>
 <span class='c'>#&gt;  $ alternative: chr "two.sided"</span>
 <span class='c'>#&gt;  $ method     : chr "Welch Two Sample t-test"</span>
 <span class='c'>#&gt;  $ data.name  : chr "pop1 and pop2"</span>
@@ -522,7 +522,7 @@ The t-test output is not a data frame, but it **is** a named list, so we can sub
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>[[</span><span class='m'>3</span><span class='o'>]</span><span class='o'>]</span>
-<span class='c'>#&gt; [1] 0.3428247</span></code></pre>
+<span class='c'>#&gt; [1] 0.7929388</span></code></pre>
 
 </div>
 
@@ -531,7 +531,7 @@ or
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>p.value</span>
-<span class='c'>#&gt; [1] 0.3428247</span></code></pre>
+<span class='c'>#&gt; [1] 0.7929388</span></code></pre>
 
 </div>
 
@@ -540,7 +540,7 @@ which is really much simpler than going through broom. In addition, we can get e
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>[[</span><span class='m'>4</span><span class='o'>]</span><span class='o'>]</span><span class='o'>[[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>]</span>
-<span class='c'>#&gt; [1] -2.524074</span></code></pre>
+<span class='c'>#&gt; [1] -1.503177</span></code></pre>
 
 </div>
 
@@ -549,7 +549,7 @@ or
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>conf.int</span><span class='o'>[[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>]</span>
-<span class='c'>#&gt; [1] -2.524074</span></code></pre>
+<span class='c'>#&gt; [1] -1.503177</span></code></pre>
 
 </div>
 
@@ -573,7 +573,7 @@ Solution (click here)
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>stderr</span>
-<span class='c'>#&gt; [1] 0.8453499</span></code></pre>
+<span class='c'>#&gt; [1] 0.8520302</span></code></pre>
 
 </div>
 
