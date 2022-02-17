@@ -34,7 +34,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Session Goals
 
--   Learn the uses of R's three basic subsetting operators: `[ ]`,
+-   Learn the uses of base-R's three subsetting operators: `[ ]`,
     `[[ ]]`, and `$`.
 -   Learn how the behavior of these operators varies depending on the
     **data structure** you are subsetting (vector, list, or data frame).
@@ -42,6 +42,8 @@ knitr::opts_chunk$set(echo = TRUE)
 -   Learn how these base-R operators relate to tidyverse commands.
 
 ------------------------------------------------------------------------
+
+In our previous set of Code Clubs on stats packages, we've encountered data structures of various kinds. Here we put the data structure material all in one place, and put it in a wider R context. We'll move below and beyond the tidyverse to get an overview of accessing various kinds of data structure in R.
 
 ## Intro: What is 'subsetting' anyway?
 
@@ -78,7 +80,7 @@ characters, or all integers, etc. Inside lists, you can *mix values of
 any type*.
 
 In addition, a list is best thought of as a general purpose container,
-which can contain not just mixed values, but entire vectors of any type. 
+which can contain not just mixed values, but also *entire vectors* of any type. 
 
 Since we'll be comparing base-R with tidyverse functions, we need to
 load the tidyverse, and we'll also be using the `palmerpenguins` package to reproduce our previous ANOVA results:
@@ -145,8 +147,8 @@ x
 str(x)
 ```
 
-(Notice for this example the *number after the decimal point* indicates
-the position (index) of the element of the vector.)
+(Notice for this example we are using a pedagocial trick, where the *number after the decimal point* indicates
+the position (index) of the value before the decimal point).
 
 **Positive integers** return elements at the specified positions. Any
 expression that evaluates to a vector of positions can be used as the
@@ -183,7 +185,7 @@ The `str()` command now shows us that we now have a 'Named'
 numeric vector, and that we have a "names" attribute, which is itself a
 character vector.
 
-### Exercise 1
+### Exercise 1a
 
 :::puzzle
 
@@ -195,11 +197,6 @@ Look at its structure using `str()`.
 
 Extract the first and last elements of this vector, indexing by position.
 
-Then, create a second vector called "named_lengths", with the same word-lengths, but now also using a corresponding names attribute: "yellow", "red" and "green".
-
-Look at its structure using `str()`.
-
-Again, extract the first and last elements, but now using a character vector as the index.
 
 <details> <summary> Solution (click here) </summary>
 
@@ -208,6 +205,26 @@ lengths <- c(6, 3, 5)
 str(lengths)
 lengths[c(1, 3)]
 ```
+
+
+<br>
+
+
+</details>
+
+:::
+
+### Exercise 1b
+
+:::puzzle
+
+Now create a second vector called "named_lengths", with the same word-lengths, but now also using a corresponding names attribute: "yellow", "red" and "green".
+
+Look at its structure using `str()`.
+
+Again, extract the first and last elements, but now using a character vector as the index.
+
+<details> <summary> Solution (click here) </summary>
 
 ```{r}
 named_lengths <- c("yellow" = 6, "red" = 3, "green" = 5)
@@ -452,7 +469,7 @@ This is saying 'give me the 4th element (or the conf.int element), and then give
 
 :::puzzle
 
-Reuse the t.test() code above, run `str` on the output, and extract the `stderr` value using the $ indexing approach.
+Reuse the t.test() code above, run `str` on the output, and extract the `stderr` value using both the `$` and `[[ ]]` indexing approaches.
 
 <br>
 
@@ -460,6 +477,10 @@ Reuse the t.test() code above, run `str` on the output, and extract the `stderr`
 
 ```{r}
 tresult$stderr
+```
+
+```{r}
+tresult[[7]]
 ```
 
 <br>
@@ -491,9 +512,17 @@ Aieee!
 
 What happens when you try to turn this into a data frame, using `as.data.frame(bill_length_anova)`?
 
-Now you can see why `broom:tidy()` is so useful! But we can still extract values from this directly.
+Now you can see why `broom:tidy()` is so useful! To remind yourselves what the tidied version looks like, run the code:
 
-See if you can extract the residual df from this data structure.
+```r
+tidy_anova <- broom::tidy(bill_length_anova)
+tidy_anova
+```
+
+
+But we can still extract values from this data structure directly: you just have to work out where to look...
+
+See if you can extract the total residual df from this data structure using the $ notation.
 
 <br>
 
@@ -513,6 +542,12 @@ as.data.frame(bill_length_anova)
 
 Error in as.data.frame.default(bill_length_anova) : 
   cannot coerce class ‘c("aov", "lm")’ to a data.frame
+```
+
+
+```{r}
+tidy_anova <- broom::tidy(bill_length_anova)
+tidy_anova
 ```
 
 ```{r}

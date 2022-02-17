@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: f9630d227cce8b17
+rmd_hash: 5382f014e3d29e9e
 
 ---
 
@@ -29,12 +29,14 @@ rmd_hash: f9630d227cce8b17
 
 ## Session Goals
 
--   Learn the uses of R's three basic subsetting operators: `[ ]`, `[[ ]]`, and `$`.
+-   Learn the uses of base-R's three subsetting operators: `[ ]`, `[[ ]]`, and `$`.
 -   Learn how the behavior of these operators varies depending on the **data structure** you are subsetting (vector, list, or data frame).
 -   Learn the value of the [`str()`](https://rdrr.io/r/utils/str.html) command.
 -   Learn how these base-R operators relate to tidyverse commands.
 
 ------------------------------------------------------------------------
+
+In our previous set of Code Clubs on stats packages, we've encountered data structures of various kinds. Here we put the data structure material all in one place, and put it in a wider R context. We'll move below and beyond the tidyverse to get an overview of accessing various kinds of data structure in R.
 
 ## Intro: What is 'subsetting' anyway?
 
@@ -52,7 +54,7 @@ Since the behavior of these operators depends on the actual data structure you a
 
 The most important distinction between vectors and lists is within vectors *every value must be of the same type*: for example, all characters, or all integers, etc. Inside lists, you can *mix values of any type*.
 
-In addition, a list is best thought of as a general purpose container, which can contain not just mixed values, but entire vectors of any type.
+In addition, a list is best thought of as a general purpose container, which can contain not just mixed values, but also *entire vectors* of any type.
 
 Since we'll be comparing base-R with tidyverse functions, we need to load the tidyverse, and we'll also be using the `palmerpenguins` package to reproduce our previous ANOVA results:
 
@@ -134,7 +136,7 @@ For such a simple structure, there are a surprisingly large number of ways to su
 
 </div>
 
-(Notice for this example the *number after the decimal point* indicates the position (index) of the element of the vector.)
+(Notice for this example we are using a pedagocial trick, where the *number after the decimal point* indicates the position (index) of the value before the decimal point).
 
 **Positive integers** return elements at the specified positions. Any expression that evaluates to a vector of positions can be used as the index. The index operator is `[ ]`:
 
@@ -178,7 +180,7 @@ The bottom line here is that each value in a vector has an implicit index (posit
 
 The [`str()`](https://rdrr.io/r/utils/str.html) command now shows us that we now have a 'Named' numeric vector, and that we have a "names" attribute, which is itself a character vector.
 
-### Exercise 1
+### Exercise 1a
 
 <div class="puzzle">
 
@@ -189,12 +191,6 @@ Create a numeric vector called "lengths" which simply shows the *length of the w
 Look at its structure using [`str()`](https://rdrr.io/r/utils/str.html).
 
 Extract the first and last elements of this vector, indexing by position.
-
-Then, create a second vector called "named_lengths", with the same word-lengths, but now also using a corresponding names attribute: "yellow", "red" and "green".
-
-Look at its structure using [`str()`](https://rdrr.io/r/utils/str.html).
-
-Again, extract the first and last elements, but now using a character vector as the index.
 
 <details>
 <summary>
@@ -210,6 +206,27 @@ Solution (click here)
 <span class='c'>#&gt; [1] 6 5</span></code></pre>
 
 </div>
+
+<br>
+
+</details>
+
+</div>
+
+### Exercise 1b
+
+<div class="puzzle">
+
+Now create a second vector called "named_lengths", with the same word-lengths, but now also using a corresponding names attribute: "yellow", "red" and "green".
+
+Look at its structure using [`str()`](https://rdrr.io/r/utils/str.html).
+
+Again, extract the first and last elements, but now using a character vector as the index.
+
+<details>
+<summary>
+Solution (click here)
+</summary>
 
 <div class="highlight">
 
@@ -489,18 +506,18 @@ The 'problem' with these dplyr functions is that they *require* a data frame as 
 <span class='nv'>tresult</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>pop1</span>, y <span class='o'>=</span> <span class='nv'>pop2</span><span class='o'>)</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>tresult</span><span class='o'>)</span>
 <span class='c'>#&gt; List of 10</span>
-<span class='c'>#&gt;  $ statistic  : Named num 0.264</span>
+<span class='c'>#&gt;  $ statistic  : Named num 0.32</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "t"</span>
-<span class='c'>#&gt;  $ parameter  : Named num 35.7</span>
+<span class='c'>#&gt;  $ parameter  : Named num 37.9</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "df"</span>
-<span class='c'>#&gt;  $ p.value    : num 0.793</span>
-<span class='c'>#&gt;  $ conf.int   : num [1:2] -1.5 1.95</span>
+<span class='c'>#&gt;  $ p.value    : num 0.751</span>
+<span class='c'>#&gt;  $ conf.int   : num [1:2] -1.77 2.44</span>
 <span class='c'>#&gt;   ..- attr(*, "conf.level")= num 0.95</span>
-<span class='c'>#&gt;  $ estimate   : Named num [1:2] 9.88 9.66</span>
+<span class='c'>#&gt;  $ estimate   : Named num [1:2] 10.17 9.84</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr [1:2] "mean of x" "mean of y"</span>
 <span class='c'>#&gt;  $ null.value : Named num 0</span>
 <span class='c'>#&gt;   ..- attr(*, "names")= chr "difference in means"</span>
-<span class='c'>#&gt;  $ stderr     : num 0.852</span>
+<span class='c'>#&gt;  $ stderr     : num 1.04</span>
 <span class='c'>#&gt;  $ alternative: chr "two.sided"</span>
 <span class='c'>#&gt;  $ method     : chr "Welch Two Sample t-test"</span>
 <span class='c'>#&gt;  $ data.name  : chr "pop1 and pop2"</span>
@@ -522,7 +539,7 @@ The t-test output is not a data frame, but it **is** a named list, so we can sub
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>[[</span><span class='m'>3</span><span class='o'>]</span><span class='o'>]</span>
-<span class='c'>#&gt; [1] 0.7929388</span></code></pre>
+<span class='c'>#&gt; [1] 0.7507211</span></code></pre>
 
 </div>
 
@@ -531,7 +548,7 @@ or
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>p.value</span>
-<span class='c'>#&gt; [1] 0.7929388</span></code></pre>
+<span class='c'>#&gt; [1] 0.7507211</span></code></pre>
 
 </div>
 
@@ -540,7 +557,7 @@ which is really much simpler than going through broom. In addition, we can get e
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>[[</span><span class='m'>4</span><span class='o'>]</span><span class='o'>]</span><span class='o'>[[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>]</span>
-<span class='c'>#&gt; [1] -1.503177</span></code></pre>
+<span class='c'>#&gt; [1] -1.774624</span></code></pre>
 
 </div>
 
@@ -549,7 +566,7 @@ or
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>conf.int</span><span class='o'>[[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>]</span>
-<span class='c'>#&gt; [1] -1.503177</span></code></pre>
+<span class='c'>#&gt; [1] -1.774624</span></code></pre>
 
 </div>
 
@@ -561,7 +578,7 @@ This is saying 'give me the 4th element (or the conf.int element), and then give
 
 <div class="puzzle">
 
-Reuse the t.test() code above, run `str` on the output, and extract the `stderr` value using the \$ indexing approach.
+Reuse the t.test() code above, run `str` on the output, and extract the `stderr` value using both the `$` and `[[ ]]` indexing approaches.
 
 <br>
 
@@ -573,7 +590,14 @@ Solution (click here)
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>$</span><span class='nv'>stderr</span>
-<span class='c'>#&gt; [1] 0.8520302</span></code></pre>
+<span class='c'>#&gt; [1] 1.041051</span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tresult</span><span class='o'>[[</span><span class='m'>7</span><span class='o'>]</span><span class='o'>]</span>
+<span class='c'>#&gt; [1] 1.041051</span></code></pre>
 
 </div>
 
@@ -605,9 +629,16 @@ Aieee!
 
 What happens when you try to turn this into a data frame, using `as.data.frame(bill_length_anova)`?
 
-Now you can see why `broom:tidy()` is so useful! But we can still extract values from this directly.
+Now you can see why `broom:tidy()` is so useful! To remind yourselves what the tidied version looks like, run the code:
 
-See if you can extract the residual df from this data structure.
+``` r
+tidy_anova <- broom::tidy(bill_length_anova)
+tidy_anova
+```
+
+But we can still extract values from this data structure directly: you just have to work out where to look...
+
+See if you can extract the total residual df from this data structure using the \$ notation.
 
 <br>
 
@@ -698,6 +729,20 @@ as.data.frame(bill_length_anova)
 Error in as.data.frame.default(bill_length_anova) : 
   cannot coerce class ‘c("aov", "lm")’ to a data.frame
 ```
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>tidy_anova</span> <span class='o'>&lt;-</span> <span class='nf'>broom</span><span class='nf'>::</span><span class='nf'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='o'>(</span><span class='nv'>bill_length_anova</span><span class='o'>)</span>
+<span class='nv'>tidy_anova</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 4 × 6</span></span>
+<span class='c'>#&gt;   term           df  sumsq  meansq statistic    p.value</span>
+<span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span> species         2 <span style='text-decoration: underline;'>7</span>015.  <span style='text-decoration: underline;'>3</span>508.      654.    5.03<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-115</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span> sex             1 <span style='text-decoration: underline;'>1</span>136.  <span style='text-decoration: underline;'>1</span>136.      212.    2.42<span style='color: #555555;'>e</span><span style='color: #BB0000;'>- 37</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span> species:sex     2   24.5   12.2       2.28  1.03<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  1</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span> Residuals     327 <span style='text-decoration: underline;'>1</span>753.     5.36     <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   <span style='color: #555555;'> </span></span></code></pre>
+
+</div>
 
 <div class="highlight">
 
