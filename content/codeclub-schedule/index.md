@@ -21,8 +21,6 @@ We have also included these sessions in the [BioDASH calendar](/events/#calendar
 
 | Session     | Date      | Presenter    | Topic                                                            | Topic block              |
 |-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
-| **S03E05**  | Feb 10    | Stephen      | **Correlation and regression**                                   | Basic statistics in R    |
-| **S03E06**  | Feb 17    | Michael B.   | **Working with data structures returned by stats functions**     | Basic statistics in R    |
 | **S03E07**  | Feb 24    | Jelmer       | **Loops part I**                                                 | "Don't repeat yourself" (DRY) |
 | **S03E08**  | Mar 03    | Jelmer       | **Loops part II**                                                | "Don't repeat yourself" (DRY) |
 | **S03E09**  | Mar 10    | Mike S.      | **Apply/purrr part I**                                           | "Don't repeat yourself" (DRY) |
@@ -41,6 +39,8 @@ We have also included these sessions in the [BioDASH calendar](/events/#calendar
 | **S03E02**  | Jan 20    | Jessica      | [**ANOVA**](/codeclub/s03e02_anova/)                             | Basic statistics in R    |
 | **S03E03**  | Jan 27    | Jelmer       | [**Principal Component Analysis**](/codeclub/s03e03_pca/)        | Basic statistics in R    |
 | **S03E04**  | Feb 03    | Jessica      | [**ANOVA part II**](/codeclub/s03e04_anova2/)                    | Basic statistics in R    |
+| **S03E05**  | Feb 10    | Stephen      | [**Correlation**](/codeclub/s03e05_correlation/)                 | Basic statistics in R    |
+| **S03E06**  | Feb 17    | Michael B.   | [**Data structures and subsetting**](/codeclub/s03e06_datastructures/)**  | Basic statistics in R    |
 
 <br>
 
