@@ -128,6 +128,11 @@ starting with vectorization this week.**
 
 #### But first, an iteration example
 
+Below, I will give a quick example of each of the two iteration approaches:
+a loop and a functional.
+Hopefully, this will be illustrative even if you don't understand all the details:
+come back in the next few weeks to learn more about this!
+
 Say that we wanted to compute the mean for each of the 4 measurements
 for each penguin: bill length, bill depth, flipper length, and body mass.
 
@@ -147,18 +152,21 @@ we wanted to perform an analysis consisting of multiple steps.
 
 What would it look like to use iteration in a case like this?
 
-- With a loop:
+- With a `for` loop:
 ```{r}
-## The columns we are interested in are columns 3 through 6
+## The columns we are interested in are columns 3 through 6 (3:6)
+## We can extract each column with the `[[...]]` notation we saw last week
 for (column_index in 3:6) {
     column_mean <- mean(penguins[[column_index]], na.rm = TRUE)
     print(column_mean)
-} 
+}
 ```
 
 - With _purrr_'s `map()` function:
 ```{r}
-map(penguins[, 3:6], mean, na.rm = TRUE)
+penguins %>%
+    select(3:6) %>%
+    map(mean, na.rm = TRUE)
 ```
 
 <div class="alert alert-note"><div>
@@ -185,8 +193,12 @@ that we extract from the penguins dataframe
 (though as we'll see later, all of this works in dataframes, too):
 
 ```{r}
-penguins_noNA <- drop_na(penguins)              # Remove rows with NAs
-bill_len <- penguins_noNA$bill_length_mm[1:10]  # Take first 10 values
+## Remove rows with NAs:
+penguins_noNA <- drop_na(penguins)              
+
+## Extract a column with `$`, then take the first 10 values: 
+bill_len <- penguins_noNA$bill_length_mm[1:10]
+
 bill_len
 ```
 
@@ -312,8 +324,10 @@ Just remember that for most functions,
 you do really need to pass a vector and not just a sequence of numbers:
 
 ```{r, error=TRUE}
+## This way, log() thinks you are passing 3 separate arguments:
 log(10, 15, 20)
 
+## Now, you pass 1 argument which is a vector created with `c()`
 log(c(10, 15, 20))
 ```
 
@@ -477,7 +491,7 @@ glue("Island of {islands}")
 
 ----------------------------------------------------------
 
-## IV -- Vectorization with indices
+## III -- Vectorization with logical indices
 
 We can also use vectorized solutions when we want to operate only on elements
 that satisfy a certain condition.
@@ -644,6 +658,9 @@ Don't hesitate to look at the Hints if you're not sure how to approach this.
     
 - When creating the plot, assign the new column to the `color` aesthetic. 
 
+*An alternative:* you don't even need to create the logical-vector-column,
+you could also directly map the `color` aesthetic to a logical expression!
+
 </details>
 
 <details><summary><b>Hints 2 </b> (click here)</summary>
@@ -675,7 +692,7 @@ ggplot(...) +
 <br>
 
 ```{r}
-## Create the new dataframe, all tidyverse
+## Create the new dataframe
 gent <- penguins %>%
   filter(species == "Gentoo") %>%
   drop_na() %>% 
@@ -686,6 +703,21 @@ gent <- penguins %>%
 ## Make the plot:
 ggplot(gent) +
   geom_point(aes(x = bill_length_mm, y = bill_depth_mm, color = ratio))
+```
+
+Or:
+
+```{r}
+## Create the new dataframe without making a new variable
+gent <- penguins %>%
+  filter(species == "Gentoo") %>%
+  drop_na()
+
+## Make the plot and include the logical expression in the `aes()` call:
+ggplot(gent) +
+  geom_point(aes(x = bill_length_mm, y = bill_depth_mm,
+                 color = bill_length_mm / bill_depth_mm > 3.5)) +
+  labs(color = "Bill length ratio > 3.5")
 ```
 
 </details>

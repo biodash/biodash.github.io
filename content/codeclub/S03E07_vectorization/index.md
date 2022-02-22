@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: d84ac5c24f3c21c0
+rmd_hash: f73d9afdeb21fb89
 
 ---
 
@@ -109,6 +109,8 @@ These approaches are clearer, less error-prone, and more flexible than copy-past
 
 #### But first, an iteration example
 
+Below, I will give a quick example of each of the two iteration approaches: a loop and a functional. Hopefully, this will be illustrative even if you don't understand all the details: come back in the next few weeks to learn more about this!
+
 Say that we wanted to compute the mean for each of the 4 measurements for each penguin: bill length, bill depth, flipper length, and body mass.
 
 To do this, we could write:
@@ -130,14 +132,15 @@ But that is a bit repetitive. And it would get especially so if we had 20 differ
 
 What would it look like to use iteration in a case like this?
 
--   With a loop:
+-   With a `for` loop:
     <div class="highlight">
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## The columns we are interested in are columns 3 through 6</span>
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## The columns we are interested in are columns 3 through 6 (3:6)</span>
+    <span class='c'>## We can extract each column with the `[[...]]` notation we saw last week</span>
     <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>column_index</span> <span class='kr'>in</span> <span class='m'>3</span><span class='o'>:</span><span class='m'>6</span><span class='o'>)</span> <span class='o'>&#123;</span>
       <span class='nv'>column_mean</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>[[</span><span class='nv'>column_index</span><span class='o'>]</span><span class='o'>]</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
       <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>column_mean</span><span class='o'>)</span>
-    <span class='o'>&#125;</span> 
+    <span class='o'>&#125;</span>
     <span class='c'>#&gt; [1] 43.92193</span>
     <span class='c'>#&gt; [1] 17.15117</span>
     <span class='c'>#&gt; [1] 200.9152</span>
@@ -147,7 +150,9 @@ What would it look like to use iteration in a case like this?
 -   With *purrr*'s `map()` function:
     <div class="highlight">
 
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>map</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>[</span>, <span class='m'>3</span><span class='o'>:</span><span class='m'>6</span><span class='o'>]</span>, <span class='nv'>mean</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+    <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+      <span class='nf'>select</span><span class='o'>(</span><span class='m'>3</span><span class='o'>:</span><span class='m'>6</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+      <span class='nf'>map</span><span class='o'>(</span><span class='nv'>mean</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
     <span class='c'>#&gt; $bill_length_mm</span>
     <span class='c'>#&gt; [1] 43.92193</span>
     <span class='c'>#&gt; </span>
@@ -192,8 +197,12 @@ To illustrate vectorization, we'll work with a vector of bill lengths that we ex
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_noNA</span> <span class='o'>&lt;-</span> <span class='nf'>drop_na</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>              <span class='c'># Remove rows with NAs</span>
-<span class='nv'>bill_len</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>bill_length_mm</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>10</span><span class='o'>]</span>  <span class='c'># Take first 10 values</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Remove rows with NAs:</span>
+<span class='nv'>penguins_noNA</span> <span class='o'>&lt;-</span> <span class='nf'>drop_na</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>              
+
+<span class='c'>## Extract a column with `$`, then take the first 10 values: </span>
+<span class='nv'>bill_len</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>bill_length_mm</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>10</span><span class='o'>]</span>
+
 <span class='nv'>bill_len</span>
 <span class='c'>#&gt;  [1] 39.1 39.5 40.3 36.7 39.3 38.9 39.2 41.1 38.6 34.6</span></code></pre>
 
@@ -328,9 +337,11 @@ Just remember that for most functions, you do really need to pass a vector and n
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='o'>(</span><span class='m'>10</span>, <span class='m'>15</span>, <span class='m'>20</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## This way, log() thinks you are passing 3 separate arguments:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='o'>(</span><span class='m'>10</span>, <span class='m'>15</span>, <span class='m'>20</span><span class='o'>)</span>
 <span class='c'>#&gt; Error in log(10, 15, 20): unused argument (20)</span>
 
+<span class='c'>## Now, you pass 1 argument which is a vector created with `c()`</span>
 <span class='nf'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>10</span>, <span class='m'>15</span>, <span class='m'>20</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; [1] 2.302585 2.708050 2.995732</span></code></pre>
 
@@ -542,7 +553,7 @@ Note: it is fine that `islands` is still a *factor*, like the `island` column in
 
 ------------------------------------------------------------------------
 
-## IV -- Vectorization with indices
+## III -- Vectorization with logical indices
 
 We can also use vectorized solutions when we want to operate only on elements that satisfy a certain condition. To do so, we make use of R's ability to index a vector with a *logical vector*.
 
@@ -740,6 +751,8 @@ Don't hesitate to look at the Hints if you're not sure how to approach this.
     -   A new column with a logical vector indicating whether the bill length to bill depth ratio is >3.5 (e.g., use the `mutate()` function with an [`ifelse()`](https://rdrr.io/r/base/ifelse.html) statement).
 -   When creating the plot, assign the new column to the `color` aesthetic.
 
+*An alternative:* you don't even need to create the logical-vector-column, you could also directly map the `color` aesthetic to a logical expression!
+
 </details>
 <details>
 <summary>
@@ -782,7 +795,7 @@ Don't hesitate to look at the Hints if you're not sure how to approach this.
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Create the new dataframe, all tidyverse</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Create the new dataframe</span>
 <span class='nv'>gent</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Gentoo"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
@@ -795,6 +808,25 @@ Don't hesitate to look at the Hints if you're not sure how to approach this.
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>ratio</span><span class='o'>)</span><span class='o'>)</span>
 </code></pre>
 <img src="figs/unnamed-chunk-35-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
+Or:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Create the new dataframe without making a new variable</span>
+<span class='nv'>gent</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Gentoo"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='c'>## Make the plot and include the logical expression in the `aes()` call:</span>
+<span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>gent</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>,
+                 color <span class='o'>=</span> <span class='nv'>bill_length_mm</span> <span class='o'>/</span> <span class='nv'>bill_depth_mm</span> <span class='o'>&gt;</span> <span class='m'>3.5</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"Bill length ratio &gt; 3.5"</span><span class='o'>)</span>
+</code></pre>
+<img src="figs/unnamed-chunk-36-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -819,11 +851,11 @@ We can also perform vectorized operations on *entire matrices*. With the followi
 <span class='nv'>mat</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>100</span>, <span class='m'>25</span><span class='o'>)</span>, nrow <span class='o'>=</span> <span class='m'>5</span>, ncol <span class='o'>=</span> <span class='m'>5</span><span class='o'>)</span>
 <span class='nv'>mat</span>
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]   99   15   95   91   57</span>
-<span class='c'>#&gt; [2,]   10   60   80   89   76</span>
-<span class='c'>#&gt; [3,]   17   82   70   42   72</span>
-<span class='c'>#&gt; [4,]   98   83   36   96   75</span>
-<span class='c'>#&gt; [5,]   21   19   67   41   49</span></code></pre>
+<span class='c'>#&gt; [1,]   38   48   43   67  100</span>
+<span class='c'>#&gt; [2,]   63   10   70   81   93</span>
+<span class='c'>#&gt; [3,]   21   65   72   98   53</span>
+<span class='c'>#&gt; [4,]   69   22   17   25   29</span>
+<span class='c'>#&gt; [5,]   90   80   45   37   33</span></code></pre>
 
 </div>
 
@@ -833,19 +865,19 @@ We can also perform vectorized operations on *entire matrices*. With the followi
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>mat</span> <span class='o'>*</span> <span class='m'>10</span>
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]  990  150  950  910  570</span>
-<span class='c'>#&gt; [2,]  100  600  800  890  760</span>
-<span class='c'>#&gt; [3,]  170  820  700  420  720</span>
-<span class='c'>#&gt; [4,]  980  830  360  960  750</span>
-<span class='c'>#&gt; [5,]  210  190  670  410  490</span>
+<span class='c'>#&gt; [1,]  380  480  430  670 1000</span>
+<span class='c'>#&gt; [2,]  630  100  700  810  930</span>
+<span class='c'>#&gt; [3,]  210  650  720  980  530</span>
+<span class='c'>#&gt; [4,]  690  220  170  250  290</span>
+<span class='c'>#&gt; [5,]  900  800  450  370  330</span>
 
 <span class='nv'>mat</span> <span class='o'>*</span> <span class='nv'>mat</span>
-<span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,] 9801  225 9025 8281 3249</span>
-<span class='c'>#&gt; [2,]  100 3600 6400 7921 5776</span>
-<span class='c'>#&gt; [3,]  289 6724 4900 1764 5184</span>
-<span class='c'>#&gt; [4,] 9604 6889 1296 9216 5625</span>
-<span class='c'>#&gt; [5,]  441  361 4489 1681 2401</span></code></pre>
+<span class='c'>#&gt;      [,1] [,2] [,3] [,4]  [,5]</span>
+<span class='c'>#&gt; [1,] 1444 2304 1849 4489 10000</span>
+<span class='c'>#&gt; [2,] 3969  100 4900 6561  8649</span>
+<span class='c'>#&gt; [3,]  441 4225 5184 9604  2809</span>
+<span class='c'>#&gt; [4,] 4761  484  289  625   841</span>
+<span class='c'>#&gt; [5,] 8100 6400 2025 1369  1089</span></code></pre>
 
 </div>
 
