@@ -1,0 +1,718 @@
+---
+output: hugodown::md_document
+title: "S03E07: Avoid Copy-pasting Code - Intro and Vectorization"
+subtitle: "How to repeat operations without repeating your code"
+summary: "In this first session on strategies for repeating operations without copy-pasting your code, we will focus on vectorization."
+authors: [admin]
+tags: [codeclub, iteration]
+date: "`r Sys.Date()`"
+lastmod: "`r Sys.Date()`"
+toc: true
+
+# Featured image
+# To use, add an image named `featured.jpg/png` to your page's folder.
+# Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
+image:
+  caption: "Artwork by @allison_horst"
+  focal_point: ""
+  preview_only: false
+
+# Projects (optional).
+#   Associate this post with one or more of your projects.
+#   Simply enter your project's folder or file name without extension.
+#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
+#   Otherwise, set `projects = []`.
+projects: []
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, cache=FALSE)
+```
+
+<br> <br> <br>
+
+------------------------------------------------------------------------
+
+## Housekeeping
+
+#### New to Code Club?
+
+Check out the [Code Club Computer Setup](/codeclub-setup/) instructions,
+which also has pointers for if you're new to R or RStudio.
+
+#### Session goals
+
+Today, you will learn:
+
+- That you should avoid copy-pasting your code
+- Which alternatives to repeating yourself exist in R
+- What *vectorization* is and how to make use of it
+
+#### R packages we will use
+
+```{r}
+## If necessary, install the packages we will use
+if (!require(palmerpenguins)) install.packages("palmerpenguins")
+if (!require(tidyverse)) install.packages("tidyverse")
+if (!require(glue)) install.packages("glue")
+
+## Load the packages we will use
+library(palmerpenguins)
+library(tidyverse)
+library(glue)
+```
+
+<br>
+
+------------------------------------------------------------------------
+
+## I -- Avoid copy-pasting code
+
+#### Don't Repeat Yourself (DRY)
+
+Sometimes, you have a bit of code, and you need to repeat the operations in
+that code *almost* exactly.
+
+This can apply to anywhere from a single line to dozens of lines of code.
+For instance, you may want to rerun a statistical model with different parameter
+values, or repeat an analysis for different batches or subsets of samples.
+In the context of our trusty penguins dataset,
+we may want to repeat an analysis for each of the 4 morphological measurements.
+
+Your first instinct is perhaps to copy-paste your code several times,
+and make the necessary slight adjustments in each instance.
+There are problems with this approach, including:
+
+- You will end up with a lot of code,
+  reducing clarity and making it more error-prone
+
+- Making changes to the parts of the code shared by all blocks becomes
+  challenging.
+
+Avoiding such code repetition is where the programming mantra
+"Don't Repeat Yourself" ("DRY") comes from.
+
+<br>
+
+#### Alternatives to repeating yourself
+
+So what are the alternatives?
+
+In R, two key approaches to avoiding copy-pasting your code are to use
+_iteration_ to repeat a procedure, and you can do so either:
+
+- Using a _**loop**_
+
+- Using _**"functional programming"**_:
+  apply a function multiple times with special functions ("functionals")
+  from the base R `apply`-family or _purrr_'s `map`-family.
+
+Loops are especially useful if you have a whole block of code that needs
+to be rerun,
+while functionals are easier to apply when you need to rerun a single function
+call.
+
+Furthermore, you can avoid code repetition by:
+
+- _**Writing your own functions**_ (using _arguments_ to make them flexible)
+
+- In simple cases, making use of R's _**vectorization**_ capabilities.
+
+These approaches are clearer, less error-prone, and more flexible than
+copy-pasting code. They can also be combined.
+
+**We will tackle all of these approaches in Code Club in the upcoming weeks,
+starting with vectorization this week.**
+
+<br>
+
+#### But first, an iteration example
+
+Say that we wanted to compute the mean for each of the 4 measurements
+for each penguin: bill length, bill depth, flipper length, and body mass.
+
+To do this, we could write:
+
+```{r}
+mean(penguins$bill_length_mm, na.rm = TRUE)
+mean(penguins$bill_depth_mm, na.rm = TRUE)
+mean(penguins$flipper_length_mm, na.rm = TRUE)
+mean(penguins$body_mass_g, na.rm = TRUE)
+```
+
+But that is a bit repetitive.
+And it would get especially so if we had 20 different measurements.
+Or if, instead of just computing the mean,
+we wanted to perform an analysis consisting of multiple steps.
+
+What would it look like to use iteration in a case like this?
+
+- With a loop:
+```{r}
+## The columns we are interested in are columns 3 through 6
+for (column_index in 3:6) {
+    column_mean <- mean(penguins[[column_index]], na.rm = TRUE)
+    print(column_mean)
+} 
+```
+
+- With _purrr_'s `map()` function:
+```{r}
+map(penguins[, 3:6], mean, na.rm = TRUE)
+```
+
+<div class="alert alert-note"><div>
+
+In this simple example where we are working with a dataframe,
+a specialized _dplyr_ approach with `across()` also works:
+
+```{r}
+penguins %>% summarise(across(3:6, mean, na.rm = TRUE))
+```
+
+</div></div>
+
+<br>
+
+#### What about vectorization?
+
+While iteration using loops or functionals is very useful,
+in R, we don't need to use these strategies as much as in other languages.
+The main reason for this is that R often makes use of _vectorization_.
+
+To illustrate vectorization, we'll work with a vector of bill lengths
+that we extract from the penguins dataframe
+(though as we'll see later, all of this works in dataframes, too):
+
+```{r}
+penguins_noNA <- drop_na(penguins)              # Remove rows with NAs
+bill_len <- penguins_noNA$bill_length_mm[1:10]  # Take first 10 values
+bill_len
+```
+
+Say that we wanted to convert each value in the `bill_len` vector from
+millimeters to inches.
+Would we need to multiply each individual value by 0.0393701?
+
+```{r}
+bill_len[1] * 0.0393701
+bill_len[2] * 0.0393701
+bill_len[3] * 0.0393701
+
+# And so on...
+```
+
+Or should we resort to a loop or a `map()`-type function here?
+Fortunately, none of this is necessary!
+You may already know that in R, you can simply do:
+
+```{r}
+bill_len * 0.0393701
+```
+
+Similarly, say that we wanted to log-transform every value in the vector,
+then we can just use the `log()` function once for the entire vector:
+
+```{r}
+log(bill_len)
+```
+
+If you knew about this, perhaps you didn't even think of much of it?
+Actually, it is worth dwelling on this capability,
+which is called _vectorization_ and is a pretty unique feature of the R language.
+In many other languages, you would in fact write a loop to transform each
+individual value.
+
+So let's learn a bit more about vectorization.
+
+<br>
+
+------------------------------------------------------------------------
+
+## II -- Vectorization patterns
+
+### A vector and a "scalar"
+
+When we multiplied the value `0.0393701` with the vector `bill_len`,
+`0.0393701` was automatically recycled as many times as needed to be multiplied
+with *each individual value* in the `bill_len` vector.
+
+```{r}
+bill_len
+
+bill_len * 0.0393701
+```
+
+(A single value like `0.0393701` is often called a "scalar" or a variable,
+but in R it is really a vector of length 1.)
+
+As mentioned, you would write a loop to do this in many other languages,
+and in fact, under the hood, R *also* uses a loop to do this!
+
+Vectorization is very useful for two reasons:
+
+- _You_ don't have to write the loop (or another iteration construct),
+  which saves you a fair bit of typing and makes the code clearer.
+
+- The under-the-hood-loop is being executed *much* faster than a loop that you
+  would write with R code, because it is written in `C`/`C++`.
+
+### Vectors of equal length
+
+We can also use vectorized operations when both vectors contain multiple items.
+For instance, say we want to get the ratio of bill length to bill depth
+for each penguin:
+
+```{r}
+## Like above with bill length, we create a vector with 10 bill depths:
+bill_dp <- penguins_noNA$bill_depth_mm[1:10]
+
+## We compute the ratio:
+bill_len / bill_dp
+
+bill_len
+bill_dp
+```
+
+What happened here is that the first value is `bill_len` was divided by the first
+value in `bill_dp`, the second value in `bill_len` by the second value in `bill_dp`,
+and so forth.
+
+This also works directly for the columns of a data frame:
+
+```{r}
+bill_ratio <- penguins$bill_length_mm / penguins$bill_depth_mm
+
+head(bill_ratio)
+```
+
+In the above examples, both vectors had the same length.
+In Exercise 1, you'll see that vectorization also works with two vectors with 
+multiple values that _differ in length_.
+
+### Vectorized functions
+
+Above, we already briefly saw that we can simply pass a vector to the `log()`
+function and it will compute the log for each of them and return a vector
+of the same length.
+
+So, the `log()` function works the same regardless of whether you pass a single
+value or a vector with multiple values:
+
+```{r}
+log(21)
+
+log(bill_len)
+```
+
+Because in R, a single value like `21` is really a vector of length 1,
+this behavior makes sense. 
+
+Just remember that for most functions,
+you do really need to pass a vector and not just a sequence of numbers:
+
+```{r, error=TRUE}
+log(10, 15, 20)
+
+log(c(10, 15, 20))
+```
+
+There are many other vectorized functions that will transform each value in a
+vector, such as `round()` (rounding numbers) and `abs()` (taking
+absolute numbers).
+
+Other vectorized functions summarize a vector into a single value,
+such as `sum()` and `mean()`.
+
+<br>
+
+----------------------------------------------------------
+
+## Breakout Rooms I
+
+<details><summary><b>Code to get set up</b> (click here)</summary>
+<br>
+
+```{r}
+## If necessary, install the packages we will use
+if (!require(palmerpenguins)) install.packages("palmerpenguins")
+if (!require(tidyverse)) install.packages("tidyverse")
+if (!require(glue)) install.packages("glue")
+
+## Load the packages we will use
+library(palmerpenguins)
+library(tidyverse)
+library(glue)
+
+## Create a vector of bill lengths
+penguins_noNA <- drop_na(penguins)
+bill_len <- head(penguins_noNA$bill_length_mm, 10)
+```
+
+</details>
+
+<div class="puzzle"><div>
+
+### Exercise 1: Unequal length
+
+Vectorization also works when two vectors with multiple elements do not have the
+same length.
+For instance, in the example below, we divide the first value by 10,
+the second by 100, the third again by 10, and so on:
+
+```{r}
+bill_len / c(10, 100)
+```
+
+- **Given the length of `bill_len` (10), do you see any issues if you would**
+  **divide by a vector of length 3? Try it out and see what happens.**
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+While 10 is a multiple of 2, it is not a multiple of 3.
+This means that the shorter vector will not be recycled in its entirety the
+last time around.
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+R will perform the operation but issue a warning about it:
+
+```{r}
+bill_len / c(10, 100, 1000)
+```
+
+</details>
+
+- **Negate _every other_ value in the `bill_len` vector.**
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- Negation means turning a positive value into a negative value and vice versa
+  (e.g. `3` => `-3` and `-15` => `15`).
+
+- You can leave the other values as-is by multiplying them by 1.
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r}
+bill_len * c(1, -1)
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+<div class="puzzle"><div>
+
+### Exercise 2: Strings
+
+The `glue` function from the package of the same name allows you to combine
+literal strings with the values or strings contained in R objects.
+For instance:
+
+```{r}
+island <- "Biscoe"
+glue("The island of {island}")
+```
+
+So, you combine both literal strings and R objects in a single quoted string,
+and access the values of R objects using braces `{}`.
+
+- **Extract the names of the three islands contained in the `penguins` dataframe,**
+  **and save them in an vector called `islands`.**
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+Use the `unique()` function to get a "deduplicated" vector of islands,
+i.e. with one entry per island.
+   
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r}
+islands <- unique(penguins$island)
+islands
+
+## Or:
+islands <- penguins %>% pull(island) %>% unique()
+```
+
+Note: it is fine that `islands` is still a _factor_,
+like the `island` column in `penguins` was.
+
+</details>
+
+- **Make use of vectorization to print each island's name like so:**
+```{r}
+#> The island of Torgersen
+#> The island of Biscoe
+#> The island of Dream
+```
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r}
+glue("Island of {islands}")
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+----------------------------------------------------------
+
+## IV -- Vectorization with indices
+
+We can also use vectorized solutions when we want to operate only on elements
+that satisfy a certain condition.
+To do so, we make use of R's ability to index a vector with a _logical vector_.
+
+Let's say we don't trust any bill length measurement of over 40 mm,
+and we want to remove those from our vector.
+
+First, note that the code below will return a logical vector of the same length
+as `bill_len`, with `TRUE` if the value is >40, and `FALSE` if it is not:
+
+```{r}
+bill_len > 40
+bill_len
+```
+
+When we index the original vector with such a logical vector
+(sometimes referred to as a _mask_), we only get the values >40:
+
+```{r}
+bill_len[bill_len > 40]
+```
+
+This is very succinct and powerful!
+
+With a similar strategy, you can also retain all elements of the vector
+but manipulate some of them:
+
+```{r}
+## We create a separate vector so we don't change the original one:
+bill_len_ed <- bill_len
+
+## Only change values > 40:
+bill_len_ed[bill_len > 40] <- bill_len_ed[bill_len > 40] - 100
+bill_len_ed
+```
+
+But for those kinds of operations,
+the vectorized `ifelse()` function is easier and clearer:
+
+```{r}
+bill_len_ed <- ifelse(bill_len > 40, bill_len - 100, bill_len)
+bill_len_ed
+```
+
+<br>
+
+<div class="alert alert-note"><div>
+
+When creating logical vectors, the `any()` and `all()` functions are very handy.
+
+For instance, say we had a vector of p-values:
+
+```{r}
+pvals <- c(0.06, 0.048, 0.01, 0.73)
+```
+
+To check whether any of the p-values are significant:
+
+```{r}
+any(pvals < 0.05)
+```
+
+To check whether all of the p-values are significant:
+
+```{r}
+all(pvals < 0.05)
+```
+
+Moreover, because `TRUE` corresponds to 1 and `FALSE` to 0,
+you can also directly count the number of elements that satisfy a condition:
+
+```{r}
+sum(pvals < 0.05)
+```
+
+</div></div>
+
+<br>
+
+<br>
+
+----------------------------------------------------------
+
+## Breakout Rooms II
+
+<div class="puzzle"><div>
+
+### Exercise 3: Logical vectors
+
+- Create a vector `bill_len_NA` where all values > 40 have been turned
+  into `NA`s.
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r}
+## Using logical vector subsetting:
+bill_len_NA <- bill_len
+bill_len_NA[bill_len_NA > 40] <- NA
+bill_len_NA
+
+## Or, using `ifelse()`:
+bill_len_NA <- ifelse(bill_len > 40, NA, bill_len)
+bill_len_NA
+```
+
+</details>
+
+- Remove all `NA`s from `bill_len_NA`. 
+  (If you don't know the function to identify `NA`s in a vector,
+  take a look at the Hints.)
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- The function `is.na()` will check which values in a vector are `NA`s:
+  it returns a logical vector with `TRUE`s for `NA` values and `FALSE`s for non-`NA`
+  values.
+
+- Since you want to _remove_ `NA` values, you need to negate the output of the
+  `is.na()` function when subsetting.
+  You can negate logical tests in R with a `!`.
+  So, `!is.na()` would have `TRUE` for non-`NA` values, which would allow you to
+  keep them.
+  
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r}
+bill_len_NA[!is.na(bill_len_NA)]
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+<div class="puzzle"><div>
+
+### Exercise 4: `ifelse()` in a plot
+
+With _ggplot_,
+make a `geom_point()` plot of `bill_length_mm` versus `bill_depth_mm` in
+Gentoo Penguins.
+In this plot,
+highlight penguins with a bill length to bill depth ratio larger than 3.5
+by giving those points a different color.
+
+Don't hesitate to look at the Hints if you're not sure how to approach this.
+
+<details><summary><b>Hints 1 </b> (click here)</summary>
+<br>
+
+- Create a new dataframe with:
+  - Just Gentoo penguins (use the function `filter()`)
+  - No `NA`s (use the function `drop_na()`)
+  - A new column with a logical vector indicating whether the bill length to bill
+    depth ratio is >3.5
+    (e.g., use the `mutate()` function with an `ifelse()` statement).
+    
+- When creating the plot, assign the new column to the `color` aesthetic. 
+
+</details>
+
+<details><summary><b>Hints 2 </b> (click here)</summary>
+<br>
+
+- Here is some example skeleton code for the data processing:
+
+```{r, eval=FALSE}
+... <- penguins %>%
+  ## Only retain rows for 1 penguin species:
+  filter(species == ...) %>%
+  ## Remove rows with NAs:
+  ... %>% 
+  ## Create a new column `ratio` with a logical vector:
+  mutate(ratio = ifelse(..., "> 3.5", "< 3.5"))
+```
+
+- Here is some example skeleton code for the plot:
+
+```{r, eval=FALSE}
+ggplot(...) +
+  ## Use the new column with the logical vector for the `color` aesthetic
+  geom_point(aes(x = ..., y = ..., color = ...))
+```
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r}
+## Create the new dataframe, all tidyverse
+gent <- penguins %>%
+  filter(species == "Gentoo") %>%
+  drop_na() %>% 
+  mutate(
+    ratio = ifelse(bill_length_mm / bill_depth_mm > 3.5, "> 3.5", "< 3.5")
+    )
+
+## Make the plot:
+ggplot(gent) +
+  geom_point(aes(x = bill_length_mm, y = bill_depth_mm, color = ratio))
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+----------------------------------------------------------
+
+## Bonus -- Vectorization with matrices
+
+We can also perform vectorized operations on *entire matrices*.
+With the following matrix:
+
+```{r}
+## We use the "sample" function to get 25 random values between 1 and a 100,
+## and put those in a 5*5 matrix:
+mat <- matrix(sample(1:100, 25), nrow = 5, ncol = 5)
+mat
+```
+
+...we could multiple all values by 10 or get the square of each value simply as follows:
+
+```{r}
+mat * 10
+
+mat * mat
+```
+
