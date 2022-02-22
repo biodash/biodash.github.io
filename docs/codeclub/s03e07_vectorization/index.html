@@ -342,7 +342,7 @@
         content="2022-02-22T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-02-22T10:02:29-05:00">
+    <meta property="article:modified_time" content="2022-02-22T15:10:58-05:00">
   
 
   
@@ -760,7 +760,7 @@
         <li><a href="#exercise-2-strings">Exercise 2: Strings</a></li>
       </ul>
     </li>
-    <li><a href="#iv----vectorization-with-indices">IV &ndash; Vectorization with indices</a></li>
+    <li><a href="#iii----vectorization-with-logical-indices">III &ndash; Vectorization with logical indices</a></li>
     <li><a href="#breakout-rooms-ii">Breakout Rooms II</a>
       <ul>
         <li><a href="#exercise-3-logical-vectors">Exercise 3: Logical vectors</a></li>
@@ -923,6 +923,7 @@
 <p><strong>We will tackle all of these approaches in Code Club in the upcoming weeks, starting with vectorization this week.</strong></p>
 <br>
 <h4 id="but-first-an-iteration-example">But first, an iteration example</h4>
+<p>Below, I will give a quick example of each of the two iteration approaches: a loop and a functional. Hopefully, this will be illustrative even if you don&rsquo;t understand all the details: come back in the next few weeks to learn more about this!</p>
 <p>Say that we wanted to compute the mean for each of the 4 measurements for each penguin: bill length, bill depth, flipper length, and body mass.</p>
 <p>To do this, we could write:</p>
 <div class="highlight">
@@ -939,13 +940,14 @@
 <p>What would it look like to use iteration in a case like this?</p>
 <ul>
 <li>
-<p>With a loop:</p>
+<p>With a <code>for</code> loop:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## The columns we are interested in are columns 3 through 6</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## The columns we are interested in are columns 3 through 6 (3:6)</span>
+<span class='c'>## We can extract each column with the `[[...]]` notation we saw last week</span>
 <span class='kr'>for</span> <span class='o'>(</span><span class='nv'>column_index</span> <span class='kr'>in</span> <span class='m'>3</span><span class='o'>:</span><span class='m'>6</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nv'>column_mean</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>[[</span><span class='nv'>column_index</span><span class='o'>]</span><span class='o'>]</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
   <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>column_mean</span><span class='o'>)</span>
-<span class='o'>&#125;</span> 
+<span class='o'>&#125;</span>
 <span class='c'>#&gt; [1] 43.92193</span>
 <span class='c'>#&gt; [1] 17.15117</span>
 <span class='c'>#&gt; [1] 200.9152</span>
@@ -955,7 +957,9 @@
 <li>
 <p>With <em>purrr</em>&rsquo;s <code>map()</code> function:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'>map</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>[</span>, <span class='m'>3</span><span class='o'>:</span><span class='m'>6</span><span class='o'>]</span>, <span class='nv'>mean</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>select</span><span class='o'>(</span><span class='m'>3</span><span class='o'>:</span><span class='m'>6</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>map</span><span class='o'>(</span><span class='nv'>mean</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 <span class='c'>#&gt; $bill_length_mm</span>
 <span class='c'>#&gt; [1] 43.92193</span>
 <span class='c'>#&gt; </span>
@@ -987,8 +991,12 @@
 <p>While iteration using loops or functionals is very useful, in R, we don&rsquo;t need to use these strategies as much as in other languages. The main reason for this is that R often makes use of <em>vectorization</em>.</p>
 <p>To illustrate vectorization, we&rsquo;ll work with a vector of bill lengths that we extract from the penguins dataframe (though as we&rsquo;ll see later, all of this works in dataframes, too):</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins_noNA</span> <span class='o'>&lt;-</span> <span class='nf'>drop_na</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>              <span class='c'># Remove rows with NAs</span>
-<span class='nv'>bill_len</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>bill_length_mm</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>10</span><span class='o'>]</span>  <span class='c'># Take first 10 values</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Remove rows with NAs:</span>
+<span class='nv'>penguins_noNA</span> <span class='o'>&lt;-</span> <span class='nf'>drop_na</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>              
+
+<span class='c'>## Extract a column with `$`, then take the first 10 values: </span>
+<span class='nv'>bill_len</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>bill_length_mm</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>10</span><span class='o'>]</span>
+
 <span class='nv'>bill_len</span>
 <span class='c'>#&gt;  [1] 39.1 39.5 40.3 36.7 39.3 38.9 39.2 41.1 38.6 34.6</span></code></pre>
 </div>
@@ -1080,9 +1088,11 @@
 <p>Because in R, a single value like <code>21</code> is really a vector of length 1, this behavior makes sense.</p>
 <p>Just remember that for most functions, you do really need to pass a vector and not just a sequence of numbers:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='o'>(</span><span class='m'>10</span>, <span class='m'>15</span>, <span class='m'>20</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## This way, log() thinks you are passing 3 separate arguments:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='o'>(</span><span class='m'>10</span>, <span class='m'>15</span>, <span class='m'>20</span><span class='o'>)</span>
 <span class='c'>#&gt; Error in log(10, 15, 20): unused argument (20)</span>
 
+<span class='c'>## Now, you pass 1 argument which is a vector created with `c()`</span>
 <span class='nf'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>10</span>, <span class='m'>15</span>, <span class='m'>20</span><span class='o'>)</span><span class='o'>)</span>
 <span class='c'>#&gt; [1] 2.302585 2.708050 2.995732</span></code></pre>
 </div>
@@ -1233,7 +1243,7 @@
 </div>
 <br>
 <hr>
-<h2 id="iv----vectorization-with-indices">IV &ndash; Vectorization with indices</h2>
+<h2 id="iii----vectorization-with-logical-indices">III &ndash; Vectorization with logical indices</h2>
 <p>We can also use vectorized solutions when we want to operate only on elements that satisfy a certain condition. To do so, we make use of R&rsquo;s ability to index a vector with a <em>logical vector</em>.</p>
 <p>Let&rsquo;s say we don&rsquo;t trust any bill length measurement of over 40 mm, and we want to remove those from our vector.</p>
 <p>First, note that the code below will return a logical vector of the same length as <code>bill_len</code>, with <code>TRUE</code> if the value is &gt;40, and <code>FALSE</code> if it is not:</p>
@@ -1368,6 +1378,7 @@
 </li>
 <li>When creating the plot, assign the new column to the <code>color</code> aesthetic.</li>
 </ul>
+<p><em>An alternative:</em> you don&rsquo;t even need to create the logical-vector-column, you could also directly map the <code>color</code> aesthetic to a logical expression!</p>
 </details>
 <details>
 <summary>
@@ -1401,7 +1412,7 @@
 </summary>
 <br>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Create the new dataframe, all tidyverse</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Create the new dataframe</span>
 <span class='nv'>gent</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
   <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Gentoo"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
   <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span> <span class='o'>%&gt;%</span> 
@@ -1414,6 +1425,21 @@
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>ratio</span><span class='o'>)</span><span class='o'>)</span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-35-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Or:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Create the new dataframe without making a new variable</span>
+<span class='nv'>gent</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
+  <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Gentoo"</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='c'>## Make the plot and include the logical expression in the `aes()` call:</span>
+<span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>gent</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>geom_point</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>,
+                 color <span class='o'>=</span> <span class='nv'>bill_length_mm</span> <span class='o'>/</span> <span class='nv'>bill_depth_mm</span> <span class='o'>&gt;</span> <span class='m'>3.5</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
+  <span class='nf'>labs</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"Bill length ratio &gt; 3.5"</span><span class='o'>)</span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-36-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </details>
 </div>
@@ -1428,29 +1454,29 @@
 <span class='nv'>mat</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>100</span>, <span class='m'>25</span><span class='o'>)</span>, nrow <span class='o'>=</span> <span class='m'>5</span>, ncol <span class='o'>=</span> <span class='m'>5</span><span class='o'>)</span>
 <span class='nv'>mat</span>
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]   99   15   95   91   57</span>
-<span class='c'>#&gt; [2,]   10   60   80   89   76</span>
-<span class='c'>#&gt; [3,]   17   82   70   42   72</span>
-<span class='c'>#&gt; [4,]   98   83   36   96   75</span>
-<span class='c'>#&gt; [5,]   21   19   67   41   49</span></code></pre>
+<span class='c'>#&gt; [1,]   38   48   43   67  100</span>
+<span class='c'>#&gt; [2,]   63   10   70   81   93</span>
+<span class='c'>#&gt; [3,]   21   65   72   98   53</span>
+<span class='c'>#&gt; [4,]   69   22   17   25   29</span>
+<span class='c'>#&gt; [5,]   90   80   45   37   33</span></code></pre>
 </div>
 <p>&hellip;we could multiple all values by 10 or get the square of each value simply as follows:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>mat</span> <span class='o'>*</span> <span class='m'>10</span>
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]  990  150  950  910  570</span>
-<span class='c'>#&gt; [2,]  100  600  800  890  760</span>
-<span class='c'>#&gt; [3,]  170  820  700  420  720</span>
-<span class='c'>#&gt; [4,]  980  830  360  960  750</span>
-<span class='c'>#&gt; [5,]  210  190  670  410  490</span>
+<span class='c'>#&gt; [1,]  380  480  430  670 1000</span>
+<span class='c'>#&gt; [2,]  630  100  700  810  930</span>
+<span class='c'>#&gt; [3,]  210  650  720  980  530</span>
+<span class='c'>#&gt; [4,]  690  220  170  250  290</span>
+<span class='c'>#&gt; [5,]  900  800  450  370  330</span>
 
 <span class='nv'>mat</span> <span class='o'>*</span> <span class='nv'>mat</span>
-<span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,] 9801  225 9025 8281 3249</span>
-<span class='c'>#&gt; [2,]  100 3600 6400 7921 5776</span>
-<span class='c'>#&gt; [3,]  289 6724 4900 1764 5184</span>
-<span class='c'>#&gt; [4,] 9604 6889 1296 9216 5625</span>
-<span class='c'>#&gt; [5,]  441  361 4489 1681 2401</span></code></pre>
+<span class='c'>#&gt;      [,1] [,2] [,3] [,4]  [,5]</span>
+<span class='c'>#&gt; [1,] 1444 2304 1849 4489 10000</span>
+<span class='c'>#&gt; [2,] 3969  100 4900 6561  8649</span>
+<span class='c'>#&gt; [3,]  441 4225 5184 9604  2809</span>
+<span class='c'>#&gt; [4,] 4761  484  289  625   841</span>
+<span class='c'>#&gt; [5,] 8100 6400 2025 1369  1089</span></code></pre>
 </div>
 
                     </div>
