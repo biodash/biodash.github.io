@@ -5,8 +5,8 @@ subtitle: "How to repeat operations without repeating your code"
 summary: "In this first session on strategies for repeating operations without copy-pasting your code, we will focus on vectorization."
 authors: [admin]
 tags: [codeclub, iteration]
-date: "2022-02-22"
-lastmod: "2022-02-22"
+date: "2022-02-23"
+lastmod: "2022-02-23"
 toc: true
 
 # Featured image
@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: f73d9afdeb21fb89
+rmd_hash: 083cc170c0d40133
 
 ---
 
@@ -42,19 +42,21 @@ Check out the [Code Club Computer Setup](/codeclub-setup/) instructions, which a
 Today, you will learn:
 
 -   That you should avoid copy-pasting your code
--   Which alternatives to repeating yourself exist in R
+-   Which alternatives exist in R
 -   What *vectorization* is and how to make use of it
 
 #### R packages we will use
 
+We will use *palmerpenguins* for its `penguins` dataframe, the *tidyverse* for dataframe manipulation and plotting, and *glue*'s `glue` function to paste strings.
+
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## If necessary, install the packages we will use</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## This will _install_ the packages only if you don't already have them:</span>
 <span class='kr'>if</span> <span class='o'>(</span><span class='o'>!</span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span><span class='o'>)</span> <span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"palmerpenguins"</span><span class='o'>)</span>
 <span class='kr'>if</span> <span class='o'>(</span><span class='o'>!</span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span><span class='o'>)</span> <span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span>
 <span class='kr'>if</span> <span class='o'>(</span><span class='o'>!</span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/tidyverse/glue'>glue</a></span><span class='o'>)</span><span class='o'>)</span> <span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"glue"</span><span class='o'>)</span>
 
-<span class='c'>## Load the packages we will use</span>
+<span class='c'>## This will _load_ the packages:</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/tidyverse/glue'>glue</a></span><span class='o'>)</span></code></pre>
@@ -67,11 +69,11 @@ Today, you will learn:
 
 ## I -- Avoid copy-pasting code
 
-#### Don't Repeat Yourself (DRY)
+### Don't Repeat Yourself
 
 Sometimes, you have a bit of code, and you need to repeat the operations in that code *almost* exactly.
 
-This can apply to anywhere from a single line to dozens of lines of code. For instance, you may want to rerun a statistical model with different parameter values, or repeat an analysis for different batches or subsets of samples. In the context of our trusty penguins dataset, we may want to repeat an analysis for each of the 4 morphological measurements.
+This can apply to anywhere from a single line to dozens of lines of code. For instance, you may want to rerun a statistical model with different parameter values, or repeat an analysis for different batches or subsets of samples. In the context of our trusty penguins dataset, we may want to repeat an analysis for each of the 4 morphological measurements taken for each penguin.
 
 Your first instinct is perhaps to copy-paste your code several times, and make the necessary slight adjustments in each instance. There are problems with this approach, including:
 
@@ -83,11 +85,11 @@ Avoiding such code repetition is where the programming mantra "Don't Repeat Your
 
 <br>
 
-#### Alternatives to repeating yourself
+### Alternatives
 
-So what are the alternatives?
+So, what are the alternatives?
 
-In R, two key approaches to avoiding copy-pasting your code are to use *iteration* to repeat a procedure, and you can do so either:
+In R, two key approaches that allow you to avoid copy-pasting your code both involve *iteration* to repeat a procedure, and do so either:
 
 -   Using a ***loop***
 
@@ -95,7 +97,7 @@ In R, two key approaches to avoiding copy-pasting your code are to use *iteratio
 
 Loops are especially useful if you have a whole block of code that needs to be rerun, while functionals are easier to apply when you need to rerun a single function call.
 
-Furthermore, you can avoid code repetition by:
+You can additionally avoid code repetition by:
 
 -   ***Writing your own functions*** (using *arguments* to make them flexible)
 
@@ -107,13 +109,46 @@ These approaches are clearer, less error-prone, and more flexible than copy-past
 
 <br>
 
-#### But first, an iteration example
+### But first, an iteration example
 
-Below, I will give a quick example of each of the two iteration approaches: a loop and a functional. Hopefully, this will be illustrative even if you don't understand all the details: come back in the next few weeks to learn more about this!
+Below, I will give a quick example of each of the two iteration approaches: a loop and a functional. Hopefully, this will be illustrative even if you don't understand all the details: come back in the next few weeks to learn more about it!
 
-Say that we wanted to compute the mean for each of the 4 measurements for each penguin: bill length, bill depth, flipper length, and body mass.
+Say that we wanted to compute the mean for each of the 4 measurements taken for each penguin: bill length, bill depth, flipper length, and body mass.
 
-To do this, we could write:
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
+<span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 8</span></span>
+<span class='c'>#&gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  </span>
+<span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span>           <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>         <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;fct&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span> Adelie  Torge…           39.1          18.7              181        <span style='text-decoration: underline;'>3</span>750 male </span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span> Adelie  Torge…           39.5          17.4              186        <span style='text-decoration: underline;'>3</span>800 fema…</span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span> Adelie  Torge…           40.3          18                195        <span style='text-decoration: underline;'>3</span>250 fema…</span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span> Adelie  Torge…           <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>                 <span style='color: #BB0000;'>NA</span>          <span style='color: #BB0000;'>NA</span> <span style='color: #BB0000;'>NA</span>   </span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span> Adelie  Torge…           36.7          19.3              193        <span style='text-decoration: underline;'>3</span>450 fema…</span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span> Adelie  Torge…           39.3          20.6              190        <span style='text-decoration: underline;'>3</span>650 male </span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 1 more variable: year &lt;int&gt;</span></span></code></pre>
+
+</div>
+
+First, let's see how we can do this for one measurement:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## We extract a vector of bill lengths from the penguins dataframe with `$`</span>
+<span class='c'>## Note that any NAs would cause the mean to be NA without na.rm=TRUE</span>
+<span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>$</span><span class='nv'>bill_length_mm</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 43.92193</span>
+
+<span class='c'>## Among other options, we could also extract this 3rd column using `[[`:</span>
+<span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>[[</span><span class='m'>3</span><span class='o'>]</span><span class='o'>]</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] 43.92193</span></code></pre>
+
+</div>
+
+(For an overview of base R data frame indexing, see the [bottom of the the page](#base-r-data-frame-indexing).)
+
+If we would simply repeat this procedure using the first syntax four times, we would write:
 
 <div class="highlight">
 
@@ -128,9 +163,9 @@ To do this, we could write:
 
 </div>
 
-But that is a bit repetitive. And it would get especially so if we had 20 different measurements. Or if, instead of just computing the mean, we wanted to perform an analysis consisting of multiple steps.
+But that is a bit repetitive. And it would get especially repetitive if we had 20 different measurements. Or if, instead of just computing the mean, we wanted to perform an analysis consisting of multiple steps.
 
-What would it look like to use iteration in a case like this?
+How would using iteration in a case like this look like?
 
 -   With a `for` loop:
     <div class="highlight">
@@ -366,7 +401,7 @@ Other vectorized functions summarize a vector into a single value, such as [`sum
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## If necessary, install the packages we will use</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## This will _install_ the packages only if you don't already have them:</span>
 <span class='kr'>if</span> <span class='o'>(</span><span class='o'>!</span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span><span class='o'>)</span> <span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"palmerpenguins"</span><span class='o'>)</span>
 <span class='kr'>if</span> <span class='o'>(</span><span class='o'>!</span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span><span class='o'>)</span> <span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span>
 <span class='kr'>if</span> <span class='o'>(</span><span class='o'>!</span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/tidyverse/glue'>glue</a></span><span class='o'>)</span><span class='o'>)</span> <span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"glue"</span><span class='o'>)</span>
@@ -378,7 +413,7 @@ Other vectorized functions summarize a vector into a single value, such as [`sum
 
 <span class='c'>## Create a vector of bill lengths</span>
 <span class='nv'>penguins_noNA</span> <span class='o'>&lt;-</span> <span class='nf'>drop_na</span><span class='o'>(</span><span class='nv'>penguins</span><span class='o'>)</span>
-<span class='nv'>bill_len</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>bill_length_mm</span>, <span class='m'>10</span><span class='o'>)</span></code></pre>
+<span class='nv'>bill_len</span> <span class='o'>&lt;-</span> <span class='nv'>penguins_noNA</span><span class='o'>$</span><span class='nv'>bill_length_mm</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>10</span><span class='o'>]</span></code></pre>
 
 </div>
 
@@ -399,7 +434,9 @@ Vectorization also works when two vectors with multiple elements do not have the
 
 </div>
 
--   **Given the length of `bill_len` (10), do you see any issues if you would** **divide by a vector of length 3? Try it out and see what happens.**
+<br>
+
+**Given the length of `bill_len` (which is 10), do you see any issues if you would** **divide by a vector of length 3? Try it out and see what happens.**
 
 <details>
 <summary>
@@ -430,7 +467,9 @@ R will perform the operation but issue a warning about it:
 
 </details>
 
--   **Negate *every other* value in the `bill_len` vector.**
+<br>
+
+**Negate *every other* value in the `bill_len` vector.**
 
 <details>
 <summary>
@@ -441,7 +480,7 @@ R will perform the operation but issue a warning about it:
 
 -   Negation means turning a positive value into a negative value and vice versa (e.g. `3` => `-3` and `-15` => `15`).
 
--   You can leave the other values as-is by multiplying them by 1.
+-   You can leave the other values unchanged simply by multiplying them by 1.
 
 </details>
 <details>
@@ -472,7 +511,7 @@ R will perform the operation but issue a warning about it:
 
 ### Exercise 2: Strings
 
-The `glue` function from the package of the same name allows you to combine literal strings with the values or strings contained in R objects. For instance:
+The `glue` function from the package of the same name allows you to combine literal strings with values or strings contained in R objects. For instance:
 
 <div class="highlight">
 
@@ -484,7 +523,9 @@ The `glue` function from the package of the same name allows you to combine lite
 
 So, you combine both literal strings and R objects in a single quoted string, and access the values of R objects using braces `{}`.
 
--   **Extract the names of the three islands contained in the `penguins` dataframe,** **and save them in an vector called `islands`.**
+<br>
+
+**Extract the names of the three islands contained in the `penguins` dataframe,** **and save them in an vector called `islands`.**
 
 <details>
 <summary>
@@ -510,8 +551,8 @@ Use the [`unique()`](https://rdrr.io/r/base/unique.html) function to get a "dedu
 <span class='c'>#&gt; [1] Torgersen Biscoe    Dream    </span>
 <span class='c'>#&gt; Levels: Biscoe Dream Torgersen</span>
 
-<span class='c'>## Or:</span>
-<span class='nv'>islands</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span> <span class='nf'>pull</span><span class='o'>(</span><span class='nv'>island</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='nf'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='o'>(</span><span class='o'>)</span></code></pre>
+<span class='c'>## Or tidyverse style:</span>
+<span class='nv'>islands</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span> <span class='nf'>distinct</span><span class='o'>(</span><span class='nv'>island</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='nf'>pull</span><span class='o'>(</span><span class='nv'>island</span><span class='o'>)</span></code></pre>
 
 </div>
 
@@ -519,11 +560,15 @@ Note: it is fine that `islands` is still a *factor*, like the `island` column in
 
 </details>
 
--   **Make use of vectorization to print each island's name like so:**
-    <div class='highlight'>
-    <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt; The island of Torgersen</span>
-    <span class='c'>#&gt; The island of Biscoe</span>
-    <span class='c'>#&gt; The island of Dream</span></code></pre>
+<br>
+
+**Make use of vectorization to print each island's name like so:**
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt; The island of Torgersen</span>
+<span class='c'>#&gt; The island of Biscoe</span>
+<span class='c'>#&gt; The island of Dream</span></code></pre>
 
 </div>
 
@@ -559,18 +604,30 @@ We can also use vectorized solutions when we want to operate only on elements th
 
 Let's say we don't trust any bill length measurement of over 40 mm, and we want to remove those from our vector.
 
-First, note that the code below will return a logical vector of the same length as `bill_len`, with `TRUE` if the value is \>40, and `FALSE` if it is not:
+First, we need to know that statements with a comparison operator like [`>`](https://rdrr.io/r/base/Comparison.html), [`<`](https://rdrr.io/r/base/Comparison.html), or [`==`](https://rdrr.io/r/base/Comparison.html) will test each value and return a logical vector with the results.
+
+For example:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_len</span> <span class='o'>&gt;</span> <span class='m'>40</span>
-<span class='c'>#&gt;  [1] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># The resulting vector contains TRUE or FALSE for each entry in the original vector:</span>
+<span class='nv'>bill_len</span> <span class='o'>==</span> <span class='m'>39.1</span>
+<span class='c'>#&gt;  [1]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span>
 <span class='nv'>bill_len</span>
 <span class='c'>#&gt;  [1] 39.1 39.5 40.3 36.7 39.3 38.9 39.2 41.1 38.6 34.6</span></code></pre>
 
 </div>
 
-When we index the original vector with such a logical vector (sometimes referred to as a *mask*), we only get the values \>40:
+Or, going back to our example with values \>40:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_len</span> <span class='o'>&gt;</span> <span class='m'>40</span>
+<span class='c'>#&gt;  [1] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE</span></code></pre>
+
+</div>
+
+When we index the original vector with such a logical vector (sometimes referred to as a *mask*), we only get the `TRUE`s, i.e. values \>40:
 
 <div class="highlight">
 
@@ -590,6 +647,7 @@ With a similar strategy, you can also retain all elements of the vector but mani
 
 <span class='c'>## Only change values &gt; 40:</span>
 <span class='nv'>bill_len_ed</span><span class='o'>[</span><span class='nv'>bill_len</span> <span class='o'>&gt;</span> <span class='m'>40</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nv'>bill_len_ed</span><span class='o'>[</span><span class='nv'>bill_len</span> <span class='o'>&gt;</span> <span class='m'>40</span><span class='o'>]</span> <span class='o'>-</span> <span class='m'>100</span>
+
 <span class='nv'>bill_len_ed</span>
 <span class='c'>#&gt;  [1]  39.1  39.5 -59.7  36.7  39.3  38.9  39.2 -58.9  38.6  34.6</span></code></pre>
 
@@ -599,7 +657,10 @@ But for those kinds of operations, the vectorized [`ifelse()`](https://rdrr.io/r
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>bill_len_ed</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span><span class='nv'>bill_len</span> <span class='o'>&gt;</span> <span class='m'>40</span>, <span class='nv'>bill_len</span> <span class='o'>-</span> <span class='m'>100</span>, <span class='nv'>bill_len</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># ifelse(test, return-this-if-true, return-this-if-false)</span>
+<span class='nv'>bill_len_ed</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>bill_len</span> <span class='o'>&gt;</span> <span class='m'>40</span>,
+                      yes <span class='o'>=</span> <span class='nv'>bill_len</span> <span class='o'>-</span> <span class='m'>100</span>, no <span class='o'>=</span> <span class='nv'>bill_len</span><span class='o'>)</span>
+
 <span class='nv'>bill_len_ed</span>
 <span class='c'>#&gt;  [1]  39.1  39.5 -59.7  36.7  39.3  38.9  39.2 -58.9  38.6  34.6</span></code></pre>
 
@@ -666,7 +727,7 @@ Moreover, because `TRUE` corresponds to 1 and `FALSE` to 0, you can also directl
 
 ### Exercise 3: Logical vectors
 
--   Create a vector `bill_len_NA` where all values > 40 have been turned into `NA`s.
+Create a vector `bill_len_NA` where all values \> 40 have been turned into `NA`s.
 
 <details>
 <summary>
@@ -680,11 +741,13 @@ Moreover, because `TRUE` corresponds to 1 and `FALSE` to 0, you can also directl
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Using logical vector subsetting:</span>
 <span class='nv'>bill_len_NA</span> <span class='o'>&lt;-</span> <span class='nv'>bill_len</span>
 <span class='nv'>bill_len_NA</span><span class='o'>[</span><span class='nv'>bill_len_NA</span> <span class='o'>&gt;</span> <span class='m'>40</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='kc'>NA</span>
+
 <span class='nv'>bill_len_NA</span>
 <span class='c'>#&gt;  [1] 39.1 39.5   NA 36.7 39.3 38.9 39.2   NA 38.6 34.6</span>
 
 <span class='c'>## Or, using `ifelse()`:</span>
 <span class='nv'>bill_len_NA</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span><span class='nv'>bill_len</span> <span class='o'>&gt;</span> <span class='m'>40</span>, <span class='kc'>NA</span>, <span class='nv'>bill_len</span><span class='o'>)</span>
+
 <span class='nv'>bill_len_NA</span>
 <span class='c'>#&gt;  [1] 39.1 39.5   NA 36.7 39.3 38.9 39.2   NA 38.6 34.6</span></code></pre>
 
@@ -692,7 +755,9 @@ Moreover, because `TRUE` corresponds to 1 and `FALSE` to 0, you can also directl
 
 </details>
 
--   Remove all `NA`s from `bill_len_NA`. (If you don't know the function to identify `NA`s in a vector, take a look at the Hints.)
+<br>
+
+Remove all `NA`s from `bill_len_NA`. (If you don't know the function to identify `NA`s in a vector, take a look at the Hints.)
 
 <details>
 <summary>
@@ -732,11 +797,11 @@ Moreover, because `TRUE` corresponds to 1 and `FALSE` to 0, you can also directl
 
 <div>
 
-### Exercise 4: `ifelse()` in a plot
+### Exercise 4: `ifelse()` plot
 
-With *ggplot*, make a `geom_point()` plot of `bill_length_mm` versus `bill_depth_mm` in Gentoo Penguins. In this plot, highlight penguins with a bill length to bill depth ratio larger than 3.5 by giving those points a different color.
+With *ggplot*, make a `geom_point()` plot of `bill_length_mm` versus `bill_depth_mm` only for Gentoo Penguins. In this plot, highlight penguins with a bill length to bill depth ratio larger than 3.5 by giving those points a different color.
 
-Don't hesitate to look at the Hints if you're not sure how to approach this.
+(Don't hesitate to look at the Hints if you're not sure how to approach this.)
 
 <details>
 <summary>
@@ -807,11 +872,11 @@ Don't hesitate to look at the Hints if you're not sure how to approach this.
 <span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>gent</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>geom_point</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>ratio</span><span class='o'>)</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-35-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-38-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
-Or:
+Or include the comparison directly in the `ggplot` call (!):
 
 <div class="highlight">
 
@@ -826,7 +891,7 @@ Or:
                  color <span class='o'>=</span> <span class='nv'>bill_length_mm</span> <span class='o'>/</span> <span class='nv'>bill_depth_mm</span> <span class='o'>&gt;</span> <span class='m'>3.5</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
   <span class='nf'>labs</span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"Bill length ratio &gt; 3.5"</span><span class='o'>)</span>
 </code></pre>
-<img src="figs/unnamed-chunk-36-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-39-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -840,7 +905,9 @@ Or:
 
 ------------------------------------------------------------------------
 
-## Bonus -- Vectorization with matrices
+## Bonus
+
+### Matrix vectorization
 
 We can also perform vectorized operations on *entire matrices*. With the following matrix:
 
@@ -851,11 +918,11 @@ We can also perform vectorized operations on *entire matrices*. With the followi
 <span class='nv'>mat</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>100</span>, <span class='m'>25</span><span class='o'>)</span>, nrow <span class='o'>=</span> <span class='m'>5</span>, ncol <span class='o'>=</span> <span class='m'>5</span><span class='o'>)</span>
 <span class='nv'>mat</span>
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]   38   48   43   67  100</span>
-<span class='c'>#&gt; [2,]   63   10   70   81   93</span>
-<span class='c'>#&gt; [3,]   21   65   72   98   53</span>
-<span class='c'>#&gt; [4,]   69   22   17   25   29</span>
-<span class='c'>#&gt; [5,]   90   80   45   37   33</span></code></pre>
+<span class='c'>#&gt; [1,]   53   47   52   31   16</span>
+<span class='c'>#&gt; [2,]   13   83    4   37   34</span>
+<span class='c'>#&gt; [3,]   17   89   40   30   20</span>
+<span class='c'>#&gt; [4,]   60   81   98   66   90</span>
+<span class='c'>#&gt; [5,]   36   58   91   19   82</span></code></pre>
 
 </div>
 
@@ -865,19 +932,61 @@ We can also perform vectorized operations on *entire matrices*. With the followi
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>mat</span> <span class='o'>*</span> <span class='m'>10</span>
 <span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
-<span class='c'>#&gt; [1,]  380  480  430  670 1000</span>
-<span class='c'>#&gt; [2,]  630  100  700  810  930</span>
-<span class='c'>#&gt; [3,]  210  650  720  980  530</span>
-<span class='c'>#&gt; [4,]  690  220  170  250  290</span>
-<span class='c'>#&gt; [5,]  900  800  450  370  330</span>
+<span class='c'>#&gt; [1,]  530  470  520  310  160</span>
+<span class='c'>#&gt; [2,]  130  830   40  370  340</span>
+<span class='c'>#&gt; [3,]  170  890  400  300  200</span>
+<span class='c'>#&gt; [4,]  600  810  980  660  900</span>
+<span class='c'>#&gt; [5,]  360  580  910  190  820</span>
 
 <span class='nv'>mat</span> <span class='o'>*</span> <span class='nv'>mat</span>
-<span class='c'>#&gt;      [,1] [,2] [,3] [,4]  [,5]</span>
-<span class='c'>#&gt; [1,] 1444 2304 1849 4489 10000</span>
-<span class='c'>#&gt; [2,] 3969  100 4900 6561  8649</span>
-<span class='c'>#&gt; [3,]  441 4225 5184 9604  2809</span>
-<span class='c'>#&gt; [4,] 4761  484  289  625   841</span>
-<span class='c'>#&gt; [5,] 8100 6400 2025 1369  1089</span></code></pre>
+<span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
+<span class='c'>#&gt; [1,] 2809 2209 2704  961  256</span>
+<span class='c'>#&gt; [2,]  169 6889   16 1369 1156</span>
+<span class='c'>#&gt; [3,]  289 7921 1600  900  400</span>
+<span class='c'>#&gt; [4,] 3600 6561 9604 4356 8100</span>
+<span class='c'>#&gt; [5,] 1296 3364 8281  361 6724</span></code></pre>
 
 </div>
+
+### Base R data frame indexing
+
+Extract a column *as a vector*:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## By name:</span>
+<span class='nv'>penguins</span><span class='o'>$</span><span class='nv'>species</span>
+<span class='nv'>penguins</span><span class='o'>[[</span><span class='s'>"species"</span><span class='o'>]</span><span class='o'>]</span>
+
+<span class='c'>## By index (column number):</span>
+<span class='nv'>penguins</span><span class='o'>[[</span><span class='m'>1</span><span class='o'>]</span><span class='o'>]</span></code></pre>
+
+</div>
+
+Extract one or more columns *as a data frame* using `[row, column]` notation,  
+with a leading comma (`[, column]`) meaning all rows:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## By name:</span>
+<span class='nv'>penguins</span><span class='o'>[</span>, <span class='s'>"species"</span><span class='o'>]</span>
+<span class='nv'>penguins</span><span class='o'>[</span>, <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"species"</span>, <span class='s'>"island"</span><span class='o'>)</span><span class='o'>]</span>
+
+<span class='c'>## By index (column numbers):</span>
+<span class='nv'>penguins</span><span class='o'>[</span>, <span class='m'>1</span><span class='o'>]</span>
+<span class='nv'>penguins</span><span class='o'>[</span>, <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>, <span class='m'>2</span><span class='o'>)</span><span class='o'>]</span>
+</code></pre>
+
+</div>
+
+Subset rows by a condition, with a trailing comma (`[row, ]`) meaning all columns:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>penguins</span><span class='o'>[</span><span class='nv'>penguins</span><span class='o'>$</span><span class='nv'>species</span> <span class='o'>==</span> <span class='s'>"Adelie"</span>, <span class='o'>]</span>
+<span class='nv'>penguins</span><span class='o'>[</span><span class='nv'>penguins</span><span class='o'>$</span><span class='nv'>bill_length_mm</span> <span class='o'>&gt;</span> <span class='m'>40</span>, <span class='o'>]</span></code></pre>
+
+</div>
+
+<br>
 

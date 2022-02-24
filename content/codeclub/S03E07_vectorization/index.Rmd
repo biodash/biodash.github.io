@@ -45,18 +45,22 @@ which also has pointers for if you're new to R or RStudio.
 Today, you will learn:
 
 - That you should avoid copy-pasting your code
-- Which alternatives to repeating yourself exist in R
+- Which alternatives exist in R
 - What *vectorization* is and how to make use of it
 
 #### R packages we will use
 
+We will use _palmerpenguins_ for its `penguins` dataframe,
+the _tidyverse_ for dataframe manipulation and plotting,
+and _glue_'s `glue` function to paste strings.
+
 ```{r}
-## If necessary, install the packages we will use
+## This will _install_ the packages only if you don't already have them:
 if (!require(palmerpenguins)) install.packages("palmerpenguins")
 if (!require(tidyverse)) install.packages("tidyverse")
 if (!require(glue)) install.packages("glue")
 
-## Load the packages we will use
+## This will _load_ the packages:
 library(palmerpenguins)
 library(tidyverse)
 library(glue)
@@ -68,7 +72,7 @@ library(glue)
 
 ## I -- Avoid copy-pasting code
 
-#### Don't Repeat Yourself (DRY)
+### Don't Repeat Yourself
 
 Sometimes, you have a bit of code, and you need to repeat the operations in
 that code *almost* exactly.
@@ -77,7 +81,8 @@ This can apply to anywhere from a single line to dozens of lines of code.
 For instance, you may want to rerun a statistical model with different parameter
 values, or repeat an analysis for different batches or subsets of samples.
 In the context of our trusty penguins dataset,
-we may want to repeat an analysis for each of the 4 morphological measurements.
+we may want to repeat an analysis for each of the 4 morphological measurements
+taken for each penguin.
 
 Your first instinct is perhaps to copy-paste your code several times,
 and make the necessary slight adjustments in each instance.
@@ -94,12 +99,12 @@ Avoiding such code repetition is where the programming mantra
 
 <br>
 
-#### Alternatives to repeating yourself
+### Alternatives
 
-So what are the alternatives?
+So, what are the alternatives?
 
-In R, two key approaches to avoiding copy-pasting your code are to use
-_iteration_ to repeat a procedure, and you can do so either:
+In R, two key approaches that allow you to avoid copy-pasting your code both
+involve _iteration_ to repeat a procedure, and do so either:
 
 - Using a _**loop**_
 
@@ -112,7 +117,7 @@ to be rerun,
 while functionals are easier to apply when you need to rerun a single function
 call.
 
-Furthermore, you can avoid code repetition by:
+You can additionally avoid code repetition by:
 
 - _**Writing your own functions**_ (using _arguments_ to make them flexible)
 
@@ -126,17 +131,36 @@ starting with vectorization this week.**
 
 <br>
 
-#### But first, an iteration example
+### But first, an iteration example
 
 Below, I will give a quick example of each of the two iteration approaches:
 a loop and a functional.
 Hopefully, this will be illustrative even if you don't understand all the details:
-come back in the next few weeks to learn more about this!
+come back in the next few weeks to learn more about it!
 
 Say that we wanted to compute the mean for each of the 4 measurements
-for each penguin: bill length, bill depth, flipper length, and body mass.
+taken for each penguin: bill length, bill depth, flipper length, and body mass.
 
-To do this, we could write:
+```{r}
+head(penguins)
+```
+
+First, let's see how we can do this for one measurement:
+
+```{r}
+## We extract a vector of bill lengths from the penguins dataframe with `$`
+## Note that any NAs would cause the mean to be NA without na.rm=TRUE
+mean(penguins$bill_length_mm, na.rm = TRUE)
+
+## Among other options, we could also extract this 3rd column using `[[`:
+mean(penguins[[3]], na.rm = TRUE)
+```
+
+(For an overview of base R data frame indexing,
+see the [bottom of the the page](#base-r-data-frame-indexing).)
+
+If we would simply repeat this procedure using the first syntax four times,
+we would write:
 
 ```{r}
 mean(penguins$bill_length_mm, na.rm = TRUE)
@@ -146,11 +170,11 @@ mean(penguins$body_mass_g, na.rm = TRUE)
 ```
 
 But that is a bit repetitive.
-And it would get especially so if we had 20 different measurements.
+And it would get especially repetitive if we had 20 different measurements.
 Or if, instead of just computing the mean,
 we wanted to perform an analysis consisting of multiple steps.
 
-What would it look like to use iteration in a case like this?
+How would using iteration in a case like this look like?
 
 - With a `for` loop:
 ```{r}
@@ -348,7 +372,7 @@ such as `sum()` and `mean()`.
 <br>
 
 ```{r}
-## If necessary, install the packages we will use
+## This will _install_ the packages only if you don't already have them:
 if (!require(palmerpenguins)) install.packages("palmerpenguins")
 if (!require(tidyverse)) install.packages("tidyverse")
 if (!require(glue)) install.packages("glue")
@@ -360,7 +384,7 @@ library(glue)
 
 ## Create a vector of bill lengths
 penguins_noNA <- drop_na(penguins)
-bill_len <- head(penguins_noNA$bill_length_mm, 10)
+bill_len <- penguins_noNA$bill_length_mm[1:10]
 ```
 
 </details>
@@ -378,8 +402,10 @@ the second by 100, the third again by 10, and so on:
 bill_len / c(10, 100)
 ```
 
-- **Given the length of `bill_len` (10), do you see any issues if you would**
-  **divide by a vector of length 3? Try it out and see what happens.**
+<br>
+
+**Given the length of `bill_len` (which is 10), do you see any issues if you would**
+**divide by a vector of length 3? Try it out and see what happens.**
 
 <details><summary><b>Hints</b> (click here)</summary>
 <br>
@@ -401,7 +427,9 @@ bill_len / c(10, 100, 1000)
 
 </details>
 
-- **Negate _every other_ value in the `bill_len` vector.**
+<br>
+
+**Negate _every other_ value in the `bill_len` vector.**
 
 <details><summary><b>Hints</b> (click here)</summary>
 <br>
@@ -409,7 +437,7 @@ bill_len / c(10, 100, 1000)
 - Negation means turning a positive value into a negative value and vice versa
   (e.g. `3` => `-3` and `-15` => `15`).
 
-- You can leave the other values as-is by multiplying them by 1.
+- You can leave the other values unchanged simply by multiplying them by 1.
 
 </details>
 
@@ -431,7 +459,7 @@ bill_len * c(1, -1)
 ### Exercise 2: Strings
 
 The `glue` function from the package of the same name allows you to combine
-literal strings with the values or strings contained in R objects.
+literal strings with values or strings contained in R objects.
 For instance:
 
 ```{r}
@@ -442,8 +470,10 @@ glue("The island of {island}")
 So, you combine both literal strings and R objects in a single quoted string,
 and access the values of R objects using braces `{}`.
 
-- **Extract the names of the three islands contained in the `penguins` dataframe,**
-  **and save them in an vector called `islands`.**
+<br>
+
+**Extract the names of the three islands contained in the `penguins` dataframe,**
+**and save them in an vector called `islands`.**
 
 <details><summary><b>Hints</b> (click here)</summary>
 <br>
@@ -460,8 +490,8 @@ i.e. with one entry per island.
 islands <- unique(penguins$island)
 islands
 
-## Or:
-islands <- penguins %>% pull(island) %>% unique()
+## Or tidyverse style:
+islands <- penguins %>% distinct(island) %>% pull(island)
 ```
 
 Note: it is fine that `islands` is still a _factor_,
@@ -469,7 +499,9 @@ like the `island` column in `penguins` was.
 
 </details>
 
-- **Make use of vectorization to print each island's name like so:**
+<br>
+
+**Make use of vectorization to print each island's name like so:**
 ```{r}
 #> The island of Torgersen
 #> The island of Biscoe
@@ -500,16 +532,25 @@ To do so, we make use of R's ability to index a vector with a _logical vector_.
 Let's say we don't trust any bill length measurement of over 40 mm,
 and we want to remove those from our vector.
 
-First, note that the code below will return a logical vector of the same length
-as `bill_len`, with `TRUE` if the value is >40, and `FALSE` if it is not:
+First, we need to know that statements with a comparison operator like `>`, `<`,
+or `==` will test each value and return a logical vector with the results.
+
+For example:
 
 ```{r}
-bill_len > 40
+# The resulting vector contains TRUE or FALSE for each entry in the original vector:
+bill_len == 39.1
 bill_len
 ```
 
+Or, going back to our example with values >40:
+
+```{r}
+bill_len > 40
+```
+
 When we index the original vector with such a logical vector
-(sometimes referred to as a _mask_), we only get the values >40:
+(sometimes referred to as a _mask_), we only get the `TRUE`s, i.e. values >40:
 
 ```{r}
 bill_len[bill_len > 40]
@@ -526,6 +567,7 @@ bill_len_ed <- bill_len
 
 ## Only change values > 40:
 bill_len_ed[bill_len > 40] <- bill_len_ed[bill_len > 40] - 100
+
 bill_len_ed
 ```
 
@@ -533,7 +575,10 @@ But for those kinds of operations,
 the vectorized `ifelse()` function is easier and clearer:
 
 ```{r}
-bill_len_ed <- ifelse(bill_len > 40, bill_len - 100, bill_len)
+# ifelse(test, return-this-if-true, return-this-if-false)
+bill_len_ed <- ifelse(test = bill_len > 40,
+                      yes = bill_len - 100, no = bill_len)
+
 bill_len_ed
 ```
 
@@ -582,8 +627,8 @@ sum(pvals < 0.05)
 
 ### Exercise 3: Logical vectors
 
-- Create a vector `bill_len_NA` where all values > 40 have been turned
-  into `NA`s.
+Create a vector `bill_len_NA` where all values > 40 have been turned
+into `NA`s.
 
 <details><summary><b>Solution</b> (click here)</summary>
 <br>
@@ -592,18 +637,22 @@ sum(pvals < 0.05)
 ## Using logical vector subsetting:
 bill_len_NA <- bill_len
 bill_len_NA[bill_len_NA > 40] <- NA
+
 bill_len_NA
 
 ## Or, using `ifelse()`:
 bill_len_NA <- ifelse(bill_len > 40, NA, bill_len)
+
 bill_len_NA
 ```
 
 </details>
 
-- Remove all `NA`s from `bill_len_NA`. 
-  (If you don't know the function to identify `NA`s in a vector,
-  take a look at the Hints.)
+<br>
+
+Remove all `NA`s from `bill_len_NA`. 
+(If you don't know the function to identify `NA`s in a vector,
+take a look at the Hints.)
 
 <details><summary><b>Hints</b> (click here)</summary>
 <br>
@@ -635,16 +684,16 @@ bill_len_NA[!is.na(bill_len_NA)]
 
 <div class="puzzle"><div>
 
-### Exercise 4: `ifelse()` in a plot
+### Exercise 4: `ifelse()` plot
 
 With _ggplot_,
-make a `geom_point()` plot of `bill_length_mm` versus `bill_depth_mm` in
+make a `geom_point()` plot of `bill_length_mm` versus `bill_depth_mm` only for
 Gentoo Penguins.
 In this plot,
 highlight penguins with a bill length to bill depth ratio larger than 3.5
 by giving those points a different color.
 
-Don't hesitate to look at the Hints if you're not sure how to approach this.
+(Don't hesitate to look at the Hints if you're not sure how to approach this.)
 
 <details><summary><b>Hints 1 </b> (click here)</summary>
 <br>
@@ -705,7 +754,7 @@ ggplot(gent) +
   geom_point(aes(x = bill_length_mm, y = bill_depth_mm, color = ratio))
 ```
 
-Or:
+Or include the comparison directly in the `ggplot` call (!):
 
 ```{r}
 ## Create the new dataframe without making a new variable
@@ -728,7 +777,9 @@ ggplot(gent) +
 
 ----------------------------------------------------------
 
-## Bonus -- Vectorization with matrices
+## Bonus
+
+### Matrix vectorization
 
 We can also perform vectorized operations on *entire matrices*.
 With the following matrix:
@@ -748,3 +799,38 @@ mat * 10
 mat * mat
 ```
 
+### Base R data frame indexing
+
+Extract a column *as a vector*:
+
+```{r, eval=FALSE}
+## By name:
+penguins$species
+penguins[["species"]]
+
+## By index (column number):
+penguins[[1]]
+```
+
+Extract one or more columns *as a data frame* using `[row, column]` notation,  
+with a leading comma (`[, column]`) meaning all rows:
+
+```{r, eval=FALSE}
+## By name:
+penguins[, "species"]
+penguins[, c("species", "island")]
+
+## By index (column numbers):
+penguins[, 1]
+penguins[, c(1, 2)]
+
+```
+
+Subset rows by a condition, with a trailing comma (`[row, ]`) meaning all columns:
+
+```{r, eval=FALSE}
+penguins[penguins$species == "Adelie", ]
+penguins[penguins$bill_length_mm > 40, ]
+```
+
+<br>
