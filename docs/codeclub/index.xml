@@ -15,7 +15,7 @@
     <item>
       <title>S03E07: Avoid Copy-pasting Code - Intro and Vectorization</title>
       <link>https://biodash.github.io/codeclub/s03e07_vectorization/</link>
-      <pubDate>Tue, 22 Feb 2022 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 23 Feb 2022 00:00:00 +0000</pubDate>
       <guid>https://biodash.github.io/codeclub/s03e07_vectorization/</guid>
       <description>&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
 &lt;hr&gt;
@@ -26,17 +26,18 @@
 &lt;p&gt;Today, you will learn:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;That you should avoid copy-pasting your code&lt;/li&gt;
-&lt;li&gt;Which alternatives to repeating yourself exist in R&lt;/li&gt;
+&lt;li&gt;Which alternatives exist in R&lt;/li&gt;
 &lt;li&gt;What &lt;em&gt;vectorization&lt;/em&gt; is and how to make use of it&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4 id=&#34;r-packages-we-will-use&#34;&gt;R packages we will use&lt;/h4&gt;
+&lt;p&gt;We will use &lt;em&gt;palmerpenguins&lt;/em&gt; for its &lt;code&gt;penguins&lt;/code&gt; dataframe, the &lt;em&gt;tidyverse&lt;/em&gt; for dataframe manipulation and plotting, and &lt;em&gt;glue&lt;/em&gt;&amp;rsquo;s &lt;code&gt;glue&lt;/code&gt; function to paste strings.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## If necessary, install the packages we will use&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## This will _install_ the packages only if you don&#39;t already have them:&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;glue&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;## Load the packages we will use&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;## This will _load_ the packages:&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
@@ -44,9 +45,9 @@
 &lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;i----avoid-copy-pasting-code&#34;&gt;I &amp;ndash; Avoid copy-pasting code&lt;/h2&gt;
-&lt;h4 id=&#34;dont-repeat-yourself-dry&#34;&gt;Don&amp;rsquo;t Repeat Yourself (DRY)&lt;/h4&gt;
+&lt;h3 id=&#34;dont-repeat-yourself&#34;&gt;Don&amp;rsquo;t Repeat Yourself&lt;/h3&gt;
 &lt;p&gt;Sometimes, you have a bit of code, and you need to repeat the operations in that code &lt;em&gt;almost&lt;/em&gt; exactly.&lt;/p&gt;
-&lt;p&gt;This can apply to anywhere from a single line to dozens of lines of code. For instance, you may want to rerun a statistical model with different parameter values, or repeat an analysis for different batches or subsets of samples. In the context of our trusty penguins dataset, we may want to repeat an analysis for each of the 4 morphological measurements.&lt;/p&gt;
+&lt;p&gt;This can apply to anywhere from a single line to dozens of lines of code. For instance, you may want to rerun a statistical model with different parameter values, or repeat an analysis for different batches or subsets of samples. In the context of our trusty penguins dataset, we may want to repeat an analysis for each of the 4 morphological measurements taken for each penguin.&lt;/p&gt;
 &lt;p&gt;Your first instinct is perhaps to copy-paste your code several times, and make the necessary slight adjustments in each instance. There are problems with this approach, including:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -58,9 +59,9 @@
 &lt;/ul&gt;
 &lt;p&gt;Avoiding such code repetition is where the programming mantra &amp;ldquo;Don&amp;rsquo;t Repeat Yourself&amp;rdquo; (&amp;ldquo;DRY&amp;rdquo;) comes from.&lt;/p&gt;
 &lt;br&gt;
-&lt;h4 id=&#34;alternatives-to-repeating-yourself&#34;&gt;Alternatives to repeating yourself&lt;/h4&gt;
-&lt;p&gt;So what are the alternatives?&lt;/p&gt;
-&lt;p&gt;In R, two key approaches to avoiding copy-pasting your code are to use &lt;em&gt;iteration&lt;/em&gt; to repeat a procedure, and you can do so either:&lt;/p&gt;
+&lt;h3 id=&#34;alternatives&#34;&gt;Alternatives&lt;/h3&gt;
+&lt;p&gt;So, what are the alternatives?&lt;/p&gt;
+&lt;p&gt;In R, two key approaches that allow you to avoid copy-pasting your code both involve &lt;em&gt;iteration&lt;/em&gt; to repeat a procedure, and do so either:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Using a &lt;em&gt;&lt;strong&gt;loop&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
@@ -70,7 +71,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Loops are especially useful if you have a whole block of code that needs to be rerun, while functionals are easier to apply when you need to rerun a single function call.&lt;/p&gt;
-&lt;p&gt;Furthermore, you can avoid code repetition by:&lt;/p&gt;
+&lt;p&gt;You can additionally avoid code repetition by:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;em&gt;&lt;strong&gt;Writing your own functions&lt;/strong&gt;&lt;/em&gt; (using &lt;em&gt;arguments&lt;/em&gt; to make them flexible)&lt;/p&gt;
@@ -82,10 +83,35 @@
 &lt;p&gt;These approaches are clearer, less error-prone, and more flexible than copy-pasting code. They can also be combined.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;We will tackle all of these approaches in Code Club in the upcoming weeks, starting with vectorization this week.&lt;/strong&gt;&lt;/p&gt;
 &lt;br&gt;
-&lt;h4 id=&#34;but-first-an-iteration-example&#34;&gt;But first, an iteration example&lt;/h4&gt;
-&lt;p&gt;Below, I will give a quick example of each of the two iteration approaches: a loop and a functional. Hopefully, this will be illustrative even if you don&amp;rsquo;t understand all the details: come back in the next few weeks to learn more about this!&lt;/p&gt;
-&lt;p&gt;Say that we wanted to compute the mean for each of the 4 measurements for each penguin: bill length, bill depth, flipper length, and body mass.&lt;/p&gt;
-&lt;p&gt;To do this, we could write:&lt;/p&gt;
+&lt;h3 id=&#34;but-first-an-iteration-example&#34;&gt;But first, an iteration example&lt;/h3&gt;
+&lt;p&gt;Below, I will give a quick example of each of the two iteration approaches: a loop and a functional. Hopefully, this will be illustrative even if you don&amp;rsquo;t understand all the details: come back in the next few weeks to learn more about it!&lt;/p&gt;
+&lt;p&gt;Say that we wanted to compute the mean for each of the 4 measurements taken for each penguin: bill length, bill depth, flipper length, and body mass.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 6 × 8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie  Torge…           39.1          18.7              181        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;750 male &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Adelie  Torge…           39.5          17.4              186        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;800 fema…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Adelie  Torge…           40.3          18                195        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;250 fema…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt; Adelie  Torge…           &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;            &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;                 &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;          &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;   &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt; Adelie  Torge…           36.7          19.3              193        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;450 fema…&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt; Adelie  Torge…           39.3          20.6              190        &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;650 male &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 1 more variable: year &amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;First, let&amp;rsquo;s see how we can do this for one measurement:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## We extract a vector of bill lengths from the penguins dataframe with `$`&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;## Note that any NAs would cause the mean to be NA without na.rm=TRUE&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 43.92193&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## Among other options, we could also extract this 3rd column using `[[`:&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;, na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 43.92193&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;(For an overview of base R data frame indexing, see the &lt;a href=&#34;#base-r-data-frame-indexing&#34;&gt;bottom of the the page&lt;/a&gt;.)&lt;/p&gt;
+&lt;p&gt;If we would simply repeat this procedure using the first syntax four times, we would write:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 43.92193&lt;/span&gt;
@@ -96,8 +122,8 @@
 &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 4201.754&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;But that is a bit repetitive. And it would get especially so if we had 20 different measurements. Or if, instead of just computing the mean, we wanted to perform an analysis consisting of multiple steps.&lt;/p&gt;
-&lt;p&gt;What would it look like to use iteration in a case like this?&lt;/p&gt;
+&lt;p&gt;But that is a bit repetitive. And it would get especially repetitive if we had 20 different measurements. Or if, instead of just computing the mean, we wanted to perform an analysis consisting of multiple steps.&lt;/p&gt;
+&lt;p&gt;How would using iteration in a case like this look like?&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;With a &lt;code&gt;for&lt;/code&gt; loop:&lt;/p&gt;
@@ -267,7 +293,7 @@
 &lt;/summary&gt;
 &lt;br&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## If necessary, install the packages we will use&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## This will _install_ the packages only if you don&#39;t already have them:&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;glue&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
@@ -279,7 +305,7 @@
 
 &lt;span class=&#39;c&#39;&gt;## Create a vector of bill lengths&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
-&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/head.html&#39;&gt;head&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins_noNA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/details&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
@@ -290,9 +316,8 @@
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 3.910 0.395 4.030 0.367 3.930 0.389 3.920 0.411 3.860 0.346&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Given the length of &lt;code&gt;bill_len&lt;/code&gt; (10), do you see any issues if you would&lt;/strong&gt; &lt;strong&gt;divide by a vector of length 3? Try it out and see what happens.&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;br&gt;
+&lt;p&gt;&lt;strong&gt;Given the length of &lt;code&gt;bill_len&lt;/code&gt; (which is 10), do you see any issues if you would&lt;/strong&gt; &lt;strong&gt;divide by a vector of length 3? Try it out and see what happens.&lt;/strong&gt;&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Hints&lt;/b&gt; (click here)
@@ -312,9 +337,8 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 3.9100 0.3950 0.0403 3.6700 0.3930 0.0389 3.9200 0.4110 0.0386 3.4600&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/details&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Negate &lt;em&gt;every other&lt;/em&gt; value in the &lt;code&gt;bill_len&lt;/code&gt; vector.&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;br&gt;
+&lt;p&gt;&lt;strong&gt;Negate &lt;em&gt;every other&lt;/em&gt; value in the &lt;code&gt;bill_len&lt;/code&gt; vector.&lt;/strong&gt;&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Hints&lt;/b&gt; (click here)
@@ -325,7 +349,7 @@
 &lt;p&gt;Negation means turning a positive value into a negative value and vice versa (e.g. &lt;code&gt;3&lt;/code&gt; =&amp;gt; &lt;code&gt;-3&lt;/code&gt; and &lt;code&gt;-15&lt;/code&gt; =&amp;gt; &lt;code&gt;15&lt;/code&gt;).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;You can leave the other values as-is by multiplying them by 1.&lt;/p&gt;
+&lt;p&gt;You can leave the other values unchanged simply by multiplying them by 1.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/details&gt;
@@ -345,16 +369,15 @@
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
 &lt;h3 id=&#34;exercise-2-strings&#34;&gt;Exercise 2: Strings&lt;/h3&gt;
-&lt;p&gt;The &lt;code&gt;glue&lt;/code&gt; function from the package of the same name allows you to combine literal strings with the values or strings contained in R objects. For instance:&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;glue&lt;/code&gt; function from the package of the same name allows you to combine literal strings with values or strings contained in R objects. For instance:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Biscoe&#34;&lt;/span&gt;
 &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;The island of &amp;#123;island&amp;#125;&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; The island of Biscoe&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;So, you combine both literal strings and R objects in a single quoted string, and access the values of R objects using braces &lt;code&gt;{}&lt;/code&gt;.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Extract the names of the three islands contained in the &lt;code&gt;penguins&lt;/code&gt; dataframe,&lt;/strong&gt; &lt;strong&gt;and save them in an vector called &lt;code&gt;islands&lt;/code&gt;.&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;br&gt;
+&lt;p&gt;&lt;strong&gt;Extract the names of the three islands contained in the &lt;code&gt;penguins&lt;/code&gt; dataframe,&lt;/strong&gt; &lt;strong&gt;and save them in an vector called &lt;code&gt;islands&lt;/code&gt;.&lt;/strong&gt;&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Hints&lt;/b&gt; (click here)
@@ -373,19 +396,17 @@
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] Torgersen Biscoe    Dream    &lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; Levels: Biscoe Dream Torgersen&lt;/span&gt;
 
-&lt;span class=&#39;c&#39;&gt;## Or:&lt;/span&gt;
-&lt;span class=&#39;nv&#39;&gt;islands&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;pull&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/unique.html&#39;&gt;unique&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;## Or tidyverse style:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;islands&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;distinct&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;pull&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;Note: it is fine that &lt;code&gt;islands&lt;/code&gt; is still a &lt;em&gt;factor&lt;/em&gt;, like the &lt;code&gt;island&lt;/code&gt; column in &lt;code&gt;penguins&lt;/code&gt; was.&lt;/p&gt;
 &lt;/details&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Make use of vectorization to print each island&amp;rsquo;s name like so:&lt;/strong&gt;
-&lt;div class=&#39;highlight&#39;&gt;
+&lt;br&gt;
+&lt;p&gt;&lt;strong&gt;Make use of vectorization to print each island&amp;rsquo;s name like so:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; The island of Torgersen&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; The island of Biscoe&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; The island of Dream&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 &lt;/div&gt;
 &lt;details&gt;
 &lt;summary&gt;
@@ -406,14 +427,21 @@
 &lt;h2 id=&#34;iii----vectorization-with-logical-indices&#34;&gt;III &amp;ndash; Vectorization with logical indices&lt;/h2&gt;
 &lt;p&gt;We can also use vectorized solutions when we want to operate only on elements that satisfy a certain condition. To do so, we make use of R&amp;rsquo;s ability to index a vector with a &lt;em&gt;logical vector&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s say we don&amp;rsquo;t trust any bill length measurement of over 40 mm, and we want to remove those from our vector.&lt;/p&gt;
-&lt;p&gt;First, note that the code below will return a logical vector of the same length as &lt;code&gt;bill_len&lt;/code&gt;, with &lt;code&gt;TRUE&lt;/code&gt; if the value is &amp;gt;40, and &lt;code&gt;FALSE&lt;/code&gt; if it is not:&lt;/p&gt;
+&lt;p&gt;First, we need to know that statements with a comparison operator like &lt;a href=&#34;https://rdrr.io/r/base/Comparison.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;&amp;gt;&lt;/code&gt;&lt;/a&gt;, &lt;a href=&#34;https://rdrr.io/r/base/Comparison.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;&amp;lt;&lt;/code&gt;&lt;/a&gt;, or &lt;a href=&#34;https://rdrr.io/r/base/Comparison.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;==&lt;/code&gt;&lt;/a&gt; will test each value and return a logical vector with the results.&lt;/p&gt;
+&lt;p&gt;For example:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# The resulting vector contains TRUE or FALSE for each entry in the original vector:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;39.1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 39.1 39.5 40.3 36.7 39.3 38.9 39.2 41.1 38.6 34.6&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;When we index the original vector with such a logical vector (sometimes referred to as a &lt;em&gt;mask&lt;/em&gt;), we only get the values &amp;gt;40:&lt;/p&gt;
+&lt;p&gt;Or, going back to our example with values &amp;gt;40:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;When we index the original vector with such a logical vector (sometimes referred to as a &lt;em&gt;mask&lt;/em&gt;), we only get the &lt;code&gt;TRUE&lt;/code&gt;s, i.e. values &amp;gt;40:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 40.3 41.1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
@@ -426,12 +454,16 @@
 
 &lt;span class=&#39;c&#39;&gt;## Only change values &amp;gt; 40:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;bill_len_ed&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_len_ed&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;
+
 &lt;span class=&#39;nv&#39;&gt;bill_len_ed&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  39.1  39.5 -59.7  36.7  39.3  38.9  39.2 -58.9  38.6  34.6&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;But for those kinds of operations, the vectorized &lt;a href=&#34;https://rdrr.io/r/base/ifelse.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ifelse()&lt;/code&gt;&lt;/a&gt; function is easier and clearer:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;bill_len_ed&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/ifelse.html&#39;&gt;ifelse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# ifelse(test, return-this-if-true, return-this-if-false)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;bill_len_ed&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/ifelse.html&#39;&gt;ifelse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;test &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;,
+                      yes &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;, no &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
 &lt;span class=&#39;nv&#39;&gt;bill_len_ed&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  39.1  39.5 -59.7  36.7  39.3  38.9  39.2 -58.9  38.6  34.6&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
@@ -467,9 +499,7 @@
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
 &lt;h3 id=&#34;exercise-3-logical-vectors&#34;&gt;Exercise 3: Logical vectors&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Create a vector &lt;code&gt;bill_len_NA&lt;/code&gt; where all values &amp;gt; 40 have been turned into &lt;code&gt;NA&lt;/code&gt;s.&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Create a vector &lt;code&gt;bill_len_NA&lt;/code&gt; where all values &amp;gt; 40 have been turned into &lt;code&gt;NA&lt;/code&gt;s.&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Solution&lt;/b&gt; (click here)
@@ -479,18 +509,19 @@
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Using logical vector subsetting:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;bill_len_NA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;bill_len_NA&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_len_NA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;NA&lt;/span&gt;
+
 &lt;span class=&#39;nv&#39;&gt;bill_len_NA&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 39.1 39.5   NA 36.7 39.3 38.9 39.2   NA 38.6 34.6&lt;/span&gt;
 
 &lt;span class=&#39;c&#39;&gt;## Or, using `ifelse()`:&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;bill_len_NA&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/ifelse.html&#39;&gt;ifelse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;, &lt;span class=&#39;kc&#39;&gt;NA&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
 &lt;span class=&#39;nv&#39;&gt;bill_len_NA&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 39.1 39.5   NA 36.7 39.3 38.9 39.2   NA 38.6 34.6&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/details&gt;
-&lt;ul&gt;
-&lt;li&gt;Remove all &lt;code&gt;NA&lt;/code&gt;s from &lt;code&gt;bill_len_NA&lt;/code&gt;. (If you don&amp;rsquo;t know the function to identify &lt;code&gt;NA&lt;/code&gt;s in a vector, take a look at the Hints.)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;br&gt;
+&lt;p&gt;Remove all &lt;code&gt;NA&lt;/code&gt;s from &lt;code&gt;bill_len_NA&lt;/code&gt;. (If you don&amp;rsquo;t know the function to identify &lt;code&gt;NA&lt;/code&gt;s in a vector, take a look at the Hints.)&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Hints&lt;/b&gt; (click here)
@@ -520,9 +551,9 @@
 &lt;br&gt;
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
-&lt;h3 id=&#34;exercise-4-ifelse-in-a-plot&#34;&gt;Exercise 4: &lt;code&gt;ifelse()&lt;/code&gt; in a plot&lt;/h3&gt;
-&lt;p&gt;With &lt;em&gt;ggplot&lt;/em&gt;, make a &lt;code&gt;geom_point()&lt;/code&gt; plot of &lt;code&gt;bill_length_mm&lt;/code&gt; versus &lt;code&gt;bill_depth_mm&lt;/code&gt; in Gentoo Penguins. In this plot, highlight penguins with a bill length to bill depth ratio larger than 3.5 by giving those points a different color.&lt;/p&gt;
-&lt;p&gt;Don&amp;rsquo;t hesitate to look at the Hints if you&amp;rsquo;re not sure how to approach this.&lt;/p&gt;
+&lt;h3 id=&#34;exercise-4-ifelse-plot&#34;&gt;Exercise 4: &lt;code&gt;ifelse()&lt;/code&gt; plot&lt;/h3&gt;
+&lt;p&gt;With &lt;em&gt;ggplot&lt;/em&gt;, make a &lt;code&gt;geom_point()&lt;/code&gt; plot of &lt;code&gt;bill_length_mm&lt;/code&gt; versus &lt;code&gt;bill_depth_mm&lt;/code&gt; only for Gentoo Penguins. In this plot, highlight penguins with a bill length to bill depth ratio larger than 3.5 by giving those points a different color.&lt;/p&gt;
+&lt;p&gt;(Don&amp;rsquo;t hesitate to look at the Hints if you&amp;rsquo;re not sure how to approach this.)&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Hints 1 &lt;/b&gt; (click here)
@@ -584,9 +615,9 @@
 &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;gent&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;ratio&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-35-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-38-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
-&lt;p&gt;Or:&lt;/p&gt;
+&lt;p&gt;Or include the comparison directly in the &lt;code&gt;ggplot&lt;/code&gt; call (!):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Create the new dataframe without making a new variable&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;gent&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
@@ -599,14 +630,15 @@
                  color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3.5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
   &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Bill length ratio &amp;gt; 3.5&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-36-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-39-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/details&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;br&gt;
 &lt;hr&gt;
-&lt;h2 id=&#34;bonus----vectorization-with-matrices&#34;&gt;Bonus &amp;ndash; Vectorization with matrices&lt;/h2&gt;
+&lt;h2 id=&#34;bonus&#34;&gt;Bonus&lt;/h2&gt;
+&lt;h3 id=&#34;matrix-vectorization&#34;&gt;Matrix vectorization&lt;/h3&gt;
 &lt;p&gt;We can also perform vectorized operations on &lt;em&gt;entire matrices&lt;/em&gt;. With the following matrix:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## We use the &#34;sample&#34; function to get 25 random values between 1 and a 100,&lt;/span&gt;
@@ -614,30 +646,58 @@
 &lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/matrix.html&#39;&gt;matrix&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/sample.html&#39;&gt;sample&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;25&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, nrow &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;, ncol &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
 &lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;      [,1] [,2] [,3] [,4] [,5]&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,]   38   48   43   67  100&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,]   63   10   70   81   93&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]   21   65   72   98   53&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,]   69   22   17   25   29&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,]   90   80   45   37   33&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,]   53   47   52   31   16&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,]   13   83    4   37   34&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]   17   89   40   30   20&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,]   60   81   98   66   90&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,]   36   58   91   19   82&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;&amp;hellip;we could multiple all values by 10 or get the square of each value simply as follows:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;
 &lt;span class=&#39;c&#39;&gt;#&amp;gt;      [,1] [,2] [,3] [,4] [,5]&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,]  380  480  430  670 1000&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,]  630  100  700  810  930&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]  210  650  720  980  530&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,]  690  220  170  250  290&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,]  900  800  450  370  330&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,]  530  470  520  310  160&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,]  130  830   40  370  340&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]  170  890  400  300  200&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,]  600  810  980  660  900&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,]  360  580  910  190  820&lt;/span&gt;
 
 &lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;mat&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt;      [,1] [,2] [,3] [,4]  [,5]&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,] 1444 2304 1849 4489 10000&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,] 3969  100 4900 6561  8649&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]  441 4225 5184 9604  2809&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,] 4761  484  289  625   841&lt;/span&gt;
-&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,] 8100 6400 2025 1369  1089&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;      [,1] [,2] [,3] [,4] [,5]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1,] 2809 2209 2704  961  256&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [2,]  169 6889   16 1369 1156&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [3,]  289 7921 1600  900  400&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [4,] 3600 6561 9604 4356 8100&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [5,] 1296 3364 8281  361 6724&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+&lt;h3 id=&#34;base-r-data-frame-indexing&#34;&gt;Base R data frame indexing&lt;/h3&gt;
+&lt;p&gt;Extract a column &lt;em&gt;as a vector&lt;/em&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## By name:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## By index (column number):&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Extract one or more columns &lt;em&gt;as a data frame&lt;/em&gt; using &lt;code&gt;[row, column]&lt;/code&gt; notation,&lt;br&gt;
+with a leading comma (&lt;code&gt;[, column]&lt;/code&gt;) meaning all rows:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## By name:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;, &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;species&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;island&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## By index (column numbers):&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;, &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Subset rows by a condition, with a trailing comma (&lt;code&gt;[row, ]&lt;/code&gt;) meaning all columns:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Adelie&#34;&lt;/span&gt;, &lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;40&lt;/span&gt;, &lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
 </description>
     </item>
     
@@ -4611,7 +4671,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-543762981&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-561278943&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4621,7 +4681,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-543762981&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-561278943&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4808,7 +4868,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-367514298&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-726148395&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4818,7 +4878,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-367514298&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-726148395&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4854,7 +4914,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-764895132&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-452176983&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4864,7 +4924,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-764895132&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-452176983&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4896,7 +4956,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-428719536&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-825769431&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4906,7 +4966,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-428719536&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-825769431&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4937,7 +4997,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-375241869&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-253169478&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4947,7 +5007,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-375241869&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-253169478&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5081,7 +5141,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-651782943&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-957416328&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5091,7 +5151,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-651782943&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-957416328&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -5148,7 +5208,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-124385976&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-279183564&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -5158,7 +5218,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-124385976&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-279183564&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12690,7 +12750,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-675349281&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-823561974&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12700,7 +12760,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-675349281&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-823561974&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12776,7 +12836,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-526981374&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-849152763&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12786,7 +12846,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-526981374&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-849152763&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12807,7 +12867,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-476589231&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-561742839&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12817,7 +12877,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-476589231&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-561742839&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12844,7 +12904,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-872346591&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-586973421&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12854,7 +12914,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-872346591&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-586973421&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12881,7 +12941,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-785296341&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-758312469&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12891,7 +12951,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-785296341&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-758312469&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12914,7 +12974,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-918324567&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-985312674&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12924,7 +12984,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-918324567&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-985312674&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12965,7 +13025,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-451832796&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-183674592&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -12975,7 +13035,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-451832796&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-183674592&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -12994,7 +13054,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-921356874&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-742361985&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -13004,7 +13064,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-921356874&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-742361985&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -13030,7 +13090,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-216795843&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-139562874&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -13040,7 +13100,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-216795843&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-139562874&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -13070,7 +13130,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-328541697&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-734968251&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -13080,7 +13140,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-328541697&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-734968251&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -13294,7 +13354,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-243756891&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-395647812&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -13304,7 +13364,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-243756891&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-395647812&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -13365,7 +13425,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-671285394&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-691823745&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -13375,7 +13435,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-671285394&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-691823745&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -13450,7 +13510,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-249865371&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-592438671&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -13460,7 +13520,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-249865371&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-592438671&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
