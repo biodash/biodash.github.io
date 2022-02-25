@@ -1,5 +1,5 @@
 ---
-title: Code Club Sessions
+title: Past Code Club Sessions
 
 # View.
 #   1 = List
@@ -11,8 +11,15 @@ view: 2
 header:
   caption: ""
   image: ""
-
 ---
 
+<br>
+
+**Note: for an overview of all past sessions in table format with links,<br>**
+**take a look at the [Schedule](/codeclub-schedule/) and scroll down!**
+
+<br>
+
 ----
+
 <br>
