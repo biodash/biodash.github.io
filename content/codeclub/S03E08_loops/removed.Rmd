@@ -1,0 +1,90 @@
+As a side note, the variable as it was last assigned in the loop does
+**persist in your environment**:
+
+```{r}
+i
+```
+
+
+### Looping over all indices
+
+Sometimes you want to loop over indices rather than e.g. the values of a vector itself,
+like we did in exercise 2 with `1:length(first_names)`.
+
+To loop over all column indices of a dataframe, you can similarly use `ncol()`
+(which returns the number of columns in a dataframe) --
+for example, `1:ncol(penguins)`.
+
+An alternative is using `seq_along()`, which will create an index for you:
+
+```{r}
+birds <- c("titmouse", "chickadee", "cardinal")
+seq_along(birds)
+```
+
+The advantage of `seq_along()` is that it will behave better when your vector
+accidentally has length 0.
+
+Here is an example of using `seq_along()` in a loop:
+
+```{r}
+for (index in seq_along(birds)) {
+  print(glue("Bird number {index} is {birds[index]}"))
+}
+```
+
+
+-----
+
+
+In case we wanted to calculate a statistic for each vector which would require
+multiple steps, it might be efficient to write our own function.
+If we imagine that no function exists to compute the mean:
+
+```{r}
+my_mean <- function(x) {
+  sum(x) / length(x)
+}
+map(measurements, my_mean)
+```
+
+```{r}
+penguins_noNA <- drop_na(penguins)
+
+bill_length_mm <- head(penguins_noNA$bill_length_mm, 20)
+bill_depth_mm <- head(penguins_noNA$bill_depth_mm, 20)
+flipper_length_mm <- head(penguins_noNA$flipper_length_mm, 20)
+body_mass_g <- head(penguins_noNA$body_mass_g, 20)
+```
+
+To compute the mean for each measurement, we could do:
+
+```{r}
+mean(bill_length_mm)
+mean(bill_depth_mm)
+mean(flipper_length_mm)
+mean(body_mass_g)
+```
+
+Let's start by putting our four vectors in a list:
+
+```{r}
+measurements <- list(bill_length_mm, bill_depth_mm,
+                     flipper_length_mm, body_mass_g)
+```
+
+    ```{r}
+    for (measurement in measurements) {
+      print(mean(measurement))
+    }
+    ```
+
+```{r}
+## Alternatively, create the new column base-R-style:
+gent <- penguins %>%
+  filter(species == "Gentoo") %>%
+  drop_na()
+gent$ratio <- ifelse(gent$bill_length_mm / gent$bill_depth_mm > 3.5,
+                     "> 3.5", "< 3.5")
+```
+
