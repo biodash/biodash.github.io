@@ -13,6 +13,699 @@
     </image>
     
     <item>
+      <title>S03E07: For Loops</title>
+      <link>https://biodash.github.io/codeclub/s03e08_loops/</link>
+      <pubDate>Sun, 27 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/s03e08_loops/</guid>
+      <description>&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;housekeeping&#34;&gt;Housekeeping&lt;/h2&gt;
+&lt;h4 id=&#34;new-to-code-club&#34;&gt;New to Code Club?&lt;/h4&gt;
+&lt;p&gt;Check out the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has pointers for if you&amp;rsquo;re new to R or RStudio.&lt;/p&gt;
+&lt;h4 id=&#34;session-goals&#34;&gt;Session goals&lt;/h4&gt;
+&lt;p&gt;Today, you will learn:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The basics of &lt;code&gt;for&lt;/code&gt; loops.&lt;/li&gt;
+&lt;li&gt;How to print and save output from &lt;code&gt;for&lt;/code&gt; loops&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;if&lt;/code&gt; statements&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;r-packages-we-will-use&#34;&gt;R packages we will use&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## This will _install_ the packages only if you don&#39;t already have them:&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;glue&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## This will _load_ the packages:&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;i----introduction&#34;&gt;I &amp;ndash; Introduction&lt;/h2&gt;
+&lt;p&gt;Last week, we learned that we should avoid copy-pasting our code when we want to repeat operations.&lt;/p&gt;
+&lt;p&gt;We also focused on one alternative approach: making use of R&amp;rsquo;s vectorization capabilities. When passed a vector, most functions will automatically be performed separately for all elements in the vector, and you don&amp;rsquo;t need to explicitly iterate over (e.g., loop over) these elements:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2.5&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4.1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;7&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3.6&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.45&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1.125 1.845 3.150 1.620&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;However, vectorization can only be applied to a specific set of problems. A more universal solution when you need to repeat operations is iteration. The two main iteration approaches in R involve &lt;em&gt;loops&lt;/em&gt; and &lt;em&gt;functionals&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Today, we will focus on loops and over the next two weeks, Mike S. will teach us about functionals.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;In R, &lt;em&gt;functionals&lt;/em&gt; like the &lt;code&gt;apply&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt; are often preferred over loops because they are more elegant and succinct than loops &amp;ndash; but this can also make them harder to understand.&lt;/p&gt;
+&lt;p&gt;Loops are a good place to start learning to use iteration because:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;They make the iteration aspect explicit and are therefore more intuitive than functionals.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;They can easily accommodate longer blocks of code without the need to &lt;em&gt;also&lt;/em&gt; write your own function.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;They are a near-universal feature in programming languages and are a &lt;em&gt;very&lt;/em&gt; common sight in languages like Python and Bash, so they are good to familiarize yourself with.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Today, we will talk about the most common type of loop: the &lt;code&gt;for&lt;/code&gt; loop. (Other types of loops in R are &lt;code&gt;while&lt;/code&gt; loops and &lt;code&gt;repeat&lt;/code&gt; loops &amp;ndash; I honestly never use those.)&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;ii----for-loop-basics&#34;&gt;II &amp;ndash; &lt;code&gt;for&lt;/code&gt; loop basics&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;for&lt;/code&gt; loops iterate over a &lt;em&gt;collection&lt;/em&gt;, such as a vector, allowing you to &lt;strong&gt;perform one or more actions for each element in the collection,&lt;/strong&gt; &lt;strong&gt;one element at a time.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The basic syntax is as follows:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;nf&#34;&gt;for &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;item&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;collection&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;c1&#34;&gt;# ...code to do things for each element, one at a time...&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;A simple example will help to understand the syntax:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## A loop to print negated values:&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;  &lt;span class=&#39;c&#39;&gt;# We iterate over 1, 2, 3, 4&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;             &lt;span class=&#39;c&#39;&gt;# Multiply each number by -1&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;On the first line, we initialized the &lt;code&gt;for&lt;/code&gt; loop, telling it to &lt;strong&gt;assign each item in the vector to the variable &lt;code&gt;a_number&lt;/code&gt;,&lt;/strong&gt; &lt;strong&gt;one at a time&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The code &lt;em&gt;inside&lt;/em&gt; the loop (which is inside the &lt;code&gt;{}&lt;/code&gt; braces and is indented) &lt;em&gt;will run as many times as there are elements in the collection&lt;/em&gt;. Each time it runs, &lt;code&gt;a_number&lt;/code&gt; contains a single value from the vector.&lt;/p&gt;
+&lt;p&gt;In other words, what you are instructing R to do is:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# Iteration 1&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -1&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# Iteration 2&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# Iteration 3&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# Iteration 4&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Just printing the same loop for reference:&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;  &lt;span class=&#39;c&#39;&gt;# We iterate over 1, 2, 3, 4&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;             &lt;span class=&#39;c&#39;&gt;# Multiply each number by -1&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;The name given to the variable that will contain one &lt;em&gt;item&lt;/em&gt; at a time, here &lt;code&gt;a_number&lt;/code&gt;, is an arbitrary choice, just like when you assign variables the regular way (&lt;code&gt;a_number &amp;lt;- 1&lt;/code&gt;).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The &lt;em&gt;collection&lt;/em&gt; is usually a vector or a list: one that already exists or which you create on the fly in the loop initialization line, like we did above with &lt;a href=&#34;https://rdrr.io/r/base/c.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;c(1, 2, 3, 4)&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;for&lt;/code&gt;, the parentheses &lt;code&gt;()&lt;/code&gt;, &lt;code&gt;in&lt;/code&gt;, and the curly braces &lt;code&gt;{}&lt;/code&gt; are all fixed elements of &lt;code&gt;for&lt;/code&gt; loops. Only the braces can be omitted in some cases, as we&amp;rsquo;ll see below.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;the-variable-in-the-loop&#34;&gt;The variable in the loop&lt;/h3&gt;
+&lt;p&gt;As mentioned, the &lt;strong&gt;variable name&lt;/strong&gt; that we assign to is arbitrary: we could use anything, as long as we reference it with the same name inside the loop:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Example 1 with a different variable name: &#34;positive_number&#34;&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;positive_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;positive_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## Example 2 with a different variable name: &#34;i&#34;&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Note also that we actually don&amp;rsquo;t &lt;em&gt;have to&lt;/em&gt; use the variable we are looping over: we could also use a &lt;code&gt;for&lt;/code&gt; loop as a roundabout way to simply repeat something as many times as there are values in our collection:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Yes!&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;                     &lt;span class=&#39;c&#39;&gt;# Print &#34;Yes!&#34; in each of our four iterations &lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Yes!&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Yes!&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Yes!&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;Yes!&#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;printing-the-output&#34;&gt;Printing the output&lt;/h3&gt;
+&lt;p&gt;In a loop, we need to explicitly use the &lt;a href=&#34;https://rdrr.io/r/base/print.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;print()&lt;/code&gt;&lt;/a&gt; function if we want to print something to screen &amp;ndash; nothing will be printed if we omit this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;In practice, you might often want to store the result in a variable rather than just printing it to screen, and we&amp;rsquo;ll see how to do that in the next section.&lt;/p&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;A note on syntax: the &lt;em&gt;curly braces&lt;/em&gt; are not strictly necessary for one-liners like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;breakout-rooms-i&#34;&gt;Breakout Rooms I&lt;/h2&gt;
+&lt;h4 id=&#34;copy-and-run-this-code-to-get-set-up&#34;&gt;Copy and run this code to get set up!&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## This will _install_ the packages only if you don&#39;t already have them:&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;require&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;glue&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;## This will _load_ the packages:&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/tidyverse/glue&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-1-a-first-few-loops&#34;&gt;Exercise 1: A first few loops&lt;/h3&gt;
+&lt;p&gt;Loop over the numbers 5 through 10 &amp;ndash; inside the loop, simply print each number to screen.&lt;/p&gt;
+&lt;p&gt;(Of course, feel free to look at the examples above for reference &amp;ndash; but &lt;em&gt;type out the loop&lt;/em&gt; to get the syntax under your fingers.)&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 5&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 6&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 7&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 9&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;p&gt;Loop over the first 8 penguin bill depth values (column &lt;code&gt;bill_depth_mm&lt;/code&gt; in the &lt;code&gt;penguins&lt;/code&gt; dataframe), and in each iteration of the loop, add &lt;code&gt;100&lt;/code&gt; to the focal bill depth. Print the results to screen.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hints on extracting the bill depths&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;One way to extract the &lt;code&gt;bill_depth_mm&lt;/code&gt; column as a vector is using &lt;code&gt;penguins$bill_depth_mm&lt;/code&gt;. (Another is &lt;code&gt;penguins %&amp;gt;% pull(bill_depth_mm)&lt;/code&gt;.)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;One way to take the first 8 values of a vector &lt;code&gt;my_vec&lt;/code&gt; is using &lt;code&gt;my_vec[1:8]&lt;/code&gt;. (Another is &lt;code&gt;my_vec %&amp;gt;% head(8)&lt;/code&gt;.)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_len&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;100&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 118.7&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 117.4&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 118&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] NA&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 119.3&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 120.6&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 117.8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 119.6&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-2-keeping-track-of-the-iteration-number&#34;&gt;Exercise 2: Keeping track of the iteration number&lt;/h3&gt;
+&lt;p&gt;Create a vector with the first names of everyone in your breakout room group (e.g. &lt;code&gt;first_names &amp;lt;- c(&amp;quot;Phillida&amp;quot;, &amp;quot;Ethan&amp;quot;, &amp;quot;Tonci&amp;quot;)&lt;/code&gt;), and a second vector with everyone&amp;rsquo;s last names.&lt;/p&gt;
+&lt;p&gt;Next, use a loop to print your breakout room&amp;rsquo;s equivalent of the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;The name of person 1 is Phillida Maas
+The name of person 2 is Ethan Hope
+The name of person 3 is Tonci Elwes
+&lt;/code&gt;&lt;/pre&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint 1&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;p&gt;To get the numbers (&lt;code&gt;person 1&lt;/code&gt; etc) &lt;em&gt;and&lt;/em&gt; the corresponding first and last names, you&amp;rsquo;ll want to loop over a vector of numbers (indices), in this case &lt;code&gt;1:3&lt;/code&gt;. You can then extract the corresponding names inside the loop by indexing with this number (as in &lt;code&gt;first_names[1]&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;Ideally, you will determine the number of names in your room with code instead of just counting them manually &amp;ndash; you can do so using the &lt;a href=&#34;https://rdrr.io/r/base/length.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;length()&lt;/code&gt;&lt;/a&gt; function. That way, you could use the exact same code if you had a different number of people in your group.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hint 2: code with blanks&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Use the following code as a template, replacing the &lt;code&gt;...&lt;/code&gt; blanks:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;first_names&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Phillida&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Ethan&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Tonci&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;last_names&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Maas&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Hope&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Elwes&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;n_names&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;...&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# get the number of first or last names&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;...&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;...&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;first_name&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;...&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;last_name&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;...&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;string&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;The name of person &amp;#123;...&amp;#125; is &amp;#123;...&amp;#125; &amp;#123;...&amp;#125;&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;string&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;first_names&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Phillida&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Ethan&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Tonci&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;last_names&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Maas&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Hope&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Elwes&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;n_names&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/length.html&#39;&gt;length&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;first_names&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# get the number of first or last names&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;index&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;n_names&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;first_name&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;first_names&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;index&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;last_name&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;last_names&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;index&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;string&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;The name of person &amp;#123;index&amp;#125; is &amp;#123;first_name&amp;#125; &amp;#123;last_name&amp;#125;&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;string&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; The name of person 1 is Phillida Maas&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; The name of person 2 is Ethan Hope&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; The name of person 3 is Tonci Elwes&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;iii----plots-or-files-as-output&#34;&gt;III &amp;ndash; Plots or files as output&lt;/h2&gt;
+&lt;p&gt;In the examples and exercises so far, we have simply printed some text output to screen. While this can be useful, in practice, you might often be interested in doing one of the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Creating a plot in each iteration of the loop&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Saving results (or a plot) to file in each iteration of the loop&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Creating a single R object (e.g. a dataframe) across the entire loop: in each iteration, you add one element (e.g. a row) to the object.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The latter scenario is especially verbose to do with a loop and moreover, the most intuitive way of doing that is unnecessarily slow (which is a key reason why loops in R have the &lt;em&gt;reputation&lt;/em&gt; of being slow). I explain the way to store all loop output in one object in the &lt;a href=&#34;https://biodash.github.io/#storing-loop-output-in-an-object/&#34;&gt;bonus materials below&lt;/a&gt; but when you need to do this, a functional approach is particularly worth considering &amp;ndash; we&amp;rsquo;ll learn how to do so in the next few weeks.&lt;/p&gt;
+&lt;p&gt;Instead, let&amp;rsquo;s take a look at &lt;strong&gt;creating plots&lt;/strong&gt; and &lt;strong&gt;saving files&lt;/strong&gt; in loops. We&amp;rsquo;ll also take this opportunity to explicitly see how we change a bit of code that does something once in order to use it in a loop.&lt;/p&gt;
+&lt;p&gt;Say that we want to make a scatterplot of bill lengths vs. bill depths in all penguin species in the &lt;code&gt;penguins&lt;/code&gt; dataframe. We&amp;rsquo;ll start with some code to make a scatterplot for one of the three species:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## Select just the data for the focal species:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;one_penguin_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Gentoo&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Select only rows with Gentoo penguins&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;                         &lt;span class=&#39;c&#39;&gt;# Remove rows with NAs&lt;/span&gt;
+  
+&lt;span class=&#39;c&#39;&gt;## Create the plot:&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_penguin_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Gentoo&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;theme_minimal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-15-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;How can we adapt this code to run it for all three penguin species with a loop?&lt;/p&gt;
+&lt;p&gt;Since we will loop over the species, we&amp;rsquo;ll start by saving the species names in a vector:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;all_penguin_species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/unique.html&#39;&gt;unique&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;focal_species&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;all_penguin_species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## Select just the data for the focal species:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;one_penguin_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## Create the plot:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_penguin_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;theme_minimal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## Print the plot:&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-17-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-17-2.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-17-3.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Note that the code above would be exactly the same regardless of whether we had 3 or all 18 species of penguins in the world in this dataframe.&lt;/p&gt;
+&lt;p&gt;Now, let&amp;rsquo;s see an example where instead of just printing the plots, we wanted to save each plot in an appropriately named file:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;focal_species&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;all_penguin_species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## Select just the data for the focal species:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;one_penguin_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## Create the plot:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_penguin_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;theme_minimal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## Save the plot&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;&amp;#123;focal_species&amp;#125;_bill-len_bill-dp.png&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggsave&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This would create the following &lt;code&gt;png&lt;/code&gt; files:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# Adelie_bill-len_bill-dp.png&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# Gentoo_bill-len_bill-dp.png&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# Chinstrap_bill-len_bill-dp.png&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Similarly, it is straightforward to save a text file with results in each iteration of a loop:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;focal_species&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;all_penguin_species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## Select just the data for the focal species:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;one_penguin_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## Save the results in a tab-separated values (tsv) file:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;&amp;#123;focal_species&amp;#125;.tsv&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;write_tsv&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_penguin_df&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This would create the following files:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# Adelie.tsv&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# Gentoo.tsv&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;# Chinstrap.tsv&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;iv----if-statements&#34;&gt;IV &amp;ndash; &lt;code&gt;if&lt;/code&gt; statements&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;if&lt;/code&gt; statements are similar in syntax to &lt;code&gt;for&lt;/code&gt; loops, and are also considered a &amp;ldquo;control flow&amp;rdquo; structure. But their purpose is different from loops: instead of iterating, &lt;strong&gt;&lt;code&gt;if&lt;/code&gt; statements do something once and they &lt;em&gt;only&lt;/em&gt; do it when a condition is fulfilled.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;For instance, we may want to check in a script whether a certain directory (folder) exists on our computer, and if it doesn&amp;rsquo;t, then we create the directory:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## `!dir.exists()` will be `TRUE` if the directory doesn&#39;t already exist&lt;/span&gt;
+&lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/files2.html&#39;&gt;dir.exists&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;important_directory&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Creating new directory&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/files2.html&#39;&gt;dir.create&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;important_directory&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;else&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Dir already exists&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Inside the parentheses &lt;code&gt;()&lt;/code&gt; after &lt;code&gt;if&lt;/code&gt; should be a test that evaluates to either &lt;code&gt;TRUE&lt;/code&gt; or &lt;code&gt;FALSE&lt;/code&gt;. If the test evaluates to &lt;code&gt;TRUE&lt;/code&gt;, whatever is inside the curly braces &lt;code&gt;{}&lt;/code&gt; will be &lt;strong&gt;executed&lt;/strong&gt;, and if it is &lt;code&gt;FALSE&lt;/code&gt;, what is inside the curly braces will be &lt;strong&gt;ignored&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;We can &lt;em&gt;optionally&lt;/em&gt; add an &lt;code&gt;else&lt;/code&gt; clause: what to do if the test evaluated to &lt;code&gt;FALSE&lt;/code&gt;. (And for more complicated cases, &lt;code&gt;else if&lt;/code&gt; clauses can add additional tests and actions.)&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;if&lt;/code&gt; statements are commonly combined with &lt;code&gt;for&lt;/code&gt; loops &amp;ndash; we may want to only execute the functions in our loop for items in our collection that fulfill a certain condition:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;7&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;   &lt;span class=&#39;c&#39;&gt;# Only `TRUE` for numbers &amp;gt;7&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;     &lt;span class=&#39;c&#39;&gt;# Hence, this is only executed for numbers &amp;gt;7&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 9&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Like in &lt;code&gt;for&lt;/code&gt; loops, braces can be omitted in &lt;code&gt;if&lt;/code&gt; statements in one-liners:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;7&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 9&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;breakout-rooms-ii&#34;&gt;Breakout Rooms II&lt;/h2&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-3-a-plotting-loop&#34;&gt;Exercise 3: A plotting loop&lt;/h3&gt;
+&lt;p&gt;Using a loop and the &lt;code&gt;penguins&lt;/code&gt; dataframe, produce a separate scatterplot for each island with bill length vs. body weight, using different colors for the species and different shapes for the sexes.&lt;/p&gt;
+&lt;p&gt;Print each plot &lt;em&gt;and&lt;/em&gt; save each plot to file.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hints&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;The loop plotting example we went through above have almost the same code that you&amp;rsquo;ll need here, so take another look at that if you&amp;rsquo;re stuck.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Islands are in the &lt;code&gt;island&lt;/code&gt; column and penguin sexes are in the &lt;code&gt;sex&lt;/code&gt; column.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Use the &lt;code&gt;shape&lt;/code&gt; aesthetic in &lt;em&gt;ggplot2&lt;/em&gt; to get different shapes for the sexes.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;all_islands&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/unique.html&#39;&gt;unique&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;focal_island&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;all_islands&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## Select just the data for the focal island:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;one_island_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## Create the plot:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_island_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;,
+                   color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, shape &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;theme_minimal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## Save and print the plot&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;&amp;#123;focal_island&amp;#125;_bill-len_bill-dp.png&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;ggsave&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-25-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-25-2.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-25-3.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;div&gt;
+&lt;h3 id=&#34;exercise-4-if-in-a-loop&#34;&gt;Exercise 4: &lt;code&gt;if&lt;/code&gt; in a loop&lt;/h3&gt;
+&lt;p&gt;In the previous exercise, you should have noticed that one island only has a single species of penguin.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s say that we don&amp;rsquo;t want to create this plot for islands with only a single species. Modify your loop from the previous exercise to include an &lt;code&gt;if&lt;/code&gt; statement such that you will only make plots for islands with multiple species of penguins.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Hints&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;You&amp;rsquo;ll want to count the number of distinct species in the dataframe after filtering it to contain penguins for one island only. One way to do that is using &lt;a href=&#34;https://rdrr.io/r/base/length.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;length(unique(...))&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;all_islands&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/unique.html&#39;&gt;unique&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;focal_island&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;all_islands&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## Select just the data for the focal island:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;one_island_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## Check how many species there are:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;n_species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/length.html&#39;&gt;length&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/unique.html&#39;&gt;unique&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_island_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;n_species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+    &lt;span class=&#39;c&#39;&gt;## Create the plot:&lt;/span&gt;
+    &lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_island_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+      &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;,
+                     color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, shape &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+      &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+      &lt;span class=&#39;nf&#39;&gt;theme_minimal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&#39;c&#39;&gt;## Save and print the plot&lt;/span&gt;
+    &lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;&amp;#123;focal_island&amp;#125;_bill-len_bill-dp.png&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;ggsave&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-26-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-26-2.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;p&gt;&lt;strong&gt;Bonus:&lt;/strong&gt; Add an &lt;code&gt;else&lt;/code&gt; clause to print a message to screen that no plot will be created for the focal island.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+&lt;b&gt;Solution&lt;/b&gt; (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;all_islands&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/unique.html&#39;&gt;unique&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;focal_island&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;all_islands&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## Select just the data for the focal species:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;one_island_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;island&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%&amp;gt;%&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;drop_na&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+   
+  &lt;span class=&#39;c&#39;&gt;## Check how many species there are&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;n_species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/length.html&#39;&gt;length&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/unique.html&#39;&gt;unique&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_island_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;n_species&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+    &lt;span class=&#39;c&#39;&gt;## Create the plot:&lt;/span&gt;
+    &lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;ggplot&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_island_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+      &lt;span class=&#39;nf&#39;&gt;geom_point&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;aes&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;bill_depth_mm&lt;/span&gt;,
+                     color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, shape &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+      &lt;span class=&#39;nf&#39;&gt;labs&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;title &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;focal_island&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;
+      &lt;span class=&#39;nf&#39;&gt;theme_minimal&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&#39;c&#39;&gt;## Save and print the plot&lt;/span&gt;
+    &lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;&amp;#123;focal_island&amp;#125;_bill-len_bill-dp.png&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;ggsave&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;filename&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;p&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;else&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+    &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://glue.tidyverse.org/reference/glue.html&#39;&gt;glue&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Not creating a plot for &amp;#123;focal_island&amp;#125;&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Not creating a plot for Torgersen&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-27-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;img src=&#34;figs/unnamed-chunk-27-2.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;bonus-material&#34;&gt;Bonus Material&lt;/h2&gt;
+&lt;h3 id=&#34;test-operators-and-functions&#34;&gt;Test operators and functions&lt;/h3&gt;
+&lt;p&gt;Common test operators and functions include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Comparison.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;==&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Comparison.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;!=&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; to test for (in)equality for numbers and characters alike&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Comparison.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;&amp;gt;&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Comparison.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;&amp;lt;&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Comparison.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;&amp;gt;=&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Comparison.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;&amp;lt;=&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; for numeric comparisons&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/match.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;%in%&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; to test for &amp;ldquo;group membership&amp;rdquo; (see examples below)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/NA.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;is.na()&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; and &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/NULL.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;is.null()&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; to test for &lt;code&gt;NA&lt;/code&gt; and &lt;code&gt;NULL&lt;/code&gt; values, respectively&lt;/li&gt;
+&lt;li&gt;Any test can be negated (inverted) with an exclamation mark &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Logic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;!&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Some examples:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;!=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] FALSE&lt;/span&gt;
+
+&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%in%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;     &lt;span class=&#39;c&#39;&gt;# 8 is contained in the vector 5, 8, 10&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] TRUE&lt;/span&gt;
+
+&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%in%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;20&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;        &lt;span class=&#39;c&#39;&gt;# 8 is not contained in the vector 10:20&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] FALSE&lt;/span&gt;
+
+&lt;span class=&#39;s&#39;&gt;&#34;Adelie&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;%in%&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Gentoo&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Adelie&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] TRUE&lt;/span&gt;
+
+&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/NA.html&#39;&gt;is.na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] TRUE&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You can also combine tests with &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Logic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;&amp;amp;&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; (logical and) and &lt;strong&gt;&lt;a href=&#34;https://rdrr.io/r/base/Logic.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;|&lt;/code&gt;&lt;/a&gt;&lt;/strong&gt; (logical or):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;# With `&amp;amp;`, TRUE is returned if both tests are TRUE:&lt;/span&gt;
+&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/NA.html&#39;&gt;is.na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] TRUE&lt;/span&gt;
+&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/NA.html&#39;&gt;is.na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] FALSE&lt;/span&gt;
+
+&lt;span class=&#39;c&#39;&gt;# With `|`, TRUE is returned if at least one of the tests is TRUE: &lt;/span&gt;
+&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/NA.html&#39;&gt;is.na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] TRUE&lt;/span&gt;
+&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/NA.html&#39;&gt;is.na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] TRUE&lt;/span&gt;
+&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;!=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;8&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/NA.html&#39;&gt;is.na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;8&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] FALSE&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;h3 id=&#34;the-next-statement&#34;&gt;The &lt;code&gt;next&lt;/code&gt; statement&lt;/h3&gt;
+&lt;p&gt;In the above examples, we have used &lt;code&gt;if&lt;/code&gt; statements to perform some operations only if the test evaluated to &lt;code&gt;TRUE&lt;/code&gt;. So our operations were done &lt;em&gt;inside&lt;/em&gt; the &lt;code&gt;if&lt;/code&gt; statement.&lt;/p&gt;
+&lt;p&gt;This can also be &amp;ldquo;turned around&amp;rdquo; &amp;ndash; inside the &lt;code&gt;if&lt;/code&gt; statement, we can &lt;strong&gt;instruct the loop to skip the rest of the current iteration using the &lt;code&gt;next&lt;/code&gt; statement&lt;/strong&gt;. Then, any operations that we code after that will only be executed when the &lt;code&gt;if&lt;/code&gt; statement test was &lt;code&gt;FALSE&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;kr&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;7&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;next&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;one_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 9&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 10&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This can especially be useful if you want to do a whole bunch of tests, because it avoids burying your code in multiple nested &lt;code&gt;if&lt;/code&gt; statements.&lt;/p&gt;
+&lt;br&gt;
+&lt;h3 id=&#34;storing-loop-output-in-an-object&#34;&gt;Storing loop output in an object&lt;/h3&gt;
+&lt;p&gt;If we want the output to be saved in an object of some kind, we need to explicitly make an assignment in each iteration of the loop. &lt;em&gt;This is where we need to start paying attention to the design of our loop.&lt;/em&gt; Unless computational speed is of no concern, you should &lt;strong&gt;avoid growing an object in each iteration of the loop&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;For example, you might be inclined to do the following if you wanted to compute and store the medians of each column in a data frame:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;c&#39;&gt;## We initialize a vector in which we collect the column medians:&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/vector.html&#39;&gt;vector&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;6&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;c&#39;&gt;## We extract one column using &#34;dataframe_name[[column_number]]&#34;:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;column_median&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/median.html&#39;&gt;median&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;, na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&#39;c&#39;&gt;## We add the single-column median to our vector of medians:&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;column_median&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]   44.45   17.30  197.00 4050.00&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Similarly, if you were working with a data frame, you may be tempted to add a column (with &lt;a href=&#34;https://rdrr.io/r/base/cbind.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;cbind()&lt;/code&gt;&lt;/a&gt;) or a row (with &lt;a href=&#34;https://rdrr.io/r/base/cbind.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;rbind()&lt;/code&gt;&lt;/a&gt;) to the data frame in each iteration of the loop.&lt;/p&gt;
+&lt;p&gt;The problem with these approaches is that &lt;strong&gt;R has to create an entirely new object in each iteration of the loop&lt;/strong&gt;, because the object&amp;rsquo;s memory requirements keep increasing.&lt;/p&gt;
+&lt;p&gt;Instead, before you start the loop, you&amp;rsquo;ll want to give the final vector (here, &lt;code&gt;column_medians&lt;/code&gt;) the appropriate size:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/vector.html&#39;&gt;vector&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;length &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/length.html&#39;&gt;length&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;6&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;6&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;column_median&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/median.html&#39;&gt;median&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;, na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;column_number&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;column_median&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;column_medians&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]    0.00    0.00   44.45   17.30  197.00 4050.00&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Note that for very small problems, such as the example above, there will &lt;em&gt;not&lt;/em&gt; be a noticeable difference in computing time between pre-assigning a properly sized object versus growing an object inside the loop. However, it is still good to get into the habit of pre-assigning an object of the right size.&lt;/p&gt;
+&lt;p&gt;Some &lt;strong&gt;summary guidelines for loops&lt;/strong&gt;, especially when you are working with large datasets and speed is an issue:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Don&amp;rsquo;t use a loop when you can instead use vectorized operations.&lt;/li&gt;
+&lt;li&gt;When you write a loop, avoid doing things &lt;em&gt;inside&lt;/em&gt; the loop that don&amp;rsquo;t need to be repeated.&lt;/li&gt;
+&lt;li&gt;Don&amp;rsquo;t grow objects inside the loop. Instead, pre-assign an object large enough to contain all output of the loop and fill it in inside the loop.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;further-reading&#34;&gt;Further reading&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://r4ds.had.co.nz/iteration.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;The iteration chapter&lt;/a&gt; in Hadley Wickham&amp;rsquo;s R for Data Science (2017). Doesn&amp;rsquo;t really cover &lt;code&gt;if&lt;/code&gt; statements.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://swcarpentry.github.io/r-novice-gapminder/07-control-flow/index.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Software Carpentry Control Flow lesson&lt;/a&gt;. Starts out with &lt;code&gt;if&lt;/code&gt; statements.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
       <title>S03E07: Avoid Copy-pasting Code - Intro and Vectorization</title>
       <link>https://biodash.github.io/codeclub/s03e07_vectorization/</link>
       <pubDate>Wed, 23 Feb 2022 00:00:00 +0000</pubDate>
