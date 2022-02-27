@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 7b1c59a174b5d475
+rmd_hash: 98b51039fbea4153
 
 ---
 
@@ -272,7 +272,7 @@ A note on syntax: the *curly braces* are not strictly necessary for one-liners l
 
 <div>
 
-### Exercise 1: A first few loops
+### Exercise 1: First loops
 
 Loop over the numbers 5 through 10 -- inside the loop, simply print each number to screen.
 
@@ -597,6 +597,10 @@ We can *optionally* add an `else` clause: what to do if the test evaluated to `F
 
 </div>
 
+<div class="alert alert-note">
+
+<div>
+
 Like in `for` loops, braces can be omitted in `if` statements in one-liners:
 
 <div class="highlight">
@@ -605,6 +609,10 @@ Like in `for` loops, braces can be omitted in `if` statements in one-liners:
 <span class='c'>#&gt; [1] 8</span>
 <span class='c'>#&gt; [1] 9</span>
 <span class='c'>#&gt; [1] 10</span></code></pre>
+
+</div>
+
+</div>
 
 </div>
 
@@ -853,29 +861,7 @@ You can also combine tests with **[`&`](https://rdrr.io/r/base/Logic.html)** (lo
 
 <br>
 
-### The `next` statement
-
-In the above examples, we have used `if` statements to perform some operations only if the test evaluated to `TRUE`. So our operations were done *inside* the `if` statement.
-
-This can also be "turned around" -- inside the `if` statement, we can **instruct the loop to skip the rest of the current iteration using the `next` statement**. Then, any operations that we code after that will only be executed when the `if` statement test was `FALSE`:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>one_number</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>10</span><span class='o'>)</span> <span class='o'>&#123;</span>
-  <span class='kr'>if</span> <span class='o'>(</span><span class='nv'>one_number</span> <span class='o'>&lt;=</span> <span class='m'>7</span><span class='o'>)</span> <span class='kr'>next</span>
-  <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>one_number</span><span class='o'>)</span>
-<span class='o'>&#125;</span>
-<span class='c'>#&gt; [1] 8</span>
-<span class='c'>#&gt; [1] 9</span>
-<span class='c'>#&gt; [1] 10</span></code></pre>
-
-</div>
-
-This can especially be useful if you want to do a whole bunch of tests, because it avoids burying your code in multiple nested `if` statements.
-
-<br>
-
-### Storing loop output in an object
+### Storing loop output
 
 If we want the output to be saved in an object of some kind, we need to explicitly make an assignment in each iteration of the loop. *This is where we need to start paying attention to the design of our loop.* Unless computational speed is of no concern, you should **avoid growing an object in each iteration of the loop**.
 
@@ -927,7 +913,9 @@ Some **summary guidelines for loops**, especially when you are working with larg
 -   When you write a loop, avoid doing things *inside* the loop that don't need to be repeated.
 -   Don't grow objects inside the loop. Instead, pre-assign an object large enough to contain all output of the loop and fill it in inside the loop.
 
-### Further reading
+<br>
+
+#### Further reading
 
 -   [The iteration chapter](https://r4ds.had.co.nz/iteration.html) in Hadley Wickham's R for Data Science (2017). Doesn't really cover `if` statements.
 
