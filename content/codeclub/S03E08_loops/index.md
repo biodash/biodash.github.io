@@ -5,8 +5,8 @@ subtitle: "How to, once again, repeat operations without repeating your code"
 summary: "In this second session on strategies for repeating operations without copy-pasting your code, we will focus on for loops."
 authors: [admin]
 tags: [codeclub, iteration]
-date: "2022-02-27"
-lastmod: "2022-02-27"
+date: "2022-03-01"
+lastmod: "2022-03-01"
 toc: true
 
 # Featured image
@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 98b51039fbea4153
+rmd_hash: 40ea8502b5d0b62d
 
 ---
 
@@ -80,9 +80,9 @@ We also focused on one alternative approach: making use of R's vectorization cap
 
 However, vectorization can only be applied to a specific set of problems. A more universal solution when you need to repeat operations is iteration. The two main iteration approaches in R involve *loops* and *functionals*.
 
-**Today, we will focus on loops and over the next two weeks, Mike S. will teach us about functionals.**
+**Today, we will focus on loops and over the next two weeks, Mike Sovic will teach us about functionals.**
 
-In R, *functionals* like the `apply` and `map` are often preferred over loops because they are more elegant and succinct than loops -- but this can also make them harder to understand.
+In R, *functionals* like `apply` and `map` are often preferred over loops because they are more elegant and succinct than loops -- but this can also make them harder to understand.
 
 Loops are a good place to start learning to use iteration because:
 
@@ -110,7 +110,7 @@ for (item in collection) {
 }
 ```
 
-A simple example will help to understand the syntax:
+The simple example below will help to understand the syntax. (Note that this example is so simple that vectorization would have also worked; we'll move on to more realistic loop examples in the next section.)
 
 <div class="highlight">
 
@@ -274,7 +274,7 @@ A note on syntax: the *curly braces* are not strictly necessary for one-liners l
 
 ### Exercise 1: First loops
 
-Loop over the numbers 5 through 10 -- inside the loop, simply print each number to screen.
+Loop over the numbers 5 through 10; and inside the loop, simply print each number to screen.
 
 (Of course, feel free to look at the examples above for reference -- but *type out the loop* to get the syntax under your fingers.)
 
@@ -472,6 +472,10 @@ Since we will loop over the species, we'll start by saving the species names in 
 
 </div>
 
+Next, we write the loop, looping over our vector of species names.
+
+*The code inside the loop is nearly identical to the code above, except that we use the variable `focal_species` instead of the literal string "Gentoo", such that we actually make a plot for each species and not three plots for Gentoo Penguins.*
+
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>focal_species</span> <span class='kr'>in</span> <span class='nv'>all_penguin_species</span><span class='o'>)</span> <span class='o'>&#123;</span>
@@ -569,6 +573,7 @@ For instance, we may want to check in a script whether a certain directory (fold
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## `!dir.exists()` will be `TRUE` if the directory doesn't already exist</span>
+<span class='c'>## `!` inverts a logical so this says "If the directory does _not_ exist"</span>
 <span class='kr'>if</span> <span class='o'>(</span><span class='o'>!</span><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.exists</a></span><span class='o'>(</span><span class='s'>"important_directory"</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='s'>"Creating new directory"</span><span class='o'>)</span>
   <span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"important_directory"</span><span class='o'>)</span>
@@ -578,7 +583,7 @@ For instance, we may want to check in a script whether a certain directory (fold
 
 </div>
 
-Inside the parentheses `()` after `if` should be a test that evaluates to either `TRUE` or `FALSE`. If the test evaluates to `TRUE`, whatever is inside the curly braces `{}` will be **executed**, and if it is `FALSE`, what is inside the curly braces will be **ignored**.
+Inside the parentheses `()` after `if`, we should define a test that evaluates to either `TRUE` or `FALSE`. If the test evaluates to `TRUE`, whatever is inside the curly braces `{}` will be **executed**, and if it is `FALSE`, what is inside the curly braces will be **ignored**.
 
 We can *optionally* add an `else` clause: what to do if the test evaluated to `FALSE`. (And for more complicated cases, `else if` clauses can add additional tests and actions.)
 
