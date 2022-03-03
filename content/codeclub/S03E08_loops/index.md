@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: f3c36b58ece86622
+rmd_hash: d6ac9451a28faf6c
 
 ---
 
@@ -146,14 +146,14 @@ In other words, what you are instructing R to do is:
 <span class='c'>#&gt; [1] -2</span>
 
 <span class='c'># Iteration 3</span>
-<span class='nv'>a_number</span> <span class='o'>&lt;-</span> <span class='m'>2</span>
-<span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>a_number</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
-<span class='c'>#&gt; [1] -2</span>
-
-<span class='c'># Iteration 4</span>
 <span class='nv'>a_number</span> <span class='o'>&lt;-</span> <span class='m'>3</span>
 <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>a_number</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
-<span class='c'>#&gt; [1] -3</span></code></pre>
+<span class='c'>#&gt; [1] -3</span>
+
+<span class='c'># Iteration 4</span>
+<span class='nv'>a_number</span> <span class='o'>&lt;-</span> <span class='m'>4</span>
+<span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>a_number</span> <span class='o'>*</span> <span class='o'>-</span><span class='m'>1</span><span class='o'>)</span>
+<span class='c'>#&gt; [1] -4</span></code></pre>
 
 </div>
 
