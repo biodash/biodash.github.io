@@ -1,12 +1,12 @@
 ---
 output: hugodown::md_document
-title: "S03E07: For Loops"
+title: "S03E08: For Loops and If Statements"
 subtitle: "How to, once again, repeat operations without repeating your code"
 summary: "In this second session on strategies for repeating operations without copy-pasting your code, we will focus on for loops."
 authors: [admin]
 tags: [codeclub, iteration]
-date: "2022-03-01"
-lastmod: "2022-03-01"
+date: "2022-03-03"
+lastmod: "2022-03-03"
 toc: true
 
 # Featured image
@@ -23,7 +23,7 @@ image:
 #   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
 #   Otherwise, set `projects = []`.
 projects: []
-rmd_hash: 40ea8502b5d0b62d
+rmd_hash: f3c36b58ece86622
 
 ---
 
@@ -43,7 +43,7 @@ Today, you will learn:
 
 -   The basics of `for` loops.
 -   How to print and save output from `for` loops
--   `if` statements
+-   How to use `if` statements
 
 #### R packages we will use
 
@@ -78,7 +78,7 @@ We also focused on one alternative approach: making use of R's vectorization cap
 
 </div>
 
-However, vectorization can only be applied to a specific set of problems. A more universal solution when you need to repeat operations is iteration. The two main iteration approaches in R involve *loops* and *functionals*.
+However, vectorization can only be applied to a specific set of problems. A more universal solution when you need to repeat operations is **iteration**. The two main iteration approaches in R involve *loops* and *functionals*.
 
 **Today, we will focus on loops and over the next two weeks, Mike Sovic will teach us about functionals.**
 
@@ -110,7 +110,9 @@ for (item in collection) {
 }
 ```
 
-The simple example below will help to understand the syntax. (Note that this example is so simple that vectorization would have also worked; we'll move on to more realistic loop examples in the next section.)
+The simple example below will help to understand the syntax:
+
+(Note that this example is so simple that vectorization would have also worked; we'll move on to more realistic loop examples in the next section.)
 
 <div class="highlight">
 
@@ -324,8 +326,8 @@ Loop over the first 8 penguin bill depth values (column `bill_depth_mm` in the `
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>bill_len</span> <span class='kr'>in</span> <span class='nv'>penguins</span><span class='o'>$</span><span class='nv'>bill_depth_mm</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>8</span><span class='o'>]</span><span class='o'>)</span> <span class='o'>&#123;</span>
-  <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>bill_len</span> <span class='o'>+</span> <span class='m'>100</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>bill_dep</span> <span class='kr'>in</span> <span class='nv'>penguins</span><span class='o'>$</span><span class='nv'>bill_depth_mm</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>8</span><span class='o'>]</span><span class='o'>)</span> <span class='o'>&#123;</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nv'>bill_dep</span> <span class='o'>+</span> <span class='m'>100</span><span class='o'>)</span>
 <span class='o'>&#125;</span>
 <span class='c'>#&gt; [1] 118.7</span>
 <span class='c'>#&gt; [1] 117.4</span>
@@ -365,9 +367,12 @@ Next, use a loop to print your breakout room's equivalent of the following:
 <b>Hint 1</b> (click here)
 </summary>
 
-To get the numbers (`person 1` etc) *and* the corresponding first and last names, you'll want to loop over a vector of numbers (indices), in this case `1:3`. You can then extract the corresponding names inside the loop by indexing with this number (as in `first_names[1]`).
+<br>
 
-Ideally, you will determine the number of names in your room with code instead of just counting them manually -- you can do so using the [`length()`](https://rdrr.io/r/base/length.html) function. That way, you could use the exact same code if you had a different number of people in your group.
+-   To get the numbers (`person 1` etc) *and* the corresponding first and last names, you'll want to **loop over a vector of numbers** (indices), in this case `1:3`. You can then extract the corresponding names inside the loop by indexing with this number (as in `first_names[1]`).
+
+-   Ideally, you will determine the number of names in your room with code instead of just counting them manually -- you can do so using the [`length()`](https://rdrr.io/r/base/length.html) function. That way, you could use the exact same code if you had a different number of people in your group.
+
 </details>
 <details>
 <summary>
@@ -433,15 +438,15 @@ Use the following code as a template, replacing the `...` blanks:
 
 In the examples and exercises so far, we have simply printed some text output to screen. While this can be useful, in practice, you might often be interested in doing one of the following:
 
--   Creating a plot in each iteration of the loop
+-   *Printing a plot* in each iteration of the loop
 
--   Saving results (or a plot) to file in each iteration of the loop
+-   Saving results or a plot *to file* in each iteration of the loop
 
--   Creating a single R object (e.g. a dataframe) across the entire loop: in each iteration, you add one element (e.g. a row) to the object.
+-   Creating *a single R object* (e.g. a dataframe) across the entire loop: in each iteration, you add one element (e.g. a row) to the object.
 
 The latter scenario is especially verbose to do with a loop and moreover, the most intuitive way of doing that is unnecessarily slow (which is a key reason why loops in R have the *reputation* of being slow). I explain the way to store all loop output in one object in the [bonus materials below](/#storing-loop-output-in-an-object/) but when you need to do this, a functional approach is particularly worth considering -- we'll learn how to do so in the next few weeks.
 
-Instead, let's take a look at **creating plots** and **saving files** in loops. We'll also take this opportunity to explicitly see how we change a bit of code that does something once in order to use it in a loop.
+Instead, let's take a look at **creating plots** and **saving files** in loops. We'll also take this opportunity to explicitly see how we *change a bit of code that does something once in order to use it in a loop.*
 
 Say that we want to make a scatterplot of bill lengths vs. bill depths in all penguin species in the `penguins` dataframe. We'll start with some code to make a scatterplot for one of the three species:
 
@@ -474,20 +479,20 @@ Since we will loop over the species, we'll start by saving the species names in 
 
 Next, we write the loop, looping over our vector of species names.
 
-*The code inside the loop is nearly identical to the code above, except that we use the variable `focal_species` instead of the literal string "Gentoo", such that we actually make a plot for each species and not three plots for Gentoo Penguins.*
+The code inside the loop is going to be nearly identical to the code above, except that we use the variable `focal_species` instead of the literal string "Gentoo" (that way, we make a plot for each species and not three plots for Gentoo Penguins):
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>focal_species</span> <span class='kr'>in</span> <span class='nv'>all_penguin_species</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='c'>## Select just the data for the focal species:</span>
   <span class='nv'>one_penguin_df</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'>%&gt;%</span>
-    <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='nv'>focal_species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+    <span class='nf'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>species</span> <span class='o'>==</span> <span class='nv'>focal_species</span><span class='o'>)</span> <span class='o'>%&gt;%</span>   <span class='c'># Using the `focal_species` variable</span>
     <span class='nf'>drop_na</span><span class='o'>(</span><span class='o'>)</span>
   
   <span class='c'>## Create the plot:</span>
   <span class='nv'>p</span> <span class='o'>&lt;-</span> <span class='nf'>ggplot</span><span class='o'>(</span><span class='nv'>one_penguin_df</span><span class='o'>)</span> <span class='o'>+</span>
     <span class='nf'>geom_point</span><span class='o'>(</span><span class='nf'>aes</span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>bill_length_mm</span>, y <span class='o'>=</span> <span class='nv'>bill_depth_mm</span>, color <span class='o'>=</span> <span class='nv'>sex</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span>
-    <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='nv'>focal_species</span><span class='o'>)</span> <span class='o'>+</span>
+    <span class='nf'>labs</span><span class='o'>(</span>title <span class='o'>=</span> <span class='nv'>focal_species</span><span class='o'>)</span> <span class='o'>+</span>         <span class='c'># Using the `focal_species` variable</span>
     <span class='nf'>theme_minimal</span><span class='o'>(</span><span class='o'>)</span>
   
   <span class='c'>## Print the plot:</span>
@@ -498,7 +503,7 @@ Next, we write the loop, looping over our vector of species names.
 
 </div>
 
-Note that the code above would be exactly the same regardless of whether we had 3 or all 18 species of penguins in the world in this dataframe.
+Note that the code above would be *exactly the same* regardless of whether we had 3 or all 18 species of penguins in the world in this dataframe.
 
 Now, let's see an example where instead of just printing the plots, we wanted to save each plot in an appropriately named file:
 
@@ -518,7 +523,7 @@ Now, let's see an example where instead of just printing the plots, we wanted to
   
   <span class='c'>## Save the plot</span>
   <span class='nv'>filename</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='o'>(</span><span class='s'>"&#123;focal_species&#125;_bill-len_bill-dp.png"</span><span class='o'>)</span>
-  <span class='nf'>ggsave</span><span class='o'>(</span><span class='nv'>filename</span>, <span class='nv'>p</span><span class='o'>)</span>
+  <span class='nf'>ggsave</span><span class='o'>(</span><span class='nv'>filename</span>, <span class='nv'>p</span><span class='o'>)</span>         <span class='c'># Save the plot to file!</span>
 <span class='o'>&#125;</span></code></pre>
 
 </div>
@@ -545,12 +550,12 @@ Similarly, it is straightforward to save a text file with results in each iterat
   
   <span class='c'>## Save the results in a tab-separated values (tsv) file:</span>
   <span class='nv'>filename</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='o'>(</span><span class='s'>"&#123;focal_species&#125;.tsv"</span><span class='o'>)</span>
-  <span class='nf'>write_tsv</span><span class='o'>(</span><span class='nv'>one_penguin_df</span>, <span class='nv'>filename</span><span class='o'>)</span>
+  <span class='nf'>write_tsv</span><span class='o'>(</span><span class='nv'>one_penguin_df</span>, <span class='nv'>filename</span><span class='o'>)</span> <span class='c'># Save the dataframe to file!</span>
 <span class='o'>&#125;</span></code></pre>
 
 </div>
 
-This would create the following files:
+This would create the following text files:
 
 <div class="highlight">
 
@@ -573,7 +578,7 @@ For instance, we may want to check in a script whether a certain directory (fold
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## `!dir.exists()` will be `TRUE` if the directory doesn't already exist</span>
-<span class='c'>## `!` inverts a logical so this says "If the directory does _not_ exist"</span>
+<span class='c'>## `!` inverts a logical, so the below says "If the directory does _not_ exist"</span>
 <span class='kr'>if</span> <span class='o'>(</span><span class='o'>!</span><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.exists</a></span><span class='o'>(</span><span class='s'>"important_directory"</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
   <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='s'>"Creating new directory"</span><span class='o'>)</span>
   <span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"important_directory"</span><span class='o'>)</span>
