@@ -1,0 +1,473 @@
+---
+title: "Session S03E09: Functional Programming With Apply() functions"
+subtitle: "Using the `apply()` functions of base R as an alternative to loops."
+summary: "In this session of Code Club, we'll consider the `apply()` family of functions, which can often be used as efficient alternatives to writing some of the loops we worked with in the previous session."  
+authors: [mike-sovic]
+date: "2022-03-08"
+output: hugodown::md_document
+toc: true
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+------------------------------------------------------------------------
+
+## Session Goals
+
+-  Continue practicing with loops in R.
+-  Describe how the `apply()` functions relate to loops in R. 
+-  Use apply functions as alternatives to loops.
+-  Identify the input and output formats associated with different `apply()` functions. 
+
+-----
+
+## Highlights From Recent Sessions
+
+In the past several sessions, we've talked about several things that have relevance to today's discussion of the `apply()` functions. Here's a quick review...
+
+### Data Structures And Indexing
+
+There are several widely-used data structures in R. They include vectors, lists, and data frames. As Michael Broe showed in [a recent session on data structures](https://biodash.github.io/codeclub/s03e06_datastructures/), each of these can be indexed, which means we can pull out one or more specific elements from those structures.
+
+### Vectors
+
+Vectors have one dimension (can be characterized by their length), and all the elements of any vector in R have to be of the same class. They are often created with the `c()` (combine) function...
+
+```{r}
+#Create some vectors
+num_vector1 <- 1:10
+num_vector1
+class(num_vector1)
+num_vector2 <- c(1,2,6,10)
+num_vector2
+class(num_vector2)
+log_vector <- c(TRUE, FALSE, TRUE, FALSE)
+log_vector
+class(log_vector)
+#Index a vector
+num_vector2[c(1,3)]
+num_vector2[log_vector]
+```
+
+### Lists
+
+```{r}
+#Create a list
+my_list <- list("num_vec1" = num_vector1,
+                "num_vec2" = num_vector2,
+                "log_vec" = c(TRUE, FALSE, TRUE, FALSE))
+
+#View the list
+my_list
+#Try some indexing
+my_list[2]
+my_list[[2]]
+my_list$num_vec2
+```
+
+### Data Frames
+
+```{r}
+#Create a data frame
+my_df <- data.frame("num_vec" = num_vector2,
+                "log_vec" = c(TRUE, FALSE, TRUE, FALSE))
+
+#View the data frame
+my_df
+
+#OR
+
+my_df <- as.data.frame(my_list[c(2,3)])
+
+my_df
+
+#Index the data frame
+my_df[2]
+
+my_df[[2]]
+
+my_df$log_vec
+```
+
+
+### Loops
+
+As Jelmer demonstrated in [last week's session](https://biodash.github.io/codeclub/s03e08_loops/), loops allow you to iteratively apply some task(s) to a series of inputs. In the simple loop below, we take each of three three values (1,3,6), print a statement with the original value, then negate the value and print another statement with the updated value...
+
+```{r}
+for (x in c(1,3,6)) {
+  print(paste0("Input value is ", x))
+  x <- -x
+  print(paste0("Negated value is ", x))
+}
+
+```
+
+### Functions
+
+We use functions abundantly in R. Even the simple examples above used multiple functions, including `c()`, which combined items into a vector, `class()`, which returned the type, or class of an object, and `paste0()`, which allowed us to stitch together character vectors and objects into a single expression. Functions typically accept (and often require) arguments - pieces of information that are provided inside the parentheses that may provide input for the function or details that modify its behavior. As a simple example, setting the na.rm argument in the `mean()` function provides a mean for all values in a vector after removing any that are NA. Otherwise, the mean is returned as "NA"...
+
+
+```{r}
+values <- c(1:5, NA, 7:10)
+values
+mean(values)
+mean(values, na.rm = TRUE)
+
+```
+
+## Functionals
+
+In contrast to traditional arguments like the *na.rm* above, some functions accept other functions as arguments - these are sometimes called *functionals*. In this session we'll look at some of the functionals in the `apply()` group. These provide alternatives to writing loops by allowing us to iteratively apply some function over structures like lists or data frames. They include...
+
+ - `apply()` - apply some function to the margins (rows or columns) of a rectangular object (i.e. matrix or data frame)
+ - `lapply()` - apply some function to each element of a list
+ - `sapply()` - similar to `lapply()`, but provides output in a different format
+ - `mapply()` - apply a function to multiple lists
+ 
+Key to understanding how and when to use each of these is thinking about the structure of the data going in and the structure of the results that get returned. We'll start with `lapply()`.
+
+### `lapply()`
+
+`lapply()` allows you to iteratively apply a function to items in a list, and by default, returns a list of results with the same number of entries as the input had. The only required arguments are the list the function will be applied to and the function itself. Keep in mind that these `apply()` functions are alternatives to loops. We'll try calculating means with both the loop approach and the `apply()` approach on the *simple_list* example below...
+
+```{r}
+simple_list <- list(1:10,
+                    11:15,
+                    16:30)
+
+simple_list
+
+
+```
+
+#### Calculate Means With A Loop
+
+```{r}
+num_entries <- length(simple_list)
+results_list_loop <- list()
+
+for (i in 1:num_entries) {
+  current_mean <- mean(simple_list[[i]])
+  results_list_loop[i] <- current_mean
+  
+}
+
+results_list_loop
+```
+
+
+#### Calculate Means With `lapply()`
+
+```{r}
+results_list_apply <- lapply(simple_list, mean)
+
+results_list_apply
+```
+
+Notice we can use a lot less code with `lapply()` to get the same result as with the for loop. 
+
+Give `lapply()` a try in a Breakout Room...
+
+
+### Breakout Exercises 1
+
+As we've talked about before, lists and data frames are closely related data structures in R - data frames are a special type of list in which all the entries are of the same size, and so they can be neatly organized into a rectangular row/column structure. When data fit that rectangular pattern, it's easy to switch them between lists and data frames.
+
+The code below pulls out the columns of the penguins data frame that are numeric and reformats them into a list named *pens_list*, which we're previewing with the `str()` function.
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(palmerpenguins)
+pens_list <- select_if(penguins, is.numeric) %>% as.list()
+str(pens_list)
+```
+
+<div class="alert puzzle">
+<div>
+
+Calculate the median value for each of the variables/entries in *pens_list*. 
+
+<details> <summary> Hints (click here) </summary>
+
+<br> You can write a loop to do this, or, preferably, use `lapply()`. You'll need one additional argument (na.rm) for the `median()` function - see the `mean()` example above, or check the help for the `median()` and `lapply()` functions for more details.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+# loop option
+results_loop <- list()
+
+for (i in 1:length(pens_list)) {
+  results_loop[i] <- median(pens_list[[i]], na.rm = TRUE)
+}
+
+results_loop
+
+#lapply option
+lapply(pens_list, median, na.rm = TRUE)
+```
+</details>
+
+</div>
+</div>
+
+<div class="alert puzzle">
+<div>
+
+You might have noticed that one of the columns is *year*. We don't really need to get the median for that, so use `lapply()` to calculate the medians again, but this time only do it for the first 4 columns. Also, have it return useful names for the list items with the USE.NAMES argument.
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Index the list in the `lapply()` function with square brackets to apply the function to just the first 4 entries. Set USE.NAMES to TRUE.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+
+#lapply option
+lapply(pens_list[1:4], median, na.rm = TRUE, USE.NAMES = TRUE)
+```
+<br>
+
+</details>
+
+</div>
+</div>
+
+
+
+
+
+
+<div class="alert puzzle">
+<div>
+
+Try the same code again, but this time run it with `sapply()` instead of `lapply()`. What's the difference in these two functions? 
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Simply replace `lapply()` from the previous exercise with `sapply()`.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+sapply(pens_list[1:4], median, na.rm = TRUE, USE.NAMES = TRUE)
+```
+
+</details>
+
+</div>
+</div>
+
+<br>
+
+
+### `apply()`
+
+`lapply()` allowed us to apply a function to separate entries in a list. `apply()` does something similar, but applies the function to the margins (rows or columns) of objects with two dimensions like data frames or matrices. 
+
+Let's start with a simple matrix...
+
+```{r}
+simple_mat <- matrix(1:15, nrow = 3)
+
+simple_mat
+
+```
+
+Now we'll use `apply()` to get means for entries in *simple_mat*. Like `lapply()`, `apply()` requires that we provide arguments to define the object the function will be applied to and the function itself. But since with `apply()` the function can either be applied to the rows or columns, we need a third argument to specify which we want. This is done with either a '1' for rows or a '2' for columns...
+
+#### Get The Mean For Each Column
+
+```{r}
+apply(simple_mat, 2, mean)
+```
+
+#### Get The Mean For Each Row
+
+```{r}
+apply(simple_mat, 1, mean)
+```
+
+
+
+### Breakout Exercises 2
+
+The code below will download a dataframe that contains average monthly temperature data for 282 US locations from 1981-2010, reformat it a bit to make it easier to work with, and store it as the object *temp_data*.  
+
+```{r, message=FALSE, warning=FALSE}
+temp_data <- read_csv('https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/temperature/city_temp_data_noaa.csv') %>%
+  unite("Location",
+        City, State,
+        sep = " ") %>%
+  column_to_rownames("Location")
+```
+
+<div class="alert puzzle">
+<div>
+
+Preview *temp_data*. How is it structured? What do the rows and columns represent?
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Use `head()` or `glimpse()` to preview the dataset.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+<br>
+
+```{r}
+head(temp_data)
+```    
+</details>
+
+</div>
+</div>
+
+
+<div class="alert puzzle">
+<div>
+
+Now calculate the mean temperature for each month. Based on the locations sampled, what month is the warmest overall? The coldest?
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Use `apply()` to calculate the means for each column (columns are designated with '2').
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+<br>
+
+```{r}
+apply(temp_data, 2, mean)
+```    
+</details>
+
+</div>
+</div>
+
+
+<div class="alert puzzle">
+<div>
+
+Now calculate the mean temperature for each location. Which location has the warmest annual temperature? The coldest? Since there are a lot of results to sort through, consider using indexing to extract the warmest and coldest temperatures.
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Use `apply()` to calculate the means for each row (rows are designated with '1'). Save the results to an object, and then use logical indexing in combination with the `max()` function to pull out the entry with the maximum value or `min()` to pull out the minimum value.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+<br>
+
+```{r}
+row_means <- apply(temp_data, 1, mean)
+row_means[row_means == max(row_means)]
+row_means[row_means == min(row_means)]
+
+```    
+</details>
+
+</div>
+</div>
+
+
+<div class="alert puzzle">
+<div>
+
+How many locations have a mean temp > 75F?
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Use indexing like in the previous exercise. You can print the results, or use the length function to get the number returned.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+<br>
+
+```{r}
+row_means[row_means > 75] %>% length()
+
+```    
+</details>
+
+</div>
+</div>
+
+
+
+### Bonus
+
+
+<div class="alert puzzle">
+<div>
+
+How many states or territories have at least one city in the dataset with a mean temp > 75F?
+
+<details> <summary> Hints (click here) </summary>
+
+<br> The states or territories are given by the last 2 characters in the row names of the data frame (which become the names of the vector elements in the results of `apply()`). Extract the set of names, use a regular expression to pull out the last two characters from each (consider `stringr::str_rep`, or `gsub()`), then unique them to get each one that's represented and find the length of that vector.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+<br>
+
+```{r}
+loc_names <- row_means[row_means > 75] %>% names() 
+states <- stringr::str_replace(loc_names, "(.+)(..)", "\\2" )
+unique_states <- unique(states)
+unique_states
+
+length(unique_states)
+```    
+</details>
+
+</div>
+</div>
+
+
+<br>
+
+------------------------------------------------------------------------
+
+## Purrr: An Alternative (Tidy) Approach To `apply()` Functions
+
+There are *tidy* alternatives to the apply functions - they're part of the *purrr* package, which we'll explore in the next session. In the meantime, if you want a preview, you can find details on *purrr* [here](https://purrr.tidyverse.org/). 
+
+------------------------------------------------------------------------
