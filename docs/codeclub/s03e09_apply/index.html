@@ -1,0 +1,1799 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.0.0-beta.3 for Hugo" />
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Jelmer Poelstra" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="In this session of Code Club, we&#39;ll consider the `apply()` family of functions, which can often be used as efficient alternatives to writing some of the loops we worked with in the previous session." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s03e09_apply/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#3f51b5" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+      
+    
+
+    
+    
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.80f9a276c6100914c616a06e45ba8d09.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9F9CQ7P0DX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'G-9F9CQ7P0DX', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="https://biodash.github.io/codeclub/s03e09_apply/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary" />
+  
+  <meta property="og:site_name" content="BioDASH" />
+  <meta property="og:url" content="https://biodash.github.io/codeclub/s03e09_apply/" />
+  <meta property="og:title" content="Session S03E09: Functional Programming With Apply() functions | BioDASH" />
+  <meta property="og:description" content="In this session of Code Club, we&#39;ll consider the `apply()` family of functions, which can often be used as efficient alternatives to writing some of the loops we worked with in the previous session." /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
+    <meta property="twitter:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2022-03-08T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2022-03-08T23:01:40-05:00">
+  
+
+  
+
+
+
+  
+
+  
+
+  <link rel='stylesheet' href='/css/highlight-light.css' title='hl-light'>
+<link rel='stylesheet' href='/css/highlight-dark.css' title='hl-dark' disabled>
+
+
+
+  <title>Session S03E09: Functional Programming With Apply() functions | BioDASH</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="20465b33bf133673f38ef0b91ee031c0" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.7a224883d792570fd34d30c7134eace3.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Code Club</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/codeclub-schedule/"><span>- <b>Schedule</b></span></a>
+            
+              <a class="dropdown-item" href="/codeclub/"><span>- Past Sessions</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-setup/"><span>- Computer Setup</span></a>
+            
+              <a class="dropdown-item" href="/"><span>------------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-suggest/"><span>- Suggest a Topic</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-present/"><span>- Info for Presenters</span></a>
+            
+              <a class="dropdown-item" href="/"><span>-----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-about/"><span>- <b>About Code Club & Join Us!</b></span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/events/"><span>Other Events</span></a>
+        </li>
+
+        
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Tutorials & Materials</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/material/"><span><b>Overview</b></span></a>
+            
+              <a class="dropdown-item" href="/"><span>---------------------</span></a>
+            
+              <a class="dropdown-item" href="/tutorials/r-resources-tips/"><span>- R Resources and Tips</span></a>
+            
+              <a class="dropdown-item" href="/"><span>--------------------</span></a>
+            
+              <a class="dropdown-item" href="https://mcic-osu.github.io/2020-12-microbiomics-workshop/"><span>- Metabarcoding workshop (Fall '20)</span></a>
+            
+              <a class="dropdown-item" href="/tutorials/2021-01_rnaseq/"><span>- RNA-seq intro meetings (Spring '21)</span></a>
+            
+              <a class="dropdown-item" href="https://mcic-osu.github.io/pracs-sp21/"><span>- Computing Course (Spring '21)</span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/support/"><span>Need Support?</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="https://github.com/biodash/biodash.github.io" target="_blank" rel="noopener"><i class='fab fa-github'></i><span></span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/index.xml" target="_blank" rel="noopener"><i class='fas fa-rss'></i><span></span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    
+<div class="container-fluid docs">
+    <div class="row flex-xl-nowrap">
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+            <ul class="nav toc-top">
+                <li><a href="#" id="back_to_top" class="docs-toc-title">Contents</a></li>
+            </ul>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#session-goals">Session Goals</a></li>
+    <li><a href="#highlights-from-recent-sessions">Highlights From Recent Sessions</a>
+      <ul>
+        <li><a href="#data-structures-and-indexing">Data Structures And Indexing</a></li>
+        <li><a href="#vectors">Vectors</a></li>
+        <li><a href="#lists">Lists</a></li>
+        <li><a href="#data-frames">Data Frames</a></li>
+        <li><a href="#loops">Loops</a></li>
+        <li><a href="#functions">Functions</a></li>
+      </ul>
+    </li>
+    <li><a href="#functionals">Functionals</a>
+      <ul>
+        <li><a href="#lapply"><code>lapply()</code></a></li>
+        <li><a href="#breakout-exercises-1">Breakout Exercises 1</a></li>
+        <li><a href="#apply"><code>apply()</code></a></li>
+        <li><a href="#breakout-exercises-2">Breakout Exercises 2</a></li>
+        <li><a href="#bonus">Bonus</a></li>
+      </ul>
+    </li>
+    <li><a href="#purrr-an-alternative-tidy-approach-to-apply-functions">Purrr: An Alternative (Tidy) Approach To <code>apply()</code> Functions</a></li>
+  </ul>
+</nav>
+        </div>
+        <main class="col-12 col-md-0 col-xl-10 py-md-3 pl-md-5 docs-content" role="main">
+            
+
+            <article class="article">
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Session S03E09: Functional Programming With Apply() functions</h1>
+
+  
+  <p class="page-subtitle">Using the <code>apply()</code> functions of base R as an alternative to loops.</p>
+  
+
+  
+    
+
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span >
+      <a href="/authors/mike-sovic/">Mike Sovic</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+    Mar 8, 2022
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+                <div class="article-container">
+                    <div class="article-style">
+                        <hr>
+<h2 id="session-goals">Session Goals</h2>
+<ul>
+<li>Continue practicing with loops in R.</li>
+<li>Describe how the <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> functions relate to loops in R.</li>
+<li>Use apply functions as alternatives to loops.</li>
+<li>Identify the input and output formats associated with different <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> functions.</li>
+</ul>
+<hr>
+<h2 id="highlights-from-recent-sessions">Highlights From Recent Sessions</h2>
+<p>In the past several sessions, we&rsquo;ve talked about several things that have relevance to today&rsquo;s discussion of the <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> functions. Here&rsquo;s a quick review&hellip;</p>
+<h3 id="data-structures-and-indexing">Data Structures And Indexing</h3>
+<p>There are several widely-used data structures in R. They include vectors, lists, and data frames. As Michael Broe showed in <a href="https://biodash.github.io/codeclub/s03e06_datastructures/" target="_blank" rel="noopener">a recent session on data structures</a>, each of these can be indexed, which means we can pull out one or more specific elements from those structures.</p>
+<h3 id="vectors">Vectors</h3>
+<p>Vectors have one dimension (can be characterized by their length), and all the elements of any vector in R have to be of the same class. They are often created with the <a href="https://rdrr.io/r/base/c.html" target="_blank" rel="noopener"><code>c()</code></a> (combine) function&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#Create some vectors</span>
+<span class='nv'>num_vector1</span> <span class='o'>&lt;-</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>10</span>
+<span class='nv'>num_vector1</span>
+
+<span class='c'>#&gt;  [1]  1  2  3  4  5  6  7  8  9 10</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='o'>(</span><span class='nv'>num_vector1</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "integer"</span>
+
+<span class='nv'>num_vector2</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>,<span class='m'>2</span>,<span class='m'>6</span>,<span class='m'>10</span><span class='o'>)</span>
+<span class='nv'>num_vector2</span>
+
+<span class='c'>#&gt; [1]  1  2  6 10</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='o'>(</span><span class='nv'>num_vector2</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "numeric"</span>
+
+<span class='nv'>log_vector</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='kc'>TRUE</span>, <span class='kc'>FALSE</span>, <span class='kc'>TRUE</span>, <span class='kc'>FALSE</span><span class='o'>)</span>
+<span class='nv'>log_vector</span>
+
+<span class='c'>#&gt; [1]  TRUE FALSE  TRUE FALSE</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='o'>(</span><span class='nv'>log_vector</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] "logical"</span>
+
+<span class='c'>#Index a vector</span>
+<span class='nv'>num_vector2</span><span class='o'>[</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>,<span class='m'>3</span><span class='o'>)</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1] 1 6</span>
+
+<span class='nv'>num_vector2</span><span class='o'>[</span><span class='nv'>log_vector</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1] 1 6</span>
+</code></pre>
+</div>
+<h3 id="lists">Lists</h3>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#Create a list</span>
+<span class='nv'>my_list</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='s'>"num_vec1"</span> <span class='o'>=</span> <span class='nv'>num_vector1</span>,
+                <span class='s'>"num_vec2"</span> <span class='o'>=</span> <span class='nv'>num_vector2</span>,
+                <span class='s'>"log_vec"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='kc'>TRUE</span>, <span class='kc'>FALSE</span>, <span class='kc'>TRUE</span>, <span class='kc'>FALSE</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'>#View the list</span>
+<span class='nv'>my_list</span>
+
+<span class='c'>#&gt; $num_vec1</span>
+<span class='c'>#&gt;  [1]  1  2  3  4  5  6  7  8  9 10</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; $num_vec2</span>
+<span class='c'>#&gt; [1]  1  2  6 10</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; $log_vec</span>
+<span class='c'>#&gt; [1]  TRUE FALSE  TRUE FALSE</span>
+
+<span class='c'>#Try some indexing</span>
+<span class='nv'>my_list</span><span class='o'>[</span><span class='m'>2</span><span class='o'>]</span>
+
+<span class='c'>#&gt; $num_vec2</span>
+<span class='c'>#&gt; [1]  1  2  6 10</span>
+
+<span class='nv'>my_list</span><span class='o'>[[</span><span class='m'>2</span><span class='o'>]</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1]  1  2  6 10</span>
+
+<span class='nv'>my_list</span><span class='o'>$</span><span class='nv'>num_vec2</span>
+
+<span class='c'>#&gt; [1]  1  2  6 10</span>
+</code></pre>
+</div>
+<h3 id="data-frames">Data Frames</h3>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#Create a data frame</span>
+<span class='nv'>my_df</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='o'>(</span><span class='s'>"num_vec"</span> <span class='o'>=</span> <span class='nv'>num_vector2</span>,
+                <span class='s'>"log_vec"</span> <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='kc'>TRUE</span>, <span class='kc'>FALSE</span>, <span class='kc'>TRUE</span>, <span class='kc'>FALSE</span><span class='o'>)</span><span class='o'>)</span>
+
+<span class='c'>#View the data frame</span>
+<span class='nv'>my_df</span>
+
+<span class='c'>#&gt;   num_vec log_vec</span>
+<span class='c'>#&gt; 1       1    TRUE</span>
+<span class='c'>#&gt; 2       2   FALSE</span>
+<span class='c'>#&gt; 3       6    TRUE</span>
+<span class='c'>#&gt; 4      10   FALSE</span>
+
+
+<span class='c'>#OR</span>
+
+<span class='nv'>my_df</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='o'>(</span><span class='nv'>my_list</span><span class='o'>[</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>2</span>,<span class='m'>3</span><span class='o'>)</span><span class='o'>]</span><span class='o'>)</span>
+
+<span class='nv'>my_df</span>
+
+<span class='c'>#&gt;   num_vec2 log_vec</span>
+<span class='c'>#&gt; 1        1    TRUE</span>
+<span class='c'>#&gt; 2        2   FALSE</span>
+<span class='c'>#&gt; 3        6    TRUE</span>
+<span class='c'>#&gt; 4       10   FALSE</span>
+
+
+<span class='c'>#Index the data frame</span>
+<span class='nv'>my_df</span><span class='o'>[</span><span class='m'>2</span><span class='o'>]</span>
+
+<span class='c'>#&gt;   log_vec</span>
+<span class='c'>#&gt; 1    TRUE</span>
+<span class='c'>#&gt; 2   FALSE</span>
+<span class='c'>#&gt; 3    TRUE</span>
+<span class='c'>#&gt; 4   FALSE</span>
+
+
+<span class='nv'>my_df</span><span class='o'>[[</span><span class='m'>2</span><span class='o'>]</span><span class='o'>]</span>
+
+<span class='c'>#&gt; [1]  TRUE FALSE  TRUE FALSE</span>
+
+
+<span class='nv'>my_df</span><span class='o'>$</span><span class='nv'>log_vec</span>
+
+<span class='c'>#&gt; [1]  TRUE FALSE  TRUE FALSE</span>
+</code></pre>
+</div>
+<h3 id="loops">Loops</h3>
+<p>As Jelmer demonstrated in <a href="https://biodash.github.io/codeclub/s03e08_loops/" target="_blank" rel="noopener">last week&rsquo;s session</a>, loops allow you to iteratively apply some task(s) to a series of inputs. In the simple loop below, we take each of three three values (1,3,6), print a statement with the original value, then negate the value and print another statement with the updated value&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'>for</span> <span class='o'>(</span><span class='nv'>x</span> <span class='kr'>in</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span>,<span class='m'>3</span>,<span class='m'>6</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='o'>(</span><span class='s'>"Input value is "</span>, <span class='nv'>x</span><span class='o'>)</span><span class='o'>)</span>
+  <span class='nv'>x</span> <span class='o'>&lt;-</span> <span class='o'>-</span><span class='nv'>x</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='o'>(</span><span class='s'>"Negated value is "</span>, <span class='nv'>x</span><span class='o'>)</span><span class='o'>)</span>
+<span class='o'>&#125;</span>
+
+<span class='c'>#&gt; [1] "Input value is 1"</span>
+<span class='c'>#&gt; [1] "Negated value is -1"</span>
+<span class='c'>#&gt; [1] "Input value is 3"</span>
+<span class='c'>#&gt; [1] "Negated value is -3"</span>
+<span class='c'>#&gt; [1] "Input value is 6"</span>
+<span class='c'>#&gt; [1] "Negated value is -6"</span>
+</code></pre>
+</div>
+<h3 id="functions">Functions</h3>
+<p>We use functions abundantly in R. Even the simple examples above used multiple functions, including <a href="https://rdrr.io/r/base/c.html" target="_blank" rel="noopener"><code>c()</code></a>, which combined items into a vector, <a href="https://rdrr.io/r/base/class.html" target="_blank" rel="noopener"><code>class()</code></a>, which returned the type, or class of an object, and <a href="https://rdrr.io/r/base/paste.html" target="_blank" rel="noopener"><code>paste0()</code></a>, which allowed us to stitch together character vectors and objects into a single expression. Functions typically accept (and often require) arguments - pieces of information that are provided inside the parentheses that may provide input for the function or details that modify its behavior. As a simple example, setting the na.rm argument in the <a href="https://rdrr.io/r/base/mean.html" target="_blank" rel="noopener"><code>mean()</code></a> function provides a mean for all values in a vector after removing any that are NA. Otherwise, the mean is returned as &ldquo;NA&rdquo;&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>values</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>5</span>, <span class='kc'>NA</span>, <span class='m'>7</span><span class='o'>:</span><span class='m'>10</span><span class='o'>)</span>
+<span class='nv'>values</span>
+
+<span class='c'>#&gt;  [1]  1  2  3  4  5 NA  7  8  9 10</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>values</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] NA</span>
+
+<span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>values</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 5.444444</span>
+</code></pre>
+</div>
+<h2 id="functionals">Functionals</h2>
+<p>In contrast to traditional arguments like the <em>na.rm</em> above, some functions accept other functions as arguments - these are sometimes called <em>functionals</em>. In this session we&rsquo;ll look at some of the functionals in the <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> group. These provide alternatives to writing loops by allowing us to iteratively apply some function over structures like lists or data frames. They include&hellip;</p>
+<ul>
+<li><a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> - apply some function to the margins (rows or columns) of a rectangular object (i.e. matrix or data frame)</li>
+<li><a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> - apply some function to each element of a list</li>
+<li><a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>sapply()</code></a> - similar to <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a>, but provides output in a different format</li>
+<li><a href="https://rdrr.io/r/base/mapply.html" target="_blank" rel="noopener"><code>mapply()</code></a> - apply a function to multiple lists</li>
+</ul>
+<p>Key to understanding how and when to use each of these is thinking about the structure of the data going in and the structure of the results that get returned. We&rsquo;ll start with <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a>.</p>
+<h3 id="lapply"><code>lapply()</code></h3>
+<p><a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> allows you to iteratively apply a function to items in a list, and by default, returns a list of results with the same number of entries as the input had. The only required arguments are the list the function will be applied to and the function itself. Keep in mind that these <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> functions are alternatives to loops. We&rsquo;ll try calculating means with both the loop approach and the <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> approach on the <em>simple_list</em> example below&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>simple_list</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>10</span>,
+                    <span class='m'>11</span><span class='o'>:</span><span class='m'>15</span>,
+                    <span class='m'>16</span><span class='o'>:</span><span class='m'>30</span><span class='o'>)</span>
+
+<span class='nv'>simple_list</span>
+
+<span class='c'>#&gt; [[1]]</span>
+<span class='c'>#&gt;  [1]  1  2  3  4  5  6  7  8  9 10</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[2]]</span>
+<span class='c'>#&gt; [1] 11 12 13 14 15</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[3]]</span>
+<span class='c'>#&gt;  [1] 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30</span>
+</code></pre>
+</div>
+<h4 id="calculate-means-with-a-loop">Calculate Means With A Loop</h4>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>num_entries</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='o'>(</span><span class='nv'>simple_list</span><span class='o'>)</span>
+<span class='nv'>results_list_loop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='kr'>for</span> <span class='o'>(</span><span class='nv'>i</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='nv'>num_entries</span><span class='o'>)</span> <span class='o'>&#123;</span>
+  <span class='nv'>current_mean</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>simple_list</span><span class='o'>[[</span><span class='nv'>i</span><span class='o'>]</span><span class='o'>]</span><span class='o'>)</span>
+  <span class='nv'>results_list_loop</span><span class='o'>[</span><span class='nv'>i</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nv'>current_mean</span>
+  
+<span class='o'>&#125;</span>
+
+<span class='nv'>results_list_loop</span>
+
+<span class='c'>#&gt; [[1]]</span>
+<span class='c'>#&gt; [1] 5.5</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[2]]</span>
+<span class='c'>#&gt; [1] 13</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[3]]</span>
+<span class='c'>#&gt; [1] 23</span>
+</code></pre>
+</div>
+<h4 id="calculate-means-with-lapply">Calculate Means With <code>lapply()</code></h4>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>results_list_apply</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='o'>(</span><span class='nv'>simple_list</span>, <span class='nv'>mean</span><span class='o'>)</span>
+
+<span class='nv'>results_list_apply</span>
+
+<span class='c'>#&gt; [[1]]</span>
+<span class='c'>#&gt; [1] 5.5</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[2]]</span>
+<span class='c'>#&gt; [1] 13</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[3]]</span>
+<span class='c'>#&gt; [1] 23</span>
+</code></pre>
+</div>
+<p>Notice we can use a lot less code with <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> to get the same result as with the for loop.</p>
+<p>Give <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> a try in a Breakout Room&hellip;</p>
+<h3 id="breakout-exercises-1">Breakout Exercises 1</h3>
+<p>As we&rsquo;ve talked about before, lists and data frames are closely related data structures in R - data frames are a special type of list in which all the entries are of the same size, and so they can be neatly organized into a rectangular row/column structure. When data fit that rectangular pattern, it&rsquo;s easy to switch them between lists and data frames.</p>
+<p>The code below pulls out the columns of the penguins data frame that are numeric and reformats them into a list named <em>pens_list</em>, which we&rsquo;re previewing with the <a href="https://rdrr.io/r/utils/str.html" target="_blank" rel="noopener"><code>str()</code></a> function.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
+<span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span>
+<span class='nv'>pens_list</span> <span class='o'>&lt;-</span> <span class='nf'>select_if</span><span class='o'>(</span><span class='nv'>penguins</span>, <span class='nv'>is.numeric</span><span class='o'>)</span> <span class='o'>%&gt;%</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='o'>(</span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='o'>(</span><span class='nv'>pens_list</span><span class='o'>)</span>
+
+<span class='c'>#&gt; List of 5</span>
+<span class='c'>#&gt;  $ bill_length_mm   : num [1:344] 39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...</span>
+<span class='c'>#&gt;  $ bill_depth_mm    : num [1:344] 18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...</span>
+<span class='c'>#&gt;  $ flipper_length_mm: int [1:344] 181 186 195 NA 193 190 181 195 193 190 ...</span>
+<span class='c'>#&gt;  $ body_mass_g      : int [1:344] 3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...</span>
+<span class='c'>#&gt;  $ year             : int [1:344] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span>
+</code></pre>
+</div>
+<div class="alert puzzle">
+<div>
+<p>Calculate the median value for each of the variables/entries in <em>pens_list</em>.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> You can write a loop to do this, or, preferably, use <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a>. You&rsquo;ll need one additional argument (na.rm) for the <a href="https://rdrr.io/r/stats/median.html" target="_blank" rel="noopener"><code>median()</code></a> function - see the <a href="https://rdrr.io/r/base/mean.html" target="_blank" rel="noopener"><code>mean()</code></a> example above, or check the help for the <a href="https://rdrr.io/r/stats/median.html" target="_blank" rel="noopener"><code>median()</code></a> and <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> functions for more details.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'># loop option</span>
+<span class='nv'>results_loop</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='kr'>for</span> <span class='o'>(</span><span class='nv'>i</span> <span class='kr'>in</span> <span class='m'>1</span><span class='o'>:</span><span class='nf'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='o'>(</span><span class='nv'>pens_list</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>&#123;</span>
+  <span class='nv'>results_loop</span><span class='o'>[</span><span class='nv'>i</span><span class='o'>]</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='o'>(</span><span class='nv'>pens_list</span><span class='o'>[[</span><span class='nv'>i</span><span class='o'>]</span><span class='o'>]</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<span class='o'>&#125;</span>
+
+<span class='nv'>results_loop</span>
+
+<span class='c'>#&gt; [[1]]</span>
+<span class='c'>#&gt; [1] 44.45</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[2]]</span>
+<span class='c'>#&gt; [1] 17.3</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[3]]</span>
+<span class='c'>#&gt; [1] 197</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[4]]</span>
+<span class='c'>#&gt; [1] 4050</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; [[5]]</span>
+<span class='c'>#&gt; [1] 2008</span>
+
+
+<span class='c'>#lapply option</span>
+<span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='o'>(</span><span class='nv'>pens_list</span>, <span class='nv'>median</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<span class='c'>#&gt; $bill_length_mm</span>
+<span class='c'>#&gt; [1] 44.45</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; $bill_depth_mm</span>
+<span class='c'>#&gt; [1] 17.3</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; $flipper_length_mm</span>
+<span class='c'>#&gt; [1] 197</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; $body_mass_g</span>
+<span class='c'>#&gt; [1] 4050</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; $year</span>
+<span class='c'>#&gt; [1] 2008</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="alert puzzle">
+<div>
+<p>You might have noticed that one of the columns is <em>year</em>. We don&rsquo;t really need to get the median for that, so use <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> to calculate the medians again, but this time only do it for the first 4 columns. Also, have it return useful names for the list items with the USE.NAMES argument.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> Index the list in the <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> function with square brackets to apply the function to just the first 4 entries. Set USE.NAMES to TRUE.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'>
+<span class='c'>#lapply option</span>
+<span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='o'>(</span><span class='nv'>pens_list</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>4</span><span class='o'>]</span>, <span class='nv'>median</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span>, USE.NAMES <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<span class='c'>#&gt; $bill_length_mm</span>
+<span class='c'>#&gt; [1] 44.45</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; $bill_depth_mm</span>
+<span class='c'>#&gt; [1] 17.3</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; $flipper_length_mm</span>
+<span class='c'>#&gt; [1] 197</span>
+<span class='c'>#&gt; </span>
+<span class='c'>#&gt; $body_mass_g</span>
+<span class='c'>#&gt; [1] 4050</span>
+</code></pre>
+</div>
+<br>
+</details>
+</div>
+</div>
+<div class="alert puzzle">
+<div>
+<p>Try the same code again, but this time run it with <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>sapply()</code></a> instead of <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a>. What&rsquo;s the difference in these two functions?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> Simply replace <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> from the previous exercise with <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>sapply()</code></a>.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='o'>(</span><span class='nv'>pens_list</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>4</span><span class='o'>]</span>, <span class='nv'>median</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span>, USE.NAMES <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+
+<span class='c'>#&gt;    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g </span>
+<span class='c'>#&gt;             44.45             17.30            197.00           4050.00</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<br>
+<h3 id="apply"><code>apply()</code></h3>
+<p><a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a> allowed us to apply a function to separate entries in a list. <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> does something similar, but applies the function to the margins (rows or columns) of objects with two dimensions like data frames or matrices.</p>
+<p>Let&rsquo;s start with a simple matrix&hellip;</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>simple_mat</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='o'>(</span><span class='m'>1</span><span class='o'>:</span><span class='m'>15</span>, nrow <span class='o'>=</span> <span class='m'>3</span><span class='o'>)</span>
+
+<span class='nv'>simple_mat</span>
+
+<span class='c'>#&gt;      [,1] [,2] [,3] [,4] [,5]</span>
+<span class='c'>#&gt; [1,]    1    4    7   10   13</span>
+<span class='c'>#&gt; [2,]    2    5    8   11   14</span>
+<span class='c'>#&gt; [3,]    3    6    9   12   15</span>
+</code></pre>
+</div>
+<p>Now we&rsquo;ll use <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> to get means for entries in <em>simple_mat</em>. Like <a href="https://rdrr.io/r/base/lapply.html" target="_blank" rel="noopener"><code>lapply()</code></a>, <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> requires that we provide arguments to define the object the function will be applied to and the function itself. But since with <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> the function can either be applied to the rows or columns, we need a third argument to specify which we want. This is done with either a &lsquo;1&rsquo; for rows or a &lsquo;2&rsquo; for columns&hellip;</p>
+<h4 id="get-the-mean-for-each-column">Get The Mean For Each Column</h4>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='o'>(</span><span class='nv'>simple_mat</span>, <span class='m'>2</span>, <span class='nv'>mean</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1]  2  5  8 11 14</span>
+</code></pre>
+</div>
+<h4 id="get-the-mean-for-each-row">Get The Mean For Each Row</h4>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='o'>(</span><span class='nv'>simple_mat</span>, <span class='m'>1</span>, <span class='nv'>mean</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 7 8 9</span>
+</code></pre>
+</div>
+<h3 id="breakout-exercises-2">Breakout Exercises 2</h3>
+<p>The code below will download a dataframe that contains average monthly temperature data for 282 US locations from 1981-2010, reformat it a bit to make it easier to work with, and store it as the object <em>temp_data</em>.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>temp_data</span> <span class='o'>&lt;-</span> <span class='nf'>read_csv</span><span class='o'>(</span><span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/temperature/city_temp_data_noaa.csv'</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>unite</span><span class='o'>(</span><span class='s'>"Location"</span>,
+        <span class='nv'>City</span>, <span class='nv'>State</span>,
+        sep <span class='o'>=</span> <span class='s'>" "</span><span class='o'>)</span> <span class='o'>%&gt;%</span>
+  <span class='nf'>column_to_rownames</span><span class='o'>(</span><span class='s'>"Location"</span><span class='o'>)</span>
+</code></pre>
+</div>
+<div class="alert puzzle">
+<div>
+<p>Preview <em>temp_data</em>. How is it structured? What do the rows and columns represent?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> Use <a href="https://rdrr.io/r/utils/head.html" target="_blank" rel="noopener"><code>head()</code></a> or <code>glimpse()</code> to preview the dataset.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>temp_data</span><span class='o'>)</span>
+
+<span class='c'>#&gt;                   JAN  FEB  MAR  APR  MAY  JUN  JUL  AUG  SEP  OCT  NOV  DEC</span>
+<span class='c'>#&gt; BIRMINGHAM AP AL 53.8 58.4 66.7 74.4 81.5 87.7 90.8 90.6 85.1 75.3 65.4 55.9</span>
+<span class='c'>#&gt; HUNTSVILLE AL    51.2 55.9 64.9 73.6 81.3 88.2 90.7 90.9 85.0 74.6 63.7 53.5</span>
+<span class='c'>#&gt; MOBILE AL        60.0 63.2 69.8 76.1 83.0 88.2 90.4 90.5 87.3 79.4 70.3 61.9</span>
+<span class='c'>#&gt; MONTGOMERY AL    57.4 61.8 69.7 76.6 84.0 89.8 92.1 91.9 87.3 78.3 69.0 59.6</span>
+<span class='c'>#&gt; ANCHORAGE AK     23.1 26.6 33.9 44.5 56.0 62.8 65.4 63.5 55.1 40.5 27.8 24.8</span>
+<span class='c'>#&gt; ANNETTE AK       41.6 42.7 44.9 50.2 56.3 61.1 64.3 64.7 59.3 51.6 44.6 41.5</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="alert puzzle">
+<div>
+<p>Now calculate the mean temperature for each month. Based on the locations sampled, what month is the warmest overall? The coldest?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> Use <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> to calculate the means for each column (columns are designated with &lsquo;2&rsquo;).</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='o'>(</span><span class='nv'>temp_data</span>, <span class='m'>2</span>, <span class='nv'>mean</span><span class='o'>)</span>
+
+<span class='c'>#&gt;      JAN      FEB      MAR      APR      MAY      JUN      JUL      AUG </span>
+<span class='c'>#&gt; 44.35709 48.03156 55.75035 64.83936 73.33227 80.73582 84.88865 83.81418 </span>
+<span class='c'>#&gt;      SEP      OCT      NOV      DEC </span>
+<span class='c'>#&gt; 77.35922 66.87234 55.59610 46.22589</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="alert puzzle">
+<div>
+<p>Now calculate the mean temperature for each location. Which location has the warmest annual temperature? The coldest? Since there are a lot of results to sort through, consider using indexing to extract the warmest and coldest temperatures.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> Use <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a> to calculate the means for each row (rows are designated with &lsquo;1&rsquo;). Save the results to an object, and then use logical indexing in combination with the <a href="https://rdrr.io/r/base/Extremes.html" target="_blank" rel="noopener"><code>max()</code></a> function to pull out the entry with the maximum value or <a href="https://rdrr.io/r/base/Extremes.html" target="_blank" rel="noopener"><code>min()</code></a> to pull out the minimum value.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>row_means</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='o'>(</span><span class='nv'>temp_data</span>, <span class='m'>1</span>, <span class='nv'>mean</span><span class='o'>)</span>
+<span class='nv'>row_means</span><span class='o'>[</span><span class='nv'>row_means</span> <span class='o'>==</span> <span class='nf'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='o'>(</span><span class='nv'>row_means</span><span class='o'>)</span><span class='o'>]</span>
+
+<span class='c'>#&gt; POHNPEI-CAROLINE IS. PC </span>
+<span class='c'>#&gt;                  88.175</span>
+
+<span class='nv'>row_means</span><span class='o'>[</span><span class='nv'>row_means</span> <span class='o'>==</span> <span class='nf'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='o'>(</span><span class='nv'>row_means</span><span class='o'>)</span><span class='o'>]</span>
+
+<span class='c'>#&gt; BARROW AK </span>
+<span class='c'>#&gt;  17.18333</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="alert puzzle">
+<div>
+<p>How many locations have a mean temp &gt; 75F?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> Use indexing like in the previous exercise. You can print the results, or use the length function to get the number returned.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>row_means</span><span class='o'>[</span><span class='nv'>row_means</span> <span class='o'>&gt;</span> <span class='m'>75</span><span class='o'>]</span> <span class='o'>%&gt;%</span> <span class='nf'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='o'>(</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 68</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<h3 id="bonus">Bonus</h3>
+<div class="alert puzzle">
+<div>
+<p>How many states or territories have at least one city in the dataset with a mean temp &gt; 75F?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<p><br> The states or territories are given by the last 2 characters in the row names of the data frame (which become the names of the vector elements in the results of <a href="https://rdrr.io/r/base/apply.html" target="_blank" rel="noopener"><code>apply()</code></a>). Extract the set of names, use a regular expression to pull out the last two characters from each (consider <code>stringr::str_rep</code>, or <a href="https://rdrr.io/r/base/grep.html" target="_blank" rel="noopener"><code>gsub()</code></a>), then unique them to get each one that&rsquo;s represented and find the length of that vector.</p>
+<br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nv'>loc_names</span> <span class='o'>&lt;-</span> <span class='nv'>row_means</span><span class='o'>[</span><span class='nv'>row_means</span> <span class='o'>&gt;</span> <span class='m'>75</span><span class='o'>]</span> <span class='o'>%&gt;%</span> <span class='nf'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='o'>(</span><span class='o'>)</span> 
+<span class='nv'>states</span> <span class='o'>&lt;-</span> <span class='nf'>stringr</span><span class='nf'>::</span><span class='nf'><a href='https://stringr.tidyverse.org/reference/str_replace.html'>str_replace</a></span><span class='o'>(</span><span class='nv'>loc_names</span>, <span class='s'>"(.+)(..)"</span>, <span class='s'>"\\2"</span> <span class='o'>)</span>
+<span class='nv'>unique_states</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='o'>(</span><span class='nv'>states</span><span class='o'>)</span>
+<span class='nv'>unique_states</span>
+
+<span class='c'>#&gt;  [1] "AL" "AZ" "CA" "FL" "GA" "HI" "LA" "MS" "NV" "NM" "SC" "TX" "PC" "PR"</span>
+
+
+<span class='nf'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='o'>(</span><span class='nv'>unique_states</span><span class='o'>)</span>
+
+<span class='c'>#&gt; [1] 14</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<br>
+<hr>
+<h2 id="purrr-an-alternative-tidy-approach-to-apply-functions">Purrr: An Alternative (Tidy) Approach To <code>apply()</code> Functions</h2>
+<p>There are <em>tidy</em> alternatives to the apply functions - they&rsquo;re part of the <em>purrr</em> package, which we&rsquo;ll explore in the next session. In the meantime, if you want a preview, you can find details on <em>purrr</em> <a href="https://purrr.tidyverse.org/" target="_blank" rel="noopener">here</a>.</p>
+<hr>
+
+                    </div>
+
+                    <br>
+
+                    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s03e09_apply/&amp;text=Session%20S03E09:%20Functional%20Programming%20With%20Apply%28%29%20functions" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s03e09_apply/&amp;t=Session%20S03E09:%20Functional%20Programming%20With%20Apply%28%29%20functions" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Session%20S03E09:%20Functional%20Programming%20With%20Apply%28%29%20functions&amp;body=https://biodash.github.io/codeclub/s03e09_apply/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s03e09_apply/&amp;title=Session%20S03E09:%20Functional%20Programming%20With%20Apply%28%29%20functions" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Session%20S03E09:%20Functional%20Programming%20With%20Apply%28%29%20functions%20https://biodash.github.io/codeclub/s03e09_apply/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s03e09_apply/&amp;title=Session%20S03E09:%20Functional%20Programming%20With%20Apply%28%29%20functions" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="/authors/mike-sovic/"><img class="avatar mr-3 avatar-circle" src="/authors/mike-sovic/avatar_hu1ab2c0735ccc2e414b344a1bc08b8162_24652_270x270_fill_q90_lanczos_center.jpg" alt="Mike Sovic"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/authors/mike-sovic/">Mike Sovic</a></h5>
+      <h6 class="card-subtitle">Bioinformatician at CAPS</h6>
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:sovic.1@osu.edu" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/mikesovic" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.youtube.com/channel/UC2dB6jDTbqzlTM6edzfBSGQ" target="_blank" rel="noopener">
+        <i class="fab fa-youtube"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <br>
+
+                    <hr class="separator">
+
+                    <div class="clearfix">
+                        
+                        
+                        <span class="previous-link">
+                            <a href="https://biodash.github.io/codeclub/s03e08_loops/">← S03E08: For Loops and If Statements</a>
+                        </span>
+                        
+                        
+                        
+                    </div>
+
+                    <hr class="separator">
+
+                </div>
+
+            </article>
+
+            
+        </main>
+    </div>
+</div>
+
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+    
+    <p class="powered-by">
+      <a href="/license/">LICENSE: CC-BY-SA <br> <i class="fab fa-creative-commons fa-2x"></i><i class="fab fa-creative-commons-by fa-2x"></i><i class="fab fa-creative-commons-sa fa-2x"></i> </a><br>
+    </p>
+    
+</footer>
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key="></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.25/gmaps.min.js" integrity="sha256-7vjlAeb8OaTrCXZkCNun9djzuB2owUsaO72kXaFDBJs=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+      
+    
+    <script src="/en/js/wowchemy.min.2f16af175a3ec51b41b36bb4934b1cf7.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>
