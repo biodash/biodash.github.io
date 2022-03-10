@@ -7,7 +7,7 @@ date: "2022-03-08"
 output: hugodown::md_document
 toc: true
 
-rmd_hash: caf6b66d656f90da
+rmd_hash: cc1f61a160b3b9c5
 
 ---
 
@@ -169,7 +169,7 @@ Vectors have one dimension (can be characterized by their length), and all the e
 
 ### Loops
 
-As Jelmer demonstrated in [last week's session](https://biodash.github.io/codeclub/s03e08_loops/), loops allow you to iteratively apply some task(s) to a series of inputs. In the simple loop below, we take each of three three values (1,3,6), print a statement with the original value, then negate the value and print another statement with the updated value...
+As Jelmer demonstrated in [last week's session](https://biodash.github.io/codeclub/s03e08_loops/), loops allow you to iteratively apply some task(s) to a series of inputs. In the simple loop below, we take each of the three values (1,3,6), print a statement with the original value, then negate the value and print another statement with the updated value...
 
 <div class="highlight">
 
@@ -399,14 +399,14 @@ Solution (click here)
 
 <div>
 
-You might have noticed that one of the columns is *year*. We don't really need to get the median for that, so use [`lapply()`](https://rdrr.io/r/base/lapply.html) to calculate the medians again, but this time only do it for the first 4 columns. Also, have it return useful names for the list items with the USE.NAMES argument.
+You might have noticed that one of the columns is *year*. We don't really need to get the median for that, so use [`lapply()`](https://rdrr.io/r/base/lapply.html) to calculate the medians again, but this time only do it for the first 4 columns..
 
 <details>
 <summary>
 Hints (click here)
 </summary>
 
-<br> Index the list in the [`lapply()`](https://rdrr.io/r/base/lapply.html) function with square brackets to apply the function to just the first 4 entries. Set USE.NAMES to TRUE.
+<br> Index the list in the [`lapply()`](https://rdrr.io/r/base/lapply.html) function with square brackets to apply the function to just the first 4 entries.
 
 <br>
 
@@ -420,7 +420,7 @@ Solution (click here)
 
 <pre class='chroma'><code class='language-r' data-lang='r'>
 <span class='c'>#lapply option</span>
-<span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='o'>(</span><span class='nv'>pens_list</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>4</span><span class='o'>]</span>, <span class='nv'>median</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span>, USE.NAMES <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='o'>(</span><span class='nv'>pens_list</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>4</span><span class='o'>]</span>, <span class='nv'>median</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 
 <span class='c'>#&gt; $bill_length_mm</span>
 <span class='c'>#&gt; [1] 44.45</span>
@@ -468,7 +468,7 @@ Solution (click here)
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='o'>(</span><span class='nv'>pens_list</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>4</span><span class='o'>]</span>, <span class='nv'>median</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span>, USE.NAMES <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='nf'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='o'>(</span><span class='nv'>pens_list</span><span class='o'>[</span><span class='m'>1</span><span class='o'>:</span><span class='m'>4</span><span class='o'>]</span>, <span class='nv'>median</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 
 <span class='c'>#&gt;    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g </span>
 <span class='c'>#&gt;             44.45             17.30            197.00           4050.00</span>
