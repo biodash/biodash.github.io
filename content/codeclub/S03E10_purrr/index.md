@@ -1,5 +1,5 @@
 ---
-title: "Session S03E10: Functional Programming With purrr functions"
+title: "Session S03E10: Functional Programming With purrr::map() Functions"
 subtitle: "Using functions from tidy's purrr package as an alternative to loops."
 summary: "In this session of Code Club, we'll consider some functions from the purrr package, which can be used as efficient alternatives to for loops and the `apply()` functions we explored in the previous session."  
 authors: [mike-sovic]
@@ -7,7 +7,7 @@ date: "2022-03-21"
 output: hugodown::md_document
 toc: true
 
-rmd_hash: 6577bac7f740462c
+rmd_hash: 98ecd3d279a3bebf
 
 ---
 
