@@ -21,9 +21,6 @@ We have also included these sessions in the [BioDASH calendar](/events/#calendar
 
 | Session     | Date      | Presenter    | Topic                                                            | Topic block              |
 |-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
-| **S03E08**  | Mar 03    | Jelmer       | **Loops**                                                        | "Don't repeat yourself" (DRY) |
-| **S03E09**  | Mar 10    | Mike S.      | **Apply/purrr part I**                                           | "Don't repeat yourself" (DRY) |
-| -           | Mar 17    | -            | _(Spring Break)_                                                 | -                      |
 | **S03E10**  | Mar 24    | Mike S.      | **Apply/purrr part II**                                          | "Don't repeat yourself" (DRY) |
 | **S03E11**  | Mar 31    | Michael B.   | **Writing functions part I**                                     | "Don't repeat yourself" (DRY) |
 | **S03E12**  | Apr 07    | Michael B.   | **Writing functions part II**                                    | "Don't repeat yourself" (DRY) |
@@ -41,6 +38,8 @@ We have also included these sessions in the [BioDASH calendar](/events/#calendar
 | **S03E05**  | Feb 10    | Stephen      | [**Correlation**](/codeclub/s03e05_correlation/)                 | Basic statistics in R    |
 | **S03E06**  | Feb 17    | Michael B.   | [**Data structures and subsetting**](/codeclub/s03e06_datastructures/)**  | Basic statistics in R    |
 | **S03E07**  | Feb 24    | Jelmer       | [**Intro to "DRY" and iteration**](/codeclub/s03e07_vectorization/) | "Don't repeat yourself" (DRY) |
+| **S03E08**  | Mar 03    | Jelmer       | [**Loops**](/codeclub/s03e08_loops/)                             | "Don't repeat yourself" (DRY) |
+| **S03E09**  | Mar 10    | Mike S.      | [**Apply/purrr part I**](/codeclub/s03e09_apply/)               | "Don't repeat yourself" (DRY) |
 
 <br>
 
