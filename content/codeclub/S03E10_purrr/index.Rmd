@@ -1,0 +1,284 @@
+---
+title: "Session S03E10: Functional Programming With purrr functions"
+subtitle: "Using functions from tidy's purrr package as an alternative to loops."
+summary: "In this session of Code Club, we'll consider some functions from the purrr package, which can be used as efficient alternatives to for loops and the `apply()` functions we explored in the previous session."  
+authors: [mike-sovic]
+date: "2022-03-21"
+output: hugodown::md_document
+toc: true
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+------------------------------------------------------------------------
+
+## Session Goals
+
+-  List and differentiate between some useful purrr functions.
+-  Compare purrr functions to the `apply()` functions from last session. 
+-  Use purrr functions as alternatives to loops.
+
+-----
+
+## Highlights From Last Session
+
+In the previous session, we explored some functions from the `apply()` family of functions, which provided alternatives to writing loops to iteratively apply some function to the elements of a data structure such as a vector, list, or data frame. Let's start with a simple list with three entries...
+
+### Generate An Example List
+
+```{r}
+our_list <- list(A = 1:10, B = 11:20, C = 21:30)
+our_list
+```
+
+
+We could use a loop to calculate the mean for each of the entries. 
+
+### Calculate Mean For Each List Entry With A Loop
+
+```{r}
+results_loop <- list()
+
+for (i in 1:length(our_list)) {
+  results_loop[i] <- mean(our_list[[i]], na.rm = TRUE)
+}
+
+results_loop
+```
+
+Like we saw last week, `lapply()` gave us an alternative way to do the same thing, and with simpler and clearer code...
+
+### Calculate Mean For Each Variable With `lapply()`
+```{r}
+res_lapply <- lapply(our_list, mean, na.rm = TRUE)
+res_lapply
+```
+
+I mentioned in the previous session that when working with the `apply()` functions, it's important to think about the structure/type of data going in to the function, and also that getting returned by the function. We saw that the `lapply()` example above returned a list, and can confirm that with...
+
+```{r}
+class(res_lapply)
+```
+
+We also saw that `sapply()` was very similar to `lapply()`, but instead of a list being returned, the results were condensed down to a vector - specifically in this case, a numeric vector...
+
+```{r}
+res_sapply <- sapply(our_list, mean, na.rm = TRUE)
+res_sapply
+class(res_sapply)
+```
+
+## `map()` Functions From *purrr*
+
+In this session, we're going to look at some of the `map()` functions from the *purrr* package, which is part of the *tidyverse*. In some cases, these functions return the same results as their `apply()` analogues. As an example, compare the `map()` function to `lapply()`...
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+res_map <- map(our_list, mean, na.rm = TRUE)
+res_map
+```
+
+So why might you want to use the `map()` functions? There are two primary reasons...
+
+ 1. The syntax/names of the `map()` functions might be easier to understand and make for clearer code.
+ 2. The `map()` family provides additional functionality that might at best be cumbersome to achieve with the base R approaches. We won't get to this in this session, but see the `imap()` function for one example.
+ 
+Ultimately, much of the value in using these `map()` functions gets realized when you start writing your own custom functions, which is something we haven't done yet, but will be doing soon. For now, we'll work with some fairly basic examples just to get introduced to some of the syntax and usage of these functions. There's a *purrr* cheatsheet that you might find helpful available at https://raw.githubusercontent.com/rstudio/cheatsheets/main/purrr.pdf
+
+ 
+We'll start working with `map()` in the first breakout session... 
+
+### Breakout Exercises 1
+
+Like with the first breakout exercise from last week, below I'm pulling out a subset of the numeric variables available in the *penguins* data frame and reformating them into a list named *pens_list* that we'll use to practice with `map()` functions. 
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(palmerpenguins)
+pens_list <- select_if(penguins, is.numeric) %>% select(-year) %>% as.list()
+str(pens_list)
+```
+
+<div class="alert puzzle">
+<div>
+
+Use `map()` to calculate the mean value for each of the variables/entries in *pens_list*. What type of results are returned (i.e. is it a list, vector, data frame, etc)?
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Apply the `mean()` function with `map()`. Remember there are NA's in the data - see the help for `mean()` for dealing with those. You can view the result, or try `class()` to get the type of object returned. 
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+res_map <- map(pens_list, mean, na.rm = TRUE)
+res_map
+class(res_map)
+```
+</details>
+
+</div>
+</div>
+
+<div class="alert puzzle">
+<div>
+
+As we saw last week, and in the example above, `sapply()` is similar to `lapply()`, but returns results as a vector instead of as a list. Take a look at the help for `map()` and find a function that will return a vector of doubles (numerics) and apply it to the *pens_list* object like you just did with `map()`. Then find another function that will return the results as a data frame.
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Try the `map_dbl()` and `map_dfr()` functions.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+map_vec <- map_dbl(pens_list, mean, na.rm = TRUE)
+map_vec
+
+map_df <- map_dfr(pens_list, mean, na.rm = TRUE)
+map_df
+
+```
+<br>
+
+</details>
+
+</div>
+</div>
+
+Remember that with `map()`, the input is a single list or vector, and the function is applied to each element of the list of vector. A number of variants of the `map()` function are available that define the type of output that gets returned.
+
+## `map2()`
+
+While `map()` allowed us to apply some function to the elements of a single list or vector, `map2()` lets us apply some operation to paired elements from two lists (or vectors). 
+
+```{r}
+our_list1 <- list(1:10)
+our_list1
+our_list2 <- list(11:20)
+our_list2
+```
+
+Here's we'll use `map2()` to get the sums of corresponding pairs of elements from the two lists...
+
+```{r}
+map2(our_list1, our_list2, ~ .x + .y)
+```
+
+The tilde (~) in the third argument indicates a formula that will be converted to a function and applied. It's actually kind of a short-hand way to write and apply a custom function, but since we haven't gotten in to writing our own functions yet (though that's coming soon!), for now, just remember that the function passed to `map2()` has to take two arguments, which are defined as '.x' and '.y' (elements in corresponding positions of the first and second lists or vectors, respectively) in each iteration of the function. 
+
+### Breakout Exercises 2
+
+Below are two vectors containing bill-measurement data from the penguins data frame (bill length and bill depth).
+
+```{r, message = FALSE, warning = FALSE}
+bill_length_mm <- pens_list$bill_length_mm
+bill_depth_mm <- pens_list$bill_depth_mm
+```
+
+<div class="alert puzzle">
+<div>
+
+Use `map2()` to calculate the bill ratio for each penguin (length/depth). Output the result as a vector containing doubles (numerics), and save it as the object *bill_ratios*.
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Apply the `map2_dbl()` function and use the third argument to define a formula that divides the length value by the width value. 
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+bill_ratios <- map2_dbl(bill_length_mm, bill_depth_mm, ~ .x / .y)
+```
+</details>
+
+</div>
+</div>
+
+
+<div class="alert puzzle">
+<div>
+
+How many of the penguins in the dataset have bill ratios greater than 3?
+
+<details> <summary> Hints (click here) </summary>
+
+<br> Logicals in R can be interpreted as 1/0 (TRUE/FALSE). Try using `sum()` to sum over the results of a logical expression to get the number of ratios > 3. Alternatively, you could index *bill_ratios* to retain just the values > 3, and then get the length of that vector. Remember that there are NA's mixed in - how does this affect each of these two approaches?
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+sum(bill_ratios > 3, na.rm = TRUE)
+
+# OR
+
+bill_ratios[bill_ratios > 3] %>% na.omit() %>% length()
+```
+</details>
+
+</div>
+</div>
+
+
+### Bonus
+
+<div class="alert puzzle">
+<div>
+
+Here's one more dataset that's based on the *penguins* data (though much of it is made up). It represents measurements taken for each of three penguins over three years. *List1* has data for year 1, *List2* has data for year 2, and *List3* has data for year 3. 
+
+```{r}
+yr1_list <- list("Pen_1" = c("bill_length_mm" = 39.1, "bill_depth_mm" = 18.7, "flipper_length_mm" = 181, "body_mass_g" = 3750),
+             "Pen_2" = c("bill_length_mm" = 39.5, "bill_depth_mm" = 17.4, "flipper_length_mm" = 186, "body_mass_g" = 3800),
+             "Pen_3" = c("bill_length_mm" = 40.3, "bill_depth_mm" = 18, "flipper_length_mm" = 195, "body_mass_g" = 3250))
+
+yr2_list <- list("Pen_1" = c("bill_length_mm" = 39.8, "bill_depth_mm" = 18.9, "flipper_length_mm" = 184, "body_mass_g" = 3767),
+             "Pen_2" = c("bill_length_mm" = 38.7, "bill_depth_mm" = 17.2, "flipper_length_mm" = 186, "body_mass_g" = 3745),
+             "Pen_3" = c("bill_length_mm" = 40.7, "bill_depth_mm" = 18.6, "flipper_length_mm" = 217, "body_mass_g" = 3470))
+
+yr3_list <- list("Pen_1" = c("bill_length_mm" = 40.2, "bill_depth_mm" = 19.3, "flipper_length_mm" = 188, "body_mass_g" = 3790),
+             "Pen_2" = c("bill_length_mm" = 38.4, "bill_depth_mm" = 17.0, "flipper_length_mm" = 187, "body_mass_g" = 3710),
+             "Pen_3" = c("bill_length_mm" = 40.9, "bill_depth_mm" = 18.9, "flipper_length_mm" = 228, "body_mass_g" = 3493))
+
+```
+
+Try calculating the average value for each of the variables for each penguin over the three years. Output the results as a data frame.
+
+<details> <summary> Hints (click here) </summary>
+
+<br> 
+
+Take a look at the help for `pmap()`. It has some similarities to `map2()`, but instead of applying to 2 lists, `pmap()` works with 3 or more. Notice the names of the lists the function will be applied to are given as a single argument (a list). Provide a formula to calculate the mean. Unlike the `map2()` function, which only works on functions that take 2 arguments (denoted '.x' and '.y'), the number of arguments passed to the function used in `pmap()` can be three or more, and they are denoted '..1', '..2', '..3', etc.
+
+<br>
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+pmap_dfr(list(yr1_list, yr2_list, yr3_list), ~ (..1 + ..2 + ..3)/3)
+```
+</details>
+
+</div>
+</div>
