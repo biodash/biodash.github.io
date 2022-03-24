@@ -7,7 +7,7 @@ date: "2022-03-21"
 output: hugodown::md_document
 toc: true
 
-rmd_hash: 98ecd3d279a3bebf
+rmd_hash: 243edac4b6d81d54
 
 ---
 
@@ -232,7 +232,7 @@ As we saw last week, and in the example above, [`sapply()`](https://rdrr.io/r/ba
 Hints (click here)
 </summary>
 
-<br> Try the `map_dbl()` and `map_dfr()` functions.
+<br> Try the `map_dbl()` and `map_dfc()` functions.
 
 <br>
 
@@ -251,7 +251,7 @@ Solution (click here)
 <span class='c'>#&gt;          43.92193          17.15117         200.91520        4201.75439</span>
 
 
-<span class='nv'>map_df</span> <span class='o'>&lt;-</span> <span class='nf'>map_dfr</span><span class='o'>(</span><span class='nv'>pens_list</span>, <span class='nv'>mean</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<span class='nv'>map_df</span> <span class='o'>&lt;-</span> <span class='nf'>map_dfc</span><span class='o'>(</span><span class='nv'>pens_list</span>, <span class='nv'>mean</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 <span class='nv'>map_df</span>
 
 <span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 x 4</span></span>
@@ -421,7 +421,7 @@ Here's one more dataset that's based on the *penguins* data (though much of it i
 
 </div>
 
-Try calculating the average value for each of the variables for each penguin over the three years. Output the results as a data frame.
+Try calculating the average value for each of the variables for each penguin over the three years. Output the results as a data frame. Note you'll need an new `map()` function that we haven't used yet. Take a look at the help for `map2()`, or the *purrr* cheatsheet, to find a similar function that works on more than two lists (takes functions with 3 or more required arguments).
 
 <details>
 <summary>
@@ -430,7 +430,7 @@ Hints (click here)
 
 <br>
 
-Take a look at the help for `pmap()`. It has some similarities to `map2()`, but instead of applying to 2 lists, `pmap()` works with 3 or more. Notice the names of the lists the function will be applied to are given as a single argument (a list). Provide a formula to calculate the mean. Unlike the `map2()` function, which only works on functions that take 2 arguments (denoted '.x' and '.y'), the number of arguments passed to the function used in `pmap()` can be three or more, and they are denoted '..1', '..2', '..3', etc.
+The `pmap()` can be used here. It has some similarities to `map2()`, but instead of applying to 2 lists, `pmap()` works with 3 or more. Notice the names of the lists the function will be applied to are given as a single argument (a list). Provide a formula to calculate the mean. Unlike the `map2()` function, which only works on functions that take 2 arguments (denoted '.x' and '.y'), the number of arguments passed to the function used in `pmap()` can be three or more, and they are denoted '..1', '..2', '..3', etc.
 
 <br>
 
