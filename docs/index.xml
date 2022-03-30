@@ -5,12 +5,359 @@
     <link>https://biodash.github.io/</link>
       <atom:link href="https://biodash.github.io/index.xml" rel="self" type="application/rss+xml" />
     <description>BioDASH</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Mon, 21 Mar 2022 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Mon, 28 Mar 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png</url>
       <title>BioDASH</title>
       <link>https://biodash.github.io/</link>
     </image>
+    
+    <item>
+      <title>Session S03E11: Writing your own Functions</title>
+      <link>https://biodash.github.io/codeclub/s03e11_functions/</link>
+      <pubDate>Mon, 28 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/s03e11_functions/</guid>
+      <description>&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;new-to-code-club&#34;&gt;New To Code Club?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;First, check out the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has some pointers that might be helpful if you&amp;rsquo;re new to R or RStudio.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Please open RStudio before Code Club to test things out &amp;ndash; if you run into issues, join the Zoom call early and we&amp;rsquo;ll troubleshoot.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;session-goals&#34;&gt;Session Goals&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Learn the basic &lt;strong&gt;template&lt;/strong&gt; of a function in R.&lt;/li&gt;
+&lt;li&gt;Learn another way to avoid repetition in your code by creating your own functions.&lt;/li&gt;
+&lt;li&gt;Learn all the advantages of using functions instead of copied code blocks.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;We&amp;rsquo;ll be using &lt;a href=&#34;https://tibble.tidyverse.org/reference/tibble.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tibble()&lt;/code&gt;&lt;/a&gt; from the tidyverse package, so we need to load that first.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching packages&lt;/span&gt; ─────────────────────────────────────── tidyverse 1.3.1 ──&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;ggplot2&lt;/span&gt; 3.3.5     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;purrr  &lt;/span&gt; 0.3.4&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tibble &lt;/span&gt; 3.1.6     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr  &lt;/span&gt; 1.0.8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tidyr  &lt;/span&gt; 1.2.0     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;stringr&lt;/span&gt; 1.4.0&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;readr  &lt;/span&gt; 2.1.2     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;forcats&lt;/span&gt; 0.5.1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Conflicts&lt;/span&gt; ────────────────────────────────────────── tidyverse_conflicts() ──&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;filter()&lt;/span&gt; masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::filter()&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;    masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::lag()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;what-is-an-r-function&#34;&gt;What is an R function?&lt;/h2&gt;
+&lt;p&gt;A good way to understand this is to translate knowledge you already have from math directly into R. &amp;lsquo;Once upon a time&amp;rsquo; you probably met something like this:&lt;/p&gt;
+&lt;p&gt;$$y = 2x +3$$&lt;/p&gt;
+&lt;p&gt;which relates an &lt;code&gt;expression&lt;/code&gt; involving $x$ (on the right hand side) to an equivalent value $y$.&lt;/p&gt;
+&lt;p&gt;In mathematics, a function is just a &amp;lsquo;rule&amp;rsquo; that relates &lt;code&gt;inputs&lt;/code&gt; to &lt;code&gt;outputs&lt;/code&gt; (with certain constraints).&lt;/p&gt;
+&lt;p&gt;Later you may have come across this formulation:&lt;/p&gt;
+&lt;p&gt;$$f(x) = 2x +3$$&lt;/p&gt;
+&lt;p&gt;Now the function has a name &lt;code&gt;f()&lt;/code&gt; (not a particularly good one, however).&lt;/p&gt;
+&lt;p&gt;You probably recall that $x$ is called the &lt;code&gt;argument&lt;/code&gt; of the function. So how do we translate this into R?&lt;/p&gt;
+&lt;p&gt;The crucial thing here is the R &lt;code&gt;function()&lt;/code&gt; operator:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;f&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;function&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;  &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We &lt;strong&gt;define&lt;/strong&gt; the function using this &lt;code&gt;function()&lt;/code&gt; operator, and also &lt;strong&gt;assign&lt;/strong&gt; the function to a name (here &lt;code&gt;f&lt;/code&gt;) using &amp;lt;-, just like assigning any other value to an object. This means that now &lt;code&gt;f&lt;/code&gt; is a function object: just like you create vector objects, or lists, or data frame objects, when you assign them to names. Notice too that in RStudio they appear in the Global Environment in a special &amp;lsquo;Functions&amp;rsquo; section, and clicking on them shows the code of the function. This means that if you have a large file with many functions defined, you don&amp;rsquo;t have to go back searching for the function definition in the code itself.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Terminology&lt;/strong&gt; (gotta have it!)&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;x&lt;/code&gt; here is also called the &lt;strong&gt;argument&lt;/strong&gt; to the function. In this case there is just one, there could be more.&lt;/p&gt;
+&lt;p&gt;The expression inside the curly braces: $(2 * x) + 3$, is called the &lt;strong&gt;body&lt;/strong&gt; of the function.&lt;/p&gt;
+&lt;p&gt;Here is the basic template of any function in R:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arg1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;arg2...&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;body&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The arguments go inside (&amp;hellip;). The body is the block of code you want to reuse, and it&amp;rsquo;s contained in curly brackets {&amp;hellip;}.&lt;/p&gt;
+&lt;p&gt;Giving good names to functions can be tricky. You to don&amp;rsquo;t want to be too explicit, and you don&amp;rsquo;t want to be too terse (&lt;code&gt;f()&lt;/code&gt; is too terse, btw). We&amp;rsquo;ll return to this below when we write fancier functions.&lt;/p&gt;
+&lt;p&gt;But now we want to actually use the function to compute an output: this is termed &lt;strong&gt;calling&lt;/strong&gt; the function, by &lt;strong&gt;passing in&lt;/strong&gt; a specific value. That specific value gets &lt;strong&gt;assigned&lt;/strong&gt; to the argument inside the function.&lt;/p&gt;
+&lt;p&gt;Here is a trivial example, assigning the value $1$ to the argument:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;f&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 5&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;So &lt;em&gt;after&lt;/em&gt; calling the function in this way &lt;code&gt;x&lt;/code&gt; is instantiated to &lt;code&gt;1&lt;/code&gt;, and what is really happening is:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span class=&#34;n&#34;&gt;f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;3&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Easy-peasy.&lt;/p&gt;
+&lt;p&gt;But wait! if you simply call a function, its &lt;strong&gt;output&lt;/strong&gt; (which you are probably interested in) just goes away. If you want to save the output of the function, to be used later, you need to &lt;em&gt;assign the output to a variable&lt;/em&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;my_output&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;f&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;my_output&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 5&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This variable will now appear in the Values section of your Environment pane in RStudio, and can be reused in your subsequent code.&lt;/p&gt;
+&lt;p&gt;But wait! remember R data-structures? What if we pass in a vector as the argument?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;f&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]  5  7  9 11 13&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Woohoo! In R, the functions you write yourself are also automagically &amp;lsquo;vectorized&amp;rsquo;: vector in, vector out.&lt;/p&gt;
+&lt;p&gt;But wait! how about a list???&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;f&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/list.html&#39;&gt;list&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; Error in 2 * x: non-numeric argument to binary operator&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Whoops! Looks like R is vectorized over vectors :). If we want to process our new function over a list we&amp;rsquo;ll have to do something more fancy, like a for-loop. We&amp;rsquo;ll see how to incorporate our own functions into for-loops, building on previous sessions, next week.&lt;/p&gt;
+&lt;h2 id=&#34;breakout-rooms-write-your-own-functions&#34;&gt;Breakout rooms, write your own functions&lt;/h2&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;Write a function from scratch that computes the square of a single input. Give it a sensible name, and run it on some test input numbers to make sure it works.&lt;/p&gt;
+&lt;p&gt;Make sure to look in the Functions pane of the RStudio Environment tab to check it is assigned correctly.&lt;/p&gt;
+&lt;p&gt;Is your function vectorized? Run it on a simple vector argument to check.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt;The relevant R exponentiation operator is `**`. &lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;square&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;function&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;**&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;square&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 4&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;square&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]  1  4  9 16&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;The function in Exercise 1 has a single argument, the base, and raises it to the exponent 2.&lt;/p&gt;
+&lt;p&gt;Write a function with two arguments, which includes both a base and exponent and try it out.&lt;/p&gt;
+&lt;p&gt;Is your function vectorized? Run it on a simple base vector to check.&lt;/p&gt;
+&lt;p&gt;Bonus: is it vectorized on both the base and the exponent?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;exponential&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;function&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;e&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;**&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;e&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;exponential&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 1024&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;exponential&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]       1    1024   59049 1048576&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;exponential&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]   1   4  27 256&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;exponential&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1]  1  4  3 16&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;exercise-3&#34;&gt;Exercise 3&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;R does not have a built-in function for calculating the &lt;a href=&#34;https://en.m.wikipedia.org/wiki/Coefficient_of_variation&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;coefficient of variation&lt;/a&gt;, aka the &lt;strong&gt;RSD&lt;/strong&gt; (relative standard deviation). This is defined as &lt;em&gt;the ratio of the standard deviation to the mean&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Create a function that computes this, and test it on a couple of vectors.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt;The relevant R built-in functions are &lt;code&gt;sd()&lt;/code&gt; and &lt;code&gt;mean()&lt;/code&gt;. The function should have one argument, which is assumed to be a vector. &lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;coefficient_of_variation&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;function&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;v&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/sd.html&#39;&gt;sd&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;v&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;v&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;coefficient_of_variation&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0.5504819&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;coefficient_of_variation&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;15&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;175&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0.4907454&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;why-write-functions-spoiler-alert-dry&#34;&gt;Why write functions? (Spoiler alert, DRY&amp;hellip;)&lt;/h2&gt;
+&lt;h3 id=&#34;copying-your-code-is-not-good&#34;&gt;Copying your code is &lt;em&gt;not good&lt;/em&gt;&lt;/h3&gt;
+&lt;p&gt;The first motivation for writing a function is when you find yourself cut-and-pasting code blocks with slight alterations each time.&lt;/p&gt;
+&lt;p&gt;Say we have the following toy tidyverse data frame, where each column is a vector of 10 random numbers from a normal distribution, with &lt;code&gt;mean = 0&lt;/code&gt; and &lt;code&gt;sd = 1&lt;/code&gt; (the defaults for &lt;code&gt;rnorm&lt;/code&gt;):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tibble.tidyverse.org/reference/tibble.html&#39;&gt;tibble&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;
+  a &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/Normal.html&#39;&gt;rnorm&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+  b &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/Normal.html&#39;&gt;rnorm&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+  c &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/Normal.html&#39;&gt;rnorm&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+  d &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/Normal.html&#39;&gt;rnorm&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 10 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;          a       b       c      d&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;      &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;  &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.88&lt;/span&gt;    0.727  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.468&lt;/span&gt;   1.27 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt;  0.039&lt;span style=&#39;text-decoration: underline;&#39;&gt;9&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.789&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;2.41&lt;/span&gt;    0.376&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.410&lt;/span&gt;   1.86    1.05   -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.618&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.266&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.204&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.715&lt;/span&gt;   0.279&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt;  0.244  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.067&lt;/span&gt;&lt;span style=&#39;color: #BB0000; text-decoration: underline;&#39;&gt;3&lt;/span&gt;  0.884  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.340&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt;  0.064&lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.09&lt;/span&gt;    0.152  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.840&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt;  0.749  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.494&lt;/span&gt;   0.681   0.341&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.35&lt;/span&gt;    0.208   0.077&lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;  2.15 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.17&lt;/span&gt;    0.088&lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.829&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.174&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt;  0.733   1.05    0.808   0.190&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;In previous Code Clubs we&amp;rsquo;ve seen how you can apply a built-in function like &lt;code&gt;mean&lt;/code&gt; to each column using a &lt;code&gt;for&lt;/code&gt; loop or &lt;code&gt;lapply&lt;/code&gt;. But say we wanted to do something a bit fancier that is not part of core R. For example, we can &lt;em&gt;normalize&lt;/em&gt; the values in a column so they range from 0 to 1 using the following code block:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 0.0000000 0.7297073 0.5582684 0.6132731 0.8073051 0.7390605 1.0000000&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] 0.1988908 0.2699569 0.9939179&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This code is a literal translation of the mathematical formula for normalization:&lt;/p&gt;
+&lt;p&gt;$$z_{i} = \frac{x_{i} - min(x)}{max(x)-min(x)}$$&lt;/p&gt;
+&lt;p&gt;OK, so how can we do this for each column? Here is a first attempt:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 10 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;        a       b     c      d&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;  &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; 0      0.246  0.562 0.706 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; 0.730 -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.267&lt;/span&gt;  0     0.407 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; 0.558  0.630  1     0.074&lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; 0.613 -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.069&lt;/span&gt;&lt;span style=&#39;color: #BB0000; text-decoration: underline;&#39;&gt;1&lt;/span&gt; 0.490 0.375 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; 0.807 -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.022&lt;/span&gt;&lt;span style=&#39;color: #BB0000; text-decoration: underline;&#39;&gt;8&lt;/span&gt; 0.952 0.168 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; 0.739 -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.370&lt;/span&gt;  0.741 0     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; 1     -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.167&lt;/span&gt;  0.894 0.396 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; 0.199  0.070&lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt; 0.719 1     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; 0.270  0.029&lt;span style=&#39;text-decoration: underline;&#39;&gt;9&lt;/span&gt; 0.458 0.223 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; 0.994  0.356  0.930 0.345&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This works, but it caused me mental anguish to type it out. Even with cut and paste! All those manual textual substitutions!! And manual data entry is prone to mistakes, especially repetitive tasks like this. And say you had 1,000 columns&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;And it didn&amp;rsquo;t work!!&lt;/strong&gt; Honestly, I swear that mistake was totally real: I didn&amp;rsquo;t notice it until I looked at the output. Can you spot the mistake?&lt;/p&gt;
+&lt;p&gt;It turns out R has a &lt;code&gt;range&lt;/code&gt; function that returns the minimum and maximum of a vector, which somewhat simplifies the coding:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/range.html&#39;&gt;range&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The result is a vector like &lt;code&gt;c(-1.2129504, 2.1011248)&lt;/code&gt; (it varies run to run, since the columns values are random) which we can then index, and so we only do the min/max computation once for each column, instead of three times, so we get the following block of code for each column:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/range.html&#39;&gt;range&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Does this help?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/range.html&#39;&gt;range&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/range.html&#39;&gt;range&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/range.html&#39;&gt;range&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/range.html&#39;&gt;range&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Still pretty horrible, and arguably worse since we add a line for each column.&lt;/p&gt;
+&lt;p&gt;How can we distill this into a function to avoid all that repetition?&lt;/p&gt;
+&lt;h3 id=&#34;encapsulation-of-code-in-a-function&#34;&gt;Encapsulation of code in a function&lt;/h3&gt;
+&lt;p&gt;The secret to function writing is abstracting the &lt;em&gt;constant&lt;/em&gt; from the &lt;em&gt;variable&lt;/em&gt;. (Using the &lt;code&gt;range&lt;/code&gt; function does throw into sharper relief what is constant and what is varying at least.) The constant part is the &lt;strong&gt;body&lt;/strong&gt; of the function: the template or boiler-plate you use over and over again. The variable parts are the &lt;strong&gt;arguments&lt;/strong&gt; of the function.&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s what it looks like in this case:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;normalize&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;function&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/range.html&#39;&gt;range&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Pretty cool, right? Here &lt;code&gt;normalize&lt;/code&gt; is the descriptive name we give the function.&lt;/p&gt;
+&lt;p&gt;In the current case the argument of our function is a column vector pulled from the data frame. But we can potentially use this function on &lt;em&gt;any&lt;/em&gt; vector, so let&amp;rsquo;s not be too specific. The more generally you can write your function, the more useful it will be.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;test_vec&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;3&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;7&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;pi&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;8.657&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;80&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;test_vec&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0.000000000 0.051948052 0.001838866 0.073467532 1.000000000&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;A couple of things to note:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Including that extra line &lt;code&gt;rng &amp;lt;- range(x)&lt;/code&gt; is no longer a problem, since we just type it once. If you are typing things out over and over you might prefer brevity. &lt;em&gt;When you write a function, you should prefer clarity.&lt;/em&gt; It&amp;rsquo;s good practice to break the the function down into logical steps, and name them properly. It&amp;rsquo;s much easier for others to &amp;lsquo;read&amp;rsquo; your function, and much easier for you when you come back to it in a couple of years. This is the principle of making your code &amp;lsquo;self-annotated&amp;rsquo;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Functions should be simple, clear, and do &lt;em&gt;one thing well&lt;/em&gt;. You create programs by combining simple functions in a modular manner.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Our original horrible code can now be rewritten as:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Which is an improvement, but the real power comes from the fact that we can use our new function in &lt;code&gt;for&lt;/code&gt; loops and &lt;code&gt;apply&lt;/code&gt; statements. We&amp;rsquo;ll see how to do that next week.&lt;/p&gt;
+&lt;p&gt;By writing our own functions, we&amp;rsquo;ve effectively extended what R can do. And this is all that packages are: libraries of new functions that extend the capabilities of base R. In fact, if there are functions you design for your particular subject area and find yourself using all the time, you can make your own package and load it, and all your favorite functions will be right there (but that&amp;rsquo;s for another day&amp;hellip;)&lt;/p&gt;
+&lt;h3 id=&#34;exercise-4-functions-are-not-just-for-arithmetic&#34;&gt;Exercise 4: Functions are not just for arithmetic!&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;The &lt;a href=&#34;https://en.m.wikipedia.org/wiki/FASTQ_format&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;fastq&lt;/a&gt; file format for DNA sequencing uses a letter/punctuation code for the &lt;em&gt;quality of the base&lt;/em&gt; called at each position (the fourth line below) which is in one-to-one relationship to the bases in the second line:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;@SIM:1:FCX:1:15:6329:1045 1:N:0:2
+TCGCACTCAACGCCCTGCATATGACAAGACAGAATC
++
+&amp;lt;&amp;gt;;##=&amp;gt;&amp;lt;9=AAAAAAAAAA9#:&amp;lt;#&amp;lt;;&amp;lt;&amp;lt;&amp;lt;????#=
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To translate a letter code into a numerical &lt;a href=&#34;https://en.m.wikipedia.org/wiki/Phred_quality_score&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;phred quality score&lt;/a&gt; we have to do two things: (i) translate the &lt;strong&gt;character&lt;/strong&gt; to an &lt;strong&gt;integer&lt;/strong&gt; using the &lt;a href=&#34;http://www.asciitable.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ASCII code&lt;/a&gt; look up table (ii) subtract 33 from that value (!). (High scores are good).&lt;/p&gt;
+&lt;p&gt;For the first step, R has a built-in function that converts a character into an integer according to that table, for example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/utf8Conversion.html&#39;&gt;utf8ToInt&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;!&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 33&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Write a function &lt;code&gt;phred_score()&lt;/code&gt; that computes the phred score for any character. Check that it returns 0 for &amp;ldquo;!&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Is this function vectorized? Apply your function to our example string:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;&amp;gt;;##=&amp;gt;&amp;lt;9=AAAAAAAAAA9#:&amp;lt;#&amp;lt;;&amp;lt;&amp;lt;&amp;lt;????#=&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;to convert it to a vector of phred quality scores.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;p&gt;&lt;br&gt;Remember when you pass the value to this function it has to be an &lt;em&gt;R character string&lt;/em&gt;, which needs to be surrounded by quotes.&lt;/p&gt;
+&lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;phred_score&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;function&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;character&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/utf8Conversion.html&#39;&gt;utf8ToInt&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;character&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;33&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;phred_score&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;!&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 0&lt;/span&gt;
+&lt;span class=&#39;nf&#39;&gt;phred_score&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;&amp;lt;&amp;gt;;##=&amp;gt;&amp;lt;9=AAAAAAAAAA9#:&amp;lt;#&amp;lt;;&amp;lt;&amp;lt;&amp;lt;????#=&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 27 29 26  2  2 28 29 27 24 28 32 32 32 32 32 32 32 32 32 32 24  2 25 27  2&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [26] 27 26 27 27 27 30 30 30 30  2 28&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Note: &amp;ldquo;!&amp;rdquo; is the first &lt;strong&gt;printing character&lt;/strong&gt; in the ASCII table. The characters 0 through 32 were used historically to control the behavior of teleprinters: &amp;ldquo;the original ASCII specification included 33 non-printing control codes which originated with Teletype machines; most of these are now obsolete&amp;rdquo;. If the ASCII table started with &amp;ldquo;!&amp;rdquo; instead of &lt;code&gt;NUL&lt;/code&gt; we wouldn&amp;rsquo;t need the correction of subtracting 33, and &amp;ldquo;!&amp;rdquo; would translate to 0. &lt;br&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+</description>
+    </item>
     
     <item>
       <title>Session S03E10: Functional Programming With purrr functions</title>
@@ -6605,7 +6952,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-647381592&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-912867543&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6615,7 +6962,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-647381592&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-912867543&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6802,7 +7149,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-275349861&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-653472891&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6812,7 +7159,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-275349861&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-653472891&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6848,7 +7195,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-628345791&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-739461825&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6858,7 +7205,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-628345791&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-739461825&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6890,7 +7237,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-137549628&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-178295346&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6900,7 +7247,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-137549628&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-178295346&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -6931,7 +7278,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-865713249&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-387452619&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6941,7 +7288,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-865713249&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-387452619&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7075,7 +7422,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-147295683&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-196724538&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7085,7 +7432,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-147295683&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-196724538&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7142,7 +7489,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-875439126&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-274598361&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7152,7 +7499,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-875439126&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-274598361&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -14872,7 +15219,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-281375946&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-527936814&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -14882,7 +15229,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-281375946&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-527936814&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -14958,7 +15305,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-518394267&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-356147928&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -14968,7 +15315,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-518394267&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-356147928&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -14989,7 +15336,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-358246719&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-239714685&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -14999,7 +15346,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-358246719&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-239714685&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15026,7 +15373,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-536491287&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-148753692&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15036,7 +15383,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-536491287&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-148753692&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15063,7 +15410,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-682571934&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-524718396&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15073,7 +15420,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-682571934&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-524718396&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15096,7 +15443,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-351482967&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-291734658&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15106,7 +15453,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-351482967&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-291734658&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15147,7 +15494,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-342189657&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-852973146&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15157,7 +15504,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-342189657&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-852973146&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15176,7 +15523,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-957814263&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-248671953&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15186,7 +15533,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-957814263&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-248671953&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15212,7 +15559,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-673128549&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-379625841&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15222,7 +15569,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-673128549&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-379625841&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15252,7 +15599,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-718956234&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-251798634&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15262,7 +15609,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-718956234&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-251798634&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15476,7 +15823,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-193846275&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-471839562&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15486,7 +15833,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-193846275&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-471839562&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15547,7 +15894,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-419865237&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-652379481&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15557,7 +15904,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-419865237&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-652379481&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15632,7 +15979,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-273569814&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-821674953&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15642,7 +15989,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-273569814&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-821674953&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
