@@ -13,7 +13,10 @@ We will meet on **Thursdays at 2 pm** starting on January 13th, 2022.
 [Sign up using the form](/codeclub-about/#sign-up)!
 
 We will be meeting over Zoom (sign up for the link),
-but you can also join Jessica in person in Howlett 340.
+but you can also join us in person:
+
+- In Columbus, Jessica will be in Howlett 340.
+- In Wooster, Jelmer will be in Selby 203.
 
 We have also included these sessions in the [BioDASH calendar](/events/#calendar).
 
@@ -21,11 +24,9 @@ We have also included these sessions in the [BioDASH calendar](/events/#calendar
 
 | Session     | Date      | Presenter    | Topic                                                            | Topic block              |
 |-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
-| **S03E10**  | Mar 24    | Mike S.      | **Apply/purrr part II**                                          | "Don't repeat yourself" (DRY) |
-| **S03E11**  | Mar 31    | Michael B.   | **Writing functions part I**                                     | "Don't repeat yourself" (DRY) |
-| **S03E12**  | Apr 07    | Michael B.   | **Writing functions part II**                                    | "Don't repeat yourself" (DRY) |
-| **S03E13**  | Apr 14    | TBA          | TBA                                                              | TBA                      |
-| **S03E14**  | Apr 21    | TBA          | TBA                                                              | TBA                      |
+| -          | Apr 07    | -             | _No Code Club this week_                                         |                          |
+| **S03E11**  | Apr 14    | Michael B.   | [**Writing functions part I**](/codeclub/s03e11_functions/)      | "Don't repeat yourself" (DRY) |
+| **S03E12**  | Apr 21    | Michael B.   | **Writing functions part II**                                    | "Don't repeat yourself" (DRY) |
 
 ### Previous sessions
 
@@ -36,10 +37,11 @@ We have also included these sessions in the [BioDASH calendar](/events/#calendar
 | **S03E03**  | Jan 27    | Jelmer       | [**Principal Component Analysis**](/codeclub/s03e03_pca/)        | Basic statistics in R    |
 | **S03E04**  | Feb 03    | Jessica      | [**ANOVA part II**](/codeclub/s03e04_anova2/)                    | Basic statistics in R    |
 | **S03E05**  | Feb 10    | Stephen      | [**Correlation**](/codeclub/s03e05_correlation/)                 | Basic statistics in R    |
-| **S03E06**  | Feb 17    | Michael B.   | [**Data structures and subsetting**](/codeclub/s03e06_datastructures/)**  | Basic statistics in R    |
+| **S03E06**  | Feb 17    | Michael B.   | [**Data structures and subsetting**](/codeclub/s03e06_datastructures/)  | Basic statistics in R    |
 | **S03E07**  | Feb 24    | Jelmer       | [**Intro to "DRY" and iteration**](/codeclub/s03e07_vectorization/) | "Don't repeat yourself" (DRY) |
 | **S03E08**  | Mar 03    | Jelmer       | [**Loops**](/codeclub/s03e08_loops/)                             | "Don't repeat yourself" (DRY) |
-| **S03E09**  | Mar 10    | Mike S.      | [**Apply/purrr part I**](/codeclub/s03e09_apply/)               | "Don't repeat yourself" (DRY) |
+| **S03E09**  | Mar 10    | Mike S.      | [**Apply functions**](/codeclub/s03e09_apply/)                   | "Don't repeat yourself" (DRY) |
+| **S03E10**  | Mar 24    | Mike S.      | [**Purrr map functions**](/codeclub/s03e10_purrr/)               | "Don't repeat yourself" (DRY) |
 
 <br>
 
