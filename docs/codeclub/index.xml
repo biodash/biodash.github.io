@@ -13,6 +13,288 @@
     </image>
     
     <item>
+      <title>Session S03E12: Incorporating your own functions into loops</title>
+      <link>https://biodash.github.io/codeclub/s03e12_functions_in_loops/</link>
+      <pubDate>Tue, 19 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/s03e12_functions_in_loops/</guid>
+      <description>&lt;p&gt;&lt;br&gt; &lt;br&gt; &lt;br&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;new-to-code-club&#34;&gt;New To Code Club?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;First, check out the &lt;a href=&#34;https://biodash.github.io/codeclub-setup/&#34;&gt;Code Club Computer Setup&lt;/a&gt; instructions, which also has some pointers that might be helpful if you&amp;rsquo;re new to R or RStudio.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Please open RStudio before Code Club to test things out &amp;ndash; if you run into issues, join the Zoom call early and we&amp;rsquo;ll troubleshoot.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;session-goals&#34;&gt;Session Goals&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Learn how to incorporate your own functions into loops.&lt;/li&gt;
+&lt;li&gt;Learn how to efficiently &lt;em&gt;save&lt;/em&gt; the outputs of your loop into a data structure.&lt;/li&gt;
+&lt;li&gt;Learn how using a functional (like &lt;code&gt;purr::map&lt;/code&gt;) saves you a lot of housekeeping.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;Again we&amp;rsquo;ll be using &lt;a href=&#34;https://tibble.tidyverse.org/reference/tibble.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;tibble()&lt;/code&gt;&lt;/a&gt; from the tidyverse package, so we need to load that first.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching packages&lt;/span&gt; ─────────────────────────────────────── tidyverse 1.3.1 ──&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;ggplot2&lt;/span&gt; 3.3.5     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;purrr  &lt;/span&gt; 0.3.4&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tibble &lt;/span&gt; 3.1.6     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr  &lt;/span&gt; 1.0.8&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tidyr  &lt;/span&gt; 1.2.0     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;stringr&lt;/span&gt; 1.4.0&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;readr  &lt;/span&gt; 2.1.2     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;forcats&lt;/span&gt; 0.5.1&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Conflicts&lt;/span&gt; ────────────────────────────────────────── tidyverse_conflicts() ──&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;filter()&lt;/span&gt; masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::filter()&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;    masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::lag()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We&amp;rsquo;ll also reuse the toy data frame from last Code Club:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tibble.tidyverse.org/reference/tibble.html&#39;&gt;tibble&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;
+  a &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/Normal.html&#39;&gt;rnorm&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+  b &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/Normal.html&#39;&gt;rnorm&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+  c &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/Normal.html&#39;&gt;rnorm&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,
+  d &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/Normal.html&#39;&gt;rnorm&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 10 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;          a        b      c      d&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;      &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;  &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;  &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.57&lt;/span&gt;    0.647    1.39   0.851&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt;  0.239   0.667   -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.108&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.74&lt;/span&gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.520&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.663&lt;/span&gt;   -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.343&lt;/span&gt;  0.652&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.035&lt;/span&gt;&lt;span style=&#39;color: #BB0000; text-decoration: underline;&#39;&gt;9&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.69&lt;/span&gt;    -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.30&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.58&lt;/span&gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt;  1.27    0.357    0.158 -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.92&lt;/span&gt; &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.04&lt;/span&gt;    0.490    0.897  1.33 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.212&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.753&lt;/span&gt;   -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.68&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.503&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt;  1.91    0.275    0.646  0.139&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.535&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.006&lt;/span&gt;&lt;span style=&#39;color: #BB0000; text-decoration: underline;&#39;&gt;32&lt;/span&gt; -&lt;span style=&#39;color: #BB0000;&#39;&gt;1.02&lt;/span&gt;  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.467&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt;  0.223  -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.422&lt;/span&gt;    0.616 -&lt;span style=&#39;color: #BB0000;&#39;&gt;0.553&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;And we&amp;rsquo;ll also be re-using our own &lt;code&gt;normalize&lt;/code&gt; function:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;normalize&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;function&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/range.html&#39;&gt;range&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;rng&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Last time we saw how to use this function to simplify our code:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;b&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;c&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;d&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;In previous Code Clubs we&amp;rsquo;ve seen how you can apply a built-in function like &lt;code&gt;mean&lt;/code&gt; to each column of a data frame using a &lt;code&gt;for&lt;/code&gt; loop, &lt;code&gt;lapply&lt;/code&gt;, or &lt;code&gt;map&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;We can use exactly the same techniques with our own functions.&lt;/p&gt;
+&lt;p&gt;But I think it&amp;rsquo;s worth taking advantage of this time to revisit a couple of details (some of which were in the Bonus Material in &lt;a href=&#34;https://biodash.github.io/codeclub/s03e08_loops/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;S03E08&lt;/a&gt;).&lt;/p&gt;
+&lt;h2 id=&#34;accessing-by-value-vsindex&#34;&gt;Accessing by value vs. index&lt;/h2&gt;
+&lt;p&gt;In our first session on loops, we saw an example like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;11&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;12&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;13&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# We iterate over 10, 11, 12, 13&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -10&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -11&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -12&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -13&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Here we are looping over the actual values in the vector. But we can also access the values &lt;em&gt;by their index&lt;/em&gt;. Here we loop over an index, and include that index in the body of the loop. It is very common in this usage to use the name &lt;code&gt;i&lt;/code&gt; for the variable. This is most common when the vector/list/data frame already exists as an object:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;numbers&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;11&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;12&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;13&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# We create a vector&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;             &lt;span class=&#39;c&#39;&gt;# We iterate over the indexes 1, 2, 3, 4&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;numbers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;     &lt;span class=&#39;c&#39;&gt;# We access the value using the index notation `[ ]`&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -10&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -11&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -12&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -13&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Note that here we &amp;lsquo;hard-coded&amp;rsquo; the length of the vector inside the loop. We can generalize this so it will work on vectors of &lt;em&gt;any length&lt;/em&gt; by using this syntax:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;numbers&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;11&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;12&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;13&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/length.html&#39;&gt;length&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;numbers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] 4&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/length.html&#39;&gt;length&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;numbers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# We iterate over 1, 2, 3,...&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;numbers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -10&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -11&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -12&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -13&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;storing-loop-outputs&#34;&gt;Storing loop outputs&lt;/h2&gt;
+&lt;p&gt;We have also seen that unless you issue a &lt;a href=&#34;https://rdrr.io/r/base/print.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;print()&lt;/code&gt;&lt;/a&gt; statement which runs on &lt;em&gt;every separate iteration of the loop&lt;/em&gt;, the output values simply &amp;lsquo;go away&amp;rsquo;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;11&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;12&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;13&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Similarly if we want to actually &lt;em&gt;save&lt;/em&gt; the output of the loop in a vector, we need to save an output value on &lt;em&gt;every separate iteration of the loop&lt;/em&gt;. And this means we have to build the output vector iteration-by-iteration. Here is a first guess how to do this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;outputs&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/vector.html&#39;&gt;vector&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;                    &lt;span class=&#39;c&#39;&gt;# We &#39;initialize&#39; an *empty vector* to hold the outputs&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;outputs&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; logical(0)&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;11&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;12&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;13&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;outputs&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;outputs&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;a_number&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# Each time round the loop we *append* a new value to the existing vector&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;outputs&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -10 -11 -12 -13&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This looks fine, &lt;strong&gt;however&lt;/strong&gt;, there is a problem. The vector &amp;lsquo;grows&amp;rsquo; at each iteration, and this means that, as Jelmer pointed out in the bonus material on loops, &amp;lsquo;&lt;strong&gt;R has to create an entirely new object in each iteration of the loop&lt;/strong&gt;, because the object&amp;rsquo;s memory requirements keep increasing.&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;This is not an issue for the toy vector we are using here, but say you were using a loop to create a data frame, column by column, with thousands of rows, and hundreds of columns. On every iteration the entire data frame would have to be copied and extended, and copied and extended, and&amp;hellip;&lt;/p&gt;
+&lt;p&gt;So how do we avoid that?&lt;/p&gt;
+&lt;p&gt;The technique is to initialize a vector (or list, or data frame) of the appropriate size for the outputs, which &lt;strong&gt;preallocates&lt;/strong&gt; the memory required to store it. Then instead of &lt;em&gt;appending&lt;/em&gt; to it on each iteration, we &lt;em&gt;write into it&lt;/em&gt; on each iteration. The size of the output vector is already fixed, and modifying values like this is way more efficient. Again, the magic is is to use indexes.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;output_vector&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/vector.html&#39;&gt;vector&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;length &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;output_vector&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] FALSE FALSE FALSE FALSE&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;numbers&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;11&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;12&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;13&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt; 
+  &lt;span class=&#39;nv&#39;&gt;output_vector&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;numbers&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;*&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;output_vector&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] -10 -11 -12 -13&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;breakout-rooms-storing-loop-outputs&#34;&gt;Breakout rooms, storing loop outputs&lt;/h2&gt;
+&lt;h3 id=&#34;exercise-1&#34;&gt;Exercise 1&lt;/h3&gt;
+&lt;div class=&#34;puzzle&#34;&gt;
+&lt;p&gt;R has a function &lt;code&gt;letters&lt;/code&gt; which returns a character vector:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;letters&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] &#34;a&#34; &#34;b&#34; &#34;c&#34; &#34;d&#34; &#34;e&#34; &#34;f&#34; &#34;g&#34; &#34;h&#34; &#34;i&#34; &#34;j&#34; &#34;k&#34; &#34;l&#34; &#34;m&#34; &#34;n&#34; &#34;o&#34; &#34;p&#34; &#34;q&#34; &#34;r&#34; &#34;s&#34;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [20] &#34;t&#34; &#34;u&#34; &#34;v&#34; &#34;w&#34; &#34;x&#34; &#34;y&#34; &#34;z&#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;(&lt;code&gt;letters&lt;/code&gt; is a bit like &lt;code&gt;iris&lt;/code&gt;: it&amp;rsquo;s a character vector which is &amp;lsquo;just there&amp;rsquo;, like &lt;code&gt;iris&lt;/code&gt; is a data frame which is &amp;lsquo;just there&amp;rsquo;).&lt;/p&gt;
+&lt;p&gt;The tidyverse also has a function &lt;a href=&#34;https://stringr.tidyverse.org/reference/case.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;str_to_upper()&lt;/code&gt;&lt;/a&gt; which converts the case of a character:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://stringr.tidyverse.org/reference/case.html&#39;&gt;str_to_upper&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;a&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;A&#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Write a for loop that converts each element of a character vector to upper case, saving the output by writing the output of each iteration into an empty vector.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt;What is `letters[1]`? &lt;br&gt;
+&lt;/details&gt;
+&lt;br&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;upper_case&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/vector.html&#39;&gt;vector&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;length &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;26&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;26&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;upper_case&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://stringr.tidyverse.org/reference/case.html&#39;&gt;str_to_upper&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;letters&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;back-to-normalize&#34;&gt;Back to &lt;code&gt;normalize&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;This gives us the machinery to use our own function in a for loop.&lt;/p&gt;
+&lt;p&gt;First, recall how we can access a column vector using the &lt;code&gt;[[ ]]&lt;/code&gt; syntax:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] -1.56695706  0.23880352 -0.52028396 -0.03587572  1.26976225 -1.03948139&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [7] -0.21172370  1.90549573 -0.53548764  0.22250909&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;So we can iteratively access each column in a for loop:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;m&#39;&gt;4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 0.0000000 0.5200245 0.3014218 0.4409221 0.8169209 0.1519029 0.3902813&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] 1.0000000 0.2970435 0.5153320&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 0.9915841 1.0000000 0.4352500 0.0000000 0.8684414 0.9250426 0.3970564&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] 0.8335988 0.7141351 0.5377301&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 1.0000000 0.5131949 0.4367290 0.1242323 0.5998479 0.8402709 0.0000000&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] 0.7587425 0.2170914 0.7489915&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 0.85264136 0.05580354 0.79127366 0.10586772 0.00000000 1.00000000&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [7] 0.43627787 0.63372198 0.44736338 0.42096304&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;And again, we can generalize this to a data frame of of any length.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/length.html&#39;&gt;length&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/print.html&#39;&gt;print&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 0.0000000 0.5200245 0.3014218 0.4409221 0.8169209 0.1519029 0.3902813&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] 1.0000000 0.2970435 0.5153320&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 0.9915841 1.0000000 0.4352500 0.0000000 0.8684414 0.9250426 0.3970564&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] 0.8335988 0.7141351 0.5377301&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 1.0000000 0.5131949 0.4367290 0.1242323 0.5998479 0.8402709 0.0000000&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [8] 0.7587425 0.2170914 0.7489915&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] 0.85264136 0.05580354 0.79127366 0.10586772 0.00000000 1.00000000&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [7] 0.43627787 0.63372198 0.44736338 0.42096304&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Here again, we are just printing the output, not saving it to a new data frame.&lt;/p&gt;
+&lt;p&gt;So, according to our strategy, we want to create an empty data frame to hold our results. We can use information from our original data frame to do this.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;empty_vec&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/vector.html&#39;&gt;vector&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;length &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/nrow.html&#39;&gt;nrow&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# Empty vector with correct number of rows&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;df_norm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tibble.tidyverse.org/reference/tibble.html&#39;&gt;tibble&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;a &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;empty_vec&lt;/span&gt;, b &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;empty_vec&lt;/span&gt;, c &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;empty_vec&lt;/span&gt;, d &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;empty_vec&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;kr&#39;&gt;for&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt; &lt;span class=&#39;kr&#39;&gt;in&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/length.html&#39;&gt;length&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;&amp;#123;&lt;/span&gt;
+  &lt;span class=&#39;nv&#39;&gt;df_norm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[[&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;i&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;o&#39;&gt;&amp;#125;&lt;/span&gt;
+
+&lt;span class=&#39;nv&#39;&gt;df_norm&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 10 × 4&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;        a     b     c      d&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;  &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; 0     0.992 1     0.853 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; 0.520 1     0.513 0.055&lt;span style=&#39;text-decoration: underline;&#39;&gt;8&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; 0.301 0.435 0.437 0.791 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; 0.441 0     0.124 0.106 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; 0.817 0.868 0.600 0     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; 0.152 0.925 0.840 1     &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; 0.390 0.397 0     0.436 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; 1     0.834 0.759 0.634 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; 0.297 0.714 0.217 0.447 &lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; 0.515 0.538 0.749 0.421&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;using-a-map-command&#34;&gt;Using a &lt;code&gt;map&lt;/code&gt; command.&lt;/h2&gt;
+&lt;p&gt;It&amp;rsquo;s a pain to have to &lt;em&gt;manually&lt;/em&gt; set up the &amp;lsquo;container&amp;rsquo; that will house your results. Couldn&amp;rsquo;t the computer do that for us? Yes! All of this housekeeping, the for loop, the preallocation of data frame size, is done behind the scenes as part of the implementation of &lt;a href=&#34;https://rdrr.io/r/base/lapply.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;lapply()&lt;/code&gt;&lt;/a&gt; and &lt;code&gt;map&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;map_norm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://purrr.tidyverse.org/reference/map.html&#39;&gt;map&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/str.html&#39;&gt;str&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;map_norm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; List of 4&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ a: num [1:10] 0 0.52 0.301 0.441 0.817 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ b: num [1:10] 0.992 1 0.435 0 0.868 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ c: num [1:10] 1 0.513 0.437 0.124 0.6 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ d: num [1:10] 0.8526 0.0558 0.7913 0.1059 0 ...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Notice that the output of &lt;code&gt;map&lt;/code&gt; (like &lt;code&gt;lapply&lt;/code&gt;) is a list. But we can easily convert it into a data frame:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span class=&#39;nv&#39;&gt;map_norm_df&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://purrr.tidyverse.org/reference/map.html&#39;&gt;map&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;df&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;normalize&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; 
+  &lt;span class=&#39;nv&#39;&gt;as_tibble&lt;/span&gt;
+
+&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/str.html&#39;&gt;str&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;map_norm_df&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt; tibble [10 × 4] (S3: tbl_df/tbl/data.frame)&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ a: num [1:10] 0 0.52 0.301 0.441 0.817 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ b: num [1:10] 0.992 1 0.435 0 0.868 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ c: num [1:10] 1 0.513 0.437 0.124 0.6 ...&lt;/span&gt;
+&lt;span class=&#39;c&#39;&gt;#&amp;gt;  $ d: num [1:10] 0.8526 0.0558 0.7913 0.1059 0 ...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Session S03E11: Writing your own Functions</title>
       <link>https://biodash.github.io/codeclub/s03e11_functions/</link>
       <pubDate>Mon, 28 Mar 2022 00:00:00 +0000</pubDate>
@@ -6952,7 +7234,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-742568193&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-143968257&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -6962,7 +7244,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-742568193&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-143968257&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7149,7 +7431,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-134527869&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-614398257&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7159,7 +7441,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-134527869&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-614398257&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7195,7 +7477,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-375928164&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-312659478&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7205,7 +7487,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-375928164&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-312659478&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7237,7 +7519,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-943562718&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-971354682&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7247,7 +7529,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-943562718&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-971354682&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7278,7 +7560,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-751264839&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-813724965&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7288,7 +7570,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-751264839&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-813724965&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7422,7 +7704,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-514736298&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-419567823&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7432,7 +7714,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-514736298&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-419567823&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -7489,7 +7771,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-257381469&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-529871436&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -7499,7 +7781,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-257381469&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-529871436&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15031,7 +15313,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-759468123&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-623841579&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15041,7 +15323,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-759468123&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-623841579&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15117,7 +15399,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-829315674&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-942386175&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15127,7 +15409,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-829315674&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-942386175&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15148,7 +15430,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-297681354&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-348617259&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15158,7 +15440,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-297681354&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-348617259&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15185,7 +15467,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-359674812&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-571823649&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15195,7 +15477,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-359674812&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-571823649&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15222,7 +15504,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-943581276&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-583214976&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15232,7 +15514,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-943581276&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-583214976&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15255,7 +15537,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-258763941&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-125374968&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15265,7 +15547,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-258763941&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-125374968&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15306,7 +15588,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-841935726&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-392176854&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15316,7 +15598,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-841935726&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-392176854&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15335,7 +15617,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-436785129&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-593647182&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15345,7 +15627,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-436785129&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-593647182&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15371,7 +15653,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-257483619&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-214895637&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15381,7 +15663,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-257483619&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-214895637&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15411,7 +15693,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-637542189&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-923148567&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15421,7 +15703,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-637542189&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-923148567&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15635,7 +15917,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-183597426&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-168972435&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15645,7 +15927,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-183597426&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-168972435&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15706,7 +15988,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-841976253&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-198764253&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15716,7 +15998,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-841976253&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-198764253&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -15791,7 +16073,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-281369547&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-643195287&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -15801,7 +16083,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-281369547&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-643195287&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
