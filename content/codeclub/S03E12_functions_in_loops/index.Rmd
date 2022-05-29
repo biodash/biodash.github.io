@@ -1,0 +1,278 @@
+---
+title: "Session S03E12: Incorporating your own functions into loops"
+summary: "In this session of Code Club, we'll see how putting your own functions into loops prevents repeating yourself even more."
+authors: [michael-broe]
+date: "2022-04-19"
+output: hugodown::md_document
+toc: true
+image: 
+  caption: ""
+  focal_point: ""
+  preview_only: false
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<br> <br> <br>
+
+------------------------------------------------------------------------
+
+## New To Code Club?
+
+-   First, check out the [Code Club Computer Setup](/codeclub-setup/)
+    instructions, which also has some pointers that might be helpful if
+    you're new to R or RStudio.
+
+-   Please open RStudio before Code Club to test things out -- if you
+    run into issues, join the Zoom call early and we'll troubleshoot.
+
+------------------------------------------------------------------------
+
+## Session Goals
+
+-   Learn how to incorporate your own functions into loops.
+-   Learn how to efficiently *save* the outputs of your loop into a data structure.
+-   Learn how using a functional (like `purr::map`) saves you a lot of housekeeping.
+
+------------------------------------------------------------------------
+
+Again we'll be using `tibble()` from the tidyverse package, so we need to load that first.
+
+```{r}
+library(tidyverse)
+```
+
+We'll also reuse the toy data frame from last Code Club:
+
+```{r}
+df <- tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+df
+```
+
+And we'll also be re-using our own `normalize` function:
+
+```{r}
+normalize <- function(x) {
+  rng <- range(x)
+  (x - rng[1]) / (rng[2] - rng[1])
+}
+```
+
+Last time we saw how to use this function to simplify our code:
+
+```{r, eval=FALSE}
+df$a <- normalize(df$a)
+df$b <- normalize(df$b)
+df$c <- normalize(df$c)
+df$d <- normalize(df$d)
+```
+
+In previous Code Clubs we've seen how you can apply a built-in function like `mean` to each column of a data frame using a `for` loop, `lapply`, or `map`.
+
+We can use exactly the same techniques with our own functions.
+
+But I think it's worth taking advantage of this time to revisit a couple of details (some of which were in the Bonus Material in [S03E08](https://biodash.github.io/codeclub/s03e08_loops/)).
+
+## Accessing by value vs. index
+
+In our first session on loops, we saw an example like this:
+
+```{r}
+for (a_number in c(10, 11, 12, 13)) { # We iterate over 10, 11, 12, 13
+  print(a_number * -1)
+}
+```
+
+Here we are looping over the actual values in the vector. But we can also access the values *by their index*. Here we loop over an index, and include that index in the body of the loop. It is very common in this usage to use the name `i` for the variable. This is most common when the vector/list/data frame already exists as an object:
+
+```{r}
+numbers <- c(10, 11, 12, 13) # We create a vector
+
+for (i in 1:4) {             # We iterate over the indexes 1, 2, 3, 4
+  print(numbers[i] * -1)     # We access the value using the index notation `[ ]`
+}
+```
+
+Note that here we 'hard-coded' the length of the vector inside the loop. We can generalize this so it will work on vectors of *any length* by using this syntax:
+
+```{r}
+numbers <- c(10, 11, 12, 13)
+
+length(numbers)
+
+for (i in 1:length(numbers)) { # We iterate over 1, 2, 3,...
+  print(numbers[i] * -1)
+}
+```
+
+## Storing loop outputs
+
+We have also seen that unless you issue a `print()` statement which runs on *every separate iteration of the loop*, the output values simply 'go away'.
+
+```{r}
+for (a_number in c(10, 11, 12, 13)) {
+  a_number * -1
+}
+```
+
+Similarly if we want to actually *save* the output of the loop in a vector, we need to save an output value on *every separate iteration of the loop*. And this means we have to build the output vector iteration-by-iteration. Here is a first guess how to do this:
+
+```{r}
+outputs <- vector()                    # We 'initialize' an *empty vector* to hold the outputs
+
+outputs
+
+for (a_number in c(10, 11, 12, 13)) {
+  outputs <- c(outputs, a_number * -1) # Each time round the loop we *append* a new value to the existing vector
+}
+
+outputs
+```
+
+This looks fine, **however**, there is a problem. The vector 'grows' at each iteration, and this means that, as Jelmer pointed out in the bonus material on loops, '**R has to create an entirely new object in each iteration of the loop**, because the object’s memory requirements keep increasing.'
+
+This is not an issue for the toy vector we are using here, but say you were using a loop to create a data frame, column by column, with thousands of rows, and hundreds of columns. On every iteration the entire data frame would have to be copied and extended, and copied and extended, and...
+
+So how do we avoid that?
+
+The technique is to initialize a vector (or list, or data frame) of the appropriate size for the outputs, which **preallocates** the memory required to store it. Then instead of *appending* to it on each iteration, we *write into it* on each iteration. The size of the output vector is already fixed, and modifying values like this is way more efficient. Again, the magic is is to use indexes.
+
+```{r}
+output_vector <- vector(length = 4)
+
+output_vector
+
+numbers <- c(10, 11, 12, 13)
+
+for (i in 1:4) { 
+  output_vector[i] <- numbers[i] * -1
+}
+
+output_vector
+```
+
+## Breakout rooms, storing loop outputs
+
+### Exercise 1
+
+:::puzzle
+
+R has a function `letters` which returns a character vector:
+
+```{r}
+letters
+```
+
+(`letters` is a bit like `iris`: it's a character vector which is 'just there', like `iris` is a data frame which is 'just there'). 
+
+The tidyverse also has a function `str_to_upper()` which converts the case of a character:
+
+```{r}
+str_to_upper("a")
+```
+
+Write a for loop that converts each element of a character vector to upper case, saving the output by writing the output of each iteration into an empty vector.
+
+<details> <summary> Hints (click here) </summary>
+
+<br>What is `letters[1]`?
+<br>
+</details>
+
+<br>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+upper_case <- vector(length = 26)
+
+for (i in 1:26) {
+  upper_case[i] <- str_to_upper(letters[i])
+}
+```
+
+<br>
+
+
+</details>
+:::
+
+
+
+## Back to `normalize`
+
+This gives us the machinery to use our own function in a for loop.
+
+First, recall how we can access a column vector using the `[[ ]]` syntax:
+
+
+```{r}
+df[[1]]
+```
+
+So we can iteratively access each column in a for loop:
+
+
+```{r}
+for (i in 1:4) {
+  print(normalize(df[[i]]))
+}
+```
+
+And again, we can generalize this to a data frame of of any length.
+
+```{r}
+for (i in 1:length(df)) {
+  print(normalize(df[[i]]))
+}
+```
+
+Here again, we are just printing the output, not saving it to a new data frame.
+
+So, according to our strategy, we want to create an empty data frame to hold our results. We can use information from our original data frame to do this.
+
+```{r}
+empty_vec <- vector(length = nrow(df)) # Empty vector with correct number of rows
+
+df_norm <- tibble(a = empty_vec, b = empty_vec, c = empty_vec, d = empty_vec)
+
+for (i in 1:length(df)){
+  df_norm[[i]] <- normalize(df[[i]])
+}
+
+df_norm
+```
+
+## Using a `map` command.
+
+It's a pain to have to *manually* set up the 'container' that will house your results. Couldn't the computer do that for us? Yes! All of this housekeeping, the for loop, the preallocation of data frame size, is done behind the scenes as part of the implementation of `lapply()` and `map`.
+
+```{r}
+map_norm <- map(df, normalize)
+
+str(map_norm)
+```
+
+Notice that the output of `map` (like `lapply`) is a list. But we can easily convert it into a data frame:
+
+```{r}
+map_norm_df <- map(df, normalize) %>% 
+  as_tibble
+
+str(map_norm_df)
+```
+
+
+
