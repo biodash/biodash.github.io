@@ -7,28 +7,34 @@ title: "Schedule for Code Club"
 
 <br>
 
-## Spring '22
+## Summer '22
 
-We will meet on **Thursdays at 2 pm** starting on January 13th, 2022.
+We will meet on **Thursdays at 2 pm** starting on June 2nd, 2022.
 [Sign up using the form](/codeclub-about/#sign-up)!
 
-We will be meeting over Zoom (sign up for the link),
-but you can also join us in person:
+You can join us either on Zoom (sign up for the link) or in person:
 
 - In Columbus, Jessica will be in Howlett 340.
 - In Wooster, Jelmer will be in Selby 203.
-
-We have also included these sessions in the [BioDASH calendar](/events/#calendar).
 
 ### Upcoming sessions
 
 | Session     | Date      | Presenter    | Topic                                                            | Topic block              |
 |-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
-| -          | Apr 07    | -             | _No Code Club this week_                                         |                          |
-| **S03E11**  | Apr 14    | Michael B.   | [**Writing functions part I**](/codeclub/s03e11_functions/)      | "Don't repeat yourself" (DRY) |
-| **S03E12**  | Apr 21    | Michael B.   | **Writing functions part II**                                    | "Don't repeat yourself" (DRY) |
+| S04E01      | June 02   | -            | [**R For Data Science, Ch. 1**](https://r4ds.had.co.nz/introduction.html) |                          |
+| S04E02      | June 09   | -            | [**R For Data Science, Ch. 3 - pt. I**](https://r4ds.had.co.nz/data-visualisation.html) |                          |
+| S04E03      | June 16   | -            | [**R For Data Science, Ch. 3 - pt. II**](https://r4ds.had.co.nz/data-visualisation.html) |                          |
+| S04E04      | June 23   | -            | [**R For Data Science, Ch. 4**](https://r4ds.had.co.nz/workflow-basics.html) |                          |
 
-### Previous sessions
+<br>
+
+------------------------------------------------------------------------
+
+## Previous semesters
+
+Ask us for access to the Zoom recordings of previous Code Club sessions!
+
+### Spring '22
 
 | Session     | Date      | Presenter    | Topic (+ link)                                                   | Topic block              |
 |-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
@@ -42,14 +48,8 @@ We have also included these sessions in the [BioDASH calendar](/events/#calendar
 | **S03E08**  | Mar 03    | Jelmer       | [**Loops**](/codeclub/s03e08_loops/)                             | "Don't repeat yourself" (DRY) |
 | **S03E09**  | Mar 10    | Mike S.      | [**Apply functions**](/codeclub/s03e09_apply/)                   | "Don't repeat yourself" (DRY) |
 | **S03E10**  | Mar 24    | Mike S.      | [**Purrr map functions**](/codeclub/s03e10_purrr/)               | "Don't repeat yourself" (DRY) |
-
-<br>
-
-------------------------------------------------------------------------
-
-## Previous semesters
-
-Ask us for access to the Zoom recordings of previous Code Club sessions!
+| **S03E11**  | Apr 14    | Michael B.   | [**Writing functions part I**](/codeclub/s03e11_functions/)      | "Don't repeat yourself" (DRY) |
+| **S03E12**  | Apr 21    | Michael B.   | [**Incorporating your own functions into loops**](/codeclub/s03e12_functions_in_loops/) | "Don't repeat yourself" (DRY) |
 
 ### Fall '21
 
