@@ -10,7 +10,7 @@ toc: true
 
 <div class="alert alert-note">
 <div>
-<b>Code Club is currently ongoing for the Spring '22 semester &ndash;
+<b>Code Club is currently ongoing for the summer of '22 &ndash;
 see the <a href="/codeclub-schedule/">schedule</a>.
 You can join us at any point &ndash; to do so, please fill out the
 <a href="#sign-up">form at the bottom of this page!</a></b>
@@ -42,18 +42,25 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 
 ## Practical information
 
-- In the first series, we will focus on all things **R**: from data analysis and visualization to
-    efficient coding, R Markdown, and so on.
-- There will be no consistent analysis type or data type ---
-  instead, we will focus on **building general skills** and applying those to a wide variety of data.  
+- While we may switch languages at some point,
+  we have focused on the **R** language so far.
+  (If you're new to R, please check out our [page with introductory R resources](/tutorials/r-resources-tips/)!)
+
 - Each week, **materials and suggested reading** will be posted up front at the [Sessions page](/codeclub/).
-    Like at a Journal Club, doing some preparatory homework by reading these materials will help you get the most out of it.
+  Like at a Journal Club, doing some preparatory homework by reading these materials will help you get the most out of it.
+
 - Each session is intended to be **mostly stand-alone** to allow for occasional participation.
+
 - To allow for a welcoming environment for participants at all levels of experience,
-    we ask everyone to be **respectful, patient, and collaborative** when interacting at Code Club.
-    This is not a competitive event.
+  we ask everyone to be **respectful, patient, and collaborative** when interacting at Code Club.
+  This is not a competitive event.
+
+- There will be no consistent analysis type or data type ---
+  instead, we will focus on **building general skills** and applying those to a wide variety of data.
+  
 - We have a separate page with [**computer setup instructions**](/codeclub-setup/), where you'll see that we also
   accommodate participating through your browser without any installations.
+
 - We also have [a form to suggest topics](/codeclub-suggest/) for Code Club!
 
 <br>
@@ -61,6 +68,7 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 ----
 
 ## Organizers
+
 - [Jelmer Poelstra](/authors/admin/) - bioinformatician at [MCIC](http://mcic.osu.edu/) Wooster
 - [Mike Sovic](/authors/mike-sovic/) - bioinformatician at [CAPS](http://caps.osu.edu/)
 - [Stephen Opiyo](/authors/stephen-opiyo/) - biostatistician at [MCIC](http://mcic.osu.edu/) Columbus
@@ -72,6 +80,7 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 ----
 
 ## Sign up
+
 To sign up, please fill out the Google Form below. Hope to see you at Code Club! 
 
 <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd_N7FkNlPnCN76J1UMCi4SlCkkG2Bq0l2llxsd7EGkdlDawA/viewform?embedded=true" width="640" height="1404" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
