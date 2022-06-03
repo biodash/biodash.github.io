@@ -10,44 +10,52 @@ toc: true
 
 <div class="alert alert-note">
 <div>
-<b>Code Club is currently ongoing for the summer of '22 &ndash;
-see the <a href="/codeclub-schedule/">schedule</a>.
-You can join us at any point &ndash; to do so, please fill out the
-<a href="#sign-up">form at the bottom of this page!</a></b>
+
+<b>Code Club is restarting for the summer of '22 on June 9th &mdash;
+see the <a href="/codeclub-schedule/">schedule</a>. <br>
+You can join us at any point &mdash; to do so, please fill out
+<a href="#sign-up">this form!</a></b>
+
 </div>
 </div>
 
-OSU Code Club is a regularly occurring, interactive, online gathering to improve coding skills.
+OSU Code Club is a regularly occurring, interactive, online and in-person gathering to improve coding skills.
 We aim for a supportive and fun culture of learning together, and hope to offer something to participants at any experience level.
 
 In each meeting, a presenter first introduces a concept or tool to be used for a challenge.
-Then, we work on the challenge in pairs or trios in Zoom "breakout rooms," and finally,
+Then, we work on the challenge in small groups, and finally,
 we reconvene to see what approaches were taken and to share lessons learned.  
 
-The idea for this Code Club was taken from a recent paper in PLoS Computational Biology:
-[Ten simple rules to increase computational skills among biologists with Code Clubs](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008119).
-We liked this idea because of the high level of interaction and because gradual, well-spaced practice is an excellent way to retain what you learn.
+So far, we have focused entirely on **the R language** and its surrounding ecosystem (R Markdown, Shiny, etc).
+Depending on interest, we may in the future also cover Python, the Unix shell (terminal),
+running your analyses at the Ohio Supercomputer Center, and so on.
 
-#### Join us --- and perhaps present a session too!
+### Learn more about -and get ready for- Code Club
 
-As the organizers, we are happy to present sessions, but we hope that as a participant, you will also want to do so.
+- [Schedule](/codeclub-schedule/)
 
-For example, you could consult the group about an actual challenge you are facing in your data analysis.
-You could also introduce everyone to an new package or approach you've been using,
-or one that you are excited about and want to dive into -- teaching a topic can be one of the best ways to learn it!
+- [Form to sign up](#sign-up)
+
+- [Computer setup instructions](/codeclub-setup/)
+
+- [Resources and tips for R novices](/tutorials/r-resources-tips/)
+
+- [List of previous sessions by semester in table form](/codeclub-schedule/#previous-semesters)
+
+- [List of previous sessions as a blogroll](/codeclub/)
+
+- [Form to suggest topics](/codeclub-suggest/)
+
 
 <br>
 
 ----
 
-## Practical information
-
-- While we may switch languages at some point,
-  we have focused on the **R** language so far.
-  (If you're new to R, please check out our [page with introductory R resources](/tutorials/r-resources-tips/)!)
+## More information
 
 - Each week, **materials and suggested reading** will be posted up front at the [Sessions page](/codeclub/).
   Like at a Journal Club, doing some preparatory homework by reading these materials will help you get the most out of it.
+  [Note for the Summer '22 sessions: as we will be working through a book, we may not post additional materials online.]
 
 - Each session is intended to be **mostly stand-alone** to allow for occasional participation.
 
@@ -57,11 +65,11 @@ or one that you are excited about and want to dive into -- teaching a topic can 
 
 - There will be no consistent analysis type or data type ---
   instead, we will focus on **building general skills** and applying those to a wide variety of data.
-  
-- We have a separate page with [**computer setup instructions**](/codeclub-setup/), where you'll see that we also
-  accommodate participating through your browser without any installations.
 
-- We also have [a form to suggest topics](/codeclub-suggest/) for Code Club!
+- The idea for this Code Club was taken from a recent paper in PLoS Computational Biology:
+  [Ten simple rules to increase computational skills among biologists with Code   Clubs](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008119).
+  We liked this idea because of the high level of interaction and because gradual,
+  well-spaced practice is an excellent way to retain what you learn.
 
 <br>
 

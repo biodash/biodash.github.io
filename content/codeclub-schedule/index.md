@@ -5,26 +5,33 @@ title: "Schedule for Code Club"
 
 ------------------------------------------------------------------------
 
-<br>
-
 ## Summer '22
 
-We will meet on **Thursdays at 2 pm** starting on June 2nd, 2022.
+We will meet on **Thursdays at 3 pm** starting on June 9th, 2022.
 [Sign up using the form](/codeclub-about/#sign-up)!
 
-You can join us either on Zoom (sign up for the link) or in person:
+You can join us either on Zoom (sign up for the link) or in-person:
 
-- In Columbus, Jessica will be in Howlett 340.
-- In Wooster, Jelmer will be in Selby 203.
+- In **Columbus**, Jessica will be in Howlett 340.
+- In **Wooster**, Jelmer will be in Selby 203.
 
 ### Upcoming sessions
 
-| Session     | Date      | Presenter    | Topic                                                            | Topic block              |
-|-------------|-----------|--------------|------------------------------------------------------------------|--------------------------|
-| S04E01      | June 02   | -            | [**R For Data Science, Ch. 1**](https://r4ds.had.co.nz/introduction.html) |                          |
-| S04E02      | June 09   | -            | [**R For Data Science, Ch. 3 - pt. I**](https://r4ds.had.co.nz/data-visualisation.html) |                          |
-| S04E03      | June 16   | -            | [**R For Data Science, Ch. 3 - pt. II**](https://r4ds.had.co.nz/data-visualisation.html) |                          |
-| S04E04      | June 23   | -            | [**R For Data Science, Ch. 4**](https://r4ds.had.co.nz/workflow-basics.html) |                          |
+| Session     | Date      | Presenter    | Topic                                                            |
+|-------------|-----------|--------------|------------------------------------------------------------------|
+| S04E01      | June 02   | Jelmer        | [**R For Data Science, Ch. 1**](https://r4ds.had.co.nz/introduction.html) |
+| S04E02      | June 09   | Jessica       | [**R For Data Science, Ch. 3 - pt. I**](https://r4ds.had.co.nz/data-visualisation.html) |
+| S04E03      | June 16   | Stephen       | [**R For Data Science, Ch. 3 - pt. II**](https://r4ds.had.co.nz/data-visualisation.html) |
+| S04E04      | June 23   | Mike S.       | [**R For Data Science, Ch. 4**](https://r4ds.had.co.nz/workflow-basics.html) |
+| S04E05      | June 30   | TBA           | R For Data Science, chapter TBA |
+| S04E06      | July 07   | TBA           | R For Data Science, chapter TBA |
+| S04E07      | June 14   | TBA           | R For Data Science, chapter TBA |
+| S04E08      | June 21   | TBA           | R For Data Science, chapter TBA |
+| S04E09      | July 28   | TBA           | R For Data Science, chapter TBA |
+| S04E10      | August 04 | TBA           | R For Data Science, chapter TBA |
+| S04E11      | August 11 | TBA           | R For Data Science, chapter TBA |
+| S04E12      | August 18 | TBA           | R For Data Science, chapter TBA |
+| S04E13      | August 25 | TBA           | R For Data Science, chapter TBA |
 
 <br>
 

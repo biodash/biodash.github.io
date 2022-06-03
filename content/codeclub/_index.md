@@ -15,8 +15,7 @@ header:
 
 <br>
 
-**Note: for an overview of all past sessions in table format with links,<br>**
-**take a look at the [Schedule](/codeclub-schedule/) and scroll down!**
+**Note: We also have an <a href="/codeclub-schedule/#previous-semesters">overview of all past sessions in table format with links</a>!**
 
 <br>
 
