@@ -7,50 +7,113 @@ title: "Computer Setup for Code Club"
 
 <br>
 
-Here, you will find general information on computer setup for Code Club.
+Here, you will find general information about computer setup for Code Club.
 Additional setup instructions for individual sessions will appear in the posts for each session.
-
-<br>
 
 ## Summary
 
-- You can work in your browser at the [Ohio Supercomputer Center (OSC)](/codeclub-setup/#osc)
-  or you can work [with local software installations](/codeclub-setup/#local).
+- Install R and RStudio
+  (if you already have R but a version below `R 3.6`, then [update R](/tutorials/r-resources-tips/#updating-r).)
+  
+- Install the *tidyverse* package and test if you can load it.
+  
+- **Prefer not to install anything locally?**
+  [Contact Jelmer](mailto:poelstra.1@osu.edu) to be added to the Ohio Supercomputer project for Code Club.
 
-- **If you plan to work at OSC**:
-  
-  - You should receive an email from OSC that you have been added to the Code Club
-    OSC project. Follow the instructions from that email, including to sign up
-    for an OSC account itself if you don't have one.
-  
-  - Test if you can start an RStudio Server session at OSC OnDemand,
-    and optionally test if you can load the *tidyverse* package.
-
-- **If you plan to work with local software installations**:
-  
-  - Install R and RStudio. <br>
-    (If you already have R but a version below `R 3.6`, then [update R](/tutorials/r-resources-tips/#updating-r).)
-  
-  - Optionally, install the *tidyverse* package and test if you can load it.
-  
-- **Run into issues or have questions?** Don't hesitate to contact [Jelmer](mailto:poelstra.1@osu.edu) or
-  one of the other organizers. You can also join the Code Club Zoom call
-  15 minutes early, and one or more of the organizers will be on there already.
+- **Run into issues or have questions?**
+  Don't hesitate to [contact Jelmer](mailto:poelstra.1@osu.edu) or
+  one of the other organizers.
+  You can also come to Code Club Zoom 15 minutes early,
+  and one or more of the organizers should be there already.
 
 <br>
 
 ----
 
-## Option 1 -- OSC {#osc}
+## Local installation {#local}
 
-All Code Club participants will get access to the [Ohio Supercomputer Center (OSC)](http://osc.edu)
+<div class="alert alert-note">
+<div>
+
+### Already have R installed?
+
+- Please check your version of R, and update if it is below version `3.6`.  
+  [See this page for instructions.](/tutorials/r-resources-tips/#updating-r)
+
+- Make sure you have installed the *tidyverse* package.
+  
+</div>
+</div>
+
+### Install R {#install-r}
+
+- **Windows**: Download and run the `.exe` file for the latest version of R from <https://cran.r-project.org/bin/windows/base/>,
+  by clicking the large `Download R [version-number] for Windows` link at the top of the gray box.
+- **Mac**: Download and run the `.pkg` file for the latest version of R from <https://cran.r-project.org/bin/macosx/>,
+  by clicking the link just below `Latest release`.
+- On a **Linux** distribution, you can also install R using the website above, but you may prefer to use
+  a package manager instead -- for instance, seee [these instructions](https://linuxize.com/post/how-to-install-r-on-ubuntu-20-04/)
+  for installing the latest R version on Ubuntu 20.04 using the `apt` package manager.
+
+### Install RStudio {#install-rstudio}
+
+RStudio is a so-called Integrated Development Environment (IDE) for R,
+with side-by-side panes for an R script, an R concole, plots, help documents, and much more.
+While it is perfectly possible to use R without RStudio, RStudio has become
+the de facto standard for working with R and is very useful.
+
+To install RStudio, go to the [RStudio download page](https://rstudio.com/products/rstudio/download/#download)
+and download and run the installer file for your operating system. 
+
+### Install the *tidyverse* {#install-tidy}
+
+To install or update the *tidyverse*, which is a collection of useful R packages,
+copy the following command into an R console, and press Enter:
+
+```r
+install.packages("tidyverse")
+```
+
+### Test whether you can load the *tidyverse* {#test-tidy} 
+
+When you issue the command `library(tidyverse)` in your R console inside RStudio,
+you should get output similar to what is shown below:
+
+```r
+library(tidyverse)
+
+── Attaching packages ──────────────────────────────────────────────────────────
+───────────────────────────────────────────── tidyverse 1.3.1 ──
+✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+✔ tibble  3.1.7     ✔ dplyr   1.0.9
+✔ tidyr   1.2.0     ✔ stringr 1.4.0
+✔ readr   2.1.2     ✔ forcats 0.5.1
+── Conflicts ───────────────────────────────────────────────────────────────────
+─────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+```
+
+If you get an error instead, please try to troubleshoot it by following any instructions
+given, or by Googling the error message.
+It may be necessary to update R itself, see [here](/codeclub-novice/#updating-r) for instructions.
+You can also send the [organizers of Code Club](https://biodash.github.io/codeclub-about/#organizers) an email.
+
+<br>
+
+----
+
+## Alternative: Use RStudio Server at OSC {#osc}
+
+Upon request ([contact Jelmer](mailto:poelstra.1@osu.edu)),
+you can get access to the [Ohio Supercomputer Center (OSC)](http://osc.edu)
 Classroom Project for Code Club (`PAS1838`).
 This way, you can code in RStudio from your browser rather than with a local installation.
 This is a good option if you prefer not to install anything or if you run
 into problems during installations.
 
-**After signing up for Code Club, you should receive an email from OSC
-that you have been added to the Code Club OSC project.**
+**After you asked for access to the OSC project,
+you should receive an email from OSC that you have been added to the Code Club OSC project.**
 
 - *If you already have an OSC account*,
   you shouldn't need to do anything to gain access,
@@ -110,24 +173,27 @@ for "classroom projects" such as this one.
 6. Click `Connect to RStudio Server` at the bottom of the box,
    and an RStudio Server instance will open.
 
-### Test whether you can load the *tidyverse* (optional)
+### Test whether you can load the *tidyverse*
 
 Several commonly used packages will be automatically available to you at OSC,
 and that should include the *tidyverse*.
 Test whether you can load the *tidyverse* by running `library(tidyverse)`,
-and check whether you get output similar to what is shown below:
+and check whether you get output similar to what is shown below
+(exact versions of packages may differ):
 
 ```r
 library(tidyverse)
 
-#> ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.1 ──
-#> ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-#> ✓ tibble  3.1.3     ✓ dplyr   1.0.7
-#> ✓ tidyr   1.1.3     ✓ stringr 1.4.0
-#> ✓ readr   2.0.1     ✓ forcats 0.5.1
-#> ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
+── Attaching packages ──────────────────────────────────────────────────────────
+───────────────────────────────────────────── tidyverse 1.3.1 ──
+✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+✔ tibble  3.1.7     ✔ dplyr   1.0.9
+✔ tidyr   1.2.0     ✔ stringr 1.4.0
+✔ readr   2.1.2     ✔ forcats 0.5.1
+── Conflicts ───────────────────────────────────────────────────────────────────
+─────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
 ```
 
 If you get an error, install the *tidyverse* as follows:
@@ -150,77 +216,6 @@ at his channel [The Data Point](https://www.youtube.com/channel/UC2dB6jDTbqzlTM6
 
 ----
 
-## Option 2 -- Local installation {#local}
-
-<div class="alert alert-note">
-<div>
-
-### Already have R installed?
-
-- Please check your version of R, and update if it is below version `3.6`.  
-  [See this page for instructions.](/tutorials/r-resources-tips/#updating-r)
-
-- Make sure you have installed the *tidyverse* package.
-  
-</div>
-</div>
-
-### Install R {#install-r}
-
-- **Windows**: Download and run the `.exe` file for the latest version of R from <https://cran.r-project.org/bin/windows/base/>,
-  by clicking the large `Download R [version-number] for Windows` link at the top of the gray box.
-- **Mac**: Download and run the `.pkg` file for the latest version of R from <https://cran.r-project.org/bin/macosx/>,
-  by clicking the link just below `Latest release`.
-- On a **Linux** distribution, you can also install R using the website above, but you may prefer to use
-  a package manager instead -- for instance, seee [these instructions](https://linuxize.com/post/how-to-install-r-on-ubuntu-20-04/)
-  for installing the latest R version on Ubuntu 20.04 using the `apt` package manager.
-
-### Install RStudio {#install-rstudio}
-
-RStudio is a so-called Integrated Development Environment (IDE) for R,
-with side-by-side panes for an R script, an R concole, plots, help documents, and much more.
-While it is perfectly possible to use R without RStudio, RStudio has become
-the de facto standard for working with R and is very useful.
-
-To install RStudio, go to the [RStudio download page](https://rstudio.com/products/rstudio/download/#download)
-and download and run the installer file for your operating system. 
-
-### Install the *tidyverse* (optional) {#install-tidy}
-
-To install or update the *tidyverse*, which is a collection of useful R packages,
-copy the following command into an R console, and press Enter:
-
-```r
-install.packages("tidyverse")
-```
-
-### Test whether you can load the *tidyverse* (optional) {#test-tidy} 
-
-When you issue the command `library(tidyverse)` in your R console inside RStudio,
-you should get output similar to what is shown below:
-
-```r
-library(tidyverse)
-
-#> ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.3.1 ──
-#> ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-#> ✓ tibble  3.1.3     ✓ dplyr   1.0.7
-#> ✓ tidyr   1.1.3     ✓ stringr 1.4.0
-#> ✓ readr   2.0.1     ✓ forcats 0.5.1
-#> ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
-```
-
-If you get an error instead, please try to troubleshoot it by following any instructions
-given, or by Googling the error message.
-It may be necessary to update R itself, see [here](/codeclub-novice/#updating-r) for instructions.
-You can also send the [organizers of Code Club](https://biodash.github.io/codeclub-about/#organizers) an email.
-
-<br>
-
-----
-
 ## More info {#more}
 
 Please see our **[R Resources and Tips](/tutorials/r-resources-tips/)** page for:
@@ -229,8 +224,6 @@ Please see our **[R Resources and Tips](/tutorials/r-resources-tips/)** page for
 - [Useful R and RStudio settings](/tutorials/r-resources-tips/#useful-settings)
 - [The basics of installing packages in R](/tutorials/r-resources-tips/#installing-r-packages)
 - [Instructions for updating R](/tutorials/r-resources-tips/#updating-r)
-
-
 
 <br/> <br/> <br/>
 
