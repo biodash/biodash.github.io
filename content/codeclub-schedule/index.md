@@ -19,19 +19,18 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session     | Date      | Presenter    | Topic                                                            |
 |-------------|-----------|--------------|------------------------------------------------------------------|
-| S04E01      | June 02   | Jelmer        | [**R For Data Science, Ch. 1**](https://r4ds.had.co.nz/introduction.html) |
-| S04E02      | June 09   | Jessica       | [**R For Data Science, Ch. 3 - pt. I**](https://r4ds.had.co.nz/data-visualisation.html) |
-| S04E03      | June 16   | Stephen       | [**R For Data Science, Ch. 3 - pt. II**](https://r4ds.had.co.nz/data-visualisation.html) |
-| S04E04      | June 23   | Mike S.       | [**R For Data Science, Ch. 4**](https://r4ds.had.co.nz/workflow-basics.html) |
-| S04E05      | June 30   | TBA           | R For Data Science, chapter TBA |
-| S04E06      | July 07   | TBA           | R For Data Science, chapter TBA |
-| S04E07      | June 14   | TBA           | R For Data Science, chapter TBA |
-| S04E08      | June 21   | TBA           | R For Data Science, chapter TBA |
-| S04E09      | July 28   | TBA           | R For Data Science, chapter TBA |
-| S04E10      | August 04 | TBA           | R For Data Science, chapter TBA |
-| S04E11      | August 11 | TBA           | R For Data Science, chapter TBA |
-| S04E12      | August 18 | TBA           | R For Data Science, chapter TBA |
-| S04E13      | August 25 | TBA           | R For Data Science, chapter TBA |
+| S04E01      | June 09   | Jelmer        | [**R For Data Science, Ch. 1**](https://r4ds.had.co.nz/introduction.html) |
+| S04E02      | June 16   | Jessica       | [**R For Data Science, Ch. 3 - pt. I**](https://r4ds.had.co.nz/data-visualisation.html) |
+| S04E03      | June 23   | Stephen       | [**R For Data Science, Ch. 3 - pt. II**](https://r4ds.had.co.nz/data-visualisation.html) |
+| S04E04      | June 30   | Mike S.       | R For Data Science, chapter TBA |
+| S04E05      | July 07   | Michael       | R For Data Science, chapter TBA |
+| S04E06      | July 14   | TBA           | R For Data Science, chapter TBA |
+| S04E07      | July 21   | TBA           | R For Data Science, chapter TBA |
+| S04E08      | July 28   | TBA           | R For Data Science, chapter TBA |
+| S04E09      | August 04 | TBA           | R For Data Science, chapter TBA |
+| S04E10      | August 11 | TBA           | R For Data Science, chapter TBA |
+| S04E11      | August 18 | TBA           | R For Data Science, chapter TBA |
+| S04E12      | August 25 | TBA           | R For Data Science, chapter TBA |
 
 <br>
 
