@@ -2,7 +2,7 @@
 toc: true
 ---
 
-# Other Events
+# Events, courses, etc.
 
 ----
 <br>
@@ -14,24 +14,7 @@ If you know of an event that you think should be listed here, please use the for
 
 ----
 
-## Calendar
-
-<iframe src="https://calendar.google.com/calendar/embed?src=9ri5c3hf39o8kusvpqgtfig6t0%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-
-<br>
-
-<br>
-
-----
-
-## Recurring Events
-
-- **CAPS Tn-seq working group**
-  - A working group dedicated to the analysis of Transposon-seq (Tn-seq) data.
-  - Every Monday from 10-11 am.
-  - Contact [Mike Sovic](mailto:sovic.1@osu.edu) for details.
-
-<br>
+## Recurring
 
 - **MCIC bioinformatics office hour**
   - Need some quick advice or help? Drop by!
@@ -49,35 +32,10 @@ If you know of an event that you think should be listed here, please use the for
 
 ----
 
-## Spring '21 Course: <br> Practical Computing Skills for Biologists
+## Upcoming
 
-Jelmer Poelstra will teach a computing course as a section of PlantPath 8300
-in the '21 spring semester.
-
-- Focused on the command line, bash and Python scripting,
-  and reproducible science with version control and automated workflows.
-- 14 weeks, 2 credits, online-only
-- Zoom sessions on Tuesdays and Thursdays from 3:55-4:55 pm.
-- Graduate level, but undergraduates may be eligible to take the course as an IS.
-- Sign up for class number 35953.
-- Contact [Jelmer](mailto:poelstra.1@osu.edu) for more information and a syllabus.
-
-
-<br>
-
-----
-
-## Upcoming Workshops
-
-None right now!
-
-<br>
-
-----
-
-## Upcoming Outside of OSU
-
-- For [Ohio Supercomputer Center](https://osc.edu) events, such as regular introductory sessions to computing at OSC, see the [OSC Events page](https://www.osc.edu/events).
+- For [Ohio Supercomputer Center](https://osc.edu) events,
+  such as regular introductory sessions to computing at OSC, see the [OSC Events page](https://www.osc.edu/events).
 
 <br>
 
@@ -96,14 +54,6 @@ None right now!
 - [STAT 6625: Statistical Analysis of Genetic Data](https://stat.osu.edu/courses/stat/6625)
 - [STAT 6730: Introduction to Computational Statistics](https://stat.osu.edu/courses/stat/6730)
 - [FDSCTE 7600: Metabolomics, Principles and Practice](https://fst.osu.edu/courses/fdscte-7600)
-
-<br>
-
-----
-
-## Past Events
-
-TBA
 
 <br/> <br/> <br/>
 
