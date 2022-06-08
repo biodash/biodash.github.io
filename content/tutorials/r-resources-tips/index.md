@@ -42,6 +42,40 @@ date: "2021-08-17"
   "R for Data Science", which is freely available on the web in a really nice format
   [here](https://r4ds.had.co.nz/).
 
+### Why R?
+
+R is a programming language that is most well-known
+for being excellent for *statistical analysis* and *data visualization*.
+
+**While the learning curve is steeper than for most programs with graphical user
+interfaces (GUIs), it pays off to invest in learning R:**
+
+- R gives you greater **flexibility** to do anything you want.
+
+- Writing computer instructions as *code*, like you have to do in R,
+  is more **reproducible** than clicking around in a GUI.
+  It also makes it much _easier to redo analyses_ with slight modifications!
+
+- R is highly **interdisciplinary** and can be used with many different kinds of data.
+  To just name two examples,
+  R has a very strong ecosystem for bioinformatics analysis ("Bioconductor" project),
+  and can be used to create maps and perform GIS analyses.
+
+- R is more than a platform to perform analysis and create figures.
+  **R Markdown** combines R with a simple text markup language
+  to produce _analysis reports_ that integrate code, results, and text,
+  and to create _slide decks_, _data dashboards_, _websites_, and even _books_!
+
+- While not as versatile outside of data-focused topics as a language like Python,
+  R can be used as a general programming language,
+  for instance to **automate tasks** such as large-scale file renaming.
+
+Finally, R:
+
+- Is open-source and freely available for all platforms (Windows, Mac, Linux).
+
+- Has a large and welcoming user community.
+
 <br>
 
 ----
