@@ -8,20 +8,23 @@ date: "2021-08-17"
 
 <br>
 
-## R Resources
+## Resources to get started with R
 
-- [RStudio cheatsheets](https://www.rstudio.com/resources/cheatsheets/)
+### The basics
 
-- [Our own Mike Sovic's Youtube playlist of short videos on R](https://www.youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe):
+- [Code Club S02E01: Intro to R -- part 1](/codeclub/s02e01_r-intro-part1/)
+
+- [Code Club S02E02: Intro to R -- part 2](/codeclub/s02e02_r-intro_part2/)
+
+- [Mike Sovic's Youtube playlist of short videos on R](https://www.youtube.com/playlist?list=PLxhIMi78eQegFm3XqsylVa-Lm7nfiUshe):
 
 {{< youtube ByxF3xjN2JQ >}}
 
 <br>
 
-- Also for getting started with R, a useful and fun written tutorial is [R for cats](https://rforcats.net/).
+### Lengthier material
 
-- For a more systematic and lengthy introduction to R, see 
-  [A Tutorial Introduction to R](https://kingaa.github.io/R_Tutorial/).
+- [A Tutorial Introduction to R](https://kingaa.github.io/R_Tutorial/).
 
 - The Carpentries have a number of great lessons on R, such as:
 
@@ -45,35 +48,12 @@ date: "2021-08-17"
 
 ## Miscellaneous R tips
 
-### Useful settings
-
-By default, R will try to save your "environment" (e.g., your loaded data, variables, etc)
-when you exit, and then reload everything the way it was upon restarting R.
-However, doing so is not good practice!
-You should always be able to reproduce your environment given a set of commands
-*saved in an R script or R Markdown document*,
-whereas saving and reloading your entire environment encourages you to be sloppy about this.
-
-To disable this behavior in RStudio,
-click `Tools` > `Global Options` > `General` and set the options as follows:
-
-{{< figure src="r_environment.png" width="400px" caption="Recommended R/RStudio settings" >}}
-
-To start R in the same way from the command line:
-
-```r
-R --no-save --no-restore-data
-```
-
-<br>
-
-----
-
 ### Installing R packages
 
 #### CRAN packages
 
-To install an R package that is available at [CRAN](https://cran.r-project.org/), the default R package repository,
+To install an R package that is available at [CRAN](https://cran.r-project.org/),
+the default R package repository,
 from within R (e.g. in the R console in RStudio), use the `install.packages()` function.
 
 The `install.packages()` function will handle dependencies within R -- i.e., it will install other R packages
