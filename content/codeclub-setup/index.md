@@ -13,7 +13,7 @@ Additional setup instructions for individual sessions will appear in the posts f
 ## Summary
 
 - Install R and RStudio
-  (if you already have R but a version below `R 3.6`, then [update R](/tutorials/r-resources-tips/#updating-r).)
+  (if you have an older version of R, then consider [updating R](/tutorials/r-resources-tips/#updating-r)).
   
 - Install the *tidyverse* package and test if you can load it.
   
@@ -37,10 +37,17 @@ Additional setup instructions for individual sessions will appear in the posts f
 
 ### Already have R installed?
 
-- Please check your version of R, and update if it is below version `3.6`.  
-  [See this page for instructions.](/tutorials/r-resources-tips/#updating-r)
+- Please check your version of R -- this information is printed to the console
+  when you start R, and you can also get it by typing `sessionInfo()` and checking
+  the first line of the output.
+  
+- As of June 2022, ideally, your R version is at least `4.2.0`.
+  But if you're reluctant to update, you should generally be fine with an R
+  version of at least `4.0`.
+  
+- To update R, [see this page for instructions](/tutorials/r-resources-tips/#updating-r).
 
-- Make sure you have installed the *tidyverse* package.
+- Make sure you have installed the *tidyverse* package (try `library(tidyverse)`).
   
 </div>
 </div>
