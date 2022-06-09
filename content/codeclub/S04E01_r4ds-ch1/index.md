@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2022-06-09"
 lastmod: "2022-06-09"
 toc: true
-rmd_hash: 1b7c6341c044b5f6
+rmd_hash: 95adad2dd1c506eb
 
 ---
 
@@ -28,11 +28,11 @@ rmd_hash: 1b7c6341c044b5f6
 -   *Jelmer Poelstra* -- Molecular & Cellular Imaging Center (MCIC) - Wooster
 -   *Mike Sovic* -- Center for Applied Plant Sciences (CAPS)
 
-### Session logistics
+### Code Club practicalities
 
 -   In-person (Columbus & Wooster) and Zoom hybrid
 
--   Mix of instruction/discussion with the entire group, and doing exercises in breakout groups of up to \~4 people.
+-   Mix of instruction/discussion with the entire group, and doing exercises in breakout groups of up to 4-5 people.
 
 -   When doing **exercises in breakout groups**, we encourage you:
 
@@ -103,11 +103,11 @@ First, you can think of this along the lines of the colloquial meaning of the wo
 
 Additionally, computer-readability should be prioritized over human-readability (think: no color-coded cells, multiple header columns, or merged cells).
 
-But, most of all, "tidy" in the context of the tidyverse refers to the following, as it is phrased in the book:
+But, most of all, "tidy" in the context of the *tidyverse* refers to the following, as it is phrased in the book:
 
 > In brief, when your data is tidy, each column is a variable, and each row is an observation.
 
-But what does this mean? In practice, it means having your data not in a "wide format" (all the information about each sample/individual in one row) but in a "long format" (variables not spread across multiple columns) -- see the examples below.
+But what does this mean? In practice, it means having your data not in a "wide format" (all the information about each sample/individual in one row) but in a "**long format**" (variables not spread across multiple columns) -- see the examples below.
 
 Example 1, not tidy:
 
@@ -144,11 +144,11 @@ Example 2, not tidy (in *matrix* form):
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt;         gene1 gene2 gene3 gene4 gene5</span>
-<span class='c'>#&gt; sample1    54    58    48    47    42</span>
-<span class='c'>#&gt; sample2    49    53    45    48    49</span>
-<span class='c'>#&gt; sample3    46    53    48    45    40</span>
-<span class='c'>#&gt; sample4    60    46    49    53    63</span>
-<span class='c'>#&gt; sample5    62    49    46    44    52</span></code></pre>
+<span class='c'>#&gt; sample1    45    49    46    44    53</span>
+<span class='c'>#&gt; sample2    61    51    44    58    50</span>
+<span class='c'>#&gt; sample3    48    42    52    56    40</span>
+<span class='c'>#&gt; sample4    52    55    43    48    48</span>
+<span class='c'>#&gt; sample5    49    55    46    67    49</span></code></pre>
 
 </div>
 
@@ -159,21 +159,21 @@ Example 2, tidy:
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 25 × 3</span></span>
 <span class='c'>#&gt;    sample  gene  count</span>
 <span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span> sample1 gene1    54</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 2</span> sample1 gene2    58</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 3</span> sample1 gene3    48</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 4</span> sample1 gene4    47</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 5</span> sample1 gene5    42</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 6</span> sample2 gene1    49</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 7</span> sample2 gene2    53</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 8</span> sample2 gene3    45</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 9</span> sample2 gene4    48</span>
-<span class='c'>#&gt; <span style='color: #555555;'>10</span> sample2 gene5    49</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span> sample1 gene1    45</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span> sample1 gene2    49</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span> sample1 gene3    46</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span> sample1 gene4    44</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span> sample1 gene5    53</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span> sample2 gene1    61</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span> sample2 gene2    51</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span> sample2 gene3    44</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span> sample2 gene4    58</span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span> sample2 gene5    50</span>
 <span class='c'>#&gt; <span style='color: #555555;'># … with 15 more rows</span></span></code></pre>
 
 </div>
 
-For more, the book has a separate chapter on [tidy data](https://r4ds.had.co.nz/tidy-data.html), and there is also [*tidyr* vignette on tidy data](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html).
+For more, the book has a separate chapter on [tidy data](https://r4ds.had.co.nz/tidy-data.html), and there is also [*tidyr* package explainer on tidy data](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html).
 
 </details>
 
@@ -234,7 +234,7 @@ The current version of R is `4.2.0`. If your version of R is below `4.0`, it wil
 
 > An R package is a collection of functions, data, and documentation that extends the capabilities of base R.
 
-So, you can think of packages as "add-ons" / "extensions" to base R. (With *base R* meaning all the default functionality of R, or "what R comes shipped with".)
+So, you can think of packages as "add-ons" / "extensions" to base R.
 
 #### Installation versus loading
 
@@ -249,14 +249,14 @@ Unlike installation, **loading** a package is necessary again and again, in ever
 
 The *tidyverse* is unusual in that it is a *collection* of packages that can still be installed and loaded with a single command. The individual *tidyverse* packages are the focus of several chapters in the book, for instance:
 
-| Package           | Functionality                 | Main chapter |
-|-------------------|-------------------------------|--------------|
-| *ggplot2*         | Creating plots                | Ch. 3        |
-| *tidyr* & *dplyr* | Manipulating dataframes       | Ch. 5 & 7    |
-| *readr*           | Reading in data               | Ch. 11       |
-| *stringr*         | Working with "strings" (text) | Ch. 14       |
-| *forcats*         | Working with "factors"        | Ch. 15       |
-| *purrr*           | Iteration                     | Ch. 21       |
+| Package                   | Functionality                                       | Main chapter |
+|----------------------|----------------------------|----------------------|
+| ***ggplot2***             | Creating plots                                      | Ch. 3        |
+| ***tidyr*** & ***dplyr*** | Manipulating dataframes                             | Ch. 5 & 7    |
+| ***readr***               | Reading in data                                     | Ch. 11       |
+| ***stringr***             | Working with "strings" (text)                       | Ch. 14       |
+| ***forcats***             | Working with "factors" <br> (categorical variables) | Ch. 15       |
+| ***purrr***               | Iteration with functions                            | Ch. 21       |
 
 #### Data packages
 
@@ -266,7 +266,7 @@ Additionally, the book uses a couple of "data packages" (packages that only cont
 
 ------------------------------------------------------------------------
 
-## Breakout rooms
+## IV -- Breakout rooms
 
 <div class="puzzle">
 
@@ -370,7 +370,7 @@ If nothing else comes up, you could think about and discuss the following:
 
 -   [1.3.4](https://r4ds.had.co.nz/introduction.html#hypothesis-confirmation): "**Hypothesis generation**" vs. "**hypothesis confirmation**" -- are you familiar with this distinction and do you used it in practice?
 
--   [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends): Other languages commonly used for data analysis: **Python** and **Julia**. Are you familiar at all with these languages and their pros and cons with respect to R?
+-   [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends): Other languages commonly used for data analysis: **Python** and **Julia**. Are you familiar at all with these languages and their pros and cons with respect to R? Or, more simply: why are you trying to learn R and not those languages?
 
 </div>
 
