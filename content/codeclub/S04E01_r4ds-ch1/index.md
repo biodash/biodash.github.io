@@ -1,6 +1,6 @@
 ---
 output: hugodown::md_document
-title: "S04E01: R for Data Science - Chapter 1: Introduction"
+title: "S04E01: R for Data Science - Chapter 1"
 subtitle: "Introducing a new season of Code Club, in which we will read the book R for Data Science (R4DS)"
 summary: "We will introduce a new season of Code Club, in which we'll do things a little differently than before: we are going to work our way through a book: R for Data Science. Today, we'll look at the first, introductory chapter of the book."
 authors: [admin]
@@ -8,11 +8,13 @@ tags: [codeclub, r4ds]
 date: "2022-06-09"
 lastmod: "2022-06-09"
 toc: true
-rmd_hash: 0f3514e17c8439e2
+rmd_hash: 1b7c6341c044b5f6
 
 ---
 
-<br> <br>
+<p align="center">
+<img src=img/r4ds_cover.png width="45%">
+</p>
 
 ------------------------------------------------------------------------
 
@@ -36,13 +38,13 @@ rmd_hash: 0f3514e17c8439e2
 
     -   To briefly introduce yourselves and to do the exercises as a group
     -   On Zoom, to turn your cameras on and to have someone share their screen (use the `Ask for help` button in Zoom to get help from an organizer)
-    -   To let a *less* experienced person do the coding
+    -   To let a *less* experienced person do the screen sharing and coding
 
--   You can interrupt us to **ask a question** at any time, by speaking or typing in the Zoom chat.
+-   You can **ask a question** at any time, by speaking or typing in the Zoom chat.
 
--   You can generally come early or stay late for **troubleshooting or questions related to your research.**
+-   You can generally come early or stay late for **troubleshooting** but also for questions related to your research.
 
-Also:
+More general notes:
 
 -   We recommend that you **read** the relevant (part of the) chapter before each session, especially if the material in the chapter is new to you.
 
@@ -66,15 +68,11 @@ Take a look at these pages on our website:
 
 ## II -- The R for Data Science book (R4DS)
 
-<p align="center">
-<img src=img/r4ds_cover.png width="35%">
-</p>
+This excellent book by Hadley Wickham (also author of many of the R packages used in the book!) and Garret Grolemund, has a freely available **[online version](https://r4ds.had.co.nz/) that is regularly updated** and contains exercises. It was originally published in 2016.
 
-This excellent book by Hadley Wickham (also author of many of the R packages used in the book!) and Garret Grolemund, has a freely available **[online version](https://r4ds.had.co.nz/) that is regularly updated**. It was originally published in 2016.
+The book focuses on the so-called **"tidyverse" ecosystem** in R. The *tidyverse* can be seen as a **modern dialect of R**. Most of its functionality is also contained in "base R" (what comes shipped with R by default), but it has an improved and more consistent programming interface ("syntax"). In previous Code Clubs, we have often --but not always!-- been doing things "the tidyverse way" as well.
 
-The book doesn't technically assume any **previous experience with R**, but if you're completely new to R and to coding in any language, we would recommend you take a look at some introductory R material ([see this page with some resources](/tutorials/r-resources-tips/)) before we start with Chapter 2 next week.
-
-The book focuses on the so-called **"tidyverse" ecosystem** in R. The *tidyverse* is a collection of R packages which focuses on improved and more consistent approaches than those of "base R" (i.e., shipped with R by default). As such, the *tidyverse* can be seen as a modern dialect of R. In previous Code Clubs, we have often --but not always!-- been doing things "the tidyverse way" as well.
+The book doesn't technically assume any **previous experience with R**, but if you're completely new to R and to coding in any language, we would recommend you take a look at some introductory R material ([see this page for some resources](/tutorials/r-resources-tips/)) before we start with Chapter 2 next week.
 
 We will *not* be able to finish the book by the end of the summer. But if folks are liking the book, we may carry on with it during the fall semester.
 
@@ -92,11 +90,98 @@ The data science process visualized:
 <img src=img/data-science.png width="80%">
 </p>
 
+#### What is tidy data?
+
+<details>
+<summary>
+<b>Brief explanation and examples</b> (Click here)
+</summary>
+
+<br>
+
+First, you can think of this along the lines of the colloquial meaning of the word: the data is well-organized.
+
+Additionally, computer-readability should be prioritized over human-readability (think: no color-coded cells, multiple header columns, or merged cells).
+
+But, most of all, "tidy" in the context of the tidyverse refers to the following, as it is phrased in the book:
+
+> In brief, when your data is tidy, each column is a variable, and each row is an observation.
+
+But what does this mean? In practice, it means having your data not in a "wide format" (all the information about each sample/individual in one row) but in a "long format" (variables not spread across multiple columns) -- see the examples below.
+
+Example 1, not tidy:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt;     name quiz1 quiz2 test1</span>
+<span class='c'>#&gt; 1  Billy     C     D     C</span>
+<span class='c'>#&gt; 2   Suzy     F     A     A</span>
+<span class='c'>#&gt; 3 Lionel     B     C     B</span></code></pre>
+
+</div>
+
+Example 1, tidy:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 9 × 3</span></span>
+<span class='c'>#&gt;   name   assessment grade</span>
+<span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'>1</span> Billy  quiz1      C    </span>
+<span class='c'>#&gt; <span style='color: #555555;'>2</span> Billy  quiz2      D    </span>
+<span class='c'>#&gt; <span style='color: #555555;'>3</span> Billy  test1      C    </span>
+<span class='c'>#&gt; <span style='color: #555555;'>4</span> Lionel quiz1      B    </span>
+<span class='c'>#&gt; <span style='color: #555555;'>5</span> Lionel quiz2      C    </span>
+<span class='c'>#&gt; <span style='color: #555555;'>6</span> Lionel test1      B    </span>
+<span class='c'>#&gt; <span style='color: #555555;'>7</span> Suzy   quiz1      F    </span>
+<span class='c'>#&gt; <span style='color: #555555;'>8</span> Suzy   quiz2      A    </span>
+<span class='c'>#&gt; <span style='color: #555555;'>9</span> Suzy   test1      A</span></code></pre>
+
+</div>
+
+Example 2, not tidy (in *matrix* form):
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt;         gene1 gene2 gene3 gene4 gene5</span>
+<span class='c'>#&gt; sample1    54    58    48    47    42</span>
+<span class='c'>#&gt; sample2    49    53    45    48    49</span>
+<span class='c'>#&gt; sample3    46    53    48    45    40</span>
+<span class='c'>#&gt; sample4    60    46    49    53    63</span>
+<span class='c'>#&gt; sample5    62    49    46    44    52</span></code></pre>
+
+</div>
+
+Example 2, tidy:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 25 × 3</span></span>
+<span class='c'>#&gt;    sample  gene  count</span>
+<span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span> sample1 gene1    54</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span> sample1 gene2    58</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span> sample1 gene3    48</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span> sample1 gene4    47</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span> sample1 gene5    42</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span> sample2 gene1    49</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span> sample2 gene2    53</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span> sample2 gene3    45</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span> sample2 gene4    48</span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span> sample2 gene5    49</span>
+<span class='c'>#&gt; <span style='color: #555555;'># … with 15 more rows</span></span></code></pre>
+
+</div>
+
+For more, the book has a separate chapter on [tidy data](https://r4ds.had.co.nz/tidy-data.html), and there is also [*tidyr* vignette on tidy data](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html).
+
+</details>
+
 <br>
 
 ### 1.3 - What you won't learn
 
-Some perhaps unfamiliar terms and concepts that came by in [this section](https://r4ds.had.co.nz/introduction.html#what-you-wont-learn):
+Some perhaps unfamiliar terms from this section:
 
 #### [1.3.1 - Processing big data](https://r4ds.had.co.nz/introduction.html#big-data)
 
@@ -104,11 +189,9 @@ Some perhaps unfamiliar terms and concepts that came by in [this section](https:
 
 At OSU, and most other universities, we instead tend to make use of "**supercomputers**" when we want to simultaneously run an analysis many times, and more broadly, if we have "big data". Specifically, we have the ["Ohio Supercomputer Center" (OSC)](https://www.osc.edu/) here.
 
-#### [1.3.3 - Rectangular data](https://r4ds.had.co.nz/introduction.html#non-rectangular-data)
+#### [1.3.3 - Non-rectangular data](https://r4ds.had.co.nz/introduction.html#non-rectangular-data)
 
-Rectangular data is basically data that can be effectively entered in a spreadsheet (and in R, we tend to put this in a so-called "data frame", or tidyverse-style, in a "tibble").
-
-The chapter mentions some examples of non-rectangular data, such as text and (phylogenetic) trees.
+Rectangular data is basically data that can be effectively entered in a spreadsheet (and in R, we tend to put this in a so-called "dataframe" or "tibble"). **The *tidyverse* is highly dataframe-oriented**, so it makes sense that the book focuses on rectangular data.
 
 <br>
 
@@ -119,8 +202,8 @@ R itself simply provides a "*console*" (command-line interface) where you can ty
 Once you have a running instance of RStudio, **create a new R script** by clicking `File` \> `New File` \> `R Script`. Now, you should see all 4 "panes" that the RStudio window is divided into:
 
 -   *Top-left*: The **Editor** for your scripts and other documents (*hidden when no file is open*).
--   *Bottom-left*: The **R Console** to interactively run your code (+ a tab with a **Terminal**).
--   *Top-right*: Your **Environment** with R objects you have created (+ several other tabs).
+-   *Bottom-left*: The **R Console** to interactively run your code (+ other tabs).
+-   *Top-right*: Your **Environment** with R objects you have created (+ other tabs).
 -   *Bottom-right*: Tabs for **Files**, **Plots**, **Help**, and others.
 
 <p align="center">
@@ -135,7 +218,7 @@ Once you have a running instance of RStudio, **create a new R script** by clicki
 
 ### Check that you have R and RStudio working
 
-Take a moment to ***explore the RStudio interface***. Were you able to open an R script? Can you run some simple R code in the console (e.g., [the example in the book](https://r4ds.had.co.nz/introduction.html#running-r-code))?
+Take a moment to ***explore the RStudio interface***. Were you able to open a new file to get the Editor pane? Can you run some simple R code in the console (e.g., [the example in the book](https://r4ds.had.co.nz/introduction.html#running-r-code))?
 
 Take a look at your ***version of R***: this was printed in the console when you started RStudio (see the RStudio screenshot above).
 
@@ -151,7 +234,7 @@ The current version of R is `4.2.0`. If your version of R is below `4.0`, it wil
 
 > An R package is a collection of functions, data, and documentation that extends the capabilities of base R.
 
-So, you can think of packages as "add-ons" / "extensions" to R.
+So, you can think of packages as "add-ons" / "extensions" to base R. (With *base R* meaning all the default functionality of R, or "what R comes shipped with".)
 
 #### Installation versus loading
 
@@ -164,12 +247,12 @@ Unlike installation, **loading** a package is necessary again and again, in ever
 
 #### The tidyverse
 
-The *tidyverse* is unusual in that it is a *collection* of packages that can be installed and loaded with a single command. The individual *tidyverse* packages are the focus of several chapters in the book, for instance:
+The *tidyverse* is unusual in that it is a *collection* of packages that can still be installed and loaded with a single command. The individual *tidyverse* packages are the focus of several chapters in the book, for instance:
 
 | Package           | Functionality                 | Main chapter |
 |-------------------|-------------------------------|--------------|
 | *ggplot2*         | Creating plots                | Ch. 3        |
-| *tidyr* & *dplyr* | Manipulating dataframes       | Ch. 5 and 7  |
+| *tidyr* & *dplyr* | Manipulating dataframes       | Ch. 5 & 7    |
 | *readr*           | Reading in data               | Ch. 11       |
 | *stringr*         | Working with "strings" (text) | Ch. 14       |
 | *forcats*         | Working with "factors"        | Ch. 15       |
@@ -177,7 +260,7 @@ The *tidyverse* is unusual in that it is a *collection* of packages that can be 
 
 #### Data packages
 
-Additionally, we'll use a couple of "data packages" (packages that only contain data, and no functions) throughout the book: *nycflights13*, *gapminder*, and *Lahman*.
+Additionally, the book uses a couple of "data packages" (packages that only contain data, and no functions): *nycflights13*, *gapminder*, and *Lahman*.
 
 <br>
 
@@ -197,7 +280,7 @@ Please take a moment to introduce yourself to your breakout roommates. You may a
 
 -   What you want to use R for, or what you are already using R for
 
--   Perhaps why you think this book might be useful
+-   Why you think this book might be useful, if you have an idea already
 
 </div>
 
@@ -209,32 +292,36 @@ Please take a moment to introduce yourself to your breakout roommates. You may a
 
 ### 2. Install/load the packages
 
-*Usually, exercises can be done with your breakout group on one computer, but the following should be done individually, to check that everyone is up and running.*
+*Usually, exercises can be done with your breakout group on one computer, but the following should be done individually, to check that everyone has R up and running.*
 
 Most of you should already have the ***tidyverse*** installed, so let's start by trying to *load* it. This is done with the [`library()`](https://rdrr.io/r/base/library.html) function. To check if you can load the *tidyverse*, run the following and see if you get similar output as printed below:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span>
-<span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span> ─────────────────────────────────────── tidyverse 1.3.1 ──</span>
-<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>ggplot2</span> 3.3.6     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>purrr  </span> 0.3.4</span>
-<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tibble </span> 3.1.7     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>dplyr  </span> 1.0.9</span>
-<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tidyr  </span> 1.2.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>stringr</span> 1.4.0</span>
-<span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>readr  </span> 2.1.2     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>forcats</span> 0.5.1</span>
-<span class='c'>#&gt; ── <span style='font-weight: bold;'>Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span>
-<span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>filter()</span> masks <span style='color: #0000BB;'>stats</span>::filter()</span>
-<span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>lag()</span>    masks <span style='color: #0000BB;'>stats</span>::lag()</span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></code></pre>
 
 </div>
 
-If that didn't work, try to install (and then load) the *tidyverse*:
+<p align="center">
+<img src=img/load_tidyverse.png width="90%">
+</p>
+
+If instead, you got something like:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt; Error in library(tidyverse) : there is no package called ‘tidyverse’</span></code></pre>
+
+</div>
+
+...that means you still need to install it:
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>## Note: the package name is "quoted" in the install.packages() function:</span>
 <span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span>
 
-<span class='c'>## ... but it is (normally) not in library():</span>
+<span class='c'>## ... but it is not (normally) in library():</span>
 <span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></code></pre>
 
 </div>
@@ -251,7 +338,7 @@ Now, let's also install the **data packages**:
 
 The previous installation commands should return a whole bunch of output, but if all went well, you should not see any errors. Instead, look for phrases like `* DONE (nycflights13)`, which indicate successful installation of a package.
 
-You can also load the data packages:
+You can also *load* the data packages:
 
 <div class="highlight">
 
@@ -279,9 +366,9 @@ Discuss or ask about whatever you thought was interesting/confusing/etc about th
 
 If nothing else comes up, you could think about and discuss the following:
 
--   [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends): ***"Data science teams"*** -- Are grad students in a lab "Data science teams", or are they talking about something else? What does this, perhaps, say about the primary expected audience for the book?
+-   [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends): ***"Data science teams"*** -- Are grad students in a lab "Data science teams", or are they talking about something else? What does this, perhaps, say about the expected primary audience for the book?
 
--   [1.3.4](https://r4ds.had.co.nz/introduction.html#hypothesis-confirmation): "Hypothesis generation" vs. "hypothesis confirmation" -- are you familiar with this distinction and do you used it in practice?
+-   [1.3.4](https://r4ds.had.co.nz/introduction.html#hypothesis-confirmation): "**Hypothesis generation**" vs. "**hypothesis confirmation**" -- are you familiar with this distinction and do you used it in practice?
 
 -   [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends): Other languages commonly used for data analysis: **Python** and **Julia**. Are you familiar at all with these languages and their pros and cons with respect to R?
 

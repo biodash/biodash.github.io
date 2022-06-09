@@ -1,6 +1,6 @@
 ---
 output: hugodown::md_document
-title: "S04E01: R for Data Science - Chapter 1: Introduction"
+title: "S04E01: R for Data Science - Chapter 1"
 subtitle: "Introducing a new season of Code Club, in which we will read the book R for Data Science (R4DS)"
 summary: "We will introduce a new season of Code Club, in which we'll do things a little differently than before: we are going to work our way through a book: R for Data Science. Today, we'll look at the first, introductory chapter of the book."
 authors: [admin]
@@ -13,9 +13,13 @@ toc: true
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=TRUE, eval=TRUE, message=FALSE, cache=FALSE)
 knitr::opts_knit$set(root.dir = here::here("content/codeclub/S04E01_r4ds-ch1"))
+
+library(tidyverse)
 ```
 
-<br> <br>
+<p align="center">
+<img src=img/r4ds_cover.png width="45%">
+</p>
 
 ------------------------------------------------------------------------
 
@@ -29,7 +33,7 @@ knitr::opts_knit$set(root.dir = here::here("content/codeclub/S04E01_r4ds-ch1"))
 - _Jelmer Poelstra_ -- Molecular & Cellular Imaging Center (MCIC) - Wooster
 - _Mike Sovic_ -- Center for Applied Plant Sciences (CAPS)
 
-### Session logistics
+### Code Club practicalities
 
 - In-person (Columbus & Wooster) and Zoom hybrid
 
@@ -40,15 +44,14 @@ knitr::opts_knit$set(root.dir = here::here("content/codeclub/S04E01_r4ds-ch1"))
   - To briefly introduce yourselves and to do the exercises as a group
   - On Zoom, to turn your cameras on and to have someone share their screen
     (use the `Ask for help` button in Zoom to get help from an organizer)
-  - To let a _less_ experienced person do the coding
+  - To let a _less_ experienced person do the screen sharing and coding
   
-- You can interrupt us to **ask a question** at any time,
-  by speaking or typing in the Zoom chat.
+- You can **ask a question** at any time, by speaking or typing in the Zoom chat.
 
 - You can generally come early or stay late for
-  **troubleshooting or questions related to your research.**
+  **troubleshooting** but also for questions related to your research.
 
-Also:
+More general notes:
 
 - We recommend that you **read** the relevant (part of the) chapter before each session,
   especially if the material in the chapter is new to you.
@@ -78,30 +81,25 @@ Take a look at these pages on our website:
 
 ## II -- The R for Data Science book (R4DS)
 
-<p align="center">
-<img src=img/r4ds_cover.png width="35%">
-</p>
-
 This excellent book by Hadley Wickham
 (also author of many of the R packages used in the book!)
 and Garret Grolemund, has a freely available
-**[online version](https://r4ds.had.co.nz/) that is regularly updated**.
-It was originally published in 2016.
+**[online version](https://r4ds.had.co.nz/) that is regularly updated**
+and contains exercises. It was originally published in 2016.
+
+The book focuses on the so-called **"tidyverse" ecosystem** in R.
+The _tidyverse_ can be seen as a **modern dialect of R**.
+Most of its functionality is also contained in "base R" (what comes shipped with R by default),
+but it has an improved and more consistent programming interface ("syntax").
+In previous Code Clubs,
+we have often --but not always!-- been doing things "the tidyverse way"
+as well.
 
 The book doesn't technically assume any **previous experience with R**,
 but if you're completely new to R and to coding in any language,
 we would recommend you take a look at some introductory R material
-([see this page with some resources](/tutorials/r-resources-tips/))
+([see this page for some resources](/tutorials/r-resources-tips/))
 before we start with Chapter 2 next week.
-
-The book focuses on the so-called **"tidyverse" ecosystem** in R.
-The _tidyverse_ is a collection of R packages which focuses on
-improved and more consistent approaches than those of "base R"
-(i.e., shipped with R by default).
-As such, the _tidyverse_ can be seen as a modern dialect of R.
-In previous Code Clubs,
-we have often --but not always!-- been doing things "the tidyverse way"
-as well.
 
 We will _not_ be able to finish the book by the end of the summer.
 But if folks are liking the book, we may carry on with it during the fall semester.
@@ -120,11 +118,76 @@ The data science process visualized:
 <img src=img/data-science.png width="80%">
 </p>
 
+#### What is tidy data?
+
+<details>
+<summary>
+<b>Brief explanation and examples</b> (Click here)
+</summary>
+<br>
+
+First, you can think of this along the lines of the colloquial meaning of the word:
+the data is well-organized.
+
+Additionally, computer-readability should be prioritized over human-readability
+(think: no color-coded cells, multiple header columns, or merged cells).
+
+But, most of all, "tidy" in the context of the tidyverse refers to the following,
+as it is phrased in the book:
+
+> In brief, when your data is tidy, each column is a variable, and each row is an observation.
+
+But what does this mean?
+In practice, it means having your data not in a "wide format"
+(all the information about each sample/individual in one row)
+but in a "long format"
+(variables not spread across multiple columns) -- see the examples below.
+
+Example 1, not tidy:
+
+```{r, echo=FALSE}
+classroom <- data.frame(name = c("Billy", "Suzy", "Lionel"),
+                        quiz1 = c("C", "F", "B"),
+                        quiz2 = c("D", "A", "C"),
+                        test1 = c("C", "A", "B"))
+classroom
+```
+
+Example 1, tidy:
+
+```{r, echo=FALSE}
+classroom %>% 
+  pivot_longer(quiz1:test1, names_to = "assessment", values_to = "grade") %>% 
+  arrange(name, assessment)
+```
+
+Example 2, not tidy (in _matrix_ form):
+
+```{r, echo=FALSE}
+m <- matrix(rpois(n = 25, lambda = 50), nrow = 5,
+            dimnames = list(paste0("sample", 1:5), paste0("gene", 1:5)))
+m
+```
+
+Example 2, tidy:
+
+```{r, echo=FALSE}
+m %>%
+  as.data.frame() %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = -sample, names_to = "gene", values_to = "count")
+```
+
+For more, the book has a separate chapter on [tidy data](https://r4ds.had.co.nz/tidy-data.html),
+and there is also [_tidyr_ vignette on tidy data](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html).
+
+</details>
+
 <br>
 
 ### 1.3 - What you won't learn
 
-Some perhaps unfamiliar terms and concepts that came by in this section:
+Some perhaps unfamiliar terms from this section:
 
 #### [1.3.1 - Processing big data](https://r4ds.had.co.nz/introduction.html#big-data)
 
@@ -137,14 +200,12 @@ when we want to simultaneously run an analysis many times,
 and more broadly, if we have "big data".
 Specifically, we have the ["Ohio Supercomputer Center" (OSC)](https://www.osc.edu/) here.
 
-#### [1.3.3 - Rectangular data](https://r4ds.had.co.nz/introduction.html#non-rectangular-data)
+#### [1.3.3 - Non-rectangular data](https://r4ds.had.co.nz/introduction.html#non-rectangular-data)
 
 Rectangular data is basically data that can be effectively entered in a spreadsheet
-(and in R, we tend to put this in a so-called "data frame", or tidyverse-style,
-in a "tibble").
-
-The chapter mentions some examples of non-rectangular data,
-such as text and (phylogenetic) trees.
+(and in R, we tend to put this in a so-called "dataframe" or "tibble").
+**The _tidyverse_ is highly dataframe-oriented**,
+so it makes sense that the book focuses on rectangular data.
 
 <br>
 
@@ -158,8 +219,8 @@ Once you have a running instance of RStudio,
 Now, you should see all 4 "panes" that the RStudio window is divided into:
 
 - _Top-left_: The **Editor** for your scripts and other documents (_hidden when no file is open_).
-- _Bottom-left_: The **R Console** to interactively run your code (+ a tab with a **Terminal**).
-- _Top-right_: Your **Environment** with R objects you have created (+ several other tabs).
+- _Bottom-left_: The **R Console** to interactively run your code (+ other tabs).
+- _Top-right_: Your **Environment** with R objects you have created (+ other tabs).
 - _Bottom-right_: Tabs for **Files**, **Plots**, **Help**, and others.
 
 <p align="center">
@@ -174,7 +235,7 @@ Now, you should see all 4 "panes" that the RStudio window is divided into:
 ### Check that you have R and RStudio working
 
 Take a moment to _**explore the RStudio interface**_.
-Were you able to open an R script?
+Were you able to open a new file to get the Editor pane?
 Can you run some simple R code in the console
 (e.g., [the example in the book](https://r4ds.had.co.nz/introduction.html#running-r-code))?
 
@@ -198,7 +259,9 @@ or after it, since it may take a while.
 
 > An R package is a collection of functions, data, and documentation that extends the capabilities of base R.
 
-So, you can think of packages as "add-ons" / "extensions" to R.
+So, you can think of packages as "add-ons" / "extensions" to base R.
+(With _base R_ meaning all the default functionality of R, or
+"what R comes shipped with".)
 
 #### Installation versus loading
 
@@ -214,14 +277,14 @@ in every R session that you want to use it.
 #### The tidyverse
 
 The _tidyverse_ is unusual in that it is a _collection_ of packages
-that can be installed and loaded with a single command.
+that can still be installed and loaded with a single command.
 The individual _tidyverse_ packages are the focus of several chapters in the book,
 for instance:
 
 | Package     | Functionality   | Main chapter
 |-------------|-----------------|-------------|
 | _ggplot2_   | Creating plots                | Ch. 3
-| _tidyr_ & _dplyr_ | Manipulating dataframes | Ch. 5 and 7
+| _tidyr_ & _dplyr_ | Manipulating dataframes | Ch. 5 & 7
 | _readr_     | Reading in data               | Ch. 11
 | _stringr_   | Working with "strings" (text)   | Ch. 14
 | _forcats_   | Working with "factors"        | Ch. 15
@@ -229,8 +292,8 @@ for instance:
 
 #### Data packages
 
-Additionally, we'll use a couple of "data packages"
-(packages that only contain data, and no functions) throughout the book:
+Additionally, the book uses a couple of "data packages"
+(packages that only contain data, and no functions):
 _nycflights13_, _gapminder_, and _Lahman_.
 
 <br>
@@ -251,7 +314,7 @@ You may also want to mention:
 
 - What you want to use R for, or what you are already using R for
 
-- Perhaps why you think this book might be useful
+- Why you think this book might be useful, if you have an idea already
 
 </div>
 </div>
@@ -262,7 +325,7 @@ You may also want to mention:
 ### 2. Install/load the packages
 
 _Usually, exercises can be done with your breakout group on one computer,
-but the following should be done individually, to check that everyone is up
+but the following should be done individually, to check that everyone has R up
 and running._
 
 Most of you should already have the **_tidyverse_** installed,
@@ -275,13 +338,23 @@ run the following and see if you get similar output as printed below:
 library(tidyverse)
 ```
 
-If that didn't work, try to install (and then load) the _tidyverse_:
+<p align="center">
+<img src=img/load_tidyverse.png width="90%">
+</p>
+
+If instead, you got something like:
+
+```{r}
+#> Error in library(tidyverse) : there is no package called ‘tidyverse’
+```
+
+...that means you still need to install it:
 
 ```{r, eval = FALSE}
 ## Note: the package name is "quoted" in the install.packages() function:
 install.packages("tidyverse")
 
-## ... but it is (normally) not in library():
+## ... but it is not (normally) in library():
 library(tidyverse)
 ```
 
@@ -331,13 +404,14 @@ If nothing else comes up, you could think about and discuss the following:
   What does this, perhaps, say about the expected primary audience for the book?
 
 - [1.3.4](https://r4ds.had.co.nz/introduction.html#hypothesis-confirmation):
-  "Hypothesis generation" vs. "hypothesis confirmation" --
+  "**Hypothesis generation**" vs. "**hypothesis confirmation**" --
   are you familiar with this distinction and do you used it in practice?
 
 - [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends):
   Other languages commonly used for data analysis: **Python** and **Julia**.
   Are you familiar at all with these languages and their pros and cons
   with respect to R?
+  Or, more simply: why are you trying to learn R and not those languages?
   
 </div>
 </div>
