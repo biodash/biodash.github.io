@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2022-06-09"
 lastmod: "2022-06-09"
 toc: true
-rmd_hash: 95adad2dd1c506eb
+rmd_hash: 769378182705460b
 
 ---
 
@@ -144,11 +144,11 @@ Example 2, not tidy (in *matrix* form):
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt;         gene1 gene2 gene3 gene4 gene5</span>
-<span class='c'>#&gt; sample1    45    49    46    44    53</span>
-<span class='c'>#&gt; sample2    61    51    44    58    50</span>
-<span class='c'>#&gt; sample3    48    42    52    56    40</span>
-<span class='c'>#&gt; sample4    52    55    43    48    48</span>
-<span class='c'>#&gt; sample5    49    55    46    67    49</span></code></pre>
+<span class='c'>#&gt; sample1    47    62    53    44    48</span>
+<span class='c'>#&gt; sample2    49    50    54    66    47</span>
+<span class='c'>#&gt; sample3    46    49    47    50    50</span>
+<span class='c'>#&gt; sample4    48    55    39    42    54</span>
+<span class='c'>#&gt; sample5    50    52    42    61    52</span></code></pre>
 
 </div>
 
@@ -159,16 +159,16 @@ Example 2, tidy:
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 25 × 3</span></span>
 <span class='c'>#&gt;    sample  gene  count</span>
 <span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span> sample1 gene1    45</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 2</span> sample1 gene2    49</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 3</span> sample1 gene3    46</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span> sample1 gene1    47</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span> sample1 gene2    62</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span> sample1 gene3    53</span>
 <span class='c'>#&gt; <span style='color: #555555;'> 4</span> sample1 gene4    44</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 5</span> sample1 gene5    53</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 6</span> sample2 gene1    61</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 7</span> sample2 gene2    51</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 8</span> sample2 gene3    44</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 9</span> sample2 gene4    58</span>
-<span class='c'>#&gt; <span style='color: #555555;'>10</span> sample2 gene5    50</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span> sample1 gene5    48</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span> sample2 gene1    49</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span> sample2 gene2    50</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span> sample2 gene3    54</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span> sample2 gene4    66</span>
+<span class='c'>#&gt; <span style='color: #555555;'>10</span> sample2 gene5    47</span>
 <span class='c'>#&gt; <span style='color: #555555;'># … with 15 more rows</span></span></code></pre>
 
 </div>
@@ -328,7 +328,7 @@ If instead, you got something like:
 
 <br>
 
-Now, let's also install the **data packages**:
+Now, let's also install the **data packages** -- we can do that all at once:
 
 <div class="highlight">
 
@@ -338,7 +338,7 @@ Now, let's also install the **data packages**:
 
 The previous installation commands should return a whole bunch of output, but if all went well, you should not see any errors. Instead, look for phrases like `* DONE (nycflights13)`, which indicate successful installation of a package.
 
-You can also *load* the data packages:
+You can also *load* the data packages (we have to do that for each package individually):
 
 <div class="highlight">
 
@@ -366,11 +366,11 @@ Discuss or ask about whatever you thought was interesting/confusing/etc about th
 
 If nothing else comes up, you could think about and discuss the following:
 
--   [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends): ***"Data science teams"*** -- Are grad students in a lab "Data science teams", or are they talking about something else? What does this, perhaps, say about the expected primary audience for the book?
+-   [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends): ***"Data science teams"*** -- Are grad students in a lab "data science teams", or are they talking about something else? Do you think this might say something about the expected primary audience for the book?
 
--   [1.3.4](https://r4ds.had.co.nz/introduction.html#hypothesis-confirmation): "**Hypothesis generation**" vs. "**hypothesis confirmation**" -- are you familiar with this distinction and do you used it in practice?
+-   [1.3.4](https://r4ds.had.co.nz/introduction.html#hypothesis-confirmation): "**Hypothesis generation**" vs. "**hypothesis confirmation**" -- are you familiar with this distinction and do you use it in practice?
 
--   [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends): Other languages commonly used for data analysis: **Python** and **Julia**. Are you familiar at all with these languages and their pros and cons with respect to R? Or, more simply: why are you trying to learn R and not those languages?
+-   [1.3.2](https://r4ds.had.co.nz/introduction.html#python-julia-and-friends): Other languages commonly used for data analysis: **Python** and **Julia**. Are you familiar at all with these languages? Why did you want to learn R instead?
 
 </div>
 
