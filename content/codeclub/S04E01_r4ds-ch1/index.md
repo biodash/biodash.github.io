@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2022-06-09"
 lastmod: "2022-06-09"
 toc: true
-rmd_hash: 769378182705460b
+rmd_hash: fa22e03b5c52dd0d
 
 ---
 
@@ -70,7 +70,7 @@ Take a look at these pages on our website:
 
 This excellent book by Hadley Wickham (also author of many of the R packages used in the book!) and Garret Grolemund, has a freely available **[online version](https://r4ds.had.co.nz/) that is regularly updated** and contains exercises. It was originally published in 2016.
 
-The book focuses on the so-called **"tidyverse" ecosystem** in R. The *tidyverse* can be seen as a **modern dialect of R**. Most of its functionality is also contained in "base R" (what comes shipped with R by default), but it has an improved and more consistent programming interface ("syntax"). In previous Code Clubs, we have often --but not always!-- been doing things "the tidyverse way" as well.
+The book focuses on the so-called **"*tidyverse*" ecosystem** in R. The *tidyverse* can be seen as a **modern dialect of R**. Most of its functionality is also contained in "base R" (that which comes shipped with R by default), but it has an improved and more consistent programming interface or "syntax". In previous Code Clubs, we have often --but not always!-- been doing things "the *tidyverse* way" as well.
 
 The book doesn't technically assume any **previous experience with R**, but if you're completely new to R and to coding in any language, we would recommend you take a look at some introductory R material ([see this page for some resources](/tutorials/r-resources-tips/)) before we start with Chapter 2 next week.
 
@@ -107,7 +107,7 @@ But, most of all, "tidy" in the context of the *tidyverse* refers to the followi
 
 > In brief, when your data is tidy, each column is a variable, and each row is an observation.
 
-But what does this mean? In practice, it means having your data not in a "wide format" (all the information about each sample/individual in one row) but in a "**long format**" (variables not spread across multiple columns) -- see the examples below.
+But what does this mean? In practice, it often means having your data not in a "wide format" (all the information about each sample/individual in one row) but in a "**long format**" (variables not spread across multiple columns) -- see the examples below.
 
 Example 1, not tidy:
 
@@ -144,11 +144,11 @@ Example 2, not tidy (in *matrix* form):
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt;         gene1 gene2 gene3 gene4 gene5</span>
-<span class='c'>#&gt; sample1    47    62    53    44    48</span>
-<span class='c'>#&gt; sample2    49    50    54    66    47</span>
-<span class='c'>#&gt; sample3    46    49    47    50    50</span>
-<span class='c'>#&gt; sample4    48    55    39    42    54</span>
-<span class='c'>#&gt; sample5    50    52    42    61    52</span></code></pre>
+<span class='c'>#&gt; sample1    48    53    42    50    52</span>
+<span class='c'>#&gt; sample2    39    43    37    64    47</span>
+<span class='c'>#&gt; sample3    45    55    51    58    52</span>
+<span class='c'>#&gt; sample4    42    40    41    64    49</span>
+<span class='c'>#&gt; sample5    48    49    54    49    43</span></code></pre>
 
 </div>
 
@@ -159,19 +159,21 @@ Example 2, tidy:
 <pre class='chroma'><code class='language-r' data-lang='r'><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 25 × 3</span></span>
 <span class='c'>#&gt;    sample  gene  count</span>
 <span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span>
-<span class='c'>#&gt; <span style='color: #555555;'> 1</span> sample1 gene1    47</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 2</span> sample1 gene2    62</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 3</span> sample1 gene3    53</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 4</span> sample1 gene4    44</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 5</span> sample1 gene5    48</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 6</span> sample2 gene1    49</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 7</span> sample2 gene2    50</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 8</span> sample2 gene3    54</span>
-<span class='c'>#&gt; <span style='color: #555555;'> 9</span> sample2 gene4    66</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 1</span> sample1 gene1    48</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 2</span> sample1 gene2    53</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 3</span> sample1 gene3    42</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 4</span> sample1 gene4    50</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 5</span> sample1 gene5    52</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 6</span> sample2 gene1    39</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 7</span> sample2 gene2    43</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 8</span> sample2 gene3    37</span>
+<span class='c'>#&gt; <span style='color: #555555;'> 9</span> sample2 gene4    64</span>
 <span class='c'>#&gt; <span style='color: #555555;'>10</span> sample2 gene5    47</span>
 <span class='c'>#&gt; <span style='color: #555555;'># … with 15 more rows</span></span></code></pre>
 
 </div>
+
+The *tidyverse* is, as the name suggests, generally designed to work with data that is "tidy" as shown above. With *ggplot2*, in particular, you'll quickly run into difficulties when trying to make plots using wide-format dataframes.
 
 For more, the book has a separate chapter on [tidy data](https://r4ds.had.co.nz/tidy-data.html), and there is also [*tidyr* package explainer on tidy data](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html).
 
@@ -218,7 +220,7 @@ Once you have a running instance of RStudio, **create a new R script** by clicki
 
 ### Check that you have R and RStudio working
 
-Take a moment to ***explore the RStudio interface***. Were you able to open a new file to get the Editor pane? Can you run some simple R code in the console (e.g., [the example in the book](https://r4ds.had.co.nz/introduction.html#running-r-code))?
+Take a moment to ***explore the RStudio interface***. Were you able to open a new file to get the Editor pane?
 
 Take a look at your ***version of R***: this was printed in the console when you started RStudio (see the RStudio screenshot above).
 
