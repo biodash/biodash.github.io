@@ -17,14 +17,14 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 ### Upcoming sessions
 
-| Session     | Date      | Presenter    | Topic                                                            |
-|-------------|-----------|--------------|------------------------------------------------------------------|
+| Session     | Date      | Presenter     | Topic                                                            |
+|-------------|-----------|---------------|------------------------------------------------------------------|
 | S04E01      | June 09   | Jelmer        | [**R For Data Science, Ch. 1**](https://r4ds.had.co.nz/introduction.html) |
-| S04E02      | June 16   | Jessica       | [**R For Data Science, Ch. 3 - pt. I**](https://r4ds.had.co.nz/data-visualisation.html) |
+| S04E02      | June 16   | Michael B.    | [**R For Data Science, Ch. 3 - pt. I**](https://r4ds.had.co.nz/data-visualisation.html) |
 | S04E03      | June 23   | Stephen       | [**R For Data Science, Ch. 3 - pt. II**](https://r4ds.had.co.nz/data-visualisation.html) |
-| S04E04      | June 30   | Mike S.       | R For Data Science, chapter TBA |
-| S04E05      | July 07   | Michael       | R For Data Science, chapter TBA |
-| S04E06      | July 14   | TBA           | R For Data Science, chapter TBA |
+| S04E04      | June 30   | Jessica       | R For Data Science, chapter TBA |
+| S04E05      | July 07   | Jessica       | R For Data Science, chapter TBA |
+| S04E06      | July 14   | Mike S.       | R For Data Science, chapter TBA |
 | S04E07      | July 21   | TBA           | R For Data Science, chapter TBA |
 | S04E08      | July 28   | TBA           | R For Data Science, chapter TBA |
 | S04E09      | August 04 | TBA           | R For Data Science, chapter TBA |
