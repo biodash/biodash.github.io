@@ -96,7 +96,7 @@ a package from source, errors arise that relate to missing system dependencies (
 
 On **Mac** and **Linux**, these system dependencies are best installed outside of R,
 such as with `homebrew` on Mac or `apt` on Ubuntu.
-The errror message you got when trying to install an R package should tell you which system dependencies are needed.
+The error message you got when trying to install an R package should tell you which system dependencies are needed.
 
 On Windows, you can use the `installr` package to install such dependencies or other software from within R -- for example:
 
@@ -132,13 +132,13 @@ For a bit more info, see [this page](https://rstats.wtf/set-up-an-r-dev-environm
 
 <br>
 
-#### Installing packages from Github
+#### Installing packages from GitHub
 
-To install a package from Github, use either the *devtools* or the *remotes* package -- for example:
+To install a package from GitHub, use either the *devtools* or the *remotes* package -- for example:
 
 ```r
-install.packages("devtools")                # Install the devtools package
-devtools::install_github("kbroman/broman")  # Install from a repository using "<username>/<repo-name>"
+install.packages("remotes")                # Install the remotes package
+remotes::install_github("kbroman/broman")  # Install from a repository using "<username>/<repo-name>"
 ```
 
 This will install the package *from source*, so you will need to make sure you are able to do so
@@ -163,11 +163,11 @@ BiocManager::install("edgeR")    # Install the edgeR package from Bioconductor
 
 ### Updating R
 
-Consider updating R if you have an older version of R installed.
-**Specifically, in the first session of Code Club, we've seen problems when installing
-the *tidyverse* with R versions below `R 3.6`.**
+Consider updating R if you have an older version of R installed --
+as of June 2022, the current version is `R 4.2` and we would certainly recommend
+updating R if the version is below `R 4.0`.
 
-You can check which version of R you have by looking at the first lines of
+You can check which version of R you have by looking at the first line of
 output when running the following command inside R:
 
 ```r
@@ -184,24 +184,28 @@ sessionInfo()
   installr::updateR()
   ```
 
-- **Mac**: Download and install the latest `.pkg` file as if you were installing it for the first time.
+  If this doesn't work, [download the Windows R installer](https://cloud.r-project.org/bin/windows/base/)
+  as if you were installing it for the first time.
+  
+- **Mac**: [Download and install the latest `.pkg` file](https://cloud.r-project.org/bin/macosx/)
+  as if you were installing it for the first time.
 
-- **Linux**: In Ubuntu, if you installed R with `apt` or `apt-get`, you can use `apt-get upgrade` in a terminal.
-  Otherwise, download and install the latest version after removing the old one.
-  [Rtask has some instructions](https://rtask.thinkr.fr/installation-of-r-4-0-on-ubuntu-20-04-lts-and-tips-for-spatial-packages/) for upgrading to
-  R 4.0 in Ubuntu (along with upgrading to Ubuntu 20.04).
+- **Linux**: In Ubuntu, if you installed R with `apt` or `apt-get`,
+  you can use `apt-get upgrade` in a terminal.
+  Otherwise, [download and install the latest version](https://cloud.r-project.org/bin/linux/)
+  after removing the old one.
 
 <br>
 
 #### Re-installing your packages after updating (Mac and Linux)
 
-While the `installr::updateR()` function for **Windows** users takes care of reinstalling
-your packages along with updating R,
+While the `installr::updateR()` function for **Windows** users takes care of
+re-installing your packages along with updating R,
 **Mac** and **Linux** users will have to manually re-install their packages.
 Some people prefer to re-install these packages on the fly, which can end up being a way
 to get rid of packages you no longer use.
 
-But if you want immediately reinstall all your packages, run this before you upgrade:
+But if you want immediately re-install all your packages, run this before you upgrade:
 
 ```r
 my_packages <- installed.packages()
