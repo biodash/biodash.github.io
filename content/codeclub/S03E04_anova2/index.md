@@ -11,7 +11,7 @@ image:
   caption: "Artwork by @allison_horst"
   focal_point: ""
   preview_only: false
-rmd_hash: e3754d4e51713264
+rmd_hash: 70bfcf6ae3af1e58
 
 ---
 
@@ -459,9 +459,7 @@ Hints (click here)
 
 <br>
 
-Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal.
-
-<br>
+Use the function [`shapiro_test()`](https://rpkgs.datanovia.com/rstatix/reference/shapiro_test.html) to test normality. If your data is non-normal, you can check to see if log transforming it makes it normal. <br>
 </details>
 
 <br>
@@ -577,9 +575,13 @@ Hints (click here)
 
 <br>
 
+<<<<<<< HEAD
 You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance.
 
 <br>
+=======
+You can use the function [`levene_test()`](https://rpkgs.datanovia.com/rstatix/reference/levene_test.html) to test for equal variance. <br>
+>>>>>>> b4836320d0dbe7b28303489c3f695280e6d0c2a2
 </details>
 
 <br>
@@ -623,7 +625,10 @@ Conduct your Kruskal-Wallis test or ANOVA to see if there is any overall signifi
 <summary>
 Hints (click here)
 </summary>
-<br> Review the information in section 3 of this post. You could also use the package `ggpubr`. <br>
+
+<br>
+
+Review the information in section 3 of this post. You could also use the package `ggpubr`. <br>
 </details>
 
 <br>
@@ -750,7 +755,11 @@ The structure of this resulting object `dunn_bill_length` can be determined usin
 <span class='c'>#&gt;   .. ..$ sex              : Factor w/ 2 levels "female","male": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class='c'>#&gt;   .. ..$ year             : int [1:165] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</span>
 <span class='c'>#&gt;   ..$ formula        :Class 'formula'  language bill_length_mm ~ species</span>
+<<<<<<< HEAD
 <span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x55a775e9b4b8&gt; </span>
+=======
+<span class='c'>#&gt;   .. .. ..- attr(*, ".Environment")=&lt;environment: 0x7fb80d5a2188&gt; </span>
+>>>>>>> b4836320d0dbe7b28303489c3f695280e6d0c2a2
 <span class='c'>#&gt;   ..$ p.adjust.method: chr "BH"</span>
 <span class='c'>#&gt;   ..$ detailed       : logi FALSE</span>
 <span class='c'>#&gt;   ..$ method         : chr "dunn_test"</span></code></pre>
@@ -873,7 +882,10 @@ Conduct a post-hoc analysis to understand which male penguin `species` have sign
 <summary>
 Hints (click here)
 </summary>
-<br> Using the results from your assumption testing in Exercise 3, pick an appropriate post-hoc test to answer your question. <br>
+
+<br>
+
+Using the results from your assumption testing in Exercise 3, pick an appropriate post-hoc test to answer your question. <br>
 </details>
 
 <br>
@@ -967,7 +979,10 @@ Bring it all together in a plot.
 <summary>
 Hints (click here)
 </summary>
-<br> Think about what you'd like to display and go back to section 5 for more help. <br>
+
+<br>
+
+Think about what you'd like to display and go back to section 5 for more help. <br>
 </details>
 
 <br>
