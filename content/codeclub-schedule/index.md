@@ -7,7 +7,7 @@ title: "Schedule for Code Club"
 
 ## Summer '22
 
-We will meet on **Thursdays at 3 pm** starting on June 9th, 2022.
+We are meeting on **Thursdays at 3 pm** starting on June 9th, 2022.
 [Sign up using the form](/codeclub-about/#sign-up)!
 
 You can join us either on Zoom (sign up for the link) or in-person:
@@ -17,20 +17,29 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 ### Upcoming sessions
 
+- R4DS = [The R for Data Science book](https://r4ds.had.co.nz/)
+
+- Chapters/sections for each session are tentative - we will announce ahead
+  of each session what we will try to cover that week.
+
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
-| S04E01      | June 09   | Jelmer        | [**R For Data Science, Ch. 1**](https://r4ds.had.co.nz/introduction.html) |
-| S04E02      | June 16   | Michael B.    | [**R For Data Science, Ch. 3 - pt. I**](https://r4ds.had.co.nz/data-visualisation.html) |
-| S04E03      | June 23   | Stephen       | [**R For Data Science, Ch. 3 - pt. II**](https://r4ds.had.co.nz/data-visualisation.html) |
-| S04E04      | June 30   | Jessica       | R For Data Science, chapter TBA |
-| S04E05      | July 07   | Jessica       | R For Data Science, chapter TBA |
-| S04E06      | July 14   | Mike S.       | R For Data Science, chapter TBA |
-| S04E07      | July 21   | TBA           | R For Data Science, chapter TBA |
-| S04E08      | July 28   | TBA           | R For Data Science, chapter TBA |
-| S04E09      | August 04 | TBA           | R For Data Science, chapter TBA |
-| S04E10      | August 11 | TBA           | R For Data Science, chapter TBA |
-| S04E11      | August 18 | TBA           | R For Data Science, chapter TBA |
-| S04E12      | August 25 | TBA           | R For Data Science, chapter TBA |
+| S04E04      | July 07   | Jessica       | [**R4DS, Ch. 3.6: Data viz III**](https://r4ds.had.co.nz/data-visualisation.html#geometric-objects) |
+| S04E05      | July 14   | Mike S.       | [**R4DS, Ch. 3.7: Data viz IV**](https://r4ds.had.co.nz/data-visualisation.html#statistical-transformations) |
+| S04E06      | July 21   | Jelmer        | [**R4DS, Ch. 3.8-3.10: Data viz V**](https://r4ds.had.co.nz/data-visualisation.html#position-adjustments) |
+| S04E07      | July 28   | Michael B.    | [**R4DS, Ch. 4, 6 & 8: Workflow**](https://r4ds.had.co.nz/workflow-basics.html) |
+| S04E08      | August 04 | Stephen       | [**R4DS, Ch. 5.1-5.3: Data transformation I**](https://r4ds.had.co.nz/transform.html)  |
+| S04E09      | August 11 | Mike S.       | [**R4DS, Ch. 5.4-5.5: Data transformation II**](https://r4ds.had.co.nz/transform.html#select)  |
+| S04E10      | August 18 | Jessica       | [**R4DS, Ch. 5.6-5.7: Data transformation III**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise)  |
+| S04E11      | August 25 | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory data analysis**](https://r4ds.had.co.nz/exploratory-data-analysis.html)  |
+
+### Earlier sessions this season
+
+| Session     | Date      | Presenter     | Topic                                                            |
+|-------------|-----------|---------------|------------------------------------------------------------------|
+| S04E01      | June 09   | Jelmer        | [**R4DS, Ch. 1: Intro**](/codeclub/s04e01_r4ds-ch1/) |
+| S04E02      | June 23   | Michael B.    | [**R4DS, Ch. 3.1- 3.4: Data viz I**](https://r4ds.had.co.nz/data-visualisation.html) |
+| S04E03      | June 30   | Jessica       | [**R4DS, Ch. 3.5: Data viz II**](https://r4ds.had.co.nz/data-visualisation.html#facets) |
 
 <br>
 
