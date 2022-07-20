@@ -3,12 +3,13 @@
 ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
   geom_point()
 
-#> - The plot suffers from "overplotting": points are hidden behind one another.
-#> - To avoid this, use the position adjustment "jittering":
+#> The plot suffers from "overplotting": points are hidden behind one another.
+
+#> To avoid this, use the position adjustment "jittering":
 ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
   geom_point(position = "jitter")
 
-#> - Similarly, you can also use the `geom_jitter()` shorthand:
+#> Similarly, you can also use the `geom_jitter()` shorthand:
 ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
   geom_jitter()
 
@@ -16,13 +17,13 @@ ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
 # 3.8 - EXERCISE 2 -------------------------------------------------------------
 #? What parameters to geom_jitter() control the amount of jittering?
 
-#> - Let's check the documentation:
+#> Let's check the documentation:
 ?geom_jitter
 
-#> - The amount of jittering (displacement) is controlled by the arguments
-#>   `width` (horizontal jittering) and `height` (vertical jittering).
+#> The amount of jittering (displacement) is controlled by the arguments
+#> `width` (horizontal jittering) and `height` (vertical jittering).
 
-#> - In the example below, our plot has a lot more jittering than before:
+#> In the example below, our plot has a lot more jittering than before...
 ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
   geom_jitter(width = 10, height = 10)
 
@@ -30,15 +31,15 @@ ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
 # 3.9 - EXERCISE 2 -------------------------------------------------------------
 #? What does labs() do? Read the documentation. [JP: and experiment with it a bit!]
 
-#> - The labs() function allows you to control the main plot labels,
-#>   such as the plot title & subtitle, and the x- and y-axis titles.
+#> The labs() function allows you to control the main plot labels,
+#> such as the plot title & subtitle, and the x- and y-axis titles.
 
-#> - We'll make a boxplot and look at the defaults first:
+#> We'll make a boxplot and look at the defaults first:
 p_box <- ggplot(data = mpg, mapping = aes(x = hwy, y = class)) +
   geom_boxplot()
 p_box
 
-#> - Let's make some modifications!
+#> Let's make some modifications!
 p_box +
   labs(x = "Highway mileage (miles per gallon, mpg)",
        y = NULL,
@@ -47,9 +48,9 @@ p_box +
        tag = "A",
        caption = "Source: http://fueleconomy.gov")
 
-#> - The above example (& the example in the book) also shows that
-#>   if you want to omit a label that is shown by default, such as the x- or
-#>   y-axis title, you can set it to `NULL`.
+#> The above example (& the example in the book) also shows that
+#> if you want to omit a label that is shown by default, such as the x- or
+#> y-axis title, you can set it to `NULL`.
 
 
 # 3.9 - EXERCISE 4 (BONUS) -----------------------------------------------------

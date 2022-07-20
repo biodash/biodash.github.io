@@ -30,6 +30,7 @@ ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = cut, fill = clarity), position = "fill")
 
 ## Other position adjustments: (3) position = "dodge" => bars beside one another
+## This makes it easy to compare values, especially within groups
 ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = cut, fill = clarity), position = "dodge")
 
@@ -61,8 +62,8 @@ ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
 ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
   geom_boxplot() +
   coord_flip()
-## However, instead of using `coord_flip`, we can also simply "flip" our
-## original mapping of x and y:
+## However, instead of using `coord_flip`,
+## we can also simply "flip" our original mapping of x and y:
 ggplot(data = mpg, mapping = aes(y = class, x = hwy)) +
   geom_boxplot()
 
