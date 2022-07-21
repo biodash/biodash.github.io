@@ -21,6 +21,9 @@ ggplot(data = diamonds) +
 ## Other position adjustments: (1) position = "identity" => no adjustment
 ## This is not useful for bar charts, but is the default for e.g. scatterplots.
 ## To even see what happens in case of bar charts, we'll make the bars transparent:
+ggplot(data = diamonds, mapping = aes(x = cut, fill = clarity)) +
+  geom_bar(position = "identity")
+
 ggplot(data = diamonds, mapping = aes(x = cut, colour = clarity)) +
   geom_bar(fill = NA, position = "identity")
 
@@ -72,6 +75,8 @@ ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
 ## we can also simply "flip" our original mapping of x and y:
 ggplot(data = mpg, mapping = aes(y = class, x = hwy)) +
   geom_boxplot()
+
+## We'll skip the map examples - just remember that you _can_ make maps with ggplot
 
 ## `coord_polar()` code example
 ## I'm not so interested in this coordinate function per se,

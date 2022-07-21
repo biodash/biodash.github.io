@@ -73,6 +73,7 @@ p_mileage
 #> This will make it easy to compare values along the x and y axes
 #> (Unfortunately, the documentation doesn't make the defaults fully clear:)
 ?geom_abline()
+
 #> We can modify the axis limits to make this clearer:
 p_mileage +
   scale_x_continuous(limits = c(0, 45)) +
