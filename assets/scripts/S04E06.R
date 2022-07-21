@@ -42,6 +42,10 @@ ggplot(data = mpg) +
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy), position = "jitter")
 
+## geom_jitter() is a useful shorthand:
+ggplot(data = mpg) +
+  geom_jitter(mapping = aes(x = displ, y = hwy))
+
 
 # EXERCISES FOR 3.8 ------------------------------------------------------------
 ## Exercise 1
@@ -58,10 +62,12 @@ ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
 ## This graph has overlapping x labels:
 ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
   geom_boxplot()
+
 ## If we flip the axes, we no longer have that problem:
 ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
   geom_boxplot() +
   coord_flip()
+
 ## However, instead of using `coord_flip`,
 ## we can also simply "flip" our original mapping of x and y:
 ggplot(data = mpg, mapping = aes(y = class, x = hwy)) +
@@ -82,6 +88,7 @@ bar <- ggplot(data = diamonds) +
   theme(aspect.ratio = 1) +
   labs(x = NULL, y = NULL)
 
+bar
 bar + coord_flip()
 bar + coord_polar()
 
