@@ -5,32 +5,34 @@ title: "Schedule for Code Club"
 
 ------------------------------------------------------------------------
 
-## Summer '22
+## Fall '22
 
-We are meeting on **Thursdays at 3 pm** starting on June 9th, 2022.
+We will be meeting on **Thursdays at 3 pm** starting on September 8th, 2022,
+continuing to work our way through the
+[The R for Data Science book](https://r4ds.had.co.nz/).
 [Sign up using the form](/codeclub-about/#sign-up)!
 
 You can join us either on Zoom (sign up for the link) or in-person:
 
 - In **Columbus**, Jessica will be in Howlett 340.
-- In **Wooster**, Jelmer will be in Selby 203 (but _not_ on July 28, Aug 4 & 11).
+- In **Wooster**, Jelmer will be in Selby 203.
 
 ### Upcoming sessions
 
 - R4DS = [The R for Data Science book](https://r4ds.had.co.nz/)
 
 - Chapters/sections for each session are tentative -
-  we will announce ahead of each session what we will try to cover that week.
+  we will announce ahead of each session what we will cover that week.
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
-| S04E07      | July 28   | Michael B.    | [**R4DS, Ch. 27: R Markdown**](https://r4ds.had.co.nz/r-markdown.html) |
-| S04E08      | August 04 | Stephen       | [**R4DS, Ch. 4, 6 & 8: Workflow**](https://r4ds.had.co.nz/workflow-basics.html) |
-| S04E09      | August 11 | Mike S.       | [**R4DS, Ch. 5.1-5.3: Data transformation I**](https://r4ds.had.co.nz/transform.html)  |
-| S04E10      | August 18 | Jessica       | [**R4DS, Ch. 5.4-5.5: Data transformation II**](https://r4ds.had.co.nz/transform.html#select)  |
-| S04E11      | August 25 | Jelmer        | [**R4DS, Ch. 5.6-5.7: Data transformation III**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise)  |
 
-### Earlier sessions this season
+| S04E08      | Sept 08 | Stephen       | [**R4DS, Ch. 4, 6 & 8: Workflow**](https://r4ds.had.co.nz/workflow-basics.html) |
+| S04E09      | Sept 15 | Mike S.       | [**R4DS, Ch. 5.1-5.3: Data transformation I**](https://r4ds.had.co.nz/transform.html)  |
+| S04E10      | Sept 22 | Jessica       | [**R4DS, Ch. 5.4-5.5: Data transformation II**](https://r4ds.had.co.nz/transform.html#select)  |
+| S04E11      | Sept 29 | Jelmer        | [**R4DS, Ch. 5.6-5.7: Data transformation III**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise)  |
+
+### Earlier R4DS sessions
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
@@ -40,6 +42,7 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | S04E04      | July 07   | Jessica       | [**R4DS, Ch. 3.6: Data viz III**](https://r4ds.had.co.nz/data-visualisation.html#geometric-objects) |
 | S04E05      | July 14   | Mike S.       | [**R4DS, Ch. 3.7: Data viz IV**](https://r4ds.had.co.nz/data-visualisation.html#statistical-transformations) |
 | S04E06      | July 21   | Jelmer        | [**R4DS, Ch. 3.8-3.10: Data viz V**](https://r4ds.had.co.nz/data-visualisation.html#position-adjustments) |
+| S04E07      | July 28   | Michael B.    | [**R4DS, Ch. 27: R Markdown**](https://r4ds.had.co.nz/r-markdown.html) |
 <br>
 
 ------------------------------------------------------------------------
