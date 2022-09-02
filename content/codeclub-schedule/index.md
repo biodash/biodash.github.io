@@ -34,7 +34,17 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | S04E08      | Sept 15   | Jessica       | [**R4DS, Ch. 4, 6 & 8: Workflow**](https://r4ds.had.co.nz/workflow-basics.html) |
 | S04E09      | Sept 22   | Stephen       | [**R4DS, Ch. 5.1-5.3: Data transformation I**](https://r4ds.had.co.nz/transform.html)  |
 | S04E10      | Sept 29   | Jelmer        | [**R4DS, Ch. 5.4-5.5: Data transformation II**](https://r4ds.had.co.nz/transform.html#select)  |
-| S04E11      | Oct 06    | Jelmer        | [**R4DS, Ch. 5.6-5.7: Data transformation III**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise)  |
+| S04E11      | Oct 06    | Michael       | [**R4DS, Ch. 5.6-5.7: Data transformation III**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise)  |
+| S04E12      | Oct 13    | Mike          | R4DS, Chapter TBD |
+| S04E13      | Oct 20    | TBD           | R4DS, Chapter TBD |
+| S04E14      | Oct 27    | TBD          | R4DS, Chapter TBD |
+| S04E15      | Nov 03    | TBD          | R4DS, Chapter TBD |
+| S04E16      | Nov 10    | TBD          | R4DS, Chapter TBD |
+| S04E17      | Nov 17    | TBD          | R4DS, Chapter TBD |
+| S04E18      | Nov 24    | TBD          | R4DS, Chapter TBD |
+| S04E19      | Dec 01    | TBD          | R4DS, Chapter TBD |
+| S04E20      | Dec 08    | TBD          | R4DS, Chapter TBD |
+| S04E21      | Dec 15    | TBD          | R4DS, Chapter TBD |
 
 ### Earlier R4DS sessions
 
