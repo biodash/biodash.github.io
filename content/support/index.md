@@ -10,7 +10,7 @@ toc: true
 ## Available support
 
 Need assistance with bioinformatics, high-throughput sequencing data analysis, working with big data, etc?
-See below for a list of support options for OSU researchers...
+See below for some support options for OSU researchers.
 
 ### MCIC
 
@@ -27,16 +27,8 @@ our two in-house servers, our computer lab in Wooster,
 and free access to workshops. 
 To become a member, please fill out [this form](https://mcic.osu.edu/bioinformatics/mcbl-registration-form).
 
-For bioinformatics consultation, anyone is free to contact [Jelmer Poelstra](mailto:poelstra.1@osu.edu)
-or drop by at the Bioinformatics Office Hour over Zoom every Tuesday between 2 and 4 pm
-([Zoom link](https://osu.zoom.us/j/96601785996?pwd=MVUxWWZjdGF6N3BSUGNDL3lmNWZlZz09) -
-advance notice is appreciated!).
-
-### CAPS
-
-The Center for Applied Plant Sciences (CAPS) supports OSU researchers working in the plant sciences. CAPS
-research scientist Mike Sovic leads bioinformatic support efforts for the Center. Details on 
-opportunities and resources available through CAPS are at http://caps.osu.edu/bioinformatics.
+For bioinformatics consultation,
+feel free to contact [Jelmer Poelstra](mailto:poelstra.1@osu.edu).
 
 ### EEOB
 
