@@ -7,7 +7,7 @@ title: "Schedule for Code Club"
 
 ## Fall '22
 
-We will be meeting on **Thursdays at 3 pm** starting on September 8th, 2022,
+We will be meeting on **Thursdays at 3 pm** starting on September 15th, 2022,
 continuing to work our way through the
 [The R for Data Science book](https://r4ds.had.co.nz/).
 [Sign up using the form](/codeclub-about/#sign-up)!
@@ -26,11 +26,10 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
-
-| S04E08      | Sept 08 | Stephen       | [**R4DS, Ch. 4, 6 & 8: Workflow**](https://r4ds.had.co.nz/workflow-basics.html) |
-| S04E09      | Sept 15 | Mike S.       | [**R4DS, Ch. 5.1-5.3: Data transformation I**](https://r4ds.had.co.nz/transform.html)  |
-| S04E10      | Sept 22 | Jessica       | [**R4DS, Ch. 5.4-5.5: Data transformation II**](https://r4ds.had.co.nz/transform.html#select)  |
-| S04E11      | Sept 29 | Jelmer        | [**R4DS, Ch. 5.6-5.7: Data transformation III**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise)  |
+| S04E08      | Sept 15   | Jessica       | [**R4DS, Ch. 4, 6 & 8: Workflow**](https://r4ds.had.co.nz/workflow-basics.html) |
+| S04E09      | Sept 22   | Stephen       | [**R4DS, Ch. 5.1-5.3: Data transformation I**](https://r4ds.had.co.nz/transform.html)  |
+| S04E10      | Sept 29   | Jelmer        | [**R4DS, Ch. 5.4-5.5: Data transformation II**](https://r4ds.had.co.nz/transform.html#select)  |
+| S04E11      | Oct 06    | Jelmer        | [**R4DS, Ch. 5.6-5.7: Data transformation III**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise)  |
 
 ### Earlier R4DS sessions
 
