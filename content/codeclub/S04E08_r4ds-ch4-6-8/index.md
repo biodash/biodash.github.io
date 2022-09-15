@@ -5,10 +5,10 @@ subtitle: "Covering some R Basics, how to work with R scripts, and introducing R
 summary: "In this first session of Code Club for Fall '22, we will continue working our way through the book R for Data Science. Today, we'll look at three very short chapters on some R and RStudio basics."
 authors: [jessica-cooperstone]
 tags: [codeclub, r4ds]
-date: "2022-09-14"
-lastmod: "2022-09-14"
+date: "2022-09-15"
+lastmod: "2022-09-15"
 toc: true
-rmd_hash: a6f6f1b0d33a2a49
+rmd_hash: 6b5ba0dd28c09833
 
 ---
 
@@ -44,7 +44,7 @@ rmd_hash: a6f6f1b0d33a2a49
 
 -   You can generally come early or stay late for **troubleshooting** but also for questions related to your research.
 
-More general notes:
+Some more notes:
 
 -   We recommend that you **read** the relevant (part of the) chapter before each session, especially if the material in the chapter is new to you.
 
@@ -68,7 +68,7 @@ Take a look at these pages on our website:
 
 This excellent book by Hadley Wickham (also author of many of the R packages used in the book!) and Garret Grolemund, has a freely available **[online version](https://r4ds.had.co.nz/) that is regularly updated** and contains exercises. It was originally published in 2016.
 
-The book focuses on the so-called **"*tidyverse*" ecosystem** in R. The *tidyverse* can be seen as a **modern dialect of R**. Most of its functionality is also contained in "base R" (that which comes shipped with R by default), but it has an improved and more consistent programming interface or "syntax". In previous Code Clubs, we have often --but not always!-- been doing things "the *tidyverse* way" as well.
+The book focuses on the so-called **"*tidyverse*" ecosystem** in R. The *tidyverse* can be seen as a **modern dialect of R**. In previous Code Clubs, we have often --but not always!-- been doing things "the *tidyverse* way" as well.
 
 For today's chapters, The R4DS exercises I think are not so good, so I've replaced some and added some of my own.
 
@@ -78,9 +78,9 @@ For today's chapters, The R4DS exercises I think are not so good, so I've replac
 
 ## III -- R4DS Chapter 4
 
-In the R4DS exercises for this chapter, the message is that R does not handle typos so make sure you spell things correctly.
+In the first two R4DS exercises for this chapter, the message is that R does not handle typos so make sure you spell things correctly.
 
-Take a look at the RStudio keyboard shortcuts by clicking `Tools` \> `Keyboard Shortcut Help`, or you can press <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>K</kbd> on a PC.
+Exercise 3: take a look at the RStudio keyboard shortcuts by clicking `Tools` \> `Keyboard Shortcut Help`, or you can press <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>K</kbd> on a PC.
 
 <br>
 
@@ -92,29 +92,11 @@ Take a look at the RStudio keyboard shortcuts by clicking `Tools` \> `Keyboard S
 
 <div>
 
-### 1. Introduce yourselves!
-
-Please take a moment to introduce yourself to your breakout roommates. You may also want to mention:
-
--   Your level of experience with R (and perhaps other coding languages)
-
--   What you want to use R for, or what you are already using R for
-
--   Why you think this book might be useful, if you have an idea already
-
-</div>
-
-</div>
-
-<div class="puzzle">
-
-<div>
-
 Run the following code:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>cars</span><span class='o'>)</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'>glimpse</span><span class='o'>(</span><span class='nv'>cars</span><span class='o'>)</span></span></code></pre>
 
 </div>
 
@@ -137,6 +119,8 @@ However, in every R session in which you want to use tidyverse function, you alw
 
 </div>
 
+Now you can use [`glimpse()`](https://pillar.r-lib.org/reference/glimpse.html):
+
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>cars</span><span class='o'>)</span></span><span><span class='c'>#&gt; Rows: 50</span></span>
@@ -156,7 +140,7 @@ Note, if you got an error like this when running [`library(tidyverse)`](https://
 
 </div>
 
-...that means you still need to install it:
+...that means you still need to *install* it:
 
 <div class="highlight">
 
@@ -211,6 +195,26 @@ Run the code below in your new Project:
 -   Find the files `diamonds.pdf` and `diamonds.csv` on your computer, without using a search function. How did you know where to look for them?
 
 -   Where is the R working directory on your computer?
+
+<details>
+<summary>
+<b>Solution</b> (click here)
+</summary>
+
+<br>
+
+-   The code does the following:
+
+    -   Load the *tidyverse* package
+    -   Create a simple plot using the tidyverse `diamonds` dataset
+    -   Save the plot to disk as a PDF file
+    -   Save the `diamonds` dataframe to disk as a CSV file
+
+-   The files were saved in the same folder as your newly created RStudio project. (See also the next point.)
+
+-   Whenever you have an active RStudio Project, R's working directory will be in the same folder as your RStudio project.
+
+</details>
 
 </div>
 
