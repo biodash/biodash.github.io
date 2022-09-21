@@ -1,0 +1,305 @@
+---
+output: hugodown::md_document
+title: "S04E08: R4DS 5.1 - 5.3"
+subtitle: "Data Transformation part 1: introduction, `filter()`, and `arrange()`"
+summary: "..."
+authors: [admin]
+tags: [codeclub, r4ds]
+date: "`r Sys.Date()`"
+lastmod: "`r Sys.Date()`"
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
+```
+
+<figure><p align="center">
+<img src=img/dplyr_filter.png width="70%">
+<figcaption>Artwork by Allison Horst</figcaption>
+</p></figure>
+
+------------------------------------------------------------------------
+
+## I -- Chapter 5.1: Introduction
+
+### Key points
+
+- Function name conflicts:
+  The function `filter()` in the _stats_ package (which is loaded by default in R)
+  will be "masked" / "overwritten" by _dplyr_'s `filter()` function when you
+  load the _tidyverse_.
+  
+  To still use masked functions
+  (or functions from installed-but-not-loaded packages),
+  use the "full" notation, e.g. `stats::filter()`.
+
+- A _data frame_ is a rectangular data structure in R (with rows and columns),
+  while a "tibble" is a tidyverse-style data frame,
+  which mainly differs in how it is printed to screen by default
+  (see the two examples below: `cars` is a regular data frame
+  and `flights` is a tibble).
+  
+- The most common R data types are integers (tibble abbreviation: `int`),
+  doubles (`dbl`), strings (`chr`), logicals (`lgl`), and factors (`fctr`).
+
+- The _dplyr_ package is designed to work with dataframes:
+  both the input and the output is a dataframe.
+
+
+```{r}
+head(mtcars)
+```
+
+```{r, echo = FALSE}
+library(nycflights13)
+```
+
+```{r}
+head(flights)
+```
+
+<br>
+
+--------
+
+## II -- Chapter 5.2: `filter()`
+
+### Key points
+
+- The `filter()` function removes rows (observations) from a dataframe based
+  on conditions. You specify those conditions for one or more column names.
+
+- When you refer to a column, don't quote its name! (`filter(flights, month == 1)`)
+
+- Use "comparison operators" like `>` (greater than) to specify conditions.
+  Note that _two_ equals signs `==` (and not a single, `=`) signifies equality,
+  and that `!=` means "does not equal".
+
+- To combine multiple conditions, use logical (Boolean) operators:
+  `&` (and), `|` (or), and `!` (not).
+  Separating conditions by a comma also means "and" in _dplyr_,
+  e.g. in `filter(flights, month == 1, day == 1)`.
+
+- The `%in%` operator tests if the value(s) on the left-hand side are contained
+  in the values on the right hand side,
+  e.g. `4 %in% 1:5` asks whether 4 is contained in the sequence of numbers from
+  1 to 5, which will return `TRUE`.
+  
+- Missing values are denoted by `NA`, and almost any operation with an `NA` will
+  return another `NA`.
+  To test if something is or contains `NA`s, don't use `x == NA` but `is.na(x)`.
+  When you filter based on a column,
+  rows with `NA`s in that column will by default be removed by `filter()`.
+
+
+<div class="puzzle">
+<div>
+
+### Exercise 1
+
+Find all flights that...
+
+1. Had an arrival delay of two or more hours
+2. Flew to Houston (`IAH` or `HOU`)
+3. Were operated by United (`UA`), American (`AA`), or Delta (`DL`)
+4. Departed in summer (July, August, and September)
+5. Arrived more than two hours late, but didn’t leave late
+6. Were delayed by at least an hour, but made up over 30 minutes in flight
+7. Departed between midnight and 6am (inclusive)
+
+Before you start, load the necessary packages:
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+```
+
+<details><summary><b>Hints</b> (click here)</summary>
+
+- Delays are given in minutes.
+
+- Times of day are numbered from `0001` (1 minute past midnight) to
+  `2400` (midnight).
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+In the solutions below, I am piping the output to `nrow()`,
+so you can check if you got the same number of rows.
+
+\1. Had an arrival delay (=> `arr_delay`) of two or more hours (=> `>= 120`):
+
+```{r}
+filter(flights, arr_delay >= 120) %>% nrow()
+```
+
+\2. Flew to Houston (`IAH` or `HOU`) -- destination is the `dest` column:
+
+```{r}
+filter(flights, dest %in% c("IAH", "HOU")) %>% nrow()
+```
+
+\3. Were operated by United (`UA`), American (`AA`), or Delta (`DL`) &mdash;
+   this information is in the `carrier` column:
+
+```{r}
+filter(flights, carrier %in% c("UA", "AA", "DL")) %>% nrow()
+```
+
+\4. Departed in summer (July, August, and September) &mdash;
+   use the `month` column:
+
+```{r}
+filter(flights, month %in% 7:9) %>% nrow()
+filter(flights, month >= 7, month <= 9) %>% nrow()
+```
+
+\5. Arrived more than two hours late, but didn’t leave late &mdash;
+   use the `arr_delay` (arrival delay) and `dep_delay` (departure delay)
+   columns:
+
+```{r}
+filter(flights, arr_delay > 120, dep_delay <= 0)
+```
+
+\6. Were delayed by at least an hour, but made up over 30 minutes in flight &mdash;
+   use the `dep_delay` and `arr_delay` columns,
+   and note that "making up over 30 miniutes" implies that the arrival delay
+   was more than 30 minutes smaller than the departure delay:
+
+```{r}
+filter(flights, dep_delay >= 60, dep_delay - arr_delay > 30) %>% nrow()
+```
+
+\7. Departed between midnight and 6am (inclusive) &mdash;
+   use the `dep_time` column and note that `2400` is midnight:
+
+```{r}
+filter(flights, dep_time <= 600 | dep_time == 2400) %>% nrow()
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+<div class="puzzle">
+<div>
+
+### Exercise 3
+
+How many flights have a missing `dep_time`?
+What other variables are missing for these flights?
+What might these rows represent?
+
+<details><summary><b>Hints</b> (click here)</summary>
+
+- A "missing" `dep_time` means that this cell would contain the value `NA`.
+- Recall that you can test if something is `NA` with the `is.na()` function!
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+- How many flights have a missing `dep_time`?
+
+```{r}
+filter(flights, is.na(dep_time))
+```
+
+- What other variables are missing for these flights?
+
+  For example, arrival times.
+
+- What might these rows represent?
+
+  These are cancelled flights.
+
+</details>
+
+</div></div>
+
+<br>
+
+--------
+
+## III -- Chapter 5.3: `arrange()`
+
+Key points:
+
+- The `arrange()` function sorts the rows in a dataframe.
+
+- Sorting is in ascending order (smallest values first) by default &mdash;
+  use `desc(column_name)` to sort in descending order.
+
+- `NA` are always sorted at the end.  
+
+<div class="puzzle">
+<div>
+
+### Exercise 2
+
+- Sort flights to find the most delayed flights.
+- Find the flights that left earliest (relative to the scheduled time).
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+If you sort in _descending_ order by `dep_delay`,
+you'll get the most delayed flights at the top:
+
+```{r}
+arrange(flights, desc(dep_delay))
+```
+
+If you sort in _ascending_ order by `dep_delay`,
+you'll get the flights that left earliest relative to the scheduled time at the top:
+
+```{r}
+arrange(flights, desc(dep_delay))
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+<div class="puzzle">
+<div>
+
+### Exercise 4
+
+- Which flights travelled the farthest?
+- Which travelled the shortest?
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+- Which flights travelled the farthest?
+
+```{r}
+arrange(flights, desc(distance))
+```
+
+- Which travelled the shortest?
+
+```{r}
+arrange(flights, distance)
+```
+
+</details>
+
+</div></div>
+
+<br> <br>
+
