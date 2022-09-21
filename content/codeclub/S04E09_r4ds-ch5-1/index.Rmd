@@ -1,8 +1,8 @@
 ---
 output: hugodown::md_document
-title: "S04E08: R4DS 5.1 - 5.3"
+title: "S04E08: R for Data Science - Chapter 5.1 - 5.3"
 subtitle: "Data Transformation part 1: introduction, `filter()`, and `arrange()`"
-summary: "..."
+summary: "This chapter covers the manipulation of rectangular data (data frames, think data from spreadsheets) with the dplyr package that is part of the tidyverse. We'll learn about data frames & tibbles, R variable types, comparison and logical operators, and missing values (NAs) in addition to the first of the core dplyr functions: filter() and arrange()"
 authors: [admin]
 tags: [codeclub, r4ds]
 date: "`r Sys.Date()`"
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
 ```
 
 <figure><p align="center">
-<img src=img/dplyr_filter.png width="70%">
+<img src=img/dplyr_filter.jpeg width="70%">
 <figcaption>Artwork by Allison Horst</figcaption>
 </p></figure>
 
@@ -47,7 +47,11 @@ knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
   both the input and the output is a dataframe.
 
 
-```{r}
+```{r, eval=FALSE}
+head(mtcars)
+```
+
+```{r, echo=FALSE}
 head(mtcars)
 ```
 
@@ -55,7 +59,11 @@ head(mtcars)
 library(nycflights13)
 ```
 
-```{r}
+```{r, eval=FALSE}
+head(flights)
+```
+
+```{r, echo=FALSE}
 head(flights)
 ```
 
@@ -134,37 +142,84 @@ so you can check if you got the same number of rows.
 
 \1. Had an arrival delay (=> `arr_delay`) of two or more hours (=> `>= 120`):
 
-```{r}
-filter(flights, arr_delay >= 120) %>% nrow()
+```{r, eval=FALSE}
+filter(flights,
+       arr_delay >= 120) %>%
+  nrow()
+```
+
+```{r, echo=FALSE}
+filter(flights,
+       arr_delay >= 120) %>%
+  nrow()
 ```
 
 \2. Flew to Houston (`IAH` or `HOU`) -- destination is the `dest` column:
 
-```{r}
-filter(flights, dest %in% c("IAH", "HOU")) %>% nrow()
+```{r, eval=FALSE}
+filter(flights,
+       dest %in% c("IAH", "HOU")) %>%
+  nrow()
+```
+
+```{r, echo=FALSE}
+filter(flights,
+       dest %in% c("IAH", "HOU")) %>%
+  nrow()
 ```
 
 \3. Were operated by United (`UA`), American (`AA`), or Delta (`DL`) &mdash;
    this information is in the `carrier` column:
 
-```{r}
-filter(flights, carrier %in% c("UA", "AA", "DL")) %>% nrow()
+```{r, eval=FALSE}
+filter(flights,
+       carrier %in% c("UA", "AA", "DL")) %>%
+  nrow()
+```
+
+```{r, echo=FALSE}
+filter(flights,
+       carrier %in% c("UA", "AA", "DL")) %>%
+  nrow()
 ```
 
 \4. Departed in summer (July, August, and September) &mdash;
    use the `month` column:
 
-```{r}
-filter(flights, month %in% 7:9) %>% nrow()
-filter(flights, month >= 7, month <= 9) %>% nrow()
+```{r, eval=FALSE}
+filter(flights,
+       month %in% 7:9) %>%
+  nrow()
+```
+
+```{r, echo=FALSE}
+filter(flights,
+       month %in% 7:9) %>%
+  nrow()
+```
+
+This would also work:
+
+```{r, eval=FALSE}
+filter(flights,
+       month >= 7, month <= 9) %>%
+  nrow()
 ```
 
 \5. Arrived more than two hours late, but didn’t leave late &mdash;
    use the `arr_delay` (arrival delay) and `dep_delay` (departure delay)
    columns:
 
-```{r}
-filter(flights, arr_delay > 120, dep_delay <= 0)
+```{r, eval=FALSE}
+filter(flights,
+       arr_delay > 120, dep_delay <= 0) %>%
+  nrow()
+```
+
+```{r, echo=FALSE}
+filter(flights,
+       arr_delay > 120, dep_delay <= 0) %>%
+  nrow()
 ```
 
 \6. Were delayed by at least an hour, but made up over 30 minutes in flight &mdash;
@@ -172,15 +227,31 @@ filter(flights, arr_delay > 120, dep_delay <= 0)
    and note that "making up over 30 miniutes" implies that the arrival delay
    was more than 30 minutes smaller than the departure delay:
 
-```{r}
-filter(flights, dep_delay >= 60, dep_delay - arr_delay > 30) %>% nrow()
+```{r, eval=FALSE}
+filter(flights,
+       dep_delay >= 60, dep_delay - arr_delay > 30) %>%
+  nrow()
+```
+
+```{r, echo=FALSE}
+filter(flights,
+       dep_delay >= 60, dep_delay - arr_delay > 30) %>%
+  nrow()
 ```
 
 \7. Departed between midnight and 6am (inclusive) &mdash;
    use the `dep_time` column and note that `2400` is midnight:
 
-```{r}
-filter(flights, dep_time <= 600 | dep_time == 2400) %>% nrow()
+```{r, eval=FALSE}
+filter(flights,
+       dep_time <= 600 | dep_time == 2400) %>%
+  nrow()
+```
+
+```{r, echo=FALSE}
+filter(flights,
+       dep_time <= 600 | dep_time == 2400) %>%
+  nrow()
 ```
 
 </details>
@@ -210,17 +281,25 @@ What might these rows represent?
 <details><summary><b>Solution</b> (click here)</summary>
 <br>
 
-- How many flights have a missing `dep_time`?
+- _How many flights have a missing `dep_time`?_
 
-```{r}
-filter(flights, is.na(dep_time))
+```{r, eval=FALSE}
+filter(flights,
+       is.na(dep_time)) %>%
+  is.na()
 ```
 
-- What other variables are missing for these flights?
+```{r, echo=FALSE}
+filter(flights,
+       is.na(dep_time)) %>%
+  is.na()
+```
+
+- _What other variables are missing for these flights?_
 
   For example, arrival times.
 
-- What might these rows represent?
+- _What might these rows represent?_
 
   These are cancelled flights.
 
@@ -254,17 +333,26 @@ Key points:
 <details><summary><b>Solution</b> (click here)</summary>
 <br>
 
-If you sort in _descending_ order by `dep_delay`,
-you'll get the most delayed flights at the top:
+- If you sort in _descending_ order by `dep_delay`,
+  you'll get the most delayed flights at the top:
 
-```{r}
+```{r, eval=FALSE}
 arrange(flights, desc(dep_delay))
 ```
 
-If you sort in _ascending_ order by `dep_delay`,
-you'll get the flights that left earliest relative to the scheduled time at the top:
+```{r, echo=FALSE}
+arrange(flights, desc(dep_delay))
+```
 
-```{r}
+- If you sort in _ascending_ order by `dep_delay`,
+  you'll get the flights that left earliest relative to the scheduled time
+  at the top:
+
+```{r, eval=FALSE}
+arrange(flights, desc(dep_delay))
+```
+
+```{r, echo=FALSE}
 arrange(flights, desc(dep_delay))
 ```
 
@@ -285,15 +373,23 @@ arrange(flights, desc(dep_delay))
 <details><summary><b>Solution</b> (click here)</summary>
 <br>
 
-- Which flights travelled the farthest?
+- _Which flights travelled the farthest?_
 
-```{r}
+```{r, eval=FALSE}
 arrange(flights, desc(distance))
 ```
 
-- Which travelled the shortest?
+```{r, echo=FALSE}
+arrange(flights, desc(distance))
+```
 
-```{r}
+- _Which travelled the shortest?_
+
+```{r, eval=FALSE}
+arrange(flights, distance)
+```
+
+```{r, echo=FALSE}
 arrange(flights, distance)
 ```
 
@@ -302,4 +398,3 @@ arrange(flights, distance)
 </div></div>
 
 <br> <br>
-
