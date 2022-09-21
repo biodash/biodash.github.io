@@ -77,10 +77,10 @@ running your analyses at the Ohio Supercomputer Center, and so on.
 
 ## Organizers
 
-- [Jelmer Poelstra](/authors/admin/) - bioinformatician at [MCIC](http://mcic.osu.edu/) Wooster
-- [Mike Sovic](/authors/mike-sovic/) - bioinformatician at [CAPS](http://caps.osu.edu/)
-- [Stephen Opiyo](/authors/stephen-opiyo/) - biostatistician at [MCIC](http://mcic.osu.edu/) Columbus
-- [Michael Broe](/authors/michael-broe/) - bioinformatician at [EEOB](https://eeob.osu.edu/)
+- [Jelmer Poelstra](/authors/admin/) - Bioinformatician at [MCIC](http://mcic.osu.edu/) Wooster
+- [Mike Sovic](/authors/mike-sovic/) - Asst. Director at the Infectious Diseases Institute AMSL - Genomics Lab
+- [Stephen Opiyo](/authors/stephen-opiyo/) - Biostatistician at [MCIC](http://mcic.osu.edu/) Columbus
+- [Michael Broe](/authors/michael-broe/) - Bioinformatician at [EEOB](https://eeob.osu.edu/)
 - [Jessica Cooperstone](/authors/jessica-cooperstone/) - Asst. Professor at [HCS](https://hcs.osu.edu/) & [FST](https://fst.osu.edu/)
 
 <br>

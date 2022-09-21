@@ -31,10 +31,9 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
-| S04E08      | Sept 15   | Jessica       | [**R4DS, Ch. 4, 6 & 8: Workflow**](https://r4ds.had.co.nz/workflow-basics.html) |
-| S04E09      | Sept 22   | Stephen       | [**R4DS, Ch. 5.1-5.3: Data transformation I**](https://r4ds.had.co.nz/transform.html)  |
-| S04E10      | Sept 29   | Jelmer        | [**R4DS, Ch. 5.4-5.5: Data transformation II**](https://r4ds.had.co.nz/transform.html#select)  |
-| S04E11      | Oct 06    | Michael       | [**R4DS, Ch. 5.6-5.7: Data transformation III**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise)  |
+| S04E09      | Sept 22   | Jelmer       | [**R4DS, Ch. 5.1-5.3: Data transformation I**](https://r4ds.had.co.nz/transform.html)  |
+| S04E10      | Sept 29   | Michael B.      | [**R4DS, Ch. 5.4-5.5: Data transformation II**](https://r4ds.had.co.nz/transform.html#select)  |
+| S04E11      | Oct 06    | Stephen       | [**R4DS, Ch. 5.6-5.7: Data transformation III**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise)  |
 | S04E12      | Oct 13    | Mike          | R4DS, Chapter TBD |
 | S04E13      | Oct 20    | TBD           | R4DS, Chapter TBD |
 | S04E14      | Oct 27    | TBD          | R4DS, Chapter TBD |
@@ -57,6 +56,7 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | S04E05      | July 14   | Mike S.       | [**R4DS, Ch. 3.7: Data viz IV**](https://r4ds.had.co.nz/data-visualisation.html#statistical-transformations) |
 | S04E06      | July 21   | Jelmer        | [**R4DS, Ch. 3.8-3.10: Data viz V**](https://r4ds.had.co.nz/data-visualisation.html#position-adjustments) |
 | S04E07      | July 28   | Michael B.    | [**R4DS, Ch. 27: R Markdown**](https://r4ds.had.co.nz/r-markdown.html) |
+| S04E08      | Sept 15   | Jessica       | [**R4DS, Ch. 4, 6 & 8: Workflow**](https://r4ds.had.co.nz/workflow-basics.html) |
 <br>
 
 ------------------------------------------------------------------------
