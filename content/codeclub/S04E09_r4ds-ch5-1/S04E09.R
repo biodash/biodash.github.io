@@ -29,8 +29,9 @@ filter(flights, month == 11 | month == 12)
 ## Use the `%in%` operator to concisely specify multiple options:
 nov_dec <- filter(flights, month %in% c(11, 12))
 
-## Two ways to see flights that weren't delayed by more than 2 hours:
+## See flights that weren't delayed (arr. or dep.) by more than 2 hours:
 filter(flights, arr_delay <= 120, dep_delay <= 120)
+filter(flights, arr_delay <= 120 & dep_delay <= 120)
 filter(flights, !(arr_delay > 120 | dep_delay > 120))
 
 ## Operations with NAs tend to return NA:

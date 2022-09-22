@@ -1,14 +1,14 @@
 ---
 output: hugodown::md_document
 title: "S04E08: R for Data Science - Chapter 5.1 - 5.3"
-subtitle: "Data Transformation part 1: introduction, `filter()`, and `arrange()`"
+subtitle: "Data Transformation with _dplyr_, part 1: introduction, `filter()`, and `arrange()`"
 summary: "This chapter covers the manipulation of rectangular data (data frames, think data from spreadsheets) with the dplyr package that is part of the tidyverse. We'll learn about data frames & tibbles, R variable types, comparison and logical operators, and missing values (NAs) in addition to the first of the core dplyr functions: filter() and arrange()"
 authors: [admin]
 tags: [codeclub, r4ds]
 date: "2022-09-22"
 lastmod: "2022-09-22"
 toc: true
-rmd_hash: e1960cd2a16f9191
+rmd_hash: f3c9798e73162bbe
 
 ---
 
@@ -29,9 +29,9 @@ Artwork by Allison Horst
 
 -   Function name conflicts: The function [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) in the *stats* package (which is loaded by default in R) will be "masked" / "overwritten" by *dplyr*'s [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function when you load the *tidyverse*. To still use a masked function (or a function from an installed-but-not-loaded package!), use the "full" notation, e.g. [`stats::filter()`](https://rdrr.io/r/stats/filter.html).
 
--   A *data frame* is rectangular data structure (with rows and columns), while a "tibble" is a tidyverse-style data frame. Tibbles mainly differ from regular data frames in how they are printed to screen by default. Ssee the two examples below: `cars` is a regular data frame and `flights` is a tibble.
+-   A *data frame* is rectangular data structure (with rows and columns), while a "tibble" is a tidyverse-style data frame. Tibbles mainly differ from regular data frames in how they are printed to screen by default. See the two examples below: `cars` is a regular data frame and `flights` is a tibble.
 
--   The most common R data types are *integers* (tibble abbreviation: `int`), *doubles* (`dbl`), ) (`chr`), *logicals* (`lgl`), and *factors* (`fctr`).
+-   The most common R data types are *integers* (tibble abbreviation: `int`), *doubles* (`dbl`), *character strings* (`chr`), *logicals* (`lgl`), and *factors* (`fctr`).
 
 -   The *dplyr* package is designed to work with dataframes: both the input and the output is a dataframe.
 
@@ -89,7 +89,7 @@ Artwork by Allison Horst
 
 ### Key points
 
--   The [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function removes rows (observations) from a dataframe based on conditions. You specify those conditions for one or more columns.
+-   The [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function removes rows (observations) from a dataframe based on certain conditions. You specify those conditions for one or more columns.
 
 -   When you refer to a column, don't quote its name! (e.g. in `filter(flights, month == 1)`, where `month` is the column name.)
 
@@ -346,7 +346,7 @@ Key points:
 
 -   The [`arrange()`](https://dplyr.tidyverse.org/reference/arrange.html) function sorts the rows in a dataframe.
 
--   Sorting is in ascending order (smallest values first) by default --- use `desc(column_name)` to sort in descending order.
+-   Sorting happens in ascending order (smallest values first) by default --- use `desc(column_name)` to sort in descending order.
 
 -   `NA` are always sorted at the end.
 
@@ -444,6 +444,8 @@ Key points:
 
 -   Which flights travelled the farthest?
 -   Which travelled the shortest?
+
+(In both cases, arrange the dataframes to see the flights of interest at the top.)
 
 <details>
 <summary>
