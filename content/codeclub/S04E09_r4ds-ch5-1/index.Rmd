@@ -29,41 +29,43 @@ knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
   The function `filter()` in the _stats_ package (which is loaded by default in R)
   will be "masked" / "overwritten" by _dplyr_'s `filter()` function when you
   load the _tidyverse_.
-  
-  To still use masked functions
-  (or functions from installed-but-not-loaded packages),
+  To still use a masked function
+  (or a function from an installed-but-not-loaded package!),
   use the "full" notation, e.g. `stats::filter()`.
 
-- A _data frame_ is a rectangular data structure in R (with rows and columns),
-  while a "tibble" is a tidyverse-style data frame,
-  which mainly differs in how it is printed to screen by default
-  (see the two examples below: `cars` is a regular data frame
-  and `flights` is a tibble).
+- A _data frame_ is rectangular data structure (with rows and columns),
+  while a "tibble" is a tidyverse-style data frame.
+  Tibbles mainly differ from regular data frames in how they are printed to screen
+  by default.
+  Ssee the two examples below: `cars` is a regular data frame
+  and `flights` is a tibble.
   
-- The most common R data types are integers (tibble abbreviation: `int`),
-  doubles (`dbl`), strings (`chr`), logicals (`lgl`), and factors (`fctr`).
+- The most common R data types are _integers_ (tibble abbreviation: `int`),
+  _doubles_ (`dbl`), ) (`chr`), _logicals_ (`lgl`), and _factors_ (`fctr`).
 
 - The _dplyr_ package is designed to work with dataframes:
   both the input and the output is a dataframe.
 
 
 ```{r, eval=FALSE}
+# 'mtcars' is a regular dataframe
 head(mtcars)
 ```
 
 ```{r, echo=FALSE}
+# 'mtcars' is a regular dataframe
 head(mtcars)
 ```
 
-```{r, echo = FALSE}
-library(nycflights13)
-```
-
 ```{r, eval=FALSE}
+# 'flights' is a tibble, which affects its printing behavior
+library(nycflights13)
 head(flights)
 ```
 
 ```{r, echo=FALSE}
+# 'flights' is a tibble, which affects its printing behavior
+library(nycflights13)
 head(flights)
 ```
 
@@ -76,9 +78,10 @@ head(flights)
 ### Key points
 
 - The `filter()` function removes rows (observations) from a dataframe based
-  on conditions. You specify those conditions for one or more column names.
+  on conditions. You specify those conditions for one or more columns.
 
-- When you refer to a column, don't quote its name! (`filter(flights, month == 1)`)
+- When you refer to a column, don't quote its name!
+  (e.g. in `filter(flights, month == 1)`, where `month` is the column name.)
 
 - Use "comparison operators" like `>` (greater than) to specify conditions.
   Note that _two_ equals signs `==` (and not a single, `=`) signifies equality,
@@ -96,10 +99,9 @@ head(flights)
   
 - Missing values are denoted by `NA`, and almost any operation with an `NA` will
   return another `NA`.
-  To test if something is or contains `NA`s, don't use `x == NA` but `is.na(x)`.
+  To test if `x` is or contains `NA`s, don't use `x == NA` but `is.na(x)`.
   When you filter based on a column,
   rows with `NA`s in that column will by default be removed by `filter()`.
-
 
 <div class="puzzle">
 <div>
@@ -137,8 +139,8 @@ library(tidyverse)
 <details><summary><b>Solution</b> (click here)</summary>
 <br>
 
-In the solutions below, I am piping the output to `nrow()`,
-so you can check if you got the same number of rows.
+_In the solutions below, I am piping the output to `nrow()`,_
+_so you can check if you got the same number of rows._
 
 \1. Had an arrival delay (=> `arr_delay`) of two or more hours (=> `>= 120`):
 
@@ -271,9 +273,13 @@ What might these rows represent?
 
 <details><summary><b>Hints</b> (click here)</summary>
 
-- A "missing" `dep_time` means that this cell would contain the value `NA`.
+- A "missing" `dep_time` means that this cell contains the value `NA`.
 - Recall that you can test if something is `NA` with the `is.na()` function!
-
+- To count the number of flights, you can look at the information printed along
+  with the dataframe (`... with X more rows`),
+  or pipe (`%>%`) the dataframe into the `nrow()` function,
+  which counts the number of rows.
+  
 </details>
 
 <br>
@@ -286,13 +292,13 @@ What might these rows represent?
 ```{r, eval=FALSE}
 filter(flights,
        is.na(dep_time)) %>%
-  is.na()
+  nrow()
 ```
 
 ```{r, echo=FALSE}
 filter(flights,
        is.na(dep_time)) %>%
-  is.na()
+  nrow()
 ```
 
 - _What other variables are missing for these flights?_
