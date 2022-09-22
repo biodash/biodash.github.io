@@ -76,8 +76,7 @@ Artwork by Allison Horst
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   time_hour &lt;dttm&gt;, and abbreviated variable names ¹​sched_dep_time,</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span></code></pre>
 
 </div>
 
@@ -392,8 +391,7 @@ Key points:
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span></code></pre>
 
 </div>
 
@@ -423,8 +421,7 @@ Key points:
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span></code></pre>
 
 </div>
 
@@ -480,8 +477,7 @@ Key points:
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span></code></pre>
 
 </div>
 
@@ -511,8 +507,7 @@ Key points:
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 336,766 more rows, 9 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, and abbreviated variable names</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   ¹​sched_dep_time, ²​dep_delay, ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</span></span></span></code></pre>
 
 </div>
 
