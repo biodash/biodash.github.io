@@ -31,11 +31,11 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
-| S04E11      | Oct 20    | Michael B.    | [**R4DS, Ch. 5.4: Data transformation III - select() **](https://r4ds.had.co.nz/transform.html#select) |
-| S04E12      | Oct 27    | Stephen       | [**R4DS, Ch. 5.5: Data transformation IV - mutate() **](https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate)  |
-| S04E13      | Nov 03    | Mike S.       | [**R4DS, Ch. 5.6: Data transformation V - summarize() **](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise) |
-| S04E14      | Nov 10    | Jelmer        | [**R4DS, Ch. 5.7: Data transformation VI - grouped mutates **](https://r4ds.had.co.nz/transform.html#grouped-mutates-and-filters) |
-| S04E15      | Nov 17    | Jessica       | R4DS, Chapter TBD |
+| S04E11      | Oct 20    | Michael B.    | [**R4DS, Ch. 5.4: Data transformation III - select()**](https://r4ds.had.co.nz/transform.html#select) |
+| S04E12      | Oct 27    | Stephen       | [**R4DS, Ch. 5.5: Data transformation IV - mutate()**](https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate)  |
+| S04E13      | Nov 03    | Mike S.       | [**R4DS, Ch. 5.6: Data transformation V - summarize()**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise) |
+| S04E14      | Nov 10    | Jessica       | [**R4DS, Ch. 5.7: Data transformation VI - grouped mutates**](https://r4ds.had.co.nz/transform.html#grouped-mutates-and-filters) |
+| S04E15      | Nov 17    | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis I**](https://r4ds.had.co.nz/exploratory-data-analysis.html) |
 | S04E16      | Nov 24    | TBD           | R4DS, Chapter TBD |
 | S04E17      | Dec 01    | TBD           | R4DS, Chapter TBD |
 | S04E18      | Dec 08    | TBD           | R4DS, Chapter TBD |
