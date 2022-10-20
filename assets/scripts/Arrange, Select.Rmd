@@ -1,0 +1,248 @@
+---
+title: "Arrange, Select"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Today we are going to finish off the material on the dplyr function `arrange()` that we didn't get to last week, and introduce a new dplyr function `select()`.
+
+The way I am presenting this is through an RMarkdown document, to interactively explore the material in these two sections of Chapter 5, Data transformation
+
+Recall that for all dplyr data manipulation functions there is a common template:
+
+- the first argument of the function is the input data frame
+
+- the next arguments say what you want to do with that data frame, using variable names (no quotes)
+
+- the result is a new dataframe
+
+The fact that all these functions have a common template makes it possible to chain steps together, to make complex code chunks out of simple steps, one step at a time, as we will see below.
+
+We will again be using the `nycflights13` and `tidyverse` packages, so we first need make sure these packages are installed, and then load them for the current session by doing `library()` commands:
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+```
+
+## `arrange()`
+
+Refer to the biodash page to see where we left off:
+
+[S04E08: R for Data Science - Chapter 5.1 - 5.3](https://biodash.github.io/codeclub/s04e09_r4ds-ch5-1/)
+
+`arrange()` is the equivalent of the Excel `sort` command.
+
+So what happens if just 'arrange' flights (the data frame) with no other arguments?
+
+```{r}
+arrange(flights)
+```
+
+Nothing changes. This is identical to the original data frame:
+
+```{r}
+head(flights)
+```
+
+But there a whole bunch of variables we can sort by. An easy way to see them is using the `glimpse()` function, which basically puts the 'columns into rows', so you can see them more easily, without scrolling off the screen. This is a great way to see just what the columns are in a complex data frame that you inherit from someone or other.
+
+```{r}
+glimpse(flights)
+```
+
+(Notice there are 19 columns). 
+
+Say we wanted to sort by month, and pull all the 'Christmassy' flights to the top. We can arrange by month, *and* sort descending:
+
+```{r}
+arrange(flights, desc(month))
+```
+
+And now say we want to just order the Christmas flights coming into Columbus. We can first `filter()` on `CMH`, and then chain (pipe) that filter statement into arrange, using the **pipe** notation.
+
+First filter on destination `CMH`:
+
+```{r}
+filter(flights, dest == "CMH")
+```
+
+(Notice we now have only 3,524 rows, as opposed to 336,776 in the full data frame). 
+
+We can pass that output data frame on to `arrange()` using the 'pipe symbol' `%>%`:
+
+```{r}
+filter(flights, dest == "CMH") %>% 
+  arrange(desc(month))
+```
+
+So this is a first example of chaining together simple steps, to get a more complex result.
+
+Finally, with arrange, you can add other variables to 'break ties'. In the following example, we first sort on `month` (descending), and *then* sort on `dep_delay`:
+
+```{r}
+filter(flights, dest == "CMH") %>% 
+  arrange(desc(month), dep_delay)
+```
+
+## Break out exercises:
+
+Again, see here: [S04E08: R for Data Science - Chapter 5.1 - 5.3](https://biodash.github.io/codeclub/s04e09_r4ds-ch5-1/)
+
+at the bottom of the page, under **III – Chapter 5.3: arrange()**.
+
+## `select()`
+
+The previous data manipulation functions we've looked at, `filter()` and `arrange()`, work on observations (i.e. rows).
+
+The next function we'll look at, `select()`, works on directly on variables (i.e. columns).
+
+If you have hundreds of columns in a data frame (many of which you may not be interested in for the current analysis) you can **subset** the columns. We saw above that `flights` has 19 columns. This is a serious example in terms of rows (336,776), but pretty trivial in terms of columns. But it's still a good toy example.
+
+It will be useful to import this example data frame into our local Environment so we can visualize it in RStudio (at the moment it is just 'floating' out there in the system: we can access it, but we can't see it).
+
+So after:
+
+```{r}
+library(nycflights13)
+```
+
+We want to do:
+
+```{r}
+my_flights <- flights
+```
+
+(We've just created a personal 'local object' data frame in our current session, pulling in data from the `nycflights13` package). And it should appear in the Environment tab in RStudio.
+
+So, how can we focus on a subset of variables in the flights data frame? One way is to explicitly name the columns you want to **keep** using the `select()` function (remember, the first argument is the data frame; the following arguments are the column names):
+
+```{r}
+select(flights, year, month, day)
+```
+
+Often this is fine, but as you move on to larger data sets, you might want to use various *selection features* instead of just explictly listing want you want to keep.
+
+These are listed if you do:
+
+```{r}
+?select
+```
+
+These use the same syntax and semantics as `filter()` for rows, using the same logical combinations.
+
+#### Selection features
+
+##### `:` 'range'
+
+You can select a **range** of columns using the `:` range operator. This is really only efficient if the original data frame is organized in a way that is useful for your purposes. The good news is that don't have to select all varibles explicitly, one by one. The range operator selects *consecutive* variables in the data frame.
+
+```{r}
+select(flights, year:day)
+```
+
+Notice that the `month` variable is automatically included, even though it's not mentioned in the select statement.
+
+But there is more organization in this data frame. Say we wanted to drill down just into the departure and arrival times:
+
+```{r}
+select(flights, dep_time:arr_delay)
+```
+
+
+##### `!` 'complement'
+
+You can also drop columns (and ranges of columns) using the logical `complement` sign:
+
+```{r}
+select(flights, !(year:day))
+```
+
+Now we just have 16 columns, as opposed to the original 19.
+
+**Just a note**. In the text we are using, the syntax is:
+
+```r
+select(flights, -(year:day))
+```
+But based on this:
+
+[select.R](https://dplyr.tidyverse.org/reference/select.html)
+
+I get the sense that `!` is the current recommendation for taking the complement in `select()` statements and that `-` is deprecated. And FYI: documentation *always* lags behind implementation.
+
+We can do exactly the same thing by explicitly listing the columns we want to drop, *but*, there is a gotcha here. 
+
+This (which was my first guess) does not work:
+
+```r
+select(flights, !(year, month, day)
+```
+Instead, we need to wrap the dropped columns in a `c()` vector:
+
+```{r}
+select(flights, !c(year, month, day)) 
+```
+
+This is the syntax for *combining selections* in the current dplyr package.
+
+Let's check if it works on positive selections:
+
+```{r}
+select(flights, c(year, month, day))
+```
+
+Yep, all the same.
+
+So it seems it's *optional* for positive selections, but *necessary* for negative selections.
+
+#### Selection helpers
+
+There are other ways to select columns efficiently without explicitly naming them.
+
+Here are some examples of helpers which select variables by pattern-matching over the names. Note that the search term must be wrapped in quotes (since we are searching on text in the column name):
+
+```{r}
+flights %>% 
+  select(ends_with("time"))
+```
+
+
+```{r}
+flights %>% 
+  select(starts_with("time"))
+```
+We can combine these two helpers (you can also think of them as 'filters' or 'constraints' to make contact with other programming languages) using logical operators. Here is an 'OR' statement using the `|` syntax. It means the selection returns *all* selections that match *either* columns that end with "time" or start with "time".
+
+```{r}
+flights %>% 
+  select(ends_with("time") | starts_with("time"))
+```
+
+In this particular case there is a more compact way to get the same result, using the `contains()` helper. But this solution has lower resolution, since "time" could be anywhere in the column name.
+
+```{r}
+flights %>% 
+  select(contains("time"))
+```
+
+But you get the idea. The usefulness of these 'selection helpers' depends on the column naming conventions you create (or most likely inherit) from a colleague or online.
+
+
+## Break out exercises:
+
+See 5.4.1 in the text.
+
+But just state with these:
+
+Create a couple of select queries which pull out dep_time, dep_delay, arr_time, and arr_delay from flights, just using what we learned above.
+
+One should be explicit, and others (at least slightly!) more efficient.
+
+If you get through these with no issues, feel free to explore more of the execises in 5.4.1.
+
