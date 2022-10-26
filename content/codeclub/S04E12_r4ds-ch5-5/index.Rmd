@@ -1,0 +1,522 @@
+---
+output: hugodown::md_document
+title: "S04E12: R for Data Science - Chapter 5.5: mutate"
+subtitle: "Data Transformation with _dplyr_, part IV: `mutate()`"
+authors: [stephen-opiyo]
+tags: [codeclub, r4ds]
+date: "`r Sys.Date()`"
+lastmod: "`r Sys.Date()`"
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
+```
+
+<figure><p align="center">
+<img src=img/mutate.jpeg width="70%">
+<figcaption>Artwork by Allison Horst</figcaption>
+</p></figure>
+
+------------------------------------------------------------------------
+
+## Introduction
+
+Today we are going to cover the dplyr function `mutate()`.
+You can today's topic in the R 4 Data Science book at:
+<https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate>.
+
+We will again be using the `nycflights13` and `tidyverse` packages,
+so we first need make sure these packages are installed,
+and then load them for the current session by doing `library()` commands:
+
+```{r, eval=FALSE}
+## Only if you haven't done so before, install the packages
+install.packages("tidyverse")
+install.packages("nycflights13")
+```
+
+```{r}
+## Load the packages
+library(tidyverse)
+library(nycflights13)
+```
+
+<br>
+
+------
+
+## The `mutate()` function
+
+The `mutate()` function always _adds_ new columns at the end of your dataset.
+Let us create a small dataset so we can see the new variables:
+
+```{r}
+flights_sml <- select(flights, 
+  year:day, 
+  ends_with("delay"), 
+  distance, 
+  air_time
+)
+```
+
+As a first example, let's add columns `gain` (delay made up) and `speed`:
+
+```{r, echo=FALSE}
+mutate(flights_sml,
+  gain = dep_delay - arr_delay,
+  speed = distance / air_time * 60
+)
+```
+
+```{r, eval=FALSE}
+mutate(flights_sml,
+  gain = dep_delay - arr_delay,
+  speed = distance / air_time * 60
+)
+```
+
+`transmute()` is very similar to `mutate()`,
+except the returned dataframe only contains the new variables that were created:
+
+```{r, eval=FALSE}
+transmute(flights,
+  gain = dep_delay - arr_delay,
+  hours = air_time / 60,
+  gain_per_hour = gain / hours
+)
+```
+
+```{r, echo=FALSE}
+transmute(flights,
+  gain = dep_delay - arr_delay,
+  hours = air_time / 60,
+  gain_per_hour = gain / hours
+)
+```
+
+<br>
+
+------
+
+## Useful creation functions to use with mutate
+
+Note that functions must be vectorised before use with `mutate()`.
+
+**Arithmetic operators:**
+`+` (addition), `-` (subtraction), `*` (multiplication), `/` (division), `^` (to the power)
+
+**Modular arithmetic:**
+`%/%` (integer division) and `%%` (remainder).
+Modular arithmetic is a handy tool because it allows you to break integers up into pieces.
+For example:
+
+```{r, eval=FALSE}
+transmute(flights,
+  dep_time,
+  hour = dep_time %/% 100,
+  minute = dep_time %% 100
+)
+```
+
+```{r, echo=FALSE}
+transmute(flights,
+  dep_time,
+  hour = dep_time %/% 100,
+  minute = dep_time %% 100
+)
+```
+
+**Logs:** `log ()`, `log2()`, `log10()`.
+Logarithms are useful transformation for dealing with data that ranges across
+multiple orders of magnitude.
+
+**Offsets:** `lead()` and `lag()`.
+These allow you to refer to leading or lagging values:
+
+```{r, eval=FALSE}
+(x <- 1:10)
+```
+
+```{r, echo=FALSE}
+(x <- 1:10)
+```
+
+```{r, eval=FALSE}
+lag(x)
+```
+
+```{r, echo=FALSE}
+lag(x)
+```
+
+```{r, eval=FALSE}
+lead(x)
+```
+
+```{r, echo=FALSE}
+lead(x)
+```
+
+**Cumulative and rolling aggregates:**
+R provides functions for sums `cumsum()`, products `cumprod()`, mins `cummin()`,
+and maxes `cummax()`;
+and dplyr provides function for mean `cummean()`.
+
+```{r, eval=FALSE}
+x
+```
+
+```{r, echo=FALSE}
+x
+```
+
+```{r, eval=FALSE}
+cumsum(x)
+```
+
+```{r, echo=FALSE}
+cumsum(x)
+```
+
+```{r, eval=FALSE}
+cummean(x)
+```
+
+```{r, echo=FALSE}
+cummean(x)
+```
+
+**Logical comparisons:**
+`<` (less than), `<=` (equal to or less than), `>` (greater than),
+`>=` (equal to or greater than), `!=` (not equal to), and `==` (equal to).
+
+**Ranking:** `min_rank()` gives the smallest values the small rank,
+and `desc(x)` to give the largest values the smallest ranks.
+
+```{r, eval=FALSE}
+y <- c(1, 2, 2, NA, 3, 4)
+```
+
+```{r, echo=FALSE}
+y <- c(1, 2, 2, NA, 3, 4)
+```
+
+```{r, eval=FALSE}
+min_rank(y)
+```
+
+```{r, echo=FALSE}
+min_rank(y)
+```
+
+```{r, eval=FALSE}
+min_rank(desc(y))
+```
+
+```{r, echo=FALSE}
+min_rank(desc(y))
+```
+
+There are other ranks functions, too,
+e.g., `row_number()`, `dense_rank()`, `percent_rank()`, `cume_dist()`, `ntile()`.
+
+```{r, eval=FALSE}
+row_number(y)
+```
+
+```{r, echo=FALSE}
+row_number(y)
+```
+
+```{r, eval=FALSE}
+dense_rank(y)
+```
+
+```{r, echo=FALSE}
+dense_rank(y)
+```
+
+```{r, eval=FALSE}
+percent_rank(y)
+```
+
+```{r, echo=FALSE}
+percent_rank(y)
+```
+
+<br>
+
+------
+
+## Breakout room exercises
+
+These correspond to the
+[exercises in the R4DS book](https://r4ds.had.co.nz/transform.html#exercises-11),
+but we're skipping exercises 2 and 6.
+
+### R4DS Exercise 1
+
+Currently `dep_time` and `sched_dep_time` are convenient to look at,
+but hard to compute with because they’re not really continuous numbers.
+Convert them to a more convenient representation of number of minutes
+since midnight.
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- You can use the following code structure
+  (we first select only relevant columns to more easily check the results):
+
+```{r, eval=FALSE}
+flights %>% 
+  select(dep_time, sched_dep_time) %>% 
+  mutate(
+    flights_times,
+    dep_time_mins = YOUR_CODE_HERE,
+    sched_dep_time_mins = YOUR_CODE_HERE
+    )
+```
+
+- Get the number of _hours_ since midnight using `%/%`
+  (as in the example in the book) and then convert this number to minutes.
+  
+- Then, get the number of _minutes_ past the hour using `%%`
+  (again as in the example in the book), and add this number to the previous
+  one to get the total number of minutes past midnight.
+  
+- Now, you might think you're all done, but there is one remaining problem:
+  midnight was originally represented as `2400`,
+  which the code described above would convert to `1440` (`24 * 60`).
+  But it should be `0` instead.
+  This is a tricky one,
+  but you can handle it using an additional `%%` calculation.
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+- To handle the midnight case, use `%% 1440`:
+  this would simply return the original value for all values below 1440,
+  and would return `0` only for `1440` (midnight): 
+
+```{r, eval=FALSE}
+flights %>%
+  select(dep_time, sched_dep_time) %>% 
+  mutate(
+    dep_time_mins = (dep_time %/% 100 * 60 + dep_time %% 100) %% 1440,
+    sched_dep_time_mins = (sched_dep_time %/% 100 * 60 + sched_dep_time %% 100) %% 1440
+    )
+```
+
+```{r, echo=FALSE}
+flights %>%
+  select(dep_time, sched_dep_time) %>% 
+  mutate(
+    dep_time_mins = (dep_time %/% 100 * 60 + dep_time %% 100) %% 1440,
+    sched_dep_time_mins = (sched_dep_time %/% 100 * 60 + sched_dep_time %% 100) %% 1440
+    )
+```
+
+</details>
+
+### R4DS Exercise 3
+
+Compare `dep_time`, `sched_dep_time`, and `dep_delay`.
+How would you expect those three numbers to be related?
+Test if this is indeed the case.
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- We should expect `dep_delay` to equal the difference between
+  `sched_dep_time` and `dep_time`.
+  
+- To check this, the first step is to use your code from exercise 1 to create
+  columns with the `sched_dep_time` and the `dep_time` in minutes past midnight.
+  
+- Then, create a column with the difference in minutes between `sched_dep_time`
+  and `dep_time` (e.g. called `our_delay_calc`).
+
+- Next, create a column with the difference between `our_delay_calc` and `dep_delay`
+  (e.g. called `delay_diff`).
+
+- Finally, use `filter()` to see if there are any rows where the `delay_diff`
+  does not equal 0. Recall that we would expect no differences at all,
+  if all is well. So what is going on with those rows?
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r, eval=FALSE}
+flights %>% 
+  select(dep_time, sched_dep_time, dep_delay) %>% 
+  mutate(
+    dep_time_min = (dep_time %/% 100 * 60 + dep_time %% 100) %% 1440,
+    sched_dep_time_min = (sched_dep_time %/% 100 * 60 + sched_dep_time %% 100) %% 1440,
+    our_delay_calc = dep_time_min - sched_dep_time_min,
+    dep_delay_diff = our_delay_calc - dep_delay
+  ) %>% 
+  filter(dep_delay_diff != 0)
+```
+
+```{r, echo=FALSE}
+flights %>% 
+  select(dep_time, sched_dep_time, dep_delay) %>% 
+  mutate(
+    dep_time_min = (dep_time %/% 100 * 60 + dep_time %% 100) %% 1440,
+    sched_dep_time_min = (sched_dep_time %/% 100 * 60 + sched_dep_time %% 100) %% 1440,
+    our_delay_calc = dep_time_min - sched_dep_time_min,
+    dep_delay_diff = our_delay_calc - dep_delay
+  ) %>% 
+  filter(dep_delay_diff != 0)
+```
+
+These `dep_delay_diff` values are all 1440 minutes (= 24 hours),
+and as you can see, these are flights that were scheduled to depart one day
+but left only the next day (past midnight).
+
+So, for our `dep_time_min` and `sched_dep_time_min` to always work for calculations,
+they should also take dates into account -- and should e.g. be minutes past some
+date in the past.
+
+</details>
+
+### R4DS Exercise 4
+
+Find the 10 most delayed flights using a ranking function.
+How do you want to handle ties?
+Carefully read the documentation for `min_rank()`.
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- Use `mutate()` to create a new column with the ranks,
+  then arrange by this column and/or filter only top ranks to get the most
+  delayed flights.
+  
+- To see the differences in the handling of ties between `row_number()`,
+  `min_rank()`, and `dense_rank()`, take a look this:
+  
+```{r, eval=FALSE}
+tibble(delays = c(3, 5, 5, 5, 130, 276),
+       rank_rownr = row_number(delays),
+       rank_min = min_rank(delays),
+       rank_dense = dense_rank(delays))
+```
+
+```{r, echo=FALSE}
+tibble(delays = c(3, 5, 5, 5, 130, 276),
+       rank_rownr = row_number(delays),
+       rank_min = min_rank(delays),
+       rank_dense = dense_rank(delays))
+```
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r}
+flights %>%
+  select(dep_time, sched_dep_time, dep_delay) %>%
+  mutate(dep_delay_rank = min_rank(desc(dep_delay))) %>% 
+  filter(dep_delay_rank <= 10) %>%
+  arrange(dep_delay_rank)
+```
+
+</details>
+
+### R4DS Exercise 5
+
+What does `1:3 + 1:10` return? Why?
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- First, you should realize that `1:3` expands to a vector with the values
+  `1`, `2`, and `3`, and similarly for `1:10`.
+  
+- Many R operations are _vectorized_, which means that when pairing two vectors
+  (including the case where one of those vectors is just a single value),
+  the shorter vector will be recycled.
+  In the example below, `3` is recycled and added to every single value in the
+  vector `1:5`:
+  
+```{r, eval=FALSE}
+3 + 1:5
+```
+
+```{r, echo=FALSE}
+3 + 1:5
+```
+
+</details>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r, eval=FALSE}
+1:3 + 1:10
+```
+
+```{r, echo=FALSE}
+1:3 + 1:10
+```
+
+R gives a warning because the length of the longer vector isn't a multiple of
+the length of the shorter vector: it recycles `1:3` three times and is then
+left over with a single value from `1:3` to be paired with `10`.
+This kind of thing is usually not intended.
+
+</details>
+
+### Bonus exercise
+
+You can use the `paste0()` function to combine strings of text,
+for instance:
+
+```{r, eval=FALSE}
+carrier <- "UA"
+flight <- 1545
+paste0("The full flight number is: ", carrier, flight)
+```
+
+```{r, echo=FALSE}
+carrier <- "UA"
+flight <- 1545
+paste0("The full flight number is: ", carrier, flight)
+```
+
+Use `paste0()` inside `mutate()` to create a new column `flight_no`
+which has the full flight number (carrier followed by flight, like above)
+for each flight.
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+```{r, eval=FALSE}
+flights %>%
+  select(carrier, flight) %>%
+  mutate(flight_no = paste0(carrier, flight))
+```
+
+```{r, echo=FALSE}
+flights %>%
+  select(carrier, flight) %>%
+  mutate(flight_no = paste0(carrier, flight))
+```
+
+</details>
+
+<br> <br>
+
+-----
+
+## Acknowledgements
+
+We used <https://jrnold.github.io/r4ds-exercise-solutions> to provide hints
+and solutions for the exercises.
