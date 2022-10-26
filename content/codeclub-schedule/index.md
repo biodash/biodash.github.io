@@ -31,7 +31,6 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
-| S04E11      | Oct 20    | Michael B.    | [**R4DS, Ch. 5.4: Data transformation III - select()**](https://r4ds.had.co.nz/transform.html#select) |
 | S04E12      | Oct 27    | Stephen       | [**R4DS, Ch. 5.5: Data transformation IV - mutate()**](https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate)  |
 | S04E13      | Nov 03    | Mike S.       | [**R4DS, Ch. 5.6: Data transformation V - summarize()**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise) |
 | S04E14      | Nov 10    | Jessica       | [**R4DS, Ch. 5.7: Data transformation VI - grouped mutates**](https://r4ds.had.co.nz/transform.html#grouped-mutates-and-filters) |
@@ -55,6 +54,7 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | S04E08      | Sept 15   | Jessica       | [**R4DS, Ch. 4, 6 & 8: Workflow**](https://r4ds.had.co.nz/workflow-basics.html) |
 | S04E09      | Sept 22   | Jelmer       | [**R4DS, Ch. 5.1-5.2: Data transformation I - intro and filter()**](https://r4ds.had.co.nz/transform.html)  |
 | S04E10      | Oct 06   | Michael B.      | [**R4DS, Ch. 5.3: Data transformation II - arrange()**](https://r4ds.had.co.nz/transform.html#arrange-rows-with-arrange)  |
+| S04E11      | Oct 20    | Michael B.    | [**R4DS, Ch. 5.4: Data transformation III - select()**](https://r4ds.had.co.nz/transform.html#select) |
 
 <br>
 

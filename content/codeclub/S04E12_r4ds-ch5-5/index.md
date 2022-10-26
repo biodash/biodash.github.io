@@ -2,12 +2,13 @@
 output: hugodown::md_document
 title: "S04E12: R for Data Science - Chapter 5.5: mutate"
 subtitle: "Data Transformation with _dplyr_, part IV: `mutate()`"
+summary: "Today we will cover the `mutate()` function to create new columns in dataframes. While this function itself is simple enough, we will get to see some interesting data manipulation techniques and operators such as `%%` and `%/%`."
 authors: [stephen-opiyo]
 tags: [codeclub, r4ds]
 date: "2022-10-26"
 lastmod: "2022-10-26"
 toc: true
-rmd_hash: 3d9152979fffb74f
+rmd_hash: d344fceddaaedda7
 
 ---
 

@@ -1,12 +1,14 @@
 ---
 output: hugodown::md_document
-title: "S04E10: R for Data Science - Chapter 5.4"
+title: "S04E9 and S04E10: R for Data Science - Chapters 5.3 and 5.4"
+subtitle: "Data Transformation with _dplyr_, parts II and III: `arrange()` and `filter()`."
+summary: "In these two sessions of Code Club, we look at sorting dataframes with `arrange()` and filtering rows of a dataframe based on certain conditions with `filter()`."
 authors: [michael-broe]
 tags: [codeclub, r4ds]
-date: "2022-10-20"
-lastmod: "2022-10-20"
+date: "2022-10-26"
+lastmod: "2022-10-26"
 toc: true
-rmd_hash: 1eec377f9c7a5a8d
+rmd_hash: b1c921a3cd2273a2
 
 ---
 
