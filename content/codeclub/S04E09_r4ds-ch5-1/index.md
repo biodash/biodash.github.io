@@ -5,10 +5,10 @@ subtitle: "Data Transformation with _dplyr_, part 1: introduction, and `filter()
 summary: "This chapter covers the manipulation of rectangular data (data frames, think data from spreadsheets) with the dplyr package that is part of the tidyverse. We'll learn about data frames & tibbles, R variable types, comparison and logical operators, and missing values (NAs) in addition to the first of the core dplyr functions: filter()"
 authors: [admin]
 tags: [codeclub, r4ds]
-date: "2022-10-27"
-lastmod: "2022-10-27"
+date: 2022-10-06
+lastmod: 2022-10-06
 toc: true
-rmd_hash: b8efc29eca6815b0
+rmd_hash: 17cb6a6c8d69363c
 
 ---
 

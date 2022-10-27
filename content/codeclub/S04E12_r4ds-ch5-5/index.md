@@ -5,8 +5,8 @@ subtitle: "Data Transformation with _dplyr_, part IV: `mutate()`"
 summary: "Today we will cover the mutate() function to create new columns in dataframes. While this function itself is simple enough, we will get to see some interesting data manipulation techniques and operators such as those for integer division and remainder."
 authors: [stephen-opiyo]
 tags: [codeclub, r4ds]
-date: "2022-10-26"
-lastmod: "2022-10-26"
+date: "2022-10-27"
+lastmod: "2022-10-27"
 toc: true
 rmd_hash: a28a00716db10838
 

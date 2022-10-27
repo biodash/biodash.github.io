@@ -5,10 +5,10 @@ subtitle: "Data Transformation with _dplyr_, parts II and III: `arrange()` and `
 summary: "In these two sessions of Code Club, we look at sorting dataframes with arrange() and filtering rows of a dataframe based on certain conditions with filter()."
 authors: [michael-broe]
 tags: [codeclub, r4ds]
-date: "2022-10-27"
-lastmod: "2022-10-27"
+date: 2022-10-13
+lastmod: 2022-10-13
 toc: true
-rmd_hash: 8b8d82e20ed8e9b1
+rmd_hash: 4eb9977eb8e5d26f
 
 ---
 
