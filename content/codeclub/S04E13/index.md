@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2022-11-03"
 lastmod: "2022-11-03"
 toc: true
-rmd_hash: 1ef3d7e5f2475716
+rmd_hash: df552637d1e66d02
 
 ---
 
@@ -36,7 +36,8 @@ rmd_hash: 1ef3d7e5f2475716
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>flights</span><span class='o'>)</span></span><span><span class='c'>#&gt; Rows: 336,776</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>flights</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; Rows: 336,776</span></span>
 <span><span class='c'>#&gt; Columns: 19</span></span>
 <span><span class='c'>#&gt; $ year           <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2…</span></span>
 <span><span class='c'>#&gt; $ month          <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
@@ -73,7 +74,9 @@ The flights tibble has 19 variables -- to keep things simple, we'll focus on jus
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights_exp</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>flights</span>, <span class='nv'>carrier</span>, <span class='nv'>flight</span>, <span class='nv'>air_time</span>, <span class='nv'>dep_delay</span><span class='o'>)</span></span>
-<span><span class='nv'>flights_exp</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 336,776 × 4</span></span></span>
+<span></span>
+<span><span class='nv'>flights_exp</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 336,776 × 4</span></span></span>
 <span><span class='c'>#&gt;    carrier flight air_time dep_delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> UA        <span style='text-decoration: underline;'>1</span>545      227         2</span></span>
@@ -97,7 +100,9 @@ There are \>336,000 observations (flights) in this dataset. Let's reduce it to j
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights_exp</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>flights_exp</span>, <span class='nv'>carrier</span> <span class='o'>==</span> <span class='s'>"AA"</span><span class='o'>)</span></span>
-<span><span class='nv'>flights_exp</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 32,729 × 4</span></span></span>
+<span></span>
+<span><span class='nv'>flights_exp</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 32,729 × 4</span></span></span>
 <span><span class='c'>#&gt;    carrier flight air_time dep_delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> AA        <span style='text-decoration: underline;'>1</span>141      160         2</span></span>
@@ -121,7 +126,9 @@ The column `air_time` is measured in minutes. What if we wanted a new column `ai
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights_exp</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span><span class='nv'>flights_exp</span>, air_time_hrs <span class='o'>=</span> <span class='nv'>air_time</span><span class='o'>/</span><span class='m'>60</span><span class='o'>)</span></span>
-<span><span class='nv'>flights_exp</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 32,729 × 5</span></span></span>
+<span></span>
+<span><span class='nv'>flights_exp</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 32,729 × 5</span></span></span>
 <span><span class='c'>#&gt;    carrier flight air_time dep_delay air_time_hrs</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>        <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> AA        <span style='text-decoration: underline;'>1</span>141      160         2         2.67</span></span>
@@ -148,7 +155,8 @@ Here's an example of how to use [`summarise()`](https://dplyr.tidyverse.org/refe
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span><span class='nv'>flights</span>, delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>dep_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 × 1</span></span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span><span class='nv'>flights</span>, delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>dep_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1 × 1</span></span></span>
 <span><span class='c'>#&gt;   delay</span></span>
 <span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>1</span>  12.6</span></span></code></pre>
@@ -161,7 +169,8 @@ Here's an example of how to use [`summarise()`](https://dplyr.tidyverse.org/refe
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>by_day</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>flights</span>, <span class='nv'>year</span>, <span class='nv'>month</span>, <span class='nv'>day</span><span class='o'>)</span></span>
 <span></span>
-<span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span><span class='nv'>by_day</span>, delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>dep_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 365 × 4</span></span></span>
+<span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span><span class='nv'>by_day</span>, delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>dep_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 365 × 4</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># Groups:   year, month [12]</span></span></span>
 <span><span class='c'>#&gt;     year month   day delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
@@ -190,7 +199,8 @@ And more than one new summarized variable can be calculated - here, there are 3:
 <span>                   dist <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>distance</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>,</span>
 <span>                   delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span></span>
 <span></span>
-<span><span class='nv'>delay</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 105 × 4</span></span></span>
+<span><span class='nv'>delay</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 105 × 4</span></span></span>
 <span><span class='c'>#&gt;    dest  count  dist delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> ABQ     254 <span style='text-decoration: underline;'>1</span>826   4.38</span></span>
@@ -212,7 +222,9 @@ Let's look a bit closer at what this is doing (note, this is not in the book):
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights_sub</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>flights</span>, <span class='nv'>dest</span>, <span class='nv'>distance</span>, <span class='nv'>arr_delay</span><span class='o'>)</span></span>
-<span><span class='nv'>flights_sub</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 336,776 × 3</span></span></span>
+<span></span>
+<span><span class='nv'>flights_sub</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 336,776 × 3</span></span></span>
 <span><span class='c'>#&gt;    dest  distance arr_delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> IAH       <span style='text-decoration: underline;'>1</span>400        11</span></span>
@@ -232,7 +244,9 @@ Let's look a bit closer at what this is doing (note, this is not in the book):
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>albuquerque_data</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>flights_sub</span>, <span class='nv'>dest</span> <span class='o'>==</span> <span class='s'>"ABQ"</span><span class='o'>)</span></span>
-<span><span class='nv'>albuquerque_data</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 254 × 3</span></span></span>
+<span></span>
+<span><span class='nv'>albuquerque_data</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 254 × 3</span></span></span>
 <span><span class='c'>#&gt;    dest  distance arr_delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> ABQ       <span style='text-decoration: underline;'>1</span>826       -<span style='color: #BB0000;'>35</span></span></span>
@@ -252,7 +266,9 @@ Let's look a bit closer at what this is doing (note, this is not in the book):
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>mean_albuquerque_delay</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>albuquerque_data</span><span class='o'>$</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span></span>
-<span><span class='nv'>mean_albuquerque_delay</span></span><span><span class='c'>#&gt; [1] 4.38189</span></span></code></pre>
+<span></span>
+<span><span class='nv'>mean_albuquerque_delay</span></span>
+<span><span class='c'>#&gt; [1] 4.38189</span></span></code></pre>
 
 </div>
 
@@ -260,8 +276,10 @@ Compare the value `mean_albuquerque_delay` to that in the summarized `delay` tib
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>mean_albuquerque_delay</span></span><span><span class='c'>#&gt; [1] 4.38189</span></span><span></span>
-<span><span class='nv'>delay</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 105 × 4</span></span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>mean_albuquerque_delay</span></span>
+<span><span class='c'>#&gt; [1] 4.38189</span></span><span></span>
+<span><span class='nv'>delay</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 105 × 4</span></span></span>
 <span><span class='c'>#&gt;    dest  count  dist delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> ABQ     254 <span style='text-decoration: underline;'>1</span>826   4.38</span></span>
@@ -316,7 +334,8 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>carrier_grp</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>flights</span>, <span class='nv'>carrier</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span><span class='nv'>carrier_grp</span>,</span>
-<span>          mean_delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span> </span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 16 × 2</span></span></span>
+<span>          mean_delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span> </span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 16 × 2</span></span></span>
 <span><span class='c'>#&gt;    carrier mean_delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> 9E           7.38 </span></span>
@@ -377,7 +396,8 @@ Solution (click here)
 <span>                            mean_delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>,</span>
 <span>                            n <span class='o'>=</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span></span>
 <span></span>
-<span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carrier_delays</span>, <span class='nv'>n</span> <span class='o'>&gt;=</span> <span class='m'>10000</span><span class='o'>)</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 9 × 3</span></span></span>
+<span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carrier_delays</span>, <span class='nv'>n</span> <span class='o'>&gt;=</span> <span class='m'>10000</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 9 × 3</span></span></span>
 <span><span class='c'>#&gt;   carrier mean_delay     n</span></span>
 <span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>1</span> 9E           7.38  <span style='text-decoration: underline;'>18</span>460</span></span>
@@ -431,7 +451,8 @@ Solution (click here)
 <span></span>
 <span><span class='nv'>dest_delays</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span><span class='nv'>dest_grp</span>, mean_delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span></span>
 <span></span>
-<span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='o'>(</span><span class='nv'>dest_delays</span>, <span class='nf'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span><span class='o'>(</span><span class='nv'>mean_delay</span><span class='o'>)</span><span class='o'>)</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 105 × 2</span></span></span>
+<span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='o'>(</span><span class='nv'>dest_delays</span>, <span class='nf'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span><span class='o'>(</span><span class='nv'>mean_delay</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 105 × 2</span></span></span>
 <span><span class='c'>#&gt;    dest  mean_delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> CAE         41.8</span></span>
@@ -515,7 +536,8 @@ Solution (click here)
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>carrier</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span>mean_delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 16 × 2</span></span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span>mean_delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 16 × 2</span></span></span>
 <span><span class='c'>#&gt;    carrier mean_delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> 9E           7.38 </span></span>
@@ -564,7 +586,8 @@ Solution (click here)
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>carrier</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span>mean_delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>,</span>
 <span>            n <span class='o'>=</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>n</span> <span class='o'>&gt;</span> <span class='m'>10000</span><span class='o'>)</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 9 × 3</span></span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>n</span> <span class='o'>&gt;</span> <span class='m'>10000</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 9 × 3</span></span></span>
 <span><span class='c'>#&gt;   carrier mean_delay     n</span></span>
 <span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>1</span> 9E           7.38  <span style='text-decoration: underline;'>18</span>460</span></span>
@@ -607,7 +630,8 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>dest</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='o'>(</span>mean_delay <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>arr_delay</span>, na.rm <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='o'>(</span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span><span class='o'>(</span><span class='nv'>mean_delay</span><span class='o'>)</span><span class='o'>)</span></span><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 105 × 2</span></span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='o'>(</span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span><span class='o'>(</span><span class='nv'>mean_delay</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 105 × 2</span></span></span>
 <span><span class='c'>#&gt;    dest  mean_delay</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> CAE         41.8</span></span>
