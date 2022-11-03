@@ -1,0 +1,358 @@
+---
+output: hugodown::md_document
+title: "S04E13: R for Data Science - Chapter 5.6: summarize"
+subtitle: "The first of two parts on _dplyr_'s `summarize()` function"
+summary: "Today we will introduce summarize() function. Together with group_by(), this function is extremely useful to produce summary statistics of your data by group."
+authors: [mike-sovic]
+tags: [codeclub, r4ds]
+date: "`r Sys.Date()`"
+lastmod: "`r Sys.Date()`"
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
+```
+
+------------------------------------------------------------------------
+
+## Get the Dataset and Packages
+
+```{r, eval=FALSE}
+# Only if you haven't done so before, install the packages
+install.packages("tidyverse")
+install.packages("nycflights13")
+```
+
+```{r}
+# Load the flights dataset and tidyverse
+library(nycflights13)
+library(tidyverse)
+```
+
+### Preview the Dataset
+
+```{r}
+glimpse(flights)
+```
+
+<br>
+
+------------------------------------------------------------------------
+
+## Review of `select()`, `filter()`, `mutate()`
+
+### `select()`
+
+The flights tibble has 19 variables --
+to keep things simple, we'll focus on just a few of these for now.
+Let's choose the variables (columns) `carrier`, `flight`, `air_time`, and `dep_delay`:
+
+```{r}
+flights_exp <- select(flights, carrier, flight, air_time, dep_delay)
+flights_exp
+```
+
+### `filter() `
+
+There are >336,000 observations (flights) in this dataset.
+Let's reduce it to just American Airlines flights:
+
+```{r}
+flights_exp <- filter(flights_exp, carrier == "AA")
+flights_exp
+```
+
+### `mutate()`
+
+The column `air_time` is measured in minutes.
+What if we wanted a new column `air_time_hrs` that reports the air time in hours?
+
+```{r}
+flights_exp <- mutate(flights_exp, air_time_hrs = air_time/60)
+flights_exp
+```
+
+<br>
+
+------------------------------------------------------------
+
+## Section 5.6: `summarise()`
+
+Here's an example of how to use `summarise()` in the simplest way.
+Notice the similarity in syntax with `mutate()`:
+
+```{r}
+summarise(flights, delay = mean(dep_delay, na.rm = TRUE))
+```
+
+`summarise()` is typically combined with `group_by()`,
+calculating the new summarized variable separately for each set of
+grouped observations in the dataset:
+
+```{r}
+by_day <- group_by(flights, year, month, day)
+
+summarise(by_day, delay = mean(dep_delay, na.rm = TRUE))
+```
+
+And more than one new summarized variable can be calculated - here, there are 3:
+
+```{r}
+by_dest <- group_by(flights, dest)
+
+delay <- summarise(by_dest,
+                   count = n(),
+                   dist = mean(distance, na.rm = TRUE),
+                   delay = mean(arr_delay, na.rm = TRUE))
+
+delay
+```
+
+Let's look a bit closer at what this is doing (note, this is not in the book):
+
+```{r}
+flights_sub <- select(flights, dest, distance, arr_delay)
+flights_sub
+```
+
+```{r}
+albuquerque_data <- filter(flights_sub, dest == "ABQ")
+albuquerque_data
+```
+
+```{r}
+mean_albuquerque_delay <- mean(albuquerque_data$arr_delay, na.rm = TRUE)
+mean_albuquerque_delay
+```
+
+Compare the value `mean_albuquerque_delay` to that in the summarized `delay`
+tibble created above:
+
+```{r}
+mean_albuquerque_delay
+
+delay
+```
+
+<br>
+
+----------------------------------------------------------------
+
+## Breakout Exercises 1
+
+Start with the original `flights` tibble for each of the following exercises.
+
+### Exercise 1
+
+<div class="alert puzzle">
+<div>
+
+Overall, which carrier had the longest mean arrival delay (*arr_delay*) in 2013?
+(Note, all these data are from 2013.)
+
+<details> <summary> Hints (click here) </summary>
+<br>
+
+Group the tibble by the *carrier* variable,
+then summarise to calculate the mean *arr_delay* for each group.
+Remember to ignore missing values by setting `na.rm = TRUE` within the `mean()` function.
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+carrier_grp <- group_by(flights, carrier)
+
+summarise(carrier_grp,
+          mean_delay = mean(arr_delay, na.rm = TRUE)) 
+```    
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
+
+### Exercise 2
+
+<div class="alert puzzle">
+<div>
+
+Evaluate arrival delay by carrier again, but this time,
+evaluate only for carriers who made at least 10,000 flights.
+
+<details> <summary> Hints (click here) </summary>
+<br> 
+
+Include a second variable in the summarized data from above to reflect the
+number of observations that went in to calculating the mean value for each group,
+then filter on this sample size variable. Consider using the function `n()`.
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+carrier_delays <- summarise(carrier_grp,
+                            mean_delay = mean(arr_delay, na.rm = TRUE),
+                            n = n())
+
+filter(carrier_delays, n >= 10000)
+```
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
+
+### Exercise 3
+
+<div class="alert puzzle">
+<div>
+
+Based on these data,
+what airport is the worst to fly in to with regards to arriving on time?
+In other words,
+which airport (`dest`) is associated with the highest average arrival delays?
+
+<details> <summary> Hints (click here) </summary>
+<br> 
+
+Group the tibble by the `dest` variable,
+summarise with the mean `arr_delay` for each group,
+then use `arrange()` to sort the new variable in descending order,
+which can be done with `desc()`.
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+dest_grp <- group_by(flights, dest)
+
+dest_delays <- summarise(dest_grp, mean_delay = mean(arr_delay, na.rm = TRUE))
+
+arrange(dest_delays, desc(mean_delay))
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+------------------------------------------------------------------------
+
+## Using Pipes
+
+We did this above...
+
+```{r}
+by_dest <- group_by(flights, dest)
+delay <- summarise(by_dest,
+                   count = n(),
+                   dist = mean(distance, na.rm = TRUE),
+                   delay = mean(arr_delay, na.rm = TRUE))
+```
+
+That code can be rewritten with the pipe as follows...
+
+```{r}
+delays <- flights %>% 
+  group_by(dest) %>% 
+  summarise(
+    count = n(),
+    dist = mean(distance, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE)
+  )
+```
+
+Notice here we didn't have to create intermediate/temporary tibbles.
+
+<br>
+
+------------------------------------------------------------------------
+
+## Breakout Exercises 2
+
+Here we'll redo the same analyses as in the first breakout session,
+but this time using the pipe.
+
+### Exercise 1
+
+<div class="alert puzzle">
+<div>
+
+Overall, which carrier had the longest mean arrival delay (*arr_delay*) in 2013?
+(Note, all these data are from 2013.)
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+flights %>% 
+  group_by(carrier) %>%
+  summarise(mean_delay = mean(arr_delay, na.rm = TRUE))
+```    
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
+
+### Exercise 2
+
+<div class="alert puzzle">
+<div>
+
+Evaluate arrival delay by carrier again, but this time,
+evaluate only for carriers who made at least 10,000 flights.
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+flights %>%
+  group_by(carrier) %>%
+  summarise(mean_delay = mean(arr_delay, na.rm = TRUE),
+            n = n()) %>%
+  filter(n > 10000)
+```
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
+
+### Exercise 3
+
+<div class="alert puzzle">
+<div>
+
+Based on these data,
+what airport is the worst to fly in to with regards to arriving on time?
+In other words,
+which airport (`dest`) is associated with the highest average arrival delays?
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+flights %>%
+  group_by(dest) %>%
+  summarise(mean_delay = mean(arr_delay, na.rm = TRUE)) %>%
+  arrange(desc(mean_delay))
+```
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
