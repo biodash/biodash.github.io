@@ -105,9 +105,10 @@ And more than one new summarized variable can be calculated - here, there are 3:
 by_dest <- group_by(flights, dest)
 
 delay <- summarise(by_dest,
-                   count = n(),
-                   dist = mean(distance, na.rm = TRUE),
-                   delay = mean(arr_delay, na.rm = TRUE))
+  count = n(),
+  dist = mean(distance, na.rm = TRUE),
+  delay = mean(arr_delay, na.rm = TRUE)
+  )
 
 delay
 ```
@@ -173,7 +174,8 @@ Remember to ignore missing values by setting `na.rm = TRUE` within the `mean()` 
 carrier_grp <- group_by(flights, carrier)
 
 summarise(carrier_grp,
-          mean_delay = mean(arr_delay, na.rm = TRUE)) 
+  mean_delay = mean(arr_delay, na.rm = TRUE)
+  ) 
 ```    
 
 </details>
@@ -204,8 +206,9 @@ then filter on this sample size variable. Consider using the function `n()`.
 
 ```{r}
 carrier_delays <- summarise(carrier_grp,
-                            mean_delay = mean(arr_delay, na.rm = TRUE),
-                            n = n())
+  mean_delay = mean(arr_delay, na.rm = TRUE),
+  n = n()
+  )
 
 filter(carrier_delays, n >= 10000)
 ```
@@ -242,7 +245,9 @@ which can be done with `desc()`.
 ```{r}
 dest_grp <- group_by(flights, dest)
 
-dest_delays <- summarise(dest_grp, mean_delay = mean(arr_delay, na.rm = TRUE))
+dest_delays <- summarise(dest_grp,
+  mean_delay = mean(arr_delay, na.rm = TRUE)
+  )
 
 arrange(dest_delays, desc(mean_delay))
 ```
@@ -261,10 +266,12 @@ We did this above...
 
 ```{r}
 by_dest <- group_by(flights, dest)
+
 delay <- summarise(by_dest,
-                   count = n(),
-                   dist = mean(distance, na.rm = TRUE),
-                   delay = mean(arr_delay, na.rm = TRUE))
+  count = n(),
+  dist = mean(distance, na.rm = TRUE),
+  delay = mean(arr_delay, na.rm = TRUE)
+  )
 ```
 
 That code can be rewritten with the pipe as follows...
@@ -326,8 +333,10 @@ evaluate only for carriers who made at least 10,000 flights.
 ```{r}
 flights %>%
   group_by(carrier) %>%
-  summarise(mean_delay = mean(arr_delay, na.rm = TRUE),
-            n = n()) %>%
+  summarise(
+    mean_delay = mean(arr_delay, na.rm = TRUE),
+    n = n()
+    ) %>%
   filter(n > 10000)
 ```
 
