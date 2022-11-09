@@ -1,0 +1,406 @@
+---
+output: hugodown::md_document
+title: "S04E14: R for Data Science - Chapter 5.6: summarize, some more"
+subtitle: "Continuing to use summarize() to extract information from our data"
+summary: "Today we will continue to investigate the summarize() function. Together with group_by(), this function is extremely useful to produce summary statistics of your data by group."
+authors: [jessica-cooperstone]
+tags: [codeclub, r4ds]
+date: "`r Sys.Date()`"
+lastmod: "`r Sys.Date()`"
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
+```
+
+------------------------------------------------------------------------
+
+## Get the Dataset and Packages
+
+```{r, eval=FALSE}
+# Only if you haven't done so before, install the packages
+install.packages("tidyverse")
+install.packages("nycflights13")
+install.packages("palmerpenguins")
+```
+
+Load libraries
+```{r}
+# Load the flights dataset and tidyverse
+library(nycflights13) # for flights data
+library(tidyverse) # for everything
+library(palmerpenguins) # for penguins data
+```
+
+### Preview the Dataset
+
+We are going to start with the penguins.
+```{r}
+glimpse(penguins)
+```
+
+<br>
+
+------------------------------------------------------------------------
+
+## Review of `summarize()`
+
+Different from `select()` (which picks columns but retains all rows) and `filter()` (which picks observations but retains all columns), `summarize()` creates a wholly new dataframe by making calculations or pulling parts of your original dataframe.
+
+For example, if we want to know the mean `body_mass_g` across all penguins in the dataset, we can calculate that like this:
+
+```{r}
+penguins %>%
+  summarize(mean_body_mass = mean(body_mass_g, # calculate mean body mass
+                                  na.rm = TRUE)) # remove the NAs
+```
+
+But we may actually be interested in the different mean `body_mass_g` calculated separately for the different `species` of penguins. We can do that by adding the function `group_by()` like this:
+```{r}
+penguins %>%
+  group_by(species) %>% # group by species
+  summarize(mean_body_mass = mean(body_mass_g, # calculate mean body mass by species
+                                  na.rm = TRUE)) # remove the NAs
+```
+
+And, you can also add more than one `group_by()` factor, for example, by the full combination `species` and `sex` variables.
+
+```{r}
+penguins %>%
+  group_by(species, sex) %>% # group by species and sex combos
+  summarize(mean_body_mass = mean(body_mass_g, # calculate mean body mass by species
+                                  na.rm = TRUE)) # remove the NAs
+```
+
+<br>
+
+------------------------------------------------------------
+
+## Using more functions in `summarize()`
+
+Last week we went over using a few different functions within `summarize()`.
+
+* `mean()`: calculates the mean (set `na.rm = TRUE` if you was the NAs to be removed before calculating)
+* `n()`: counts the number of observations
+
+But, there are lots more functions you might be interested to add into `summarize()`, including:
+
+* `median()`: when you want to calculate the median instead of the mean
+* `sd()`: calculates the standard deviation
+* `IQR()`: calculates the interquartile range
+* `sum()`: calculates the sum
+* `min()`: calculates the minimum
+* `max()`: calculates the maximum
+* `n_distinct()`: calculates the number of distinct or unique occurences
+
+You can always combine functions or write your own functions to use within `summarize()` as well. For example, let's say you wanted the standard error of the mean, but there isn't a function built into tidyverse or base R that does that. You can still get your standard error but using a combination of other functions!
+
+```{r}
+penguins %>%
+  group_by(species) %>%
+  drop_na(species, body_mass_g) %>% # dropping observations with missing values
+  summarize(mean_body_mass = mean(body_mass_g), # mean body mass
+            n_observations = n(), # how many observations are there
+            std_error_body_mass = sd(body_mass_g)/(sqrt(n()))) # sd/sqrt(n)
+```
+
+<br>
+
+------------------------------------------------------------
+
+
+## Breakout Exercises 1
+
+Back to the `flights` tibble for each of the following exercises.
+
+### Exercise 1.1
+
+<div class="alert puzzle">
+<div>
+
+Determine the mean, standard deviation, min, and max departure delay for each airport of origin. Also determine how many observations you have for each airport of origin. 
+
+<details> <summary> Hints (click here) </summary>
+<br>
+
+Group the tibble by `origin`. Summarize for each summary you want to calculate. Make sure you exclude missing data. 
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+flights %>%
+  group_by(origin) %>%
+  drop_na(dep_delay) %>%
+  summarize(mean_dep_delay = mean(dep_delay),
+            sd_dep_delay = sd(dep_delay),
+            min_dep_delay = min(dep_delay),
+            max_dep_delay = max(dep_delay),
+            n_dep_delay = n())
+  
+```    
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
+
+### Exercise 1.2
+
+<div class="alert puzzle">
+<div>
+
+How many distinct destinations are there to fly from for each EWR, JFK, and LGA?
+
+<details> <summary> Hints (click here) </summary>
+<br> 
+
+Think about what you want to `group_by()` and what of the new functions we talked about today you could use in `summarize()`.
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+flights %>%
+  group_by(origin) %>% 
+  summarize(n_distinct_dest = n_distinct(dest))
+```
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
+
+
+## Using `slice_()`
+
+Using [`slice_()`](https://dplyr.tidyverse.org/reference/slice.html) you can subset rows based on their position. 
+
+```{r}
+penguins %>%
+  drop_na(species, body_mass_g) %>% # dropping observations with missing values
+  group_by(species) %>%
+  summarize(mean_body_mass = mean(body_mass_g)) %>%
+  slice_min(mean_body_mass, n = 1) # min based on mean_body_mass, just give me 1
+```
+
+* `slice_head()` and `slice_tail()` select the first or last rows.
+* `slice_sample()` randomly selects rows.
+* `slice_min()` and `slice_max()` select rows with highest or lowest values of a variable.
+
+You can use `slice_()` functions on dataframes themselves (not just on summarized data).
+
+For example:
+
+```{r}
+penguins %>%
+  drop_na(body_mass_g) %>% # dropping observations with missing values
+  slice_max(body_mass_g, n = 10) # the 10 heaviest penguins
+```
+
+Note, we actually got 11, that is because in 10th place there is a tie. Ties are kept by default, but can be turned off by setting `with_ties = FALSE`.
+
+You can also set the proportion of results to return using `prop = `.
+```{r}
+penguins %>%
+  drop_na(body_mass_g) %>% # dropping observations with missing values
+  slice_max(body_mass_g, prop = 0.1) # the top 10% heaviest penguins
+```
+
+If data are grouped, the operation will be performed group wise, like we see below.
+
+```{r}
+penguins %>%
+  drop_na(body_mass_g, species) %>% # dropping observations with missing values
+  group_by(species) %>%
+  slice_min(body_mass_g, n = 1) 
+```
+
+We get the minimum `body_mass_g` for each `species`, and in this case we get 2 for Adelie penguins because there is a tie.
+
+<br>
+
+
+------------------------------------------------------------------------
+
+## Using `summarize()` with `across()`
+
+There are also ways that you can combine `summarize()` to function [`across()`](https://dplyr.tidyverse.org/reference/across.html) your different variables. The function [`where()`](https://tidyselect.r-lib.org/reference/where.html) allows you to pick variables where the function is `TRUE`.
+
+
+```{r}
+penguins %>%
+  drop_na() %>%
+  group_by(species) %>%
+  summarize(across(where(is.numeric), mean))
+```
+
+```{r}
+has_mm <- penguins %>%
+  select(contains("mm"))
+
+penguins %>%
+  drop_na() %>%
+  group_by(species) %>%
+  summarize(across(bill_length_mm:flipper_length_mm, mean))
+
+penguins %>%
+  drop_na() %>%
+  group_by(species) %>%
+  summarize(across(contains("mm"), mean))
+```
+
+
+All of these [helper functions](https://tidyselect.r-lib.org/reference/language.html) can be used outside of `summarize()` too.
+
+<br>
+
+
+------------------------------------------------------------------------
+
+## Breakout Exercises 2
+
+Let's practice using `slice()` and `summarize()` with `across()`.
+
+### Exercise 2.1
+
+<div class="alert puzzle">
+<div>
+
+What is the tail number (`tailnum`) for the plane that has, on average, the least delayed flights to arrive? What about the most delayed flights? How many flights did this plane take in this dataset? How would your answer change if you required that a plane take at least 50 flights?
+
+<details> <summary> Hints (click here) </summary>
+<br> 
+
+Group the tibble by the `tailnum` variable, and summarize to get mean `arr_delay` and also `n()`. Then pick the right `filter()` parameters if necessary, and the appropriate `slice_()` function.
+
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+Least delayed flights
+```{r}
+# any number of flights
+flights %>%
+  group_by(tailnum) %>%
+  summarize(mean_arr_delay = mean(arr_delay),
+            n_flights = n()) %>%
+  slice_min(mean_arr_delay, n = 1)
+
+# at least 50 flights
+flights %>%
+  group_by(tailnum) %>%
+  summarize(mean_arr_delay = mean(arr_delay),
+            n_flights = n()) %>%
+  filter(n_flights >= 50) %>%
+  slice_min(mean_arr_delay, n = 1)
+```
+
+Most delayed flights
+```{r}
+# any number of flights
+flights %>%
+  group_by(tailnum) %>%
+  summarize(mean_arr_delay = mean(arr_delay),
+            n_flights = n()) %>%
+  slice_max(mean_arr_delay, n = 1)
+
+# at least 50 flights
+flights %>%
+  group_by(tailnum) %>%
+  summarize(mean_arr_delay = mean(arr_delay),
+            n_flights = n()) %>%
+  filter(n_flights >= 50) %>%
+  slice_max(mean_arr_delay, n = 1)
+```
+
+</details>
+
+</div></div>
+
+<br>
+
+----------------------------------------------------------------
+
+### Exercise 2.2
+
+<div class="alert puzzle">
+<div>
+
+Which destinations have the longest maximum arrival delay? Which destinations have the shortest? Pull data for the top 10 for both the longest and shortest maximum arrival delay. Keep track of how many flights there are to each location in case that might be useful information.
+
+<details> <summary> Hints (click here) </summary>
+<br> 
+
+Group the tibble by the `dest` variable, and summarize to get max `arr_delay` and also `n()`. Then pick the right `slice_()` function.
+
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+Least delayed
+```{r}
+flights %>%
+  drop_na(dest, arr_delay) %>%
+  group_by(dest) %>%
+  summarize(max_arr_delay = max(arr_delay),
+            n_flights = n()) %>%
+  slice_min(max_arr_delay, n = 10)
+```
+
+Most delayed
+```{r}
+flights %>%
+  drop_na(dest, arr_delay) %>%
+  group_by(dest) %>%
+  summarize(max_arr_delay = max(arr_delay),
+            n_flights = n()) %>%
+  slice_max(max_arr_delay, n = 10)
+```
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
+
+### Exercise 2.3
+
+<div class="alert puzzle">
+<div>
+
+Calculate the median for `air_time`, `arr_delay` and `dep_delay` by `origin`. Try to not do each manually.
+
+<details> <summary> Hints (click here) </summary>
+<br> 
+
+Group the tibble by the `origin` variable, and combine `summarize()` and `across()` to get the median for each variable. Try listing them together using `c()`.
+
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+flights %>%
+  drop_na(air_time, arr_delay, dep_delay, origin) %>%
+  group_by(origin) %>%
+  summarize(across(c(air_time, arr_delay, dep_delay), median, 
+                   .names = "{col}_median")) # extra fun thing to rename columns
+```
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
