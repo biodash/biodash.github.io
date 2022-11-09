@@ -13,6 +13,483 @@
     </image>
     
     <item>
+      <title>S04E14: R for Data Science - Chapter 5.6: summarize, some more</title>
+      <link>https://biodash.github.io/codeclub/s04e14_r4ds-ch5-5-again/</link>
+      <pubDate>Wed, 09 Nov 2022 00:00:00 +0000</pubDate>
+      <guid>https://biodash.github.io/codeclub/s04e14_r4ds-ch5-5-again/</guid>
+      <description>&lt;hr&gt;
+&lt;h2 id=&#34;get-the-dataset-and-packages&#34;&gt;Get the Dataset and Packages&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# Only if you haven&#39;t done so before, install the packages&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;tidyverse&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;nycflights13&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;palmerpenguins&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Load libraries&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# Load the flights dataset and tidyverse&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/hadley/nycflights13&#39;&gt;nycflights13&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# for flights data&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# for everything&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://allisonhorst.github.io/palmerpenguins/&#39;&gt;palmerpenguins&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# for penguins data&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;preview-the-dataset&#34;&gt;Preview the Dataset&lt;/h3&gt;
+&lt;p&gt;We are going to start with the penguins.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://pillar.r-lib.org/reference/glimpse.html&#39;&gt;glimpse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; Rows: 344&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; Columns: 8&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ species           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ island            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_length_mm    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ bill_depth_mm     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ flipper_length_mm &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ body_mass_g       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ sex               &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; male, female, female, NA, female, male, female, male…&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; $ year              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;review-of-summarize&#34;&gt;Review of &lt;code&gt;summarize()&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;Different from &lt;a href=&#34;https://dplyr.tidyverse.org/reference/select.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;select()&lt;/code&gt;&lt;/a&gt; (which picks columns but retains all rows) and &lt;a href=&#34;https://dplyr.tidyverse.org/reference/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; (which picks observations but retains all columns), &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt; creates a wholly new dataframe by making calculations or pulling parts of your original dataframe.&lt;/p&gt;
+&lt;p&gt;For example, if we want to know the mean &lt;code&gt;body_mass_g&lt;/code&gt; across all penguins in the dataset, we can calculate that like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_body_mass &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, &lt;span class=&#39;c&#39;&gt;# calculate mean body mass&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;                                  na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# remove the NAs&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 × 1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   mean_body_mass&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt;          &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;202.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;But we may actually be interested in the different mean &lt;code&gt;body_mass_g&lt;/code&gt; calculated separately for the different &lt;code&gt;species&lt;/code&gt; of penguins. We can do that by adding the function &lt;a href=&#34;https://dplyr.tidyverse.org/reference/group_by.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;group_by()&lt;/code&gt;&lt;/a&gt; like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# group by species&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_body_mass &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, &lt;span class=&#39;c&#39;&gt;# calculate mean body mass by species&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;                                  na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# remove the NAs&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   mean_body_mass&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie             &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;701.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap          &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;733.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo             &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;076.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;And, you can also add more than one &lt;a href=&#34;https://dplyr.tidyverse.org/reference/group_by.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;group_by()&lt;/code&gt;&lt;/a&gt; factor, for example, by the full combination &lt;code&gt;species&lt;/code&gt; and &lt;code&gt;sex&lt;/code&gt; variables.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;sex&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# group by species and sex combos&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_body_mass &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, &lt;span class=&#39;c&#39;&gt;# calculate mean body mass by species&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;                                  na.rm &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# remove the NAs&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 8 × 3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# Groups:   species [3]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   sex    mean_body_mass&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie    female          &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;369.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Adelie    male            &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;043.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Adelie    &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;              &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;540 &lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt; Chinstrap female          &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;527.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;5&lt;/span&gt; Chinstrap male            &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;939.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;6&lt;/span&gt; Gentoo    female          &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;680.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;7&lt;/span&gt; Gentoo    male            &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;485.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;8&lt;/span&gt; Gentoo    &lt;span style=&#39;color: #BB0000;&#39;&gt;NA&lt;/span&gt;              &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;588.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;using-more-functions-in-summarize&#34;&gt;Using more functions in &lt;code&gt;summarize()&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;Last week we went over using a few different functions within &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/r/base/mean.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mean()&lt;/code&gt;&lt;/a&gt;: calculates the mean (set &lt;code&gt;na.rm = TRUE&lt;/code&gt; if you was the NAs to be removed before calculating)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dplyr.tidyverse.org/reference/context.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;n()&lt;/code&gt;&lt;/a&gt;: counts the number of observations&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;But, there are lots more functions you might be interested to add into &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt;, including:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/r/stats/median.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;median()&lt;/code&gt;&lt;/a&gt;: when you want to calculate the median instead of the mean&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/r/stats/sd.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;sd()&lt;/code&gt;&lt;/a&gt;: calculates the standard deviation&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/r/stats/IQR.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;IQR()&lt;/code&gt;&lt;/a&gt;: calculates the interquartile range&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/r/base/sum.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;sum()&lt;/code&gt;&lt;/a&gt;: calculates the sum&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/r/base/Extremes.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;min()&lt;/code&gt;&lt;/a&gt;: calculates the minimum&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://rdrr.io/r/base/Extremes.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;max()&lt;/code&gt;&lt;/a&gt;: calculates the maximum&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dplyr.tidyverse.org/reference/n_distinct.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;n_distinct()&lt;/code&gt;&lt;/a&gt;: calculates the number of distinct or unique occurences&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You can always combine functions or write your own functions to use within &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt; as well. For example, let&amp;rsquo;s say you wanted the standard error of the mean, but there isn&amp;rsquo;t a function built into tidyverse or base R that does that. You can still get your standard error but using a combination of other functions!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# dropping observations with missing values&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_body_mass &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;c&#39;&gt;# mean body mass&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;            n_observations &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/context.html&#39;&gt;n&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;c&#39;&gt;# how many observations are there&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;            std_error_body_mass &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/sd.html&#39;&gt;sd&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/MathFun.html&#39;&gt;sqrt&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/context.html&#39;&gt;n&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# sd/sqrt(n)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   mean_body_mass n_observations std_error_body_mass&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;          &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;               &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie             &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;701.            151                37.3&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap          &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;733.             68                46.6&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo             &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;076.            123                45.5&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;breakout-exercises-1&#34;&gt;Breakout Exercises 1&lt;/h2&gt;
+&lt;p&gt;Back to the &lt;code&gt;flights&lt;/code&gt; tibble for each of the following exercises.&lt;/p&gt;
+&lt;h3 id=&#34;exercise-11&#34;&gt;Exercise 1.1&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Determine the mean, standard deviation, min, and max departure delay for each airport of origin. Also determine how many observations you have for each airport of origin.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Group the tibble by &lt;code&gt;origin&lt;/code&gt;. Summarize for each summary you want to calculate. Make sure you exclude missing data.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;origin&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dep_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_dep_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dep_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            sd_dep_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/stats/sd.html&#39;&gt;sd&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dep_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            min_dep_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dep_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            max_dep_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dep_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            n_dep_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/context.html&#39;&gt;n&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 6&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   origin mean_dep_delay sd_dep_delay min_dep_delay max_dep_delay n_dep_delay&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;        &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; EWR              15.1         41.3           -&lt;span style=&#39;color: #BB0000;&#39;&gt;25&lt;/span&gt;          &lt;span style=&#39;text-decoration: underline;&#39;&gt;1&lt;/span&gt;126      &lt;span style=&#39;text-decoration: underline;&#39;&gt;117&lt;/span&gt;596&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; JFK              12.1         39.0           -&lt;span style=&#39;color: #BB0000;&#39;&gt;43&lt;/span&gt;          &lt;span style=&#39;text-decoration: underline;&#39;&gt;1&lt;/span&gt;301      &lt;span style=&#39;text-decoration: underline;&#39;&gt;109&lt;/span&gt;416&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; LGA              10.3         40.0           -&lt;span style=&#39;color: #BB0000;&#39;&gt;33&lt;/span&gt;           911      &lt;span style=&#39;text-decoration: underline;&#39;&gt;101&lt;/span&gt;509&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-12&#34;&gt;Exercise 1.2&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;How many distinct destinations are there to fly from for each EWR, JFK, and LGA?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Think about what you want to &lt;a href=&#34;https://dplyr.tidyverse.org/reference/group_by.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;group_by()&lt;/code&gt;&lt;/a&gt; and what of the new functions we talked about today you could use in &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;origin&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;n_distinct_dest &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/n_distinct.html&#39;&gt;n_distinct&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dest&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   origin n_distinct_dest&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; EWR                 86&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; JFK                 70&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; LGA                 68&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;using-slice_&#34;&gt;Using &lt;code&gt;slice_()&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;Using &lt;a href=&#34;https://dplyr.tidyverse.org/reference/slice.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice_()&lt;/code&gt;&lt;/a&gt; you can subset rows based on their position.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# dropping observations with missing values&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_body_mass &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mean_body_mass&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# min based on mean_body_mass, just give me 1&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 × 2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species mean_body_mass&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie           &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;701.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dplyr.tidyverse.org/reference/slice.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice_head()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://dplyr.tidyverse.org/reference/slice.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice_tail()&lt;/code&gt;&lt;/a&gt; select the first or last rows.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dplyr.tidyverse.org/reference/slice.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice_sample()&lt;/code&gt;&lt;/a&gt; randomly selects rows.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dplyr.tidyverse.org/reference/slice.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice_min()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://dplyr.tidyverse.org/reference/slice.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice_max()&lt;/code&gt;&lt;/a&gt; select rows with highest or lowest values of a variable.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You can use &lt;a href=&#34;https://dplyr.tidyverse.org/reference/se-deprecated.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice_()&lt;/code&gt;&lt;/a&gt; functions on dataframes themselves (not just on summarized data).&lt;/p&gt;
+&lt;p&gt;For example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# dropping observations with missing values&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# the 10 heaviest penguins&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 11 × 8&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;    species island bill_length_mm bill_depth_mm flipper_len…¹ body_…² sex    year&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; Gentoo  Biscoe           49.2          15.2           221    &lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;300 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;007&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; Gentoo  Biscoe           59.6          17             230    &lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;050 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;007&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; Gentoo  Biscoe           51.1          16.3           220    &lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;000 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; Gentoo  Biscoe           48.8          16.2           222    &lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;000 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;009&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; Gentoo  Biscoe           45.2          16.4           223    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;950 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; Gentoo  Biscoe           49.8          15.9           229    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;950 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;009&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; Gentoo  Biscoe           48.4          14.6           213    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;850 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;007&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; Gentoo  Biscoe           49.3          15.7           217    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;850 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;007&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; Gentoo  Biscoe           55.1          16             230    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;850 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;009&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; Gentoo  Biscoe           49.5          16.2           229    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;800 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;11&lt;/span&gt; Gentoo  Biscoe           48.6          16             230    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;800 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with abbreviated variable names ¹​flipper_length_mm, ²​body_mass_g&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Note, we actually got 11, that is because in 10th place there is a tie. Ties are kept by default, but can be turned off by setting &lt;code&gt;with_ties = FALSE&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;You can also set the proportion of results to return using &lt;code&gt;prop =&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# dropping observations with missing values&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, prop &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# the top 10% heaviest penguins&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 34 × 8&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;    species island bill_length_mm bill_depth_mm flipper_len…¹ body_…² sex    year&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; Gentoo  Biscoe           49.2          15.2           221    &lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;300 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;007&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; Gentoo  Biscoe           59.6          17             230    &lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;050 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;007&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; Gentoo  Biscoe           51.1          16.3           220    &lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;000 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; Gentoo  Biscoe           48.8          16.2           222    &lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;000 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;009&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; Gentoo  Biscoe           45.2          16.4           223    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;950 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; Gentoo  Biscoe           49.8          15.9           229    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;950 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;009&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; Gentoo  Biscoe           48.4          14.6           213    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;850 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;007&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; Gentoo  Biscoe           49.3          15.7           217    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;850 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;007&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; Gentoo  Biscoe           55.1          16             230    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;850 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;009&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; Gentoo  Biscoe           49.5          16.2           229    &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;800 male   &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 24 more rows, and abbreviated variable names ¹​flipper_length_mm,&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;#   ²​body_mass_g&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;If data are grouped, the operation will be performed group wise, like we see below.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# dropping observations with missing values&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;body_mass_g&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 4 × 8&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# Groups:   species [3]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   island bill_length_mm bill_depth_mm flipper_le…¹ body_…² sex    year&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;           &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;        &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie    Biscoe           36.5          16.6          181    &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;850 fema…  &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Adelie    Biscoe           36.4          17.1          184    &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;850 fema…  &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Chinstrap Dream            46.9          16.6          192    &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;700 fema…  &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;4&lt;/span&gt; Gentoo    Biscoe           42.7          13.7          208    &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;950 fema…  &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with abbreviated variable names ¹​flipper_length_mm, ²​body_mass_g&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We get the minimum &lt;code&gt;body_mass_g&lt;/code&gt; for each &lt;code&gt;species&lt;/code&gt;, and in this case we get 2 for Adelie penguins because there is a tie.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;using-summarize-with-across&#34;&gt;Using &lt;code&gt;summarize()&lt;/code&gt; with &lt;code&gt;across()&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;There are also ways that you can combine &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt; to function &lt;a href=&#34;https://dplyr.tidyverse.org/reference/across.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;across()&lt;/code&gt;&lt;/a&gt; your different variables. The function &lt;a href=&#34;https://tidyselect.r-lib.org/reference/where.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;where()&lt;/code&gt;&lt;/a&gt; allows you to pick variables where the function is &lt;code&gt;TRUE&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/across.html&#39;&gt;across&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;where&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;is.numeric&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;mean&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 6&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g  year&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;       &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt; &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie              38.8          18.3              190.       &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;706. &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap           48.8          18.4              196.       &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;733. &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo              47.6          15.0              217.       &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;092. &lt;span style=&#39;text-decoration: underline;&#39;&gt;2&lt;/span&gt;008.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;has_mm&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/select.html&#39;&gt;select&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyselect.r-lib.org/reference/starts_with.html&#39;&gt;contains&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/across.html&#39;&gt;across&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;bill_length_mm&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;flipper_length_mm&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;mean&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   bill_length_mm bill_depth_mm flipper_length_mm&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie              38.8          18.3              190.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap           48.8          18.4              196.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo              47.6          15.0              217.&lt;/span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;penguins&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;species&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/across.html&#39;&gt;across&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyselect.r-lib.org/reference/starts_with.html&#39;&gt;contains&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;mm&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;mean&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   species   bill_length_mm bill_depth_mm flipper_length_mm&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;fct&amp;gt;&lt;/span&gt;              &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;             &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; Adelie              38.8          18.3              190.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; Chinstrap           48.8          18.4              196.&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; Gentoo              47.6          15.0              217.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;All of these &lt;a href=&#34;https://tidyselect.r-lib.org/reference/language.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;helper functions&lt;/a&gt; can be used outside of &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt; too.&lt;/p&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;breakout-exercises-2&#34;&gt;Breakout Exercises 2&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s practice using &lt;a href=&#34;https://dplyr.tidyverse.org/reference/slice.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt; with &lt;a href=&#34;https://dplyr.tidyverse.org/reference/across.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;across()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;exercise-21&#34;&gt;Exercise 2.1&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;What is the tail number (&lt;code&gt;tailnum&lt;/code&gt;) for the plane that has, on average, the least delayed flights to arrive? What about the most delayed flights? How many flights did this plane take in this dataset? How would your answer change if you required that a plane take at least 50 flights?&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Group the tibble by the &lt;code&gt;tailnum&lt;/code&gt; variable, and summarize to get mean &lt;code&gt;arr_delay&lt;/code&gt; and also &lt;a href=&#34;https://dplyr.tidyverse.org/reference/context.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;n()&lt;/code&gt;&lt;/a&gt;. Then pick the right &lt;a href=&#34;https://dplyr.tidyverse.org/reference/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; parameters if necessary, and the appropriate &lt;a href=&#34;https://dplyr.tidyverse.org/reference/se-deprecated.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice_()&lt;/code&gt;&lt;/a&gt; function.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Least delayed flights&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# any number of flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;tailnum&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_arr_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            n_flights &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/context.html&#39;&gt;n&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mean_arr_delay&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 × 3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   tailnum mean_arr_delay n_flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; N560AS             -&lt;span style=&#39;color: #BB0000;&#39;&gt;53&lt;/span&gt;         1&lt;/span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# at least 50 flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;tailnum&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_arr_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            n_flights &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/context.html&#39;&gt;n&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;n_flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;50&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mean_arr_delay&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 × 3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   tailnum mean_arr_delay n_flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; N548UW           -&lt;span style=&#39;color: #BB0000;&#39;&gt;13.0&lt;/span&gt;        52&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Most delayed flights&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# any number of flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;tailnum&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_arr_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            n_flights &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/context.html&#39;&gt;n&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mean_arr_delay&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 × 3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   tailnum mean_arr_delay n_flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; N844MH             320         1&lt;/span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# at least 50 flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;tailnum&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mean_arr_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            n_flights &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/context.html&#39;&gt;n&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;n_flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;50&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;mean_arr_delay&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;1&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 1 × 3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   tailnum mean_arr_delay n_flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; N8698A            27.5        57&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-22&#34;&gt;Exercise 2.2&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Which destinations have the longest maximum arrival delay? Which destinations have the shortest? Pull data for the top 10 for both the longest and shortest maximum arrival delay. Keep track of how many flights there are to each location in case that might be useful information.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Group the tibble by the &lt;code&gt;dest&lt;/code&gt; variable, and summarize to get max &lt;code&gt;arr_delay&lt;/code&gt; and also &lt;a href=&#34;https://dplyr.tidyverse.org/reference/context.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;n()&lt;/code&gt;&lt;/a&gt;. Then pick the right &lt;a href=&#34;https://dplyr.tidyverse.org/reference/se-deprecated.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;slice_()&lt;/code&gt;&lt;/a&gt; function.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+Least delayed
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dest&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dest&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;max_arr_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            n_flights &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/context.html&#39;&gt;n&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_min&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;max_arr_delay&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 10 × 3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;    dest  max_arr_delay n_flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; LEX             -&lt;span style=&#39;color: #BB0000;&#39;&gt;22&lt;/span&gt;         1&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; PSP              17        18&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; ANC              39         8&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; HDN              43        14&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; EYW              45        17&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; SBN              53        10&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; MTJ             101        14&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; ILM             143       107&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; ABQ             153       254&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; BZN             154        35&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Most delayed&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dest&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;dest&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;max_arr_delay &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/Extremes.html&#39;&gt;max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;            n_flights &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/context.html&#39;&gt;n&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/slice.html&#39;&gt;slice_max&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;max_arr_delay&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 10 × 3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;    dest  max_arr_delay n_flights&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;    &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;         &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;     &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;int&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 1&lt;/span&gt; HNL            &lt;span style=&#39;text-decoration: underline;&#39;&gt;1&lt;/span&gt;272       701&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 2&lt;/span&gt; CMH            &lt;span style=&#39;text-decoration: underline;&#39;&gt;1&lt;/span&gt;127      &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;326&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 3&lt;/span&gt; ORD            &lt;span style=&#39;text-decoration: underline;&#39;&gt;1&lt;/span&gt;109     &lt;span style=&#39;text-decoration: underline;&#39;&gt;16&lt;/span&gt;566&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 4&lt;/span&gt; SFO            &lt;span style=&#39;text-decoration: underline;&#39;&gt;1&lt;/span&gt;007     &lt;span style=&#39;text-decoration: underline;&#39;&gt;13&lt;/span&gt;173&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 5&lt;/span&gt; CVG             989      &lt;span style=&#39;text-decoration: underline;&#39;&gt;3&lt;/span&gt;725&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 6&lt;/span&gt; TPA             931      &lt;span style=&#39;text-decoration: underline;&#39;&gt;7&lt;/span&gt;390&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 7&lt;/span&gt; MSP             915      &lt;span style=&#39;text-decoration: underline;&#39;&gt;6&lt;/span&gt;929&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 8&lt;/span&gt; ATL             895     &lt;span style=&#39;text-decoration: underline;&#39;&gt;16&lt;/span&gt;837&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; MIA             878     &lt;span style=&#39;text-decoration: underline;&#39;&gt;11&lt;/span&gt;593&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; LAS             852      &lt;span style=&#39;text-decoration: underline;&#39;&gt;5&lt;/span&gt;952&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;exercise-23&#34;&gt;Exercise 2.3&lt;/h3&gt;
+&lt;div class=&#34;alert puzzle&#34;&gt;
+&lt;div&gt;
+&lt;p&gt;Calculate the median for &lt;code&gt;air_time&lt;/code&gt;, &lt;code&gt;arr_delay&lt;/code&gt; and &lt;code&gt;dep_delay&lt;/code&gt; by &lt;code&gt;origin&lt;/code&gt;. Try to not do each manually.&lt;/p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Hints (click here)
+&lt;/summary&gt;
+&lt;br&gt;
+&lt;p&gt;Group the tibble by the &lt;code&gt;origin&lt;/code&gt; variable, and combine &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://dplyr.tidyverse.org/reference/across.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;across()&lt;/code&gt;&lt;/a&gt; to get the median for each variable. Try listing them together using &lt;a href=&#34;https://rdrr.io/r/base/c.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;c()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Solution (click here)
+&lt;/summary&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://tidyr.tidyverse.org/reference/drop_na.html&#39;&gt;drop_na&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;air_time&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;dep_delay&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;origin&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;origin&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/across.html&#39;&gt;across&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;air_time&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;arr_delay&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;dep_delay&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;median&lt;/span&gt;, &lt;/span&gt;
+&lt;span&gt;                   .names &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;&amp;#123;col&amp;#125;_median&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;c&#39;&gt;# extra fun thing to rename columns&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# A tibble: 3 × 4&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   origin air_time_median arr_delay_median dep_delay_median&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;   &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;chr&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;            &lt;span style=&#39;color: #555555; font-style: italic;&#39;&gt;&amp;lt;dbl&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;1&lt;/span&gt; EWR                130               -&lt;span style=&#39;color: #BB0000;&#39;&gt;4&lt;/span&gt;               -&lt;span style=&#39;color: #BB0000;&#39;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; JFK                149               -&lt;span style=&#39;color: #BB0000;&#39;&gt;6&lt;/span&gt;               -&lt;span style=&#39;color: #BB0000;&#39;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; LGA                115               -&lt;span style=&#39;color: #BB0000;&#39;&gt;5&lt;/span&gt;               -&lt;span style=&#39;color: #BB0000;&#39;&gt;3&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;hr&gt;
+</description>
+    </item>
+    
+    <item>
       <title>S04E08: R for Data Science - Chapters 4, 6, and 8</title>
       <link>https://biodash.github.io/codeclub/s04e08_r4ds-ch4-6-8/</link>
       <pubDate>Thu, 15 Sep 2022 00:00:00 +0000</pubDate>
@@ -1921,7 +2398,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-182356749&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-178249635&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -1931,7 +2408,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-182356749&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-178249635&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2118,7 +2595,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-951726348&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-265749183&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2128,7 +2605,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-951726348&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-265749183&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2164,7 +2641,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-647813925&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-293518764&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2174,7 +2651,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-647813925&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-293518764&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2206,7 +2683,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-248196735&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-185439276&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2216,7 +2693,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-248196735&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-185439276&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2247,7 +2724,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-657293841&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-624793185&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2257,7 +2734,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-657293841&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-624793185&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2391,7 +2868,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-162734985&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-637184529&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2401,7 +2878,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-162734985&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-637184529&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -2458,7 +2935,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-368142759&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-237148596&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -2468,7 +2945,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-368142759&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-237148596&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3725,7 +4202,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-395614728&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-947831652&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3735,7 +4212,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-395614728&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-947831652&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3811,7 +4288,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-796841235&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-586971243&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3821,7 +4298,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-796841235&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-586971243&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3842,7 +4319,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-384917256&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-472138596&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3852,7 +4329,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-384917256&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-472138596&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3879,7 +4356,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-968213574&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-542176398&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3889,7 +4366,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-968213574&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-542176398&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3916,7 +4393,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-741856923&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-913276584&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3926,7 +4403,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-741856923&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-913276584&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -3949,7 +4426,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-321845796&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-971845362&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -3959,7 +4436,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-321845796&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-971845362&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4000,7 +4477,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-217659348&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-369851724&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4010,7 +4487,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-217659348&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-369851724&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4029,7 +4506,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-657498123&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-459286713&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4039,7 +4516,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-657498123&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-459286713&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4065,7 +4542,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-127346589&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-156823749&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4075,7 +4552,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-127346589&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-156823749&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4105,7 +4582,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-416732859&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-896452731&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4115,7 +4592,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-416732859&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-896452731&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4329,7 +4806,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-893452671&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-635842971&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4339,7 +4816,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-893452671&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-635842971&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4400,7 +4877,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-382169574&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-482613597&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4410,7 +4887,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-382169574&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-482613597&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -4485,7 +4962,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-593716284&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-863295174&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -4495,7 +4972,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-593716284&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-863295174&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
