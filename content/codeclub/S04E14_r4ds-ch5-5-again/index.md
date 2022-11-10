@@ -8,17 +8,17 @@ tags: [codeclub, r4ds]
 date: "2022-11-09"
 lastmod: "2022-11-09"
 toc: true
-rmd_hash: 0b9cf77197d8e76d
+rmd_hash: eef3aa0f62864b9e
 
 ---
 
 ------------------------------------------------------------------------
 
-## Get the Dataset and Packages
+## Get data and package
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Only if you haven't done so before, install the packages</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># only if you haven't done so before, install the packages</span></span>
 <span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span></span>
 <span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"nycflights13"</span><span class='o'>)</span></span>
 <span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"palmerpenguins"</span><span class='o'>)</span></span></code></pre>
@@ -29,10 +29,9 @@ Load libraries
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Load the flights dataset and tidyverse</span></span>
-<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/hadley/nycflights13'>nycflights13</a></span><span class='o'>)</span> <span class='c'># for flights data</span></span>
-<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span> <span class='c'># for everything</span></span>
-<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span> <span class='c'># for penguins data</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span> <span class='c'># for everything</span></span>
+<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://allisonhorst.github.io/palmerpenguins/'>palmerpenguins</a></span><span class='o'>)</span> <span class='c'># for penguins data</span></span>
+<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/hadley/nycflights13'>nycflights13</a></span><span class='o'>)</span> <span class='c'># for flights data</span></span></code></pre>
 
 </div>
 
@@ -283,6 +282,7 @@ Using [`slice_()`](https://dplyr.tidyverse.org/reference/slice.html) you can sub
 
 </div>
 
+-   [`slice()`](https://dplyr.tidyverse.org/reference/slice.html) allows you to pick rows by the position (i.e., indexing, e.g., `slice(4)` will give you the 4th row of that df)
 -   [`slice_head()`](https://dplyr.tidyverse.org/reference/slice.html) and [`slice_tail()`](https://dplyr.tidyverse.org/reference/slice.html) select the first or last rows.
 -   [`slice_sample()`](https://dplyr.tidyverse.org/reference/slice.html) randomly selects rows.
 -   [`slice_min()`](https://dplyr.tidyverse.org/reference/slice.html) and [`slice_max()`](https://dplyr.tidyverse.org/reference/slice.html) select rows with highest or lowest values of a variable.
@@ -388,9 +388,7 @@ There are also ways that you can combine [`summarize()`](https://dplyr.tidyverse
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>has_mm</span> <span class='o'>&lt;-</span> <span class='nv'>penguins</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nf'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>contains</a></span><span class='o'>(</span><span class='s'>"mm"</span><span class='o'>)</span><span class='o'>)</span></span>
-<span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># from column bill_length_mm to column flipper_length_mm</span></span>
 <span><span class='nv'>penguins</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
@@ -401,6 +399,7 @@ There are also ways that you can combine [`summarize()`](https://dplyr.tidyverse
 <span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Adelie              38.8          18.3              190.</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Chinstrap           48.8          18.4              196.</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Gentoo              47.6          15.0              217.</span></span><span></span>
+<span><span class='c'># using the helper contains()</span></span>
 <span><span class='nv'>penguins</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
@@ -422,7 +421,7 @@ All of these [helper functions](https://tidyselect.r-lib.org/reference/language.
 
 ## Breakout Exercises 2
 
-Let's practice using [`slice()`](https://dplyr.tidyverse.org/reference/slice.html) and [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html) with [`across()`](https://dplyr.tidyverse.org/reference/across.html).
+Let's practice using [`slice()`](https://dplyr.tidyverse.org/reference/slice.html) and [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html) with [`across()`](https://dplyr.tidyverse.org/reference/across.html), still using the `flights` data.
 
 ### Exercise 2.1
 
