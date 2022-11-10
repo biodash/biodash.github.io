@@ -5,10 +5,10 @@ subtitle: "Continuing to use summarize() to extract information from our data"
 summary: "Today we will continue to investigate the summarize() function. Together with group_by(), this function is extremely useful to produce summary statistics of your data by group."
 authors: [jessica-cooperstone]
 tags: [codeclub, r4ds]
-date: "2022-11-09"
-lastmod: "2022-11-09"
+date: "2022-11-10"
+lastmod: "2022-11-10"
 toc: true
-rmd_hash: eef3aa0f62864b9e
+rmd_hash: 4fe3ffb10ce648b3
 
 ---
 
@@ -429,7 +429,7 @@ Let's practice using [`slice()`](https://dplyr.tidyverse.org/reference/slice.htm
 
 <div>
 
-What is the tail number (`tailnum`) for the plane that has, on average, the least delayed flights to arrive? What about the most delayed flights? How many flights did this plane take in this dataset? How would your answer change if you required that a plane take at least 50 flights?
+What is the tail number (`tailnum`) for the plane that has, on average, the least arrival delay?? What about the most arrival delay? How many flights did this plane take in this dataset? How would your answer change if you required that a plane take at least 50 flights?
 
 <details>
 <summary>
@@ -520,6 +520,53 @@ Most delayed flights
 
 <div>
 
+Calculate the median for `air_time`, `arr_delay` and `dep_delay` by `origin`. Try to not do each manually.
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+
+<br>
+
+Group the tibble by the `origin` variable, and combine [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html) and [`across()`](https://dplyr.tidyverse.org/reference/across.html) to get the median for each variable. Try listing them together using [`c()`](https://rdrr.io/r/base/c.html).
+
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='nv'>air_time</span>, <span class='nv'>arr_delay</span>, <span class='nv'>dep_delay</span>, <span class='nv'>origin</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>origin</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='o'>(</span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/across.html'>across</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>air_time</span>, <span class='nv'>arr_delay</span>, <span class='nv'>dep_delay</span><span class='o'>)</span>, <span class='nv'>median</span>, </span>
+<span>                   .names <span class='o'>=</span> <span class='s'>"&#123;col&#125;_median"</span><span class='o'>)</span><span class='o'>)</span> <span class='c'># extra fun thing to rename columns</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 4</span></span></span>
+<span><span class='c'>#&gt;   origin air_time_median arr_delay_median dep_delay_median</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> EWR                130               -<span style='color: #BB0000;'>4</span>               -<span style='color: #BB0000;'>1</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> JFK                149               -<span style='color: #BB0000;'>6</span>               -<span style='color: #BB0000;'>1</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> LGA                115               -<span style='color: #BB0000;'>5</span>               -<span style='color: #BB0000;'>3</span></span></span></code></pre>
+
+</div>
+
+</details>
+
+</div>
+
+</div>
+
+------------------------------------------------------------------------
+
+### Exercise 2.3
+
+<div class="alert puzzle">
+
+<div>
+
 Which destinations have the longest maximum arrival delay? Which destinations have the shortest? Pull data for the top 10 for both the longest and shortest maximum arrival delay. Keep track of how many flights there are to each location in case that might be useful information.
 
 <details>
@@ -585,53 +632,6 @@ Most delayed
 <span><span class='c'>#&gt; <span style='color: #555555;'> 8</span> ATL             895     <span style='text-decoration: underline;'>16</span>837</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 9</span> MIA             878     <span style='text-decoration: underline;'>11</span>593</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>10</span> LAS             852      <span style='text-decoration: underline;'>5</span>952</span></span></code></pre>
-
-</div>
-
-</details>
-
-</div>
-
-</div>
-
-------------------------------------------------------------------------
-
-### Exercise 2.3
-
-<div class="alert puzzle">
-
-<div>
-
-Calculate the median for `air_time`, `arr_delay` and `dep_delay` by `origin`. Try to not do each manually.
-
-<details>
-<summary>
-Hints (click here)
-</summary>
-
-<br>
-
-Group the tibble by the `origin` variable, and combine [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html) and [`across()`](https://dplyr.tidyverse.org/reference/across.html) to get the median for each variable. Try listing them together using [`c()`](https://rdrr.io/r/base/c.html).
-
-</details>
-<details>
-<summary>
-Solution (click here)
-</summary>
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='o'>(</span><span class='nv'>air_time</span>, <span class='nv'>arr_delay</span>, <span class='nv'>dep_delay</span>, <span class='nv'>origin</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>origin</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='o'>(</span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/across.html'>across</a></span><span class='o'>(</span><span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='nv'>air_time</span>, <span class='nv'>arr_delay</span>, <span class='nv'>dep_delay</span><span class='o'>)</span>, <span class='nv'>median</span>, </span>
-<span>                   .names <span class='o'>=</span> <span class='s'>"&#123;col&#125;_median"</span><span class='o'>)</span><span class='o'>)</span> <span class='c'># extra fun thing to rename columns</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 4</span></span></span>
-<span><span class='c'>#&gt;   origin air_time_median arr_delay_median dep_delay_median</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>            <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> EWR                130               -<span style='color: #BB0000;'>4</span>               -<span style='color: #BB0000;'>1</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> JFK                149               -<span style='color: #BB0000;'>6</span>               -<span style='color: #BB0000;'>1</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> LGA                115               -<span style='color: #BB0000;'>5</span>               -<span style='color: #BB0000;'>3</span></span></span></code></pre>
 
 </div>
 
