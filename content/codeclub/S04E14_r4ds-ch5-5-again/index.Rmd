@@ -16,10 +16,10 @@ knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
 
 ------------------------------------------------------------------------
 
-## Get the Dataset and Packages
+## Get data and package
 
 ```{r, eval=FALSE}
-# Only if you haven't done so before, install the packages
+# only if you haven't done so before, install the packages
 install.packages("tidyverse")
 install.packages("nycflights13")
 install.packages("palmerpenguins")
@@ -27,10 +27,9 @@ install.packages("palmerpenguins")
 
 Load libraries
 ```{r}
-# Load the flights dataset and tidyverse
-library(nycflights13) # for flights data
 library(tidyverse) # for everything
 library(palmerpenguins) # for penguins data
+library(nycflights13) # for flights data
 ```
 
 ### Preview the Dataset
@@ -191,6 +190,7 @@ penguins %>%
   slice_min(mean_body_mass, n = 1) # min based on mean_body_mass, just give me 1
 ```
 
+* `slice()` allows you to pick rows by the position (i.e., indexing, e.g., `slice(4)` will give you the 4th row of that df)
 * `slice_head()` and `slice_tail()` select the first or last rows.
 * `slice_sample()` randomly selects rows.
 * `slice_min()` and `slice_max()` select rows with highest or lowest values of a variable.
@@ -243,14 +243,13 @@ penguins %>%
 ```
 
 ```{r}
-has_mm <- penguins %>%
-  select(contains("mm"))
-
+# from column bill_length_mm to column flipper_length_mm
 penguins %>%
   drop_na() %>%
   group_by(species) %>%
   summarize(across(bill_length_mm:flipper_length_mm, mean))
 
+# using the helper contains()
 penguins %>%
   drop_na() %>%
   group_by(species) %>%
@@ -267,7 +266,7 @@ All of these [helper functions](https://tidyselect.r-lib.org/reference/language.
 
 ## Breakout Exercises 2
 
-Let's practice using `slice()` and `summarize()` with `across()`.
+Let's practice using `slice()` and `summarize()` with `across()`, still using the `flights` data.
 
 ### Exercise 2.1
 
@@ -288,6 +287,7 @@ Group the tibble by the `tailnum` variable, and summarize to get mean `arr_delay
 <br>
 
 Least delayed flights
+
 ```{r}
 # any number of flights
 flights %>%
@@ -306,6 +306,7 @@ flights %>%
 ```
 
 Most delayed flights
+
 ```{r}
 # any number of flights
 flights %>%
