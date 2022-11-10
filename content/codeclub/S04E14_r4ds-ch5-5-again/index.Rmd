@@ -273,7 +273,7 @@ Let's practice using `slice()` and `summarize()` with `across()`, still using th
 <div class="alert puzzle">
 <div>
 
-What is the tail number (`tailnum`) for the plane that has, on average, the least delayed flights to arrive? What about the most delayed flights? How many flights did this plane take in this dataset? How would your answer change if you required that a plane take at least 50 flights?
+What is the tail number (`tailnum`) for the plane that has, on average, the least arrival delay?? What about the most arrival delay? How many flights did this plane take in this dataset? How would your answer change if you required that a plane take at least 50 flights?
 
 <details> <summary> Hints (click here) </summary>
 <br> 
@@ -332,7 +332,39 @@ flights %>%
 
 ----------------------------------------------------------------
 
+
 ### Exercise 2.2
+
+<div class="alert puzzle">
+<div>
+
+Calculate the median for `air_time`, `arr_delay` and `dep_delay` by `origin`. Try to not do each manually.
+
+<details> <summary> Hints (click here) </summary>
+<br> 
+
+Group the tibble by the `origin` variable, and combine `summarize()` and `across()` to get the median for each variable. Try listing them together using `c()`.
+
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+```{r}
+flights %>%
+  drop_na(air_time, arr_delay, dep_delay, origin) %>%
+  group_by(origin) %>%
+  summarize(across(c(air_time, arr_delay, dep_delay), median, 
+                   .names = "{col}_median")) # extra fun thing to rename columns
+```
+
+</details>
+
+</div></div>
+
+------------------------------------------------------------------------
+
+### Exercise 2.3
 
 <div class="alert puzzle">
 <div>
@@ -367,37 +399,6 @@ flights %>%
   summarize(max_arr_delay = max(arr_delay),
             n_flights = n()) %>%
   slice_max(max_arr_delay, n = 10)
-```
-
-</details>
-
-</div></div>
-
-------------------------------------------------------------------------
-
-### Exercise 2.3
-
-<div class="alert puzzle">
-<div>
-
-Calculate the median for `air_time`, `arr_delay` and `dep_delay` by `origin`. Try to not do each manually.
-
-<details> <summary> Hints (click here) </summary>
-<br> 
-
-Group the tibble by the `origin` variable, and combine `summarize()` and `across()` to get the median for each variable. Try listing them together using `c()`.
-
-
-</details>
-
-<details> <summary> Solution (click here) </summary>
-
-```{r}
-flights %>%
-  drop_na(air_time, arr_delay, dep_delay, origin) %>%
-  group_by(origin) %>%
-  summarize(across(c(air_time, arr_delay, dep_delay), median, 
-                   .names = "{col}_median")) # extra fun thing to rename columns
 ```
 
 </details>
