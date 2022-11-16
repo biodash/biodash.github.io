@@ -31,13 +31,11 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
-| S04E13      | Nov 03    | Mike S.       | [**R4DS, Ch. 5.6: Data transformation V - summarize() part 1**](/codeclub/S04E13) |
-| S04E14      | Nov 10    | Jessica       | [**R4DS, Ch. 5.6: Data transformation V - summarize() part 2**](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise) |
-| S04E15      | Nov 17    | Jelmer        | [**R4DS, Ch. 5.7: Data transformation VI - grouped mutates**](https://r4ds.had.co.nz/transform.html#grouped-mutates-and-filters) |
-| S04E16      | Nov 24    | TBD           | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis I**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
-| S04E17      | Dec 01    | TBD           | R4DS, Chapter TBD |
-| S04E18      | Dec 08    | TBD           | R4DS, Chapter TBD |
-| S04E19      | Dec 15    | TBD           | R4DS, Chapter TBD |
+| S04E15      | Nov 17    | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis I**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
+| S04E16      | Nov 24    | TBD           | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis II**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
+| S04E17      | Dec 01    | TBD           | [**R4DS, Ch. 10: Tibbles**](https://r4ds.had.co.nz/tibbles.html) |
+| S04E18      | Dec 08    | TBD           | [**R4DS, Ch. 11: Data Import**](https://r4ds.had.co.nz/data-import.html) |
+| S04E19      | Dec 15    | TBD           | [**R4DS, Ch. 12: Tidy Data**](https://r4ds.had.co.nz/tidy-data.html) |
 
 ### Earlier R4DS sessions
 
@@ -55,6 +53,8 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | S04E10      | Oct 06   | Michael B.      | [**R4DS, Ch. 5.3: Data transformation II - arrange()**](/codeclub/S04E10-11_r4ds-ch5-4/)  |
 | S04E11      | Oct 20    | Michael B.    | [**R4DS, Ch. 5.4: Data transformation III - select()**](/codeclub/S04E10-11_r4ds-ch5-4/) |
 | S04E12      | Oct 27    | Stephen       | [**R4DS, Ch. 5.5: Data transformation IV - mutate()**](/codeclub/S04E12_r4ds-ch5-5)  |
+| S04E13      | Nov 03    | Mike S.       | [**R4DS, Ch. 5.6: Data transformation V - summarize() part 1**](/codeclub/S04E13) |
+| S04E14      | Nov 10    | Jessica       | [**R4DS, Ch. 5.6: Data transformation V - summarize() part 2**](/codeclub/s04e14_r4ds-ch5-5-again/) |
 
 <br>
 

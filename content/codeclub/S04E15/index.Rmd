@@ -1,0 +1,542 @@
+---
+output: hugodown::md_document
+title: "S04E15: R for Data Science - Exploratory Data Analysis"
+subtitle: "Chapter 7.3 - 7.4: plotting distributions of variables"
+summary: "This chapter covers so-called Exploratory Data Analysis (EDA): computing summary stats and especially making quick plots to explore the variation in and distributions of single variables (this session), and looking at covariation among variables (next session)."
+authors: [admin]
+tags: [codeclub, r4ds]
+date: 2022-11-15
+lastmod: 2022-11-15
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
+```
+
+--------------------------------------------------------------------------------
+
+## Load packages
+
+Today, we'll only need to load the _tidyverse_, as we'll work with datasets
+that are automatically loaded along with it.
+
+```{r}
+## You only need to install if you haven't previously done so
+# install.packages("tidyverse")
+
+library(tidyverse)
+```
+
+We'll mostly explore the `diamonds` dataset,
+so let's take a quick look at it before we begin:
+
+```{r}
+head(diamonds)
+```
+
+On each row, we have information about one individual diamond,
+such as its `carat` and `price`. 
+Note that `x`, `y`, and `z` represent the diamond's length, width, and depth,
+respectively.
+
+Since we'll be making a bunch of plots with ggplot2,
+let's use the following trick to set an overarching "theme" for all plots
+that is a little better-looking than the default one:
+
+```{r}
+# This changes two things:
+# - theme_minimal() gives an overall different look, with a white background
+# - base_size = 14 will make the text relatively bigger
+theme_set(theme_minimal(base_size = 14))
+```
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Chapter 7.3: Variation
+
+### Exploring variation in a categorical variable
+
+Let's say we want to see how many diamonds there are for each value of `cut`.
+When we printed the first lines of the dataframe above,
+we could see that `cut` has values like `Ideal`, `Premium`, and `Good`:
+this is therefore a "categorical" and not a "continuous" variable.
+
+We could also see that the data type indication for `cut` was `<ord>`,
+which is short for _ordered factor_.
+In R, categorical variables can be represented not just as character strings
+or integers, but also as **factors**.
+Factors have a defined set of _levels_
+(e.g. the levels `Ideal` or `Premium` for the factor `cut`),
+and those levels can be given a custom order.
+That is handy when plotting or when you need to set a reference level in a model.
+
+To quickly see all values that `cut` can take on, and their frequencies,
+we can use the `count()` function that we've previously seen:
+
+```{r}
+diamonds %>% count(cut)
+```
+
+Making a barplot of different `cut` frequencies might also be useful.
+Recall that when making a plot with _ggplot2_,
+we at least need the following components:
+
+- The `ggplot()` function, in which we supply the dataframe that we
+  want to use.
+  
+- A _geom_ function, which is basically the type of plot we want to make,
+  such as `geom_point()` for a scatterplot and `geom_bar()` for a barplot.
+
+- An "aesthetic mapping" that defines which variables (columns) to plot
+  along the x-axis, y-axis, and/or to map colors or shapes too. 
+
+For a barplot showing `cut`, our ggplot code would look as follows:
+
+```{r}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut))
+```
+
+We typically specify what should go along the y-axis, too, when making plots.
+But that is not the case for bar plots,
+where the default is to plot a _count which is computed from the data_.
+
+<br>
+
+### Exploring variation in a continuous variable
+
+To explore variation in a continuous variable like `carat`,
+a histogram is a classic approach --
+we can make one using `geom_histogram()`:
+
+```{r}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat))
+```
+
+Under the hood, a histogram discretized the continuous data into bins,
+and then shows the counts (here: number of diamonds) in each bin.
+We may want to play around with the width of the bins (and thus of the bars)
+to see more fine-grained or coarse-grained patterns,
+and can do so using the `binwidth` argument:
+
+```{r}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.5)
+```
+
+If we wanted to see this kind of representation in table-form,
+we can use the ggplot2 function `cut_width`,
+in which the `width` argument does the same thing as `geom_histogram`'s
+`binwidth`:
+
+```{r}
+diamonds %>%
+  mutate(carat_discrete = cut_width(carat, width = 0.5)) %>%
+  count(carat_discrete)
+```
+
+```{r, eval=FALSE}
+# Or the same thing more concisely:
+diamonds %>% count(cut_width(carat, width = 0.5))
+```
+
+If we want to show the variation for different levels of `cut` separately but
+all in one graph,
+we can simply provide a variable to map to `fill`,
+which is the fill color of the bars:
+
+```{r}
+smaller <- diamonds %>% filter(carat < 3)
+
+ggplot(data = smaller,
+       mapping = aes(x = carat, fill = cut)) +
+  geom_histogram(binwidth = 0.1, color = "grey20")
+```
+
+Though in such cases, a linegraph with `geom_freqpoly()` might be easier
+to interpret:
+
+```{r}
+ggplot(data = smaller,
+       mapping = aes(x = carat, colour = cut)) +
+  geom_freqpoly(binwidth = 0.1, size = 1.5)
+```
+
+### Unusual values
+
+Sometimes a histogram may have very wide axis limits,
+but there are no visible bars on the sides:
+
+```{r}
+ggplot(diamonds) + 
+  geom_histogram(mapping = aes(x = y), binwidth = 0.5)
+```
+
+The x-axis limits are automatically picked based on the data,
+so there should be some values all the way up to about 60.
+But since the y-axis scale goes all the way up to 12 thousand,
+a count of 1 and perhaps even 10 or more would probably not show up.
+To see these counts in the graph, we could _zoom in_ on the y-axis
+with `coord_cartesian()`:
+
+```{r}
+ggplot(diamonds) + 
+  geom_histogram(mapping = aes(x = y), binwidth = 0.5) +
+  coord_cartesian(ylim = c(0, 50)) # c(<lower-limit>, <upper-limit>)
+```
+
+Note that in _ggplot2_,
+zooming in on a graph and setting axis limits isn't the same thing:
+you'll learn more about that in the exercises.
+
+Of course we could also try to find these values in the dataframe itself,
+which might be more useful than a graph in cases like this.
+To do so, we can use the `filter()` function we learned about in the previous
+chapter:
+
+```{r}
+diamonds %>% filter(y < 3 | y > 20)
+```
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Breakout Rooms
+
+These exercises will continue to use the `diamonds` data,
+which is automatically loaded when you load the _tidyverse_.
+
+<div class="puzzle">
+<div>
+
+### Exercise 1
+
+In the `diamonds` data, explore the distribution of `price`,
+which is the price of a diamond in USD.
+Do you discover anything unusual or surprising?
+
+Make sure to try different values for the `binwidth` argument!
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- This is a continuous variable, so use `geom_histogram()`.
+
+- A more fine-grained plot (smaller bins with `binwidth`)
+  than the default should reveal something odd.
+  
+- Try `filter()`ing the date before plotting to see the area with the odd
+  pattern in more detail.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+- `geom_histogram()` with default settings doesn't reveal anything too weird:
+
+```{r}
+ggplot(data = diamonds,
+       mapping = aes(x = price)) +
+  geom_histogram()
+```
+
+- But with a binwidth of e.g. 100, we start to see something odd:
+  a gap in the distribution.
+
+```{r}
+ggplot(data = diamonds,
+       mapping = aes(x = price)) +
+  geom_histogram(binwidth = 100)
+```
+
+- Let's take a closer look by zooming in on prices of $2,500 or less:
+
+```{r}
+diamonds %>%
+  ggplot(mapping = aes(x = price)) +
+  geom_histogram(binwidth = 25) +
+  coord_cartesian(xlim = c(0, 2500))
+```
+
+(An alternative approach would be to filter the data before plotting:)
+
+```{r, eval=FALSE}
+diamonds %>%
+  filter(price < 2500) %>% 
+  ggplot(mapping = aes(x = price)) +
+  geom_histogram(binwidth = 25)
+```
+
+
+</details>
+</div></div>
+
+<br>
+
+<div class="puzzle">
+<div>
+
+### Exercise 2
+
+Compare `coord_cartesian()` vs `lims()` when zooming in vertically on a histogram.
+Specifically, make two histograms of `price` with a y-axis that only goes
+up to 3000, one with `coord_cartesian(ylim = ...)` and one with `lims(y = ...)`.
+
+What is happening in graph with `lims()`?
+(See the hint for example usage of `lims()`, a function we haven't seen yet.)
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+No axis limits:
+
+```{r}
+ggplot(diamonds) +
+  geom_point(mapping = aes(x = x, y = y))
+```
+
+With arbitrary axis limits:
+
+```{r}
+ggplot(diamonds) +
+  geom_point(mapping = aes(x = x, y = y)) +
+  lims(x = c(5, 10),   # c(<lower-limit>, <upper-limit>)
+       y = c(0, 20))   # c(<lower-limit>, <upper-limit>)
+```
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+Whereas the graph produced with `coord_cartesian()` is simply "cut off" at
+the specified limit,
+the graph produced with `lims()` is missing bars!
+
+It turns out that _ggplot2_ removes the bars that can't be shown given our y-limit.
+Notice that it warns us about doing so:
+`#> Warning: Removed 5 rows containing missing values (geom_bar).`
+
+```{r}
+ggplot(diamonds) +
+  geom_histogram(mapping = aes(x = price)) +
+  coord_cartesian(ylim = c(0, 3000))
+```
+
+```{r}
+ggplot(diamonds) +
+  geom_histogram(mapping = aes(x = price)) +
+  lims(y = c(0, 3000))
+```
+
+</details>
+</div></div>
+
+<br>
+
+<div class="puzzle">
+<div>
+
+### Exercise 3
+
+Using scatterplots,
+explore the relationship between the depth `y` and the width `z` of the diamonds.
+
+What do you think about the outliers?
+Are they more likely to be unusual diamonds or data entry errors?
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- Make a scatterplot with `geom_point()`.
+
+- Zoom in on the area with most points,
+  to get a better feel for the overall relationship between `y` and `z`.
+
+- Could a diamond with a value of `y` larger than 20 just be a very large diamond?
+  Or does the corresponding value for `z`,
+  and the overall relationship between `y` and `z` make it more likely that
+  they are outliers?
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+Let's start with a simple scatterplot with all data and default axis limits:
+
+```{r}
+ggplot(data = diamonds,
+       mapping = aes(x = z, y = y)) +
+  geom_point()
+```
+
+Phew! There are definitely some striking outliers.
+Let's zoom in on the main cloud of points:
+
+```{r}
+ggplot(data = diamonds,
+       mapping = aes(x = z, y = y)) +
+  geom_point() +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 15))
+```
+
+That looks like an overall very tight correlation between
+width (`y`) and depth (`z`).
+
+Therefore,
+the outliers of `y` and `z` don't just seem to represent very large or very small 
+diamonds, and are likely data entry errors or something along those lines.
+
+</details>
+</div></div>
+
+<br>
+
+### Exercise 4 (bonus)
+
+Explore the distribution of `carat`.
+Specifically, compare the number of diamonds of 0.99 (and a little less) carat and
+those of 1 (and a little more) carat?
+What do you think is the cause of the difference?
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- Make a histogram (`geom_histogram()`) for `carat`,
+  and optionally zoom in to the area around 1.
+
+- Use `filter()` and `count()` to specifically check out the diamond counts
+  with a carat of around 1.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+We can start by simply making a histogram for `carat`:
+
+```{r}
+ggplot(data = diamonds,
+       mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.01)
+```
+
+That's a weird pattern, with a bunch of peaks and valleys!
+Let's just show the area around a carat of `1`:
+
+```{r}
+diamonds %>%
+  filter(carat > 0.9, carat < 1.1) %>%
+  ggplot(mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.01)
+```
+
+There's clearly a big uptick around `1`,
+but checking out the raw counts would make it easier to answer the original question:
+
+```{r}
+diamonds %>%
+  filter(carat > 0.9, carat < 1.1) %>%
+  count(carat)
+```
+
+There are suspiciously few diamonds with a carat of 0.99
+(and, to a lesser extent, with a carat anywhere above 0.9):
+could there be some rounding-up going on? 
+
+</details>
+</div></div>
+
+<div class="puzzle">
+<div>
+
+--------------------------------------------------------------------------------
+
+## Chapter 7.4: Missing values
+
+If you've established that certain outliers are untrustworthy and
+want to get rid of them,
+you have two main options.
+
+First, you could remove the rows (diamonds) with outliers:
+
+```{r}
+diamonds2 <- diamonds %>%
+  filter(y > 3, y < 20)
+```
+
+But you may not want throw out rows in their entirety,
+because the other values might be valid and are still valuable.
+In that case, you can set outliers to `NA` (missing value),
+and a convenient way to do that is with the `ifelse()` function.
+
+To understand `ifelse()`, a simple example may help:
+
+```{r}
+# Create a vector with integers from 1 to 10:
+x <- 1:10
+x
+```
+
+```{r}
+# This will return a logical vector, indicating, for each value,
+# whether it is smaller than 5:
+x < 5
+```
+
+```{r}
+# We can turn the small values into NAs, and leave big values unchanged, as follows:
+ifelse(test = x < 5, yes = NA, no = 10)
+```
+
+In case of the diamonds,
+we can use this function as follows to turn `y` outliers into `NA`s:
+
+```{r}
+diamonds2 <- diamonds %>%
+  mutate(y = ifelse(test = y < 3 | y > 20, yes = NA, no = y))
+```
+
+<br>
+
+Sometimes you may want to compare distributions among observations with and
+without missing values.
+To do that, we can create a new variable that indicates whether a value is
+missing or not, and map (for example) `color` to this variable: 
+
+```{r}
+nycflights13::flights %>% 
+  mutate(cancelled = is.na(dep_time)) %>% 
+  ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) +
+  geom_freqpoly(binwidth = 100)
+```
+
+However, the large difference in the absolute counts of cancelled versus
+not-cancelled flights makes it hard to see relative differences along the
+x-axis.
+
+We can use `geom_density()` to produce a density plot,
+where the height of the lines is only determined by the relative counts,
+and where we can see if cancelled flights have a different distribution:
+
+```{r}
+nycflights13::flights %>% 
+  mutate(cancelled = is.na(dep_time)) %>% 
+  ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) + 
+  geom_density()
+```
