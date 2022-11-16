@@ -179,7 +179,7 @@ ggplot(diamonds) +
 The x-axis limits are automatically picked based on the data,
 so there should be some values all the way up to about 60.
 But since the y-axis scale goes all the way up to 12 thousand,
-a count of 1 and perhaps even 10 or more would probably not show up.
+a count of 1 and perhaps even 10 or more would probably not be visible.
 To see these counts in the graph, we could _zoom in_ on the y-axis
 with `coord_cartesian()`:
 
@@ -230,8 +230,9 @@ Make sure to try different values for the `binwidth` argument!
 - A more fine-grained plot (smaller bins with `binwidth`)
   than the default should reveal something odd.
   
-- Try `filter()`ing the date before plotting to see the area with the odd
+- You might want to use `coord_cartesian()` to see the area with the odd
   pattern in more detail.
+  (Alternatively, you could try `filter()`ing the data before plotting.)
 
 </details>
 
@@ -240,7 +241,8 @@ Make sure to try different values for the `binwidth` argument!
 <details><summary><b>Solution</b> (click here)</summary>
 <br>
 
-- `geom_histogram()` with default settings doesn't reveal anything too weird:
+- `geom_histogram()` with default settings doesn't reveal anything too weird,
+  except perhaps the bump just below 5,000:
 
 ```{r}
 ggplot(data = diamonds,
@@ -286,30 +288,32 @@ diamonds %>%
 
 ### Exercise 2
 
-Compare `coord_cartesian()` vs `lims()` when zooming in vertically on a histogram.
+Compare `coord_cartesian()` vs the superficially similar `lims()` when zooming in
+vertically on a histogram.
 Specifically, make two histograms of `price` with a y-axis that only goes
-up to 3000, one with `coord_cartesian(ylim = ...)` and one with `lims(y = ...)`.
+up to 3000:
+one with `coord_cartesian(ylim = ...)` and one with `lims(y = ...)`.
 
-What is happening in graph with `lims()`?
+What is happening in the graph made with `lims()`?
 (See the hint for example usage of `lims()`, a function we haven't seen yet.)
 
 <details><summary><b>Hints</b> (click here)</summary>
 <br>
 
-No axis limits:
-
-```{r}
-ggplot(diamonds) +
-  geom_point(mapping = aes(x = x, y = y))
-```
-
-With arbitrary axis limits:
+You can use `lims` to set arbitrary axis limits:
 
 ```{r}
 ggplot(diamonds) +
   geom_point(mapping = aes(x = x, y = y)) +
   lims(x = c(5, 10),   # c(<lower-limit>, <upper-limit>)
        y = c(0, 20))   # c(<lower-limit>, <upper-limit>)
+```
+
+(Whereas with default axis limits, the plot would look like this:)
+
+```{r}
+ggplot(diamonds) +
+  geom_point(mapping = aes(x = x, y = y))
 ```
 
 </details>
@@ -469,6 +473,8 @@ could there be some rounding-up going on?
 
 ## Chapter 7.4: Missing values
 
+### Removing outliers
+
 If you've established that certain outliers are untrustworthy and
 want to get rid of them,
 you have two main options.
@@ -484,7 +490,6 @@ But you may not want throw out rows in their entirety,
 because the other values might be valid and are still valuable.
 In that case, you can set outliers to `NA` (missing value),
 and a convenient way to do that is with the `ifelse()` function.
-
 To understand `ifelse()`, a simple example may help:
 
 ```{r}
@@ -512,7 +517,7 @@ diamonds2 <- diamonds %>%
   mutate(y = ifelse(test = y < 3 | y > 20, yes = NA, no = y))
 ```
 
-<br>
+### Comparing observations with and without missing data 
 
 Sometimes you may want to compare distributions among observations with and
 without missing values.
@@ -540,3 +545,8 @@ nycflights13::flights %>%
   ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) + 
   geom_density()
 ```
+
+It looks like flights at the end of the day are much more commonly cancelled
+than those early on, which is what we might have expected!
+
+<br>
