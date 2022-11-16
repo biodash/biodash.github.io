@@ -1,7 +1,7 @@
 ---
 output: hugodown::md_document
 title: "S04E15: R for Data Science - Exploratory Data Analysis"
-subtitle: "Chapter 7.3 - 7.4: plotting distributions of variables"
+subtitle: "Chapter 7.3 - 7.4: Plotting the distributions of categorical and continuous variables"
 summary: "This chapter covers so-called Exploratory Data Analysis (EDA): computing summary stats and especially making quick plots to explore the variation in and distributions of single variables (this session), and looking at covariation among variables (next session)."
 authors: [admin]
 tags: [codeclub, r4ds]
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
 
 --------------------------------------------------------------------------------
 
-## Load packages
+## Setting up
 
 Today, we'll only need to load the _tidyverse_, as we'll work with datasets
 that are automatically loaded along with it.
@@ -40,7 +40,7 @@ such as its `carat` and `price`.
 Note that `x`, `y`, and `z` represent the diamond's length, width, and depth,
 respectively.
 
-Since we'll be making a bunch of plots with ggplot2,
+Since we'll be making a bunch of plots with _ggplot2_,
 let's use the following trick to set an overarching "theme" for all plots
 that is a little better-looking than the default one:
 
@@ -72,9 +72,10 @@ Factors have a defined set of _levels_
 (e.g. the levels `Ideal` or `Premium` for the factor `cut`),
 and those levels can be given a custom order.
 That is handy when plotting or when you need to set a reference level in a model.
+(For more, see [this Code Club page on factors](/codeclub/06_factors/))
 
-To quickly see all values that `cut` can take on, and their frequencies,
-we can use the `count()` function that we've previously seen:
+To quickly see which `cut` can take on and what their frequencies are,
+we can use `count()`:
 
 ```{r}
 diamonds %>% count(cut)
@@ -93,7 +94,7 @@ we at least need the following components:
 - An "aesthetic mapping" that defines which variables (columns) to plot
   along the x-axis, y-axis, and/or to map colors or shapes too. 
 
-For a barplot showing `cut`, our ggplot code would look as follows:
+For a barplot showing `cut`, our _ggplot2_ code would look as follows:
 
 ```{r}
 ggplot(data = diamonds) +
@@ -102,7 +103,7 @@ ggplot(data = diamonds) +
 
 We typically specify what should go along the y-axis, too, when making plots.
 But that is not the case for bar plots,
-where the default is to plot a _count which is computed from the data_.
+where the default is to plot a _count which is **computed** from the data_.
 
 <br>
 
@@ -117,9 +118,9 @@ ggplot(data = diamonds) +
   geom_histogram(mapping = aes(x = carat))
 ```
 
-Under the hood, a histogram discretized the continuous data into bins,
+Under the hood, a histogram discretizes the continuous data into bins,
 and then shows the counts (here: number of diamonds) in each bin.
-We may want to play around with the width of the bins (and thus of the bars)
+We may want to play around with the width of the bins
 to see more fine-grained or coarse-grained patterns,
 and can do so using the `binwidth` argument:
 
@@ -150,8 +151,10 @@ we can simply provide a variable to map to `fill`,
 which is the fill color of the bars:
 
 ```{r}
+## First let's subset the data to a subset of relatively small diamonds 
 smaller <- diamonds %>% filter(carat < 3)
 
+## Then, we make the plot
 ggplot(data = smaller,
        mapping = aes(x = carat, fill = cut)) +
   geom_histogram(binwidth = 0.1, color = "grey20")
@@ -163,13 +166,14 @@ to interpret:
 ```{r}
 ggplot(data = smaller,
        mapping = aes(x = carat, colour = cut)) +
+  # I'm making the lines thicker than the default with 'size'
   geom_freqpoly(binwidth = 0.1, size = 1.5)
 ```
 
 ### Unusual values
 
-Sometimes a histogram may have very wide axis limits,
-but there are no visible bars on the sides:
+Sometimes, plots like histograms have very wide axis limits
+yet no visible bars on the sides of the plot:
 
 ```{r}
 ggplot(diamonds) + 
@@ -177,11 +181,12 @@ ggplot(diamonds) +
 ```
 
 The x-axis limits are automatically picked based on the data,
-so there should be some values all the way up to about 60.
-But since the y-axis scale goes all the way up to 12 thousand,
-a count of 1 and perhaps even 10 or more would probably not be visible.
-To see these counts in the graph, we could _zoom in_ on the y-axis
-with `coord_cartesian()`:
+so there really _should_ be some values all the way up to about 60.
+We just can't see them,
+since the y-axis scale goes all the way up to 12 thousand.
+
+If we want to see these counts in the graph,
+we can _zoom in_ on the y-axis with `coord_cartesian()`:
 
 ```{r}
 ggplot(diamonds) + 
@@ -409,66 +414,6 @@ diamonds, and are likely data entry errors or something along those lines.
 
 <br>
 
-### Exercise 4 (bonus)
-
-Explore the distribution of `carat`.
-Specifically, compare the number of diamonds of 0.99 (and a little less) carat and
-those of 1 (and a little more) carat?
-What do you think is the cause of the difference?
-
-<details><summary><b>Hints</b> (click here)</summary>
-<br>
-
-- Make a histogram (`geom_histogram()`) for `carat`,
-  and optionally zoom in to the area around 1.
-
-- Use `filter()` and `count()` to specifically check out the diamond counts
-  with a carat of around 1.
-
-</details>
-
-<br>
-
-<details><summary><b>Solution</b> (click here)</summary>
-<br>
-
-We can start by simply making a histogram for `carat`:
-
-```{r}
-ggplot(data = diamonds,
-       mapping = aes(x = carat)) +
-  geom_histogram(binwidth = 0.01)
-```
-
-That's a weird pattern, with a bunch of peaks and valleys!
-Let's just show the area around a carat of `1`:
-
-```{r}
-diamonds %>%
-  filter(carat > 0.9, carat < 1.1) %>%
-  ggplot(mapping = aes(x = carat)) +
-  geom_histogram(binwidth = 0.01)
-```
-
-There's clearly a big uptick around `1`,
-but checking out the raw counts would make it easier to answer the original question:
-
-```{r}
-diamonds %>%
-  filter(carat > 0.9, carat < 1.1) %>%
-  count(carat)
-```
-
-There are suspiciously few diamonds with a carat of 0.99
-(and, to a lesser extent, with a carat anywhere above 0.9):
-could there be some rounding-up going on? 
-
-</details>
-</div></div>
-
-<div class="puzzle">
-<div>
-
 --------------------------------------------------------------------------------
 
 ## Chapter 7.4: Missing values
@@ -550,3 +495,64 @@ It looks like flights at the end of the day are much more commonly cancelled
 than those early on, which is what we might have expected!
 
 <br>
+
+<div class="puzzle">
+<div>
+
+### Exercise 4 (bonus)
+
+Explore the distribution of `carat`.
+Specifically, compare the number of diamonds of 0.99 (and a little less) carat and
+those of 1 (and a little more) carat?
+What do you think is the cause of the difference?
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- Make a histogram (`geom_histogram()`) for `carat`,
+  and optionally zoom in to the area around 1.
+
+- Use `filter()` and `count()` to specifically check out the diamond counts
+  with a carat of around 1.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+We can start by simply making a histogram for `carat`:
+
+```{r}
+ggplot(data = diamonds,
+       mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.01)
+```
+
+That's a weird pattern, with a bunch of peaks and valleys!
+Let's just show the area around a carat of `1`:
+
+```{r}
+diamonds %>%
+  filter(carat > 0.9, carat < 1.1) %>%
+  ggplot(mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.01)
+```
+
+There's clearly a big uptick around `1`,
+but checking out the raw counts would make it easier to answer the original question:
+
+```{r}
+diamonds %>%
+  filter(carat > 0.9, carat < 1.1) %>%
+  count(carat)
+```
+
+There are suspiciously few diamonds with a carat of 0.99
+(and, to a lesser extent, with a carat anywhere above 0.9):
+could there be some rounding-up going on? 
+
+</details>
+</div></div>
+
