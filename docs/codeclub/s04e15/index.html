@@ -342,7 +342,7 @@
         content="2022-11-15T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-11-16T14:37:08-05:00">
+    <meta property="article:modified_time" content="2022-11-16T15:40:27-05:00">
   
 
   
@@ -707,7 +707,7 @@
             </ul>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#load-packages">Load packages</a></li>
+    <li><a href="#setting-up">Setting up</a></li>
     <li><a href="#chapter-73-variation">Chapter 7.3: Variation</a>
       <ul>
         <li><a href="#exploring-variation-in-a-categorical-variable">Exploring variation in a categorical variable</a></li>
@@ -720,13 +720,13 @@
         <li><a href="#exercise-1">Exercise 1</a></li>
         <li><a href="#exercise-2">Exercise 2</a></li>
         <li><a href="#exercise-3">Exercise 3</a></li>
-        <li><a href="#exercise-4-bonus">Exercise 4 (bonus)</a></li>
       </ul>
     </li>
     <li><a href="#chapter-74-missing-values">Chapter 7.4: Missing values</a>
       <ul>
         <li><a href="#removing-outliers">Removing outliers</a></li>
         <li><a href="#comparing-observations-with-and-without-missing-data">Comparing observations with and without missing data</a></li>
+        <li><a href="#exercise-4-bonus">Exercise 4 (bonus)</a></li>
       </ul>
     </li>
   </ul>
@@ -759,7 +759,7 @@
   <h1>S04E15: R for Data Science - Exploratory Data Analysis</h1>
 
   
-  <p class="page-subtitle">Chapter 7.3 - 7.4: plotting distributions of variables</p>
+  <p class="page-subtitle">Chapter 7.3 - 7.4: Plotting the distributions of categorical and continuous variables</p>
   
 
   
@@ -819,7 +819,7 @@
                 <div class="article-container">
                     <div class="article-style">
                         <hr>
-<h2 id="load-packages">Load packages</h2>
+<h2 id="setting-up">Setting up</h2>
 <p>Today, we&rsquo;ll only need to load the <em>tidyverse</em>, as we&rsquo;ll work with datasets that are automatically loaded along with it.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>## You only need to install if you haven't previously done so</span></span>
@@ -841,7 +841,7 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'>6</span>  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48</span></span></code></pre>
 </div>
 <p>On each row, we have information about one individual diamond, such as its <code>carat</code> and <code>price</code>. Note that <code>x</code>, <code>y</code>, and <code>z</code> represent the diamond&rsquo;s length, width, and depth, respectively.</p>
-<p>Since we&rsquo;ll be making a bunch of plots with ggplot2, let&rsquo;s use the following trick to set an overarching &ldquo;theme&rdquo; for all plots that is a little better-looking than the default one:</p>
+<p>Since we&rsquo;ll be making a bunch of plots with <em>ggplot2</em>, let&rsquo;s use the following trick to set an overarching &ldquo;theme&rdquo; for all plots that is a little better-looking than the default one:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># This changes two things:</span></span>
 <span><span class='c'># - theme_minimal() gives an overall different look, with a white background</span></span>
@@ -853,8 +853,8 @@
 <h2 id="chapter-73-variation">Chapter 7.3: Variation</h2>
 <h3 id="exploring-variation-in-a-categorical-variable">Exploring variation in a categorical variable</h3>
 <p>Let&rsquo;s say we want to see how many diamonds there are for each value of <code>cut</code>. When we printed the first lines of the dataframe above, we could see that <code>cut</code> has values like <code>Ideal</code>, <code>Premium</code>, and <code>Good</code>: this is therefore a &ldquo;categorical&rdquo; and not a &ldquo;continuous&rdquo; variable.</p>
-<p>We could also see that the data type indication for <code>cut</code> was <code>&lt;ord&gt;</code>, which is short for <em>ordered factor</em>. In R, categorical variables can be represented not just as character strings or integers, but also as <strong>factors</strong>. Factors have a defined set of <em>levels</em> (e.g. the levels <code>Ideal</code> or <code>Premium</code> for the factor <code>cut</code>), and those levels can be given a custom order. That is handy when plotting or when you need to set a reference level in a model.</p>
-<p>To quickly see all values that <code>cut</code> can take on, and their frequencies, we can use the <a href="https://dplyr.tidyverse.org/reference/count.html" target="_blank" rel="noopener"><code>count()</code></a> function that we&rsquo;ve previously seen:</p>
+<p>We could also see that the data type indication for <code>cut</code> was <code>&lt;ord&gt;</code>, which is short for <em>ordered factor</em>. In R, categorical variables can be represented not just as character strings or integers, but also as <strong>factors</strong>. Factors have a defined set of <em>levels</em> (e.g. the levels <code>Ideal</code> or <code>Premium</code> for the factor <code>cut</code>), and those levels can be given a custom order. That is handy when plotting or when you need to set a reference level in a model. (For more, see <a href="/codeclub/06_factors/">this Code Club page on factors</a>)</p>
+<p>To quickly see which <code>cut</code> can take on and what their frequencies are, we can use <a href="https://dplyr.tidyverse.org/reference/count.html" target="_blank" rel="noopener"><code>count()</code></a>:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span><span class='nv'>cut</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 5 × 2</span></span></span>
@@ -878,14 +878,14 @@
 <p>An &ldquo;aesthetic mapping&rdquo; that defines which variables (columns) to plot along the x-axis, y-axis, and/or to map colors or shapes too.</p>
 </li>
 </ul>
-<p>For a barplot showing <code>cut</code>, our ggplot code would look as follows:</p>
+<p>For a barplot showing <code>cut</code>, our <em>ggplot2</em> code would look as follows:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>We typically specify what should go along the y-axis, too, when making plots. But that is not the case for bar plots, where the default is to plot a <em>count which is computed from the data</em>.</p>
+<p>We typically specify what should go along the y-axis, too, when making plots. But that is not the case for bar plots, where the default is to plot a <em>count which is <strong>computed</strong> from the data</em>.</p>
 <br>
 <h3 id="exploring-variation-in-a-continuous-variable">Exploring variation in a continuous variable</h3>
 <p>To explore variation in a continuous variable like <code>carat</code>, a histogram is a classic approach &ndash; we can make one using <a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" target="_blank" rel="noopener"><code>geom_histogram()</code></a>:</p>
@@ -895,7 +895,7 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>Under the hood, a histogram discretized the continuous data into bins, and then shows the counts (here: number of diamonds) in each bin. We may want to play around with the width of the bins (and thus of the bars) to see more fine-grained or coarse-grained patterns, and can do so using the <code>binwidth</code> argument:</p>
+<p>Under the hood, a histogram discretizes the continuous data into bins, and then shows the counts (here: number of diamonds) in each bin. We may want to play around with the width of the bins to see more fine-grained or coarse-grained patterns, and can do so using the <code>binwidth</code> argument:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span>, binwidth <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
@@ -928,8 +928,10 @@
 </div>
 <p>If we want to show the variation for different levels of <code>cut</code> separately but all in one graph, we can simply provide a variable to map to <code>fill</code>, which is the fill color of the bars:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>smaller</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carat</span> <span class='o'>&lt;</span> <span class='m'>3</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>## First let's subset the data to a subset of relatively small diamonds </span></span>
+<span><span class='nv'>smaller</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carat</span> <span class='o'>&lt;</span> <span class='m'>3</span><span class='o'>)</span></span>
 <span></span>
+<span><span class='c'>## Then, we make the plot</span></span>
 <span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>smaller</span>,</span>
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, fill <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.1</span>, color <span class='o'>=</span> <span class='s'>"grey20"</span><span class='o'>)</span></span>
@@ -940,19 +942,21 @@
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>smaller</span>,</span>
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, colour <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='c'># I'm making the lines thicker than the default with 'size'</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_freqpoly</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.1</span>, size <span class='o'>=</span> <span class='m'>1.5</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <h3 id="unusual-values">Unusual values</h3>
-<p>Sometimes a histogram may have very wide axis limits, but there are no visible bars on the sides:</p>
+<p>Sometimes, plots like histograms have very wide axis limits yet no visible bars on the sides of the plot:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span>, binwidth <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>The x-axis limits are automatically picked based on the data, so there should be some values all the way up to about 60. But since the y-axis scale goes all the way up to 12 thousand, a count of 1 and perhaps even 10 or more would probably not be visible. To see these counts in the graph, we could <em>zoom in</em> on the y-axis with <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a>:</p>
+<p>The x-axis limits are automatically picked based on the data, so there really <em>should</em> be some values all the way up to about 60. We just can&rsquo;t see them, since the y-axis scale goes all the way up to 12 thousand.</p>
+<p>If we want to see these counts in the graph, we can <em>zoom in</em> on the y-axis with <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a>:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span>, binwidth <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span> <span class='o'>+</span></span>
@@ -1155,79 +1159,6 @@
 </div>
 </div>
 <br>
-<h3 id="exercise-4-bonus">Exercise 4 (bonus)</h3>
-<p>Explore the distribution of <code>carat</code>. Specifically, compare the number of diamonds of 0.99 (and a little less) carat and those of 1 (and a little more) carat? What do you think is the cause of the difference?</p>
-<details>
-<summary>
-<b>Hints</b> (click here)
-</summary>
-<br>
-<ul>
-<li>
-<p>Make a histogram (<a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" target="_blank" rel="noopener"><code>geom_histogram()</code></a>) for <code>carat</code>, and optionally zoom in to the area around 1.</p>
-</li>
-<li>
-<p>Use <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> and <a href="https://dplyr.tidyverse.org/reference/count.html" target="_blank" rel="noopener"><code>count()</code></a> to specifically check out the diamond counts with a carat of around 1.</p>
-</li>
-</ul>
-</details>
-<br>
-<details>
-<summary>
-<b>Solution</b> (click here)
-</summary>
-<br>
-<p>We can start by simply making a histogram for <code>carat</code>:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
-<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<p>That&rsquo;s a weird pattern, with a bunch of peaks and valleys! Let&rsquo;s just show the area around a carat of <code>1</code>:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carat</span> <span class='o'>&gt;</span> <span class='m'>0.9</span>, <span class='nv'>carat</span> <span class='o'>&lt;</span> <span class='m'>1.1</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<p>There&rsquo;s clearly a big uptick around <code>1</code>, but checking out the raw counts would make it easier to answer the original question:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carat</span> <span class='o'>&gt;</span> <span class='m'>0.9</span>, <span class='nv'>carat</span> <span class='o'>&lt;</span> <span class='m'>1.1</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span><span class='nv'>carat</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 19 × 2</span></span></span>
-<span><span class='c'>#&gt;    carat     n</span></span>
-<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span>  0.91   570</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span>  0.92   226</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span>  0.93   142</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span>  0.94    59</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span>  0.95    65</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span>  0.96   103</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span>  0.97    59</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span>  0.98    31</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span>  0.99    23</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  1     <span style='text-decoration: underline;'>1</span>558</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>11</span>  1.01  <span style='text-decoration: underline;'>2</span>242</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>12</span>  1.02   883</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>13</span>  1.03   523</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>14</span>  1.04   475</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>15</span>  1.05   361</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>16</span>  1.06   373</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>17</span>  1.07   342</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>18</span>  1.08   246</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>19</span>  1.09   287</span></span></code></pre>
-</div>
-<p>There are suspiciously few diamonds with a carat of 0.99 (and, to a lesser extent, with a carat anywhere above 0.9): could there be some rounding-up going on?</p>
-</details>
-</div>
-</div>
-<div class="puzzle">
-<div>
 <hr>
 <h2 id="chapter-74-missing-values">Chapter 7.4: Missing values</h2>
 <h3 id="removing-outliers">Removing outliers</h3>
@@ -1268,7 +1199,7 @@
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sched_dep_time</span>, color <span class='o'>=</span> <span class='nv'>cancelled</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_freqpoly</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>100</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-33-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>However, the large difference in the absolute counts of cancelled versus not-cancelled flights makes it hard to see relative differences along the x-axis.</p>
 <p>We can use <a href="https://ggplot2.tidyverse.org/reference/geom_density.html" target="_blank" rel="noopener"><code>geom_density()</code></a> to produce a density plot, where the height of the lines is only determined by the relative counts, and where we can see if cancelled flights have a different distribution:</p>
@@ -1278,10 +1209,83 @@
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sched_dep_time</span>, color <span class='o'>=</span> <span class='nv'>cancelled</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-34-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>It looks like flights at the end of the day are much more commonly cancelled than those early on, which is what we might have expected!</p>
 <br>
+<div class="puzzle">
+<div>
+<h3 id="exercise-4-bonus">Exercise 4 (bonus)</h3>
+<p>Explore the distribution of <code>carat</code>. Specifically, compare the number of diamonds of 0.99 (and a little less) carat and those of 1 (and a little more) carat? What do you think is the cause of the difference?</p>
+<details>
+<summary>
+<b>Hints</b> (click here)
+</summary>
+<br>
+<ul>
+<li>
+<p>Make a histogram (<a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" target="_blank" rel="noopener"><code>geom_histogram()</code></a>) for <code>carat</code>, and optionally zoom in to the area around 1.</p>
+</li>
+<li>
+<p>Use <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> and <a href="https://dplyr.tidyverse.org/reference/count.html" target="_blank" rel="noopener"><code>count()</code></a> to specifically check out the diamond counts with a carat of around 1.</p>
+</li>
+</ul>
+</details>
+<br>
+<details>
+<summary>
+<b>Solution</b> (click here)
+</summary>
+<br>
+<p>We can start by simply making a histogram for <code>carat</code>:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-32-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>That&rsquo;s a weird pattern, with a bunch of peaks and valleys! Let&rsquo;s just show the area around a carat of <code>1</code>:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carat</span> <span class='o'>&gt;</span> <span class='m'>0.9</span>, <span class='nv'>carat</span> <span class='o'>&lt;</span> <span class='m'>1.1</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-33-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>There&rsquo;s clearly a big uptick around <code>1</code>, but checking out the raw counts would make it easier to answer the original question:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carat</span> <span class='o'>&gt;</span> <span class='m'>0.9</span>, <span class='nv'>carat</span> <span class='o'>&lt;</span> <span class='m'>1.1</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span><span class='nv'>carat</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 19 × 2</span></span></span>
+<span><span class='c'>#&gt;    carat     n</span></span>
+<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span>  0.91   570</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span>  0.92   226</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span>  0.93   142</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span>  0.94    59</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span>  0.95    65</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span>  0.96   103</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span>  0.97    59</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span>  0.98    31</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span>  0.99    23</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  1     <span style='text-decoration: underline;'>1</span>558</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>11</span>  1.01  <span style='text-decoration: underline;'>2</span>242</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>12</span>  1.02   883</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>13</span>  1.03   523</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>14</span>  1.04   475</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>15</span>  1.05   361</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>16</span>  1.06   373</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>17</span>  1.07   342</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>18</span>  1.08   246</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>19</span>  1.09   287</span></span></code></pre>
+</div>
+<p>There are suspiciously few diamonds with a carat of 0.99 (and, to a lesser extent, with a carat anywhere above 0.9): could there be some rounding-up going on?</p>
+</details>
+</div>
+</div>
 
                     </div>
 
