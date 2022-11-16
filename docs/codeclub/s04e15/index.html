@@ -342,7 +342,7 @@
         content="2022-11-15T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-11-16T14:06:16-05:00">
+    <meta property="article:modified_time" content="2022-11-16T14:37:08-05:00">
   
 
   
@@ -720,10 +720,15 @@
         <li><a href="#exercise-1">Exercise 1</a></li>
         <li><a href="#exercise-2">Exercise 2</a></li>
         <li><a href="#exercise-3">Exercise 3</a></li>
-        <li><a href="#exercise-4">Exercise 4</a></li>
+        <li><a href="#exercise-4-bonus">Exercise 4 (bonus)</a></li>
       </ul>
     </li>
-    <li><a href="#chapter-74-missing-values">Chapter 7.4: Missing values</a></li>
+    <li><a href="#chapter-74-missing-values">Chapter 7.4: Missing values</a>
+      <ul>
+        <li><a href="#removing-outliers">Removing outliers</a></li>
+        <li><a href="#comparing-observations-with-and-without-missing-data">Comparing observations with and without missing data</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
         </div>
@@ -822,7 +827,7 @@
 <span></span>
 <span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span></code></pre>
 </div>
-<p>We&rsquo;ll mostly explore the <code>diamonds</code> dataset, so let&rsquo;s take a quick look at it:</p>
+<p>We&rsquo;ll mostly explore the <code>diamonds</code> dataset, so let&rsquo;s take a quick look at it before we begin:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 10</span></span></span>
@@ -836,7 +841,7 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'>6</span>  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48</span></span></code></pre>
 </div>
 <p>On each row, we have information about one individual diamond, such as its <code>carat</code> and <code>price</code>. Note that <code>x</code>, <code>y</code>, and <code>z</code> represent the diamond&rsquo;s length, width, and depth, respectively.</p>
-<p>We&rsquo;ll be making a bunch of plots with ggplot2, and to avoid allergic reactions to the default gray background, let&rsquo;s use the following trick to set an overarching &ldquo;theme&rdquo; for all plots:</p>
+<p>Since we&rsquo;ll be making a bunch of plots with ggplot2, let&rsquo;s use the following trick to set an overarching &ldquo;theme&rdquo; for all plots that is a little better-looking than the default one:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># This changes two things:</span></span>
 <span><span class='c'># - theme_minimal() gives an overall different look, with a white background</span></span>
@@ -847,8 +852,8 @@
 <hr>
 <h2 id="chapter-73-variation">Chapter 7.3: Variation</h2>
 <h3 id="exploring-variation-in-a-categorical-variable">Exploring variation in a categorical variable</h3>
-<p>Let&rsquo;s say we want to see how many diamonds there are for each <code>cut</code>. When we printed the first lines of the dataframe above, we could see that this variable has values like <code>Ideal</code>, <code>Premium</code>, and <code>Good</code>: this is therefore a &ldquo;categorical&rdquo; and not a &ldquo;continuous&rdquo; variable.</p>
-<p>We could also see that the data type indication for <code>cut</code> was <code>&lt;ord&gt;</code>, which is short for <em>ordered factor</em>. In R, categorical variables can be represented not just as character strings or integers, but also as <strong>factors</strong>. Factors have a defined set of <em>levels</em> (e.g. the levels <code>Ideal</code> or <code>Premium</code> for the factor <code>cut</code>), and those levels can be given a custom order, which for instance is handy when plotting.</p>
+<p>Let&rsquo;s say we want to see how many diamonds there are for each value of <code>cut</code>. When we printed the first lines of the dataframe above, we could see that <code>cut</code> has values like <code>Ideal</code>, <code>Premium</code>, and <code>Good</code>: this is therefore a &ldquo;categorical&rdquo; and not a &ldquo;continuous&rdquo; variable.</p>
+<p>We could also see that the data type indication for <code>cut</code> was <code>&lt;ord&gt;</code>, which is short for <em>ordered factor</em>. In R, categorical variables can be represented not just as character strings or integers, but also as <strong>factors</strong>. Factors have a defined set of <em>levels</em> (e.g. the levels <code>Ideal</code> or <code>Premium</code> for the factor <code>cut</code>), and those levels can be given a custom order. That is handy when plotting or when you need to set a reference level in a model.</p>
 <p>To quickly see all values that <code>cut</code> can take on, and their frequencies, we can use the <a href="https://dplyr.tidyverse.org/reference/count.html" target="_blank" rel="noopener"><code>count()</code></a> function that we&rsquo;ve previously seen:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span><span class='nv'>cut</span><span class='o'>)</span></span>
@@ -921,7 +926,7 @@
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Or the same thing more concisely:</span></span>
 <span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_width</a></span><span class='o'>(</span><span class='nv'>carat</span>, width <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span><span class='o'>)</span></span></code></pre>
 </div>
-<p>If we want to show the variation in multiple variables in one graph, we can simply provide a variable to map to <code>fill</code>, which is the fill color of the bars:</p>
+<p>If we want to show the variation for different levels of <code>cut</code> separately but all in one graph, we can simply provide a variable to map to <code>fill</code>, which is the fill color of the bars:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>smaller</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carat</span> <span class='o'>&lt;</span> <span class='m'>3</span><span class='o'>)</span></span>
 <span></span>
@@ -947,11 +952,11 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>The x-axis limits are automatically picked based on the data, so there have to be some values up to about 60. But since the y-axis scale goes all the way up to 12 thousand, a count of 1 and perhaps even 10 or more would probably not show up. To see these counts in the graph, we could <em>zoom in</em> on the y-axis with <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a>:</p>
+<p>The x-axis limits are automatically picked based on the data, so there should be some values all the way up to about 60. But since the y-axis scale goes all the way up to 12 thousand, a count of 1 and perhaps even 10 or more would probably not be visible. To see these counts in the graph, we could <em>zoom in</em> on the y-axis with <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a>:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span>, binwidth <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>50</span><span class='o'>)</span><span class='o'>)</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>50</span><span class='o'>)</span><span class='o'>)</span> <span class='c'># c(&lt;lower-limit&gt;, &lt;upper-limit&gt;)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
@@ -975,7 +980,7 @@
 <br>
 <hr>
 <h2 id="breakout-rooms">Breakout Rooms</h2>
-<p>These exercises will work with the <code>diamonds</code> data, which is automatically loaded when you load the <em>tidyverse</em>.</p>
+<p>These exercises will continue to use the <code>diamonds</code> data, which is automatically loaded when you load the <em>tidyverse</em>.</p>
 <div class="puzzle">
 <div>
 <h3 id="exercise-1">Exercise 1</h3>
@@ -991,10 +996,10 @@
 <p>This is a continuous variable, so use <a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" target="_blank" rel="noopener"><code>geom_histogram()</code></a>.</p>
 </li>
 <li>
-<p>A more fine-grained plot (smaller bins) than the default should reveal something odd.</p>
+<p>A more fine-grained plot (smaller bins with <code>binwidth</code>) than the default should reveal something odd.</p>
 </li>
 <li>
-<p>Try <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a>ing the date before plotting to see the area with the odd pattern in more detail.</p>
+<p>You might want to use <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a> to see the area with the odd pattern in more detail. (Alternatively, you could try <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a>ing the data before plotting.)</p>
 </li>
 </ul>
 </details>
@@ -1005,7 +1010,7 @@
 </summary>
 <br>
 <ul>
-<li><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" target="_blank" rel="noopener"><code>geom_histogram()</code></a> with default settings doesn&rsquo;t reveal anything too weird:</li>
+<li><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" target="_blank" rel="noopener"><code>geom_histogram()</code></a> with default settings doesn&rsquo;t reveal anything too weird, except perhaps the bump just below 5,000:</li>
 </ul>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
@@ -1025,39 +1030,146 @@
 <p><img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
-<li>Let&rsquo;s take a closer look by filtering out prices of $2,500 or more before making the plot:</li>
-</ul>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>price</span> <span class='o'>&lt;</span> <span class='m'>2500</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>25</span><span class='o'>)</span></span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<ul>
-<li>Alternatively, we could forego pre-filtering, and zoom in using <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a>:</li>
+<li>Let&rsquo;s take a closer look by zooming in on prices of $2,500 or less:</li>
 </ul>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>25</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>xlim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>2500</span><span class='o'>)</span><span class='o'>)</span> <span class='c'># c(&lt;lower-limit&gt;, &lt;upper-limit&gt;)</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>xlim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>2500</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>(An alternative approach would be to filter the data before plotting:)</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>price</span> <span class='o'>&lt;</span> <span class='m'>2500</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>25</span><span class='o'>)</span></span></code></pre>
 </div>
 </details>
 </div>
 </div>
+<br>
 <div class="puzzle">
 <div>
 <h3 id="exercise-2">Exercise 2</h3>
-<p>How many diamonds are 0.99 carat? How many are 1 carat? What do you think is the cause of the difference?</p>
+<p>Compare <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a> vs the superficially similar <a href="https://ggplot2.tidyverse.org/reference/lims.html" target="_blank" rel="noopener"><code>lims()</code></a> when zooming in vertically on a histogram. Specifically, make two histograms of <code>price</code> with a y-axis that only goes up to 3000: one with <code>coord_cartesian(ylim = ...)</code> and one with <code>lims(y = ...)</code>.</p>
+<p>What is happening in the graph made with <a href="https://ggplot2.tidyverse.org/reference/lims.html" target="_blank" rel="noopener"><code>lims()</code></a>? (See the hint for example usage of <a href="https://ggplot2.tidyverse.org/reference/lims.html" target="_blank" rel="noopener"><code>lims()</code></a>, a function we haven&rsquo;t seen yet.)</p>
 <details>
 <summary>
 <b>Hints</b> (click here)
 </summary>
 <br>
+<p>You can use <code>lims</code> to set arbitrary axis limits:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x</span>, y <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>lims</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>5</span>, <span class='m'>10</span><span class='o'>)</span>,   <span class='c'># c(&lt;lower-limit&gt;, &lt;upper-limit&gt;)</span></span>
+<span>       y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>20</span><span class='o'>)</span><span class='o'>)</span>   <span class='c'># c(&lt;lower-limit&gt;, &lt;upper-limit&gt;)</span></span>
+<span><span class='c'>#&gt; Warning: Removed 17593 rows containing missing values (geom_point).</span></span></code></pre>
+<p><img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>(Whereas with default axis limits, the plot would look like this:)</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x</span>, y <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+<br>
+<details>
+<summary>
+<b>Solution</b> (click here)
+</summary>
+<br>
+<p>Whereas the graph produced with <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a> is simply &ldquo;cut off&rdquo; at the specified limit, the graph produced with <a href="https://ggplot2.tidyverse.org/reference/lims.html" target="_blank" rel="noopener"><code>lims()</code></a> is missing bars!</p>
+<p>It turns out that <em>ggplot2</em> removes the bars that can&rsquo;t be shown given our y-limit. Notice that it warns us about doing so: <code>#&gt; Warning: Removed 5 rows containing missing values (geom_bar).</code></p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>3000</span><span class='o'>)</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>lims</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>3000</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; Warning: Removed 5 rows containing missing values (geom_bar).</span></span></code></pre>
+<p><img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+</div>
+</div>
+<br>
+<div class="puzzle">
+<div>
+<h3 id="exercise-3">Exercise 3</h3>
+<p>Using scatterplots, explore the relationship between the depth <code>y</code> and the width <code>z</code> of the diamonds.</p>
+<p>What do you think about the outliers? Are they more likely to be unusual diamonds or data entry errors?</p>
+<details>
+<summary>
+<b>Hints</b> (click here)
+</summary>
+<br>
+<ul>
+<li>
+<p>Make a scatterplot with <a href="https://ggplot2.tidyverse.org/reference/geom_point.html" target="_blank" rel="noopener"><code>geom_point()</code></a>.</p>
+</li>
+<li>
+<p>Zoom in on the area with most points, to get a better feel for the overall relationship between <code>y</code> and <code>z</code>.</p>
+</li>
+<li>
+<p>Could a diamond with a value of <code>y</code> larger than 20 just be a very large diamond? Or does the corresponding value for <code>z</code>, and the overall relationship between <code>y</code> and <code>z</code> make it more likely that they are outliers?</p>
+</li>
+</ul>
+</details>
+<br>
+<details>
+<summary>
+<b>Solution</b> (click here)
+</summary>
+<br>
+<p>Let&rsquo;s start with a simple scatterplot with all data and default axis limits:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>z</span>, y <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Phew! There are definitely some striking outliers. Let&rsquo;s zoom in on the main cloud of points:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>z</span>, y <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>xlim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>10</span><span class='o'>)</span>, ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>15</span><span class='o'>)</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>That looks like an overall very tight correlation between width (<code>y</code>) and depth (<code>z</code>).</p>
+<p>Therefore, the outliers of <code>y</code> and <code>z</code> don&rsquo;t just seem to represent very large or very small diamonds, and are likely data entry errors or something along those lines.</p>
+</details>
+</div>
+</div>
+<br>
+<h3 id="exercise-4-bonus">Exercise 4 (bonus)</h3>
+<p>Explore the distribution of <code>carat</code>. Specifically, compare the number of diamonds of 0.99 (and a little less) carat and those of 1 (and a little more) carat? What do you think is the cause of the difference?</p>
+<details>
+<summary>
+<b>Hints</b> (click here)
+</summary>
+<br>
+<ul>
+<li>
+<p>Make a histogram (<a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" target="_blank" rel="noopener"><code>geom_histogram()</code></a>) for <code>carat</code>, and optionally zoom in to the area around 1.</p>
+</li>
+<li>
+<p>Use <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> and <a href="https://dplyr.tidyverse.org/reference/count.html" target="_blank" rel="noopener"><code>count()</code></a> to specifically check out the diamond counts with a carat of around 1.</p>
+</li>
+</ul>
 </details>
 <br>
 <details>
@@ -1071,7 +1183,7 @@
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>That&rsquo;s a weird pattern, with a bunch of peaks and valleys! Let&rsquo;s just show the area around a carat of <code>1</code>:</p>
 <div class="highlight">
@@ -1080,9 +1192,9 @@
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>There&rsquo;s clearly a big uptick around <code>1</code>, but checking out the counts directly would make answering the original question easier:</p>
+<p>There&rsquo;s clearly a big uptick around <code>1</code>, but checking out the raw counts would make it easier to answer the original question:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>carat</span> <span class='o'>&gt;</span> <span class='m'>0.9</span>, <span class='nv'>carat</span> <span class='o'>&lt;</span> <span class='m'>1.1</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
@@ -1116,118 +1228,16 @@
 </div>
 <div class="puzzle">
 <div>
-<h3 id="exercise-3">Exercise 3</h3>
-<p>Compare <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a> vs <a href="https://ggplot2.tidyverse.org/reference/lims.html" target="_blank" rel="noopener"><code>lims()</code></a> when zooming in vertically on a histogram. Specifically, make two histograms of <code>price</code> with a y-axis that only goes up to 3000, one with <code>coord_cartesian(ylim = ...)</code> and one with <code>lims(y = ...)</code>.</p>
-<p>What is happening in graph with <a href="https://ggplot2.tidyverse.org/reference/lims.html" target="_blank" rel="noopener"><code>lims()</code></a>? (See the hint for example usage of <a href="https://ggplot2.tidyverse.org/reference/lims.html" target="_blank" rel="noopener"><code>lims()</code></a>, a function we haven&rsquo;t seen yet.)</p>
-<details>
-<summary>
-<b>Hints</b> (click here)
-</summary>
-<br>
-<p>No axis limits:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x</span>, y <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span></span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<p>With arbitrary axis limits:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>x</span>, y <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>lims</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>5</span>, <span class='m'>10</span><span class='o'>)</span>,   <span class='c'># c(&lt;lower-limit&gt;, &lt;upper-limit&gt;)</span></span>
-<span>       y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>20</span><span class='o'>)</span><span class='o'>)</span>   <span class='c'># c(&lt;lower-limit&gt;, &lt;upper-limit&gt;)</span></span>
-<span><span class='c'>#&gt; Warning: Removed 17593 rows containing missing values (geom_point).</span></span></code></pre>
-<p><img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-</details>
-<br>
-<details>
-<summary>
-<b>Solution</b> (click here)
-</summary>
-<br>
-<p>Whereas the graph produced with <a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" target="_blank" rel="noopener"><code>coord_cartesian()</code></a> is simply &ldquo;cut off&rdquo; at the specified limit, the graph produced with <a href="https://ggplot2.tidyverse.org/reference/lims.html" target="_blank" rel="noopener"><code>lims()</code></a> is missing bars!</p>
-<p>It turns out that <em>ggplot2</em> removes the bars that can&rsquo;t be shown given our y-limit. Notice that it warns us about doing so: <code>#&gt; Warning: Removed 5 rows containing missing values (geom_bar).</code></p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>3000</span><span class='o'>)</span><span class='o'>)</span></span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>lims</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>3000</span><span class='o'>)</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; Warning: Removed 5 rows containing missing values (geom_bar).</span></span></code></pre>
-<p><img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-</details>
-</div>
-</div>
-<br>
-<div class="puzzle">
-<div>
-<h3 id="exercise-4">Exercise 4</h3>
-<p>Using plots, explore the relationship between the depth <code>y</code> and the width <code>z</code> of the diamonds.</p>
-<p>What do you think about the outliers? Are they more likely to be unusual diamonds or data entry errors?</p>
-<details>
-<summary>
-<b>Hints</b> (click here)
-</summary>
-<br>
-<ul>
-<li>
-<p>Make a scatterplot with <a href="https://ggplot2.tidyverse.org/reference/geom_point.html" target="_blank" rel="noopener"><code>geom_point()</code></a>.</p>
-</li>
-<li>
-<p>Zoom in on the area with most points, to get a better feel for the overall relationship between <code>y</code> and <code>z</code>.</p>
-</li>
-<li>
-<p>Could a diamond with a value of <code>y</code> larger than 20 just be a very large diamond? Or does the corresponding value for <code>z</code>, and the overall relationship between <code>y</code> and <code>z</code> make it more likely that they are outliers?</p>
-</li>
-</ul>
-</details>
-<br>
-<details>
-<summary>
-<b>Solution</b> (click here)
-</summary>
-<br>
-<p>Let&rsquo;s start with a simple scatterplot with all data and default axis limits:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
-<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>z</span>, y <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<p>Phew! There are definitely some striking outliers. Let&rsquo;s zoom in on the main cloud of points:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
-<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>z</span>, y <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>xlim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>10</span><span class='o'>)</span>, ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>15</span><span class='o'>)</span><span class='o'>)</span></span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<p>That looks like an overall very tight correlation between width (<code>y</code>) and depth (<code>z</code>).</p>
-<p>Therefore, the outliers of <code>y</code> and <code>z</code> don&rsquo;t just seem to represent very large or very small diamonds, and are likely data entry errors or something along those lines.</p>
-</details>
-</div>
-</div>
-<br>
 <hr>
 <h2 id="chapter-74-missing-values">Chapter 7.4: Missing values</h2>
+<h3 id="removing-outliers">Removing outliers</h3>
 <p>If you&rsquo;ve established that certain outliers are untrustworthy and want to get rid of them, you have two main options.</p>
 <p>First, you could remove the rows (diamonds) with outliers:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds2</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>3</span>, <span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>20</span><span class='o'>)</span></span></code></pre>
 </div>
-<p>But you may not want throw out rows in their entirety, because the other values might be valid and are still valuable. In that case, you can set outliers to <code>NA</code> (missing value), and a convenient way to do that is with the <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a> function.</p>
-<p>To understand <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a>, a simple example may help:</p>
+<p>But you may not want throw out rows in their entirety, because the other values might be valid and are still valuable. In that case, you can set outliers to <code>NA</code> (missing value), and a convenient way to do that is with the <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a> function. To understand <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a>, a simple example may help:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Create a vector with integers from 1 to 10:</span></span>
 <span><span class='nv'>x</span> <span class='o'>&lt;-</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>10</span></span>
@@ -1250,7 +1260,7 @@
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds2</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>3</span> <span class='o'>|</span> <span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>20</span>, yes <span class='o'>=</span> <span class='kc'>NA</span>, no <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span></span></code></pre>
 </div>
-<br>
+<h3 id="comparing-observations-with-and-without-missing-data">Comparing observations with and without missing data</h3>
 <p>Sometimes you may want to compare distributions among observations with and without missing values. To do that, we can create a new variable that indicates whether a value is missing or not, and map (for example) <code>color</code> to this variable:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'>nycflights13</span><span class='nf'>::</span><span class='nv'><a href='https://rdrr.io/pkg/nycflights13/man/flights.html'>flights</a></span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
@@ -1270,6 +1280,8 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-34-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
+<p>It looks like flights at the end of the day are much more commonly cancelled than those early on, which is what we might have expected!</p>
+<br>
 
                     </div>
 
