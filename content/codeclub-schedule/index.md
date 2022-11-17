@@ -7,15 +7,12 @@ title: "Schedule for Code Club"
 
 ## Fall '22
 
-We will be meeting on **Thursdays at 3 pm starting on September 15th, 2022**,
+We are meeting on **Thursdays at 3 pm**,
 continuing to work our way through the
 [The R for Data Science book (R4DS)](https://r4ds.had.co.nz/).
 
-If you are a newcomer this fall,
-this is a great time to join because in our previous R4DS sessions,
-we have just covered the data visualization chapter and R Markdown --
-and we will now start with some R basics and with data manipulation.
-[Sign up using the form](/codeclub-about/#sign-up)!
+If you haven't previously signed up,
+[do so using the form](/codeclub-about/#sign-up)!
 
 You can join us either on Zoom (sign up for the link) or in-person:
 
@@ -32,10 +29,9 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
 | S04E15      | Nov 17    | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis I**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
-| S04E16      | Nov 24    | TBD           | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis II**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
-| S04E17      | Dec 01    | TBD           | [**R4DS, Ch. 10: Tibbles**](https://r4ds.had.co.nz/tibbles.html) |
-| S04E18      | Dec 08    | TBD           | [**R4DS, Ch. 11: Data Import**](https://r4ds.had.co.nz/data-import.html) |
-| S04E19      | Dec 15    | TBD           | [**R4DS, Ch. 12: Tidy Data**](https://r4ds.had.co.nz/tidy-data.html) |
+| S04E16      | Dec 01    | Michael B.    | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis II**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
+| S04E17      | Dec 08    | Stephen       | [**R4DS, Ch. 10: Tibbles**](https://r4ds.had.co.nz/tibbles.html) |
+| S04E18      | Dec 15    | Mike S.       | [**R4DS, Ch. 11: Data Import**](https://r4ds.had.co.nz/data-import.html) |
 
 ### Earlier R4DS sessions
 
