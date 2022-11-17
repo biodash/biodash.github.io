@@ -18,8 +18,8 @@ knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
 
 ## Setting up
 
-Today, we'll only need to load the _tidyverse_, as we'll work with datasets
-that are automatically loaded along with it.
+To start with, we'll only need to load the _tidyverse_,
+as we'll explore a dataset that is automatically loaded along with it.
 
 ```{r}
 ## You only need to install if you haven't previously done so
@@ -28,17 +28,17 @@ that are automatically loaded along with it.
 library(tidyverse)
 ```
 
-We'll mostly explore the `diamonds` dataset,
+We'll be working with the `diamonds` dataset today,
 so let's take a quick look at it before we begin:
 
 ```{r}
-head(diamonds)
+diamonds
 ```
 
 On each row, we have information about one individual diamond,
 such as its `carat` and `price`. 
-Note that `x`, `y`, and `z` represent the diamond's length, width, and depth,
-respectively.
+(`x`, `y`, and `z` represent the diamond's length, width, and depth,
+respectively.)
 
 Since we'll be making a bunch of plots with _ggplot2_,
 let's use the following trick to set an overarching "theme" for all plots
@@ -68,13 +68,13 @@ We could also see that the data type indication for `cut` was `<ord>`,
 which is short for _ordered factor_.
 In R, categorical variables can be represented not just as character strings
 or integers, but also as **factors**.
-Factors have a defined set of _levels_
-(e.g. the levels `Ideal` or `Premium` for the factor `cut`),
-and those levels can be given a custom order.
+Factors have a defined set of _levels_ which can be assigned a custom order.
 That is handy when plotting or when you need to set a reference level in a model.
-(For more, see [this Code Club page on factors](/codeclub/06_factors/))
+(For more,
+see [the page for this previous Code Club session on factors](/codeclub/06_factors/).)
 
-To quickly see which `cut` can take on and what their frequencies are,
+To quickly see which values the variable `cut` contains,
+and what their frequencies are,
 we can use `count()`:
 
 ```{r}
@@ -91,8 +91,7 @@ we at least need the following components:
 - A _geom_ function, which is basically the type of plot we want to make,
   such as `geom_point()` for a scatterplot and `geom_bar()` for a barplot.
 
-- An "aesthetic mapping" that defines which variables (columns) to plot
-  along the x-axis, y-axis, and/or to map colors or shapes too. 
+- An "aesthetic mapping" that defines which variables to plot along the axes.
 
 For a barplot showing `cut`, our _ggplot2_ code would look as follows:
 
@@ -101,15 +100,16 @@ ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = cut))
 ```
 
-We typically specify what should go along the y-axis, too, when making plots.
+When making plots, we typically specify what should go along the y-axis, too.
 But that is not the case for bar plots,
-where the default is to plot a _count which is **computed** from the data_.
+where the default is to automatically 
+plot a _count which is **computed** from the data_.
 
 <br>
 
 ### Exploring variation in a continuous variable
 
-To explore variation in a continuous variable like `carat`,
+To explore variation in a _continuous_ variable like `carat`,
 a histogram is a classic approach --
 we can make one using `geom_histogram()`:
 
@@ -140,34 +140,28 @@ diamonds %>%
   count(carat_discrete)
 ```
 
-```{r, eval=FALSE}
-# Or the same thing more concisely:
-diamonds %>% count(cut_width(carat, width = 0.5))
-```
-
-If we want to show the variation for different levels of `cut` separately but
-all in one graph,
+If we want to show the variation for different levels of `cut` separately
+in a single graph,
 we can simply provide a variable to map to `fill`,
 which is the fill color of the bars:
 
 ```{r}
-## First let's subset the data to a subset of relatively small diamonds 
+## First, let's subset the data to only keep relatively small diamonds: 
 smaller <- diamonds %>% filter(carat < 3)
 
-## Then, we make the plot
+## Then, we make the plot:
 ggplot(data = smaller,
        mapping = aes(x = carat, fill = cut)) +
   geom_histogram(binwidth = 0.1, color = "grey20")
 ```
 
-Though in such cases, a linegraph with `geom_freqpoly()` might be easier
-to interpret:
+Though in a case like this,
+a linegraph with `geom_freqpoly()` might be easier to interpret:
 
 ```{r}
 ggplot(data = smaller,
        mapping = aes(x = carat, colour = cut)) +
-  # I'm making the lines thicker than the default with 'size'
-  geom_freqpoly(binwidth = 0.1, size = 1.5)
+  geom_freqpoly(binwidth = 0.1, size = 1.5) # (Making thicker lines with 'size')
 ```
 
 ### Unusual values
@@ -282,6 +276,8 @@ diamonds %>%
   geom_histogram(binwidth = 25)
 ```
 
+I have no idea why there are no diamonds with a price of around $1,500 --
+anybody?
 
 </details>
 </div></div>
@@ -293,19 +289,20 @@ diamonds %>%
 
 ### Exercise 2
 
-Compare `coord_cartesian()` vs the superficially similar `lims()` when zooming in
-vertically on a histogram.
+Compare `coord_cartesian()` with the similar function `lims()` to 
+see a narrower range along the y-axis for a histogram.
 Specifically, make two histograms of `price` with a y-axis that only goes
-up to 3000:
+up to 3,000:
 one with `coord_cartesian(ylim = ...)` and one with `lims(y = ...)`.
 
 What is happening in the graph made with `lims()`?
-(See the hint for example usage of `lims()`, a function we haven't seen yet.)
+
+(See the hint for example usage of `lims()`, a function we haven't seen yet.
 
 <details><summary><b>Hints</b> (click here)</summary>
 <br>
 
-You can use `lims` to set arbitrary axis limits:
+You can use `lims()` to set arbitrary axis limits:
 
 ```{r}
 ggplot(diamonds) +
@@ -314,11 +311,15 @@ ggplot(diamonds) +
        y = c(0, 20))   # c(<lower-limit>, <upper-limit>)
 ```
 
-(Whereas with default axis limits, the plot would look like this:)
+You could also use `ylim()` from the equivalent `ylim()` / `xlim()` pair of
+functions,
+though note the slightly simplified syntax:
 
 ```{r}
 ggplot(diamonds) +
-  geom_point(mapping = aes(x = x, y = y))
+  geom_point(mapping = aes(x = x, y = y)) +
+  xlim(5, 10) +   # Note: you don't pass a vector inside 'c()' here
+  ylim(0, 20)
 ```
 
 </details>
@@ -432,8 +433,8 @@ diamonds2 <- diamonds %>%
 ```
 
 But you may not want throw out rows in their entirety,
-because the other values might be valid and are still valuable.
-In that case, you can set outliers to `NA` (missing value),
+because the values for the other variables might be valid and still valuable.
+In that case, you can convert outliers to `NA`s (missing values),
 and a convenient way to do that is with the `ifelse()` function.
 To understand `ifelse()`, a simple example may help:
 
@@ -451,7 +452,7 @@ x < 5
 
 ```{r}
 # We can turn the small values into NAs, and leave big values unchanged, as follows:
-ifelse(test = x < 5, yes = NA, no = 10)
+ifelse(test = x < 5, yes = NA, no = x)
 ```
 
 In case of the diamonds,
@@ -470,7 +471,9 @@ To do that, we can create a new variable that indicates whether a value is
 missing or not, and map (for example) `color` to this variable: 
 
 ```{r}
-nycflights13::flights %>% 
+library(nycflights13)
+
+flights %>% 
   mutate(cancelled = is.na(dep_time)) %>% 
   ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) +
   geom_freqpoly(binwidth = 100)
@@ -485,7 +488,7 @@ where the height of the lines is only determined by the relative counts,
 and where we can see if cancelled flights have a different distribution:
 
 ```{r}
-nycflights13::flights %>% 
+flights %>% 
   mutate(cancelled = is.na(dep_time)) %>% 
   ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) + 
   geom_density()
