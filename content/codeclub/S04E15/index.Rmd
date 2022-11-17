@@ -11,7 +11,7 @@ toc: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = TRUE, cache = FALSE)
 ```
 
 --------------------------------------------------------------------------------
@@ -151,18 +151,23 @@ diamonds %>%
   count(carat_discrete)
 ```
 
+### Multiple variables
+
 If we want to show the variation in `carat` _separately for each level of `cut`_,
 we can map `carate` _also_ to `fill`, which is the fill color of the bars:
 
 ```{r}
-## First, let's subset the data to only keep relatively small diamonds: 
+# First, let's subset the data to only keep relatively small diamonds: 
 smaller <- diamonds %>% filter(carat < 3)
 
-## Then, we make the plot:
+# Then, we make the plot:
 ggplot(data = smaller,
-       # The mapping is now inside ggplot, and we use `cut` twice:
        mapping = aes(x = carat, fill = cut)) +
   geom_histogram(binwidth = 0.1, color = "grey20")
+
+# Above, note that:
+# - The mapping is now inside 'ggplot()', and we used 'cut' twice
+# - In geom_histogram(), color is _not_ a mapping and is for the color of the border
 ```
 
 Though in a case like this,
@@ -174,7 +179,7 @@ ggplot(data = smaller,
   geom_freqpoly(binwidth = 0.1, size = 1.5) # (Making thicker lines with 'size')
 ```
 
-### Unusual values
+### Unusual values (outliers)
 
 Sometimes, plots like histograms have very wide axis limits
 yet no visible bars on the sides:
@@ -187,7 +192,7 @@ ggplot(diamonds) +
 The x-axis limits are automatically picked based on the data,
 so there really _should_ be some values all the way up to about 60.
 We just can't see them,
-since the y-axis scale goes all the way up to 12 thousand.
+since the y-axis scale goes all the way up to 12,000.
 
 If we want to see these counts in the graph,
 we can _zoom in_ on the y-axis with `coord_cartesian()`:
@@ -306,7 +311,7 @@ one with `coord_cartesian(ylim = ...)` and one with `lims(y = ...)`.
 
 What is happening in the graph made with `lims()`?
 
-(See the hint for example usage of `lims()`, a function we haven't seen yet.
+(See the hint for example usage of `lims()`, a function we haven't seen yet.)
 
 <details><summary><b>Hints</b> (click here)</summary>
 <br>
@@ -368,7 +373,7 @@ ggplot(diamonds) +
 ### Exercise 3
 
 Using scatterplots,
-explore the relationship between the depth `y` and the width `z` of the diamonds.
+explore the relationship between the width `y` and the depth `z` of the diamonds.
 
 What do you think about the outliers?
 Are they more likely to be unusual diamonds or data entry errors?
@@ -416,7 +421,8 @@ width (`y`) and depth (`z`).
 
 Therefore,
 the outliers of `y` and `z` don't just seem to represent very large or very small 
-diamonds, and are likely data entry errors or something along those lines.
+diamonds,
+and are likely data entry errors or something along those lines.
 
 </details>
 </div></div>
@@ -506,6 +512,10 @@ than those early on, which is what we might have expected!
 
 <br>
 
+--------------------------------------------------------------------------------
+
+## Breakout Rooms
+
 <div class="puzzle">
 <div>
 
@@ -565,4 +575,6 @@ could there be some rounding-up going on?
 
 </details>
 </div></div>
+
+<br>
 
