@@ -69,7 +69,8 @@ which is short for _ordered factor_.
 In R, categorical variables can be represented not just as character strings
 or integers, but also as **factors**.
 Factors have a defined set of _levels_ which can be assigned a custom order.
-That is handy when plotting or when you need to set a reference level in a model.
+That is handy when plotting or when you need to set a reference level
+in a statistical model.
 (For more,
 see [the page for this previous Code Club session on factors](/codeclub/06_factors/).)
 
@@ -81,7 +82,8 @@ we can use `count()`:
 diamonds %>% count(cut)
 ```
 
-Making a barplot of different `cut` frequencies might also be useful.
+To get a feel for the distribution of a categorical variable,
+making a barplot can also be useful.
 Recall that when making a plot with _ggplot2_,
 we at least need the following components:
 
@@ -100,8 +102,9 @@ ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = cut))
 ```
 
-When making plots, we typically specify what should go along the y-axis, too.
-But that is not the case for bar plots,
+When making plots, we typically specify which variable should go along the y-axis,
+too.
+But that is not the case for barplots,
 where the default is to automatically 
 plot a _count which is **computed** from the data_.
 
@@ -109,9 +112,15 @@ plot a _count which is **computed** from the data_.
 
 ### Exploring variation in a continuous variable
 
-To explore variation in a _continuous_ variable like `carat`,
-a histogram is a classic approach --
-we can make one using `geom_histogram()`:
+We'll take another look at the `diamonds` dataframe and pick a _continuous_
+variable:
+
+```{r}
+diamonds
+```
+
+Let's explore the variation in the continuous variable `carat`,
+and do so by making a histogram using `geom_histogram()`:
 
 ```{r}
 ggplot(data = diamonds) +
@@ -130,9 +139,11 @@ ggplot(data = diamonds) +
 ```
 
 If we wanted to see this kind of representation in table-form,
-we can use the ggplot2 function `cut_width`,
-in which the `width` argument does the same thing as `geom_histogram`'s
-`binwidth`:
+using `count()` directly wouldn't work:
+we don't have a column with bins for `carat`, only the raw, numeric values.
+
+To create bins, we can use the _ggplot2_ function `cut_width`,
+whose `width` argument is equivalent to `geom_histogram`'s `binwidth`:
 
 ```{r}
 diamonds %>%
@@ -140,10 +151,8 @@ diamonds %>%
   count(carat_discrete)
 ```
 
-If we want to show the variation for different levels of `cut` separately
-in a single graph,
-we can simply provide a variable to map to `fill`,
-which is the fill color of the bars:
+If we want to show the variation in `carat` _separately for each level of `cut`_,
+we can map `carate` _also_ to `fill`, which is the fill color of the bars:
 
 ```{r}
 ## First, let's subset the data to only keep relatively small diamonds: 
@@ -151,6 +160,7 @@ smaller <- diamonds %>% filter(carat < 3)
 
 ## Then, we make the plot:
 ggplot(data = smaller,
+       # The mapping is now inside ggplot, and we use `cut` twice:
        mapping = aes(x = carat, fill = cut)) +
   geom_histogram(binwidth = 0.1, color = "grey20")
 ```
@@ -167,7 +177,7 @@ ggplot(data = smaller,
 ### Unusual values
 
 Sometimes, plots like histograms have very wide axis limits
-yet no visible bars on the sides of the plot:
+yet no visible bars on the sides:
 
 ```{r}
 ggplot(diamonds) + 
@@ -240,8 +250,7 @@ Make sure to try different values for the `binwidth` argument!
 <details><summary><b>Solution</b> (click here)</summary>
 <br>
 
-- `geom_histogram()` with default settings doesn't reveal anything too weird,
-  except perhaps the bump just below 5,000:
+- `geom_histogram()` with default settings doesn't reveal anything too weird:
 
 ```{r}
 ggplot(data = diamonds,
@@ -311,8 +320,7 @@ ggplot(diamonds) +
        y = c(0, 20))   # c(<lower-limit>, <upper-limit>)
 ```
 
-You could also use `ylim()` from the equivalent `ylim()` / `xlim()` pair of
-functions,
+You could also use the very similar `ylim()` / `xlim()` pair of functions,
 though note the slightly simplified syntax:
 
 ```{r}
@@ -428,13 +436,12 @@ you have two main options.
 First, you could remove the rows (diamonds) with outliers:
 
 ```{r}
-diamonds2 <- diamonds %>%
-  filter(y > 3, y < 20)
+diamonds2 <- diamonds %>% filter(y > 3, y < 20)
 ```
 
-But you may not want throw out rows in their entirety,
+But you may not want throw out entire rows,
 because the values for the other variables might be valid and still valuable.
-In that case, you can convert outliers to `NA`s (missing values),
+Alternatively, you can convert outliers to `NA`s (missing values),
 and a convenient way to do that is with the `ifelse()` function.
 To understand `ifelse()`, a simple example may help:
 
@@ -476,7 +483,7 @@ library(nycflights13)
 flights %>% 
   mutate(cancelled = is.na(dep_time)) %>% 
   ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) +
-  geom_freqpoly(binwidth = 100)
+  geom_freqpoly(binwidth = 100) # (100 = 1 hour, so we plot by hour)
 ```
 
 However, the large difference in the absolute counts of cancelled versus

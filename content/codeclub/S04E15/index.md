@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: 2022-11-15
 lastmod: 2022-11-15
 toc: true
-rmd_hash: 8a4b835455ff304e
+rmd_hash: c247827f6eb82b20
 
 ---
 
@@ -72,7 +72,7 @@ Since we'll be making a bunch of plots with *ggplot2*, let's use the following t
 
 Let's say we want to see how many diamonds there are for each value of `cut`. When we printed the first lines of the dataframe above, we could see that `cut` has values like `Ideal`, `Premium`, and `Good`: this is therefore a "categorical" and not a "continuous" variable.
 
-We could also see that the data type indication for `cut` was `<ord>`, which is short for *ordered factor*. In R, categorical variables can be represented not just as character strings or integers, but also as **factors**. Factors have a defined set of *levels* which can be assigned a custom order. That is handy when plotting or when you need to set a reference level in a model. (For more, see [the page for this previous Code Club session on factors](/codeclub/06_factors/).)
+We could also see that the data type indication for `cut` was `<ord>`, which is short for *ordered factor*. In R, categorical variables can be represented not just as character strings or integers, but also as **factors**. Factors have a defined set of *levels* which can be assigned a custom order. That is handy when plotting or when you need to set a reference level in a statistical model. (For more, see [the page for this previous Code Club session on factors](/codeclub/06_factors/).)
 
 To quickly see which values the variable `cut` contains, and what their frequencies are, we can use [`count()`](https://dplyr.tidyverse.org/reference/count.html):
 
@@ -90,7 +90,7 @@ To quickly see which values the variable `cut` contains, and what their frequenc
 
 </div>
 
-Making a barplot of different `cut` frequencies might also be useful. Recall that when making a plot with *ggplot2*, we at least need the following components:
+To get a feel for the distribution of a categorical variable, making a barplot can also be useful. Recall that when making a plot with *ggplot2*, we at least need the following components:
 
 -   The [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html) function, in which we supply the dataframe that we want to use.
 
@@ -109,20 +109,42 @@ For a barplot showing `cut`, our *ggplot2* code would look as follows:
 
 </div>
 
-When making plots, we typically specify what should go along the y-axis, too. But that is not the case for bar plots, where the default is to automatically plot a *count which is **computed** from the data*.
+When making plots, we typically specify which variable should go along the y-axis, too. But that is not the case for barplots, where the default is to automatically plot a *count which is **computed** from the data*.
 
 <br>
 
 ### Exploring variation in a continuous variable
 
-To explore variation in a *continuous* variable like `carat`, a histogram is a classic approach -- we can make one using [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html):
+We'll take another look at the `diamonds` dataframe and pick a *continuous* variable:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 53,940 × 10</span></span></span>
+<span><span class='c'>#&gt;    carat cut       color clarity depth table price     x     y     z</span></span>
+<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span>  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span>  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span>  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span>  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span>  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span>  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span>  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span>  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span>  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 53,930 more rows</span></span></span></code></pre>
+
+</div>
+
+Let's explore the variation in the continuous variable `carat`, and do so by making a histogram using [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html):
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -133,11 +155,13 @@ Under the hood, a histogram discretizes the continuous data into bins, and then 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span>, binwidth <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
-If we wanted to see this kind of representation in table-form, we can use the ggplot2 function `cut_width`, in which the `width` argument does the same thing as `geom_histogram`'s `binwidth`:
+If we wanted to see this kind of representation in table-form, using [`count()`](https://dplyr.tidyverse.org/reference/count.html) directly wouldn't work: we don't have a column with bins for `carat`, only the raw, numeric values.
+
+To create bins, we can use the *ggplot2* function `cut_width`, whose `width` argument is equivalent to `geom_histogram`'s `binwidth`:
 
 <div class="highlight">
 
@@ -161,7 +185,7 @@ If we wanted to see this kind of representation in table-form, we can use the gg
 
 </div>
 
-If we want to show the variation for different levels of `cut` separately in a single graph, we can simply provide a variable to map to `fill`, which is the fill color of the bars:
+If we want to show the variation in `carat` *separately for each level of `cut`*, we can map `carate` *also* to `fill`, which is the fill color of the bars:
 
 <div class="highlight">
 
@@ -170,10 +194,11 @@ If we want to show the variation for different levels of `cut` separately in a s
 <span></span>
 <span><span class='c'>## Then, we make the plot:</span></span>
 <span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>smaller</span>,</span>
+<span>       <span class='c'># The mapping is now inside ggplot, and we use `cut` twice:</span></span>
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, fill <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.1</span>, color <span class='o'>=</span> <span class='s'>"grey20"</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -185,20 +210,20 @@ Though in a case like this, a linegraph with [`geom_freqpoly()`](https://ggplot2
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, colour <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_freqpoly</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.1</span>, size <span class='o'>=</span> <span class='m'>1.5</span><span class='o'>)</span> <span class='c'># (Making thicker lines with 'size')</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
 ### Unusual values
 
-Sometimes, plots like histograms have very wide axis limits yet no visible bars on the sides of the plot:
+Sometimes, plots like histograms have very wide axis limits yet no visible bars on the sides:
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span>, binwidth <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -212,7 +237,7 @@ If we want to see these counts in the graph, we can *zoom in* on the y-axis with
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span>, binwidth <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>50</span><span class='o'>)</span><span class='o'>)</span> <span class='c'># c(&lt;lower-limit&gt;, &lt;upper-limit&gt;)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -280,7 +305,7 @@ Make sure to try different values for the `binwidth` argument!
 
 <br>
 
--   [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html) with default settings doesn't reveal anything too weird, except perhaps the bump just below 5,000:
+-   [`geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html) with default settings doesn't reveal anything too weird:
 
 <div class="highlight">
 
@@ -288,7 +313,7 @@ Make sure to try different values for the `binwidth` argument!
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -300,7 +325,7 @@ Make sure to try different values for the `binwidth` argument!
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>100</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -313,7 +338,7 @@ Make sure to try different values for the `binwidth` argument!
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>25</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>xlim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>2500</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -366,11 +391,11 @@ You can use [`lims()`](https://ggplot2.tidyverse.org/reference/lims.html) to set
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>lims</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>5</span>, <span class='m'>10</span><span class='o'>)</span>,   <span class='c'># c(&lt;lower-limit&gt;, &lt;upper-limit&gt;)</span></span>
 <span>       y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>20</span><span class='o'>)</span><span class='o'>)</span>   <span class='c'># c(&lt;lower-limit&gt;, &lt;upper-limit&gt;)</span></span>
 <span><span class='c'>#&gt; Warning: Removed 17593 rows containing missing values (geom_point).</span></span></code></pre>
-<img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
-You could also use [`ylim()`](https://ggplot2.tidyverse.org/reference/lims.html) from the equivalent [`ylim()`](https://ggplot2.tidyverse.org/reference/lims.html) / [`xlim()`](https://ggplot2.tidyverse.org/reference/lims.html) pair of functions, though note the slightly simplified syntax:
+You could also use the very similar [`ylim()`](https://ggplot2.tidyverse.org/reference/lims.html) / [`xlim()`](https://ggplot2.tidyverse.org/reference/lims.html) pair of functions, though note the slightly simplified syntax:
 
 <div class="highlight">
 
@@ -379,7 +404,7 @@ You could also use [`ylim()`](https://ggplot2.tidyverse.org/reference/lims.html)
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span><span class='o'>(</span><span class='m'>5</span>, <span class='m'>10</span><span class='o'>)</span> <span class='o'>+</span>   <span class='c'># Note: you don't pass a vector inside 'c()' here</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>20</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; Warning: Removed 17593 rows containing missing values (geom_point).</span></span></code></pre>
-<img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -404,7 +429,7 @@ It turns out that *ggplot2* removes the bars that can't be shown given our y-lim
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>3000</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -414,7 +439,7 @@ It turns out that *ggplot2* removes the bars that can't be shown given our y-lim
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>lims</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>3000</span><span class='o'>)</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; Warning: Removed 5 rows containing missing values (geom_bar).</span></span></code></pre>
-<img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -468,7 +493,7 @@ Let's start with a simple scatterplot with all data and default axis limits:
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>z</span>, y <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -481,7 +506,7 @@ Phew! There are definitely some striking outliers. Let's zoom in on the main clo
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span><span class='o'>(</span>xlim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>10</span><span class='o'>)</span>, ylim <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='m'>0</span>, <span class='m'>15</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -509,12 +534,11 @@ First, you could remove the rows (diamonds) with outliers:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds2</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>3</span>, <span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>20</span><span class='o'>)</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds2</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>3</span>, <span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>20</span><span class='o'>)</span></span></code></pre>
 
 </div>
 
-But you may not want throw out rows in their entirety, because the values for the other variables might be valid and still valuable. In that case, you can convert outliers to `NA`s (missing values), and a convenient way to do that is with the [`ifelse()`](https://rdrr.io/r/base/ifelse.html) function. To understand [`ifelse()`](https://rdrr.io/r/base/ifelse.html), a simple example may help:
+But you may not want throw out entire rows, because the values for the other variables might be valid and still valuable. Alternatively, you can convert outliers to `NA`s (missing values), and a convenient way to do that is with the [`ifelse()`](https://rdrr.io/r/base/ifelse.html) function. To understand [`ifelse()`](https://rdrr.io/r/base/ifelse.html), a simple example may help:
 
 <div class="highlight">
 
@@ -562,9 +586,9 @@ Sometimes you may want to compare distributions among observations with and with
 <span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>cancelled <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='o'>(</span><span class='nv'>dep_time</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sched_dep_time</span>, color <span class='o'>=</span> <span class='nv'>cancelled</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_freqpoly</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>100</span><span class='o'>)</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_freqpoly</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>100</span><span class='o'>)</span> <span class='c'># (100 = 1 hour, so we plot by hour)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -579,7 +603,7 @@ We can use [`geom_density()`](https://ggplot2.tidyverse.org/reference/geom_densi
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sched_dep_time</span>, color <span class='o'>=</span> <span class='nv'>cancelled</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -625,7 +649,7 @@ We can start by simply making a histogram for `carat`:
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-32-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -638,7 +662,7 @@ That's a weird pattern, with a bunch of peaks and valleys! Let's just show the a
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-32-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-33-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
