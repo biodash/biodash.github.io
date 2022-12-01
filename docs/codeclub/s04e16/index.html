@@ -342,7 +342,7 @@
         content="2022-12-01T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-12-01T12:22:47-05:00">
+    <meta property="article:modified_time" content="2022-12-01T13:51:05-05:00">
   
 
   
@@ -823,12 +823,13 @@
                         <hr>
 <h2 id="setting-up">Setting up</h2>
 <p>Like last time, we&rsquo;ll mostly use <em>tidyverse</em> tools to explore the <code>diamonds</code> dataset, which is also part of the <em>tidyverse</em>.</p>
-<p>We&rsquo;ll also have a quick look at the <code>flights</code> dataset, for which we&rsquo;ll need to load the <em>nycflights13</em> package:</p>
+<p>We&rsquo;ll also have one look at the <code>flights</code> dataset, for which we&rsquo;ll need to load the <em>nycflights13</em> package:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>## You only need to install if you haven't previously done so</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>## You only need to install packages if you haven't previously done so</span></span>
 <span><span class='c'># install.packages("nycflights13")</span></span>
 <span><span class='c'># install.packages("tidyverse")</span></span>
 <span></span>
+<span><span class='c'>## But you'll have to load packages for every R session:</span></span>
 <span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/hadley/nycflights13'>nycflights13</a></span><span class='o'>)</span></span>
 <span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span> ─────────────────────────────────────── tidyverse 1.3.2 ──</span></span>
@@ -882,11 +883,11 @@
 <p>To get rid of outliers in your dataset, you have two main options. First, you could <strong>completely remove rows that contain outliers</strong>, for example with <em>dplyr</em>&rsquo;s <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> function:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Remove rows for which column y is smaller than 3 or larger than 20: </span></span>
-<span><span class='nv'>diamonds2</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>3</span> <span class='o'>|</span> <span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>20</span><span class='o'>)</span></span></code></pre>
+<span><span class='nv'>diamonds_no_outliers</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>3</span> <span class='o'>|</span> <span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>20</span><span class='o'>)</span></span></code></pre>
 </div>
 <p>But you may not want throw out entire rows, because the values for the <em>other variables</em> (columns) in these rows might be valid and valuable. Therefore, and alternative is to <strong>convert outliers to <code>NA</code>s (missing values)</strong>, and a convenient way to do that is with the <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a> function:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds_no_outliers</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds_NA_outliers</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>3</span> <span class='o'>|</span> <span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>20</span>, yes <span class='o'>=</span> <span class='kc'>NA</span>, no <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span></span></code></pre>
 </div>
 <div class="alert alert-note">
@@ -903,7 +904,7 @@
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span></span>
 <span><span class='c'>#&gt;  [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE</span></span></code></pre>
 </div>
-<p>We can use that expression as the <code>test</code> in <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a>, and turn values smaller than 5 into NA, while leaving the other values unchanged:</p>
+<p>We can use that expression as the <code>test</code> in <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a>, and turn values smaller than 5 into <code>NA</code> (<code>yes = NA</code>), while leaving the other values unchanged (<code>no = x</code>):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span>, yes <span class='o'>=</span> <span class='kc'>NA</span>, no <span class='o'>=</span> <span class='nv'>x</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt;  [1] NA NA NA NA  5  6  7  8  9 10</span></span></code></pre>
@@ -911,7 +912,7 @@
 </div>
 </div>
 <h3 id="comparing-observations-with-and-without-missing-data">Comparing observations with and without missing data</h3>
-<p>It can be useful to compare distributions among rows with and without missing values. To do that, we can first create a new variable that indicates whether a value for another variable is missing or not. Then, we can map an aesthetic like <code>color</code> to this missing-or-not variable, to show the two groups separately.</p>
+<p>It can be useful to compare distributions among rows with and without missing values. To do that, we can first create a new column that indicates whether a value for a variable of interest is missing or not. Then, we can map an aesthetic like <code>color</code> to this missing-or-not column to show the two groups separately.</p>
 <p>Below, we&rsquo;ll compare flights with and without missing values for departure time (<code>dep_time</code>), i.e. cancelled and not-cancelled flights, using the geom <code>geom_freqpoly</code> that we also saw last time:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
@@ -937,16 +938,16 @@
 <h2 id="chapter-75-covariation">Chapter 7.5: Covariation</h2>
 <p>This section of the book covers the exploration of covariation among two variables. For example, is there a relationship between the cut and the price of a diamond (a categorical and continuous variable)? Or an association between the cut and color of a diamond (two categorical variables)? Or between the carat and the price of a diamond (two continuous variables)?</p>
 <h3 id="751-a-categorical-and-continuous-variable">7.5.1: A categorical and continuous variable</h3>
-<p>In out last plot above, we already explored the relationship between a categorical variable (cancelled &amp; not-cancelled flights) and a continuous one (departure time).</p>
-<p>Let&rsquo;s see another example, this time for the <code>diamonds</code> dataset: whether prices differ among diamond cuts:</p>
+<p>In out last plot above, we already explored the relationship between a categorical variable (cancelled &amp; not-cancelled flights) and a continuous one (departure time), and we did so with so with a frequency polygon (<code>geom_freqpoly</code>).</p>
+<p>Let&rsquo;s see another example, this time for the <code>diamonds</code> dataset, to examine whether prices differ among diamond cuts:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
-<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>colour <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span></span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>price</span>, color <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>Another classic way of showing the relationship between a categorical and a continuous variable is with a <strong>boxplot</strong>. <a href="https://r4ds.had.co.nz/exploratory-data-analysis.html#cat-cont" target="_blank" rel="noopener">The book</a> has a good explanation of what the components of a boxplot (box, median line, whiskers, outliers) represent. Let&rsquo;s make a boxplot of diamond <code>price</code> by <code>cut</code>:</p>
+<p>A <strong>boxplot</strong> is another classic way to show the relationship between a categorical and a continuous variable. <a href="https://r4ds.had.co.nz/exploratory-data-analysis.html#cat-cont" target="_blank" rel="noopener">The book</a> has a good explanation of what the components of a boxplot (box, median line, whiskers, outliers) represent. Let&rsquo;s make a boxplot of diamond <code>price</code> by <code>cut</code>:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># To make the plot better-looking, and to see the same colors as above,</span></span>
 <span><span class='c'># we'll also map the fill aesthetic to cut:</span></span>
@@ -974,8 +975,9 @@
 </blockquote>
 <p>A quick way to do that is with <a href="https://ggplot2.tidyverse.org/reference/geom_count.html" target="_blank" rel="noopener"><code>geom_count()</code></a>:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_count.html'>geom_count</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>color</span>, y <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>color</span>, y <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_count.html'>geom_count</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
@@ -993,8 +995,9 @@
 <p>Visualizing the relationship between two continuous variables is perhaps the most intuitive of the variable type combinations. It can be done with simple scatterplots (<a href="https://ggplot2.tidyverse.org/reference/geom_point.html" target="_blank" rel="noopener"><code>geom_point()</code></a>), of which we have already seen a couple of examples.</p>
 <p>The books covers a few strategies that can be useful when dealing with large datasets, when relationships may be hidden due to overplotting. Consider the relationship between the <code>carat</code> (weight) and <code>price</code> of diamonds:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, y <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, y <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
@@ -1002,9 +1005,9 @@
 <p>Making points transparent is one strategy to more clearly see patterns in the data in the face of overplotting:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># An alpha of 1 (the default) is opaque and an alpha of 1 is transparent </span></span>
-<span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, y <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span>,</span>
-<span>             alpha <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
+<span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, y <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
@@ -1033,10 +1036,10 @@
 <br>
 <ul>
 <li>
-<p>You can start by creating a binned column with <a href="https://dplyr.tidyverse.org/reference/mutate.html" target="_blank" rel="noopener"><code>mutate()</code></a> and <code>cut_width(carat, 0.1)</code>, <em>or</em> you can create the bins &ldquo;on the fly&rdquo;, by simply using <code>cut_width(carat, 0.1)</code> as <code>x</code> or <code>y</code> aesthetic.</p>
+<p>Run <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>?cut_number</code></a> to see the documentation for this function.</p>
 </li>
 <li>
-<p>Side note: An alternative way of making this kind of plot would be with <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_width()</code></a> instead of <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_number()</code></a>: then, you fix the width of each bin rather than the number of data points in each bin. The disadvantage of that approach is that you may be misled by bins with very few data points, but a way to ameliorate this is by using the <code>varwidth = TRUE</code> argument of <a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" target="_blank" rel="noopener"><code>geom_boxplot()</code></a>.</p>
+<p>You can start by creating a binned column with <a href="https://dplyr.tidyverse.org/reference/mutate.html" target="_blank" rel="noopener"><code>mutate()</code></a> and <code>cut_number(carat, n = 10)</code>, <em>or</em> you can create the bins &ldquo;on the fly&rdquo;, by simply using <code>cut_number(carat, n = 10)</code> as the <code>x</code> or <code>y</code> aesthetic.</p>
 </li>
 </ul>
 </details>
@@ -1049,7 +1052,7 @@
 <p>To be able to read the axis labels, I moved <code>carat</code> to the y axis (and I also added a y-axis label):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_number</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='m'>10</span><span class='o'>)</span>, x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_number</a></span><span class='o'>(</span><span class='nv'>carat</span>, n <span class='o'>=</span> <span class='m'>10</span><span class='o'>)</span>, x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='s'>"carat (binned)"</span><span class='o'>)</span></span>
 </code></pre>
@@ -1059,14 +1062,14 @@
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, y <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>group <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_number</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='m'>10</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>group <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_number</a></span><span class='o'>(</span><span class='nv'>carat</span>, n <span class='o'>=</span> <span class='m'>10</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>Alternatively, if you want to have control over the ranges that the bins cover (but not over the number of points in each bin), you can use the <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_width()</code></a> function:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_width</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='m'>0.2</span><span class='o'>)</span>, x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_width</a></span><span class='o'>(</span><span class='nv'>carat</span>, width <span class='o'>=</span> <span class='m'>0.4</span><span class='o'>)</span>, x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='s'>"carat (binned)"</span><span class='o'>)</span></span>
 </code></pre>
@@ -1075,7 +1078,7 @@
 <p>In that case, consider using <code>varwidth = TRUE</code> to make the width of the boxes to reflect the number of data points:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_width</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='m'>0.2</span><span class='o'>)</span>, x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_width</a></span><span class='o'>(</span><span class='nv'>carat</span>, width <span class='o'>=</span> <span class='m'>0.4</span><span class='o'>)</span>, x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>varwidth <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='s'>"carat (binned)"</span><span class='o'>)</span></span>
 </code></pre>
@@ -1149,8 +1152,8 @@
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>color</span>, <span class='nv'>cut</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='o'>(</span>price <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>color</span>, y <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_tile</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>fill <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>color</span>, y <span class='o'>=</span> <span class='nv'>cut</span>, fill <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_tile</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/scale_viridis.html'>scale_fill_viridis_c</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; `summarise()` has grouped output by 'color'. You can override using the</span></span>
 <span><span class='c'>#&gt; `.groups` argument.</span></span></code></pre>
@@ -1231,8 +1234,8 @@
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>color</span>, <span class='nv'>cut</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>price_per_carat <span class='o'>=</span> <span class='nv'>price</span> <span class='o'>/</span> <span class='nv'>carat</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='o'>(</span>price_per_carat <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>price_per_carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>color</span>, y <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_tile</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>fill <span class='o'>=</span> <span class='nv'>price_per_carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>color</span>, y <span class='o'>=</span> <span class='nv'>cut</span>, fill <span class='o'>=</span> <span class='nv'>price_per_carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_tile</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/scale_viridis.html'>scale_fill_viridis_c</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; `summarise()` has grouped output by 'color'. You can override using the</span></span>
 <span><span class='c'>#&gt; `.groups` argument.</span></span></code></pre>
@@ -1248,7 +1251,7 @@
 <div class="puzzle">
 <div>
 <h3 id="exercise-4-bonus">Exercise 4 (bonus)</h3>
-<p>To better understand the relationship between <code>color</code>, <code>carat</code>, and <code>price</code> (see the previous exercise), modify the earlier scatterplot of <code>carat</code> and <code>price</code> simply by mapping diamond <code>color</code> to the color aesthetic.</p>
+<p>To get another perspecective on the relationship between <code>color</code>, <code>carat</code>, and <code>price</code> (see the previous exercise), modify the earlier scatterplot of <code>carat</code> and <code>price</code> simply by mapping diamond <code>color</code> to the color aesthetic.</p>
 <details>
 <summary>
 <b>Solution</b> (click here)
@@ -1278,7 +1281,7 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-29-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>We could set a different custom order using the <code>levels</code> argument of the <code>factor</code> function (the same code would work if <code>cut</code> would not yet have been a factor):</p>
+<p>We could set a different custom order using the <code>levels</code> argument of the <code>factor</code> function (the same code would work if <code>cut</code> would not yet have been a factor at all):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>cut_order</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"Very Good"</span>, <span class='s'>"Fair"</span>, <span class='s'>"Good"</span>, <span class='s'>"Ideal"</span>, <span class='s'>"Premium"</span><span class='o'>)</span></span>
 <span></span>

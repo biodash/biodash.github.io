@@ -20,12 +20,13 @@
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;setting-up&#34;&gt;Setting up&lt;/h2&gt;
 &lt;p&gt;Like last time, we&amp;rsquo;ll mostly use &lt;em&gt;tidyverse&lt;/em&gt; tools to explore the &lt;code&gt;diamonds&lt;/code&gt; dataset, which is also part of the &lt;em&gt;tidyverse&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;We&amp;rsquo;ll also have a quick look at the &lt;code&gt;flights&lt;/code&gt; dataset, for which we&amp;rsquo;ll need to load the &lt;em&gt;nycflights13&lt;/em&gt; package:&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll also have one look at the &lt;code&gt;flights&lt;/code&gt; dataset, for which we&amp;rsquo;ll need to load the &lt;em&gt;nycflights13&lt;/em&gt; package:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;## You only need to install if you haven&#39;t previously done so&lt;/span&gt;&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;## You only need to install packages if you haven&#39;t previously done so&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;# install.packages(&#34;nycflights13&#34;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;# install.packages(&#34;tidyverse&#34;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;## But you&#39;ll have to load packages for every R session:&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://github.com/hadley/nycflights13&#39;&gt;nycflights13&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching packages&lt;/span&gt; ─────────────────────────────────────── tidyverse 1.3.2 ──&lt;/span&gt;&lt;/span&gt;
@@ -79,11 +80,11 @@
 &lt;p&gt;To get rid of outliers in your dataset, you have two main options. First, you could &lt;strong&gt;completely remove rows that contain outliers&lt;/strong&gt;, for example with &lt;em&gt;dplyr&lt;/em&gt;&amp;rsquo;s &lt;a href=&#34;https://dplyr.tidyverse.org/reference/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; function:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# Remove rows for which column y is smaller than 3 or larger than 20: &lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds2&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;20&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds_no_outliers&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;20&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;But you may not want throw out entire rows, because the values for the &lt;em&gt;other variables&lt;/em&gt; (columns) in these rows might be valid and valuable. Therefore, and alternative is to &lt;strong&gt;convert outliers to &lt;code&gt;NA&lt;/code&gt;s (missing values)&lt;/strong&gt;, and a convenient way to do that is with the &lt;a href=&#34;https://rdrr.io/r/base/ifelse.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ifelse()&lt;/code&gt;&lt;/a&gt; function:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds_no_outliers&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds_NA_outliers&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/mutate.html&#39;&gt;mutate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/ifelse.html&#39;&gt;ifelse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;test &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;3&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;20&lt;/span&gt;, yes &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;NA&lt;/span&gt;, no &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;y&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;div class=&#34;alert alert-note&#34;&gt;
@@ -100,7 +101,7 @@
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;We can use that expression as the &lt;code&gt;test&lt;/code&gt; in &lt;a href=&#34;https://rdrr.io/r/base/ifelse.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ifelse()&lt;/code&gt;&lt;/a&gt;, and turn values smaller than 5 into NA, while leaving the other values unchanged:&lt;/p&gt;
+&lt;p&gt;We can use that expression as the &lt;code&gt;test&lt;/code&gt; in &lt;a href=&#34;https://rdrr.io/r/base/ifelse.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;ifelse()&lt;/code&gt;&lt;/a&gt;, and turn values smaller than 5 into &lt;code&gt;NA&lt;/code&gt; (&lt;code&gt;yes = NA&lt;/code&gt;), while leaving the other values unchanged (&lt;code&gt;no = x&lt;/code&gt;):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/ifelse.html&#39;&gt;ifelse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;test &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;5&lt;/span&gt;, yes &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;NA&lt;/span&gt;, no &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;x&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;  [1] NA NA NA NA  5  6  7  8  9 10&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
@@ -108,7 +109,7 @@
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;h3 id=&#34;comparing-observations-with-and-without-missing-data&#34;&gt;Comparing observations with and without missing data&lt;/h3&gt;
-&lt;p&gt;It can be useful to compare distributions among rows with and without missing values. To do that, we can first create a new variable that indicates whether a value for another variable is missing or not. Then, we can map an aesthetic like &lt;code&gt;color&lt;/code&gt; to this missing-or-not variable, to show the two groups separately.&lt;/p&gt;
+&lt;p&gt;It can be useful to compare distributions among rows with and without missing values. To do that, we can first create a new column that indicates whether a value for a variable of interest is missing or not. Then, we can map an aesthetic like &lt;code&gt;color&lt;/code&gt; to this missing-or-not column to show the two groups separately.&lt;/p&gt;
 &lt;p&gt;Below, we&amp;rsquo;ll compare flights with and without missing values for departure time (&lt;code&gt;dep_time&lt;/code&gt;), i.e. cancelled and not-cancelled flights, using the geom &lt;code&gt;geom_freqpoly&lt;/code&gt; that we also saw last time:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;flights&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;/span&gt;
@@ -134,16 +135,16 @@
 &lt;h2 id=&#34;chapter-75-covariation&#34;&gt;Chapter 7.5: Covariation&lt;/h2&gt;
 &lt;p&gt;This section of the book covers the exploration of covariation among two variables. For example, is there a relationship between the cut and the price of a diamond (a categorical and continuous variable)? Or an association between the cut and color of a diamond (two categorical variables)? Or between the carat and the price of a diamond (two continuous variables)?&lt;/p&gt;
 &lt;h3 id=&#34;751-a-categorical-and-continuous-variable&#34;&gt;7.5.1: A categorical and continuous variable&lt;/h3&gt;
-&lt;p&gt;In out last plot above, we already explored the relationship between a categorical variable (cancelled &amp;amp; not-cancelled flights) and a continuous one (departure time).&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s see another example, this time for the &lt;code&gt;diamonds&lt;/code&gt; dataset: whether prices differ among diamond cuts:&lt;/p&gt;
+&lt;p&gt;In out last plot above, we already explored the relationship between a categorical variable (cancelled &amp;amp; not-cancelled flights) and a continuous one (departure time), and we did so with so with a frequency polygon (&lt;code&gt;geom_freqpoly&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s see another example, this time for the &lt;code&gt;diamonds&lt;/code&gt; dataset, to examine whether prices differ among diamond cuts:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt;,&lt;/span&gt;
-&lt;span&gt;       mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_density.html&#39;&gt;geom_density&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;colour &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;       mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;, color &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_density.html&#39;&gt;geom_density&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-12-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
-&lt;p&gt;Another classic way of showing the relationship between a categorical and a continuous variable is with a &lt;strong&gt;boxplot&lt;/strong&gt;. &lt;a href=&#34;https://r4ds.had.co.nz/exploratory-data-analysis.html#cat-cont&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;The book&lt;/a&gt; has a good explanation of what the components of a boxplot (box, median line, whiskers, outliers) represent. Let&amp;rsquo;s make a boxplot of diamond &lt;code&gt;price&lt;/code&gt; by &lt;code&gt;cut&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;A &lt;strong&gt;boxplot&lt;/strong&gt; is another classic way to show the relationship between a categorical and a continuous variable. &lt;a href=&#34;https://r4ds.had.co.nz/exploratory-data-analysis.html#cat-cont&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;The book&lt;/a&gt; has a good explanation of what the components of a boxplot (box, median line, whiskers, outliers) represent. Let&amp;rsquo;s make a boxplot of diamond &lt;code&gt;price&lt;/code&gt; by &lt;code&gt;cut&lt;/code&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# To make the plot better-looking, and to see the same colors as above,&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;# we&#39;ll also map the fill aesthetic to cut:&lt;/span&gt;&lt;/span&gt;
@@ -171,8 +172,9 @@
 &lt;/blockquote&gt;
 &lt;p&gt;A quick way to do that is with &lt;a href=&#34;https://ggplot2.tidyverse.org/reference/geom_count.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;geom_count()&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_count.html&#39;&gt;geom_count&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;color&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;       mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;color&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_count.html&#39;&gt;geom_count&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-15-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -190,8 +192,9 @@
 &lt;p&gt;Visualizing the relationship between two continuous variables is perhaps the most intuitive of the variable type combinations. It can be done with simple scatterplots (&lt;a href=&#34;https://ggplot2.tidyverse.org/reference/geom_point.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;geom_point()&lt;/code&gt;&lt;/a&gt;), of which we have already seen a couple of examples.&lt;/p&gt;
 &lt;p&gt;The books covers a few strategies that can be useful when dealing with large datasets, when relationships may be hidden due to overplotting. Consider the relationship between the &lt;code&gt;carat&lt;/code&gt; (weight) and &lt;code&gt;price&lt;/code&gt; of diamonds:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_point.html&#39;&gt;geom_point&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;       mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_point.html&#39;&gt;geom_point&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-17-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -199,9 +202,9 @@
 &lt;p&gt;Making points transparent is one strategy to more clearly see patterns in the data in the face of overplotting:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# An alpha of 1 (the default) is opaque and an alpha of 1 is transparent &lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_point.html&#39;&gt;geom_point&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;,&lt;/span&gt;
-&lt;span&gt;             alpha &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.01&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;data &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt;,&lt;/span&gt;
+&lt;span&gt;       mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_point.html&#39;&gt;geom_point&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;alpha &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.01&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-18-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
@@ -230,10 +233,10 @@
 &lt;br&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;You can start by creating a binned column with &lt;a href=&#34;https://dplyr.tidyverse.org/reference/mutate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mutate()&lt;/code&gt;&lt;/a&gt; and &lt;code&gt;cut_width(carat, 0.1)&lt;/code&gt;, &lt;em&gt;or&lt;/em&gt; you can create the bins &amp;ldquo;on the fly&amp;rdquo;, by simply using &lt;code&gt;cut_width(carat, 0.1)&lt;/code&gt; as &lt;code&gt;x&lt;/code&gt; or &lt;code&gt;y&lt;/code&gt; aesthetic.&lt;/p&gt;
+&lt;p&gt;Run &lt;a href=&#34;https://ggplot2.tidyverse.org/reference/cut_interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;?cut_number&lt;/code&gt;&lt;/a&gt; to see the documentation for this function.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Side note: An alternative way of making this kind of plot would be with &lt;a href=&#34;https://ggplot2.tidyverse.org/reference/cut_interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;cut_width()&lt;/code&gt;&lt;/a&gt; instead of &lt;a href=&#34;https://ggplot2.tidyverse.org/reference/cut_interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;cut_number()&lt;/code&gt;&lt;/a&gt;: then, you fix the width of each bin rather than the number of data points in each bin. The disadvantage of that approach is that you may be misled by bins with very few data points, but a way to ameliorate this is by using the &lt;code&gt;varwidth = TRUE&lt;/code&gt; argument of &lt;a href=&#34;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;geom_boxplot()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can start by creating a binned column with &lt;a href=&#34;https://dplyr.tidyverse.org/reference/mutate.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;mutate()&lt;/code&gt;&lt;/a&gt; and &lt;code&gt;cut_number(carat, n = 10)&lt;/code&gt;, &lt;em&gt;or&lt;/em&gt; you can create the bins &amp;ldquo;on the fly&amp;rdquo;, by simply using &lt;code&gt;cut_number(carat, n = 10)&lt;/code&gt; as the &lt;code&gt;x&lt;/code&gt; or &lt;code&gt;y&lt;/code&gt; aesthetic.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/details&gt;
@@ -246,7 +249,7 @@
 &lt;p&gt;To be able to read the axis labels, I moved &lt;code&gt;carat&lt;/code&gt; to the y axis (and I also added a y-axis label):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/cut_interval.html&#39;&gt;cut_number&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/cut_interval.html&#39;&gt;cut_number&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/labs.html&#39;&gt;labs&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;carat (binned)&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -256,14 +259,14 @@
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;group &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/cut_interval.html&#39;&gt;cut_number&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;group &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/cut_interval.html&#39;&gt;cut_number&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, n &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;10&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-20-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;Alternatively, if you want to have control over the ranges that the bins cover (but not over the number of points in each bin), you can use the &lt;a href=&#34;https://ggplot2.tidyverse.org/reference/cut_interval.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;cut_width()&lt;/code&gt;&lt;/a&gt; function:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/cut_interval.html&#39;&gt;cut_width&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;0.2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/cut_interval.html&#39;&gt;cut_width&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/labs.html&#39;&gt;labs&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;carat (binned)&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -272,7 +275,7 @@
 &lt;p&gt;In that case, consider using &lt;code&gt;varwidth = TRUE&lt;/code&gt; to make the width of the boxes to reflect the number of data points:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/cut_interval.html&#39;&gt;cut_width&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, &lt;span class=&#39;m&#39;&gt;0.2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/cut_interval.html&#39;&gt;cut_width&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;, width &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;0.4&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt; &lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;varwidth &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;kc&#39;&gt;TRUE&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/labs.html&#39;&gt;labs&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;carat (binned)&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -346,8 +349,8 @@
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;color&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;price &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;color&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_tile.html&#39;&gt;geom_tile&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;color&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;, fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_tile.html&#39;&gt;geom_tile&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/scale_viridis.html&#39;&gt;scale_fill_viridis_c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; `summarise()` has grouped output by &#39;color&#39;. You can override using the&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; `.groups` argument.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
@@ -428,8 +431,8 @@
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;color&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/mutate.html&#39;&gt;mutate&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;price_per_carat &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;/&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;carat&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt; &lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/summarise.html&#39;&gt;summarize&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;price_per_carat &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/mean.html&#39;&gt;mean&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;price_per_carat&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&lt;a href=&#39;https://magrittr.tidyverse.org/reference/pipe.html&#39;&gt;%&amp;gt;%&lt;/a&gt;&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;color&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_tile.html&#39;&gt;geom_tile&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price_per_carat&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;mapping &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;color&lt;/span&gt;, y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;cut&lt;/span&gt;, fill &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;price_per_carat&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_tile.html&#39;&gt;geom_tile&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/scale_viridis.html&#39;&gt;scale_fill_viridis_c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; `summarise()` has grouped output by &#39;color&#39;. You can override using the&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; `.groups` argument.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
@@ -445,7 +448,7 @@
 &lt;div class=&#34;puzzle&#34;&gt;
 &lt;div&gt;
 &lt;h3 id=&#34;exercise-4-bonus&#34;&gt;Exercise 4 (bonus)&lt;/h3&gt;
-&lt;p&gt;To better understand the relationship between &lt;code&gt;color&lt;/code&gt;, &lt;code&gt;carat&lt;/code&gt;, and &lt;code&gt;price&lt;/code&gt; (see the previous exercise), modify the earlier scatterplot of &lt;code&gt;carat&lt;/code&gt; and &lt;code&gt;price&lt;/code&gt; simply by mapping diamond &lt;code&gt;color&lt;/code&gt; to the color aesthetic.&lt;/p&gt;
+&lt;p&gt;To get another perspecective on the relationship between &lt;code&gt;color&lt;/code&gt;, &lt;code&gt;carat&lt;/code&gt;, and &lt;code&gt;price&lt;/code&gt; (see the previous exercise), modify the earlier scatterplot of &lt;code&gt;carat&lt;/code&gt; and &lt;code&gt;price&lt;/code&gt; simply by mapping diamond &lt;code&gt;color&lt;/code&gt; to the color aesthetic.&lt;/p&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Solution&lt;/b&gt; (click here)
@@ -475,7 +478,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-29-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
-&lt;p&gt;We could set a different custom order using the &lt;code&gt;levels&lt;/code&gt; argument of the &lt;code&gt;factor&lt;/code&gt; function (the same code would work if &lt;code&gt;cut&lt;/code&gt; would not yet have been a factor):&lt;/p&gt;
+&lt;p&gt;We could set a different custom order using the &lt;code&gt;levels&lt;/code&gt; argument of the &lt;code&gt;factor&lt;/code&gt; function (the same code would work if &lt;code&gt;cut&lt;/code&gt; would not yet have been a factor at all):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;cut_order&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/c.html&#39;&gt;c&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Very Good&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Fair&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Good&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Ideal&#34;&lt;/span&gt;, &lt;span class=&#39;s&#39;&gt;&#34;Premium&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;/span&gt;
@@ -10435,7 +10438,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-687542391&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-976321854&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10445,7 +10448,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-687542391&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-976321854&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10632,7 +10635,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-216593478&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-815923674&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10642,7 +10645,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-216593478&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-815923674&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10678,7 +10681,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-193542876&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-698534127&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10688,7 +10691,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-193542876&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-698534127&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10720,7 +10723,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-715293648&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-396521487&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10730,7 +10733,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-715293648&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-396521487&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10761,7 +10764,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-631572498&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-918634527&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10771,7 +10774,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-631572498&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-918634527&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10905,7 +10908,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-927546183&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-253971864&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10915,7 +10918,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-927546183&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-253971864&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -10972,7 +10975,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-167584392&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-329684751&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10982,7 +10985,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-167584392&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-329684751&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -18707,7 +18710,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-296841375&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-125967348&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -18717,7 +18720,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-296841375&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-125967348&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -18793,7 +18796,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-549687231&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-849365172&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -18803,7 +18806,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-549687231&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-849365172&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -18824,7 +18827,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-167249358&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-735186294&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -18834,7 +18837,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-167249358&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-735186294&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -18861,7 +18864,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-517986342&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-954271836&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -18871,7 +18874,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-517986342&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-954271836&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -18898,7 +18901,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-591627384&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-415923867&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -18908,7 +18911,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-591627384&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-415923867&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -18931,7 +18934,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-956471382&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-679542813&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -18941,7 +18944,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-956471382&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-679542813&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -18982,7 +18985,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-289713546&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-642973185&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -18992,7 +18995,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-289713546&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-642973185&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19011,7 +19014,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-563981472&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-561243987&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19021,7 +19024,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-563981472&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-561243987&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19047,7 +19050,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-813476295&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-548972163&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19057,7 +19060,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-813476295&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-548972163&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19087,7 +19090,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-795312648&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-895613427&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19097,7 +19100,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-795312648&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-895613427&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19311,7 +19314,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-682937514&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-951632748&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19321,7 +19324,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-682937514&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-951632748&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19382,7 +19385,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-834216579&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-791528643&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19392,7 +19395,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-834216579&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-791528643&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19467,7 +19470,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-745321968&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-429176853&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19477,7 +19480,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-745321968&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-429176853&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
