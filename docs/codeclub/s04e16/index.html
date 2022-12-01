@@ -342,7 +342,7 @@
         content="2022-12-01T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-12-01T10:38:41-05:00">
+    <meta property="article:modified_time" content="2022-12-01T12:22:47-05:00">
   
 
   
@@ -727,6 +727,7 @@
         <li><a href="#exercise-1">Exercise 1</a></li>
         <li><a href="#exercise-2">Exercise 2</a></li>
         <li><a href="#exercise-3">Exercise 3</a></li>
+        <li><a href="#exercise-4-bonus">Exercise 4 (bonus)</a></li>
       </ul>
     </li>
     <li><a href="#bonus-reordering-factor-levels">Bonus: (re)ordering factor levels</a></li>
@@ -825,9 +826,10 @@
 <p>We&rsquo;ll also have a quick look at the <code>flights</code> dataset, for which we&rsquo;ll need to load the <em>nycflights13</em> package:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>## You only need to install if you haven't previously done so</span></span>
-<span><span class='c'># install.packages("tidyverse")</span></span>
 <span><span class='c'># install.packages("nycflights13")</span></span>
+<span><span class='c'># install.packages("tidyverse")</span></span>
 <span></span>
+<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/hadley/nycflights13'>nycflights13</a></span><span class='o'>)</span></span>
 <span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span> ─────────────────────────────────────── tidyverse 1.3.2 ──</span></span>
 <span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>ggplot2</span> 3.3.6      <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>purrr  </span> 0.3.5 </span></span>
@@ -836,7 +838,7 @@
 <span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>readr  </span> 2.1.3      <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>forcats</span> 0.5.2 </span></span>
 <span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
 <span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>filter()</span> masks <span style='color: #0000BB;'>stats</span>::filter()</span></span>
-<span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>lag()</span>    masks <span style='color: #0000BB;'>stats</span>::lag()</span></span><span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/hadley/nycflights13'>nycflights13</a></span><span class='o'>)</span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>lag()</span>    masks <span style='color: #0000BB;'>stats</span>::lag()</span></span></code></pre>
 </div>
 <p>Let&rsquo;s again take a quick look at the <code>diamonds</code> dataset before we begin:</p>
 <div class="highlight">
@@ -856,7 +858,7 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 53,930 more rows</span></span></span></code></pre>
 </div>
-<p>On each row, we have information about one individual diamond, such as its <code>carat</code> and <code>price</code> (<code>x</code>, <code>y</code>, and <code>z</code> represent the diamond&rsquo;s length, width, and depth, respectively.)</p>
+<p>On each row, we have information about one individual diamond, such as its <code>carat</code> and <code>price</code> (<code>x</code>, <code>y</code>, and <code>z</code> represent the diamond&rsquo;s length, width, and depth, respectively).</p>
 <p>Finally, we&rsquo;ll again set a <em>ggplot2</em> &ldquo;theme&rdquo; that is a little better-looking than the default one (this setting will apply until you restart R/RStudio):</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># This changes two things:</span></span>
@@ -890,29 +892,27 @@
 <div class="alert alert-note">
 <div>
 <h3 id="more-on-ifelse">More on <code>ifelse()</code></h3>
-<p>To better understand <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a>, a simple example may help:</p>
+<p>To better understand <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a>, a simple example may help. First, we create a vector with integers from 1 to 10:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Create a vector with integers from 1 to 10:</span></span>
-<span><span class='nv'>x</span> <span class='o'>&lt;-</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>10</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>x</span> <span class='o'>&lt;-</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>10</span></span>
 <span><span class='nv'>x</span></span>
 <span><span class='c'>#&gt;  [1]  1  2  3  4  5  6  7  8  9 10</span></span></code></pre>
 </div>
+<p>The following expression will return a logical vector that indicates, for each value of <code>x</code>, whether it is smaller than 5:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># This will return a logical vector, indicating, for each value,</span></span>
-<span><span class='c'># whether it is smaller than 5:</span></span>
-<span><span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span></span>
 <span><span class='c'>#&gt;  [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE</span></span></code></pre>
 </div>
+<p>We can use that expression as the <code>test</code> in <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a>, and turn values smaller than 5 into NA, while leaving the other values unchanged:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># We can turn the small values into NAs, and leave big values unchanged, as follows:</span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span>, yes <span class='o'>=</span> <span class='kc'>NA</span>, no <span class='o'>=</span> <span class='nv'>x</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span>, yes <span class='o'>=</span> <span class='kc'>NA</span>, no <span class='o'>=</span> <span class='nv'>x</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt;  [1] NA NA NA NA  5  6  7  8  9 10</span></span></code></pre>
 </div>
 </div>
 </div>
 <h3 id="comparing-observations-with-and-without-missing-data">Comparing observations with and without missing data</h3>
-<p>It can be useful to compare distributions among observations with and without missing values. To do that, we can first create a new variable that indicates whether a value is missing or not. Then, we can map an aesthetic like <code>color</code> to this variable to show the two groups separately.</p>
-<p>Below, we&rsquo;ll compare flights with and without missing values for departure time (<code>dep_time</code>), since the former are cancelled flights, using the geom <code>geom_freqpoly</code> that we also saw last time:</p>
+<p>It can be useful to compare distributions among rows with and without missing values. To do that, we can first create a new variable that indicates whether a value for another variable is missing or not. Then, we can map an aesthetic like <code>color</code> to this missing-or-not variable, to show the two groups separately.</p>
+<p>Below, we&rsquo;ll compare flights with and without missing values for departure time (<code>dep_time</code>), i.e. cancelled and not-cancelled flights, using the geom <code>geom_freqpoly</code> that we also saw last time:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>cancelled <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='o'>(</span><span class='nv'>dep_time</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
@@ -931,13 +931,13 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>It looks like flights at the end of the day are much more commonly cancelled than those early on, which is what we might have expected!</p>
+<p>It looks like flights at the end of the day are much more commonly cancelled than those early on, which is what we might have expected.</p>
 <br>
 <hr>
 <h2 id="chapter-75-covariation">Chapter 7.5: Covariation</h2>
-<p>This section of the book covers the exploration of covariation among two variables. For example, is there a relationship between the cut and the price of a diamond (a categorical and continuous variable)? Or between the cut and color of a diamond (two categorical variables)? Or between the carat and the price of a diamond (two continuous variables)?</p>
+<p>This section of the book covers the exploration of covariation among two variables. For example, is there a relationship between the cut and the price of a diamond (a categorical and continuous variable)? Or an association between the cut and color of a diamond (two categorical variables)? Or between the carat and the price of a diamond (two continuous variables)?</p>
 <h3 id="751-a-categorical-and-continuous-variable">7.5.1: A categorical and continuous variable</h3>
-<p>In out last plot above, we actually explored the relationship between a categorical variable (cancelled &amp; not-cancelled flights) and a continuous one (departure time).</p>
+<p>In out last plot above, we already explored the relationship between a categorical variable (cancelled &amp; not-cancelled flights) and a continuous one (departure time).</p>
 <p>Let&rsquo;s see another example, this time for the <code>diamonds</code> dataset: whether prices differ among diamond cuts:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span>,</span>
@@ -946,7 +946,7 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>Another classic way of showing the relationship between a categorical and a continuous variable is with a <strong>boxplot</strong>. <a href="https://r4ds.had.co.nz/exploratory-data-analysis.html#cat-cont" target="_blank" rel="noopener">The book</a> has a good explanation of what the components of a boxplot (box, median line, whiskers, outliers) represent. Let&rsquo;s make a boxplot of diamond prices by cut:</p>
+<p>Another classic way of showing the relationship between a categorical and a continuous variable is with a <strong>boxplot</strong>. <a href="https://r4ds.had.co.nz/exploratory-data-analysis.html#cat-cont" target="_blank" rel="noopener">The book</a> has a good explanation of what the components of a boxplot (box, median line, whiskers, outliers) represent. Let&rsquo;s make a boxplot of diamond <code>price</code> by <code>cut</code>:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># To make the plot better-looking, and to see the same colors as above,</span></span>
 <span><span class='c'># we'll also map the fill aesthetic to cut:</span></span>
@@ -979,27 +979,27 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>A slightly more visually appealing way to plot this is using a heatmap, which we can do with <a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" target="_blank" rel="noopener"><code>geom_tile()</code></a> after we calculate the counts ourselves:</p>
+<p>A <strong>heatmap</strong> is a slightly more visually appealing way to plot this. We can create one using <strong><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" target="_blank" rel="noopener"><code>geom_tile()</code></a></strong> by first calculating the counts ourselves, and then mapping these counts to the <code>fill</code> color of the tiles:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span><span class='nv'>color</span>, <span class='nv'>cut</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>  </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>color</span>, y <span class='o'>=</span> <span class='nv'>cut</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_tile</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>fill <span class='o'>=</span> <span class='nv'>n</span><span class='o'>)</span><span class='o'>)</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='o'>(</span><span class='nv'>color</span>, <span class='nv'>cut</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>  <span class='c'># This will create a column 'n' with the counts</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>color</span>, y <span class='o'>=</span> <span class='nv'>cut</span>, fill <span class='o'>=</span> <span class='nv'>n</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_tile</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <br>
 <h3 id="753-two-continuous-variables">7.5.3: Two continuous variables</h3>
-<p>Visualizing the relationship between two continuous variables is perhaps the most intuitive of the combinations. It can be done with simple scatterplots (<a href="https://ggplot2.tidyverse.org/reference/geom_point.html" target="_blank" rel="noopener"><code>geom_point()</code></a>), of which we have already seen a couple of examples.</p>
-<p>The books covers a few strategies that can be useful when dealing with large datasets, when relationships may be hidden due to overplotting. Consider the relationship between the carat (weight) and price of diamonds:</p>
+<p>Visualizing the relationship between two continuous variables is perhaps the most intuitive of the variable type combinations. It can be done with simple scatterplots (<a href="https://ggplot2.tidyverse.org/reference/geom_point.html" target="_blank" rel="noopener"><code>geom_point()</code></a>), of which we have already seen a couple of examples.</p>
+<p>The books covers a few strategies that can be useful when dealing with large datasets, when relationships may be hidden due to overplotting. Consider the relationship between the <code>carat</code> (weight) and <code>price</code> of diamonds:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, y <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>There is clearly some overplotting going on here, with some areas of solid black &ndash; though this type of thing can get a lot worse and the overall pattern is still clear in this case.</p>
-<p>Making points transparent is one strategy to more clearly see patterns in the data:</p>
+<p>There is clearly some overplotting going on here, with areas of solid black &ndash; though this type of thing can get a lot worse. Here, the overall pattern is still apparent.</p>
+<p>Making points transparent is one strategy to more clearly see patterns in the data in the face of overplotting:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># An alpha of 1 (the default) is opaque and an alpha of 1 is transparent </span></span>
 <span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>diamonds</span><span class='o'>)</span> <span class='o'>+</span> </span>
@@ -1011,10 +1011,10 @@
 <p>Two other strategies covered in the book are:</p>
 <ul>
 <li>
-<p>Use automated 2-dimensional binning (e.g. with <code>geom_bin2d</code>)</p>
+<p>Use a geom that does 2-dimensional binning for you (e.g. <code>geom_bin2d</code>).</p>
 </li>
 <li>
-<p>Bin one of the continuous variables, effectively turning it into a categorical variable, so that we can use plot types like boxplots. You&rsquo;ll try that in the exercises.</p>
+<p>Bin <em>one</em> of the continuous variables, effectively turning it into a categorical variable, so that we can use plot types like boxplots. You&rsquo;ll try that in the exercises.</p>
 </li>
 </ul>
 <br>
@@ -1025,7 +1025,7 @@
 <div>
 <h3 id="exercise-1">Exercise 1</h3>
 <p>Use the function <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_number()</code></a> to divide the <code>carat</code> values into 10 bins, and create a boxplot of diamond prices for each of these bins.</p>
-<p>*Tip: If you can&rsquo;t read the x-axis labels (bin names) in the resulting plot * <em>because they overlap, consider flipping the plot:</em> <em>simply swap the <code>x</code> and <code>y</code> aesthetic assignments</em> <em>(alternatively, use the stand-alone function <a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" target="_blank" rel="noopener"><code>coord_flip()</code></a>).</em></p>
+<p><em>Tip: If you can&rsquo;t read the x-axis labels (bin names) in the resulting plot</em> <em>because they overlap, consider flipping the plot:</em> <em>simply swap the <code>x</code> and <code>y</code> aesthetic assignments</em> <em>(alternatively, use the stand-alone function <a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" target="_blank" rel="noopener"><code>coord_flip()</code></a>).</em></p>
 <details>
 <summary>
 <b>Hints</b> (click here)
@@ -1036,7 +1036,7 @@
 <p>You can start by creating a binned column with <a href="https://dplyr.tidyverse.org/reference/mutate.html" target="_blank" rel="noopener"><code>mutate()</code></a> and <code>cut_width(carat, 0.1)</code>, <em>or</em> you can create the bins &ldquo;on the fly&rdquo;, by simply using <code>cut_width(carat, 0.1)</code> as <code>x</code> or <code>y</code> aesthetic.</p>
 </li>
 <li>
-<p>An alternative way of making this kind of plot would be by using <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_width()</code></a> instead of <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_number()</code></a>: then, you fix the width of each bin rather than the number of data points in each bin. The disadvantage of that approach is that you may be misled by bins with very few data points, but a way to ameliorate this is by using the <code>varwidth = TRUE</code> argument of <a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" target="_blank" rel="noopener"><code>geom_boxplot()</code></a>.</p>
+<p>Side note: An alternative way of making this kind of plot would be with <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_width()</code></a> instead of <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_number()</code></a>: then, you fix the width of each bin rather than the number of data points in each bin. The disadvantage of that approach is that you may be misled by bins with very few data points, but a way to ameliorate this is by using the <code>varwidth = TRUE</code> argument of <a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" target="_blank" rel="noopener"><code>geom_boxplot()</code></a>.</p>
 </li>
 </ul>
 </details>
@@ -1055,15 +1055,15 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>The book has the following code to do this, which is less intuitive but has the advantage of keeping the carat axis labels as if it still were a continuous variable:</p>
+<p>The book has a different way of doing this, using the <code>group</code> aesthetic. This is less intuitive but has the advantage of keeping the carat axis labels as if it still were a regular continuous variable. It also makes the width of the boxes represent the width of the bins, which you may or may not like:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, y <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>group <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_width</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='m'>0.2</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>group <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_number</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='m'>10</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>Alternatively, you can use the <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_width()</code></a> function:</p>
+<p>Alternatively, if you want to have control over the ranges that the bins cover (but not over the number of points in each bin), you can use the <a href="https://ggplot2.tidyverse.org/reference/cut_interval.html" target="_blank" rel="noopener"><code>cut_width()</code></a> function:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_width</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='m'>0.2</span><span class='o'>)</span>, x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
@@ -1072,7 +1072,7 @@
 </code></pre>
 <p><img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>Use <code>varwidth = TRUE</code> if you want the width of the boxplots to reflect the number of data points:</p>
+<p>In that case, consider using <code>varwidth = TRUE</code> to make the width of the boxes to reflect the number of data points:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/cut_interval.html'>cut_width</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='m'>0.2</span><span class='o'>)</span>, x <span class='o'>=</span> <span class='nv'>price</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
@@ -1090,13 +1090,13 @@
 <h3 id="exercise-2">Exercise 2</h3>
 <ul>
 <li>
-<p>Create a heatmap (<a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" target="_blank" rel="noopener"><code>geom_tile()</code></a>) that shows the mean diamond price for each diamond color and cut combination.</p>
+<p>Create a heatmap (<a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" target="_blank" rel="noopener"><code>geom_tile()</code></a>) that shows the <em>mean diamond price</em> for each diamond color and cut combination (you&rsquo;ll have to compute the mean price first).</p>
 </li>
 <li>
 <p>From your heatmap, would you say that going from color <code>D</code> =&gt; <code>J</code> is associated with an <em>increase</em> or a <em>decrease</em> in the mean price?</p>
 </li>
 </ul>
-<p><em>Tip: add <code>+ scale_fill_viridis_c()</code> at the end for a much nicer color scale.</em></p>
+<p><em>Tip: add <code>+ scale_fill_viridis_c()</code> to your code for a much nicer color scale.</em></p>
 <details>
 <summary>
 <b>Hints</b> (click here)
@@ -1104,7 +1104,7 @@
 <br>
 <ul>
 <li>
-<p>In the heatmap, you&rsquo;ll want <code>color</code> along the <code>x</code> axis and <code>cut</code> along the <code>y</code> axis (or vice versa), and you&rsquo;ll want to <code>fill</code> the tiles by price.</p>
+<p>In the heatmap, you&rsquo;ll want <code>color</code> along the <code>x</code> axis and <code>cut</code> along the <code>y</code> axis (or vice versa), and you&rsquo;ll want to <code>fill</code> the tiles by the mean price.</p>
 </li>
 <li>
 <p>You&rsquo;ll first have to compute the mean diamond price for each of the <code>color</code>-<code>cut</code> combinations: use <a href="https://dplyr.tidyverse.org/reference/group_by.html" target="_blank" rel="noopener"><code>group_by()</code></a> and then <a href="https://dplyr.tidyverse.org/reference/summarise.html" target="_blank" rel="noopener"><code>summarize()</code></a>.</p>
@@ -1156,11 +1156,10 @@
 <span><span class='c'>#&gt; `.groups` argument.</span></span></code></pre>
 <p><img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
-<p>It looks like going from color <code>D</code> to <code>J</code> is associated with an overall increase in the mean price.</p>
+<p>It looks like going from color <code>D</code> to <code>J</code> is associated with an overall <em>increase</em> in the mean price of diamonds.</p>
 </details>
 </div>
 </div>
-<br>
 <br>
 <div class="puzzle">
 <div>
@@ -1174,9 +1173,6 @@
 </li>
 <li>
 <p>How could you quickly create a price index that controls for <code>carat</code>? Make a heatmap with that price index instead of the raw price.</p>
-</li>
-<li>
-<p>Bonus: to better understand the relationship between <code>color</code>, <code>carat</code>, and <code>price</code>, modify the earlier scatterplot of <code>carat</code> and <code>price</code> simply by mapping diamond <code>color</code> to the color aesthetic.</p>
 </li>
 </ul>
 <details>
@@ -1192,7 +1188,7 @@
 <p>If higher carats are causally associated with higher prices, and certain colors have higher mean carats than others, it is not fair to look at the effect of color on price without somehow taking carat into account.</p>
 </li>
 <li>
-<p>A simple way of taking carat into account is by using price-per-carat rather than price in your heatmap.</p>
+<p>A simple way of taking carat into account is by using &ldquo;price per carat&rdquo; (price divided by carat) rather than the raw price in your heatmap.</p>
 </li>
 </ul>
 </details>
@@ -1221,10 +1217,10 @@
 </div>
 <ul>
 <li>
-<p>It looks like going from <code>D</code> =&gt; <code>J</code>, <code>carat</code> is higher.</p>
+<p>It looks like going from <code>D</code> =&gt; <code>J</code>, <code>carat</code> is typically higher.</p>
 </li>
 <li>
-<p>Since <code>carat</code> is strongly positively associated with <code>price</code>, it is therefore not fair to compare prices among colors without controlling for <code>carat</code>.</p>
+<p>Since <code>carat</code> is strongly positively associated with <code>price</code>, it is not fair to compare prices among colors without controlling for <code>carat</code>.</p>
 </li>
 <li>
 <p>A simple way to do so is dividing <code>price</code> by <code>carat</code> to create an index that represents the &ldquo;price per carat&rdquo;. Then, you can use that index instead of the raw price in your heatmap:</p>
@@ -1243,13 +1239,22 @@
 <p><img src="figs/unnamed-chunk-27-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <ul>
-<li>
-<p>Now, it looks like going from <code>D</code> =&gt; <code>J</code> is associated with a <strong>decrease</strong> rather than an increase in the mean price!</p>
-</li>
-<li>
-<p>A scatterplot of carat and price that includes diamond color confirms this pattern:</p>
-</li>
+<li>Now, it looks like going from <code>D</code> =&gt; <code>J</code> is associated with a <strong>decrease</strong> rather than an increase in the mean price!</li>
 </ul>
+</details>
+</div>
+</div>
+<br>
+<div class="puzzle">
+<div>
+<h3 id="exercise-4-bonus">Exercise 4 (bonus)</h3>
+<p>To better understand the relationship between <code>color</code>, <code>carat</code>, and <code>price</code> (see the previous exercise), modify the earlier scatterplot of <code>carat</code> and <code>price</code> simply by mapping diamond <code>color</code> to the color aesthetic.</p>
+<details>
+<summary>
+<b>Solution</b> (click here)
+</summary>
+<br>
+<p>A scatterplot of <code>carat</code> and <code>price</code> that includes diamond color confirms that <code>D</code> diamonds are more expensive than <code>J</code> diamonds (and so on) once you take <code>carat</code> into account:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span>, y <span class='o'>=</span> <span class='nv'>price</span>, color <span class='o'>=</span> <span class='nv'>color</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
@@ -1260,6 +1265,7 @@
 </details>
 </div>
 </div>
+<br>
 <hr>
 <h2 id="bonus-reordering-factor-levels">Bonus: (re)ordering factor levels</h2>
 <p>In the plots with diamond <code>cut</code>, you might have noticed that the cuts are ordered in a custom, sensible way rather than alphabetically. This is possible because the <code>cut</code> column has the data type <code>factor</code>.</p>
