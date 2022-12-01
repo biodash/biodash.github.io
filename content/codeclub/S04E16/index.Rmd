@@ -22,14 +22,15 @@ Like last time,
 we'll mostly use _tidyverse_ tools to explore the `diamonds` dataset,
 which is also part of the _tidyverse_.
 
-We'll also have a quick look at the `flights` dataset,
+We'll also have one look at the `flights` dataset,
 for which we'll need to load the _nycflights13_ package:
 
 ```{r}
-## You only need to install if you haven't previously done so
+## You only need to install packages if you haven't previously done so
 # install.packages("nycflights13")
 # install.packages("tidyverse")
 
+## But you'll have to load packages for every R session:
 library(nycflights13)
 library(tidyverse)
 ```
@@ -88,7 +89,7 @@ for example with _dplyr_'s `filter()` function:
 
 ```{r}
 # Remove rows for which column y is smaller than 3 or larger than 20: 
-diamonds2 <- diamonds %>% filter(y < 3 | y > 20)
+diamonds_no_outliers <- diamonds %>% filter(y < 3 | y > 20)
 ```
 
 But you may not want throw out entire rows,
@@ -98,7 +99,7 @@ Therefore, and alternative is to **convert outliers to `NA`s (missing values)**,
 and a convenient way to do that is with the `ifelse()` function:
 
 ```{r}
-diamonds_no_outliers <- diamonds %>%
+diamonds_NA_outliers <- diamonds %>%
   mutate(y = ifelse(test = y < 3 | y > 20, yes = NA, no = y))
 ```
 
@@ -122,7 +123,8 @@ x < 5
 ```
 
 We can use that expression as the `test` in `ifelse()`,
-and turn values smaller than 5 into NA, while leaving the other values unchanged:
+and turn values smaller than 5 into `NA` (`yes = NA`),
+while leaving the other values unchanged (`no = x`):
 
 ```{r}
 ifelse(test = x < 5, yes = NA, no = x)
@@ -134,9 +136,9 @@ ifelse(test = x < 5, yes = NA, no = x)
 
 It can be useful to compare distributions among rows with and without missing values.
 To do that,
-we can first create a new variable that indicates whether a value for another
-variable is  missing or not.
-Then, we can map an aesthetic like `color` to this missing-or-not variable,
+we can first create a new column that indicates whether a value for a variable
+of interest is missing or not.
+Then, we can map an aesthetic like `color` to this missing-or-not column
 to show the two groups separately.
 
 Below, we'll compare flights with and without missing values for departure time
@@ -186,19 +188,20 @@ Or between the carat and the price of a diamond (two continuous variables)?
 
 In out last plot above,
 we already explored the relationship between a categorical variable
-(cancelled & not-cancelled flights) and a continuous one (departure time).
+(cancelled & not-cancelled flights) and a continuous one (departure time),
+and we did so with so with a frequency polygon (`geom_freqpoly`).
 
-Let's see another example, this time for the `diamonds` dataset:
-whether prices differ among diamond cuts:
+Let's see another example, this time for the `diamonds` dataset,
+to examine whether prices differ among diamond cuts:
 
 ```{r}
 ggplot(data = diamonds,
-       mapping = aes(x = price)) + 
-  geom_density(mapping = aes(colour = cut))
+       mapping = aes(x = price, color = cut)) + 
+  geom_density()
 ```
 
-Another classic way of showing the relationship between a categorical and a
-continuous variable is with a **boxplot**.
+A **boxplot** is another classic way to show the relationship between a
+categorical and a continuous variable.
 [The book](https://r4ds.had.co.nz/exploratory-data-analysis.html#cat-cont)
 has a good explanation of what the components of a boxplot
 (box, median line, whiskers, outliers) represent. 
@@ -235,8 +238,9 @@ As the books says,
 A quick way to do that is with `geom_count()`:
 
 ```{r}
-ggplot(data = diamonds) +
-  geom_count(mapping = aes(x = color, y = cut))
+ggplot(data = diamonds,
+       mapping = aes(x = color, y = cut)) +
+  geom_count()
 ```
 
 A **heatmap** is a slightly more visually appealing way to plot this.
@@ -265,8 +269,9 @@ when relationships may be hidden due to overplotting.
 Consider the relationship between the `carat` (weight) and `price` of diamonds:
 
 ```{r}
-ggplot(data = diamonds) +
-  geom_point(mapping = aes(x = carat, y = price))
+ggplot(data = diamonds,
+       mapping = aes(x = carat, y = price)) +
+  geom_point()
 ```
 
 There is clearly some overplotting going on here,
@@ -279,9 +284,9 @@ data in the face of overplotting:
 
 ```{r}
 # An alpha of 1 (the default) is opaque and an alpha of 1 is transparent 
-ggplot(data = diamonds) + 
-  geom_point(mapping = aes(x = carat, y = price),
-             alpha = 0.01)
+ggplot(data = diamonds,
+       mapping = aes(x = carat, y = price)) + 
+  geom_point(alpha = 0.01)
 ```
 
 Two other strategies covered in the book are:
@@ -319,18 +324,12 @@ _(alternatively, use the stand-alone function `coord_flip()`)._
 <details><summary><b>Hints</b> (click here)</summary>
 <br>
 
-- You can start by creating a binned column with `mutate()` and
-  `cut_width(carat, 0.1)`,
-  _or_ you can create the bins "on the fly",
-  by simply using `cut_width(carat, 0.1)` as `x` or `y` aesthetic.
+- Run `?cut_number` to see the documentation for this function.
 
-- Side note: An alternative way of making this kind of plot would be with
-  `cut_width()` instead of `cut_number()`:
-  then, you fix the width of each bin rather than the number of data points in
-  each bin.
-  The disadvantage of that approach is that you may be misled by bins with
-  very few data points, but a way to ameliorate this is by using the
-  `varwidth = TRUE` argument of `geom_boxplot()`.
+- You can start by creating a binned column with `mutate()` and
+  `cut_number(carat, n = 10)`,
+  _or_ you can create the bins "on the fly",
+  by simply using `cut_number(carat, n = 10)` as the `x` or `y` aesthetic.
 
 </details>
 
@@ -344,7 +343,7 @@ To be able to read the axis labels, I moved `carat` to the y axis
 
 ```{r}
 diamonds %>%
-  ggplot(mapping = aes(y = cut_number(carat, 10), x = price)) + 
+  ggplot(mapping = aes(y = cut_number(carat, n = 10), x = price)) + 
   geom_boxplot() +
   labs(y = "carat (binned)")
 ```
@@ -358,7 +357,7 @@ which you may or may not like:
 ```{r}
 diamonds %>% 
   ggplot(mapping = aes(x = carat, y = price)) + 
-  geom_boxplot(mapping = aes(group = cut_number(carat, 10)))
+  geom_boxplot(mapping = aes(group = cut_number(carat, n = 10)))
 ```
 
 Alternatively, if you want to have control over the ranges that the bins cover
@@ -367,7 +366,7 @@ you can use the `cut_width()` function:
 
 ```{r}
 diamonds %>%
-  ggplot(mapping = aes(y = cut_width(carat, 0.2), x = price)) + 
+  ggplot(mapping = aes(y = cut_width(carat, width = 0.4), x = price)) + 
   geom_boxplot() +
   labs(y = "carat (binned)")
 ```
@@ -377,7 +376,7 @@ to reflect the number of data points:
 
 ```{r}
 diamonds %>%
-  ggplot(mapping = aes(y = cut_width(carat, 0.2), x = price)) + 
+  ggplot(mapping = aes(y = cut_width(carat, width = 0.4), x = price)) + 
   geom_boxplot(varwidth = TRUE) +
   labs(y = "carat (binned)")
 ```
@@ -435,8 +434,8 @@ diamonds %>%
 diamonds %>%
   group_by(color, cut) %>%
   summarize(price = mean(price)) %>%
-  ggplot(mapping = aes(x = color, y = cut)) +
-  geom_tile(mapping = aes(fill = price)) +
+  ggplot(mapping = aes(x = color, y = cut, fill = price)) +
+  geom_tile() +
   scale_fill_viridis_c()
 ```
 
@@ -514,8 +513,8 @@ diamonds %>%
   group_by(color, cut) %>%
   mutate(price_per_carat = price / carat) %>% 
   summarize(price_per_carat = mean(price_per_carat)) %>%
-  ggplot(mapping = aes(x = color, y = cut)) +
-  geom_tile(mapping = aes(fill = price_per_carat)) +
+  ggplot(mapping = aes(x = color, y = cut, fill = price_per_carat)) +
+  geom_tile() +
   scale_fill_viridis_c()
 ```
 
@@ -532,8 +531,8 @@ diamonds %>%
 
 ### Exercise 4 (bonus)
 
-To better understand the relationship between `color`, `carat`, and `price`
-(see the previous exercise),
+To get another perspecective on the relationship between `color`, `carat`, and
+`price` (see the previous exercise),
 modify the earlier scatterplot of `carat` and `price` simply by mapping
 diamond `color` to the color aesthetic.
   
@@ -575,7 +574,8 @@ diamonds %>%
 ```
 
 We could set a different custom order using the `levels` argument of the `factor`
-function (the same code would work if `cut` would not yet have been a factor):
+function
+(the same code would work if `cut` would not yet have been a factor at all):
 
 ```{r}
 cut_order <- c("Very Good", "Fair", "Good", "Ideal", "Premium")
