@@ -1,0 +1,574 @@
+---
+output: hugodown::md_document
+title: "S04E16: R for Data Science - Exploratory Data Analysis II"
+subtitle: "Chapter 7.4 - 7.5: Missing Values and Covariation"
+summary: "We continue with this chapter on Exploratory Data Analysis (EDA), now covering missing values (and the ifelse function to turn outliers into missing values) and covariation among variables, with a couple of new plot types: boxplots and heatmaps."
+authors: [admin]
+tags: [codeclub, r4ds]
+date: 2022-12-01
+lastmod: 2022-12-01
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = TRUE, cache = FALSE)
+```
+
+--------------------------------------------------------------------------------
+
+## Setting up
+
+Like last time,
+we'll mostly use _tidyverse_ tools to explore the `diamonds` dataset,
+which is also part of the _tidyverse_.
+
+We'll also have a quick look at the `flights` dataset,
+for which we'll need to load the _nycflights13_ package:
+
+```{r}
+## You only need to install if you haven't previously done so
+# install.packages("tidyverse")
+# install.packages("nycflights13")
+
+library(tidyverse)
+library(nycflights13)
+```
+
+Let's again take a quick look at the `diamonds` dataset before we begin:
+
+```{r}
+diamonds
+```
+
+On each row, we have information about one individual diamond,
+such as its `carat` and `price`
+(`x`, `y`, and `z` represent the diamond's length, width, and depth,
+respectively.)
+
+Finally,
+we'll again set a _ggplot2_ "theme" that is a little better-looking than the
+default one
+(this setting will apply until you restart R/RStudio):
+
+```{r}
+# This changes two things:
+# - theme_minimal() gives an overall different look, with a white background
+# - base_size = 14 will make the text relatively bigger
+theme_set(theme_minimal(base_size = 14))
+```
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Chapter 7.4: Missing values
+
+### Removing outliers
+
+Let's assume you have established that certain outlier values in your data
+are untrustworthy.
+For instance, see the plot below for the `diamonds` data,
+a scatterplot of diamond width (`y`) versus depth (`z`):
+
+```{r}
+ggplot(data = diamonds,
+       mapping = aes(x = z, y = y)) +
+  geom_point()
+```
+
+Three rather extreme outliers deviate not just in their absolute values,
+but also in their relative values:
+overall, depth and width are strongly correlated,
+yet the extremely large `z` value does not correspond to a large `y` value at all
+(and so on for the other outliers).
+
+To get rid of outliers in your dataset, you have two main options.
+First, you could **completely remove rows that contain outliers**,
+for example with _dplyr_'s `filter()` function:
+
+```{r}
+# Remove rows for which column y is smaller than 3 or larger than 20: 
+diamonds2 <- diamonds %>% filter(y < 3 | y > 20)
+```
+
+But you may not want throw out entire rows,
+because the values for the _other variables_ (columns) in these rows
+might be valid and valuable.
+Therefore, and alternative is to **convert outliers to `NA`s (missing values)**,
+and a convenient way to do that is with the `ifelse()` function:
+
+```{r}
+diamonds_no_outliers <- diamonds %>%
+  mutate(y = ifelse(test = y < 3 | y > 20, yes = NA, no = y))
+```
+
+<div class="alert alert-note"><div>
+
+### More on `ifelse()`
+
+To better understand `ifelse()`, a simple example may help:
+
+```{r}
+# Create a vector with integers from 1 to 10:
+x <- 1:10
+x
+```
+
+```{r}
+# This will return a logical vector, indicating, for each value,
+# whether it is smaller than 5:
+x < 5
+```
+
+```{r}
+# We can turn the small values into NAs, and leave big values unchanged, as follows:
+ifelse(test = x < 5, yes = NA, no = x)
+```
+
+</div></div>
+
+### Comparing observations with and without missing data 
+
+It can be useful to compare distributions among observations with and
+without missing values.
+To do that,
+we can first create a new variable that indicates whether a value is
+missing or not.
+Then, we can map an aesthetic like `color` to this variable to show the 
+two groups separately.
+
+Below, we'll compare flights with and without missing values for departure time
+(`dep_time`), since the former are cancelled flights,
+using the geom `geom_freqpoly` that we also saw last time:
+
+```{r}
+flights %>% 
+  mutate(cancelled = is.na(dep_time)) %>% 
+  ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) +
+  geom_freqpoly(binwidth = 100) # (100 = 1 hour, so we plot by hour)
+```
+
+However, the large difference in the absolute counts of cancelled versus
+not-cancelled flights makes it hard to see relative differences along the
+x-axis.
+
+We can use `geom_density()` to produce a **density plot**,
+where the height of the lines is only determined by the relative counts,
+allowing us to see if cancelled flights have a different distribution:
+
+```{r}
+flights %>% 
+  mutate(cancelled = is.na(dep_time)) %>% 
+  ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) + 
+  geom_density()
+```
+
+It looks like flights at the end of the day are much more commonly cancelled
+than those early on, which is what we might have expected!
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Chapter 7.5: Covariation
+
+This section of the book covers the exploration of covariation among two variables.
+For example,
+is there a relationship between the cut and the price of a diamond
+(a categorical and continuous variable)?
+Or between the cut and color of a diamond (two categorical variables)?
+Or between the carat and the price of a diamond (two continuous variables)?
+
+### 7.5.1: A categorical and continuous variable
+
+In out last plot above,
+we actually explored the relationship between a categorical variable
+(cancelled & not-cancelled flights) and a continuous one (departure time).
+
+Let's see another example, this time for the `diamonds` dataset:
+whether prices differ among diamond cuts:
+
+```{r}
+ggplot(data = diamonds,
+       mapping = aes(x = price)) + 
+  geom_density(mapping = aes(colour = cut))
+```
+
+Another classic way of showing the relationship between a categorical and a
+continuous variable is with a **boxplot**.
+[The book](https://r4ds.had.co.nz/exploratory-data-analysis.html#cat-cont)
+has a good explanation of what the components of a boxplot
+(box, median line, whiskers, outliers) represent. 
+Let's make a boxplot of diamond prices by cut:
+
+```{r}
+# To make the plot better-looking, and to see the same colors as above,
+# we'll also map the fill aesthetic to cut:
+ggplot(data = diamonds,
+       mapping = aes(x = cut, y = price, fill = cut)) +
+  geom_boxplot() +
+  guides(fill = "none") # Just to turn the legend for fill off
+```
+
+A less formal, but sometimes more informative variant of this type of plot
+is a **violin plot**, where the width represents the number of data points:
+
+```{r}
+ggplot(data = diamonds,
+       mapping = aes(x = cut, y = price, fill = cut)) +
+  geom_violin() +
+  guides(fill = "none") # Just to turn the legend for fill off
+```
+
+<br>
+
+### 7.5.2: Two categorical variables
+
+As the books says,
+
+> To visualise the covariation between categorical variables,
+> you’ll need to count the number of observations for each combination. 
+
+A quick way to do that is with `geom_count()`:
+
+```{r}
+ggplot(data = diamonds) +
+  geom_count(mapping = aes(x = color, y = cut))
+```
+
+A slightly more visually appealing way to plot this is using a heatmap,
+which we can do with `geom_tile()` after we calculate the counts ourselves:
+
+```{r}
+diamonds %>% 
+  count(color, cut) %>%  
+  ggplot(mapping = aes(x = color, y = cut)) +
+  geom_tile(mapping = aes(fill = n))
+```
+
+<br>
+
+### 7.5.3: Two continuous variables
+
+Visualizing the relationship between two continuous variables is perhaps the
+most intuitive of the combinations.
+It can be done with simple scatterplots (`geom_point()`),
+of which we have already seen a couple of examples.
+
+The books covers a few strategies that can be useful when dealing with large datasets,
+when relationships may be hidden due to overplotting.
+Consider the relationship between the carat (weight) and price of diamonds:
+
+```{r}
+ggplot(data = diamonds) +
+  geom_point(mapping = aes(x = carat, y = price))
+```
+
+There is clearly some overplotting going on here,
+with some areas of solid black --
+though this type of thing can get a lot worse and the overall pattern is still
+clear in this case.
+
+Making points transparent is one strategy to more clearly see patterns in the
+data:
+
+```{r}
+# An alpha of 1 (the default) is opaque and an alpha of 1 is transparent 
+ggplot(data = diamonds) + 
+  geom_point(mapping = aes(x = carat, y = price),
+             alpha = 0.01)
+```
+
+Two other strategies covered in the book are:
+
+- Use automated 2-dimensional binning (e.g. with `geom_bin2d`)
+
+- Bin one of the continuous variables,
+  effectively turning it into a categorical variable,
+  so that we can use plot types like boxplots.
+  You'll try that in the exercises.
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Breakout Rooms
+
+All the exercises use the `diamonds` dataset.
+After loading the _tidyverse_, this dataset should be available to you.
+
+<div class="puzzle">
+<div>
+
+### Exercise 1
+
+Use the function `cut_number()`
+to divide the `carat` values into 10 bins,
+and create a boxplot of diamond prices for each of these bins.
+
+_Tip: If you can't read the x-axis labels (bin names) in the resulting plot _
+_because they overlap, consider flipping the plot:_
+_simply swap the `x` and `y` aesthetic assignments_
+_(alternatively, use the stand-alone function `coord_flip()`)._
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- You can start by creating a binned column with `mutate()` and
+  `cut_width(carat, 0.1)`,
+  _or_ you can create the bins "on the fly",
+  by simply using `cut_width(carat, 0.1)` as `x` or `y` aesthetic.
+
+- An alternative way of making this kind of plot would be by using `cut_width()`
+  instead of `cut_number()`:
+  then, you fix the width of each bin rather than the number of data points in
+  each bin.
+  The disadvantage of that approach is that you may be misled by bins with
+  very few data points, but a way to ameliorate this is by using the
+  `varwidth = TRUE` argument of `geom_boxplot()`.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+To be able to read the axis labels, I moved `carat` to the y axis
+(and I also added a y-axis label):
+
+```{r}
+diamonds %>%
+  ggplot(mapping = aes(y = cut_number(carat, 10), x = price)) + 
+  geom_boxplot() +
+  labs(y = "carat (binned)")
+```
+
+The book has the following code to do this,
+which is less intuitive but has the advantage of keeping the carat axis labels
+as if it still were a continuous variable:
+
+```{r}
+diamonds %>% 
+  ggplot(mapping = aes(x = carat, y = price)) + 
+  geom_boxplot(mapping = aes(group = cut_width(carat, 0.2)))
+```
+
+Alternatively, you can use the `cut_width()` function:
+
+```{r}
+diamonds %>%
+  ggplot(mapping = aes(y = cut_width(carat, 0.2), x = price)) + 
+  geom_boxplot() +
+  labs(y = "carat (binned)")
+```
+
+Use `varwidth = TRUE` if you want the width of the boxplots to reflect the number
+of data points:
+
+```{r}
+diamonds %>%
+  ggplot(mapping = aes(y = cut_width(carat, 0.2), x = price)) + 
+  geom_boxplot(varwidth = TRUE) +
+  labs(y = "carat (binned)")
+```
+
+</details>
+</div></div>
+
+<br>
+
+<div class="puzzle">
+<div>
+
+### Exercise 2
+
+- Create a heatmap (`geom_tile()`) that shows the mean diamond price for
+  each diamond color and cut combination.
+
+- From your heatmap,
+  would you say that going from color `D` => `J` is associated with an _increase_
+  or a _decrease_ in the mean price?
+
+_Tip: add `+ scale_fill_viridis_c()` at the end for a much nicer color scale._
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- In the heatmap, you'll want `color` along the `x` axis and `cut` along the `y`
+  axis (or vice versa), and you'll want to `fill` the tiles by price.
+  
+- You'll first have to compute the mean diamond price for each of the `color`-`cut`
+  combinations: use `group_by()` and then `summarize()`.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution just for getting the mean price</b> (click here)</summary>
+<br>
+
+```{r}
+diamonds %>%
+  group_by(color, cut) %>%
+  summarize(price = mean(price))
+```  
+
+</details>
+
+<br>
+
+<details><summary><b>Full solution</b> (click here)</summary>
+<br>
+
+```{r}
+diamonds %>%
+  group_by(color, cut) %>%
+  summarize(price = mean(price)) %>%
+  ggplot(mapping = aes(x = color, y = cut)) +
+  geom_tile(mapping = aes(fill = price)) +
+  scale_fill_viridis_c()
+```
+
+It looks like going from color `D` to `J` is associated with an overall increase
+in the mean price.
+
+</details>
+</div></div>
+
+<br>
+
+<br>
+
+<div class="puzzle">
+<div>
+
+### Exercise 3
+
+- Make a plot to visualize the relationship between `color` and `carat`.
+
+- Seeing this relationship, and knowing that `carat` and `price` are strongly related
+  (see the scatterplots above),
+  do you think this might have influenced (confounded)
+  the apparent relationship between `color` and `price`?
+
+- How could you quickly create a price index that controls for `carat`?
+  Make a heatmap with that price index instead of the raw price. 
+
+- Bonus: to better understand the relationship between `color`, `carat`, and `price`,
+  modify the earlier scatterplot of `carat` and `price` simply by mapping diamond
+  `color` to the color aesthetic.
+
+<details><summary><b>Hints</b> (click here)</summary>
+<br>
+
+- Use a boxplot, violin plot and/or a density plot to visualize the relationship
+  between `color` and `carat`.
+
+- If higher carats are causally associated with higher prices,
+  and certain colors have higher mean carats than others,
+  it is not fair to look at the effect of color on price without
+  somehow taking carat into account.
+  
+- A simple way of taking carat into account is by using price-per-carat rather
+  than price in your heatmap.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b> (click here)</summary>
+<br>
+
+- To visualize the relationship between `color` and `carat`,
+  you could for example use a boxplot and/or a density plot:
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = color, y = carat)) +
+  geom_boxplot()
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = carat, color = color)) +
+  geom_density()
+```
+
+- It looks like going from `D` => `J`, `carat` is higher.
+
+- Since `carat` is strongly positively associated with `price`,
+  it is therefore not fair to compare prices among colors without controlling for
+  `carat`.
+  
+- A simple way to do so is dividing `price` by `carat`
+  to create an index that represents the "price per carat".
+  Then, you can use that index instead of the raw price in your heatmap:
+
+```{r}
+diamonds %>%
+  group_by(color, cut) %>%
+  mutate(price_per_carat = price / carat) %>% 
+  summarize(price_per_carat = mean(price_per_carat)) %>%
+  ggplot(mapping = aes(x = color, y = cut)) +
+  geom_tile(mapping = aes(fill = price_per_carat)) +
+  scale_fill_viridis_c()
+```
+
+- Now, it looks like going from `D` => `J` is associated with a **decrease** rather
+  than an increase in the mean price!
+
+- A scatterplot of carat and price that includes diamond color confirms this
+  pattern:
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = carat, y = price, color = color)) +
+  geom_point()
+```
+
+</details>
+
+</div></div>
+
+--------------------------------------------------------------------------------
+
+## Bonus: (re)ordering factor levels
+
+In the plots with diamond `cut`,
+you might have noticed that the cuts are ordered in a custom, sensible way
+rather than alphabetically.
+This is possible because the `cut` column has the data type `factor`.
+
+If we convert `cut` to a regular character data type,
+the custom order disappears (it is now ordered alphabetically):
+
+```{r}
+diamonds %>%
+  mutate(cut = as.character(cut)) %>% 
+  ggplot(mapping = aes(x = cut, y = price)) +
+  geom_boxplot()
+```
+
+We could set a different custom order using the `levels` argument of the `factor`
+function (the same code would work if `cut` would not yet have been a factor):
+
+```{r}
+cut_order <- c("Very Good", "Fair", "Good", "Ideal", "Premium")
+
+diamonds %>%
+  mutate(cut = factor(cut, levels = cut_order)) %>% 
+  ggplot(mapping = aes(x = cut, y = price)) +
+  geom_boxplot()
+```
+
+Or, you could make the order of the factor levels depend on the data (!):
+
+```{r}
+diamonds %>%
+  mutate(cut = reorder(cut, price, FUN = median)) %>% 
+  ggplot(mapping = aes(x = cut, y = price)) +
+  geom_boxplot()
+```
+
+<br>

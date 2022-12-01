@@ -1,7 +1,7 @@
 ---
 output: hugodown::md_document
 title: "S04E15: R for Data Science - Exploratory Data Analysis"
-subtitle: "Chapter 7.3 - 7.4: Plotting the distributions of categorical and continuous variables"
+subtitle: "Chapter 7.3: Plotting the distributions of categorical and continuous variables"
 summary: "This chapter covers so-called Exploratory Data Analysis (EDA): computing summary stats and especially making quick plots to explore the variation in and distributions of single variables (this session), and looking at covariation among variables (next session)."
 authors: [admin]
 tags: [codeclub, r4ds]
@@ -429,93 +429,6 @@ and are likely data entry errors or something along those lines.
 
 <br>
 
---------------------------------------------------------------------------------
-
-## Chapter 7.4: Missing values
-
-### Removing outliers
-
-If you've established that certain outliers are untrustworthy and
-want to get rid of them,
-you have two main options.
-
-First, you could remove the rows (diamonds) with outliers:
-
-```{r}
-diamonds2 <- diamonds %>% filter(y > 3, y < 20)
-```
-
-But you may not want throw out entire rows,
-because the values for the other variables might be valid and still valuable.
-Alternatively, you can convert outliers to `NA`s (missing values),
-and a convenient way to do that is with the `ifelse()` function.
-To understand `ifelse()`, a simple example may help:
-
-```{r}
-# Create a vector with integers from 1 to 10:
-x <- 1:10
-x
-```
-
-```{r}
-# This will return a logical vector, indicating, for each value,
-# whether it is smaller than 5:
-x < 5
-```
-
-```{r}
-# We can turn the small values into NAs, and leave big values unchanged, as follows:
-ifelse(test = x < 5, yes = NA, no = x)
-```
-
-In case of the diamonds,
-we can use this function as follows to turn `y` outliers into `NA`s:
-
-```{r}
-diamonds2 <- diamonds %>%
-  mutate(y = ifelse(test = y < 3 | y > 20, yes = NA, no = y))
-```
-
-### Comparing observations with and without missing data 
-
-Sometimes you may want to compare distributions among observations with and
-without missing values.
-To do that, we can create a new variable that indicates whether a value is
-missing or not, and map (for example) `color` to this variable: 
-
-```{r}
-library(nycflights13)
-
-flights %>% 
-  mutate(cancelled = is.na(dep_time)) %>% 
-  ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) +
-  geom_freqpoly(binwidth = 100) # (100 = 1 hour, so we plot by hour)
-```
-
-However, the large difference in the absolute counts of cancelled versus
-not-cancelled flights makes it hard to see relative differences along the
-x-axis.
-
-We can use `geom_density()` to produce a density plot,
-where the height of the lines is only determined by the relative counts,
-and where we can see if cancelled flights have a different distribution:
-
-```{r}
-flights %>% 
-  mutate(cancelled = is.na(dep_time)) %>% 
-  ggplot(mapping = aes(x = sched_dep_time, color = cancelled)) + 
-  geom_density()
-```
-
-It looks like flights at the end of the day are much more commonly cancelled
-than those early on, which is what we might have expected!
-
-<br>
-
---------------------------------------------------------------------------------
-
-## Breakout Rooms
-
 <div class="puzzle">
 <div>
 
@@ -577,4 +490,3 @@ could there be some rounding-up going on?
 </div></div>
 
 <br>
-

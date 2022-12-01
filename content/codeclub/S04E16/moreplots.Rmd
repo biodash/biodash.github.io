@@ -1,0 +1,79 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = cut, y = price, fill = color)) +
+  geom_boxplot()
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = cut, y = price / carat, fill = color)) +
+  geom_boxplot()
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = carat, y = price, color = color)) +
+  geom_smooth()
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = carat, y = price, color = color)) +
+  geom_smooth() +
+  facet_wrap(vars(cut))
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = carat, y = price, color = cut)) +
+  geom_smooth(se = FALSE)
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = carat, y = price, color = cut)) +
+  geom_smooth(se = FALSE) +
+    facet_wrap(vars(color))
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = cut_number(carat, n = 5),
+             y = price, fill = cut)) +
+  geom_boxplot() +
+  facet_wrap(vars(color))
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = cut_number(carat, n = 5),
+             y = price, fill = color)) +
+  geom_boxplot() +
+  facet_wrap(vars(cut))
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = price / carat, color = color)) +
+  geom_density() +
+  facet_wrap(vars(cut))
+```
+
+```{r}
+diamonds %>%
+  ggplot(aes(x = price / carat, color = cut)) +
+  geom_density() +
+  facet_wrap(vars(color))
+```

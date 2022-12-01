@@ -1,14 +1,14 @@
 ---
 output: hugodown::md_document
 title: "S04E15: R for Data Science - Exploratory Data Analysis"
-subtitle: "Chapter 7.3 - 7.4: Plotting the distributions of categorical and continuous variables"
+subtitle: "Chapter 7.3: Plotting the distributions of categorical and continuous variables"
 summary: "This chapter covers so-called Exploratory Data Analysis (EDA): computing summary stats and especially making quick plots to explore the variation in and distributions of single variables (this session), and looking at covariation among variables (next session)."
 authors: [admin]
 tags: [codeclub, r4ds]
 date: 2022-11-15
 lastmod: 2022-11-15
 toc: true
-rmd_hash: ff908ad0379cc140
+rmd_hash: 47b87bd1a989377c
 
 ---
 
@@ -535,99 +535,6 @@ Therefore, the outliers of `y` and `z` don't just seem to represent very large o
 
 <br>
 
-------------------------------------------------------------------------
-
-## Chapter 7.4: Missing values
-
-### Removing outliers
-
-If you've established that certain outliers are untrustworthy and want to get rid of them, you have two main options.
-
-First, you could remove the rows (diamonds) with outliers:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds2</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>3</span>, <span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>20</span><span class='o'>)</span></span></code></pre>
-
-</div>
-
-But you may not want throw out entire rows, because the values for the other variables might be valid and still valuable. Alternatively, you can convert outliers to `NA`s (missing values), and a convenient way to do that is with the [`ifelse()`](https://rdrr.io/r/base/ifelse.html) function. To understand [`ifelse()`](https://rdrr.io/r/base/ifelse.html), a simple example may help:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Create a vector with integers from 1 to 10:</span></span>
-<span><span class='nv'>x</span> <span class='o'>&lt;-</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>10</span></span>
-<span><span class='nv'>x</span></span>
-<span><span class='c'>#&gt;  [1]  1  2  3  4  5  6  7  8  9 10</span></span></code></pre>
-
-</div>
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># This will return a logical vector, indicating, for each value,</span></span>
-<span><span class='c'># whether it is smaller than 5:</span></span>
-<span><span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span></span>
-<span><span class='c'>#&gt;  [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE</span></span></code></pre>
-
-</div>
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># We can turn the small values into NAs, and leave big values unchanged, as follows:</span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span>, yes <span class='o'>=</span> <span class='kc'>NA</span>, no <span class='o'>=</span> <span class='nv'>x</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt;  [1] NA NA NA NA  5  6  7  8  9 10</span></span></code></pre>
-
-</div>
-
-In case of the diamonds, we can use this function as follows to turn `y` outliers into `NA`s:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds2</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>3</span> <span class='o'>|</span> <span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>20</span>, yes <span class='o'>=</span> <span class='kc'>NA</span>, no <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span></span></code></pre>
-
-</div>
-
-### Comparing observations with and without missing data
-
-Sometimes you may want to compare distributions among observations with and without missing values. To do that, we can create a new variable that indicates whether a value is missing or not, and map (for example) `color` to this variable:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/hadley/nycflights13'>nycflights13</a></span><span class='o'>)</span></span>
-<span></span>
-<span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>cancelled <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='o'>(</span><span class='nv'>dep_time</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sched_dep_time</span>, color <span class='o'>=</span> <span class='nv'>cancelled</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_freqpoly</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>100</span><span class='o'>)</span> <span class='c'># (100 = 1 hour, so we plot by hour)</span></span>
-</code></pre>
-<img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" />
-
-</div>
-
-However, the large difference in the absolute counts of cancelled versus not-cancelled flights makes it hard to see relative differences along the x-axis.
-
-We can use [`geom_density()`](https://ggplot2.tidyverse.org/reference/geom_density.html) to produce a density plot, where the height of the lines is only determined by the relative counts, and where we can see if cancelled flights have a different distribution:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>cancelled <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='o'>(</span><span class='nv'>dep_time</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sched_dep_time</span>, color <span class='o'>=</span> <span class='nv'>cancelled</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='o'>(</span><span class='o'>)</span></span>
-</code></pre>
-<img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" />
-
-</div>
-
-It looks like flights at the end of the day are much more commonly cancelled than those early on, which is what we might have expected!
-
-<br>
-
-------------------------------------------------------------------------
-
-## Breakout Rooms
-
 <div class="puzzle">
 
 <div>
@@ -666,7 +573,7 @@ We can start by simply making a histogram for `carat`:
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-32-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -679,7 +586,7 @@ That's a weird pattern, with a bunch of peaks and valleys! Let's just show the a
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-33-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 

@@ -28,10 +28,9 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
-| S04E15      | Nov 17    | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis I**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
-| S04E16      | Dec 01    | Michael B.    | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis II**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
-| S04E17      | Dec 08    | Stephen       | [**R4DS, Ch. 10: Tibbles**](https://r4ds.had.co.nz/tibbles.html) |
-| S04E18      | Dec 15    | Mike S.       | [**R4DS, Ch. 11: Data Import**](https://r4ds.had.co.nz/data-import.html) |
+| S04E16      | Dec 01    | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis II**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
+| S04E17      | Dec 08    | Michael B.    | [**R4DS, Ch. 10: Tibbles**](https://r4ds.had.co.nz/tibbles.html) |
+| S04E18      | Dec 15    | Stephen       | [**R4DS, Ch. 11: Data Import**](https://r4ds.had.co.nz/data-import.html) |
 
 ### Earlier R4DS sessions
 
@@ -51,6 +50,7 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | S04E12      | Oct 27    | Stephen       | [**R4DS, Ch. 5.5: Data transformation IV - mutate()**](/codeclub/S04E12_r4ds-ch5-5)  |
 | S04E13      | Nov 03    | Mike S.       | [**R4DS, Ch. 5.6: Data transformation V - summarize() part 1**](/codeclub/S04E13) |
 | S04E14      | Nov 10    | Jessica       | [**R4DS, Ch. 5.6: Data transformation V - summarize() part 2**](/codeclub/s04e14_r4ds-ch5-5-again/) |
+| S04E15      | Nov 17    | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis I**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
 
 <br>
 
