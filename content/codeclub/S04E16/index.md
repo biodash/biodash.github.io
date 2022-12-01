@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: 2022-12-01
 lastmod: 2022-12-01
 toc: true
-rmd_hash: 4fbedcead3f846fc
+rmd_hash: 306478190b71e858
 
 ---
 
@@ -106,7 +106,7 @@ To get rid of outliers in your dataset, you have two main options. First, you co
 
 </div>
 
-But you may not want throw out entire rows, because the values for the *other variables* (columns) in these rows might be valid and valuable. Therefore, and alternative is to **convert outliers to `NA`s (missing values)**, and a convenient way to do that is with the [`ifelse()`](https://rdrr.io/r/base/ifelse.html) function:
+But you may not want throw out entire rows, because the values for the *other variables* (columns) in these rows might be valid and valuable. Therefore, an alternative is to **convert outliers to `NA`s (missing values)**, and a convenient way to do that is with the [`ifelse()`](https://rdrr.io/r/base/ifelse.html) function:
 
 <div class="highlight">
 
