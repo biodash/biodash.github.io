@@ -342,7 +342,7 @@
         content="2022-11-15T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2022-11-17T14:20:44-05:00">
+    <meta property="article:modified_time" content="2022-12-01T10:38:41-05:00">
   
 
   
@@ -721,16 +721,6 @@
         <li><a href="#exercise-1">Exercise 1</a></li>
         <li><a href="#exercise-2">Exercise 2</a></li>
         <li><a href="#exercise-3">Exercise 3</a></li>
-      </ul>
-    </li>
-    <li><a href="#chapter-74-missing-values">Chapter 7.4: Missing values</a>
-      <ul>
-        <li><a href="#removing-outliers">Removing outliers</a></li>
-        <li><a href="#comparing-observations-with-and-without-missing-data">Comparing observations with and without missing data</a></li>
-      </ul>
-    </li>
-    <li><a href="#breakout-rooms-1">Breakout Rooms</a>
-      <ul>
         <li><a href="#exercise-4-bonus">Exercise 4 (bonus)</a></li>
       </ul>
     </li>
@@ -764,7 +754,7 @@
   <h1>S04E15: R for Data Science - Exploratory Data Analysis</h1>
 
   
-  <p class="page-subtitle">Chapter 7.3 - 7.4: Plotting the distributions of categorical and continuous variables</p>
+  <p class="page-subtitle">Chapter 7.3: Plotting the distributions of categorical and continuous variables</p>
   
 
   
@@ -791,7 +781,7 @@
   <span class="article-date">
     
     
-    Nov 17, 2022
+    Dec 1, 2022
   </span>
   
 
@@ -1200,63 +1190,6 @@
 </div>
 </div>
 <br>
-<hr>
-<h2 id="chapter-74-missing-values">Chapter 7.4: Missing values</h2>
-<h3 id="removing-outliers">Removing outliers</h3>
-<p>If you&rsquo;ve established that certain outliers are untrustworthy and want to get rid of them, you have two main options.</p>
-<p>First, you could remove the rows (diamonds) with outliers:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds2</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>3</span>, <span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>20</span><span class='o'>)</span></span></code></pre>
-</div>
-<p>But you may not want throw out entire rows, because the values for the other variables might be valid and still valuable. Alternatively, you can convert outliers to <code>NA</code>s (missing values), and a convenient way to do that is with the <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a> function. To understand <a href="https://rdrr.io/r/base/ifelse.html" target="_blank" rel="noopener"><code>ifelse()</code></a>, a simple example may help:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Create a vector with integers from 1 to 10:</span></span>
-<span><span class='nv'>x</span> <span class='o'>&lt;-</span> <span class='m'>1</span><span class='o'>:</span><span class='m'>10</span></span>
-<span><span class='nv'>x</span></span>
-<span><span class='c'>#&gt;  [1]  1  2  3  4  5  6  7  8  9 10</span></span></code></pre>
-</div>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># This will return a logical vector, indicating, for each value,</span></span>
-<span><span class='c'># whether it is smaller than 5:</span></span>
-<span><span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span></span>
-<span><span class='c'>#&gt;  [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE</span></span></code></pre>
-</div>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># We can turn the small values into NAs, and leave big values unchanged, as follows:</span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>x</span> <span class='o'>&lt;</span> <span class='m'>5</span>, yes <span class='o'>=</span> <span class='kc'>NA</span>, no <span class='o'>=</span> <span class='nv'>x</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt;  [1] NA NA NA NA  5  6  7  8  9 10</span></span></code></pre>
-</div>
-<p>In case of the diamonds, we can use this function as follows to turn <code>y</code> outliers into <code>NA</code>s:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds2</span> <span class='o'>&lt;-</span> <span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='o'>(</span>test <span class='o'>=</span> <span class='nv'>y</span> <span class='o'>&lt;</span> <span class='m'>3</span> <span class='o'>|</span> <span class='nv'>y</span> <span class='o'>&gt;</span> <span class='m'>20</span>, yes <span class='o'>=</span> <span class='kc'>NA</span>, no <span class='o'>=</span> <span class='nv'>y</span><span class='o'>)</span><span class='o'>)</span></span></code></pre>
-</div>
-<h3 id="comparing-observations-with-and-without-missing-data">Comparing observations with and without missing data</h3>
-<p>Sometimes you may want to compare distributions among observations with and without missing values. To do that, we can create a new variable that indicates whether a value is missing or not, and map (for example) <code>color</code> to this variable:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://github.com/hadley/nycflights13'>nycflights13</a></span><span class='o'>)</span></span>
-<span></span>
-<span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>cancelled <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='o'>(</span><span class='nv'>dep_time</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sched_dep_time</span>, color <span class='o'>=</span> <span class='nv'>cancelled</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_freqpoly</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>100</span><span class='o'>)</span> <span class='c'># (100 = 1 hour, so we plot by hour)</span></span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-30-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<p>However, the large difference in the absolute counts of cancelled versus not-cancelled flights makes it hard to see relative differences along the x-axis.</p>
-<p>We can use <a href="https://ggplot2.tidyverse.org/reference/geom_density.html" target="_blank" rel="noopener"><code>geom_density()</code></a> to produce a density plot, where the height of the lines is only determined by the relative counts, and where we can see if cancelled flights have a different distribution:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>flights</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>cancelled <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='o'>(</span><span class='nv'>dep_time</span><span class='o'>)</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>sched_dep_time</span>, color <span class='o'>=</span> <span class='nv'>cancelled</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='o'>(</span><span class='o'>)</span></span>
-</code></pre>
-<p><img src="figs/unnamed-chunk-31-1.png" width="700px" style="display: block; margin: auto;" /></p>
-</div>
-<p>It looks like flights at the end of the day are much more commonly cancelled than those early on, which is what we might have expected!</p>
-<br>
-<hr>
-<h2 id="breakout-rooms-1">Breakout Rooms</h2>
 <div class="puzzle">
 <div>
 <h3 id="exercise-4-bonus">Exercise 4 (bonus)</h3>
@@ -1287,7 +1220,7 @@
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-32-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>That&rsquo;s a weird pattern, with a bunch of peaks and valleys! Let&rsquo;s just show the area around a carat of <code>1</code>:</p>
 <div class="highlight">
@@ -1296,7 +1229,7 @@
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>carat</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span>binwidth <span class='o'>=</span> <span class='m'>0.01</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-33-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/unnamed-chunk-26-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 <p>There&rsquo;s clearly a big uptick around <code>1</code>, but checking out the raw counts would make it easier to answer the original question:</p>
 <div class="highlight">
@@ -1551,6 +1484,12 @@
                             <a href="https://biodash.github.io/codeclub/s04e14_r4ds-ch5-5-again/">← S04E14: R for Data Science - Chapter 5.6: summarize, some more</a>
                         </span>
                         
+                        
+                        
+                        
+                        <span class="next-link">
+                            <a href="https://biodash.github.io/codeclub/s04e16/">S04E16: R for Data Science - Exploratory Data Analysis II →</a>
+                        </span>
                         
                         
                     </div>
