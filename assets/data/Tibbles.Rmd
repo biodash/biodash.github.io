@@ -1,0 +1,262 @@
+---
+title: "10 Tibbles"
+author: "Michael Broe"
+date: "2022-12-07"
+output: html_document
+---
+
+To obtain your own copy of this file, we'll use the `download.file()` function. Do the following.
+
+In the Files pane, create a new directory, say "Tibbles".
+
+Set that as your working directory.
+
+Set a variable to hold the URL:
+
+tibble_url <- "https://raw.githubusercontent.com/biodash/biodash.github.io/master/assets/data/Tibbles.Rmd"
+
+Then run:
+
+download.file(tibble_url, "Tibbles.Rmd")
+
+**NOTE** This document makes use of the package nycflights13. If you don't have it you will get an error when we try to load the library. In that case, run
+
+install.packages("nycflights13")
+
+from the console or an R Script file.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(nycflights13)
+```
+
+Tibbles are a modern take on data frames. They keep the features that have stood the test of time, and drop the features that used to be convenient but are now frustrating (i.e. converting character vectors to factors). (Note: this conversion no longer takes place for standard R data frames since R 4.0).
+
+## 10.2 Creating tibbles
+
+Let's first look at a classic data frame which comes with R: `iris`. For convenience we create a local copy `df_iris`:
+
+```{r}
+df_iris <- iris
+class(df_iris)
+```
+
+The `class()` function is useful when you are jumping back and forth between data frames and tibbles, or to check the structure of a data set you inherit from somewhere else.
+
+We can 'coerce' a classic data frame to be a tibble using the `as_tibble()` function:
+
+```{r}
+tib_iris <- as_tibble(df_iris)
+class(tib_iris)
+```
+
+This is interesting. You might expect the class to be `tibble`. But "tibble" is just the colloquial term for this data structure. Under the hood, the class is `tbl_df` which is a sub-class of `data.frame`, created to have different default behaviour.
+
+You can build your own tibbles from individual vectors with `tibble()`.
+
+```{r}
+my_tibble <- tibble(
+  x = 1:5, 
+  y = c(1), 
+  z = x ^ 2 + y
+)
+
+my_tibble
+```
+
+Notice that column `y` has 'recycled' its value 5 times to fit the dimensions of the tibble. Recycling is a feature of R: short vectors are repeated to match the length of the longest vectors. When building tibbles *only vectors of length 1 are recycled*. What happens if we try to recycle a vector of length 2?
+
+```{r eval=FALSE}
+my_tibble <- tibble(
+  x = 1:5, 
+  y = c(1,2), 
+  z = x ^ 2 + y
+)
+
+my_tibble
+```
+This is because recycling vectors of greater lengths is a frequent source of bugs.
+
+Let's just check the class:
+```{r}
+class(my_tibble)
+```
+
+`tibble()` builds columns sequentially. When defining a column, you can only refer to columns created earlier in the definition. What happens if we break that rule?
+
+```{r eval=FALSE}
+my_tibble <- tibble(
+  x = 1:5, 
+  z = x ^ 2 + y,
+  y = c(1, 3, 5, 7, 9)
+  
+)
+```
+Notice the definition of `z` calls both `x` and `y`. `x` is fine, but `y` has not yet been defined.
+
+We can also build character vectors into a tibble with no problem:
+
+```{r}
+my_tibble <- tibble(
+  x = 1:5, 
+  y = c("foo")
+)
+
+my_tibble
+```
+
+tibbles also give you the option of using 'non-syntactic' column names:
+
+This is fine:
+
+```{r}
+tib <- tibble(
+    abc = 1, 
+    xyz = "a")
+
+tib
+```
+
+But this doesn't work, since the space in the name breaks the syntax rules of R variables:
+
+```{r eval=FALSE}
+tib <- tibble(
+    a bc = 1, 
+    x yz = "a")
+
+tib
+```
+
+But if we use backticks around the names all is good:
+
+```{r}
+tib <- tibble(
+    `a bc` = 1, 
+    `x yz` = "a")
+
+tib
+```
+
+## 10.3 Tibbles vs. data.frame
+
+There are two main differences in the usage of a tibble vs. a classic data.frame: printing and subsetting.
+
+### 10.3.1 Printing
+
+Tibbles have a refined print method that shows only the first 10 rows, and all the columns that fit on screen. This makes it much easier to work with large data. In addition to its name, each column reports its type.
+
+Let's first print the iris data.frame:
+
+```{r}
+df_iris
+```
+
+This doesn't look so bad! But RStudio is stepping in here to format the printing of the data frame *inside* the Rmarkdown file.
+
+We can see the raw output of printing the data frame by executing it directly from the console.
+
+This spews out the entire data frame. Here it's a mere 150 rows, but if it was 150,000 rows it would all get dumped to the console.
+
+Interestingly, this problem of over-share occurs when we Knit the markdown file.
+
+Also notice that in the 'raw' print -- both in the console and the Knit result, the **type** of the column is not indicated, but it is shown when the data frame is printed inside the RMarkdown file. Again, this is RStudio adding it's magic sugar, but the result is that it actually hides the difference between printing a data frame and a tibble.
+
+Now let's print the tibble:
+
+```{r}
+tib_iris
+```
+*Inside the RMarkdown file* this looks exactly the same as the data frame! But again, this is RStudio covering up the differences. What happens when we run this inside the console look at the Knit output. It looks entirely different.
+
+In both cases we see the type of each column. In addition, the default tibble print function only shows the first 10 rows, so your data doesn't run off the end of the console, and doesn't fill-up your Knit document. If you really want to show more rows you can use an explicit `print()` function with an option:
+
+```{r}
+tib_iris %>% 
+    print(n = 20)
+```
+
+#### 10.3.2 Subsetting
+
+So far all the tools you’ve learned have worked with complete data frames. If you want to pull out a single variable, you need some new tools, $ and [[. [[ can extract by name or position; $ only extracts by name but is a little less typing.
+
+Let's pull out the 5th column: Species:
+
+```{r}
+tib_iris$Species
+```
+
+```{r}
+tib_iris[[5]]
+```
+
+It should be stressed that these subsetting tools are not specific to tibbles, they work exactly the same on data frames.
+
+Also note that our backtick notation works here as well:
+
+```{r}
+tib$`a bc`
+tib$`x yz`
+```
+
+But didn't we already learn a tidyverse function for extracting columns? Specifically, `select()`?
+
+```{r}
+tib_iris %>% 
+    select(Species)
+```
+
+The difference is that the output of a dplyr function is **always another tibble**:
+
+```{r}
+class(tib_iris %>% 
+    select(Species))
+```
+
+This is a tibble which happens to have exactly one column. But if we want to pull out the **contents** of that column, a single vector, we use the `$` or `[[]]` notation:
+
+```{r}
+class(tib_iris$Species)
+```
+```{r}
+class(tib_iris[[1]])
+```
+
+We will explore subsetting in greater detail when we get to Chapter 20: Vectors.
+
+#### `pull()`
+
+The `$` or `[[]]` notation is part of base R, but there is in fact a new tidyverse version of these: `pull()`. It extracts both by name and position:
+
+```{r}
+tib_iris %>% 
+    pull(Species)
+```
+```{r}
+tib_iris %>% 
+    pull(5)
+```
+ `pull()` also lets you count from the final column:
+
+```{r}
+tib_iris %>% 
+    pull(-1)
+```
+In fact, `pull()` without an argument pulls the final column, on the assumption that this is often the last column added, using `mutate()` for example, which always adds new columns at the end of your dataset.
+
+```{r}
+tib_iris %>% 
+    pull()
+```
+
+## 10.5 Exercises
+
+1. How can you tell if an object is a tibble? (Hint: try printing mtcars, which is a regular data frame). How else can you tell if it's a tibble or not, other than printing it?
+
+2. Convert it to a tibble, and print it again.
+
+3. Find three ways to identify the displacement `disp` vector.
+
+4. You also have available a dataset called flights (part of the nycflights13 package we load at the beginning of this file). Is this a tibble or a data frame? How do you know? When it comes to printing this data set why is the distinction particularly important?
+
+
