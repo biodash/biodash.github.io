@@ -20,7 +20,7 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 ### Upcoming sessions
 
-TBA
+TBA...
 
 <br>
 
