@@ -5,11 +5,10 @@ title: "Schedule for Code Club"
 
 ------------------------------------------------------------------------
 
-## Fall '22
+## Spring '23
 
-We are meeting on **Thursdays at 3 pm**,
-continuing to work our way through the
-[The R for Data Science book (R4DS)](https://r4ds.had.co.nz/).
+We are planning to meet on **Thursdays at 3 pm**,
+starting on January 12th.
 
 If you haven't previously signed up,
 [do so using the form](/codeclub-about/#sign-up)!
@@ -21,18 +20,19 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 ### Upcoming sessions
 
+TBA
+
+<br>
+
+------------------------------------------------------------------------
+
+## Previous semesters
+
+Ask us for access to the Zoom recordings of previous Code Club sessions!
+
+### Summer - Fall '22
+
 - R4DS = [The R for Data Science book](https://r4ds.had.co.nz/)
-
-- Chapters/sections for each session are tentative -
-  we will announce ahead of each session what we will cover that week.
-
-| Session     | Date      | Presenter     | Topic                                                            |
-|-------------|-----------|---------------|------------------------------------------------------------------|
-| S04E16      | Dec 01    | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis II**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
-| S04E17      | Dec 08    | Michael B.    | [**R4DS, Ch. 10: Tibbles**](https://r4ds.had.co.nz/tibbles.html) |
-| S04E18      | Dec 15    | Stephen       | [**R4DS, Ch. 11: Data Import**](https://r4ds.had.co.nz/data-import.html) |
-
-### Earlier R4DS sessions
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
@@ -51,14 +51,8 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | S04E13      | Nov 03    | Mike S.       | [**R4DS, Ch. 5.6: Data transformation V - summarize() part 1**](/codeclub/S04E13) |
 | S04E14      | Nov 10    | Jessica       | [**R4DS, Ch. 5.6: Data transformation V - summarize() part 2**](/codeclub/s04e14_r4ds-ch5-5-again/) |
 | S04E15      | Nov 17    | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis I**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
-
-<br>
-
-------------------------------------------------------------------------
-
-## Previous semesters
-
-Ask us for access to the Zoom recordings of previous Code Club sessions!
+| S04E16      | Dec 01    | Jelmer        | [**R4DS, Ch. 7.1-7.3: Exploratory Data Analysis II**](https://r4ds.had.co.nz/exploratory-data-analysis.html) | |
+| S04E17      | Dec 08    | Michael B.    | [**R4DS, Ch. 10: Tibbles**](https://r4ds.had.co.nz/tibbles.html) |
 
 ### Spring '22
 
