@@ -8,7 +8,7 @@ title: "Schedule for Code Club"
 ## Spring '23
 
 We are planning to meet on **Thursdays at 3 pm**,
-starting on January 12th.
+starting on January 19th.
 
 If you haven't previously signed up,
 [do so using the form](/codeclub-about/#sign-up)!
