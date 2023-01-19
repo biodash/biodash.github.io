@@ -20,7 +20,25 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 ### Upcoming sessions
 
-TBA...
+- R4DS = [The R for Data Science book](https://r4ds.hadley.nz/)
+  Note that we have switched to the second edition!
+
+| Session | Date    | Presenter  | Topic                                                            |
+|---------|---------|------------|------------------------------------------------------------------|
+| S05E01  | Jan 26  | Jelmer     | [**R4DS, Ch. 4: Pipes**](https://r4ds.hadley.nz/workflow-pipes.html) |
+| S05E02  | Feb 02  | Stephen    | [**R4DS, Ch. 6: Tidy Data, I**](https://r4ds.hadley.nz/data-tidy.html) |
+| S05E03  | Feb 09  | Jessica    | [**R4DS, Ch. 6: Tidy Data, II**](https://r4ds.hadley.nz/data-tidy.html) |
+| S05E04  | Feb 16  | Michael    | [**R4DS, Ch. 7: Code Style**](https://r4ds.hadley.nz/workflow-style.html) |
+| S05E05  | Feb 23  | Jelmer     | [**R4DS, Ch. 8: Data Import, I**](https://r4ds.hadley.nz/data-import.html) |
+| S05E06  | Mar 02  | Stephen    | [**R4DS, Ch. 8: Data Import, II**](https://r4ds.hadley.nz/data-import.html) |
+| S05E07  | Mar 09  | TBD        | TBD |
+| -       | Mar 16  | -          | Spring Break |
+| S05E08  | Mar 23  | TBD        | TBD |
+| S05E09  | Mar 30  | TBD        | TBD |
+| S05E10  | Apr 06  | TBD        | TBD |
+| S05E11  | Apr 13  | TBD        | TBD |
+| S05E12  | Apr 20  | TBD        | TBD |
+| S05E13  | Apr 27  | TBD        | TBD |
 
 <br>
 
