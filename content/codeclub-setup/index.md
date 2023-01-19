@@ -17,7 +17,7 @@ Additional setup instructions for individual sessions will appear in the posts f
   
 - Install the *tidyverse* package and test if you can load it.
   
-- **Prefer not to install anything locally?**
+- Prefer not to install anything locally?
   [Contact Jelmer](mailto:poelstra.1@osu.edu) to be added to the Ohio Supercomputer project for Code Club.
 
 - **Run into issues or have questions?**
@@ -41,9 +41,9 @@ Additional setup instructions for individual sessions will appear in the posts f
   when you start R, and you can also get it by typing `sessionInfo()` and checking
   the first line of the output.
   
-- As of June 2022, ideally, your R version is at least `4.2.0`.
-  But if you're reluctant to update, you should generally be fine with an R
-  version of at least `4.0`.
+- Currently (January 2023), we would recommend R version `4.2.0` or higher.
+  And since we'll work with the "base R pipe",
+  you'll definitely need version `4.1.0` or higher.
   
 - To update R, [see this page for instructions](/tutorials/r-resources-tips/#updating-r).
 
