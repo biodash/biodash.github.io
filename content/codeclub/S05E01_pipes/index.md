@@ -5,10 +5,10 @@ subtitle: "Introducing a new season of Code Club, in which we will continue read
 summary: "We'll continue with the R for Data Science book in the 5th season of Code Club, now switching to the brand-new second edition! We'll talk about pipes in R, which is covered in the short Chapter 5 of the book."
 authors: [admin]
 tags: [codeclub, r4ds]
-date: "2023-01-23"
-lastmod: "2023-01-23"
+date: "2023-01-24"
+lastmod: "2023-01-24"
 toc: true
-rmd_hash: 798dba400a3e5f8b
+rmd_hash: cd2a8296d425f9c3
 
 ---
 
@@ -126,7 +126,7 @@ Once you have a running instance of RStudio, **create a new R script** by clicki
 
 <div>
 
-### Check your version of R
+### Your turn: Check your R version
 
 Take a look at your ***version of R***: this was printed in the console when you started RStudio (see the RStudio screenshot above).
 
@@ -165,7 +165,7 @@ The *tidyverse* is unusual in that it is a *collection* of packages that can sti
 
 <div>
 
-### Check that you can load the tidyverse
+### Your turn: Load the tidyverse
 
 To check if you can load the *tidyverse*, run the following and see if you get similar output as printed below:
 
@@ -179,7 +179,7 @@ To check if you can load the *tidyverse*, run the following and see if you get s
 <img src=img/load_tidyverse.png width="90%">
 </p>
 
-If instead, you got something like:
+If instead, you got something like...
 
 <div class="highlight">
 
@@ -187,14 +187,7 @@ If instead, you got something like:
 
 </div>
 
-...that means you still need to install it:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># (Note: the package name is "quoted" in the install.packages() function)</span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span></span></code></pre>
-
-</div>
+...then you still need to install it (`install.packages("tidyverse")`).
 
 </div>
 
@@ -211,81 +204,6 @@ If instead, you got something like:
 A pipe is a programming tool that takes the output of one command (in R, a *function*) and passes it on to be used as the input for another command.
 
 Pipes prevent you from having to save intermediate output to a file or object. They also make your code shorter and easier to understand.
-
-Pipes originate in Unix terminals, and are ubiquitous there, so for those of you that are curious, I've included two examples of using the Unix pipe, and the corresponding commands in R, in the dropdown box below.
-
-<details>
-<summary>
-<b>Two Unix & R pipe examples</b> (click here)
-</summary>
-
-<br>
-
-You might want to *count the number of files in a folder*, which involve two distinct processes: obtaining a list of files, and counting them.
-
-We can get a **l**i**s**t of files in the current folder with `ls`, count with `wc -l` (**w**ord**c**ount -**l**ines), and connect these processes with the pipe `|`:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'># The output of 'ls' is piped (with '|') to 'wc -l':
-ls | wc -l
-
-
-#> 4</code></pre>
-
-</div>
-
-We can do the same in R, where the function [`dir()`](https://rdrr.io/r/base/list.files.html) lists files, the function [`length()`](https://rdrr.io/r/base/length.html) counts the number of elements, and `|>` is the pipe symbol:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>|&gt;</span>  <span class='nf'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='o'>(</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; [1] 4</span></span></code></pre>
-
-</div>
-
-------------------------------------------------------------------------
-
-As another example, let's say we have a file `words.txt` that contains one word per line, some repeated:
-
-    table
-    chair
-    desk
-    chair
-    desk
-    table
-    chair
-
-We can get a list of unique words and their number of occurrences using:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'># 'cat' prints the contents of the file
-# 'sort' sorts alphabetically
-# 'uniq -c' counts the number of occurrences for each entry 
-cat words.txt | sort | uniq -c
-
-
-#>       3 chair
-#>       2 desk
-#>       2 table</code></pre>
-
-</div>
-
-And we can again do the same in R:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># 'readLines()' reads the contents of a file into R</span></span>
-<span><span class='c'># 'table()' counts the number of occurrences for each entry</span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span><span class='o'>(</span><span class='s'>"words.txt"</span><span class='o'>)</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='o'>(</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; </span></span>
-<span><span class='c'>#&gt; chair  desk table </span></span>
-<span><span class='c'>#&gt;     3     2     2</span></span></code></pre>
-
-</div>
-
-</details>
 
 ### A dataframe example
 
@@ -374,19 +292,112 @@ But this can be done much more elegantly, and without wasting computer memory on
 
 </div>
 
+### Two Unix & R examples
+
+Pipes originate in Unix terminals, and are ubiquitous there. So for those of you that are curious, I've included two examples of using the Unix pipe, and the corresponding commands in R, in the dropdown box below.
+
+<details>
+<summary>
+<b>See the examples</b> (click here)
+</summary>
+
+<br>
+
+**Counting files**
+
+You might want to *count the number of files in a folder*, which involve two distinct processes: obtaining a list of files, and counting them.
+
+We can get a **l**i**s**t of files in the current folder with `ls`, count with `wc -l` (**w**ord**c**ount -**l**ines), and connect these processes with the pipe `|`:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'># The output of 'ls' is piped (with '|') to 'wc -l':
+ls | wc -l
+
+
+#> 4</code></pre>
+
+</div>
+
+We can do the same in R, where the function [`dir()`](https://rdrr.io/r/base/list.files.html) lists files, the function [`length()`](https://rdrr.io/r/base/length.html) counts the number of elements, and `|>` is the pipe symbol:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>|&gt;</span>  <span class='nf'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='o'>(</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] 4</span></span></code></pre>
+
+</div>
+
+<br>
+
+------------------------------------------------------------------------
+
+**Counting word frequencies**
+
+As another example, let's say we have a file `words.txt` that contains one word per line:
+
+    table
+    chair
+    desk
+    chair
+    desk
+    table
+    chair
+
+We can get a list of unique words and their number of occurrences using:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'># 'cat' prints the contents of the file
+# 'sort' sorts alphabetically
+# 'uniq -c' counts the number of occurrences for each entry 
+cat words.txt | sort | uniq -c
+
+
+#>       3 chair
+#>       2 desk
+#>       2 table</code></pre>
+
+</div>
+
+And we can again do the same in R:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># 'readLines()' reads the contents of a file into R</span></span>
+<span><span class='c'># 'table()' counts the number of occurrences for each entry</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span><span class='o'>(</span><span class='s'>"words.txt"</span><span class='o'>)</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='o'>(</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; </span></span>
+<span><span class='c'>#&gt; chair  desk table </span></span>
+<span><span class='c'>#&gt;     3     2     2</span></span></code></pre>
+
+</div>
+
+</details>
+
 ### The other pipe and a keyboard shortcut
 
 Those of you who've worked with R for a bit are likely familiar with **another pipe symbol: `%>%`**.
 
-This pipe is in the *magrittr* package that is loaded as part of the *tidyverse*, and until recently was the standard pipe used in tidyverse documentation and in the previous edition of R4DS. There has been a push to switch to the base R pipe since it was introduced in May 2021, mainly because it does not rely on an additional package. In addition, it's convenient that it's more similar to the Unix type and is one character less to type.
+This pipe is in the *magrittr* package that is loaded as part of the *tidyverse*, and until recently was the standard pipe used in tidyverse documentation and in the previous edition of R4DS. There has been a gradual switch to the base R pipe since it was introduced in May 2021, mainly because it does not rely on a package. In addition, it's convenient that the base R pipe `|>` is more similar to the Unix pipe (`|`), and is one character typing than `%>%`.
 
 The number of characters shouldn't make much of a difference, though, because it remains even quicker to use the **RStudio keyboard shortcut for the pipe,** **which is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>.**
+
+<div class="puzzle">
+
+<div>
+
+### Your turn: set the keyboard shortcut
 
 To make that shortcut *map to the base R pipe*, go to `Tools` in the top menu bar, click `Global Options`, click `Code` in the left menu, and check the box `Use native pipe operator, |> (requires R 4.1+)`:
 
 <p align="center">
 <img src=img/rstudio-pipe-options.png width="60%">
 </p>
+
+</div>
+
+</div>
 
 ### Using the `_` placeholder
 
@@ -414,7 +425,7 @@ The R pipe passes its contents to the *first argument* of a function. In other w
 
 </div>
 
-Being aware of this is useful when you run into cases where you want the piped data to go to say the second or third argument of a function (see the box below).
+This placeholder is useful when the piped data should go to, say, the second or third argument of a function (see the box below).
 
 <div class="alert alert-note">
 
@@ -424,35 +435,43 @@ Being aware of this is useful when you run into cases where you want the piped d
 
 What if we need our piped data to go to another argument than the function's first one?
 
-Let's see an example with the [`gsub()`](https://rdrr.io/r/base/grep.html) function, which can be used to replace characters in text strings:
+Let's see an example with the [`gsub()`](https://rdrr.io/r/base/grep.html) function, which can be used to replace characters in text strings as follows:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>'N'</span>, replacement <span class='o'>=</span> <span class='s'>'-'</span>, x <span class='o'>=</span> <span class='s'>"ACCGNNT"</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>"N"</span>, replacement <span class='o'>=</span> <span class='s'>"-"</span>, x <span class='o'>=</span> <span class='s'>"ACCGNNT"</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] "ACCG--T"</span></span><span></span>
+<span><span class='c'># Or, without naming the arguments:</span></span>
+<span><span class='c'># gsub("N", "-", "ACCGNNT")</span></span></code></pre>
+
+</div>
+
+As you could see above, the input data (the string `x`) is not the first but the third argument to [`gsub()`](https://rdrr.io/r/base/grep.html). To use the pipe with [`gsub()`](https://rdrr.io/r/base/grep.html), use the `_` placeholder:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='s'>"ACCGNNT"</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>"N"</span>, replacement <span class='o'>=</span> <span class='s'>"-"</span>, x <span class='o'>=</span> <span class='nv'>_</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; [1] "ACCG--T"</span></span></code></pre>
 
 </div>
 
-As you could see above, the input data (the string `x`) is not the first but the third argument to this function.
+If you're wondering how you can know the order of the arguments of a function, watch the pop-up box when you type a function's name and opening parenthesis (see the screenshot below), or check the help with e.g. [`?gsub`](https://rdrr.io/r/base/grep.html).
 
-To use the pipe with [`gsub()`](https://rdrr.io/r/base/grep.html), we can use the `_` placeholder:
+<p align="center">
+<img src=img/gsub.png width="45%">
+</p>
 
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='s'>"ACCGNNT"</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>'N'</span>, replacement <span class='o'>=</span> <span class='s'>'-'</span>, x <span class='o'>=</span> <span class='nv'>_</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; [1] "ACCG--T"</span></span></code></pre>
-
-</div>
+<br>
 
 ------------------------------------------------------------------------
 
-Above, I mentioned that the pipe passes its contents to the *first argument* of a function. But to be more precise, the pipe passes the object to the first *unnamed* argument of the receiving function. Therefore, the following also works:
+Above, I mentioned that the pipe passes its contents to the *first argument* of a function. But to be more precise, the pipe passes the object to *the first argument that you didn't mention by name*. Therefore, the following also works:
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># The piped data is being passed to the 3rd argument, 'x',</span></span>
-<span><span class='c'># which is the first argument that we don't refer to below: </span></span>
-<span><span class='s'>"ACCGNNT"</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>'N'</span>, replacement <span class='o'>=</span> <span class='s'>'-'</span><span class='o'>)</span></span>
+<span><span class='c'># which is the first of the function's arguments that we don't refer to below: </span></span>
+<span><span class='s'>"ACCGNNT"</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>"N"</span>, replacement <span class='o'>=</span> <span class='s'>"-"</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; [1] "ACCG--T"</span></span></code></pre>
 
 </div>
@@ -462,7 +481,7 @@ Additionally, make sure you always *name* the argument that you pass `_` to:
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'># Using '_' without the argument name ('x=') doesn't work:
-"ACCGNNT" |> gsub(pattern = 'N', replacement = '-', _)
+"ACCGNNT" |> gsub(pattern = "N", replacement = "-", _)
 
 <span><span class='c'>#&gt; Error: pipe placeholder can only be used as a named argument</span></span></code></pre>
 
@@ -473,6 +492,54 @@ Additionally, make sure you always *name* the argument that you pass `_` to:
 </div>
 
 <br>
+
+<div class="puzzle">
+
+<div>
+
+### Your turn: Use the pipe
+
+With one single "pipeline" (operations connected by a pipe `|>`), manipulate the `diamonds` dataframe such that you:
+
+-   Print only the columns `cut`, `color`, `depth`, and `price`.
+-   Print only diamonds (rows) with a `depth` less than 50
+
+<details>
+<summary>
+<b>Hints</b>(click here)
+</summary>
+
+<br>
+
+This is quite similar to the example given above, using the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function to select certain columns, and the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function to select certain rows.
+
+</details>
+<details>
+<summary>
+<b>Solution</b>(click here)
+</summary>
+
+<br>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span>.data <span class='o'>=</span> <span class='nv'>_</span>, <span class='nv'>cut</span>, <span class='nv'>color</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span>.data <span class='o'>=</span> <span class='nv'>_</span>, <span class='nv'>depth</span> <span class='o'>&lt;</span> <span class='m'>50</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 4</span></span></span>
+<span><span class='c'>#&gt;   cut   color depth price</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Fair  G        43  <span style='text-decoration: underline;'>3</span>634</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Fair  G        44  <span style='text-decoration: underline;'>4</span>032</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Ideal J        43  <span style='text-decoration: underline;'>4</span>778</span></span></code></pre>
+
+</div>
+
+</details>
+
+</div>
+
+</div>
 
 ------------------------------------------------------------------------
 

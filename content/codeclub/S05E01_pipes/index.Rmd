@@ -161,7 +161,7 @@ Now, you should see all 4 "panes" that the RStudio window is divided into:
 
 <div class="puzzle"><div>
 
-### Check your version of R
+### Your turn: Check your R version
 
 Take a look at your _**version of R**_:
 this was printed in the console when you started RStudio
@@ -210,7 +210,7 @@ for instance:
 
 <div class="puzzle"><div>
 
-### Check that you can load the tidyverse
+### Your turn: Load the tidyverse
 
 To check if you can load the _tidyverse_,
 run the following and see if you get similar output as printed below:
@@ -223,18 +223,13 @@ library(tidyverse)
 <img src=img/load_tidyverse.png width="90%">
 </p>
 
-If instead, you got something like:
+If instead, you got something like...
 
 ```{r}
 #> Error in library(tidyverse) : there is no package called ‘tidyverse’
 ```
 
-...that means you still need to install it:
-
-```{r, eval = FALSE}
-# (Note: the package name is "quoted" in the install.packages() function)
-install.packages("tidyverse")
-```
+...then you still need to install it (`install.packages("tidyverse")`).
 
 </div></div>
 
@@ -251,69 +246,6 @@ and passes it on to be used as the input for another command.
 
 Pipes prevent you from having to save intermediate output to a file or object.
 They also make your code shorter and easier to understand.
-
-Pipes originate in Unix terminals, and are ubiquitous there,
-so for those of you that are curious,
-I've included two examples of using the Unix pipe,
-and the corresponding commands in R, in the dropdown box below.
-
-<details><summary><b>Two Unix & R pipe examples</b> (click here)</summary>
-<br>
-
-You might want to _count the number of files in a folder_,
-which involve two distinct processes: obtaining a list of files, and counting them.
-
-We can get a **l**i**s**t of files in the current folder with `ls`,
-count with `wc -l` (**w**ord**c**ount -**l**ines),
-and connect these processes with the pipe `|`:
-
-```{bash}
-# The output of 'ls' is piped (with '|') to 'wc -l':
-ls | wc -l
-```
-
-We can do the same in R, where the function `dir()` lists files,
-the function `length()` counts the number of elements,
-and `|>` is the pipe symbol:
-
-```{r}
-dir() |>  length()
-```
-
-----------
-
-As another example,
-let's say we have a file `words.txt` that contains one word per line,
-some repeated:
-
-```
-table
-chair
-desk
-chair
-desk
-table
-chair
-```
-
-We can get a list of unique words and their number of occurrences using:
-
-```{bash}
-# 'cat' prints the contents of the file
-# 'sort' sorts alphabetically
-# 'uniq -c' counts the number of occurrences for each entry 
-cat words.txt | sort | uniq -c
-```
-
-And we can again do the same in R:
-
-```{r}
-# 'readLines()' reads the contents of a file into R
-# 'table()' counts the number of occurrences for each entry
-readLines("words.txt") |> table()
-```
-
-</details>
 
 ### A dataframe example
 
@@ -362,6 +294,76 @@ diamonds |>
   filter(price > 1000)
 ```
 
+### Two Unix & R examples
+
+Pipes originate in Unix terminals, and are ubiquitous there.
+So for those of you that are curious,
+I've included two examples of using the Unix pipe,
+and the corresponding commands in R, in the dropdown box below.
+
+<details><summary><b>See the examples</b> (click here)</summary>
+<br>
+
+**Counting files**
+
+You might want to _count the number of files in a folder_,
+which involve two distinct processes: obtaining a list of files, and counting them.
+
+We can get a **l**i**s**t of files in the current folder with `ls`,
+count with `wc -l` (**w**ord**c**ount -**l**ines),
+and connect these processes with the pipe `|`:
+
+```{bash}
+# The output of 'ls' is piped (with '|') to 'wc -l':
+ls | wc -l
+```
+
+We can do the same in R, where the function `dir()` lists files,
+the function `length()` counts the number of elements,
+and `|>` is the pipe symbol:
+
+```{r}
+dir() |>  length()
+```
+
+<br>
+
+----------
+
+**Counting word frequencies**
+
+As another example,
+let's say we have a file `words.txt` that contains one word per line:
+
+```
+table
+chair
+desk
+chair
+desk
+table
+chair
+```
+
+We can get a list of unique words and their number of occurrences using:
+
+```{bash}
+# 'cat' prints the contents of the file
+# 'sort' sorts alphabetically
+# 'uniq -c' counts the number of occurrences for each entry 
+cat words.txt | sort | uniq -c
+```
+
+And we can again do the same in R:
+
+```{r}
+# 'readLines()' reads the contents of a file into R
+# 'table()' counts the number of occurrences for each entry
+readLines("words.txt") |> table()
+```
+
+</details>
+
 ### The other pipe and a keyboard shortcut
 
 Those of you who've worked with R for a bit are likely familiar with
@@ -371,15 +373,19 @@ This pipe is in the _magrittr_ package that is loaded as part of the
 _tidyverse_,
 and until recently was the standard pipe used in tidyverse documentation and in
 the previous edition of R4DS.
-There has been a push to switch to the base R pipe since it was introduced
-in May 2021, mainly because it does not rely on an additional package.
-In addition, it's convenient that it's more similar to the Unix type
-and is one character less to type.
+There has been a gradual switch to the base R pipe since it was introduced
+in May 2021, mainly because it does not rely on a package.
+In addition, it's convenient that the base R pipe `|>` is more similar to the
+Unix pipe (`|`), and is one character typing than `%>%`.
 
 The number of characters shouldn't make much of a difference, though,
 because it remains even quicker to use the
 **RStudio keyboard shortcut for the pipe,**
 **which is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>.**
+
+<div class="puzzle"><div>
+
+### Your turn: set the keyboard shortcut
 
 To make that shortcut _map to the base R pipe_,
 go to `Tools` in the top menu bar,
@@ -390,6 +396,8 @@ and check the box `Use native pipe operator, |> (requires R 4.1+)`:
 <p align="center">
 <img src=img/rstudio-pipe-options.png width="60%">
 </p>
+
+</div></div>
 
 ### Using the `_` placeholder
 
@@ -403,8 +411,8 @@ diamonds |>
   filter(.data = _, price > 1000)
 ```
 
-Being aware of this is useful when you run into cases where you want the piped
-data to go to say the second or third argument of a function (see the box below).
+This placeholder is useful when the piped data should go to, say,
+the second or third argument of a function (see the box below).
 
 <div class="alert alert-note"><div>
 
@@ -414,45 +422,89 @@ What if we need our piped data to go to another argument
 than the function's first one?
 
 Let's see an example with the `gsub()` function,
-which can be used to replace characters in text strings:
+which can be used to replace characters in text strings as follows:
 
 ```{r}
-gsub(pattern = 'N', replacement = '-', x = "ACCGNNT")
+gsub(pattern = "N", replacement = "-", x = "ACCGNNT")
+
+# Or, without naming the arguments:
+# gsub("N", "-", "ACCGNNT")
 ```
 
 As you could see above,
-the input data (the string `x`) is not the first but the third argument to
-this function.
-
-To use the pipe with `gsub()`, we can use the `_` placeholder:
+the input data (the string `x`) is not the first but the third argument to `gsub()`.
+To use the pipe with `gsub()`, use the `_` placeholder:
 
 ```{r}
-"ACCGNNT" |> gsub(pattern = 'N', replacement = '-', x = _)
+"ACCGNNT" |> gsub(pattern = "N", replacement = "-", x = _)
 ```
+
+If you're wondering how you can know the order of the arguments of a function,
+watch the pop-up box when you type a function's name and opening parenthesis
+(see the screenshot below),
+or check the help with e.g. `?gsub`.
+
+<p align="center">
+<img src=img/gsub.png width="45%">
+</p>
+
+<br>
 
 ----------
 
 Above, I mentioned that the pipe passes its contents to the _first argument_
 of a function.
-But to be more precise, the pipe passes the object to the first _unnamed_
-argument of the receiving function.
+But to be more precise,
+the pipe passes the object to _the first argument that you didn't mention by name_.
 Therefore, the following also works:
 
 ```{r}
 # The piped data is being passed to the 3rd argument, 'x',
-# which is the first argument that we don't refer to below: 
-"ACCGNNT" |> gsub(pattern = 'N', replacement = '-')
+# which is the first of the function's arguments that we don't refer to below: 
+"ACCGNNT" |> gsub(pattern = "N", replacement = "-")
 ```
 
 Additionally, make sure you always _name_ the argument that you pass `_` to:
 
 ```{r, error=TRUE}
 # Using '_' without the argument name ('x=') doesn't work:
-"ACCGNNT" |> gsub(pattern = 'N', replacement = '-', _)
+"ACCGNNT" |> gsub(pattern = "N", replacement = "-", _)
 ```
 
 </div></div>
 
 <br>
+
+<div class="puzzle"><div>
+
+### Your turn: Use the pipe
+
+With one single "pipeline" (operations connected by a pipe `|>`),
+manipulate the `diamonds` dataframe such that you:
+
+- Print only the columns `cut`, `color`, `depth`, and `price`.
+- Print only diamonds (rows) with a `depth` less than 50
+
+<details><summary><b>Hints</b>(click here)</summary>
+<br>
+
+This is quite similar to the example given above,
+using the `select()` function to select certain columns,
+and the `filter()` function to select certain rows.
+
+</details>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+diamonds |>
+  select(.data = _, cut, color, depth, price) |>
+  filter(.data = _, depth < 50)
+```
+
+</details>
+
+</div></div>
 
 ----
