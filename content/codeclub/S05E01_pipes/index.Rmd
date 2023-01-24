@@ -275,16 +275,14 @@ and saving the output in a new dataframe called `diamonds_simple`:
 
 ```{r}
 # The first argument is the input dataframe, the others are the columns we want
-diamonds_simple <- select(.data = diamonds,
-                          carat, cut, price)
+diamonds_simple <- select(diamonds, carat, cut, price)
 ```
 
 Next, we take `diamonds_simple` and use the `filter()` function
 to only select the diamonds (_rows_) that we want:
 
 ```{r}
-filter(.data = diamonds_simple,
-       price > 1000)
+filter(diamonds_simple, price > 1000)
 ```
 
 But this can be done much more elegantly,
@@ -295,6 +293,10 @@ diamonds |>
   select(carat, cut, price) |>
   filter(price > 1000)
 ```
+
+(Above, we used the pipe not just in between `select()` and `filter()`,
+but also _before_ `select()`.
+That adds a line but also makes it even easier to see what's being done.)
 
 #### Two Unix & R examples
 
@@ -382,7 +384,7 @@ the previous edition of R4DS.
 There has been a gradual switch to the base R pipe since it was introduced
 in May 2021, mainly because it does not rely on a package.
 In addition, it's convenient that the base R pipe `|>` is more similar to the
-Unix pipe `|`, and is one character fewer to type than `%>%`.
+Unix pipe `|`, and is one fewer character to type than `%>%`.
 
 The number of characters shouldn't make much of a difference, though,
 because it remains even quicker to use the
@@ -405,7 +407,53 @@ and check the box `Use native pipe operator, |> (requires R 4.1+)`:
 
 </div></div>
 
-### Using the `_` placeholder
+<br>
+
+There are some differences in the behavior of the `|>` and `%>%` pipes
+in more advanced use cases, which the book chapter goes into.
+
+If you ever need to use the pipe with a function where the piped data is not
+the first argument,
+see the Bonus section below about using the `_` placeholder.
+
+<div class="puzzle"><div>
+
+### Your turn: Use the pipe
+
+With one single "pipeline" (operations connected by a pipe `|>`),
+manipulate the `diamonds` dataframe such that you:
+
+- print only the columns `cut`, `color`, `depth`, and `price`, and
+- print only diamonds (rows) with a `depth` of less than 50.
+
+How many diamonds have a `depth` of less than 50?
+
+<details><summary><b>Hints</b>(click here)</summary>
+<br>
+
+This is quite similar to the example given above:
+use the `select()` function to select certain columns,
+and the `filter()` function to select certain rows.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+diamonds |>
+  select(.data = _, cut, color, depth, price) |>
+  filter(.data = _, depth < 50)
+```
+
+</details>
+</div></div>
+
+<br>
+
+### Bonus: Using the `_` placeholder
 
 The R pipe passes its contents to the _first argument_ of a function.
 In other words, the code we saw above is shorthand for the following,
@@ -415,14 +463,11 @@ where **`_`** is the placeholder for the data that the pipe passes on:
 diamonds |>
   select(.data = _, carat, cut, price) |>
   filter(.data = _, price > 1000)
+
+diamonds %>%
+  select(., carat, cut, price) %>%
+  filter(., price > 1000)
 ```
-
-This placeholder is useful when the piped data should go to, say,
-the second or third argument of a function (see the box below).
-
-<div class="alert alert-note"><div>
-
-#### Piping to another argument
 
 What if we need our piped data to go to another argument
 than the function's first one?
@@ -475,44 +520,6 @@ Additionally, make sure you always _name_ the argument that you pass `_` to:
 "ACCGNNT" |> gsub(pattern = "N", replacement = "-", _)
 ```
 
-</div></div>
-
 <br>
-
-<div class="puzzle"><div>
-
-### Your turn: Use the pipe
-
-With one single "pipeline" (operations connected by a pipe `|>`),
-manipulate the `diamonds` dataframe such that you:
-
-- print only the columns `cut`, `color`, `depth`, and `price`, and
-- print only diamonds (rows) with a `depth` of less than 50.
-
-How many diamonds have a `depth` of less than 50?
-
-<details><summary><b>Hints</b>(click here)</summary>
-<br>
-
-This is quite similar to the example given above:
-use the `select()` function to select certain columns,
-and the `filter()` function to select certain rows.
-
-</details>
-
-<details><summary><b>Solution</b>(click here)</summary>
-<br>
-
-```{r}
-diamonds |>
-  select(.data = _, cut, color, depth, price) |>
-  filter(.data = _, depth < 50)
-```
-
-</details>
-
-</div></div>
 
 ----
-
-
