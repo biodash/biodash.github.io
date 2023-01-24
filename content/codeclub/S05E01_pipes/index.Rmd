@@ -1,7 +1,7 @@
 ---
 output: hugodown::md_document
-title: "S05E01: R for Data Science (2e) - Chapter 5 - Pipes"
-subtitle: "Introducing a new season of Code Club, in which we will continue reading the book R for Data Science (R4DS)"
+title: "S05E01: R for Data Science (2e) - Ch. 5 - Pipes"
+subtitle: "Introducing a new season of Code Club, in which we will continue to read the book R for Data Science (R4DS), and start with a short chapter on pipes."
 summary: "We'll continue with the R for Data Science book in the 5th season of Code Club, now switching to the brand-new second edition! We'll talk about pipes in R, which is covered in the short Chapter 5 of the book."
 authors: [admin]
 tags: [codeclub, r4ds]
@@ -25,14 +25,14 @@ library(tidyverse)
 
 ## Intro to this Code Club Season
 
-### Organizers
+#### Organizers
 
 - _Michael Broe_ -- Evolution, Ecology and Organismal Biology (EEOB)
 - _Jessica Cooperstone_ -- Horticulture & Crop Science (HCS) / Food Science & Technology (FST)
 - _Stephen Opiyo_ -- Molecular & Cellular Imaging Center (MCIC) - Columbus
 - _Jelmer Poelstra_ -- Molecular & Cellular Imaging Center (MCIC) - Wooster
 
-### Code Club practicalities
+#### Code Club practicalities
 
 - In-person (Columbus & Wooster) and Zoom hybrid
 
@@ -67,7 +67,7 @@ More general notes:
 
 <div class="alert alert-note"><div>
 
-### New to Code Club or R?
+#### New to Code Club or R?
 
 Take a look at these pages on our website:
 
@@ -77,11 +77,15 @@ Take a look at these pages on our website:
 
 </div></div>
 
+Before moving on the the chapter on pipes,
+I will start with a very brief overview of the book, the RStudio interface,
+and how to load R packages.
+
 <br>
 
 ------------------------------------------------------------------------
 
-## The R for Data Science book (R4DS)
+## R for Data Science (R4DS)
 
 This excellent book by Hadley Wickham
 (also author of many of the R packages used in the book!)
@@ -97,8 +101,7 @@ but it has an improved and more consistent programming interface or "syntax".
 Last year in Code Club, we worked through the material of a number of chapters
 of the first edition of the book, which was published in 2016.
 
-Since then, quite some development has taken place, especially in the _tidyverse_
-but also in _base R_ (such as the pipe, which we'll see in today's session).
+Since 2016, quite some R development has taken place.
 A **second edition** has been online since a couple of months,
 with completely updated and also restructured contents --
 we thought it has improved a lot!
@@ -116,15 +119,7 @@ Especially in the first sessions,
 we'll make sure to explain all code,
 including things that were covered last semester.
 
-Before moving on the the chapter on pipes,
-I will start with a very brief overview of the book, of the RStudio interface,
-and how to load R packages.
-
-<br>
-
-------------------------------------------------------------------------
-
-## Getting Started / Chapter 1
+#### What's in the book
 
 The introductory chapter of the book has this figure to show the data science
 process and what the book will cover:
@@ -134,10 +129,16 @@ process and what the book will cover:
 </p>
 
 In terms of what the book does _not_ cover,
-what may be most surprising for a book about data science
-is that it contains very little material on statistics
+it may especially be surprising for a book about data science
+that it contains very little material on _statistics_
 (even less so in the second edition, now that there is a companion book
 ["Tidy Modeling with R"](https://www.tmwr.org/) that focuses on this).
+
+<br>
+
+------------------------------------------------------------------------
+
+## Getting Up and Running
 
 ### RStudio interface
 
@@ -169,7 +170,7 @@ this was printed in the console when you started RStudio
 
 The most recent version of R is `4.2.2`.
 To use the current functionality of the "base R pipe",
-**you'll need at least version `4.2`**
+**you'll need at least version `4.2.0`**
 (and to use it at all, you need at least R version `4.1`).
 If you have a lower version of R,
 I would recommend that you update at the end or after this session following
@@ -247,7 +248,7 @@ and passes it on to be used as the input for another command.
 Pipes prevent you from having to save intermediate output to a file or object.
 They also make your code shorter and easier to understand.
 
-### A dataframe example
+### An example
 
 In R, we work a lot with "dataframes",
 rectangular data structures like spreadsheets --
@@ -294,7 +295,7 @@ diamonds |>
   filter(price > 1000)
 ```
 
-### Two Unix & R examples
+#### Two Unix & R examples
 
 Pipes originate in Unix terminals, and are ubiquitous there.
 So for those of you that are curious,
@@ -304,13 +305,18 @@ and the corresponding commands in R, in the dropdown box below.
 <details><summary><b>See the examples</b> (click here)</summary>
 <br>
 
+_(If you're trying to follow along yourself:_
+_the Unix/terminal examples will only work natively on Mac and Linux,_
+_where you can simply click the `Terminal` tab in the bottom-right RStudio_
+_panel, and issue Unix commands.)_
+
 **Counting files**
 
 You might want to _count the number of files in a folder_,
 which involve two distinct processes: obtaining a list of files, and counting them.
 
 We can get a **l**i**s**t of files in the current folder with `ls`,
-count with `wc -l` (**w**ord**c**ount -**l**ines),
+perform the counting with `wc -l` (**w**ord**c**ount -**l**ines),
 and connect these processes with the pipe `|`:
 
 ```{bash}
@@ -319,8 +325,7 @@ ls | wc -l
 ```
 
 We can do the same in R, where the function `dir()` lists files,
-the function `length()` counts the number of elements,
-and `|>` is the pipe symbol:
+while the function `length()` counts the number of elements:
 
 ```{r}
 dir() |>  length()
@@ -345,7 +350,8 @@ table
 chair
 ```
 
-We can get a list of unique words and their number of occurrences using:
+In a terminal,
+we can get a list of unique words and their number of occurrences using:
 
 ```{bash}
 # 'cat' prints the contents of the file
@@ -354,7 +360,7 @@ We can get a list of unique words and their number of occurrences using:
 cat words.txt | sort | uniq -c
 ```
 
-And we can again do the same in R:
+And to do the same thing in R:
 
 ```{r}
 # 'readLines()' reads the contents of a file into R
@@ -369,14 +375,13 @@ readLines("words.txt") |> table()
 Those of you who've worked with R for a bit are likely familiar with
 **another pipe symbol: `%>%`**.
 
-This pipe is in the _magrittr_ package that is loaded as part of the
-_tidyverse_,
-and until recently was the standard pipe used in tidyverse documentation and in
+This pipe is is loaded as part of the _tidyverse_,
+and until recently was very widely used including in the
 the previous edition of R4DS.
 There has been a gradual switch to the base R pipe since it was introduced
 in May 2021, mainly because it does not rely on a package.
 In addition, it's convenient that the base R pipe `|>` is more similar to the
-Unix pipe (`|`), and is one character typing than `%>%`.
+Unix pipe `|`, and is one character fewer to type than `%>%`.
 
 The number of characters shouldn't make much of a difference, though,
 because it remains even quicker to use the
@@ -385,9 +390,9 @@ because it remains even quicker to use the
 
 <div class="puzzle"><div>
 
-### Your turn: set the keyboard shortcut
+### Your turn: Use the `|>` pipe by default
 
-To make that shortcut _map to the base R pipe_,
+To make that keyboard shortcut _map to the base R pipe_ (instead of to `%>%`),
 go to `Tools` in the top menu bar,
 click `Global Options`,
 click `Code` in the left menu,
@@ -403,7 +408,7 @@ and check the box `Use native pipe operator, |> (requires R 4.1+)`:
 
 The R pipe passes its contents to the _first argument_ of a function.
 In other words, the code we saw above is shorthand for the following,
-where `_` is the placeholder for the data that the pipe passes on:
+where **`_`** is the placeholder for the data that the pipe passes on:
 
 ```{r}
 diamonds |>
@@ -416,7 +421,7 @@ the second or third argument of a function (see the box below).
 
 <div class="alert alert-note"><div>
 
-### Piping to another argument
+#### Piping to another argument
 
 What if we need our piped data to go to another argument
 than the function's first one?
@@ -447,8 +452,6 @@ or check the help with e.g. `?gsub`.
 <p align="center">
 <img src=img/gsub.png width="45%">
 </p>
-
-<br>
 
 ----------
 
@@ -482,14 +485,16 @@ Additionally, make sure you always _name_ the argument that you pass `_` to:
 With one single "pipeline" (operations connected by a pipe `|>`),
 manipulate the `diamonds` dataframe such that you:
 
-- Print only the columns `cut`, `color`, `depth`, and `price`.
-- Print only diamonds (rows) with a `depth` less than 50
+- print only the columns `cut`, `color`, `depth`, and `price`, and
+- print only diamonds (rows) with a `depth` of less than 50.
+
+How many diamonds have a `depth` of less than 50?
 
 <details><summary><b>Hints</b>(click here)</summary>
 <br>
 
-This is quite similar to the example given above,
-using the `select()` function to select certain columns,
+This is quite similar to the example given above:
+use the `select()` function to select certain columns,
 and the `filter()` function to select certain rows.
 
 </details>

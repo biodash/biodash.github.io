@@ -1,14 +1,14 @@
 ---
 output: hugodown::md_document
-title: "S05E01: R for Data Science (2e) - Chapter 5 - Pipes"
-subtitle: "Introducing a new season of Code Club, in which we will continue reading the book R for Data Science (R4DS)"
+title: "S05E01: R for Data Science (2e) - Ch. 5 - Pipes"
+subtitle: "Introducing a new season of Code Club, in which we will continue to read the book R for Data Science (R4DS), and start with a short chapter on pipes."
 summary: "We'll continue with the R for Data Science book in the 5th season of Code Club, now switching to the brand-new second edition! We'll talk about pipes in R, which is covered in the short Chapter 5 of the book."
 authors: [admin]
 tags: [codeclub, r4ds]
 date: "2023-01-24"
 lastmod: "2023-01-24"
 toc: true
-rmd_hash: cd2a8296d425f9c3
+rmd_hash: 6095a691f15197af
 
 ---
 
@@ -20,14 +20,14 @@ rmd_hash: cd2a8296d425f9c3
 
 ## Intro to this Code Club Season
 
-### Organizers
+#### Organizers
 
 -   *Michael Broe* -- Evolution, Ecology and Organismal Biology (EEOB)
 -   *Jessica Cooperstone* -- Horticulture & Crop Science (HCS) / Food Science & Technology (FST)
 -   *Stephen Opiyo* -- Molecular & Cellular Imaging Center (MCIC) - Columbus
 -   *Jelmer Poelstra* -- Molecular & Cellular Imaging Center (MCIC) - Wooster
 
-### Code Club practicalities
+#### Code Club practicalities
 
 -   In-person (Columbus & Wooster) and Zoom hybrid
 
@@ -55,7 +55,7 @@ More general notes:
 
 <div>
 
-### New to Code Club or R?
+#### New to Code Club or R?
 
 Take a look at these pages on our website:
 
@@ -67,11 +67,13 @@ Take a look at these pages on our website:
 
 </div>
 
+Before moving on the the chapter on pipes, I will start with a very brief overview of the book, the RStudio interface, and how to load R packages.
+
 <br>
 
 ------------------------------------------------------------------------
 
-## The R for Data Science book (R4DS)
+## R for Data Science (R4DS)
 
 This excellent book by Hadley Wickham (also author of many of the R packages used in the book!) and Garret Grolemund is freely available online.
 
@@ -79,7 +81,7 @@ The book focuses on the so-called **"*tidyverse*" ecosystem** in R. The *tidyver
 
 Last year in Code Club, we worked through the material of a number of chapters of the first edition of the book, which was published in 2016.
 
-Since then, quite some development has taken place, especially in the *tidyverse* but also in *base R* (such as the pipe, which we'll see in today's session). A **second edition** has been online since a couple of months, with completely updated and also restructured contents -- we thought it has improved a lot!
+Since 2016, quite some R development has taken place. A **second edition** has been online since a couple of months, with completely updated and also restructured contents -- we thought it has improved a lot!
 
 This new edition is not *completely* finished yet, so you'll find notifications like these at the top of each chapter:
 
@@ -89,13 +91,7 @@ This new edition is not *completely* finished yet, so you'll find notifications 
 
 We decided not to restart at the beginning of the book for this semester. We hope this won't make it too challenging for beginners to join us. Especially in the first sessions, we'll make sure to explain all code, including things that were covered last semester.
 
-Before moving on the the chapter on pipes, I will start with a very brief overview of the book, of the RStudio interface, and how to load R packages.
-
-<br>
-
-------------------------------------------------------------------------
-
-## Getting Started / Chapter 1
+#### What's in the book
 
 The introductory chapter of the book has this figure to show the data science process and what the book will cover:
 
@@ -103,7 +99,13 @@ The introductory chapter of the book has this figure to show the data science pr
 <img src=img/data-science.png width="80%">
 </p>
 
-In terms of what the book does *not* cover, what may be most surprising for a book about data science is that it contains very little material on statistics (even less so in the second edition, now that there is a companion book ["Tidy Modeling with R"](https://www.tmwr.org/) that focuses on this).
+In terms of what the book does *not* cover, it may especially be surprising for a book about data science that it contains very little material on *statistics* (even less so in the second edition, now that there is a companion book ["Tidy Modeling with R"](https://www.tmwr.org/) that focuses on this).
+
+<br>
+
+------------------------------------------------------------------------
+
+## Getting Up and Running
 
 ### RStudio interface
 
@@ -130,7 +132,7 @@ Once you have a running instance of RStudio, **create a new R script** by clicki
 
 Take a look at your ***version of R***: this was printed in the console when you started RStudio (see the RStudio screenshot above).
 
-The most recent version of R is `4.2.2`. To use the current functionality of the "base R pipe", **you'll need at least version `4.2`** (and to use it at all, you need at least R version `4.1`). If you have a lower version of R, I would recommend that you update at the end or after this session following [these instructions](/tutorials/r-resources-tips/#updating-r).
+The most recent version of R is `4.2.2`. To use the current functionality of the "base R pipe", **you'll need at least version `4.2.0`** (and to use it at all, you need at least R version `4.1`). If you have a lower version of R, I would recommend that you update at the end or after this session following [these instructions](/tutorials/r-resources-tips/#updating-r).
 
 </div>
 
@@ -205,7 +207,7 @@ A pipe is a programming tool that takes the output of one command (in R, a *func
 
 Pipes prevent you from having to save intermediate output to a file or object. They also make your code shorter and easier to understand.
 
-### A dataframe example
+### An example
 
 In R, we work a lot with "dataframes", rectangular data structures like spreadsheets -- and in particular, the R4DS book and the *tidyverse* focus on this very heavily.
 
@@ -292,7 +294,7 @@ But this can be done much more elegantly, and without wasting computer memory on
 
 </div>
 
-### Two Unix & R examples
+#### Two Unix & R examples
 
 Pipes originate in Unix terminals, and are ubiquitous there. So for those of you that are curious, I've included two examples of using the Unix pipe, and the corresponding commands in R, in the dropdown box below.
 
@@ -303,11 +305,13 @@ Pipes originate in Unix terminals, and are ubiquitous there. So for those of you
 
 <br>
 
+*(If you're trying to follow along yourself:* *the Unix/terminal examples will only work natively on Mac and Linux,* *where you can simply click the `Terminal` tab in the bottom-right RStudio* *panel, and issue Unix commands.)*
+
 **Counting files**
 
 You might want to *count the number of files in a folder*, which involve two distinct processes: obtaining a list of files, and counting them.
 
-We can get a **l**i**s**t of files in the current folder with `ls`, count with `wc -l` (**w**ord**c**ount -**l**ines), and connect these processes with the pipe `|`:
+We can get a **l**i**s**t of files in the current folder with `ls`, perform the counting with `wc -l` (**w**ord**c**ount -**l**ines), and connect these processes with the pipe `|`:
 
 <div class="highlight">
 
@@ -319,7 +323,7 @@ ls | wc -l
 
 </div>
 
-We can do the same in R, where the function [`dir()`](https://rdrr.io/r/base/list.files.html) lists files, the function [`length()`](https://rdrr.io/r/base/length.html) counts the number of elements, and `|>` is the pipe symbol:
+We can do the same in R, where the function [`dir()`](https://rdrr.io/r/base/list.files.html) lists files, while the function [`length()`](https://rdrr.io/r/base/length.html) counts the number of elements:
 
 <div class="highlight">
 
@@ -344,7 +348,7 @@ As another example, let's say we have a file `words.txt` that contains one word 
     table
     chair
 
-We can get a list of unique words and their number of occurrences using:
+In a terminal, we can get a list of unique words and their number of occurrences using:
 
 <div class="highlight">
 
@@ -360,7 +364,7 @@ cat words.txt | sort | uniq -c
 
 </div>
 
-And we can again do the same in R:
+And to do the same thing in R:
 
 <div class="highlight">
 
@@ -379,7 +383,7 @@ And we can again do the same in R:
 
 Those of you who've worked with R for a bit are likely familiar with **another pipe symbol: `%>%`**.
 
-This pipe is in the *magrittr* package that is loaded as part of the *tidyverse*, and until recently was the standard pipe used in tidyverse documentation and in the previous edition of R4DS. There has been a gradual switch to the base R pipe since it was introduced in May 2021, mainly because it does not rely on a package. In addition, it's convenient that the base R pipe `|>` is more similar to the Unix pipe (`|`), and is one character typing than `%>%`.
+This pipe is is loaded as part of the *tidyverse*, and until recently was very widely used including in the the previous edition of R4DS. There has been a gradual switch to the base R pipe since it was introduced in May 2021, mainly because it does not rely on a package. In addition, it's convenient that the base R pipe `|>` is more similar to the Unix pipe `|`, and is one character fewer to type than `%>%`.
 
 The number of characters shouldn't make much of a difference, though, because it remains even quicker to use the **RStudio keyboard shortcut for the pipe,** **which is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>.**
 
@@ -387,9 +391,9 @@ The number of characters shouldn't make much of a difference, though, because it
 
 <div>
 
-### Your turn: set the keyboard shortcut
+### Your turn: Use the `|>` pipe by default
 
-To make that shortcut *map to the base R pipe*, go to `Tools` in the top menu bar, click `Global Options`, click `Code` in the left menu, and check the box `Use native pipe operator, |> (requires R 4.1+)`:
+To make that keyboard shortcut *map to the base R pipe* (instead of to `%>%`), go to `Tools` in the top menu bar, click `Global Options`, click `Code` in the left menu, and check the box `Use native pipe operator, |> (requires R 4.1+)`:
 
 <p align="center">
 <img src=img/rstudio-pipe-options.png width="60%">
@@ -401,7 +405,7 @@ To make that shortcut *map to the base R pipe*, go to `Tools` in the top menu ba
 
 ### Using the `_` placeholder
 
-The R pipe passes its contents to the *first argument* of a function. In other words, the code we saw above is shorthand for the following, where `_` is the placeholder for the data that the pipe passes on:
+The R pipe passes its contents to the *first argument* of a function. In other words, the code we saw above is shorthand for the following, where **`_`** is the placeholder for the data that the pipe passes on:
 
 <div class="highlight">
 
@@ -431,7 +435,7 @@ This placeholder is useful when the piped data should go to, say, the second or 
 
 <div>
 
-### Piping to another argument
+#### Piping to another argument
 
 What if we need our piped data to go to another argument than the function's first one?
 
@@ -460,8 +464,6 @@ If you're wondering how you can know the order of the arguments of a function, w
 <p align="center">
 <img src=img/gsub.png width="45%">
 </p>
-
-<br>
 
 ------------------------------------------------------------------------
 
@@ -501,8 +503,10 @@ Additionally, make sure you always *name* the argument that you pass `_` to:
 
 With one single "pipeline" (operations connected by a pipe `|>`), manipulate the `diamonds` dataframe such that you:
 
--   Print only the columns `cut`, `color`, `depth`, and `price`.
--   Print only diamonds (rows) with a `depth` less than 50
+-   print only the columns `cut`, `color`, `depth`, and `price`, and
+-   print only diamonds (rows) with a `depth` of less than 50.
+
+How many diamonds have a `depth` of less than 50?
 
 <details>
 <summary>
@@ -511,7 +515,7 @@ With one single "pipeline" (operations connected by a pipe `|>`), manipulate the
 
 <br>
 
-This is quite similar to the example given above, using the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function to select certain columns, and the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function to select certain rows.
+This is quite similar to the example given above: use the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function to select certain columns, and the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function to select certain rows.
 
 </details>
 <details>
