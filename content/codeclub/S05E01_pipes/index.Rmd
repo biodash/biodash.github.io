@@ -2,7 +2,7 @@
 output: hugodown::md_document
 title: "S05E01: R for Data Science (2e) - Chapter 5 - Pipes"
 subtitle: "Introducing a new season of Code Club, in which we will continue reading the book R for Data Science (R4DS)"
-summary: "..."
+summary: "We'll continue with the R for Data Science book in the 5th season of Code Club, now switching to the brand-new second edition! We'll talk about pipes in R, which is covered in the short Chapter 5 of the book."
 authors: [admin]
 tags: [codeclub, r4ds]
 date: "`r Sys.Date()`"
@@ -37,7 +37,7 @@ library(tidyverse)
 - In-person (Columbus & Wooster) and Zoom hybrid
 
 - Mix of instruction/discussion with the entire group,
-  and doing exercises in breakout groups of 3-4 people.
+  and exercises in groups of 3-4 people.
 
 - When doing **exercises in breakout groups**, we encourage you:
   - To briefly introduce yourselves and to do the exercises as a group
@@ -47,8 +47,8 @@ library(tidyverse)
   
 - You can **ask a question** at any time, by speaking or typing in the Zoom chat.
 
-- You can generally come early or stay late for
-  **troubleshooting** but also for questions related to your research.
+- You can come up to 15 minutes early or stay late for
+  **troubleshooting** and perhaps a question related to your research.
 
 More general notes:
 
@@ -60,7 +60,7 @@ More general notes:
 - We try to make each session **as stand-alone as possible**,
   and don't require you to know anything.
   That said, if you missed one or more sessions,
-  you'll get more out of the next ones if you read the intermediate chapters.
+  you'll get more out of the next ones if you try to catch up with the material.
   
 - We **record** the whole-group parts of the Zoom call,
   and share the recordings only with Code Club participants.
@@ -99,7 +99,7 @@ of the first edition of the book, which was published in 2016.
 
 Since then, quite some development has taken place, especially in the _tidyverse_
 but also in _base R_ (such as the pipe, which we'll see in today's session).
-A second edition has been online since a couple of months,
+A **second edition** has been online since a couple of months,
 with completely updated and also restructured contents --
 we thought it has improved a lot!
 
@@ -110,12 +110,15 @@ so you'll find notifications like these at the top of each chapter:
 <img src=img/work-in-progress-warning.png width="95%">
 </p>
 
-We decided not to restart all the way at the beginning of the book this semester.
+We decided not to restart at the beginning of the book for this semester.
 We hope this won't make it too challenging for beginners to join us.
-Especially in the first bunch of sessions, we'll make sure to explain all code,
+Especially in the first sessions,
+we'll make sure to explain all code,
 including things that were covered last semester.
-I will also start now with a very brief overview of the book, using RStudio,
-and loading R packages.
+
+Before moving on the the chapter on pipes,
+I will start with a very brief overview of the book, of the RStudio interface,
+and how to load R packages.
 
 <br>
 
@@ -131,10 +134,10 @@ process and what the book will cover:
 </p>
 
 In terms of what the book does _not_ cover,
-what may be most surprising is that there is very little material on statistics
-in it
-(even less in the second edition, now that there is a companion book
-["Tidy Modeling with R"](https://www.tmwr.org/), which focuses on this).
+what may be most surprising for a book about data science
+is that it contains very little material on statistics
+(even less so in the second edition, now that there is a companion book
+["Tidy Modeling with R"](https://www.tmwr.org/) that focuses on this).
 
 ### RStudio interface
 
@@ -158,7 +161,7 @@ Now, you should see all 4 "panes" that the RStudio window is divided into:
 
 <div class="puzzle"><div>
 
-### Check that your version of R
+### Check your version of R
 
 Take a look at your _**version of R**_:
 this was printed in the console when you started RStudio
@@ -229,11 +232,8 @@ If instead, you got something like:
 ...that means you still need to install it:
 
 ```{r, eval = FALSE}
-# Note: the package name is "quoted" in the install.packages() function:
+# (Note: the package name is "quoted" in the install.packages() function)
 install.packages("tidyverse")
-
-# ... but it is not (normally) in library():
-library(tidyverse)
 ```
 
 </div></div>
@@ -252,20 +252,25 @@ and passes it on to be used as the input for another command.
 Pipes prevent you from having to save intermediate output to a file or object.
 They also make your code shorter and easier to understand.
 
-Since pipes originate in Unix terminals, and are ubiquitous there,
-let's start with a Unix example.
+Pipes originate in Unix terminals, and are ubiquitous there,
+so for those of you that are curious,
+I've included two examples of using the Unix pipe,
+and the corresponding commands in R, in the dropdown box below.
+
+<details><summary><b>Another Unix & R pipe example</b> (click here)</summary>
+<br>
+
 You might want to _count the number of files in a folder_,
 which involve two distinct processes: obtaining a list of files, and counting them.
+
+We can get a **l**i**s**t of files in the current folder with `ls`,
+count with `wc -l` (**w**ord**c**ount -**l**ines),
+and connect these processes with the pipe `|`:
 
 ```{bash}
 # The output of 'ls' is piped (with '|') to 'wc -l':
 ls | wc -l
 ```
-
-The `ls` command **l**i**s**ts files,
-and the `wc -l` command counts lines (**w**ord**c**ount -**l**ines).
-When the output of `ls` is piped to `wc -l`,
-the latter therefore counts the number of files in the current folder.
 
 We can do the same in R, where the function `dir()` lists files,
 the function `length()` counts the number of elements,
@@ -275,8 +280,7 @@ and `|>` is the pipe symbol:
 dir() |>  length()
 ```
 
-<details><summary><b>Another Unix & R pipe example</b> (click here)</summary>
-<br>
+----------
 
 As another example,
 let's say we have a file `words.txt` that contains one word per line,
@@ -333,7 +337,7 @@ that cost over $1,000, and only shows the columns `carat`, `cut`, and `price`.
 
 Without using pipes,
 we could start by selecting the columns of interest with the `select()` function,
-and saving the output in a new dataframe `diamonds_simple`:
+and saving the output in a new dataframe called `diamonds_simple`:
 
 ```{r}
 # The first argument is the input dataframe, the others are the columns we want
@@ -399,6 +403,9 @@ diamonds |>
   filter(.data = _, price > 1000)
 ```
 
+Being aware of this is useful when you run into cases where you want the piped
+data to go to say the second or third argument of a function (see the box below).
+
 <div class="alert alert-note"><div>
 
 ### Piping to another argument
@@ -424,7 +431,11 @@ To use the pipe with `gsub()`, we can use the `_` placeholder:
 "ACCGNNT" |> gsub(pattern = 'N', replacement = '-', x = _)
 ```
 
-To be more precise, the pipe passes the object to the first _unnamed_
+<br>
+
+Above, I mentioned that the pipe passes its contents to the _first argument_
+of a function.
+But to be more precise, the pipe passes the object to the first _unnamed_
 argument of the receiving function.
 Therefore, the following also works:
 
@@ -434,7 +445,7 @@ Therefore, the following also works:
 "ACCGNNT" |> gsub(pattern = 'N', replacement = '-')
 ```
 
-Additionally, make sure you always name the argument that you pass `_` to:
+Additionally, make sure you always _name_ the argument that you pass `_` to:
 
 ```{r, error=TRUE}
 # Using '_' without the argument name ('x=') doesn't work:

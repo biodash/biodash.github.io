@@ -2,13 +2,13 @@
 output: hugodown::md_document
 title: "S05E01: R for Data Science (2e) - Chapter 5 - Pipes"
 subtitle: "Introducing a new season of Code Club, in which we will continue reading the book R for Data Science (R4DS)"
-summary: "..."
+summary: "We'll continue with the R for Data Science book in the 5th season of Code Club, now switching to the brand-new second edition! We'll talk about pipes in R, which is covered in the short Chapter 5 of the book."
 authors: [admin]
 tags: [codeclub, r4ds]
 date: "2023-01-23"
 lastmod: "2023-01-23"
 toc: true
-rmd_hash: 96e6eb2002e49a7b
+rmd_hash: dc9473cc1b98eaac
 
 ---
 
@@ -31,7 +31,7 @@ rmd_hash: 96e6eb2002e49a7b
 
 -   In-person (Columbus & Wooster) and Zoom hybrid
 
--   Mix of instruction/discussion with the entire group, and doing exercises in breakout groups of 3-4 people.
+-   Mix of instruction/discussion with the entire group, and exercises in groups of 3-4 people.
 
 -   When doing **exercises in breakout groups**, we encourage you:
 
@@ -41,13 +41,13 @@ rmd_hash: 96e6eb2002e49a7b
 
 -   You can **ask a question** at any time, by speaking or typing in the Zoom chat.
 
--   You can generally come early or stay late for **troubleshooting** but also for questions related to your research.
+-   You can come up to 15 minutes early or stay late for **troubleshooting** and perhaps a question related to your research.
 
 More general notes:
 
 -   If you can, read or skim the relevant (part of the) chapter before each session, especially if you're very new to the material. But we'll always try to present it in such a way that does not assume you've read it.
 
--   We try to make each session **as stand-alone as possible**, and don't require you to know anything. That said, if you missed one or more sessions, you'll get more out of the next ones if you read the intermediate chapters.
+-   We try to make each session **as stand-alone as possible**, and don't require you to know anything. That said, if you missed one or more sessions, you'll get more out of the next ones if you try to catch up with the material.
 
 -   We **record** the whole-group parts of the Zoom call, and share the recordings only with Code Club participants.
 
@@ -79,7 +79,7 @@ The book focuses on the so-called **"*tidyverse*" ecosystem** in R. The *tidyver
 
 Last year in Code Club, we worked through the material of a number of chapters of the first edition of the book, which was published in 2016.
 
-Since then, quite some development has taken place, especially in the *tidyverse* but also in *base R* (such as the pipe, which we'll see in today's session). A second edition has been online since a couple of months, with completely updated and also restructured contents -- we thought it has improved a lot!
+Since then, quite some development has taken place, especially in the *tidyverse* but also in *base R* (such as the pipe, which we'll see in today's session). A **second edition** has been online since a couple of months, with completely updated and also restructured contents -- we thought it has improved a lot!
 
 This new edition is not *completely* finished yet, so you'll find notifications like these at the top of each chapter:
 
@@ -87,7 +87,9 @@ This new edition is not *completely* finished yet, so you'll find notifications 
 <img src=img/work-in-progress-warning.png width="95%">
 </p>
 
-We decided not to restart all the way at the beginning of the book this semester. We hope this won't make it too challenging for beginners to join us. Especially in the first bunch of sessions, we'll make sure to explain all code, including things that were covered last semester. I will also start now with a very brief overview of the book, using RStudio, and loading R packages.
+We decided not to restart at the beginning of the book for this semester. We hope this won't make it too challenging for beginners to join us. Especially in the first sessions, we'll make sure to explain all code, including things that were covered last semester.
+
+Before moving on the the chapter on pipes, I will start with a very brief overview of the book, of the RStudio interface, and how to load R packages.
 
 <br>
 
@@ -101,7 +103,7 @@ The introductory chapter of the book has this figure to show the data science pr
 <img src=img/data-science.png width="80%">
 </p>
 
-In terms of what the book does *not* cover, what may be most surprising is that there is very little material on statistics in it (even less in the second edition, now that there is a companion book ["Tidy Modeling with R"](https://www.tmwr.org/), which focuses on this).
+In terms of what the book does *not* cover, what may be most surprising for a book about data science is that it contains very little material on statistics (even less so in the second edition, now that there is a companion book ["Tidy Modeling with R"](https://www.tmwr.org/) that focuses on this).
 
 ### RStudio interface
 
@@ -124,7 +126,7 @@ Once you have a running instance of RStudio, **create a new R script** by clicki
 
 <div>
 
-### Check that your version of R
+### Check your version of R
 
 Take a look at your ***version of R***: this was printed in the console when you started RStudio (see the RStudio screenshot above).
 
@@ -189,11 +191,8 @@ If instead, you got something like:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Note: the package name is "quoted" in the install.packages() function:</span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span></span>
-<span></span>
-<span><span class='c'># ... but it is not (normally) in library():</span></span>
-<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># (Note: the package name is "quoted" in the install.packages() function)</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"tidyverse"</span><span class='o'>)</span></span></code></pre>
 
 </div>
 
@@ -213,7 +212,18 @@ A pipe is a programming tool that takes the output of one command (in R, a *func
 
 Pipes prevent you from having to save intermediate output to a file or object. They also make your code shorter and easier to understand.
 
-Since pipes originate in Unix terminals, and are ubiquitous there, let's start with a Unix example. You might want to *count the number of files in a folder*, which involve two distinct processes: obtaining a list of files, and counting them.
+Pipes originate in Unix terminals, and are ubiquitous there, so for those of you that are curious, I've included two examples of using the Unix pipe, and the corresponding commands in R, in the dropdown box below.
+
+<details>
+<summary>
+<b>Another Unix & R pipe example</b> (click here)
+</summary>
+
+<br>
+
+You might want to *count the number of files in a folder*, which involve two distinct processes: obtaining a list of files, and counting them.
+
+We can get a **l**i**s**t of files in the current folder with `ls`, count with `wc -l` (**w**ord**c**ount -**l**ines), and connect these processes with the pipe `|`:
 
 <div class="highlight">
 
@@ -225,8 +235,6 @@ ls | wc -l
 
 </div>
 
-The `ls` command **l**i**s**ts files, and the `wc -l` command counts lines (**w**ord**c**ount -**l**ines). When the output of `ls` is piped to `wc -l`, the latter therefore counts the number of files in the current folder.
-
 We can do the same in R, where the function [`dir()`](https://rdrr.io/r/base/list.files.html) lists files, the function [`length()`](https://rdrr.io/r/base/length.html) counts the number of elements, and `|>` is the pipe symbol:
 
 <div class="highlight">
@@ -236,12 +244,7 @@ We can do the same in R, where the function [`dir()`](https://rdrr.io/r/base/lis
 
 </div>
 
-<details>
-<summary>
-<b>Another Unix & R pipe example</b> (click here)
-</summary>
-
-<br>
+------------------------------------------------------------------------
 
 As another example, let's say we have a file `words.txt` that contains one word per line, some repeated:
 
@@ -314,7 +317,7 @@ So let's see an example of using a pipe with the `diamonds` dataframe, which is 
 
 Let's say we want to subset this dataframe so it only contains diamonds that cost over \$1,000, and only shows the columns `carat`, `cut`, and `price`.
 
-Without using pipes, we could start by selecting the columns of interest with the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and saving the output in a new dataframe `diamonds_simple`:
+Without using pipes, we could start by selecting the columns of interest with the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and saving the output in a new dataframe called `diamonds_simple`:
 
 <div class="highlight">
 
@@ -411,6 +414,8 @@ The R pipe passes its contents to the *first argument* of a function. In other w
 
 </div>
 
+Being aware of this is useful when you run into cases where you want the piped data to go to say the second or third argument of a function (see the box below).
+
 <div class="alert alert-note">
 
 <div>
@@ -439,7 +444,9 @@ To use the pipe with [`gsub()`](https://rdrr.io/r/base/grep.html), we can use th
 
 </div>
 
-To be more precise, the pipe passes the object to the first *unnamed* argument of the receiving function. Therefore, the following also works:
+<br>
+
+Above, I mentioned that the pipe passes its contents to the *first argument* of a function. But to be more precise, the pipe passes the object to the first *unnamed* argument of the receiving function. Therefore, the following also works:
 
 <div class="highlight">
 
@@ -450,7 +457,7 @@ To be more precise, the pipe passes the object to the first *unnamed* argument o
 
 </div>
 
-Additionally, make sure you always name the argument that you pass `_` to:
+Additionally, make sure you always *name* the argument that you pass `_` to:
 
 <div class="highlight">
 
