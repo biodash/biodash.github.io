@@ -19,8 +19,8 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 ### Upcoming sessions
 
-- R4DS = [The R for Data Science book](https://r4ds.hadley.nz/)
-  Note that we have switched to the second edition!
+- R4DS = [The R for Data Science book](https://r4ds.hadley.nz/).  
+  Note that we have switched to the _second edition_!
 
 | Session | Date    | Presenter  | Topic                                                            |
 |---------|---------|------------|------------------------------------------------------------------|
@@ -49,7 +49,7 @@ Ask us for access to the Zoom recordings of previous Code Club sessions!
 
 ### Summer - Fall '22
 
-- R4DS = [The R for Data Science book](https://r4ds.had.co.nz/)
+- R4DS = [The R for Data Science book (1st edition)](https://r4ds.had.co.nz/)
 
 | Session     | Date      | Presenter     | Topic                                                            |
 |-------------|-----------|---------------|------------------------------------------------------------------|
