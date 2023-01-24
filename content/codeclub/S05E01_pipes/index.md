@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-01-24"
 lastmod: "2023-01-24"
 toc: true
-rmd_hash: 28f9b9796832edfe
+rmd_hash: a7bc70f23132a7d0
 
 ---
 
@@ -391,7 +391,7 @@ The number of characters shouldn't make much of a difference, though, because it
 
 <div>
 
-### Your turn: Use the `|>` pipe by default
+### Your turn: Set the `|>` pipe as default
 
 To make that keyboard shortcut *map to the base R pipe* (instead of to `%>%`), go to `Tools` in the top menu bar, click `Global Options`, click `Code` in the left menu, and check the box `Use native pipe operator, |> (requires R 4.1+)`:
 
@@ -464,6 +464,8 @@ This is quite similar to the example given above: use the [`select()`](https://d
 
 <br>
 
+------------------------------------------------------------------------
+
 ### Bonus: Using the `_` placeholder
 
 The R pipe passes its contents to the *first argument* of a function. In other words, the code we saw above is shorthand for the following, where **`_`** is the placeholder for the data that the pipe passes on:
@@ -473,23 +475,6 @@ The R pipe passes its contents to the *first argument* of a function. In other w
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span>.data <span class='o'>=</span> <span class='nv'>_</span>, <span class='nv'>carat</span>, <span class='nv'>cut</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span>.data <span class='o'>=</span> <span class='nv'>_</span>, <span class='nv'>price</span> <span class='o'>&gt;</span> <span class='m'>1000</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 39,416 × 3</span></span></span>
-<span><span class='c'>#&gt;    carat cut       price</span></span>
-<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span>  0.7  Ideal      <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span>  0.86 Fair       <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span>  0.7  Ideal      <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span>  0.71 Very Good  <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span>  0.78 Very Good  <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span>  0.7  Good       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span>  0.7  Good       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span>  0.96 Fair       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span>  0.73 Very Good  <span style='text-decoration: underline;'>2</span>760</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  0.8  Premium    <span style='text-decoration: underline;'>2</span>760</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># … with 39,406 more rows</span></span></span><span></span>
-<span><span class='nv'>diamonds</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>.</span>, <span class='nv'>carat</span>, <span class='nv'>cut</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>.</span>, <span class='nv'>price</span> <span class='o'>&gt;</span> <span class='m'>1000</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 39,416 × 3</span></span></span>
 <span><span class='c'>#&gt;    carat cut       price</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
