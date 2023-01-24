@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-01-23"
 lastmod: "2023-01-23"
 toc: true
-rmd_hash: dc9473cc1b98eaac
+rmd_hash: 798dba400a3e5f8b
 
 ---
 
@@ -216,7 +216,7 @@ Pipes originate in Unix terminals, and are ubiquitous there, so for those of you
 
 <details>
 <summary>
-<b>Another Unix & R pipe example</b> (click here)
+<b>Two Unix & R pipe examples</b> (click here)
 </summary>
 
 <br>
@@ -424,7 +424,7 @@ Being aware of this is useful when you run into cases where you want the piped d
 
 What if we need our piped data to go to another argument than the function's first one?
 
-Let's see an example. The [`gsub()`](https://rdrr.io/r/base/grep.html) function can be used to replace characters in text strings, for example:
+Let's see an example with the [`gsub()`](https://rdrr.io/r/base/grep.html) function, which can be used to replace characters in text strings:
 
 <div class="highlight">
 
@@ -433,7 +433,7 @@ Let's see an example. The [`gsub()`](https://rdrr.io/r/base/grep.html) function 
 
 </div>
 
-As you could see in the example above, the input data (the string `x`) is not the first but the third argument to this function.
+As you could see above, the input data (the string `x`) is not the first but the third argument to this function.
 
 To use the pipe with [`gsub()`](https://rdrr.io/r/base/grep.html), we can use the `_` placeholder:
 
@@ -444,7 +444,7 @@ To use the pipe with [`gsub()`](https://rdrr.io/r/base/grep.html), we can use th
 
 </div>
 
-<br>
+------------------------------------------------------------------------
 
 Above, I mentioned that the pipe passes its contents to the *first argument* of a function. But to be more precise, the pipe passes the object to the first *unnamed* argument of the receiving function. Therefore, the following also works:
 
