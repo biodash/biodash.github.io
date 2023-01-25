@@ -188,7 +188,7 @@
 &lt;hr&gt;
 &lt;h2 id=&#34;chapter-5-pipes&#34;&gt;Chapter 5: Pipes&lt;/h2&gt;
 &lt;h3 id=&#34;what-is-a-pipe&#34;&gt;What is a pipe?&lt;/h3&gt;
-&lt;p&gt;A pipe is a programming tool that takes the output of one command (in R, a &lt;em&gt;function&lt;/em&gt;) and passes it on to be used as the input for another command.&lt;/p&gt;
+&lt;p&gt;A pipe is a programming tool that takes the &lt;strong&gt;output&lt;/strong&gt; of one command (in R, a &lt;em&gt;function&lt;/em&gt;), and passes it on to be used as the &lt;strong&gt;input&lt;/strong&gt; for another command.&lt;/p&gt;
 &lt;p&gt;Pipes prevent you from having to save intermediate output to a file or object. They also make your code shorter and easier to understand.&lt;/p&gt;
 &lt;h3 id=&#34;an-example&#34;&gt;An example&lt;/h3&gt;
 &lt;p&gt;In R, we work a lot with &amp;ldquo;dataframes&amp;rdquo;, rectangular data structures like spreadsheets &amp;ndash; and in particular, the R4DS book and the &lt;em&gt;tidyverse&lt;/em&gt; focus on this very heavily.&lt;/p&gt;
@@ -212,13 +212,12 @@
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 53,930 more rows&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;&lt;em&gt;(If you get &lt;code&gt;Error: object &#39;diamonds&#39; not found&lt;/code&gt;, then the tidyverse isn&amp;rsquo;t loaded.&lt;/em&gt; &lt;em&gt;Use &lt;a href=&#34;https://tidyverse.tidyverse.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library(tidyverse)&lt;/code&gt;&lt;/a&gt; to do so.)&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s say we want to subset this dataframe shows the columns &lt;code&gt;color&lt;/code&gt;, &lt;code&gt;depth&lt;/code&gt;, and &lt;code&gt;price&lt;/code&gt; for diamonds with a depth smaller than 50.&lt;/p&gt;
-&lt;p&gt;Without using pipes, we could start by selecting the columns of interest with the &lt;a href=&#34;https://dplyr.tidyverse.org/reference/select.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;select()&lt;/code&gt;&lt;/a&gt; function, and saving the output in a new dataframe called &lt;code&gt;diamonds_simple&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s say we want to &lt;strong&gt;subset this dataframe to show the columns &lt;code&gt;color&lt;/code&gt;, &lt;code&gt;depth&lt;/code&gt;, and &lt;code&gt;price&lt;/code&gt;&lt;/strong&gt; &lt;strong&gt;for diamonds with a depth smaller than 50&lt;/strong&gt;. Without using pipes, we could start by selecting the columns of interest with the &lt;a href=&#34;https://dplyr.tidyverse.org/reference/select.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;select()&lt;/code&gt;&lt;/a&gt; function, and saving the output in a new dataframe called &lt;code&gt;diamonds_simple&lt;/code&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# The first argument is the input dataframe, the others are the columns we want&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds_simple&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/select.html&#39;&gt;select&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;color&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;depth&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;Next, use the &lt;a href=&#34;https://dplyr.tidyverse.org/reference/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; function on &lt;code&gt;diamonds_simple&lt;/code&gt; to only return the diamonds (&lt;em&gt;rows&lt;/em&gt;) that we want:&lt;/p&gt;
+&lt;p&gt;Next, we can use the &lt;a href=&#34;https://dplyr.tidyverse.org/reference/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt; function on &lt;code&gt;diamonds_simple&lt;/code&gt; to only return the diamonds (&lt;em&gt;rows&lt;/em&gt;) that we want:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# The first argument is the input dataframe, the next is an expression to filter by&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/filter.html&#39;&gt;filter&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;diamonds_simple&lt;/span&gt;, &lt;span class=&#39;nv&#39;&gt;depth&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#39;m&#39;&gt;50&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
@@ -241,7 +240,9 @@
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;2&lt;/span&gt; G        44  &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;032&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;3&lt;/span&gt; J        43  &lt;span style=&#39;text-decoration: underline;&#39;&gt;4&lt;/span&gt;778&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;(Above, we used the pipe not just in between &lt;a href=&#34;https://dplyr.tidyverse.org/reference/select.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;select()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://dplyr.tidyverse.org/reference/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt;, but also &lt;em&gt;before&lt;/em&gt; &lt;a href=&#34;https://dplyr.tidyverse.org/reference/select.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;select()&lt;/code&gt;&lt;/a&gt;. That adds a line but also makes it even easier to see what&amp;rsquo;s being done.)&lt;/p&gt;
+&lt;p&gt;Above, we used the pipe not just in between &lt;a href=&#34;https://dplyr.tidyverse.org/reference/select.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;select()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://dplyr.tidyverse.org/reference/filter.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;filter()&lt;/code&gt;&lt;/a&gt;, but also &lt;em&gt;before&lt;/em&gt; &lt;a href=&#34;https://dplyr.tidyverse.org/reference/select.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;select()&lt;/code&gt;&lt;/a&gt;. That adds a line but also makes it even easier to see what&amp;rsquo;s being done.&lt;/p&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+&lt;div&gt;
 &lt;h4 id=&#34;two-unix--r-examples&#34;&gt;Two Unix &amp;amp; R examples&lt;/h4&gt;
 &lt;p&gt;Pipes originate in Unix terminals, and are ubiquitous there. So for those of you that are curious, I&amp;rsquo;ve included two examples of using the Unix pipe, and the corresponding commands in R, in the dropdown box below.&lt;/p&gt;
 &lt;details&gt;
@@ -299,7 +300,9 @@ cat words.txt | sort | uniq -c
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt;     3     2     2&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/details&gt;
-&lt;h3 id=&#34;the-other-pipe-and-a-keyboard-shortcut&#34;&gt;The other pipe and a keyboard shortcut&lt;/h3&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;the--pipe-and-a-keyboard-shortcut&#34;&gt;The &lt;code&gt;%&amp;gt;%&lt;/code&gt; pipe and a keyboard shortcut&lt;/h3&gt;
 &lt;p&gt;Those of you who&amp;rsquo;ve worked with R for a bit are likely familiar with &lt;strong&gt;another pipe operator: &lt;code&gt;%&amp;gt;%&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;This pipe is loaded as part of the &lt;em&gt;tidyverse&lt;/em&gt;, and until recently was very widely used, including in the previous edition of R4DS. There has been a gradual switch to the base R pipe since that was introduced in May 2021, mainly because it does not rely on a package. In addition, it&amp;rsquo;s convenient that the base R pipe &lt;code&gt;|&amp;gt;&lt;/code&gt; is more similar to the Unix pipe &lt;code&gt;|&lt;/code&gt;, and is one fewer character to type than &lt;code&gt;%&amp;gt;%&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;The number of characters shouldn&amp;rsquo;t make much of a difference, though, because it remains even quicker to use the &lt;strong&gt;RStudio keyboard shortcut for the pipe,&lt;/strong&gt; &lt;strong&gt;which is &lt;kbd&gt;Ctrl&lt;/kbd&gt;+&lt;kbd&gt;Shift&lt;/kbd&gt;+&lt;kbd&gt;M&lt;/kbd&gt;.&lt;/strong&gt;&lt;/p&gt;
@@ -397,7 +400,7 @@ cat words.txt | sort | uniq -c
 &lt;span&gt;&lt;span class=&#39;s&#39;&gt;&#34;ACCGNNT&#34;&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&amp;gt;&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/grep.html&#39;&gt;gsub&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;pattern &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;N&#34;&lt;/span&gt;, replacement &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;-&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; [1] &#34;ACCG--T&#34;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;Additionally, make sure you always &lt;em&gt;name&lt;/em&gt; the argument that you pass &lt;code&gt;_&lt;/code&gt; to:&lt;/p&gt;
+&lt;p&gt;Additionally, make sure you &lt;strong&gt;always name the argument that you pass &lt;code&gt;_&lt;/code&gt; to&lt;/strong&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;# Using &#39;_&#39; without the argument name (&#39;x=&#39;) doesn&#39;t work:
 &#34;ACCGNNT&#34; |&gt; gsub(pattern = &#34;N&#34;, replacement = &#34;-&#34;, _)
@@ -10835,7 +10838,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-274196835&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-953241687&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -10845,7 +10848,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-274196835&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-953241687&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11032,7 +11035,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-814926573&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-294568317&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11042,7 +11045,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-814926573&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-294568317&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11078,7 +11081,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-471258693&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-325149768&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11088,7 +11091,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-471258693&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-325149768&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11120,7 +11123,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-694253178&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-324619785&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11130,7 +11133,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-694253178&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-324619785&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11161,7 +11164,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-421953768&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-258317496&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11171,7 +11174,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-421953768&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-258317496&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11305,7 +11308,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-951382674&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-346871259&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11315,7 +11318,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-951382674&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-346871259&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11372,7 +11375,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-824597136&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-731458296&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11382,7 +11385,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-824597136&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-731458296&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19107,7 +19110,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-781652943&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-163829475&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19117,7 +19120,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-781652943&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-163829475&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19193,7 +19196,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-837214695&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-218596347&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19203,7 +19206,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-837214695&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-218596347&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19224,7 +19227,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-372169485&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-753264198&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19234,7 +19237,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-372169485&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-753264198&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19261,7 +19264,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-512478963&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-639514782&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19271,7 +19274,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-512478963&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-639514782&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19298,7 +19301,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-628935147&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-482759631&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19308,7 +19311,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-628935147&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-482759631&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19331,7 +19334,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-982365174&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-416725893&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19341,7 +19344,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-982365174&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-416725893&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19382,7 +19385,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-879134652&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-298654137&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19392,7 +19395,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-879134652&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-298654137&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19411,7 +19414,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-985372461&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-762143589&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19421,7 +19424,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-985372461&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-762143589&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19447,7 +19450,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-137845692&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-596248713&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19457,7 +19460,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-137845692&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-596248713&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19487,7 +19490,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-521493687&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-381924765&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19497,7 +19500,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-521493687&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-381924765&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19711,7 +19714,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-982547163&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-758163429&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19721,7 +19724,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-982547163&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-758163429&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19782,7 +19785,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-235741986&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-153649827&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19792,7 +19795,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-235741986&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-153649827&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19867,7 +19870,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-384926517&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-712645983&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19877,7 +19880,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-384926517&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-712645983&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
