@@ -5,10 +5,10 @@ subtitle: "Introducing a new season of Code Club, in which we will continue to r
 summary: "We'll continue with the R for Data Science book in the 5th season of Code Club, now switching to the brand-new second edition! We'll talk about pipes in R, which is covered in the short Chapter 5 of the book."
 authors: [admin]
 tags: [codeclub, r4ds]
-date: "2023-01-24"
-lastmod: "2023-01-24"
+date: "2023-01-25"
+lastmod: "2023-01-25"
 toc: true
-rmd_hash: a7bc70f23132a7d0
+rmd_hash: 0b9f24ece8393de1
 
 ---
 
@@ -89,7 +89,7 @@ This new edition is not *completely* finished yet, so you'll find notifications 
 <img src=img/work-in-progress-warning.png width="95%">
 </p>
 
-We decided not to restart at the beginning of the book for this semester. We hope this won't make it too challenging for beginners to join us. Especially in the first sessions, we'll make sure to explain all code, including things that were covered last semester.
+We decided **not to restart at the beginning of the book** for this semester. We hope this won't make it too challenging for beginners to join us. Especially in the first sessions, we'll make sure to explain all code, including things that were covered last semester.
 
 #### What's in the book
 
@@ -99,7 +99,7 @@ The introductory chapter of the book has this figure to show the data science pr
 <img src=img/data-science.png width="80%">
 </p>
 
-In terms of what the book does *not* cover, it may especially be surprising for a book about data science that it contains very little material on *statistics* (even less so in the second edition, now that there is a companion book ["Tidy Modeling with R"](https://www.tmwr.org/) that focuses on this).
+In terms of what the book does *not* cover, it may especially be surprising for a book about data science that it contains very little material on *statistics* (even less so in the second edition, now that there is a companion book ["Tidy Modeling with R"](https://www.tmwr.org/) on that topic).
 
 <br>
 
@@ -113,10 +113,10 @@ R itself simply provides a "*console*" (command-line interface) where you can ty
 
 Once you have a running instance of RStudio, **create a new R script** by clicking `File` \> `New File` \> `R Script`. Now, you should see all 4 "panes" that the RStudio window is divided into:
 
--   *Top-left*: The **Editor** for your scripts and other documents (*hidden when no file is open*).
--   *Bottom-left*: The **R Console** to interactively run your code (+ other tabs).
--   *Top-right*: Your **Environment** with R objects you have created (+ other tabs).
--   *Bottom-right*: Tabs for **Files**, **Plots**, **Help**, and others.
+-   *Top-left*: The **Editor** for your scripts and other documents (*hidden when no file is open*)
+-   *Bottom-left*: The **R Console** to interactively run your code (+ other tabs)
+-   *Top-right*: Your **Environment** with R objects you have created (+ other tabs)
+-   *Bottom-right*: Tabs for **Files**, **Plots**, **Help**, and others
 
 <p align="center">
 <img src=img/rstudio-layout-ed.png width="95%">
@@ -132,7 +132,9 @@ Once you have a running instance of RStudio, **create a new R script** by clicki
 
 Take a look at your ***version of R***: this was printed in the console when you started RStudio (see the RStudio screenshot above).
 
-The most recent version of R is `4.2.2`. To use the current functionality of the "base R pipe", **you'll need at least version `4.2.0`** (and to use it at all, you need at least R version `4.1`). If you have a lower version of R, I would recommend that you update at the end or after this session following [these instructions](/tutorials/r-resources-tips/#updating-r).
+The most recent version of R is `4.2.2`. To use all current functionality of the "base R pipe", you'll need at least version `4.2.0`, and **to use the base R pipe at all, you need at least R version `4.1`**.
+
+If you have a lower version of R, I would recommend that you update at the end or after this session following [these instructions](/tutorials/r-resources-tips/#updating-r).
 
 </div>
 
@@ -146,7 +148,7 @@ You can think of packages as "add-ons" / "extensions" to base R.
 
 #### Installation versus loading
 
-Packages have to be separately **installed** (usually *from within R*, using R code) and once you have done this, you don't need to redo it unless you have switched to a different version of R.
+To be able to use them, packages have to be **installed** (usually *from within R*, using R code). Once you have done this, you don't need to redo it until you switch to a different version of R.
 
 Unlike installation, **loading** a package is necessary again and again, in every R session that you want to use it.
 
@@ -215,7 +217,8 @@ So let's see an example of using a pipe with the `diamonds` dataframe, which is 
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Simply typing the dataframe's name in the console will print the first rows:</span></span>
+<span><span class='nv'>diamonds</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 53,940 × 10</span></span></span>
 <span><span class='c'>#&gt;    carat cut       color clarity depth table price     x     y     z</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
@@ -229,42 +232,35 @@ So let's see an example of using a pipe with the `diamonds` dataframe, which is 
 <span><span class='c'>#&gt; <span style='color: #555555;'> 8</span>  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 9</span>  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># … with 53,930 more rows</span></span></span><span></span>
-<span><span class='c'># If you get 'Error: object 'diamonds' not found', then the tidyverse isn't loaded.</span></span>
-<span><span class='c'># Use 'library(tidyverse)' to do so.</span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 53,930 more rows</span></span></span></code></pre>
 
 </div>
 
-Let's say we want to subset this dataframe so it only contains diamonds that cost over \$1,000, and only shows the columns `carat`, `cut`, and `price`.
+*(If you get `Error: object 'diamonds' not found`, then the tidyverse isn't loaded.* *Use [`library(tidyverse)`](https://tidyverse.tidyverse.org) to do so.)*
+
+Let's say we want to subset this dataframe shows the columns `color`, `depth`, and `price` for diamonds with a depth smaller than 50.
 
 Without using pipes, we could start by selecting the columns of interest with the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and saving the output in a new dataframe called `diamonds_simple`:
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># The first argument is the input dataframe, the others are the columns we want</span></span>
-<span><span class='nv'>diamonds_simple</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>diamonds</span>, <span class='nv'>carat</span>, <span class='nv'>cut</span>, <span class='nv'>price</span><span class='o'>)</span></span></code></pre>
+<span><span class='nv'>diamonds_simple</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>diamonds</span>, <span class='nv'>color</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span></span></code></pre>
 
 </div>
 
-Next, we take `diamonds_simple` and use the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function to only select the diamonds (*rows*) that we want:
+Next, use the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function on `diamonds_simple` to only return the diamonds (*rows*) that we want:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>diamonds_simple</span>, <span class='nv'>price</span> <span class='o'>&gt;</span> <span class='m'>1000</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 39,416 × 3</span></span></span>
-<span><span class='c'>#&gt;    carat cut       price</span></span>
-<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span>  0.7  Ideal      <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span>  0.86 Fair       <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span>  0.7  Ideal      <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span>  0.71 Very Good  <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span>  0.78 Very Good  <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span>  0.7  Good       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span>  0.7  Good       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span>  0.96 Fair       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span>  0.73 Very Good  <span style='text-decoration: underline;'>2</span>760</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  0.8  Premium    <span style='text-decoration: underline;'>2</span>760</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># … with 39,406 more rows</span></span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># The first argument is the input dataframe, the next is an expression to filter by</span></span>
+<span><span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>diamonds_simple</span>, <span class='nv'>depth</span> <span class='o'>&lt;</span> <span class='m'>50</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 3</span></span></span>
+<span><span class='c'>#&gt;   color depth price</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> G        43  <span style='text-decoration: underline;'>3</span>634</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> G        44  <span style='text-decoration: underline;'>4</span>032</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> J        43  <span style='text-decoration: underline;'>4</span>778</span></span></code></pre>
 
 </div>
 
@@ -273,22 +269,14 @@ But this can be done much more elegantly, and without wasting computer memory on
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='nv'>cut</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>price</span> <span class='o'>&gt;</span> <span class='m'>1000</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 39,416 × 3</span></span></span>
-<span><span class='c'>#&gt;    carat cut       price</span></span>
-<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span>  0.7  Ideal      <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span>  0.86 Fair       <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span>  0.7  Ideal      <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span>  0.71 Very Good  <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span>  0.78 Very Good  <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span>  0.7  Good       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span>  0.7  Good       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span>  0.96 Fair       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span>  0.73 Very Good  <span style='text-decoration: underline;'>2</span>760</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  0.8  Premium    <span style='text-decoration: underline;'>2</span>760</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># … with 39,406 more rows</span></span></span></code></pre>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>color</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>depth</span> <span class='o'>&lt;</span> <span class='m'>50</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 3</span></span></span>
+<span><span class='c'>#&gt;   color depth price</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> G        43  <span style='text-decoration: underline;'>3</span>634</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> G        44  <span style='text-decoration: underline;'>4</span>032</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> J        43  <span style='text-decoration: underline;'>4</span>778</span></span></code></pre>
 
 </div>
 
@@ -311,7 +299,7 @@ Pipes originate in Unix terminals, and are ubiquitous there. So for those of you
 
 You might want to *count the number of files in a folder*, which involve two distinct processes: obtaining a list of files, and counting them.
 
-We can get a **l**i**s**t of files in the current folder with `ls`, perform the counting with `wc -l` (**w**ord**c**ount -**l**ines), and connect these processes with the pipe `|`:
+Using Unix commands, We can get a **l**i**s**t of files in the current folder with `ls`, perform the counting with `wc -l` (**w**ord**c**ount -**l**ines), and connect these processes with the pipe `|`:
 
 <div class="highlight">
 
@@ -381,9 +369,9 @@ And to do the same thing in R:
 
 ### The other pipe and a keyboard shortcut
 
-Those of you who've worked with R for a bit are likely familiar with **another pipe symbol: `%>%`**.
+Those of you who've worked with R for a bit are likely familiar with **another pipe operator: `%>%`**.
 
-This pipe is is loaded as part of the *tidyverse*, and until recently was very widely used including in the the previous edition of R4DS. There has been a gradual switch to the base R pipe since it was introduced in May 2021, mainly because it does not rely on a package. In addition, it's convenient that the base R pipe `|>` is more similar to the Unix pipe `|`, and is one fewer character to type than `%>%`.
+This pipe is loaded as part of the *tidyverse*, and until recently was very widely used, including in the previous edition of R4DS. There has been a gradual switch to the base R pipe since that was introduced in May 2021, mainly because it does not rely on a package. In addition, it's convenient that the base R pipe `|>` is more similar to the Unix pipe `|`, and is one fewer character to type than `%>%`.
 
 The number of characters shouldn't make much of a difference, though, because it remains even quicker to use the **RStudio keyboard shortcut for the pipe,** **which is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>.**
 
@@ -405,7 +393,7 @@ To make that keyboard shortcut *map to the base R pipe* (instead of to `%>%`), g
 
 <br>
 
-There are some differences in the behavior of the `|>` and `%>%` pipes in more advanced use cases, which the book chapter goes into.
+There are some differences in the behavior of the `|>` and `%>%` pipes in more advanced use cases, which the book chapter goes into (check that out if you have used `%>%` a lot).
 
 If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using the `_` placeholder.
 
@@ -417,10 +405,10 @@ If you ever need to use the pipe with a function where the piped data is not the
 
 With one single "pipeline" (operations connected by a pipe `|>`), manipulate the `diamonds` dataframe such that you:
 
--   print only the columns `cut`, `color`, `depth`, and `price`, and
--   print only diamonds (rows) with a `depth` of less than 50.
+-   Print only the columns `carat`, `cut`, `depth`, and `price`
+-   ... for diamonds (rows) with a `price` of more than \$1,000.
 
-How many diamonds have a `depth` of less than 50?
+Bonus: *How many* diamonds cost more than \$1,000?
 
 <details>
 <summary>
@@ -445,14 +433,36 @@ This is quite similar to the example given above: use the [`select()`](https://d
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span>.data <span class='o'>=</span> <span class='nv'>_</span>, <span class='nv'>cut</span>, <span class='nv'>color</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span>.data <span class='o'>=</span> <span class='nv'>_</span>, <span class='nv'>depth</span> <span class='o'>&lt;</span> <span class='m'>50</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 4</span></span></span>
-<span><span class='c'>#&gt;   cut   color depth price</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Fair  G        43  <span style='text-decoration: underline;'>3</span>634</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Fair  G        44  <span style='text-decoration: underline;'>4</span>032</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Ideal J        43  <span style='text-decoration: underline;'>4</span>778</span></span></code></pre>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='nv'>cut</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>price</span> <span class='o'>&gt;</span> <span class='m'>1000</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 39,416 × 4</span></span></span>
+<span><span class='c'>#&gt;    carat cut       depth price</span></span>
+<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span>  0.7  Ideal      62.5  <span style='text-decoration: underline;'>2</span>757</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span>  0.86 Fair       55.1  <span style='text-decoration: underline;'>2</span>757</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span>  0.7  Ideal      61.6  <span style='text-decoration: underline;'>2</span>757</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span>  0.71 Very Good  62.4  <span style='text-decoration: underline;'>2</span>759</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span>  0.78 Very Good  63.8  <span style='text-decoration: underline;'>2</span>759</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span>  0.7  Good       57.5  <span style='text-decoration: underline;'>2</span>759</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span>  0.7  Good       59.4  <span style='text-decoration: underline;'>2</span>759</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span>  0.96 Fair       66.3  <span style='text-decoration: underline;'>2</span>759</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span>  0.73 Very Good  61.6  <span style='text-decoration: underline;'>2</span>760</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  0.8  Premium    61.5  <span style='text-decoration: underline;'>2</span>760</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 39,406 more rows</span></span></span></code></pre>
+
+</div>
+
+10 rows are printed to screen, and it says `… with 39,406 more rows` at the bottom: therefore, there are 39,416 diamonds that cost more than \$1,000.
+
+You can also get this number with code -- for instance by adding the [`nrow()`](https://rdrr.io/r/base/nrow.html) function to the pipeline, which will count the number of rows (excluding the header line) in a dataframe.
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='nv'>cut</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>price</span> <span class='o'>&gt;</span> <span class='m'>1000</span><span class='o'>)</span> <span class='o'>|&gt;</span> </span>
+<span>  <span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] 39416</span></span></code></pre>
 
 </div>
 
@@ -468,44 +478,23 @@ This is quite similar to the example given above: use the [`select()`](https://d
 
 ### Bonus: Using the `_` placeholder
 
-The R pipe passes its contents to the *first argument* of a function. In other words, the code we saw above is shorthand for the following, where **`_`** is the placeholder for the data that the pipe passes on:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span>.data <span class='o'>=</span> <span class='nv'>_</span>, <span class='nv'>carat</span>, <span class='nv'>cut</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span>.data <span class='o'>=</span> <span class='nv'>_</span>, <span class='nv'>price</span> <span class='o'>&gt;</span> <span class='m'>1000</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 39,416 × 3</span></span></span>
-<span><span class='c'>#&gt;    carat cut       price</span></span>
-<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span>  0.7  Ideal      <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span>  0.86 Fair       <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span>  0.7  Ideal      <span style='text-decoration: underline;'>2</span>757</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span>  0.71 Very Good  <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span>  0.78 Very Good  <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span>  0.7  Good       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span>  0.7  Good       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span>  0.96 Fair       <span style='text-decoration: underline;'>2</span>759</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span>  0.73 Very Good  <span style='text-decoration: underline;'>2</span>760</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>10</span>  0.8  Premium    <span style='text-decoration: underline;'>2</span>760</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># … with 39,406 more rows</span></span></span></code></pre>
-
-</div>
-
-What if we need our piped data to go to another argument than the function's first one?
+By default, the R pipe passes its contents to the *first argument* of a function. What if we need our piped data to go to another argument than the function's first one?
 
 Let's see an example with the [`gsub()`](https://rdrr.io/r/base/grep.html) function, which can be used to replace characters in text strings as follows:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>"N"</span>, replacement <span class='o'>=</span> <span class='s'>"-"</span>, x <span class='o'>=</span> <span class='s'>"ACCGNNT"</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; [1] "ACCG--T"</span></span><span></span>
-<span><span class='c'># Or, without naming the arguments:</span></span>
-<span><span class='c'># gsub("N", "-", "ACCGNNT")</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># This will replace 'N's with '-' in the string 'ACCGNNT': </span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>"N"</span>, replacement <span class='o'>=</span> <span class='s'>"-"</span>, x <span class='o'>=</span> <span class='s'>"ACCGNNT"</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] "ACCG--T"</span></span></code></pre>
 
 </div>
 
-As you could see above, the input data (the string `x`) is not the first but the third argument to [`gsub()`](https://rdrr.io/r/base/grep.html). To use the pipe with [`gsub()`](https://rdrr.io/r/base/grep.html), use the `_` placeholder:
+*(For clarity, I named [`gsub()`](https://rdrr.io/r/base/grep.html)'s arguments above.* *Without naming the arguments, it would be: `gsub("N", "-", "ACCGNNT")`).*
+
+As you could see above, what we would usually think of as the input data, the string passed to the argument `x`, is not the first but the third argument to [`gsub()`](https://rdrr.io/r/base/grep.html).
+
+To make the pipe work with [`gsub()`](https://rdrr.io/r/base/grep.html), use an underscore (`_`) as a placeholder to indicate where the piped data should go:
 
 <div class="highlight">
 

@@ -114,7 +114,7 @@ so you'll find notifications like these at the top of each chapter:
 <img src=img/work-in-progress-warning.png width="95%">
 </p>
 
-We decided not to restart at the beginning of the book for this semester.
+We decided **not to restart at the beginning of the book** for this semester.
 We hope this won't make it too challenging for beginners to join us.
 Especially in the first sessions,
 we'll make sure to explain all code,
@@ -133,7 +133,7 @@ In terms of what the book does _not_ cover,
 it may especially be surprising for a book about data science
 that it contains very little material on _statistics_
 (even less so in the second edition, now that there is a companion book
-["Tidy Modeling with R"](https://www.tmwr.org/) that focuses on this).
+["Tidy Modeling with R"](https://www.tmwr.org/) on that topic).
 
 <br>
 
@@ -150,10 +150,10 @@ Once you have a running instance of RStudio,
 **create a new R script** by clicking `File` > `New File` > `R Script`.
 Now, you should see all 4 "panes" that the RStudio window is divided into:
 
-- _Top-left_: The **Editor** for your scripts and other documents (_hidden when no file is open_).
-- _Bottom-left_: The **R Console** to interactively run your code (+ other tabs).
-- _Top-right_: Your **Environment** with R objects you have created (+ other tabs).
-- _Bottom-right_: Tabs for **Files**, **Plots**, **Help**, and others.
+- _Top-left_: The **Editor** for your scripts and other documents (_hidden when no file is open_)
+- _Bottom-left_: The **R Console** to interactively run your code (+ other tabs)
+- _Top-right_: Your **Environment** with R objects you have created (+ other tabs)
+- _Bottom-right_: Tabs for **Files**, **Plots**, **Help**, and others
 
 <p align="center">
 <img src=img/rstudio-layout-ed.png width="95%">
@@ -170,9 +170,10 @@ this was printed in the console when you started RStudio
 (see the RStudio screenshot above).
 
 The most recent version of R is `4.2.2`.
-To use the current functionality of the "base R pipe",
-**you'll need at least version `4.2.0`**
-(and to use it at all, you need at least R version `4.1`).
+To use all current functionality of the "base R pipe",
+you'll need at least version `4.2.0`,
+and **to use the base R pipe at all, you need at least R version `4.1`**.
+
 If you have a lower version of R,
 I would recommend that you update at the end or after this session following
 [these instructions](/tutorials/r-resources-tips/#updating-r).
@@ -187,9 +188,10 @@ You can think of packages as "add-ons" / "extensions" to base R.
 
 #### Installation versus loading
 
-Packages have to be separately **installed** (usually _from within R_, using R code)
-and once you have done this,
-you don't need to redo it unless you have switched to a different version of R.
+To be able to use them,
+packages have to be **installed** (usually _from within R_, using R code).
+Once you have done this,
+you don't need to redo it until you switch to a different version of R.
 
 Unlike installation, **loading** a package is necessary again and again,
 in every R session that you want to use it.
@@ -260,14 +262,16 @@ which is automatically loaded along with the _tidyverse_.
 It contains information on almost 54,000 diamonds (one diamond per row):
 
 ```{r}
+# Simply typing the dataframe's name in the console will print the first rows:
 diamonds
-
-# If you get 'Error: object 'diamonds' not found', then the tidyverse isn't loaded.
-# Use 'library(tidyverse)' to do so.
 ```
 
-Let's say we want to subset this dataframe so it only contains diamonds
-that cost over $1,000, and only shows the columns `carat`, `cut`, and `price`.
+_(If you get `Error: object 'diamonds' not found`, then the tidyverse isn't loaded._
+_Use `library(tidyverse)` to do so.)_
+
+Let's say we want to subset this dataframe
+shows the columns `color`, `depth`, and `price`
+for diamonds with a depth smaller than 50.
 
 Without using pipes,
 we could start by selecting the columns of interest with the `select()` function,
@@ -275,14 +279,15 @@ and saving the output in a new dataframe called `diamonds_simple`:
 
 ```{r}
 # The first argument is the input dataframe, the others are the columns we want
-diamonds_simple <- select(diamonds, carat, cut, price)
+diamonds_simple <- select(diamonds, color, depth, price)
 ```
 
-Next, we take `diamonds_simple` and use the `filter()` function
-to only select the diamonds (_rows_) that we want:
+Next, use the `filter()` function on `diamonds_simple`
+to only return the diamonds (_rows_) that we want:
 
 ```{r}
-filter(diamonds_simple, price > 1000)
+# The first argument is the input dataframe, the next is an expression to filter by
+filter(diamonds_simple, depth < 50)
 ```
 
 But this can be done much more elegantly,
@@ -290,8 +295,8 @@ and without wasting computer memory on an intermediate object, using the pipe:
 
 ```{r}
 diamonds |>
-  select(carat, cut, price) |>
-  filter(price > 1000)
+  select(color, depth, price) |>
+  filter(depth < 50)
 ```
 
 (Above, we used the pipe not just in between `select()` and `filter()`,
@@ -318,6 +323,7 @@ _panel, and issue Unix commands.)_
 You might want to _count the number of files in a folder_,
 which involve two distinct processes: obtaining a list of files, and counting them.
 
+Using Unix commands,
 We can get a **l**i**s**t of files in the current folder with `ls`,
 perform the counting with `wc -l` (**w**ord**c**ount -**l**ines),
 and connect these processes with the pipe `|`:
@@ -376,12 +382,12 @@ readLines("words.txt") |> table()
 ### The other pipe and a keyboard shortcut
 
 Those of you who've worked with R for a bit are likely familiar with
-**another pipe symbol: `%>%`**.
+**another pipe operator: `%>%`**.
 
-This pipe is is loaded as part of the _tidyverse_,
-and until recently was very widely used including in the
-the previous edition of R4DS.
-There has been a gradual switch to the base R pipe since it was introduced
+This pipe is loaded as part of the _tidyverse_,
+and until recently was very widely used,
+including in the previous edition of R4DS.
+There has been a gradual switch to the base R pipe since that was introduced
 in May 2021, mainly because it does not rely on a package.
 In addition, it's convenient that the base R pipe `|>` is more similar to the
 Unix pipe `|`, and is one fewer character to type than `%>%`.
@@ -410,7 +416,8 @@ and check the box `Use native pipe operator, |> (requires R 4.1+)`:
 <br>
 
 There are some differences in the behavior of the `|>` and `%>%` pipes
-in more advanced use cases, which the book chapter goes into.
+in more advanced use cases, which the book chapter goes into
+(check that out if you have used `%>%` a lot).
 
 If you ever need to use the pipe with a function where the piped data is not
 the first argument,
@@ -423,10 +430,10 @@ see the Bonus section below about using the `_` placeholder.
 With one single "pipeline" (operations connected by a pipe `|>`),
 manipulate the `diamonds` dataframe such that you:
 
-- print only the columns `cut`, `color`, `depth`, and `price`, and
-- print only diamonds (rows) with a `depth` of less than 50.
+- Print only the columns `carat`, `cut`, `depth`, and `price`
+- ... for diamonds (rows) with a `price` of more than $1,000.
 
-How many diamonds have a `depth` of less than 50?
+Bonus: _How many_ diamonds cost more than $1,000?
 
 <details><summary><b>Hints</b>(click here)</summary>
 <br>
@@ -444,8 +451,23 @@ and the `filter()` function to select certain rows.
 
 ```{r}
 diamonds |>
-  select(.data = _, cut, color, depth, price) |>
-  filter(.data = _, depth < 50)
+  select(carat, cut, depth, price) |>
+  filter(price > 1000)
+```
+
+10 rows are printed to screen,
+and it says `… with 39,406 more rows` at the bottom:
+therefore, there are 39,416 diamonds that cost more than $1,000.
+
+You can also get this number with code --
+for instance by adding the `nrow()` function to the pipeline,
+which will count the number of rows (excluding the header line) in a dataframe.
+
+```{r}
+diamonds |>
+  select(carat, cut, depth, price) |>
+  filter(price > 1000) |> 
+  nrow()
 ```
 
 </details>
@@ -457,16 +479,7 @@ diamonds |>
 
 ### Bonus: Using the `_` placeholder
 
-The R pipe passes its contents to the _first argument_ of a function.
-In other words, the code we saw above is shorthand for the following,
-where **`_`** is the placeholder for the data that the pipe passes on:
-
-```{r}
-diamonds |>
-  select(.data = _, carat, cut, price) |>
-  filter(.data = _, price > 1000)
-```
-
+By default, the R pipe passes its contents to the _first argument_ of a function.
 What if we need our piped data to go to another argument
 than the function's first one?
 
@@ -474,15 +487,20 @@ Let's see an example with the `gsub()` function,
 which can be used to replace characters in text strings as follows:
 
 ```{r}
+# This will replace 'N's with '-' in the string 'ACCGNNT': 
 gsub(pattern = "N", replacement = "-", x = "ACCGNNT")
-
-# Or, without naming the arguments:
-# gsub("N", "-", "ACCGNNT")
 ```
 
+_(For clarity, I named `gsub()`'s arguments above._
+_Without naming the arguments, it would be: `gsub("N", "-", "ACCGNNT")`)._
+
 As you could see above,
-the input data (the string `x`) is not the first but the third argument to `gsub()`.
-To use the pipe with `gsub()`, use the `_` placeholder:
+what we would usually think of as the input data,
+the string passed to the argument `x`,
+is not the first but the third argument to `gsub()`.
+
+To make the pipe work with `gsub()`,
+use an underscore (`_`) as a placeholder to indicate where the piped data should go:
 
 ```{r}
 "ACCGNNT" |> gsub(pattern = "N", replacement = "-", x = _)
