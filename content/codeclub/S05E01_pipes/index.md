@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-01-25"
 lastmod: "2023-01-25"
 toc: true
-rmd_hash: 0b9f24ece8393de1
+rmd_hash: 7f90253d53149543
 
 ---
 
@@ -205,7 +205,7 @@ If instead, you got something like...
 
 ### What is a pipe?
 
-A pipe is a programming tool that takes the output of one command (in R, a *function*) and passes it on to be used as the input for another command.
+A pipe is a programming tool that takes the **output** of one command (in R, a *function*), and passes it on to be used as the **input** for another command.
 
 Pipes prevent you from having to save intermediate output to a file or object. They also make your code shorter and easier to understand.
 
@@ -238,9 +238,7 @@ So let's see an example of using a pipe with the `diamonds` dataframe, which is 
 
 *(If you get `Error: object 'diamonds' not found`, then the tidyverse isn't loaded.* *Use [`library(tidyverse)`](https://tidyverse.tidyverse.org) to do so.)*
 
-Let's say we want to subset this dataframe shows the columns `color`, `depth`, and `price` for diamonds with a depth smaller than 50.
-
-Without using pipes, we could start by selecting the columns of interest with the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and saving the output in a new dataframe called `diamonds_simple`:
+Let's say we want to **subset this dataframe to show the columns `color`, `depth`, and `price`** **for diamonds with a depth smaller than 50**. Without using pipes, we could start by selecting the columns of interest with the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and saving the output in a new dataframe called `diamonds_simple`:
 
 <div class="highlight">
 
@@ -249,7 +247,7 @@ Without using pipes, we could start by selecting the columns of interest with th
 
 </div>
 
-Next, use the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function on `diamonds_simple` to only return the diamonds (*rows*) that we want:
+Next, we can use the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function on `diamonds_simple` to only return the diamonds (*rows*) that we want:
 
 <div class="highlight">
 
@@ -280,7 +278,11 @@ But this can be done much more elegantly, and without wasting computer memory on
 
 </div>
 
-(Above, we used the pipe not just in between [`select()`](https://dplyr.tidyverse.org/reference/select.html) and [`filter()`](https://dplyr.tidyverse.org/reference/filter.html), but also *before* [`select()`](https://dplyr.tidyverse.org/reference/select.html). That adds a line but also makes it even easier to see what's being done.)
+Above, we used the pipe not just in between [`select()`](https://dplyr.tidyverse.org/reference/select.html) and [`filter()`](https://dplyr.tidyverse.org/reference/filter.html), but also *before* [`select()`](https://dplyr.tidyverse.org/reference/select.html). That adds a line but also makes it even easier to see what's being done.
+
+<div class="alert alert-note">
+
+<div>
 
 #### Two Unix & R examples
 
@@ -367,7 +369,11 @@ And to do the same thing in R:
 
 </details>
 
-### The other pipe and a keyboard shortcut
+</div>
+
+</div>
+
+### The `%>%` pipe and a keyboard shortcut
 
 Those of you who've worked with R for a bit are likely familiar with **another pipe operator: `%>%`**.
 
@@ -522,7 +528,7 @@ Above, I mentioned that the pipe passes its contents to the *first argument* of 
 
 </div>
 
-Additionally, make sure you always *name* the argument that you pass `_` to:
+Additionally, make sure you **always name the argument that you pass `_` to**:
 
 <div class="highlight">
 
