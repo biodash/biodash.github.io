@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-01-25"
 lastmod: "2023-01-25"
 toc: true
-rmd_hash: 7f90253d53149543
+rmd_hash: 232994b1717ac5c3
 
 ---
 
@@ -390,7 +390,7 @@ The number of characters shouldn't make much of a difference, though, because it
 To make that keyboard shortcut *map to the base R pipe* (instead of to `%>%`), go to `Tools` in the top menu bar, click `Global Options`, click `Code` in the left menu, and check the box `Use native pipe operator, |> (requires R 4.1+)`:
 
 <p align="center">
-<img src=img/rstudio-pipe-options.png width="60%">
+<img src=img/rstudio-pipe-options.png width="85%">
 </p>
 
 </div>
