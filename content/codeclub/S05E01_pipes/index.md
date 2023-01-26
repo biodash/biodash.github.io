@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-01-26"
 lastmod: "2023-01-26"
 toc: true
-rmd_hash: 2baa6610484a5d2b
+rmd_hash: 44c487d4ea45b316
 
 ---
 
@@ -238,16 +238,17 @@ A pipe is a programming tool that takes the **output** of one command (in R, a *
 
 Pipes prevent you from having to save intermediate output to a file or object. They also make your code shorter and easier to understand.
 
-To give a very simple (but therefore not very practical) example: without a pipe, we can print the number of rows in the `diamonds` dataframe using the [`nrow()`](https://rdrr.io/r/base/nrow.html) function with `diamonds` as the sole argument:
+To give a very minimal example -- without a pipe, we can print the number of rows in the `diamonds` dataframe as follows:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Use the `nrow()` function with `diamonds` as the sole argument:</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; [1] 53940</span></span></code></pre>
 
 </div>
 
-Instead, we could also take the diamonds dataframe and then pipe (`|>`) it into the [`nrow()`](https://rdrr.io/r/base/nrow.html) function:
+Instead, we could also take the `diamonds` dataframe, and then pipe (`|>`) it into the [`nrow()`](https://rdrr.io/r/base/nrow.html) function:
 
 <div class="highlight">
 
@@ -260,7 +261,7 @@ Notice above that we no longer type the input argument to [`nrow()`](https://rdr
 
 ### A more practical example
 
-Let's say we want to **subset the `diamonds` dataframe to only show the columns** **`color`, `depth`, and `price`** **for diamonds with a depth smaller than 50**. Without using pipes, we could start by selecting the columns of interest with the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and saving the output in a new dataframe called `diamonds_simple`:
+Let's say we want to subset the `diamonds` dataframe to **only show the columns `color`, `depth`, and `price`** **for diamonds with a depth smaller than 50**. Without using pipes, we could start by selecting the columns of interest with the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and saving the output in a new dataframe called `diamonds_simple`:
 
 <div class="highlight">
 
@@ -302,9 +303,9 @@ But using the pipe, we can do this more elegantly, and without wasting computer 
 
 We took the `diamonds` dataset and piped it into the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and then we piped the output of [`select()`](https://dplyr.tidyverse.org/reference/select.html) into the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function. Using the the pipe *before* [`select()`](https://dplyr.tidyverse.org/reference/select.html) is not necessary and adds a line, but also makes it even easier to see what's being done!
 
-Like in the earlier example, when we use the pipe, we no longer type out the input argument in the receiving function: it knows to use the piped data.
+Like in the earlier example, when we use the pipe, we no longer type out the input argument in the receiving function: it knows to use the piped data. This is not completely automagical and foolproof though: what actually happens is that the piped data becomes the first argument to the receiving function.
 
-This is not completely automagical and foolproof though: what actually happens is that the piped data becomes the first argument to the receiving function. If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using the `_` placeholder.
+If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using the `_` placeholder.
 
 <div class="alert alert-note">
 
@@ -438,7 +439,7 @@ With one single "pipeline" (operations connected by a pipe `|>`), manipulate the
 -   Print only the columns `carat`, `cut`, `depth`, and `price`
 -   ... for diamonds (rows) with a `price` of more than \$1,000.
 
-Bonus: *How many* diamonds cost more than \$1,000?
+Bonus: *How many* diamonds cost more than \$1,000? And could you get this number directly, by expanding your "pipeline"?
 
 <details>
 <summary>
@@ -448,6 +449,8 @@ Bonus: *How many* diamonds cost more than \$1,000?
 <br>
 
 This is quite similar to the example given above: use the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function to select certain columns, and the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function to select certain rows.
+
+To answer the bonus question: each diamond is on one row, so you are counting rows. And to answer it by expanding your pipeline, recall from the very first pipe example that the [`nrow()`](https://rdrr.io/r/base/nrow.html) function will print the number of rows.
 
 </details>
 
@@ -552,7 +555,7 @@ Above, I mentioned that the pipe passes its contents to the *first argument* of 
 
 </div>
 
-Additionally, make sure you **always name the argument that you pass `_` to**:
+Additionally, when you do use the `_` placeholder, make sure you **always *name* the argument that you pass it to**:
 
 <div class="highlight">
 

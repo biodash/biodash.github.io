@@ -270,16 +270,17 @@ and passes it on to be used as the **input** for another command.
 Pipes prevent you from having to save intermediate output to a file or object.
 They also make your code shorter and easier to understand.
 
-To give a very simple (but therefore not very practical) example:
+To give a very minimal example --
 without a pipe, we can print the number of rows in the `diamonds` dataframe
-using the `nrow()` function with `diamonds` as the sole argument:
+as follows:
 
 ```{r}
+# Use the `nrow()` function with `diamonds` as the sole argument:
 nrow(diamonds)
 ```
 
-Instead, we could also take the diamonds dataframe and then pipe (`|>`) it
-into the `nrow()` function:
+Instead, we could also take the `diamonds` dataframe,
+and then pipe (`|>`) it into the `nrow()` function:
 
 ```{r}
 diamonds |> nrow()
@@ -291,9 +292,8 @@ inside the parentheses:
 
 ### A more practical example
 
-Let's say we want to
-**subset the `diamonds` dataframe to only show the columns**
-**`color`, `depth`, and `price`**
+Let's say we want to subset the `diamonds` dataframe to
+**only show the columns `color`, `depth`, and `price`**
 **for diamonds with a depth smaller than 50**.
 Without using pipes,
 we could start by selecting the columns of interest with the `select()` function,
@@ -330,10 +330,10 @@ but also makes it even easier to see what's being done!
 Like in the earlier example, when we use the pipe,
 we no longer type out the input argument in the receiving function:
 it knows to use the piped data.
-
 This is not completely automagical and foolproof though:
 what actually happens is that the piped data becomes the first argument
 to the receiving function.
+
 If you ever need to use the pipe with a function where the piped data is not
 the first argument,
 see the Bonus section below about using the `_` placeholder.
@@ -469,6 +469,7 @@ manipulate the `diamonds` dataframe such that you:
 - ... for diamonds (rows) with a `price` of more than $1,000.
 
 Bonus: _How many_ diamonds cost more than $1,000?
+And could you get this number directly, by expanding your "pipeline"?
 
 <details><summary><b>Hints</b>(click here)</summary>
 <br>
@@ -476,6 +477,12 @@ Bonus: _How many_ diamonds cost more than $1,000?
 This is quite similar to the example given above:
 use the `select()` function to select certain columns,
 and the `filter()` function to select certain rows.
+
+To answer the bonus question: each diamond is on one row,
+so you are counting rows.
+And to answer it by expanding your pipeline,
+recall from the very first pipe example that the `nrow()` function
+will print the number of rows.
 
 </details>
 
@@ -564,7 +571,8 @@ Therefore, the following also works:
 "ACCGNNT" |> gsub(pattern = "N", replacement = "-")
 ```
 
-Additionally, make sure you **always name the argument that you pass `_` to**:
+Additionally, when you do use the `_` placeholder,
+make sure you **always _name_ the argument that you pass it to**:
 
 ```{r, error=TRUE}
 # Using '_' without the argument name ('x=') doesn't work:
