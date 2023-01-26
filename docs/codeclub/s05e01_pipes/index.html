@@ -342,7 +342,7 @@
         content="2023-01-26T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2023-01-26T12:58:39-05:00">
+    <meta property="article:modified_time" content="2023-01-26T15:28:33-05:00">
   
 
   
@@ -928,7 +928,7 @@
 </div>
 <br>
 <h3 id="r-packages">R packages</h3>
-<p>You can think of packages as &ldquo;add-ons&rdquo; / &ldquo;extensions&rdquo; to base R.</p>
+<p>You can think of packages as &ldquo;add-ons&rdquo; / &ldquo;extensions&rdquo; to base R functionality.</p>
 <h4 id="installation-versus-loading">Installation versus loading</h4>
 <p>To be able to use them, packages have to be <strong>installed</strong> (usually <em>from within R</em>, using R code). Once you have done this, you don&rsquo;t need to redo it until you switch to a different version of R.</p>
 <p>Unlike installation, <strong>loading</strong> a package is necessary again and again, in every R session that you want to use it.</p>
@@ -1062,8 +1062,8 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'>3</span> J        43  <span style='text-decoration: underline;'>4</span>778</span></span></code></pre>
 </div>
 <p>We took the <code>diamonds</code> dataset and piped it into the <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> function, and then we piped the output of <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> into the <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> function. Using the the pipe <em>before</em> <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> is not necessary and adds a line, but also makes it even easier to see what&rsquo;s being done!</p>
-<p>Like in the earlier example, when we use the pipe, we no longer type out the input argument in the receiving function: it knows to use the piped data. This is not completely automagical and foolproof though: what actually happens is that the piped data becomes the first argument to the receiving function.</p>
-<p>If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using the <code>_</code> placeholder.</p>
+<p>Like in the earlier example, when we use the pipe, we <em>don&rsquo;t type the corresponding input argument</em> in the receiving function: it knows to use the piped data. This is not completely &ldquo;automagical&rdquo; and foolproof though: what actually happens is that the piped data becomes the first argument to the receiving function.</p>
+<p>If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using <strong>the <code>_</code> placeholder</strong>.</p>
 <div class="alert alert-note">
 <div>
 <h4 id="two-unix--r-examples">Two Unix &amp; R examples</h4>
@@ -1183,7 +1183,7 @@ cat words.txt | sort | uniq -c
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 39,406 more rows</span></span></span></code></pre>
 </div>
 <p>10 rows are printed to screen, and it says <code>… with 39,406 more rows</code> at the bottom: therefore, there are 39,416 diamonds that cost more than $1,000.</p>
-<p>You can also get this number with code &ndash; for instance by adding the <a href="https://rdrr.io/r/base/nrow.html" target="_blank" rel="noopener"><code>nrow()</code></a> function to the pipeline, which will count the number of rows (excluding the header line) in a dataframe.</p>
+<p>You can also get this number with code &ndash; for instance by adding the <a href="https://rdrr.io/r/base/nrow.html" target="_blank" rel="noopener"><code>nrow()</code></a> function to the pipeline, which will count the number of rows (excluding the header line) in a dataframe:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>carat</span>, <span class='nv'>cut</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
@@ -1206,12 +1206,12 @@ cat words.txt | sort | uniq -c
 </div>
 <p><em>(For clarity, I named <a href="https://rdrr.io/r/base/grep.html" target="_blank" rel="noopener"><code>gsub()</code></a>&rsquo;s arguments above.</em> <em>Without naming the arguments, it would be: <code>gsub(&quot;N&quot;, &quot;-&quot;, &quot;ACCGNNT&quot;)</code>).</em></p>
 <p>As you could see above, what we would usually think of as the input data, the string passed to the argument <code>x</code>, is not the first but the third argument to <a href="https://rdrr.io/r/base/grep.html" target="_blank" rel="noopener"><code>gsub()</code></a>.</p>
-<p>To make the pipe work with <a href="https://rdrr.io/r/base/grep.html" target="_blank" rel="noopener"><code>gsub()</code></a>, use an underscore (<code>_</code>) as a placeholder to indicate where the piped data should go:</p>
+<p>To make the pipe work with <a href="https://rdrr.io/r/base/grep.html" target="_blank" rel="noopener"><code>gsub()</code></a>, <strong>use an underscore (<code>_</code>) as a placeholder</strong> that indicates where the piped data goes:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='s'>"ACCGNNT"</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>"N"</span>, replacement <span class='o'>=</span> <span class='s'>"-"</span>, x <span class='o'>=</span> <span class='nv'>_</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; [1] "ACCG--T"</span></span></code></pre>
 </div>
-<p>If you&rsquo;re wondering how you can know the order of the arguments of a function, watch the pop-up box when you type a function&rsquo;s name and opening parenthesis (see the screenshot below), or check the help with e.g. <a href="https://rdrr.io/r/base/grep.html" target="_blank" rel="noopener"><code>?gsub</code></a>.</p>
+<p>As an aside, if you&rsquo;re wondering how you&rsquo;d know a function&rsquo;s argument order, watch the pop-up box when you type a function&rsquo;s name and the opening parenthesis (see the screenshot below), or check the help e.g. by typing <a href="https://rdrr.io/r/base/grep.html" target="_blank" rel="noopener"><code>?gsub</code></a> in the Console.</p>
 <p align="center">
 <img src=img/gsub.png width="45%">
 </p>
@@ -1232,6 +1232,7 @@ cat words.txt | sort | uniq -c
 </div>
 <br>
 <hr>
+<br>
 
                     </div>
 
