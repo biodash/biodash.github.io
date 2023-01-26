@@ -237,6 +237,24 @@ If instead, you got something like...
 
 </div></div>
 
+### The `diamonds` dataframe
+
+In R, we work a lot with "dataframes",
+rectangular data structures like spreadsheets --
+and in particular, the R4DS book and the _tidyverse_ focus on this very heavily.
+
+Today we'll see some examples of using the pipe with the `diamonds` dataframe,
+which is automatically loaded along with the _tidyverse_.
+It contains information on almost 54,000 diamonds (one diamond per row):
+
+```{r}
+# Simply typing the dataframe's name in the console will print the first rows:
+diamonds
+```
+
+_(If you get `Error: object 'diamonds' not found`, then the tidyverse isn't loaded._
+_Use `library(tidyverse)` to do so.)_
+
 <br>
 
 ----
@@ -252,26 +270,30 @@ and passes it on to be used as the **input** for another command.
 Pipes prevent you from having to save intermediate output to a file or object.
 They also make your code shorter and easier to understand.
 
-### An example
-
-In R, we work a lot with "dataframes",
-rectangular data structures like spreadsheets --
-and in particular, the R4DS book and the _tidyverse_ focus on this very heavily.
-
-So let's see an example of using a pipe with the `diamonds` dataframe,
-which is automatically loaded along with the _tidyverse_.
-It contains information on almost 54,000 diamonds (one diamond per row):
+To give a very simple (but therefore not very practical) example:
+without a pipe, we can print the number of rows in the `diamonds` dataframe
+using the `nrow()` function with `diamonds` as the sole argument:
 
 ```{r}
-# Simply typing the dataframe's name in the console will print the first rows:
-diamonds
+nrow(diamonds)
 ```
 
-_(If you get `Error: object 'diamonds' not found`, then the tidyverse isn't loaded._
-_Use `library(tidyverse)` to do so.)_
+Instead, we could also take the diamonds dataframe and then pipe (`|>`) it
+into the `nrow()` function:
+
+```{r}
+diamonds |> nrow()
+```
+
+Notice above that we no longer type the input argument to `nrow()`
+inside the parentheses:
+`nrow()` recognizes that data came in through the pipe.
+
+### A more practical example
 
 Let's say we want to
-**subset this dataframe to show the columns `color`, `depth`, and `price`**
+**subset the `diamonds` dataframe to only show the columns**
+**`color`, `depth`, and `price`**
 **for diamonds with a depth smaller than 50**.
 Without using pipes,
 we could start by selecting the columns of interest with the `select()` function,
@@ -290,18 +312,31 @@ to only return the diamonds (_rows_) that we want:
 filter(diamonds_simple, depth < 50)
 ```
 
-But this can be done much more elegantly,
-and without wasting computer memory on an intermediate object, using the pipe:
+But using the pipe,
+we can do this more elegantly,
+and without wasting computer memory on an intermediate object:
 
 ```{r}
-diamonds |>
-  select(color, depth, price) |>
-  filter(depth < 50)
+diamonds |>                       # Take 'diamonds' and push it through the pipe
+  select(color, depth, price) |>  # No input is specified, and the output is piped
+  filter(depth < 50)              # Again, no input is specified
 ```
 
-Above, we used the pipe not just in between `select()` and `filter()`,
-but also _before_ `select()`.
-That adds a line but also makes it even easier to see what's being done.
+We took the `diamonds` dataset and piped it into the `select()` function,
+and then we piped the output of `select()` into the `filter()` function.
+Using the the pipe _before_ `select()` is not necessary and adds a line,
+but also makes it even easier to see what's being done!
+
+Like in the earlier example, when we use the pipe,
+we no longer type out the input argument in the receiving function:
+it knows to use the piped data.
+
+This is not completely automagical and foolproof though:
+what actually happens is that the piped data becomes the first argument
+to the receiving function.
+If you ever need to use the pipe with a function where the piped data is not
+the first argument,
+see the Bonus section below about using the `_` placeholder.
 
 <div class="alert alert-note"><div>
 
@@ -401,6 +436,10 @@ because it remains even quicker to use the
 **RStudio keyboard shortcut for the pipe,**
 **which is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>.**
 
+There are some differences in the behavior of the `|>` and `%>%` pipes
+in more advanced use cases, which the book chapter goes into
+(check that out if you have used `%>%` a lot).
+
 <div class="puzzle"><div>
 
 ### Your turn: Set the `|>` pipe as default
@@ -418,14 +457,6 @@ and check the box `Use native pipe operator, |> (requires R 4.1+)`:
 </div></div>
 
 <br>
-
-There are some differences in the behavior of the `|>` and `%>%` pipes
-in more advanced use cases, which the book chapter goes into
-(check that out if you have used `%>%` a lot).
-
-If you ever need to use the pipe with a function where the piped data is not
-the first argument,
-see the Bonus section below about using the `_` placeholder.
 
 <div class="puzzle"><div>
 

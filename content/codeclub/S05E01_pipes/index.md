@@ -5,10 +5,10 @@ subtitle: "Introducing a new season of Code Club, in which we will continue to r
 summary: "We'll continue with the R for Data Science book in the 5th season of Code Club, now switching to the brand-new second edition! We'll talk about pipes in R, which is covered in the short Chapter 5 of the book."
 authors: [admin]
 tags: [codeclub, r4ds]
-date: "2023-01-25"
-lastmod: "2023-01-25"
+date: "2023-01-26"
+lastmod: "2023-01-26"
 toc: true
-rmd_hash: 232994b1717ac5c3
+rmd_hash: 2baa6610484a5d2b
 
 ---
 
@@ -197,23 +197,11 @@ If instead, you got something like...
 
 </div>
 
-<br>
-
-------------------------------------------------------------------------
-
-## Chapter 5: Pipes
-
-### What is a pipe?
-
-A pipe is a programming tool that takes the **output** of one command (in R, a *function*), and passes it on to be used as the **input** for another command.
-
-Pipes prevent you from having to save intermediate output to a file or object. They also make your code shorter and easier to understand.
-
-### An example
+### The `diamonds` dataframe
 
 In R, we work a lot with "dataframes", rectangular data structures like spreadsheets -- and in particular, the R4DS book and the *tidyverse* focus on this very heavily.
 
-So let's see an example of using a pipe with the `diamonds` dataframe, which is automatically loaded along with the *tidyverse*. It contains information on almost 54,000 diamonds (one diamond per row):
+Today we'll see some examples of using the pipe with the `diamonds` dataframe, which is automatically loaded along with the *tidyverse*. It contains information on almost 54,000 diamonds (one diamond per row):
 
 <div class="highlight">
 
@@ -238,7 +226,41 @@ So let's see an example of using a pipe with the `diamonds` dataframe, which is 
 
 *(If you get `Error: object 'diamonds' not found`, then the tidyverse isn't loaded.* *Use [`library(tidyverse)`](https://tidyverse.tidyverse.org) to do so.)*
 
-Let's say we want to **subset this dataframe to show the columns `color`, `depth`, and `price`** **for diamonds with a depth smaller than 50**. Without using pipes, we could start by selecting the columns of interest with the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and saving the output in a new dataframe called `diamonds_simple`:
+<br>
+
+------------------------------------------------------------------------
+
+## Chapter 5: Pipes
+
+### What is a pipe?
+
+A pipe is a programming tool that takes the **output** of one command (in R, a *function*), and passes it on to be used as the **input** for another command.
+
+Pipes prevent you from having to save intermediate output to a file or object. They also make your code shorter and easier to understand.
+
+To give a very simple (but therefore not very practical) example: without a pipe, we can print the number of rows in the `diamonds` dataframe using the [`nrow()`](https://rdrr.io/r/base/nrow.html) function with `diamonds` as the sole argument:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] 53940</span></span></code></pre>
+
+</div>
+
+Instead, we could also take the diamonds dataframe and then pipe (`|>`) it into the [`nrow()`](https://rdrr.io/r/base/nrow.html) function:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] 53940</span></span></code></pre>
+
+</div>
+
+Notice above that we no longer type the input argument to [`nrow()`](https://rdrr.io/r/base/nrow.html) inside the parentheses: [`nrow()`](https://rdrr.io/r/base/nrow.html) recognizes that data came in through the pipe.
+
+### A more practical example
+
+Let's say we want to **subset the `diamonds` dataframe to only show the columns** **`color`, `depth`, and `price`** **for diamonds with a depth smaller than 50**. Without using pipes, we could start by selecting the columns of interest with the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and saving the output in a new dataframe called `diamonds_simple`:
 
 <div class="highlight">
 
@@ -262,13 +284,13 @@ Next, we can use the [`filter()`](https://dplyr.tidyverse.org/reference/filter.h
 
 </div>
 
-But this can be done much more elegantly, and without wasting computer memory on an intermediate object, using the pipe:
+But using the pipe, we can do this more elegantly, and without wasting computer memory on an intermediate object:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>color</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>depth</span> <span class='o'>&lt;</span> <span class='m'>50</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span>                       <span class='c'># Take 'diamonds' and push it through the pipe</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>color</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span> <span class='o'>|&gt;</span>  <span class='c'># No input is specified, and the output is piped</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>depth</span> <span class='o'>&lt;</span> <span class='m'>50</span><span class='o'>)</span>              <span class='c'># Again, no input is specified</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 3 × 3</span></span></span>
 <span><span class='c'>#&gt;   color depth price</span></span>
 <span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;ord&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
@@ -278,7 +300,11 @@ But this can be done much more elegantly, and without wasting computer memory on
 
 </div>
 
-Above, we used the pipe not just in between [`select()`](https://dplyr.tidyverse.org/reference/select.html) and [`filter()`](https://dplyr.tidyverse.org/reference/filter.html), but also *before* [`select()`](https://dplyr.tidyverse.org/reference/select.html). That adds a line but also makes it even easier to see what's being done.
+We took the `diamonds` dataset and piped it into the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and then we piped the output of [`select()`](https://dplyr.tidyverse.org/reference/select.html) into the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function. Using the the pipe *before* [`select()`](https://dplyr.tidyverse.org/reference/select.html) is not necessary and adds a line, but also makes it even easier to see what's being done!
+
+Like in the earlier example, when we use the pipe, we no longer type out the input argument in the receiving function: it knows to use the piped data.
+
+This is not completely automagical and foolproof though: what actually happens is that the piped data becomes the first argument to the receiving function. If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using the `_` placeholder.
 
 <div class="alert alert-note">
 
@@ -381,6 +407,8 @@ This pipe is loaded as part of the *tidyverse*, and until recently was very wide
 
 The number of characters shouldn't make much of a difference, though, because it remains even quicker to use the **RStudio keyboard shortcut for the pipe,** **which is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>.**
 
+There are some differences in the behavior of the `|>` and `%>%` pipes in more advanced use cases, which the book chapter goes into (check that out if you have used `%>%` a lot).
+
 <div class="puzzle">
 
 <div>
@@ -398,10 +426,6 @@ To make that keyboard shortcut *map to the base R pipe* (instead of to `%>%`), g
 </div>
 
 <br>
-
-There are some differences in the behavior of the `|>` and `%>%` pipes in more advanced use cases, which the book chapter goes into (check that out if you have used `%>%` a lot).
-
-If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using the `_` placeholder.
 
 <div class="puzzle">
 
