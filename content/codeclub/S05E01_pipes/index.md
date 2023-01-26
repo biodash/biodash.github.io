@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-01-26"
 lastmod: "2023-01-26"
 toc: true
-rmd_hash: 24de941b1f28e600
+rmd_hash: c91965584b346ebb
 
 ---
 
@@ -144,7 +144,7 @@ If you have a lower version of R, I would recommend that you update at the end o
 
 ### R packages
 
-You can think of packages as "add-ons" / "extensions" to base R.
+You can think of packages as "add-ons" / "extensions" to base R functionality.
 
 #### Installation versus loading
 
@@ -303,9 +303,9 @@ But using the pipe, we can do this more elegantly, and without wasting computer 
 
 We took the `diamonds` dataset and piped it into the [`select()`](https://dplyr.tidyverse.org/reference/select.html) function, and then we piped the output of [`select()`](https://dplyr.tidyverse.org/reference/select.html) into the [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) function. Using the the pipe *before* [`select()`](https://dplyr.tidyverse.org/reference/select.html) is not necessary and adds a line, but also makes it even easier to see what's being done!
 
-Like in the earlier example, when we use the pipe, we no longer type out the input argument in the receiving function: it knows to use the piped data. This is not completely automagical and foolproof though: what actually happens is that the piped data becomes the first argument to the receiving function.
+Like in the earlier example, when we use the pipe, we *don't type the corresponding input argument* in the receiving function: it knows to use the piped data. This is not completely "automagical" and foolproof though: what actually happens is that the piped data becomes the first argument to the receiving function.
 
-If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using the `_` placeholder.
+If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using **the `_` placeholder**.
 
 <div class="alert alert-note">
 
@@ -487,7 +487,7 @@ To answer the bonus question: each diamond is on one row, so you are counting ro
 
 10 rows are printed to screen, and it says `… with 39,406 more rows` at the bottom: therefore, there are 39,416 diamonds that cost more than \$1,000.
 
-You can also get this number with code -- for instance by adding the [`nrow()`](https://rdrr.io/r/base/nrow.html) function to the pipeline, which will count the number of rows (excluding the header line) in a dataframe.
+You can also get this number with code -- for instance by adding the [`nrow()`](https://rdrr.io/r/base/nrow.html) function to the pipeline, which will count the number of rows (excluding the header line) in a dataframe:
 
 <div class="highlight">
 
@@ -527,7 +527,7 @@ Let's see an example with the [`gsub()`](https://rdrr.io/r/base/grep.html) funct
 
 As you could see above, what we would usually think of as the input data, the string passed to the argument `x`, is not the first but the third argument to [`gsub()`](https://rdrr.io/r/base/grep.html).
 
-To make the pipe work with [`gsub()`](https://rdrr.io/r/base/grep.html), use an underscore (`_`) as a placeholder to indicate where the piped data should go:
+To make the pipe work with [`gsub()`](https://rdrr.io/r/base/grep.html), **use an underscore (`_`) as a placeholder** that indicates where the piped data goes:
 
 <div class="highlight">
 
@@ -536,7 +536,7 @@ To make the pipe work with [`gsub()`](https://rdrr.io/r/base/grep.html), use an 
 
 </div>
 
-If you're wondering how you can know the order of the arguments of a function, watch the pop-up box when you type a function's name and opening parenthesis (see the screenshot below), or check the help with e.g. [`?gsub`](https://rdrr.io/r/base/grep.html).
+As an aside, if you're wondering how you'd know a function's argument order, watch the pop-up box when you type a function's name and the opening parenthesis (see the screenshot below), or check the help e.g. by typing [`?gsub`](https://rdrr.io/r/base/grep.html) in the Console.
 
 <p align="center">
 <img src=img/gsub.png width="45%">
@@ -569,4 +569,6 @@ Additionally, when you do use the `_` placeholder, make sure you **always *name*
 <br>
 
 ------------------------------------------------------------------------
+
+<br>
 
