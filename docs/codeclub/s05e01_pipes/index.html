@@ -342,7 +342,7 @@
         content="2023-01-26T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2023-01-26T10:17:13-05:00">
+    <meta property="article:modified_time" content="2023-01-26T11:57:21-05:00">
   
 
   
@@ -1020,19 +1020,20 @@
 <h3 id="what-is-a-pipe">What is a pipe?</h3>
 <p>A pipe is a programming tool that takes the <strong>output</strong> of one command (in R, a <em>function</em>), and passes it on to be used as the <strong>input</strong> for another command.</p>
 <p>Pipes prevent you from having to save intermediate output to a file or object. They also make your code shorter and easier to understand.</p>
-<p>To give a very simple (but therefore not very practical) example: without a pipe, we can print the number of rows in the <code>diamonds</code> dataframe using the <a href="https://rdrr.io/r/base/nrow.html" target="_blank" rel="noopener"><code>nrow()</code></a> function with <code>diamonds</code> as the sole argument:</p>
+<p>To give a very minimal example &ndash; without a pipe, we can print the number of rows in the <code>diamonds</code> dataframe as follows:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Use the `nrow()` function with `diamonds` as the sole argument:</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>diamonds</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; [1] 53940</span></span></code></pre>
 </div>
-<p>Instead, we could also take the diamonds dataframe and then pipe (<code>|&gt;</code>) it into the <a href="https://rdrr.io/r/base/nrow.html" target="_blank" rel="noopener"><code>nrow()</code></a> function:</p>
+<p>Instead, we could also take the <code>diamonds</code> dataframe, and then pipe (<code>|&gt;</code>) it into the <a href="https://rdrr.io/r/base/nrow.html" target="_blank" rel="noopener"><code>nrow()</code></a> function:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>diamonds</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; [1] 53940</span></span></code></pre>
 </div>
 <p>Notice above that we no longer type the input argument to <a href="https://rdrr.io/r/base/nrow.html" target="_blank" rel="noopener"><code>nrow()</code></a> inside the parentheses: <a href="https://rdrr.io/r/base/nrow.html" target="_blank" rel="noopener"><code>nrow()</code></a> recognizes that data came in through the pipe.</p>
 <h3 id="a-more-practical-example">A more practical example</h3>
-<p>Let&rsquo;s say we want to <strong>subset the <code>diamonds</code> dataframe to only show the columns</strong> <strong><code>color</code>, <code>depth</code>, and <code>price</code></strong> <strong>for diamonds with a depth smaller than 50</strong>. Without using pipes, we could start by selecting the columns of interest with the <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> function, and saving the output in a new dataframe called <code>diamonds_simple</code>:</p>
+<p>Let&rsquo;s say we want to subset the <code>diamonds</code> dataframe to <strong>only show the columns <code>color</code>, <code>depth</code>, and <code>price</code></strong> <strong>for diamonds with a depth smaller than 50</strong>. Without using pipes, we could start by selecting the columns of interest with the <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> function, and saving the output in a new dataframe called <code>diamonds_simple</code>:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># The first argument is the input dataframe, the others are the columns we want</span></span>
 <span><span class='nv'>diamonds_simple</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>diamonds</span>, <span class='nv'>color</span>, <span class='nv'>depth</span>, <span class='nv'>price</span><span class='o'>)</span></span></code></pre>
@@ -1061,8 +1062,8 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'>3</span> J        43  <span style='text-decoration: underline;'>4</span>778</span></span></code></pre>
 </div>
 <p>We took the <code>diamonds</code> dataset and piped it into the <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> function, and then we piped the output of <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> into the <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> function. Using the the pipe <em>before</em> <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> is not necessary and adds a line, but also makes it even easier to see what&rsquo;s being done!</p>
-<p>Like in the earlier example, when we use the pipe, we no longer type out the input argument in the receiving function: it knows to use the piped data.</p>
-<p>This is not completely automagical and foolproof though: what actually happens is that the piped data becomes the first argument to the receiving function. If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using the <code>_</code> placeholder.</p>
+<p>Like in the earlier example, when we use the pipe, we no longer type out the input argument in the receiving function: it knows to use the piped data. This is not completely automagical and foolproof though: what actually happens is that the piped data becomes the first argument to the receiving function.</p>
+<p>If you ever need to use the pipe with a function where the piped data is not the first argument, see the Bonus section below about using the <code>_</code> placeholder.</p>
 <div class="alert alert-note">
 <div>
 <h4 id="two-unix--r-examples">Two Unix &amp; R examples</h4>
@@ -1147,13 +1148,14 @@ cat words.txt | sort | uniq -c
 <li>Print only the columns <code>carat</code>, <code>cut</code>, <code>depth</code>, and <code>price</code></li>
 <li>&hellip; for diamonds (rows) with a <code>price</code> of more than $1,000.</li>
 </ul>
-<p>Bonus: <em>How many</em> diamonds cost more than $1,000?</p>
+<p>Bonus: <em>How many</em> diamonds cost more than $1,000? And could you get this number directly, by expanding your &ldquo;pipeline&rdquo;?</p>
 <details>
 <summary>
 <b>Hints</b>(click here)
 </summary>
 <br>
 <p>This is quite similar to the example given above: use the <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> function to select certain columns, and the <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> function to select certain rows.</p>
+<p>To answer the bonus question: each diamond is on one row, so you are counting rows. And to answer it by expanding your pipeline, recall from the very first pipe example that the <a href="https://rdrr.io/r/base/nrow.html" target="_blank" rel="noopener"><code>nrow()</code></a> function will print the number of rows.</p>
 </details>
 <br>
 <details>
@@ -1221,7 +1223,7 @@ cat words.txt | sort | uniq -c
 <span><span class='s'>"ACCGNNT"</span> <span class='o'>|&gt;</span> <span class='nf'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='o'>(</span>pattern <span class='o'>=</span> <span class='s'>"N"</span>, replacement <span class='o'>=</span> <span class='s'>"-"</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; [1] "ACCG--T"</span></span></code></pre>
 </div>
-<p>Additionally, make sure you <strong>always name the argument that you pass <code>_</code> to</strong>:</p>
+<p>Additionally, when you do use the <code>_</code> placeholder, make sure you <strong>always <em>name</em> the argument that you pass it to</strong>:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'># Using '_' without the argument name ('x=') doesn't work:
 "ACCGNNT" |> gsub(pattern = "N", replacement = "-", _)
