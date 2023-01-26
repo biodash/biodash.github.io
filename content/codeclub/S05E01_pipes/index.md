@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-01-26"
 lastmod: "2023-01-26"
 toc: true
-rmd_hash: 44c487d4ea45b316
+rmd_hash: 24de941b1f28e600
 
 ---
 
@@ -322,7 +322,7 @@ Pipes originate in Unix terminals, and are ubiquitous there. So for those of you
 
 <br>
 
-*(If you're trying to follow along yourself:* *the Unix/terminal examples will only work natively on Mac and Linux,* *where you can simply click the `Terminal` tab in the bottom-right RStudio* *panel, and issue Unix commands.)*
+*(If you're trying to follow along yourself:* *the Unix/terminal examples will only work natively on Mac and Linux,* *where you can simply click the `Terminal` tab in the bottom-left RStudio* *panel next to `Console`, and issue Unix commands.)*
 
 **Counting files**
 
@@ -340,7 +340,7 @@ ls | wc -l
 
 </div>
 
-We can do the same in R, where the function [`dir()`](https://rdrr.io/r/base/list.files.html) lists files, while the function [`length()`](https://rdrr.io/r/base/length.html) counts the number of elements:
+So, there happen to be 4 files in the folder this code is run in. We can do the same in R, where the function [`dir()`](https://rdrr.io/r/base/list.files.html) lists files, while the function [`length()`](https://rdrr.io/r/base/length.html) counts the number of elements:
 
 <div class="highlight">
 
