@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-02-01"
 lastmod: "2023-02-01"
 toc: true
-rmd_hash: b93ea707d6e994e7
+rmd_hash: 02a3a122c965bb58
 
 ---
 
@@ -381,35 +381,96 @@ Now we're in a good position to look at how song ranks vary over time by drawing
 
 ## Breakout Rooms 2
 
+<div class="puzzle">
+
+<div>
+
 ### Exercise 1
 
-1.  Create a dataset `table_pivot_long1` from `table1` with the following variables: `country`, `year`, `population`, `type`, and `count`.
+1.  Create a dataframe `table_pivot_long1` from `table1` with the following variables: `country`, `year`, `population`, `type`, and `count`.
 
-Hint use starts_with("case), values_to ="count"
+2.  What are the number of rows and columns of `table_pivot_long1`?
 
-1.  What are the number of rows and columns of `table_pivot_long1`?
+<details>
+<summary>
+<b>Hints</b>(click here)
+</summary>
 
-Solution question 1
+<br>
+
+Use `starts_with("case), values_to = "count"`
+
+</details>
+<details>
+<summary>
+<b>Solution</b>(click here)
+</summary>
+
+<br>
+
+1.  
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>#a)</span></span>
-<span><span class='nv'>table_pivot_long1</span> <span class='o'>&lt;-</span> <span class='nv'>table1</span> <span class='o'>|&gt;</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>table_pivot_long1</span> <span class='o'>&lt;-</span> <span class='nv'>table1</span> <span class='o'>|&gt;</span></span>
 <span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='o'>(</span><span class='s'>"cases"</span><span class='o'>)</span>, </span>
 <span>                            names_to <span class='o'>=</span> <span class='s'>"type"</span>, </span>
 <span>                            values_to <span class='o'>=</span> <span class='s'>"count"</span><span class='o'>)</span></span>
 <span></span>
-<span><span class='c'># b)The dimension of table_pivot_long1 is 6 observations and 5 variables</span></span></code></pre>
+<span><span class='nv'>table_pivot_long1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 5</span></span></span>
+<span><span class='c'>#&gt;   country      year population type   count</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Afghanistan  <span style='text-decoration: underline;'>1</span>999   19<span style='text-decoration: underline;'>987</span>071 cases    745</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Afghanistan  <span style='text-decoration: underline;'>2</span>000   20<span style='text-decoration: underline;'>595</span>360 cases   <span style='text-decoration: underline;'>2</span>666</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Brazil       <span style='text-decoration: underline;'>1</span>999  172<span style='text-decoration: underline;'>006</span>362 cases  <span style='text-decoration: underline;'>37</span>737</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> Brazil       <span style='text-decoration: underline;'>2</span>000  174<span style='text-decoration: underline;'>504</span>898 cases  <span style='text-decoration: underline;'>80</span>488</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> China        <span style='text-decoration: underline;'>1</span>999 <span style='text-decoration: underline;'>1</span>272<span style='text-decoration: underline;'>915</span>272 cases <span style='text-decoration: underline;'>212</span>258</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> China        <span style='text-decoration: underline;'>2</span>000 <span style='text-decoration: underline;'>1</span>280<span style='text-decoration: underline;'>428</span>583 cases <span style='text-decoration: underline;'>213</span>766</span></span></code></pre>
 
 </div>
+
+1.  `table_pivot_long1` has 6 rows and 5 columns
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>table_pivot_long1</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] 6 5</span></span></code></pre>
+
+</div>
+
+</details>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="puzzle">
+
+<div>
 
 ### Exercise 2
 
 Compute the rate per 10,000 for `table_pivot_long1`, and name the new computed variable `rate`.
 
-Hints use mutate, count, population
+<details>
+<summary>
+<b>Hints</b>(click here)
+</summary>
 
-Solution question 2
+<br>
+
+Use the [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) function similar to the first example with [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) in this session.
+
+</details>
+<details>
+<summary>
+<b>Solution</b>(click here)
+</summary>
+
+<br>
 
 <div class="highlight">
 
@@ -424,6 +485,12 @@ Solution question 2
 <span><span class='c'>#&gt; <span style='color: #555555;'>4</span> Brazil       <span style='text-decoration: underline;'>2</span>000  174<span style='text-decoration: underline;'>504</span>898 cases  <span style='text-decoration: underline;'>80</span>488 0.461 </span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>5</span> China        <span style='text-decoration: underline;'>1</span>999 <span style='text-decoration: underline;'>1</span>272<span style='text-decoration: underline;'>915</span>272 cases <span style='text-decoration: underline;'>212</span>258 0.167 </span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>6</span> China        <span style='text-decoration: underline;'>2</span>000 <span style='text-decoration: underline;'>1</span>280<span style='text-decoration: underline;'>428</span>583 cases <span style='text-decoration: underline;'>213</span>766 0.167</span></span></code></pre>
+
+</div>
+
+</details>
+
+</div>
 
 </div>
 
