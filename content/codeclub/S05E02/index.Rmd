@@ -281,8 +281,12 @@ Specifically, there are 10 peaks from 38 metabolites.
 Here's how you can download and read in that dataset:
 
 ```{r, eval=FALSE}
+# Download the CSV file
 file_URL <- "https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E02/Metabolite.csv"
 download.file(url = file_URL, destfile = "Metabolite.csv")
+
+# Read the CSV file into a dataframe
+library(tidyverse)
 metabolites <- read_csv("Metabolite.csv")
 ```
 
@@ -348,8 +352,17 @@ Add a column to `metabolites_long` with the count in units of 1000s
 by dividing the count column by 1000,
 and name the new variable `count_k`.
 
-Bonus: if you've used `group_by()` and `summarize()` before,
-try to compute the mean count per metabolite.
+Take a moment to realize that this is much easier to compute once the data is
+in a tidy format, and the same is true for the bonus activities below.
+
+Bonus:
+
+- If you've used `group_by()` and `summarize()` before,
+  try to compute the mean count per metabolite.
+
+- If you've made `ggplot`s before,
+  make a boxplot of metabolite counts, with counts across Peaks along the x-axis,
+  and metabolites along the y-axis.
 
 <details><summary><b>Hints</b>(click here)</summary>
 <br>
@@ -369,12 +382,20 @@ metabolites_long |>
   mutate(count_k = count / 1000)
 ```
 
-Bonus:
+Bonus 1:
 
 ```{r}
 metabolites_long |>
   group_by(Soy_Metabolite) |>
   summarize(mean_count = mean(count))
+```
+
+Bonus 2:
+
+```{r}
+metabolites_long |> 
+  ggplot() +
+  geom_boxplot(aes(y = Soy_Metabolite, x = count))
 ```
 
 </details>

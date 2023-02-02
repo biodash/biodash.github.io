@@ -5,10 +5,10 @@ subtitle: "Today, we'll start with the R4DS chapter on \"tidy\" data, learning w
 summary: "Today, we'll start with the R4DS chapter on \"tidy\" data, learning what it means for a dataframe to be in a tidy format, and how to reshape untidy into tidy data."
 authors: [stephen-opiyo]
 tags: [codeclub, r4ds]
-date: "2023-02-01"
-lastmod: "2023-02-01"
+date: "2023-02-02"
+lastmod: "2023-02-02"
 toc: true
-rmd_hash: 6eb26a01e0e8de3e
+rmd_hash: 5051b654db42767f
 
 ---
 
@@ -387,8 +387,12 @@ Here's how you can download and read in that dataset:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>file_URL</span> <span class='o'>&lt;-</span> <span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E02/Metabolite.csv"</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Download the CSV file</span></span>
+<span><span class='nv'>file_URL</span> <span class='o'>&lt;-</span> <span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E02/Metabolite.csv"</span></span>
 <span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>file_URL</span>, destfile <span class='o'>=</span> <span class='s'>"Metabolite.csv"</span><span class='o'>)</span></span>
+<span></span>
+<span><span class='c'># Read the CSV file into a dataframe</span></span>
+<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span>
 <span><span class='nv'>metabolites</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"Metabolite.csv"</span><span class='o'>)</span></span></code></pre>
 
 </div>
@@ -481,7 +485,13 @@ Bonus: `metabolites` has 38 rows and 11 columns, whereas `metabolites_long` has 
 
 Add a column to `metabolites_long` with the count in units of 1000s by dividing the count column by 1000, and name the new variable `count_k`.
 
-Bonus: if you've used [`group_by()`](https://dplyr.tidyverse.org/reference/group_by.html) and [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html) before, try to compute the mean count per metabolite.
+Take a moment to realize that this is much easier to compute once the data is in a tidy format, and the same is true for the bonus activities below.
+
+Bonus:
+
+-   If you've used [`group_by()`](https://dplyr.tidyverse.org/reference/group_by.html) and [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html) before, try to compute the mean count per metabolite.
+
+-   If you've made `ggplot`s before, make a boxplot of metabolite counts, with counts across Peaks along the x-axis, and metabolites along the y-axis.
 
 <details>
 <summary>
@@ -524,7 +534,7 @@ Use the [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) function
 
 </div>
 
-Bonus:
+Bonus 1:
 
 <div class="highlight">
 
@@ -545,6 +555,18 @@ Bonus:
 <span><span class='c'>#&gt; <span style='color: #555555;'> 9</span> Clotiazepam          <span style='text-decoration: underline;'>57</span>847.</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>10</span> Cloxazolam          <span style='text-decoration: underline;'>144</span>292.</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 28 more rows</span></span></span></code></pre>
+
+</div>
+
+Bonus 2:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>metabolites_long</span> <span class='o'>|&gt;</span> </span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nv'>Soy_Metabolite</span>, x <span class='o'>=</span> <span class='nv'>count</span><span class='o'>)</span><span class='o'>)</span></span>
+</code></pre>
+<img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
