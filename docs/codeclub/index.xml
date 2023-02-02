@@ -15,7 +15,7 @@
     <item>
       <title>S05E02: R4DS (2e) - Ch. 6 - Tidy Data</title>
       <link>https://biodash.github.io/codeclub/s05e02/</link>
-      <pubDate>Wed, 01 Feb 2023 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 02 Feb 2023 00:00:00 +0000</pubDate>
       <guid>https://biodash.github.io/codeclub/s05e02/</guid>
       <description>&lt;hr&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
@@ -327,8 +327,12 @@ operations, but you should still be able to think through the transformations yo
 &lt;p&gt;In the exercises, you&amp;rsquo;ll work with some metabolite data from mass spectometry experiments on soybeans attacked by aphids. Specifically, there are 10 peaks from 38 metabolites.&lt;/p&gt;
 &lt;p&gt;Here&amp;rsquo;s how you can download and read in that dataset:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;file_URL&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E02/Metabolite.csv&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# Download the CSV file&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;file_URL&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E02/Metabolite.csv&#34;&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;file_URL&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;Metabolite.csv&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# Read the CSV file into a dataframe&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;nv&#39;&gt;metabolites&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://readr.tidyverse.org/reference/read_delim.html&#39;&gt;read_csv&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;Metabolite.csv&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -392,7 +396,16 @@ operations, but you should still be able to think through the transformations yo
 &lt;div&gt;
 &lt;h3 id=&#34;exercise-2&#34;&gt;Exercise 2&lt;/h3&gt;
 &lt;p&gt;Add a column to &lt;code&gt;metabolites_long&lt;/code&gt; with the count in units of 1000s by dividing the count column by 1000, and name the new variable &lt;code&gt;count_k&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Bonus: if you&amp;rsquo;ve used &lt;a href=&#34;https://dplyr.tidyverse.org/reference/group_by.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;group_by()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt; before, try to compute the mean count per metabolite.&lt;/p&gt;
+&lt;p&gt;Take a moment to realize that this is much easier to compute once the data is in a tidy format, and the same is true for the bonus activities below.&lt;/p&gt;
+&lt;p&gt;Bonus:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;If you&amp;rsquo;ve used &lt;a href=&#34;https://dplyr.tidyverse.org/reference/group_by.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;group_by()&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;https://dplyr.tidyverse.org/reference/summarise.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;summarize()&lt;/code&gt;&lt;/a&gt; before, try to compute the mean count per metabolite.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;If you&amp;rsquo;ve made &lt;code&gt;ggplot&lt;/code&gt;s before, make a boxplot of metabolite counts, with counts across Peaks along the x-axis, and metabolites along the y-axis.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;details&gt;
 &lt;summary&gt;
 &lt;b&gt;Hints&lt;/b&gt;(click here)
@@ -424,7 +437,7 @@ operations, but you should still be able to think through the transformations yo
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; Alprazolam     Peak10    &lt;span style=&#39;text-decoration: underline;&#39;&gt;64&lt;/span&gt;183.    64.2&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 370 more rows&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;Bonus:&lt;/p&gt;
+&lt;p&gt;Bonus 1:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;metabolites_long&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&amp;gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://dplyr.tidyverse.org/reference/group_by.html&#39;&gt;group_by&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;Soy_Metabolite&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&amp;gt;&lt;/span&gt;&lt;/span&gt;
@@ -443,6 +456,14 @@ operations, but you should still be able to think through the transformations yo
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt; 9&lt;/span&gt; Clotiazepam          &lt;span style=&#39;text-decoration: underline;&#39;&gt;57&lt;/span&gt;847.&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;10&lt;/span&gt; Cloxazolam          &lt;span style=&#39;text-decoration: underline;&#39;&gt;144&lt;/span&gt;292.&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #555555;&#39;&gt;# … with 28 more rows&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Bonus 2:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;metabolites_long&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&amp;gt;&lt;/span&gt; &lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/ggplot.html&#39;&gt;ggplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;  &lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/geom_boxplot.html&#39;&gt;geom_boxplot&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://ggplot2.tidyverse.org/reference/aes.html&#39;&gt;aes&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;y &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;Soy_Metabolite&lt;/span&gt;, x &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;count&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;figs/unnamed-chunk-20-1.png&#34; width=&#34;700px&#34; style=&#34;display: block; margin: auto;&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/details&gt;
 &lt;/div&gt;
@@ -11295,7 +11316,7 @@ Solutions (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-517398462&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-283519746&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11305,7 +11326,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-517398462&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-283519746&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11492,7 +11513,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-617328459&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-958716234&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11502,7 +11523,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-617328459&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-958716234&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11538,7 +11559,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-492365871&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-245837619&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11548,7 +11569,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-492365871&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-245837619&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11580,7 +11601,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-491682753&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-841962375&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11590,7 +11611,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-491682753&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-841962375&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11621,7 +11642,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-431687592&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-532498617&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11631,7 +11652,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./tomato4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-431687592&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-532498617&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11765,7 +11786,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-394276851&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-723416985&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11775,7 +11796,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-394276851&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-723416985&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -11832,7 +11853,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-938251467&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-842697315&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -11842,7 +11863,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-938251467&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-842697315&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19374,7 +19395,7 @@ Solution (click here)
 &lt;p&gt;This is an example of work from my group where we have found plotly to be particularly useful.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-941825673&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-972143658&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19384,7 +19405,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./apples.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-941825673&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-972143658&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19460,7 +19481,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-815623749&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-347695281&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19470,7 +19491,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-815623749&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-347695281&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19491,7 +19512,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-139758462&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-657981423&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19501,7 +19522,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-139758462&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-657981423&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19528,7 +19549,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-716259483&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-184756392&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19538,7 +19559,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins3.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-716259483&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-184756392&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19565,7 +19586,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-962347158&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-986317425&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19575,7 +19596,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins4.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-962347158&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-986317425&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19598,7 +19619,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-483271659&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-478632519&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19608,7 +19629,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins5.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-483271659&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-478632519&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19649,7 +19670,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-469138725&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-825679314&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19659,7 +19680,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins6.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-469138725&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-825679314&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19678,7 +19699,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-241368597&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-958632714&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19688,7 +19709,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins7.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-241368597&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-958632714&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19714,7 +19735,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-694852137&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-389762154&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19724,7 +19745,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins8.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-694852137&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-389762154&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19754,7 +19775,7 @@ Solution (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-769185234&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-497683512&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19764,7 +19785,7 @@ Solution (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./penguins9.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-769185234&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-497683512&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -19978,7 +19999,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-826374195&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-974268153&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -19988,7 +20009,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio1.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-826374195&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-974268153&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -20049,7 +20070,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-389726541&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-746138529&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -20059,7 +20080,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./ohio2.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-389726541&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-746138529&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -20134,7 +20155,7 @@ Solutions (click here)
 &lt;/div&gt;
 &lt;p&gt;&lt;code&gt;
 
-&lt;div id=&#34;chart-287596143&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-361748925&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -20144,7 +20165,7 @@ Solutions (click here)
       clearInterval( a );
 
       Plotly.d3.json(&#34;./gapminder.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-287596143&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-361748925&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
