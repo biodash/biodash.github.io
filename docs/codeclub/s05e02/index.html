@@ -342,7 +342,7 @@
         content="2023-02-01T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2023-02-01T16:53:40-05:00">
+    <meta property="article:modified_time" content="2023-02-01T21:46:42-05:00">
   
 
   
@@ -1123,55 +1123,64 @@ operations, but you should still be able to think through the transformations yo
 <br>
 <hr>
 <h2 id="breakout-rooms-2">Breakout Rooms 2</h2>
+<p>In the exercises, you&rsquo;ll work with some metabolite data from mass spectometry experiments on soybeans attacked by aphids. Specifically, there are 10 peaks from 38 metabolites.</p>
+<p>Here&rsquo;s how you can download and read in that dataset:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span><span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E02/Metabolite.csv"</span><span class='o'>)</span></span>
+<span><span class='nv'>metabolites</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"Metabolite.csv"</span><span class='o'>)</span></span></code></pre>
+</div>
+<div class="highlight">
+</div>
 <div class="puzzle">
 <div>
 <h3 id="exercise-1">Exercise 1</h3>
-<ol>
-<li>
-<p>Create a dataframe <code>table_pivot_long1</code> from <code>table1</code> with the following variables: <code>country</code>, <code>year</code>, <code>population</code>, <code>type</code>, and <code>count</code>.</p>
-</li>
-<li>
-<p>What are the number of rows and columns of <code>table_pivot_long1</code>?</p>
-</li>
-</ol>
+<p>Pivot the <code>metabolite</code> dataframe to a long, tidy format. The resulting dataframe should pivot all the <code>Peak</code> columns, such that it will have only 3 columns: <code>Soy_Metabolite</code> as before, and the new columns <code>peak_nr</code> and <code>count</code>. Store the result in a new dataframe called <code>metabolites_long</code>.</p>
+<p>Bonus: What are the number of rows and columns of <code>metabolites</code> and <code>metabolites_long</code>?</p>
 <details>
 <summary>
 <b>Hints</b>(click here)
 </summary>
 <br>
-<p>Use <code>starts_with(&quot;case), values_to = &quot;count&quot;</code></p>
+<ul>
+<li>Use the <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> function.</li>
+<li>You could use <code>starts_with(&quot;Peak&quot;)</code> to select all the &ldquo;Peak&rdquo; columns.</li>
+<li>The Peak column names should go into the new column <code>peak_nr</code>, and the Peak values should go into the new column <code>count</code>.</li>
+</ul>
 </details>
+<br>
 <details>
 <summary>
 <b>Solution</b>(click here)
 </summary>
 <br>
-<ol>
-<li></li>
-</ol>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>table_pivot_long1</span> <span class='o'>&lt;-</span> <span class='nv'>table1</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='o'>(</span><span class='s'>"cases"</span><span class='o'>)</span>, </span>
-<span>                            names_to <span class='o'>=</span> <span class='s'>"type"</span>, </span>
-<span>                            values_to <span class='o'>=</span> <span class='s'>"count"</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>metabolites_long</span> <span class='o'>&lt;-</span> <span class='nv'>metabolites</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='o'>(</span><span class='s'>"Peak"</span><span class='o'>)</span>, </span>
+<span>               names_to <span class='o'>=</span> <span class='s'>"peak_nr"</span>, </span>
+<span>               values_to <span class='o'>=</span> <span class='s'>"count"</span><span class='o'>)</span></span>
 <span></span>
-<span><span class='nv'>table_pivot_long1</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 5</span></span></span>
-<span><span class='c'>#&gt;   country      year population type   count</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Afghanistan  <span style='text-decoration: underline;'>1</span>999   19<span style='text-decoration: underline;'>987</span>071 cases    745</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Afghanistan  <span style='text-decoration: underline;'>2</span>000   20<span style='text-decoration: underline;'>595</span>360 cases   <span style='text-decoration: underline;'>2</span>666</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Brazil       <span style='text-decoration: underline;'>1</span>999  172<span style='text-decoration: underline;'>006</span>362 cases  <span style='text-decoration: underline;'>37</span>737</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> Brazil       <span style='text-decoration: underline;'>2</span>000  174<span style='text-decoration: underline;'>504</span>898 cases  <span style='text-decoration: underline;'>80</span>488</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> China        <span style='text-decoration: underline;'>1</span>999 <span style='text-decoration: underline;'>1</span>272<span style='text-decoration: underline;'>915</span>272 cases <span style='text-decoration: underline;'>212</span>258</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> China        <span style='text-decoration: underline;'>2</span>000 <span style='text-decoration: underline;'>1</span>280<span style='text-decoration: underline;'>428</span>583 cases <span style='text-decoration: underline;'>213</span>766</span></span></code></pre>
+<span><span class='nv'>metabolites_long</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 380 × 3</span></span></span>
+<span><span class='c'>#&gt;    Soy_Metabolite peak_nr    count</span></span>
+<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>          <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> Alprazolam     Peak1    <span style='text-decoration: underline;'>373</span>291.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span> Alprazolam     Peak2    <span style='text-decoration: underline;'>207</span>793.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span> Alprazolam     Peak3     <span style='text-decoration: underline;'>96</span>152.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span> Alprazolam     Peak4    <span style='text-decoration: underline;'>462</span>212.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span> Alprazolam     Peak5    <span style='text-decoration: underline;'>468</span>161.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span> Alprazolam     Peak6   1<span style='text-decoration: underline;'>250</span>863 </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span> Alprazolam     Peak7     <span style='text-decoration: underline;'>62</span>486.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span> Alprazolam     Peak8    <span style='text-decoration: underline;'>190</span>680.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span> Alprazolam     Peak9    <span style='text-decoration: underline;'>530</span>639.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>10</span> Alprazolam     Peak10    <span style='text-decoration: underline;'>64</span>183.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 370 more rows</span></span></span></code></pre>
 </div>
-<ol>
-<li><code>table_pivot_long1</code> has 6 rows and 5 columns</li>
-</ol>
+<p>Bonus: <code>metabolites</code> has 38 rows and 11 columns, whereas <code>metabolites_long</code> has 380 rows and 3 columns:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>table_pivot_long1</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; [1] 6 5</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>metabolites</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] 38 11</span></span><span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='o'>(</span><span class='nv'>metabolites_long</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] 380   3</span></span></code></pre>
 </div>
 </details>
 </div>
@@ -1180,7 +1189,8 @@ operations, but you should still be able to think through the transformations yo
 <div class="puzzle">
 <div>
 <h3 id="exercise-2">Exercise 2</h3>
-<p>Compute the rate per 10,000 for <code>table_pivot_long1</code>, and name the new computed variable <code>rate</code>.</p>
+<p>Add a column to <code>metabolite_long</code> with the count in units of 1000s by dividing the count column by 1000, and name the new variable <code>count_k</code>.</p>
+<p>Bonus: if you&rsquo;ve used <a href="https://dplyr.tidyverse.org/reference/group_by.html" target="_blank" rel="noopener"><code>group_by()</code></a> and <a href="https://dplyr.tidyverse.org/reference/summarise.html" target="_blank" rel="noopener"><code>summarize()</code></a> before, try to compute the mean count per metabolite.</p>
 <details>
 <summary>
 <b>Hints</b>(click here)
@@ -1188,23 +1198,49 @@ operations, but you should still be able to think through the transformations yo
 <br>
 <p>Use the <a href="https://dplyr.tidyverse.org/reference/mutate.html" target="_blank" rel="noopener"><code>mutate()</code></a> function similar to the first example with <a href="https://dplyr.tidyverse.org/reference/mutate.html" target="_blank" rel="noopener"><code>mutate()</code></a> in this session.</p>
 </details>
+<br>
 <details>
 <summary>
 <b>Solution</b>(click here)
 </summary>
 <br>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>table_pivot_long1</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>rate <span class='o'>=</span> <span class='nv'>count</span> <span class='o'>/</span> <span class='nv'>population</span> <span class='o'>*</span> <span class='m'>1000</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 6</span></span></span>
-<span><span class='c'>#&gt;   country      year population type   count   rate</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Afghanistan  <span style='text-decoration: underline;'>1</span>999   19<span style='text-decoration: underline;'>987</span>071 cases    745 0.037<span style='text-decoration: underline;'>3</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Afghanistan  <span style='text-decoration: underline;'>2</span>000   20<span style='text-decoration: underline;'>595</span>360 cases   <span style='text-decoration: underline;'>2</span>666 0.129 </span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Brazil       <span style='text-decoration: underline;'>1</span>999  172<span style='text-decoration: underline;'>006</span>362 cases  <span style='text-decoration: underline;'>37</span>737 0.219 </span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> Brazil       <span style='text-decoration: underline;'>2</span>000  174<span style='text-decoration: underline;'>504</span>898 cases  <span style='text-decoration: underline;'>80</span>488 0.461 </span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> China        <span style='text-decoration: underline;'>1</span>999 <span style='text-decoration: underline;'>1</span>272<span style='text-decoration: underline;'>915</span>272 cases <span style='text-decoration: underline;'>212</span>258 0.167 </span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> China        <span style='text-decoration: underline;'>2</span>000 <span style='text-decoration: underline;'>1</span>280<span style='text-decoration: underline;'>428</span>583 cases <span style='text-decoration: underline;'>213</span>766 0.167</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>metabolites_long</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>count_k <span class='o'>=</span> <span class='nv'>count</span> <span class='o'>/</span> <span class='m'>1000</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 380 × 4</span></span></span>
+<span><span class='c'>#&gt;    Soy_Metabolite peak_nr    count count_k</span></span>
+<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>          <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> Alprazolam     Peak1    <span style='text-decoration: underline;'>373</span>291.   373. </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span> Alprazolam     Peak2    <span style='text-decoration: underline;'>207</span>793.   208. </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span> Alprazolam     Peak3     <span style='text-decoration: underline;'>96</span>152.    96.2</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span> Alprazolam     Peak4    <span style='text-decoration: underline;'>462</span>212.   462. </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span> Alprazolam     Peak5    <span style='text-decoration: underline;'>468</span>161.   468. </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span> Alprazolam     Peak6   1<span style='text-decoration: underline;'>250</span>863   <span style='text-decoration: underline;'>1</span>251. </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span> Alprazolam     Peak7     <span style='text-decoration: underline;'>62</span>486.    62.5</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span> Alprazolam     Peak8    <span style='text-decoration: underline;'>190</span>680.   191. </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span> Alprazolam     Peak9    <span style='text-decoration: underline;'>530</span>639.   531. </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>10</span> Alprazolam     Peak10    <span style='text-decoration: underline;'>64</span>183.    64.2</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 370 more rows</span></span></span></code></pre>
+</div>
+<p>Bonus:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>metabolites_long</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='o'>(</span><span class='nv'>Soy_Metabolite</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='o'>(</span>mean_count <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='o'>(</span><span class='nv'>count</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 38 × 2</span></span></span>
+<span><span class='c'>#&gt;    Soy_Metabolite   mean_count</span></span>
+<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>                 <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> Alprazolam          <span style='text-decoration: underline;'>370</span>646.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span> Bretazenil          <span style='text-decoration: underline;'>167</span>582.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span> Bromazepam          <span style='text-decoration: underline;'>865</span>158.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span> Brotizolam         1<span style='text-decoration: underline;'>194</span>049.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span> Chlordiazepoxide     <span style='text-decoration: underline;'>87</span>565.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span> Cinolazepam         <span style='text-decoration: underline;'>428</span>290.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span> Clonazepam          <span style='text-decoration: underline;'>889</span>529.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span> Clorazepate          <span style='text-decoration: underline;'>53</span>912.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span> Clotiazepam          <span style='text-decoration: underline;'>57</span>847.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>10</span> Cloxazolam          <span style='text-decoration: underline;'>144</span>292.</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 28 more rows</span></span></span></code></pre>
 </div>
 </details>
 </div>
