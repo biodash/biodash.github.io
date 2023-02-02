@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-02-01"
 lastmod: "2023-02-01"
 toc: true
-rmd_hash: 0ed98d09cff4d35d
+rmd_hash: 6eb26a01e0e8de3e
 
 ---
 
@@ -387,7 +387,8 @@ Here's how you can download and read in that dataset:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span><span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E02/Metabolite.csv"</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>file_URL</span> <span class='o'>&lt;-</span> <span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E02/Metabolite.csv"</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>file_URL</span>, destfile <span class='o'>=</span> <span class='s'>"Metabolite.csv"</span><span class='o'>)</span></span>
 <span><span class='nv'>metabolites</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"Metabolite.csv"</span><span class='o'>)</span></span></code></pre>
 
 </div>
@@ -478,7 +479,7 @@ Bonus: `metabolites` has 38 rows and 11 columns, whereas `metabolites_long` has 
 
 ### Exercise 2
 
-Add a column to `metabolite_long` with the count in units of 1000s by dividing the count column by 1000, and name the new variable `count_k`.
+Add a column to `metabolites_long` with the count in units of 1000s by dividing the count column by 1000, and name the new variable `count_k`.
 
 Bonus: if you've used [`group_by()`](https://dplyr.tidyverse.org/reference/group_by.html) and [`summarize()`](https://dplyr.tidyverse.org/reference/summarise.html) before, try to compute the mean count per metabolite.
 
