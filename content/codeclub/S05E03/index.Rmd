@@ -1,0 +1,356 @@
+---
+output: hugodown::md_document
+title: "S05E03: R4DS (2e) - Ch. 6 - Tidy Data 2"
+subtitle: "Today, we'll continue with the R4DS chapter on \"tidy\" data, refreshing ourselves on what it means for a dataframe to be in a tidy format, and how to reshape between tidy and untidy."
+summary: "Today, we'll continue with the R4DS chapter on \"tidy\" data, refreshing ourselves on what it means for a dataframe to be in a tidy format, and how to reshape between tidy and untidy."
+authors: [jessica-cooperstone]
+tags: [codeclub, r4ds]
+date: "`r Sys.Date()`"
+lastmod: "`r Sys.Date()`"
+toc: true
+
+image: 
+  caption: "Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"
+  focal_point: ""
+  preview_only: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE, cache = FALSE)
+knitr::opts_knit$set(root.dir = here::here("content/codeclub/S05E03"))
+```
+
+------------------------------------------------------------------------
+
+## Introduction
+
+Today we will learn about a consistent way to organize your data in R,
+using a system called **"tidy" data**. 
+
+Then we will cover the primary tool use for tidying data, **pivoting**. Pivoting allows you to change the shape of your data without changing any of the values. [Last week](https://biodash.github.io/codeclub/s05e02/) we went over `pivot_longer()`, today we are going to:
+
+* refresh on tidy data
+* refresh on `pivot_longer()`
+* learn `pivot_wider()`
+
+
+We will again be using tools embedded within the `tidyverse` package, so we need to load it before we can use it. We do that with the `library()` function.
+
+```{r}
+# you should have the tidyverse installed, but if not, do so using:
+# install.packages("tidyverse")
+
+# load the tidyverse
+library(tidyverse)
+```
+
+<br>
+
+------------------------------------------------------------------------
+
+## What is tidy data?
+
+Let's briefly go over again the idea of tidy data.
+
+<p align="center"> 
+<img src=img/tidy_data.jpeg width="50%" alt="Stylized text providing an overview of Tidy Data. The top reads “Tidy data is a standard way of mapping the meaning of a dataset to its structure. - Hadley Wickham.” On the left reads “In tidy data: each variable forms a column; each observation forms a row; each cell is a single measurement.” There is an example table on the lower right with columns ‘id’, ‘name’ and ‘color’ with observations for different cats, illustrating tidy data structure.">
+</p>
+Illustrations from the [Openscapes](https://www.openscapes.org/) blog [Tidy Data for reproducibility, efficiency, and collaboration](https://www.openscapes.org/blog/2020/10/12/tidy-data/) by Julia Lowndes and Allison Horst
+
+This is easier to "see" than to explain.👀
+
+Here is an example of non-tidy data, where there is *data embedded in column names*.
+```{r}
+billboard
+```
+
+Here is an example of the same exact data, in a tidy format, where those data that used to be column names, are now *values coded for a particular variable*.
+
+```{r}
+billboard |> 
+  pivot_longer(
+    cols = starts_with("wk"), 
+    names_to = "week", 
+    values_to = "rank"
+  )
+```
+
+<br>
+
+## Why should you care?
+
+Let's go through an example where we will learn that we can't make the visualization that we want, because our data is not in tidy format.
+```{r}
+world_bank_pop
+
+# look at world_bank_pop using glimpse
+glimpse(world_bank_pop)
+```
+
+What if we want to make a plot to see how population has changed (y-axis) for a specific country (say, the USA) over the duration for which data is collected (x-axis)? With the data in this format, we cannot make this plot. This is because **year** is not a column in our dataframe. This population information is spread over all of the columns that have a year as their name.
+
+We can fix this by using `pivot_longer()`.
+
+```{r}
+world_bank_pop_tidy <- world_bank_pop |> 
+  pivot_longer(cols = !c(country, indicator), # which columns do we want to "pivot"
+               names_to = "year", # where should the column names go
+               values_to = "measure") # where should the values within each cell go
+
+# check how this went
+glimpse(world_bank_pop_tidy)
+
+# convert year from a character to a number so we can plot it 
+world_bank_pop_tidy <- world_bank_pop_tidy |> 
+  mutate(year = as.numeric(year))
+
+# check again 
+glimpse(world_bank_pop_tidy)
+```
+
+Now we can make the plot we want. If you're not familiar with ggplot syntax you can learn more in the R4DS section called [Visualize](https://r4ds.hadley.nz/visualize.html) or in past code clubs on:
+
+* [ggplot](https://biodash.github.io/codeclub/s02e06_ggplot2/)
+* [ggplot some more](https://biodash.github.io/codeclub/s02e07_ggplot2_part2/)
+* [my data viz class](https://datavisualizing.netlify.app/module2.html)
+
+
+```{r}
+# a minimal plot
+world_bank_pop_tidy |> 
+  filter(country == "USA") |> 
+  filter(indicator == "SP.POP.TOTL") |> 
+  ggplot(aes(x = year, y = measure, color = country)) + 
+  geom_line() 
+
+# a more polished plot
+world_bank_pop_tidy |> 
+  filter(country == "USA") |> 
+  filter(indicator == "SP.POP.TOTL") |> 
+  ggplot(aes(x = year, y = measure, color = country)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(limits = c(0, 4e8)) +
+# ylim(c(0, 4e8)) + # also works instead of scale_y_continuous
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(x = "Year",
+       y = "Population",
+       title = "Total population in the United States \nfrom 2000 to 2017",
+       caption = "Data from the World Bank")
+```
+
+
+Often it may be easier to collect your data in wide format, but analyze it in tidy (i.e., long) format. 
+
+> This does not mean you must now collect your data in tidy format! You simply need to become comfortable with switching between formats.
+
+## Two functions for pivoting data
+
+- [**`pivot_longer()`**](https://tidyr.tidyverse.org/reference/pivot_longer.html) pulls data that is embedded in column names, and reshapes your dataframe such this information is now embedded within the values. This typically makes your dataframes longer (i.e., increases the number of rows).  
+  _Typically_, we use `pivot_longer()` to make an untidy dataset tidy,
+  since untidy datasets often have multiple columns for a single variable,
+  and multiple observations in a single row.
+
+- [**`pivot_wider()`**](https://tidyr.tidyverse.org/reference/pivot_wider.html) takes data that is embedded in the values of your dataframe, and puts this information in variable names. This typically makes your dataframe "wider" (i.e., increases the number of columns).  
+  _Typically_, `pivot_wider()` will make a dataset untidy, but this can still be useful for certain calculations, or if you want to use a for loop to do something iteratively across columns.
+
+<br>
+
+------------------------------------------------------------------------
+
+## `pivot_wider()`
+
+The opposite of `pivot_longer()` is `pivot_wider()`. We haven't used `pivot_wider()` get so let's try it. We are going to use the dataframe `population` which is pre-loaded with the tidyverse. This dataframe is currently in tidy format.
+
+```{r}
+# what is in population?
+glimpse(population)
+```
+
+What if we wanted to adjust the data so that instead of having a column called `year`, the data for each year is its own column, and have the corresponding `population` within each cell ? We can do that with `pivot_wider()`.
+
+```{r}
+population_wide <- population |>
+  pivot_wider(names_from = "year",
+              values_from = "population")
+
+head(population_wide)
+```
+
+------------------------------------------------------------------------
+
+## `pivot_longer()`
+
+Let's practice again using `pivot_longer()`. We just made a wide dataframe with `pivot_wider()` - can we make it long again?
+
+```{r}
+population_long <- population_wide |>
+  pivot_longer(cols = !country, # all columns except country
+               names_to = "year",
+               values_to = "population")
+
+head(population_long)
+```
+
+There are many different ways you can code to tell R which columns you want to pivot. I'm showing below some other ways to code the same outcome, but you can find a more ocomprehensive list of [tidy-select helpers](https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html) in the `tidyr` documentation page.
+```{r}
+population_long <- population_wide |>
+  pivot_longer(cols = where(is.numeric), # all numeric columns
+               names_to = "year",
+               values_to = "population")
+
+head(population_long)
+```
+
+```{r}
+population_long <- population_wide |>
+  pivot_longer(cols = 2:20, # columns 2 through 20
+               names_to = "year",
+               values_to = "population")
+
+head(population_long)
+```
+
+------------------------------------------------------------------------
+
+## Breakout Rooms
+
+We are going to use some data that is a part of the `#TidyTuesday` series of data activities for tidyverse/R learning. I've picked some [data](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-02-01) that comes from the American Kennel Club and was compiled by [KKakey](https://github.com/kkakey/dog_traits_AKC/blob/main/README.md).
+
+First we will download data that contains popularity of dog breeds by AKC registration from 2013-2020. You can access the data through the chunk of code below.
+
+```{r}
+breed_rank_all <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-02-01/breed_rank.csv')
+
+```
+
+<div class="puzzle"><div>
+
+### Exercise 1 
+
+Convert this data from wide format to long format.
+
+<details><summary><b>Hint 1</b>(click here)</summary>
+<br>
+
+Use the function `pivot_longer()`. Try setting the arguments `cols =`, `names_to = ` and `values_to = `. 
+
+</details>
+
+<br>
+
+<details><summary><b>Hint 2 after you've already pivoted</b>(click here)</summary>
+<br>
+
+Note that each column is called Year Rank (e.g., 2020 Rank) and not just Year (e.g., 2020). You can fix this within `pivot_longer()` using `names_transform`. Try visiting this [link](https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/) for some help.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+glimpse(breed_rank_all)
+
+breed_rank_tidy <- breed_rank_all %>%
+  pivot_longer(cols = contains("Rank"),
+              names_to = "year",
+              values_to = "rank",
+              names_transform = list(year = parse_number))
+
+head(breed_rank_tidy)
+```
+
+
+</details>
+</div></div>
+<br>
+
+<div class="puzzle"><div>
+
+### Exercise 2
+
+Take that new dataframe you've just made using `pivot_longer()` and make it wide again. No, you can't just use the original dataframe 😀🐶
+
+<details><summary><b>Hints</b>(click here)</summary>
+<br>
+
+Hints
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+breed_rank_wide <- breed_rank_tidy |>
+  pivot_wider(names_from = "year",
+              values_from = "rank")
+
+head(breed_rank_wide)
+```
+
+Note, that R is adding all your new columns to the end of your dataframe. If you want to reorder your columns, you can do that simply with `select()` which both picks and orders columns. Note, you need backticks around a variable name when that variable name is a number (as this is atypical syntax for R).
+
+```{r}
+breed_rank_wide <- breed_rank_wide |>
+  select(Breed, `2013`:`2020`, everything()) 
+
+head(breed_rank_wide)
+```
+
+
+
+</details>
+</div></div>
+
+<br>
+
+### Bonus 1
+
+Try making a plot that shows the rank popularity of your favorite dog breeds over 2013-2020.
+
+<details><summary><b>Hints</b>(click here)</summary>
+<br>
+
+Use your tidy dataframe, `filter()` to pick the Breeds you want to keep, and maybe a combined point and line plot.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+jess_fav_breeds <- c("French Bulldogs", "Boston Terriers", "Pugs")
+
+breed_rank_tidy |>
+  filter(Breed %in% jess_fav_breeds) |>
+# filter(Breed == c("French Bulldogs", "Boston Terriers", "Pugs")) |> # also works
+  ggplot(aes(x = year, y = rank, color = Breed)) +
+  geom_point() + 
+  geom_line() +
+  labs(x = "Year", 
+       y = "Breed ",
+       title = "AKC Popularity of Jess's Favorite Dog Breeds",
+       caption = "Data from AKC/#TidyTuesday")
+```
+
+
+
+</details>
+</div></div>
+
+<br>
+
+----
+
+----
+
+<br>
