@@ -341,7 +341,7 @@
         content="2023-02-07T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2023-02-07T14:45:12-05:00">
+    <meta property="article:modified_time" content="2023-02-07T20:41:53-05:00">
   
 
   
@@ -832,6 +832,17 @@
 <li>refresh on <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a></li>
 <li>learn <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a></li>
 </ul>
+<p>If you want to download the R script that goes along with today&rsquo;s code club you can do so with the following code:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># save the url location for today's script</span></span>
+<span><span class='nv'>todays_R_script</span> <span class='o'>&lt;-</span> <span class='s'>'https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E03/r4ds_tidying2.R'</span></span>
+<span></span>
+<span><span class='c'># go get that file! </span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_R_script</span>,</span>
+<span>              destfile <span class='o'>=</span> <span class='s'>"r4ds_tidying2.R"</span><span class='o'>)</span></span>
+<span></span></code></pre>
+</div>
+<p>The file will be downloaded to your working directory. If you don&rsquo;t know where that is, you can find out by executing <a href="https://rdrr.io/r/base/getwd.html" target="_blank" rel="noopener"><code>getwd()</code></a> in your console.</p>
 <p>We will again be using tools embedded within the <code>tidyverse</code> package, so we need to load it before we can use it. We do that with the <a href="https://rdrr.io/r/base/library.html" target="_blank" rel="noopener"><code>library()</code></a> function.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># you should have the tidyverse installed, but if not, do so using:</span></span>
@@ -1000,8 +1011,6 @@
 </div>
 </div>
 <br>
-<div class="puzzle">
-<div>
 <p>Often it may be easier to collect your data in wide format, but analyze it in tidy (i.e., long) format.</p>
 <blockquote>
 <p>This does not mean you must now collect your data in tidy format! You simply need to become comfortable with switching between formats.</p>
@@ -1248,17 +1257,17 @@
 </summary>
 <br>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>jess_fav_breeds</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"French Bulldogs"</span>, <span class='s'>"Boston Terriers"</span>, <span class='s'>"Pugs"</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>fav_breeds</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"French Bulldogs"</span>, <span class='s'>"Poodles"</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='nv'>breed_rank_tidy</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>Breed</span> <span class='o'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='nv'>jess_fav_breeds</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
-<span><span class='c'># filter(Breed == c("French Bulldogs", "Boston Terriers", "Pugs")) |&gt; # also works</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>Breed</span> <span class='o'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='nv'>fav_breeds</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
+<span><span class='c'># filter(Breed == c("French Bulldogs", "Poodles")) |&gt; # also works</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>rank</span>, color <span class='o'>=</span> <span class='nv'>Breed</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Year"</span>, </span>
-<span>       y <span class='o'>=</span> <span class='s'>"Breed "</span>,</span>
-<span>       title <span class='o'>=</span> <span class='s'>"AKC Popularity of Jess's Favorite Dog Breeds"</span>,</span>
+<span>       y <span class='o'>=</span> <span class='s'>"Rank (where 1 is the most popular)"</span>,</span>
+<span>       title <span class='o'>=</span> <span class='s'>"AKC Popularity of Jess and Daniel's Favorite Dog Breeds"</span>,</span>
 <span>       caption <span class='o'>=</span> <span class='s'>"Data from AKC/#TidyTuesday"</span><span class='o'>)</span></span>
 </code></pre>
 <p><img src="figs/bonus-solution-1-1.png" width="700px" style="display: block; margin: auto;" /></p>
@@ -1267,7 +1276,6 @@
 </div>
 </div>
 <br>
-<hr>
 <hr>
 <br>
 
