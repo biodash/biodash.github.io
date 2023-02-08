@@ -13,7 +13,7 @@ image:
   caption: "Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"
   focal_point: ""
   preview_only: false
-rmd_hash: a5ef1b9bbd19d09f
+rmd_hash: dacaaa835de64465
 
 ---
 
@@ -28,6 +28,22 @@ Then we will cover the primary tool use for tidying data, **pivoting**. Pivoting
 -   refresh on tidy data
 -   refresh on [`pivot_longer()`](https://tidyr.tidyverse.org/reference/pivot_longer.html)
 -   learn [`pivot_wider()`](https://tidyr.tidyverse.org/reference/pivot_wider.html)
+
+If you want to download the R script that goes along with today's code club you can do so with the following code:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># save the url location for today's script</span></span>
+<span><span class='nv'>todays_R_script</span> <span class='o'>&lt;-</span> <span class='s'>'https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E03/r4ds_tidying2.R'</span></span>
+<span></span>
+<span><span class='c'># go get that file! </span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>todays_R_script</span>,</span>
+<span>              destfile <span class='o'>=</span> <span class='s'>"r4ds_tidying2.R"</span><span class='o'>)</span></span>
+<span></span></code></pre>
+
+</div>
+
+The file will be downloaded to your working directory. If you don't know where that is, you can find out by executing [`getwd()`](https://rdrr.io/r/base/getwd.html) in your console.
 
 We will again be using tools embedded within the `tidyverse` package, so we need to load it before we can use it. We do that with the [`library()`](https://rdrr.io/r/base/library.html) function.
 
@@ -244,10 +260,6 @@ Now we can make the plot we want. If you're not familiar with ggplot syntax you 
 </div>
 
 <br>
-
-<div class="puzzle">
-
-<div>
 
 Often it may be easier to collect your data in wide format, but analyze it in tidy (i.e., long) format.
 
@@ -581,17 +593,17 @@ Use your tidy dataframe, [`filter()`](https://dplyr.tidyverse.org/reference/filt
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>jess_fav_breeds</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"French Bulldogs"</span>, <span class='s'>"Boston Terriers"</span>, <span class='s'>"Pugs"</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>fav_breeds</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"French Bulldogs"</span>, <span class='s'>"Poodles"</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='nv'>breed_rank_tidy</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>Breed</span> <span class='o'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='nv'>jess_fav_breeds</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
-<span><span class='c'># filter(Breed == c("French Bulldogs", "Boston Terriers", "Pugs")) |&gt; # also works</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>Breed</span> <span class='o'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='nv'>fav_breeds</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
+<span><span class='c'># filter(Breed == c("French Bulldogs", "Poodles")) |&gt; # also works</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>rank</span>, color <span class='o'>=</span> <span class='nv'>Breed</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='s'>"Year"</span>, </span>
-<span>       y <span class='o'>=</span> <span class='s'>"Breed "</span>,</span>
-<span>       title <span class='o'>=</span> <span class='s'>"AKC Popularity of Jess's Favorite Dog Breeds"</span>,</span>
+<span>       y <span class='o'>=</span> <span class='s'>"Rank (where 1 is the most popular)"</span>,</span>
+<span>       title <span class='o'>=</span> <span class='s'>"AKC Popularity of Jess and Daniel's Favorite Dog Breeds"</span>,</span>
 <span>       caption <span class='o'>=</span> <span class='s'>"Data from AKC/#TidyTuesday"</span><span class='o'>)</span></span>
 </code></pre>
 <img src="figs/bonus-solution-1-1.png" width="700px" style="display: block; margin: auto;" />
@@ -599,14 +611,10 @@ Use your tidy dataframe, [`filter()`](https://dplyr.tidyverse.org/reference/filt
 </div>
 
 </details>
-
 </div>
-
 </div>
 
 <br>
-
-------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
