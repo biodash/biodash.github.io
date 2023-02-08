@@ -33,7 +33,7 @@
   
     
   
-  <meta name="description" content="Today, we&#39;ll continue with the R4DS chapter on &#34;tidy&#34; data, refreshing ourselves on what it means for a dataframe to be in a tidy format, and how to reshape between tidy and untidy." />
+  <meta name="description" content="Today, we will revisit tidy data, review pivot_longer() and learn pivot_wider()." />
 
   
   <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s05e03/" />
@@ -332,7 +332,7 @@
   <meta property="og:site_name" content="BioDASH" />
   <meta property="og:url" content="https://biodash.github.io/codeclub/s05e03/" />
   <meta property="og:title" content="S05E03: R4DS (2e) - Ch. 6 - Tidy Data 2 | BioDASH" />
-  <meta property="og:description" content="Today, we&#39;ll continue with the R4DS chapter on &#34;tidy&#34; data, refreshing ourselves on what it means for a dataframe to be in a tidy format, and how to reshape between tidy and untidy." /><meta property="og:image" content="https://biodash.github.io/codeclub/s05e03/featured.jpeg" />
+  <meta property="og:description" content="Today, we will revisit tidy data, review pivot_longer() and learn pivot_wider()." /><meta property="og:image" content="https://biodash.github.io/codeclub/s05e03/featured.jpeg" />
     <meta property="twitter:image" content="https://biodash.github.io/codeclub/s05e03/featured.jpeg" /><meta property="og:locale" content="en-us" />
   
     
@@ -341,7 +341,7 @@
         content="2023-02-07T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2023-02-07T12:33:20-05:00">
+    <meta property="article:modified_time" content="2023-02-07T14:45:12-05:00">
   
 
   
@@ -758,7 +758,7 @@
   <h1>S05E03: R4DS (2e) - Ch. 6 - Tidy Data 2</h1>
 
   
-  <p class="page-subtitle">Today, we&rsquo;ll continue with the R4DS chapter on &ldquo;tidy&rdquo; data, refreshing ourselves on what it means for a dataframe to be in a tidy format, and how to reshape between tidy and untidy.</p>
+  <p class="page-subtitle">Today, we will revisit tidy data, review pivot_longer() and learn pivot_wider().</p>
   
 
   
@@ -845,7 +845,7 @@
 <h2 id="what-is-tidy-data">What is tidy data?</h2>
 <p>Let&rsquo;s briefly go over again the idea of tidy data.</p>
 <p align="center">
-<img src=img/tidy_data.jpeg width="50%" alt="Stylized text providing an overview of Tidy Data. The top reads “Tidy data is a standard way of mapping the meaning of a dataset to its structure. - Hadley Wickham.” On the left reads “In tidy data: each variable forms a column; each observation forms a row; each cell is a single measurement.” There is an example table on the lower right with columns ‘id’, ‘name’ and ‘color’ with observations for different cats, illustrating tidy data structure.">
+<img src=img/tidy_data.jpeg width="90%" alt="Stylized text providing an overview of Tidy Data. The top reads “Tidy data is a standard way of mapping the meaning of a dataset to its structure. - Hadley Wickham.” On the left reads “In tidy data: each variable forms a column; each observation forms a row; each cell is a single measurement.” There is an example table on the lower right with columns ‘id’, ‘name’ and ‘color’ with observations for different cats, illustrating tidy data structure.">
 </p>
 <p>Illustrations from the <a href="https://www.openscapes.org/" target="_blank" rel="noopener">Openscapes</a> blog <a href="https://www.openscapes.org/blog/2020/10/12/tidy-data/" target="_blank" rel="noopener">Tidy Data for reproducibility, efficiency, and collaboration</a> by Julia Lowndes and Allison Horst</p>
 <p>This is easier to &ldquo;see&rdquo; than to explain.👀</p>
@@ -900,48 +900,20 @@
 <h2 id="why-should-you-care">Why should you care?</h2>
 <p>Let&rsquo;s go through an example where we will learn that we can&rsquo;t make the visualization that we want, because our data is not in tidy format.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>world_bank_pop</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1,056 × 20</span></span></span>
-<span><span class='c'>#&gt;    country indic…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`</span></span>
-<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> ABW     SP.URB… 4.24<span style='color: #555555;'>e</span>4 4.30<span style='color: #555555;'>e</span>4 4.37<span style='color: #555555;'>e</span>4 4.42<span style='color: #555555;'>e</span>4 4.47<span style='color: #555555;'>e</span>+4 4.49<span style='color: #555555;'>e</span>+4  4.49<span style='color: #555555;'>e</span>+4  4.47<span style='color: #555555;'>e</span>+4</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span> ABW     SP.URB… 1.18<span style='color: #555555;'>e</span>0 1.41<span style='color: #555555;'>e</span>0 1.43<span style='color: #555555;'>e</span>0 1.31<span style='color: #555555;'>e</span>0 9.51<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 4.91<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> -<span style='color: #BB0000;'>1.78</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-2</span> -<span style='color: #BB0000;'>4.35</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span> ABW     SP.POP… 9.09<span style='color: #555555;'>e</span>4 9.29<span style='color: #555555;'>e</span>4 9.50<span style='color: #555555;'>e</span>4 9.70<span style='color: #555555;'>e</span>4 9.87<span style='color: #555555;'>e</span>+4 1.00<span style='color: #555555;'>e</span>+5  1.01<span style='color: #555555;'>e</span>+5  1.01<span style='color: #555555;'>e</span>+5</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span> ABW     SP.POP… 2.06<span style='color: #555555;'>e</span>0 2.23<span style='color: #555555;'>e</span>0 2.23<span style='color: #555555;'>e</span>0 2.11<span style='color: #555555;'>e</span>0 1.76<span style='color: #555555;'>e</span>+0 1.30<span style='color: #555555;'>e</span>+0  7.98<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span>  3.84<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span> AFG     SP.URB… 4.44<span style='color: #555555;'>e</span>6 4.65<span style='color: #555555;'>e</span>6 4.89<span style='color: #555555;'>e</span>6 5.16<span style='color: #555555;'>e</span>6 5.43<span style='color: #555555;'>e</span>+6 5.69<span style='color: #555555;'>e</span>+6  5.93<span style='color: #555555;'>e</span>+6  6.15<span style='color: #555555;'>e</span>+6</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span> AFG     SP.URB… 3.91<span style='color: #555555;'>e</span>0 4.66<span style='color: #555555;'>e</span>0 5.13<span style='color: #555555;'>e</span>0 5.23<span style='color: #555555;'>e</span>0 5.12<span style='color: #555555;'>e</span>+0 4.77<span style='color: #555555;'>e</span>+0  4.12<span style='color: #555555;'>e</span>+0  3.65<span style='color: #555555;'>e</span>+0</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span> AFG     SP.POP… 2.01<span style='color: #555555;'>e</span>7 2.10<span style='color: #555555;'>e</span>7 2.20<span style='color: #555555;'>e</span>7 2.31<span style='color: #555555;'>e</span>7 2.41<span style='color: #555555;'>e</span>+7 2.51<span style='color: #555555;'>e</span>+7  2.59<span style='color: #555555;'>e</span>+7  2.66<span style='color: #555555;'>e</span>+7</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span> AFG     SP.POP… 3.49<span style='color: #555555;'>e</span>0 4.25<span style='color: #555555;'>e</span>0 4.72<span style='color: #555555;'>e</span>0 4.82<span style='color: #555555;'>e</span>0 4.47<span style='color: #555555;'>e</span>+0 3.87<span style='color: #555555;'>e</span>+0  3.23<span style='color: #555555;'>e</span>+0  2.76<span style='color: #555555;'>e</span>+0</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span> AGO     SP.URB… 8.23<span style='color: #555555;'>e</span>6 8.71<span style='color: #555555;'>e</span>6 9.22<span style='color: #555555;'>e</span>6 9.77<span style='color: #555555;'>e</span>6 1.03<span style='color: #555555;'>e</span>+7 1.09<span style='color: #555555;'>e</span>+7  1.15<span style='color: #555555;'>e</span>+7  1.21<span style='color: #555555;'>e</span>+7</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>10</span> AGO     SP.URB… 5.44<span style='color: #555555;'>e</span>0 5.59<span style='color: #555555;'>e</span>0 5.70<span style='color: #555555;'>e</span>0 5.76<span style='color: #555555;'>e</span>0 5.75<span style='color: #555555;'>e</span>+0 5.69<span style='color: #555555;'>e</span>+0  4.92<span style='color: #555555;'>e</span>+0  4.89<span style='color: #555555;'>e</span>+0</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># … with 1,046 more rows, 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;,</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;,</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   `2015` &lt;dbl&gt;, `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, and abbreviated variable name</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   ¹​indicator</span></span></span><span></span>
-<span><span class='c'># look at world_bank_pop using glimpse</span></span>
-<span><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>world_bank_pop</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; Rows: 1,056</span></span>
-<span><span class='c'>#&gt; Columns: 20</span></span>
-<span><span class='c'>#&gt; $ country   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "ABW", "ABW", "ABW", "ABW", "AFG", "AFG", "AFG", "AFG", "AGO…</span></span>
-<span><span class='c'>#&gt; $ indicator <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "SP.URB.TOTL", "SP.URB.GROW", "SP.POP.TOTL", "SP.POP.GROW", …</span></span>
-<span><span class='c'>#&gt; $ `2000`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.244400e+04, 1.182632e+00, 9.085300e+04, 2.055027e+00, 4.43…</span></span>
-<span><span class='c'>#&gt; $ `2001`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.304800e+04, 1.413021e+00, 9.289800e+04, 2.225930e+00, 4.64…</span></span>
-<span><span class='c'>#&gt; $ `2002`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.367000e+04, 1.434560e+00, 9.499200e+04, 2.229056e+00, 4.89…</span></span>
-<span><span class='c'>#&gt; $ `2003`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.424600e+04, 1.310360e+00, 9.701700e+04, 2.109354e+00, 5.15…</span></span>
-<span><span class='c'>#&gt; $ `2004`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.466900e+04, 9.514777e-01, 9.873700e+04, 1.757353e+00, 5.42…</span></span>
-<span><span class='c'>#&gt; $ `2005`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.488900e+04, 4.913027e-01, 1.000310e+05, 1.302039e+00, 5.69…</span></span>
-<span><span class='c'>#&gt; $ `2006`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.488100e+04, -1.782333e-02, 1.008320e+05, 7.975628e-01, 5.9…</span></span>
-<span><span class='c'>#&gt; $ `2007`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.468600e+04, -4.354289e-01, 1.012200e+05, 3.840600e-01, 6.1…</span></span>
-<span><span class='c'>#&gt; $ `2008`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.437500e+04, -6.984006e-01, 1.013530e+05, 1.313107e-01, 6.3…</span></span>
-<span><span class='c'>#&gt; $ `2009`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.405200e+04, -7.305493e-01, 1.014530e+05, 9.861642e-02, 6.5…</span></span>
-<span><span class='c'>#&gt; $ `2010`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.377800e+04, -6.239346e-01, 1.016690e+05, 2.126801e-01, 6.8…</span></span>
-<span><span class='c'>#&gt; $ `2011`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.382200e+04, 1.004566e-01, 1.020530e+05, 3.769848e-01, 7.11…</span></span>
-<span><span class='c'>#&gt; $ `2012`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.406400e+04, 5.507148e-01, 1.025770e+05, 5.121450e-01, 7.41…</span></span>
-<span><span class='c'>#&gt; $ `2013`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.436000e+04, 6.695040e-01, 1.031870e+05, 5.929140e-01, 7.73…</span></span>
-<span><span class='c'>#&gt; $ `2014`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.467400e+04, 7.053514e-01, 1.037950e+05, 5.874924e-01, 8.05…</span></span>
-<span><span class='c'>#&gt; $ `2015`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.497900e+04, 6.804037e-01, 1.043410e+05, 5.246582e-01, 8.36…</span></span>
-<span><span class='c'>#&gt; $ `2016`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.527500e+04, 6.559290e-01, 1.048220e+05, 4.599292e-01, 8.67…</span></span>
-<span><span class='c'>#&gt; $ `2017`    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.557200e+04, 6.538489e-01, 1.052640e+05, 4.207807e-01, 8.97…</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># look at world_bank_pop using head</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>world_bank_pop</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 20</span></span></span>
+<span><span class='c'>#&gt;   country indica…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> ABW     SP.URB.… 4.24<span style='color: #555555;'>e</span>4 4.30<span style='color: #555555;'>e</span>4 4.37<span style='color: #555555;'>e</span>4 4.42<span style='color: #555555;'>e</span>4 4.47<span style='color: #555555;'>e</span>+4 4.49<span style='color: #555555;'>e</span>+4  4.49<span style='color: #555555;'>e</span>+4  4.47<span style='color: #555555;'>e</span>+4</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> ABW     SP.URB.… 1.18<span style='color: #555555;'>e</span>0 1.41<span style='color: #555555;'>e</span>0 1.43<span style='color: #555555;'>e</span>0 1.31<span style='color: #555555;'>e</span>0 9.51<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 4.91<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> -<span style='color: #BB0000;'>1.78</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-2</span> -<span style='color: #BB0000;'>4.35</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> ABW     SP.POP.… 9.09<span style='color: #555555;'>e</span>4 9.29<span style='color: #555555;'>e</span>4 9.50<span style='color: #555555;'>e</span>4 9.70<span style='color: #555555;'>e</span>4 9.87<span style='color: #555555;'>e</span>+4 1.00<span style='color: #555555;'>e</span>+5  1.01<span style='color: #555555;'>e</span>+5  1.01<span style='color: #555555;'>e</span>+5</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> ABW     SP.POP.… 2.06<span style='color: #555555;'>e</span>0 2.23<span style='color: #555555;'>e</span>0 2.23<span style='color: #555555;'>e</span>0 2.11<span style='color: #555555;'>e</span>0 1.76<span style='color: #555555;'>e</span>+0 1.30<span style='color: #555555;'>e</span>+0  7.98<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span>  3.84<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> AFG     SP.URB.… 4.44<span style='color: #555555;'>e</span>6 4.65<span style='color: #555555;'>e</span>6 4.89<span style='color: #555555;'>e</span>6 5.16<span style='color: #555555;'>e</span>6 5.43<span style='color: #555555;'>e</span>+6 5.69<span style='color: #555555;'>e</span>+6  5.93<span style='color: #555555;'>e</span>+6  6.15<span style='color: #555555;'>e</span>+6</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> AFG     SP.URB.… 3.91<span style='color: #555555;'>e</span>0 4.66<span style='color: #555555;'>e</span>0 5.13<span style='color: #555555;'>e</span>0 5.23<span style='color: #555555;'>e</span>0 5.12<span style='color: #555555;'>e</span>+0 4.77<span style='color: #555555;'>e</span>+0  4.12<span style='color: #555555;'>e</span>+0  3.65<span style='color: #555555;'>e</span>+0</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;,</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;,</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, and abbreviated variable name ¹​indicator</span></span></span></code></pre>
 </div>
 <p>What if we want to make a plot to see how population has changed (y-axis) for a specific country (say, the USA) over the duration for which data is collected (x-axis)? With the data in this format, we cannot make this plot. This is because <strong>year</strong> is not a column in our dataframe. This population information is spread over all of the columns that have a year as their name.</p>
 <p>We can fix this by using <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a>.</p>
@@ -952,25 +924,33 @@
 <span>               values_to <span class='o'>=</span> <span class='s'>"measure"</span><span class='o'>)</span> <span class='c'># where should the values within each cell go</span></span>
 <span></span>
 <span><span class='c'># check how this went</span></span>
-<span><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>world_bank_pop_tidy</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; Rows: 19,008</span></span>
-<span><span class='c'>#&gt; Columns: 4</span></span>
-<span><span class='c'>#&gt; $ country   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "ABW", "ABW", "ABW", "ABW", "ABW", "ABW", "ABW", "ABW", "ABW…</span></span>
-<span><span class='c'>#&gt; $ indicator <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "SP.URB.TOTL", "SP.URB.TOTL", "SP.URB.TOTL", "SP.URB.TOTL", …</span></span>
-<span><span class='c'>#&gt; $ year      <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "2000", "2001", "2002", "2003", "2004", "2005", "2006", "200…</span></span>
-<span><span class='c'>#&gt; $ measure   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.244400e+04, 4.304800e+04, 4.367000e+04, 4.424600e+04, 4.46…</span></span><span></span>
-<span><span class='c'># convert year from a character to a number so we can plot it </span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>world_bank_pop_tidy</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 4</span></span></span>
+<span><span class='c'>#&gt;   country indicator   year  measure</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> ABW     SP.URB.TOTL 2000    <span style='text-decoration: underline;'>42</span>444</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> ABW     SP.URB.TOTL 2001    <span style='text-decoration: underline;'>43</span>048</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> ABW     SP.URB.TOTL 2002    <span style='text-decoration: underline;'>43</span>670</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> ABW     SP.URB.TOTL 2003    <span style='text-decoration: underline;'>44</span>246</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> ABW     SP.URB.TOTL 2004    <span style='text-decoration: underline;'>44</span>669</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> ABW     SP.URB.TOTL 2005    <span style='text-decoration: underline;'>44</span>889</span></span></code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># convert year from a character to a number so we can plot it </span></span>
 <span><span class='nv'>world_bank_pop_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>world_bank_pop_tidy</span> <span class='o'>|&gt;</span> </span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>year <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='c'># check again </span></span>
-<span><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>world_bank_pop_tidy</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; Rows: 19,008</span></span>
-<span><span class='c'>#&gt; Columns: 4</span></span>
-<span><span class='c'>#&gt; $ country   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "ABW", "ABW", "ABW", "ABW", "ABW", "ABW", "ABW", "ABW", "ABW…</span></span>
-<span><span class='c'>#&gt; $ indicator <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "SP.URB.TOTL", "SP.URB.TOTL", "SP.URB.TOTL", "SP.URB.TOTL", …</span></span>
-<span><span class='c'>#&gt; $ year      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, …</span></span>
-<span><span class='c'>#&gt; $ measure   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 4.244400e+04, 4.304800e+04, 4.367000e+04, 4.424600e+04, 4.46…</span></span></code></pre>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>world_bank_pop_tidy</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 4</span></span></span>
+<span><span class='c'>#&gt;   country indicator    year measure</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>000   <span style='text-decoration: underline;'>42</span>444</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>001   <span style='text-decoration: underline;'>43</span>048</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>002   <span style='text-decoration: underline;'>43</span>670</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>003   <span style='text-decoration: underline;'>44</span>246</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>004   <span style='text-decoration: underline;'>44</span>669</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>005   <span style='text-decoration: underline;'>44</span>889</span></span></code></pre>
 </div>
 <p>Now we can make the plot we want. If you&rsquo;re not familiar with ggplot syntax you can learn more in the R4DS section called <a href="https://r4ds.hadley.nz/visualize.html" target="_blank" rel="noopener">Visualize</a> or in past code clubs on:</p>
 <ul>
@@ -983,12 +963,22 @@
 <span><span class='nv'>world_bank_pop_tidy</span> <span class='o'>|&gt;</span> </span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>country</span> <span class='o'>==</span> <span class='s'>"USA"</span><span class='o'>)</span> <span class='o'>|&gt;</span> </span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>indicator</span> <span class='o'>==</span> <span class='s'>"SP.POP.TOTL"</span><span class='o'>)</span> <span class='o'>|&gt;</span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>measure</span>, color <span class='o'>=</span> <span class='nv'>country</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
-<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='o'>(</span><span class='o'>)</span> </span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>measure</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span> </span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" /></p>
-<pre class='chroma'><code class='language-r' data-lang='r'><span></span>
-<span><span class='c'># a more polished plot</span></span>
+<p><img src="figs/world_bank_pop-plot-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<br>
+<div class="puzzle">
+<div>
+<details>
+<summary>
+<b>If you want to see a more polished version of this plot </b>(click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># a more polished plot</span></span>
 <span><span class='nv'>world_bank_pop_tidy</span> <span class='o'>|&gt;</span> </span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>country</span> <span class='o'>==</span> <span class='s'>"USA"</span><span class='o'>)</span> <span class='o'>|&gt;</span> </span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>indicator</span> <span class='o'>==</span> <span class='s'>"SP.POP.TOTL"</span><span class='o'>)</span> <span class='o'>|&gt;</span> </span>
@@ -1004,8 +994,14 @@
 <span>       title <span class='o'>=</span> <span class='s'>"Total population in the United States \nfrom 2000 to 2017"</span>,</span>
 <span>       caption <span class='o'>=</span> <span class='s'>"Data from the World Bank"</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-6-2.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/world_bank_pop-plot-polished-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
+</details>
+</div>
+</div>
+<br>
+<div class="puzzle">
+<div>
 <p>Often it may be easier to collect your data in wide format, but analyze it in tidy (i.e., long) format.</p>
 <blockquote>
 <p>This does not mean you must now collect your data in tidy format! You simply need to become comfortable with switching between formats.</p>
@@ -1027,12 +1023,16 @@
 <p>The opposite of <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> is <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a>. We haven&rsquo;t used <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a> get so let&rsquo;s try it. We are going to use the dataframe <code>population</code> which is pre-loaded with the tidyverse. This dataframe is currently in tidy format.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># what is in population?</span></span>
-<span><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>population</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; Rows: 4,060</span></span>
-<span><span class='c'>#&gt; Columns: 3</span></span>
-<span><span class='c'>#&gt; $ country    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "Afghanistan", "Afghanistan", "Afghanistan", "Afghanistan",…</span></span>
-<span><span class='c'>#&gt; $ year       <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,…</span></span>
-<span><span class='c'>#&gt; $ population <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span> 17586073, 18415307, 19021226, 19496836, 19987071, 20595360,…</span></span></code></pre>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>population</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span></span>
+<span><span class='c'>#&gt;   country      year population</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Afghanistan  <span style='text-decoration: underline;'>1</span>995   17<span style='text-decoration: underline;'>586</span>073</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Afghanistan  <span style='text-decoration: underline;'>1</span>996   18<span style='text-decoration: underline;'>415</span>307</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Afghanistan  <span style='text-decoration: underline;'>1</span>997   19<span style='text-decoration: underline;'>021</span>226</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> Afghanistan  <span style='text-decoration: underline;'>1</span>998   19<span style='text-decoration: underline;'>496</span>836</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> Afghanistan  <span style='text-decoration: underline;'>1</span>999   19<span style='text-decoration: underline;'>987</span>071</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> Afghanistan  <span style='text-decoration: underline;'>2</span>000   20<span style='text-decoration: underline;'>595</span>360</span></span></code></pre>
 </div>
 <p>What if we wanted to adjust the data so that instead of having a column called <code>year</code>, the data for each year is its own column, and have the corresponding <code>population</code> within each cell ? We can do that with <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a>.</p>
 <div class="highlight">
@@ -1122,7 +1122,7 @@
 <p>Convert this data from wide format to long format.</p>
 <details>
 <summary>
-<b>Hint 1</b>(click here)
+<b>Hint 1 </b>(click here)
 </summary>
 <br>
 <p>Use the function <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a>. Try setting the arguments <code>cols =</code>, <code>names_to =</code> and <code>values_to =</code>.</p>
@@ -1130,7 +1130,7 @@
 <br>
 <details>
 <summary>
-<b>Hint 2 after you've already pivoted</b>(click here)
+<b>Hint 2 after you've already pivoted </b>(click here)
 </summary>
 <br>
 <p>Note that each column is called Year Rank (e.g., 2020 Rank) and not just Year (e.g., 2020). You can fix this within <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> using <code>names_transform</code>. Try visiting this <a href="https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/" target="_blank" rel="noopener">link</a> for some help.</p>
@@ -1138,7 +1138,7 @@
 <br>
 <details>
 <summary>
-<b>Solution</b>(click here)
+<b>Solution </b>(click here)
 </summary>
 <br>
 <div class="highlight">
@@ -1155,8 +1155,10 @@
 <span><span class='c'>#&gt; $ `2019 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 4, 2, 3, 5, 6, 7, 8, 9, 11, 10, 13, 12, 14, 17, 15, 16,…</span></span>
 <span><span class='c'>#&gt; $ `2020 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,…</span></span>
 <span><span class='c'>#&gt; $ links       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "https://www.akc.org/dog-breeds/labrador-retriever/", "htt…</span></span>
-<span><span class='c'>#&gt; $ Image       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "https://www.akc.org/wp-content/uploads/2017/11/Labrador-R…</span></span><span></span>
-<span><span class='nv'>breed_rank_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>breed_rank_all</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span><span class='c'>#&gt; $ Image       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "https://www.akc.org/wp-content/uploads/2017/11/Labrador-R…</span></span></code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_rank_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>breed_rank_all</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>contains</a></span><span class='o'>(</span><span class='s'>"Rank"</span><span class='o'>)</span>,</span>
 <span>              names_to <span class='o'>=</span> <span class='s'>"year"</span>,</span>
 <span>              values_to <span class='o'>=</span> <span class='s'>"rank"</span>,</span>
@@ -1183,7 +1185,7 @@
 <p>Take that new dataframe you&rsquo;ve just made using <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> and make it wide again. No, you can&rsquo;t just use the original dataframe 😀🐶</p>
 <details>
 <summary>
-<b>Hints</b>(click here)
+<b>Hints </b>(click here)
 </summary>
 <br>
 <p>Hints</p>
@@ -1191,7 +1193,7 @@
 <br>
 <details>
 <summary>
-<b>Solution</b>(click here)
+<b>Solution </b>(click here)
 </summary>
 <br>
 <div class="highlight">
@@ -1234,7 +1236,7 @@
 <p>Try making a plot that shows the rank popularity of your favorite dog breeds over 2013-2020.</p>
 <details>
 <summary>
-<b>Hints</b>(click here)
+<b>Hints </b>(click here)
 </summary>
 <br>
 <p>Use your tidy dataframe, <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> to pick the Breeds you want to keep, and maybe a combined point and line plot.</p>
@@ -1242,7 +1244,7 @@
 <br>
 <details>
 <summary>
-<b>Solution</b>(click here)
+<b>Solution </b>(click here)
 </summary>
 <br>
 <div class="highlight">
@@ -1259,7 +1261,7 @@
 <span>       title <span class='o'>=</span> <span class='s'>"AKC Popularity of Jess's Favorite Dog Breeds"</span>,</span>
 <span>       caption <span class='o'>=</span> <span class='s'>"Data from AKC/#TidyTuesday"</span><span class='o'>)</span></span>
 </code></pre>
-<p><img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><img src="figs/bonus-solution-1-1.png" width="700px" style="display: block; margin: auto;" /></p>
 </div>
 </details>
 </div>
