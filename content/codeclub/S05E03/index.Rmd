@@ -73,7 +73,7 @@ Let's briefly go over again the idea of tidy data.
 </p>
 
 _(Illustrations from the [Openscapes](https://www.openscapes.org/) blog_
-_[Tidy Data for reproducibility, efficiency, and_ _collaboration](https://www.openscapes.org/blog/2020/10/12/tidy-data/)_
+_[Tidy Data for reproducibility, efficiency, and collaboration](https://www.openscapes.org/blog/2020/10/12/tidy-data/)_
 _by Julia Lowndes and Allison Horst.)_
 
 This is easier to "see" 👀 than to explain.
@@ -268,10 +268,13 @@ head(population_long)
 
 ## Breakout Rooms
 
-We are going to use some data that is a part of the `#TidyTuesday` series of data activities for tidyverse/R learning. I've picked some [data](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-02-01) that comes from the American Kennel Club and was compiled by [KKakey](https://github.com/kkakey/dog_traits_AKC/blob/main/README.md).
+We are going to use a dataset that is a part of the `#TidyTuesday` series of
+data activities for tidyverse/R learning.
+I've picked some
+[data](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-02-01)
+that comes from the American Kennel Club and was compiled by [KKakey](https://github.com/kkakey/dog_traits_AKC/blob/main/README.md).
 
-First we will download data that contains popularity of dog breeds by AKC registration from 2013-2020.
-
+This dataset contains the popularity of dog breeds by AKC registration from 2013-2020.
 You can directly read this data into a dataframe using:
 
 ```{r breakout-room-read-data}
@@ -291,7 +294,9 @@ breed_rank_all
 Convert the `breed_rank_all` dataframe from its current wide, untidy format,
 to a tidy, long format.
 
-<details><summary><b>Hint 1 </b>(click here)</summary>
+Bonus: Make sure the `year` column only contains the year number itself.
+
+<details><summary><b>Hint</b>(click here)</summary>
 <br>
 
 - Use the function `pivot_longer()`.
@@ -303,13 +308,21 @@ to a tidy, long format.
 
 <br>
 
-<details><summary><b>Hint 2 after you've pivoted </b>(click here)</summary>
+<details><summary><b>Hint for bonus </b>(click here)</summary>
 <br>
 
 Note that the year columns are called "<year> Rank" (e.g., `2020 Rank`)
 and not just "<year>" (e.g., `2020`).
-You can fix this within `pivot_longer()` using `names_transform`.
-Visit [this link](https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/) for some help.
+
+You can fix this using either:
+
+- A `mutate()` step after pivoting, similar to the example above --
+  but use parse_number() instead of as.numeric().
+  
+- Directly within your `pivot_longer()` call,
+  using the `names_transform` argument.
+  (Visit [this link](https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/)
+  for some help on that.)
 
 </details>
 
@@ -318,14 +331,41 @@ Visit [this link](https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/) for some 
 <details><summary><b>Solution </b>(click here)</summary>
 <br>
 
+Initial step:
+
 ```{r exercise-1-solution-2}
-breed_rank_tidy <- breed_rank_all %>%
+breed_rank_tidy <- breed_rank_all |> 
   pivot_longer(cols = contains("Rank"),
-              names_to = "year",
-              values_to = "rank",
-              names_transform = list(year = parse_number))
+               names_to = "year",
+               values_to = "rank")
 
 head(breed_rank_tidy)
+```
+
+This leaves us with a suboptimal `year` column:
+
+```{r}
+head(breed_rank_tidy$year)
+```
+
+We can fix that as follows:
+
+```{r}
+breed_rank_tidy <- breed_rank_tidy |>
+  mutate(year = parse_number(year))
+```
+
+Alternatively, it's possible to do this all at once using the `names_transform`
+argument of `pivot_longer()`:
+
+```{r}
+breed_rank_tidy <- breed_rank_all |> 
+  pivot_longer(cols = contains("Rank"),
+               names_to = "year",
+               values_to = "rank",
+               names_transform = parse_number) # or: 'list(year = parse_number)'
+
+breed_rank_tidy
 ```
 
 

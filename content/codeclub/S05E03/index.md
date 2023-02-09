@@ -13,7 +13,7 @@ image:
   caption: "Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"
   focal_point: ""
   preview_only: false
-rmd_hash: ad281dad0eca700d
+rmd_hash: 8467587dddd8dd7b
 
 ---
 
@@ -71,7 +71,7 @@ Let's briefly go over again the idea of tidy data.
 <img src=img/tidy_data.jpeg width="90%" alt="Stylized text providing an overview of Tidy Data. The top reads “Tidy data is a standard way of mapping the meaning of a dataset to its structure. - Hadley Wickham.” On the left reads “In tidy data: each variable forms a column; each observation forms a row; each cell is a single measurement.” There is an example table on the lower right with columns ‘id’, ‘name’ and ‘color’ with observations for different cats, illustrating tidy data structure.">
 </p>
 
-*(Illustrations from the [Openscapes](https://www.openscapes.org/) blog* *[Tidy Data for reproducibility, efficiency, and\_ \_collaboration](https://www.openscapes.org/blog/2020/10/12/tidy-data/)* *by Julia Lowndes and Allison Horst.)*
+*(Illustrations from the [Openscapes](https://www.openscapes.org/) blog* *[Tidy Data for reproducibility, efficiency, and collaboration](https://www.openscapes.org/blog/2020/10/12/tidy-data/)* *by Julia Lowndes and Allison Horst.)*
 
 This is easier to "see" 👀 than to explain. Here is an example of non-tidy data, where there is *data embedded in column names*, and one variable (the rank of a song) is spread across many columns:
 
@@ -389,11 +389,9 @@ There are many different ways you can code to tell R which columns you want to p
 
 ## Breakout Rooms
 
-We are going to use some data that is a part of the `#TidyTuesday` series of data activities for tidyverse/R learning. I've picked some [data](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-02-01) that comes from the American Kennel Club and was compiled by [KKakey](https://github.com/kkakey/dog_traits_AKC/blob/main/README.md).
+We are going to use a dataset that is a part of the `#TidyTuesday` series of data activities for tidyverse/R learning. I've picked some [data](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-02-01) that comes from the American Kennel Club and was compiled by [KKakey](https://github.com/kkakey/dog_traits_AKC/blob/main/README.md).
 
-First we will download data that contains popularity of dog breeds by AKC registration from 2013-2020.
-
-You can directly read this data into a dataframe using:
+This dataset contains the popularity of dog breeds by AKC registration from 2013-2020. You can directly read this data into a dataframe using:
 
 <div class="highlight">
 
@@ -433,9 +431,11 @@ Let's take a look at the data:
 
 Convert the `breed_rank_all` dataframe from its current wide, untidy format, to a tidy, long format.
 
+Bonus: Make sure the `year` column only contains the year number itself.
+
 <details>
 <summary>
-<b>Hint 1 </b>(click here)
+<b>Hint</b>(click here)
 </summary>
 
 <br>
@@ -450,12 +450,18 @@ Convert the `breed_rank_all` dataframe from its current wide, untidy format, to 
 
 <details>
 <summary>
-<b>Hint 2 after you've pivoted </b>(click here)
+<b>Hint for bonus </b>(click here)
 </summary>
 
 <br>
 
-Note that the year columns are called "<year> Rank" (e.g., `2020 Rank`) and not just "<year>" (e.g., `2020`). You can fix this within [`pivot_longer()`](https://tidyr.tidyverse.org/reference/pivot_longer.html) using `names_transform`. Visit [this link](https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/) for some help.
+Note that the year columns are called "<year> Rank" (e.g., `2020 Rank`) and not just "<year>" (e.g., `2020`).
+
+You can fix this using either:
+
+-   A [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) step after pivoting, similar to the example above -- but use parse_number() instead of as.numeric().
+
+-   Directly within your [`pivot_longer()`](https://tidyr.tidyverse.org/reference/pivot_longer.html) call, using the `names_transform` argument. (Visit [this link](https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/) for some help on that.)
 
 </details>
 
@@ -468,24 +474,71 @@ Note that the year columns are called "<year> Rank" (e.g., `2020 Rank`) and not 
 
 <br>
 
+Initial step:
+
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_rank_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>breed_rank_all</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_rank_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>breed_rank_all</span> <span class='o'>|&gt;</span> </span>
 <span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>contains</a></span><span class='o'>(</span><span class='s'>"Rank"</span><span class='o'>)</span>,</span>
-<span>              names_to <span class='o'>=</span> <span class='s'>"year"</span>,</span>
-<span>              values_to <span class='o'>=</span> <span class='s'>"rank"</span>,</span>
-<span>              names_transform <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span>year <span class='o'>=</span> <span class='nv'>parse_number</span><span class='o'>)</span><span class='o'>)</span></span>
+<span>               names_to <span class='o'>=</span> <span class='s'>"year"</span>,</span>
+<span>               values_to <span class='o'>=</span> <span class='s'>"rank"</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>breed_rank_tidy</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 5</span></span></span>
-<span><span class='c'>#&gt;   Breed                 links                                  Image  year  rank</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>                 <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>                                  <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http…  <span style='text-decoration: underline;'>2</span>013     1</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http…  <span style='text-decoration: underline;'>2</span>014     1</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http…  <span style='text-decoration: underline;'>2</span>015     1</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http…  <span style='text-decoration: underline;'>2</span>016     1</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http…  <span style='text-decoration: underline;'>2</span>017     1</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http…  <span style='text-decoration: underline;'>2</span>018     1</span></span></code></pre>
+<span><span class='c'>#&gt;   Breed                 links                                  Image year   rank</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>                 <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>                                  <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http… 2013…     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http… 2014…     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http… 2015…     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http… 2016…     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http… 2017…     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labrad… http… 2018…     1</span></span></code></pre>
+
+</div>
+
+This leaves us with a suboptimal `year` column:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>breed_rank_tidy</span><span class='o'>$</span><span class='nv'>year</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; [1] "2013 Rank" "2014 Rank" "2015 Rank" "2016 Rank" "2017 Rank" "2018 Rank"</span></span></code></pre>
+
+</div>
+
+We can fix that as follows:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_rank_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>breed_rank_tidy</span> <span class='o'>|&gt;</span></span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='o'>(</span>year <span class='o'>=</span> <span class='nf'><a href='https://readr.tidyverse.org/reference/parse_number.html'>parse_number</a></span><span class='o'>(</span><span class='nv'>year</span><span class='o'>)</span><span class='o'>)</span></span></code></pre>
+
+</div>
+
+Alternatively, it's possible to do this all at once using the `names_transform` argument of [`pivot_longer()`](https://tidyr.tidyverse.org/reference/pivot_longer.html):
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_rank_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>breed_rank_all</span> <span class='o'>|&gt;</span> </span>
+<span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>contains</a></span><span class='o'>(</span><span class='s'>"Rank"</span><span class='o'>)</span>,</span>
+<span>               names_to <span class='o'>=</span> <span class='s'>"year"</span>,</span>
+<span>               values_to <span class='o'>=</span> <span class='s'>"rank"</span>,</span>
+<span>               names_transform <span class='o'>=</span> <span class='nv'>parse_number</span><span class='o'>)</span> <span class='c'># or: 'list(year = parse_number)'</span></span>
+<span></span>
+<span><span class='nv'>breed_rank_tidy</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 1,560 × 5</span></span></span>
+<span><span class='c'>#&gt;    Breed                 links                                 Image  year  rank</span></span>
+<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>                 <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>                                 <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labra… http…  <span style='text-decoration: underline;'>2</span>013     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labra… http…  <span style='text-decoration: underline;'>2</span>014     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labra… http…  <span style='text-decoration: underline;'>2</span>015     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labra… http…  <span style='text-decoration: underline;'>2</span>016     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labra… http…  <span style='text-decoration: underline;'>2</span>017     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labra… http…  <span style='text-decoration: underline;'>2</span>018     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labra… http…  <span style='text-decoration: underline;'>2</span>019     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span> Retrievers (Labrador) https://www.akc.org/dog-breeds/labra… http…  <span style='text-decoration: underline;'>2</span>020     1</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span> French Bulldogs       https://www.akc.org/dog-breeds/frenc… http…  <span style='text-decoration: underline;'>2</span>013    11</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>10</span> French Bulldogs       https://www.akc.org/dog-breeds/frenc… http…  <span style='text-decoration: underline;'>2</span>014     9</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 1,550 more rows</span></span></span></code></pre>
 
 </div>
 
