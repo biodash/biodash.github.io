@@ -13,7 +13,7 @@ image:
   caption: "Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"
   focal_point: ""
   preview_only: false
-rmd_hash: 8467587dddd8dd7b
+rmd_hash: 4a1a156ee22f8683
 
 ---
 
@@ -455,11 +455,11 @@ Bonus: Make sure the `year` column only contains the year number itself.
 
 <br>
 
-Note that the year columns are called "<year> Rank" (e.g., `2020 Rank`) and not just "<year>" (e.g., `2020`).
+Note that the values in your resulting column with years are "\<year\> Rank" (e.g., `2020 Rank`), and not just "\<year\>" (e.g., `2020`).
 
 You can fix this using either:
 
--   A [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) step after pivoting, similar to the example above -- but use parse_number() instead of as.numeric().
+-   A [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) step after pivoting, similar to the example above -- but using [`parse_number()`](https://readr.tidyverse.org/reference/parse_number.html) instead of [`as.numeric()`](https://rdrr.io/r/base/numeric.html), since some alphabetic characters have to be removed.
 
 -   Directly within your [`pivot_longer()`](https://tidyr.tidyverse.org/reference/pivot_longer.html) call, using the `names_transform` argument. (Visit [this link](https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/) for some help on that.)
 
