@@ -338,10 +338,10 @@
     
       <meta
         property="article:published_time"
-        content="2023-02-07T00:00:00&#43;00:00"
+        content="2023-02-09T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2023-02-07T20:41:53-05:00">
+    <meta property="article:modified_time" content="2023-02-09T13:40:42-05:00">
   
 
   
@@ -709,14 +709,17 @@
     <li><a href="#introduction">Introduction</a></li>
     <li><a href="#what-is-tidy-data">What is tidy data?</a></li>
     <li><a href="#why-should-you-care">Why should you care?</a></li>
-    <li><a href="#two-functions-for-pivoting-data">Two functions for pivoting data</a></li>
-    <li><a href="#pivot_wider"><code>pivot_wider()</code></a></li>
-    <li><a href="#pivot_longer"><code>pivot_longer()</code></a></li>
+    <li><a href="#two-functions-for-pivoting-data">Two functions for pivoting data</a>
+      <ul>
+        <li><a href="#pivot_wider"><code>pivot_wider()</code></a></li>
+        <li><a href="#pivot_longer"><code>pivot_longer()</code></a></li>
+      </ul>
+    </li>
     <li><a href="#breakout-rooms">Breakout Rooms</a>
       <ul>
         <li><a href="#exercise-1">Exercise 1</a></li>
         <li><a href="#exercise-2">Exercise 2</a></li>
-        <li><a href="#bonus-1">Bonus 1</a></li>
+        <li><a href="#bonus-exercise">Bonus exercise</a></li>
       </ul>
     </li>
   </ul>
@@ -784,7 +787,7 @@
   <span class="article-date">
     
     
-    Feb 7, 2023
+    Feb 9, 2023
   </span>
   
 
@@ -823,10 +826,11 @@
 
                 <div class="article-container">
                     <div class="article-style">
-                        <hr>
+                        <p><br> <br></p>
+<hr>
 <h2 id="introduction">Introduction</h2>
-<p>Today we will learn about a consistent way to organize your data in R, using a system called <strong>&ldquo;tidy&rdquo; data</strong>.</p>
-<p>Then we will cover the primary tool use for tidying data, <strong>pivoting</strong>. Pivoting allows you to change the shape of your data without changing any of the values. <a href="https://biodash.github.io/codeclub/s05e02/" target="_blank" rel="noopener">Last week</a> we went over <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a>, today we are going to:</p>
+<p>Today we will continue learning about a consistent way to organize your data in R, using a system called <strong>&ldquo;tidy&rdquo; data</strong>.</p>
+<p><a href="https://biodash.github.io/codeclub/s05e02/" target="_blank" rel="noopener">Last week</a> we went over <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a>, and today we are going to:</p>
 <ul>
 <li>refresh on tidy data</li>
 <li>refresh on <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a></li>
@@ -858,9 +862,8 @@
 <p align="center">
 <img src=img/tidy_data.jpeg width="90%" alt="Stylized text providing an overview of Tidy Data. The top reads “Tidy data is a standard way of mapping the meaning of a dataset to its structure. - Hadley Wickham.” On the left reads “In tidy data: each variable forms a column; each observation forms a row; each cell is a single measurement.” There is an example table on the lower right with columns ‘id’, ‘name’ and ‘color’ with observations for different cats, illustrating tidy data structure.">
 </p>
-<p>Illustrations from the <a href="https://www.openscapes.org/" target="_blank" rel="noopener">Openscapes</a> blog <a href="https://www.openscapes.org/blog/2020/10/12/tidy-data/" target="_blank" rel="noopener">Tidy Data for reproducibility, efficiency, and collaboration</a> by Julia Lowndes and Allison Horst</p>
-<p>This is easier to &ldquo;see&rdquo; than to explain.👀</p>
-<p>Here is an example of non-tidy data, where there is <em>data embedded in column names</em>.</p>
+<p><em>(Illustrations from the <a href="https://www.openscapes.org/" target="_blank" rel="noopener">Openscapes</a> blog</em> <em><a href="https://www.openscapes.org/blog/2020/10/12/tidy-data/" target="_blank" rel="noopener">Tidy Data for reproducibility, efficiency, and_ _collaboration</a></em> <em>by Julia Lowndes and Allison Horst.)</em></p>
+<p>This is easier to &ldquo;see&rdquo; 👀 than to explain. Here is an example of non-tidy data, where there is <em>data embedded in column names</em>, and one variable (the rank of a song) is spread across many columns:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>billboard</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 317 × 79</span></span></span>
@@ -886,13 +889,7 @@
 </div>
 <p>Here is an example of the same exact data, in a tidy format, where those data that used to be column names, are now <em>values coded for a particular variable</em>.</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>billboard</span> <span class='o'>|&gt;</span> </span>
-<span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span></span>
-<span>    cols <span class='o'>=</span> <span class='nf'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='o'>(</span><span class='s'>"wk"</span><span class='o'>)</span>, </span>
-<span>    names_to <span class='o'>=</span> <span class='s'>"week"</span>, </span>
-<span>    values_to <span class='o'>=</span> <span class='s'>"rank"</span></span>
-<span>  <span class='o'>)</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 24,092 × 5</span></span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 24,092 × 5</span></span></span>
 <span><span class='c'>#&gt;    artist track                   date.entered week   rank</span></span>
 <span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>                   <span style='color: #555555; font-style: italic;'>&lt;date&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> 2 Pac  Baby Don't Cry (Keep... 2000-02-26   wk1      87</span></span>
@@ -908,25 +905,26 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 24,082 more rows</span></span></span></code></pre>
 </div>
 <br>
+<hr>
 <h2 id="why-should-you-care">Why should you care?</h2>
 <p>Let&rsquo;s go through an example where we will learn that we can&rsquo;t make the visualization that we want, because our data is not in tidy format.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># look at world_bank_pop using head</span></span>
 <span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>world_bank_pop</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 20</span></span></span>
-<span><span class='c'>#&gt;   country indica…¹ `2000` `2001` `2002` `2003`  `2004`  `2005`   `2006`   `2007`</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> ABW     SP.URB.… 4.24<span style='color: #555555;'>e</span>4 4.30<span style='color: #555555;'>e</span>4 4.37<span style='color: #555555;'>e</span>4 4.42<span style='color: #555555;'>e</span>4 4.47<span style='color: #555555;'>e</span>+4 4.49<span style='color: #555555;'>e</span>+4  4.49<span style='color: #555555;'>e</span>+4  4.47<span style='color: #555555;'>e</span>+4</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> ABW     SP.URB.… 1.18<span style='color: #555555;'>e</span>0 1.41<span style='color: #555555;'>e</span>0 1.43<span style='color: #555555;'>e</span>0 1.31<span style='color: #555555;'>e</span>0 9.51<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 4.91<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> -<span style='color: #BB0000;'>1.78</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-2</span> -<span style='color: #BB0000;'>4.35</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> ABW     SP.POP.… 9.09<span style='color: #555555;'>e</span>4 9.29<span style='color: #555555;'>e</span>4 9.50<span style='color: #555555;'>e</span>4 9.70<span style='color: #555555;'>e</span>4 9.87<span style='color: #555555;'>e</span>+4 1.00<span style='color: #555555;'>e</span>+5  1.01<span style='color: #555555;'>e</span>+5  1.01<span style='color: #555555;'>e</span>+5</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> ABW     SP.POP.… 2.06<span style='color: #555555;'>e</span>0 2.23<span style='color: #555555;'>e</span>0 2.23<span style='color: #555555;'>e</span>0 2.11<span style='color: #555555;'>e</span>0 1.76<span style='color: #555555;'>e</span>+0 1.30<span style='color: #555555;'>e</span>+0  7.98<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span>  3.84<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> AFG     SP.URB.… 4.44<span style='color: #555555;'>e</span>6 4.65<span style='color: #555555;'>e</span>6 4.89<span style='color: #555555;'>e</span>6 5.16<span style='color: #555555;'>e</span>6 5.43<span style='color: #555555;'>e</span>+6 5.69<span style='color: #555555;'>e</span>+6  5.93<span style='color: #555555;'>e</span>+6  6.15<span style='color: #555555;'>e</span>+6</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> AFG     SP.URB.… 3.91<span style='color: #555555;'>e</span>0 4.66<span style='color: #555555;'>e</span>0 5.13<span style='color: #555555;'>e</span>0 5.23<span style='color: #555555;'>e</span>0 5.12<span style='color: #555555;'>e</span>+0 4.77<span style='color: #555555;'>e</span>+0  4.12<span style='color: #555555;'>e</span>+0  3.65<span style='color: #555555;'>e</span>+0</span></span>
+<span><span class='c'>#&gt;   country indic…¹ `2000`  `2001`  `2002`  `2003`  `2004`  `2005`  `2006`  `2007`</span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> ABW     SP.URB… 4.16<span style='color: #555555;'>e</span>4 4.20<span style='color: #555555;'>e</span>+4 4.22<span style='color: #555555;'>e</span>+4 4.23<span style='color: #555555;'>e</span>+4 4.23<span style='color: #555555;'>e</span>+4 4.24<span style='color: #555555;'>e</span>+4 4.26<span style='color: #555555;'>e</span>+4 4.27<span style='color: #555555;'>e</span>+4</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> ABW     SP.URB… 1.66<span style='color: #555555;'>e</span>0 9.56<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 4.01<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 1.97<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 9.46<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-2</span> 1.94<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 3.67<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 4.08<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> ABW     SP.POP… 8.91<span style='color: #555555;'>e</span>4 9.07<span style='color: #555555;'>e</span>+4 9.18<span style='color: #555555;'>e</span>+4 9.27<span style='color: #555555;'>e</span>+4 9.35<span style='color: #555555;'>e</span>+4 9.45<span style='color: #555555;'>e</span>+4 9.56<span style='color: #555555;'>e</span>+4 9.68<span style='color: #555555;'>e</span>+4</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> ABW     SP.POP… 2.54<span style='color: #555555;'>e</span>0 1.77<span style='color: #555555;'>e</span>+0 1.19<span style='color: #555555;'>e</span>+0 9.97<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 9.01<span style='color: #555555;'>e</span><span style='color: #BB0000;'>-1</span> 1.00<span style='color: #555555;'>e</span>+0 1.18<span style='color: #555555;'>e</span>+0 1.23<span style='color: #555555;'>e</span>+0</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> AFE     SP.URB… 1.16<span style='color: #555555;'>e</span>8 1.20<span style='color: #555555;'>e</span>+8 1.24<span style='color: #555555;'>e</span>+8 1.29<span style='color: #555555;'>e</span>+8 1.34<span style='color: #555555;'>e</span>+8 1.39<span style='color: #555555;'>e</span>+8 1.44<span style='color: #555555;'>e</span>+8 1.49<span style='color: #555555;'>e</span>+8</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> AFE     SP.URB… 3.60<span style='color: #555555;'>e</span>0 3.66<span style='color: #555555;'>e</span>+0 3.72<span style='color: #555555;'>e</span>+0 3.71<span style='color: #555555;'>e</span>+0 3.74<span style='color: #555555;'>e</span>+0 3.81<span style='color: #555555;'>e</span>+0 3.81<span style='color: #555555;'>e</span>+0 3.61<span style='color: #555555;'>e</span>+0</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># … with 10 more variables: `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;,</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>#   `2016` &lt;dbl&gt;, `2017` &lt;dbl&gt;, and abbreviated variable name ¹​indicator</span></span></span></code></pre>
 </div>
-<p>What if we want to make a plot to see how population has changed (y-axis) for a specific country (say, the USA) over the duration for which data is collected (x-axis)? With the data in this format, we cannot make this plot. This is because <strong>year</strong> is not a column in our dataframe. This population information is spread over all of the columns that have a year as their name.</p>
+<p>What if we want to make a plot to see how population has changed (y-axis) for a specific country (say, the USA) over the duration for which data is collected (x-axis)? With the data in this format, we cannot make this plot, at least not with <em>ggplot2</em>. This is because <strong>year</strong> is not a column in our dataframe. This population information is spread over all of the columns that have a year as their name.</p>
 <p>We can fix this by using <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a>.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>world_bank_pop_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>world_bank_pop</span> <span class='o'>|&gt;</span> </span>
@@ -939,12 +937,12 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 4</span></span></span>
 <span><span class='c'>#&gt;   country indicator   year  measure</span></span>
 <span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> ABW     SP.URB.TOTL 2000    <span style='text-decoration: underline;'>42</span>444</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> ABW     SP.URB.TOTL 2001    <span style='text-decoration: underline;'>43</span>048</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> ABW     SP.URB.TOTL 2002    <span style='text-decoration: underline;'>43</span>670</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> ABW     SP.URB.TOTL 2003    <span style='text-decoration: underline;'>44</span>246</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> ABW     SP.URB.TOTL 2004    <span style='text-decoration: underline;'>44</span>669</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> ABW     SP.URB.TOTL 2005    <span style='text-decoration: underline;'>44</span>889</span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> ABW     SP.URB.TOTL 2000    <span style='text-decoration: underline;'>41</span>625</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> ABW     SP.URB.TOTL 2001    <span style='text-decoration: underline;'>42</span>025</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> ABW     SP.URB.TOTL 2002    <span style='text-decoration: underline;'>42</span>194</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> ABW     SP.URB.TOTL 2003    <span style='text-decoration: underline;'>42</span>277</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> ABW     SP.URB.TOTL 2004    <span style='text-decoration: underline;'>42</span>317</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> ABW     SP.URB.TOTL 2005    <span style='text-decoration: underline;'>42</span>399</span></span></code></pre>
 </div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># convert year from a character to a number so we can plot it </span></span>
@@ -956,12 +954,12 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 4</span></span></span>
 <span><span class='c'>#&gt;   country indicator    year measure</span></span>
 <span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>000   <span style='text-decoration: underline;'>42</span>444</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>001   <span style='text-decoration: underline;'>43</span>048</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>002   <span style='text-decoration: underline;'>43</span>670</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>003   <span style='text-decoration: underline;'>44</span>246</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>004   <span style='text-decoration: underline;'>44</span>669</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>005   <span style='text-decoration: underline;'>44</span>889</span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>000   <span style='text-decoration: underline;'>41</span>625</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>001   <span style='text-decoration: underline;'>42</span>025</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>3</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>002   <span style='text-decoration: underline;'>42</span>194</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>4</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>003   <span style='text-decoration: underline;'>42</span>277</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>5</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>004   <span style='text-decoration: underline;'>42</span>317</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>6</span> ABW     SP.URB.TOTL  <span style='text-decoration: underline;'>2</span>005   <span style='text-decoration: underline;'>42</span>399</span></span></code></pre>
 </div>
 <p>Now we can make the plot we want. If you&rsquo;re not familiar with ggplot syntax you can learn more in the R4DS section called <a href="https://r4ds.hadley.nz/visualize.html" target="_blank" rel="noopener">Visualize</a> or in past code clubs on:</p>
 <ul>
@@ -1015,27 +1013,20 @@
 <blockquote>
 <p>This does not mean you must now collect your data in tidy format! You simply need to become comfortable with switching between formats.</p>
 </blockquote>
-<h2 id="two-functions-for-pivoting-data">Two functions for pivoting data</h2>
-<ul>
-<li>
-<p><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><strong><code>pivot_longer()</code></strong></a> pulls data that is embedded in column names, and reshapes your dataframe such this information is now embedded within the values. This typically makes your dataframes longer (i.e., increases the number of rows).<br>
-<em>Typically</em>, we use <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> to make an untidy dataset tidy, since untidy datasets often have multiple columns for a single variable, and multiple observations in a single row.</p>
-</li>
-<li>
-<p><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><strong><code>pivot_wider()</code></strong></a> takes data that is embedded in the values of your dataframe, and puts this information in variable names. This typically makes your dataframe &ldquo;wider&rdquo; (i.e., increases the number of columns).<br>
-<em>Typically</em>, <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a> will make a dataset untidy, but this can still be useful for certain calculations, or if you want to use a for loop to do something iteratively across columns.</p>
-</li>
-</ul>
 <br>
 <hr>
-<h2 id="pivot_wider"><code>pivot_wider()</code></h2>
+<h2 id="two-functions-for-pivoting-data">Two functions for pivoting data</h2>
+<p><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><strong><code>pivot_longer()</code></strong></a> pulls data that is embedded in column names, and reshapes your dataframe such this information is now embedded within the values. Or put differently, it collects variables that are spread across multiple columns into a single column. This makes your dataframes longer, i.e., increases the number of rows. <em>Typically</em>, we use <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> to make an untidy dataset tidy.</p>
+<p><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><strong><code>pivot_wider()</code></strong></a> takes data that is embedded in the values of your dataframe, and puts this information in variable names. Or put differently, it spreads a variable across multiple columns. This makes your dataframe &ldquo;wider&rdquo;, i.e., increases the number of columns. <em>Typically</em>, <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a> will make a dataset untidy. This can be useful for certain calculations, or if you want to use a for loop to do something iteratively across columns.</p>
+<br>
+<h3 id="pivot_wider"><code>pivot_wider()</code></h3>
 <p>The opposite of <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> is <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a>. We haven&rsquo;t used <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a> get so let&rsquo;s try it. We are going to use the dataframe <code>population</code> which is pre-loaded with the tidyverse. This dataframe is currently in tidy format.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># what is in population?</span></span>
 <span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>population</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span></span>
 <span><span class='c'>#&gt;   country      year population</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Afghanistan  <span style='text-decoration: underline;'>1</span>995   17<span style='text-decoration: underline;'>586</span>073</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Afghanistan  <span style='text-decoration: underline;'>1</span>996   18<span style='text-decoration: underline;'>415</span>307</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Afghanistan  <span style='text-decoration: underline;'>1</span>997   19<span style='text-decoration: underline;'>021</span>226</span></span>
@@ -1052,20 +1043,19 @@
 <span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>population_wide</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 20</span></span></span>
 <span><span class='c'>#&gt;   country  `1995` `1996` `1997` `1998` `1999` `2000` `2001` `2002` `2003` `2004`</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Afghani… 1.76<span style='color: #555555;'>e</span>7 1.84<span style='color: #555555;'>e</span>7 1.90<span style='color: #555555;'>e</span>7 1.95<span style='color: #555555;'>e</span>7 2.00<span style='color: #555555;'>e</span>7 2.06<span style='color: #555555;'>e</span>7 2.13<span style='color: #555555;'>e</span>7 2.22<span style='color: #555555;'>e</span>7 2.31<span style='color: #555555;'>e</span>7 2.40<span style='color: #555555;'>e</span>7</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Albania  3.36<span style='color: #555555;'>e</span>6 3.34<span style='color: #555555;'>e</span>6 3.33<span style='color: #555555;'>e</span>6 3.33<span style='color: #555555;'>e</span>6 3.32<span style='color: #555555;'>e</span>6 3.30<span style='color: #555555;'>e</span>6 3.29<span style='color: #555555;'>e</span>6 3.26<span style='color: #555555;'>e</span>6 3.24<span style='color: #555555;'>e</span>6 3.22<span style='color: #555555;'>e</span>6</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Algeria  2.93<span style='color: #555555;'>e</span>7 2.98<span style='color: #555555;'>e</span>7 3.03<span style='color: #555555;'>e</span>7 3.08<span style='color: #555555;'>e</span>7 3.13<span style='color: #555555;'>e</span>7 3.17<span style='color: #555555;'>e</span>7 3.22<span style='color: #555555;'>e</span>7 3.26<span style='color: #555555;'>e</span>7 3.30<span style='color: #555555;'>e</span>7 3.35<span style='color: #555555;'>e</span>7</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>4</span> America… 5.29<span style='color: #555555;'>e</span>4 5.39<span style='color: #555555;'>e</span>4 5.49<span style='color: #555555;'>e</span>4 5.59<span style='color: #555555;'>e</span>4 5.68<span style='color: #555555;'>e</span>4 5.75<span style='color: #555555;'>e</span>4 5.82<span style='color: #555555;'>e</span>4 5.87<span style='color: #555555;'>e</span>4 5.91<span style='color: #555555;'>e</span>4 5.93<span style='color: #555555;'>e</span>4</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>5</span> Andorra  6.39<span style='color: #555555;'>e</span>4 6.43<span style='color: #555555;'>e</span>4 6.41<span style='color: #555555;'>e</span>4 6.38<span style='color: #555555;'>e</span>4 6.41<span style='color: #555555;'>e</span>4 6.54<span style='color: #555555;'>e</span>4 6.8 <span style='color: #555555;'>e</span>4 7.16<span style='color: #555555;'>e</span>4 7.56<span style='color: #555555;'>e</span>4 7.91<span style='color: #555555;'>e</span>4</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>6</span> Angola   1.21<span style='color: #555555;'>e</span>7 1.25<span style='color: #555555;'>e</span>7 1.28<span style='color: #555555;'>e</span>7 1.31<span style='color: #555555;'>e</span>7 1.35<span style='color: #555555;'>e</span>7 1.39<span style='color: #555555;'>e</span>7 1.44<span style='color: #555555;'>e</span>7 1.49<span style='color: #555555;'>e</span>7 1.54<span style='color: #555555;'>e</span>7 1.60<span style='color: #555555;'>e</span>7</span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'># … with 9 more variables: `2005` &lt;int&gt;, `2006` &lt;int&gt;, `2007` &lt;int&gt;,</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   `2008` &lt;int&gt;, `2009` &lt;int&gt;, `2010` &lt;int&gt;, `2011` &lt;int&gt;, `2012` &lt;int&gt;,</span></span></span>
-<span><span class='c'>#&gt; <span style='color: #555555;'>#   `2013` &lt;int&gt;</span></span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 9 more variables: `2005` &lt;dbl&gt;, `2006` &lt;dbl&gt;, `2007` &lt;dbl&gt;,</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;, `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;,</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   `2013` &lt;dbl&gt;</span></span></span></code></pre>
 </div>
-<hr>
-<h2 id="pivot_longer"><code>pivot_longer()</code></h2>
-<p>Let&rsquo;s practice again using <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a>. We just made a wide dataframe with <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a> - can we make it long again?</p>
+<h3 id="pivot_longer"><code>pivot_longer()</code></h3>
+<p>Let&rsquo;s practice using <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> again. We just made a wide dataframe with <a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" target="_blank" rel="noopener"><code>pivot_wider()</code></a> &ndash; can we make it long again?</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>population_long</span> <span class='o'>&lt;-</span> <span class='nv'>population_wide</span> <span class='o'>|&gt;</span></span>
 <span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='o'>!</span><span class='nv'>country</span>, <span class='c'># all columns except country</span></span>
@@ -1075,7 +1065,7 @@
 <span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>population_long</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span></span>
 <span><span class='c'>#&gt;   country     year  population</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Afghanistan 1995    17<span style='text-decoration: underline;'>586</span>073</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Afghanistan 1996    18<span style='text-decoration: underline;'>415</span>307</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Afghanistan 1997    19<span style='text-decoration: underline;'>021</span>226</span></span>
@@ -1086,14 +1076,14 @@
 <p>There are many different ways you can code to tell R which columns you want to pivot. I&rsquo;m showing below some other ways to code the same outcome, but you can find a more ocomprehensive list of <a href="https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html" target="_blank" rel="noopener">tidy-select helpers</a> in the <code>tidyr</code> documentation page.</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>population_long</span> <span class='o'>&lt;-</span> <span class='nv'>population_wide</span> <span class='o'>|&gt;</span></span>
-<span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'>where</span><span class='o'>(</span><span class='nv'>is.numeric</span><span class='o'>)</span>, <span class='c'># all numeric columns</span></span>
+<span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://tidyselect.r-lib.org/reference/where.html'>where</a></span><span class='o'>(</span><span class='nv'>is.numeric</span><span class='o'>)</span>, <span class='c'># all numeric columns</span></span>
 <span>               names_to <span class='o'>=</span> <span class='s'>"year"</span>,</span>
 <span>               values_to <span class='o'>=</span> <span class='s'>"population"</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>population_long</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span></span>
 <span><span class='c'>#&gt;   country     year  population</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Afghanistan 1995    17<span style='text-decoration: underline;'>586</span>073</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Afghanistan 1996    18<span style='text-decoration: underline;'>415</span>307</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Afghanistan 1997    19<span style='text-decoration: underline;'>021</span>226</span></span>
@@ -1110,7 +1100,7 @@
 <span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>population_long</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 3</span></span></span>
 <span><span class='c'>#&gt;   country     year  population</span></span>
-<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;int&gt;</span></span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Afghanistan 1995    17<span style='text-decoration: underline;'>586</span>073</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Afghanistan 1996    18<span style='text-decoration: underline;'>415</span>307</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>3</span> Afghanistan 1997    19<span style='text-decoration: underline;'>021</span>226</span></span>
@@ -1118,31 +1108,60 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'>5</span> Afghanistan 1999    19<span style='text-decoration: underline;'>987</span>071</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>6</span> Afghanistan 2000    20<span style='text-decoration: underline;'>595</span>360</span></span></code></pre>
 </div>
+<br>
 <hr>
 <h2 id="breakout-rooms">Breakout Rooms</h2>
 <p>We are going to use some data that is a part of the <code>#TidyTuesday</code> series of data activities for tidyverse/R learning. I&rsquo;ve picked some <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-02-01" target="_blank" rel="noopener">data</a> that comes from the American Kennel Club and was compiled by <a href="https://github.com/kkakey/dog_traits_AKC/blob/main/README.md" target="_blank" rel="noopener">KKakey</a>.</p>
-<p>First we will download data that contains popularity of dog breeds by AKC registration from 2013-2020. You can access the data through the chunk of code below.</p>
+<p>First we will download data that contains popularity of dog breeds by AKC registration from 2013-2020.</p>
+<p>You can directly read this data into a dataframe using:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_rank_all</span> <span class='o'>&lt;-</span> <span class='nf'>readr</span><span class='nf'>::</span><span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-02-01/breed_rank.csv'</span><span class='o'>)</span></span></code></pre>
+</div>
+<p>Let&rsquo;s take a look at the data:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_rank_all</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 195 × 11</span></span></span>
+<span><span class='c'>#&gt;    Breed   2013 …¹ 2014 …² 2015 …³ 2016 …⁴ 2017 …⁵ 2018 …⁶ 2019 …⁷ 2020 …⁸ links</span></span>
+<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> Retrie…       1       1       1       1       1       1       1       1 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span> French…      11       9       6       6       4       4       4       2 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span> German…       2       2       2       2       2       2       2       3 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span> Retrie…       3       3       3       3       3       3       3       4 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span> Bulldo…       5       4       4       4       5       5       5       5 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span> Poodles       8       7       8       7       7       7       6       6 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span> Beagles       4       5       5       5       6       6       7       7 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span> Rottwe…       9      10       9       8       8       8       8       8 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span> Pointe…      13      12      11      11      10       9       9       9 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>10</span> Dachsh…      10      11      13      13      13      12      11      10 http…</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 185 more rows, 1 more variable: Image &lt;chr&gt;, and abbreviated variable</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   names ¹​`2013 Rank`, ²​`2014 Rank`, ³​`2015 Rank`, ⁴​`2016 Rank`, ⁵​`2017 Rank`,</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   ⁶​`2018 Rank`, ⁷​`2019 Rank`, ⁸​`2020 Rank`</span></span></span></code></pre>
 </div>
 <div class="puzzle">
 <div>
 <h3 id="exercise-1">Exercise 1</h3>
-<p>Convert this data from wide format to long format.</p>
+<p>Convert the <code>breed_rank_all</code> dataframe from its current wide, untidy format, to a tidy, long format.</p>
 <details>
 <summary>
 <b>Hint 1 </b>(click here)
 </summary>
 <br>
+<ul>
+<li>
 <p>Use the function <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a>. Try setting the arguments <code>cols =</code>, <code>names_to =</code> and <code>values_to =</code>.</p>
+</li>
+<li>
+<p>You&rsquo;ll want to pivot the columns with years in them.</p>
+</li>
+</ul>
 </details>
 <br>
 <details>
 <summary>
-<b>Hint 2 after you've already pivoted </b>(click here)
+<b>Hint 2 after you've pivoted </b>(click here)
 </summary>
 <br>
-<p>Note that each column is called Year Rank (e.g., 2020 Rank) and not just Year (e.g., 2020). You can fix this within <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> using <code>names_transform</code>. Try visiting this <a href="https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/" target="_blank" rel="noopener">link</a> for some help.</p>
+<p>Note that the year columns are called &ldquo;<year> Rank&rdquo; (e.g., <code>2020 Rank</code>) and not just &ldquo;<year>&rdquo; (e.g., <code>2020</code>). You can fix this within <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> using <code>names_transform</code>. Visit <a href="https://www.tidyverse.org/blog/2020/05/tidyr-1.1.0/" target="_blank" rel="noopener">this link</a> for some help.</p>
 </details>
 <br>
 <details>
@@ -1150,22 +1169,6 @@
 <b>Solution </b>(click here)
 </summary>
 <br>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='o'>(</span><span class='nv'>breed_rank_all</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; Rows: 195</span></span>
-<span><span class='c'>#&gt; Columns: 11</span></span>
-<span><span class='c'>#&gt; $ Breed       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "Retrievers (Labrador)", "French Bulldogs", "German Shephe…</span></span>
-<span><span class='c'>#&gt; $ `2013 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 11, 2, 3, 5, 8, 4, 9, 13, 10, 24, 20, 6, 7, 16, 14, 18,…</span></span>
-<span><span class='c'>#&gt; $ `2014 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 9, 2, 3, 4, 7, 5, 10, 12, 11, 22, 18, 6, 8, 15, 13, 19,…</span></span>
-<span><span class='c'>#&gt; $ `2015 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 6, 2, 3, 4, 8, 5, 9, 11, 13, 20, 17, 7, 10, 15, 12, 18,…</span></span>
-<span><span class='c'>#&gt; $ `2016 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 6, 2, 3, 4, 7, 5, 8, 11, 13, 18, 16, 9, 10, 14, 12, 19,…</span></span>
-<span><span class='c'>#&gt; $ `2017 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 4, 2, 3, 5, 7, 6, 8, 10, 13, 15, 17, 9, 11, 14, 12, 19,…</span></span>
-<span><span class='c'>#&gt; $ `2018 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 4, 2, 3, 5, 7, 6, 8, 9, 12, 13, 15, 10, 11, 16, 14, 18,…</span></span>
-<span><span class='c'>#&gt; $ `2019 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 4, 2, 3, 5, 6, 7, 8, 9, 11, 10, 13, 12, 14, 17, 15, 16,…</span></span>
-<span><span class='c'>#&gt; $ `2020 Rank` <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,…</span></span>
-<span><span class='c'>#&gt; $ links       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "https://www.akc.org/dog-breeds/labrador-retriever/", "htt…</span></span>
-<span><span class='c'>#&gt; $ Image       <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span> "https://www.akc.org/wp-content/uploads/2017/11/Labrador-R…</span></span></code></pre>
-</div>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_rank_tidy</span> <span class='o'>&lt;-</span> <span class='nv'>breed_rank_all</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='nf'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='o'>(</span>cols <span class='o'>=</span> <span class='nf'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>contains</a></span><span class='o'>(</span><span class='s'>"Rank"</span><span class='o'>)</span>,</span>
@@ -1197,7 +1200,7 @@
 <b>Hints </b>(click here)
 </summary>
 <br>
-<p>Hints</p>
+<p>Try using <a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" target="_blank" rel="noopener"><code>pivot_longer()</code></a> and make sure you specify <code>names_from =</code> and <code>values_from =</code>.</p>
 </details>
 <br>
 <details>
@@ -1241,14 +1244,16 @@
 </div>
 </div>
 <br>
-<h3 id="bonus-1">Bonus 1</h3>
-<p>Try making a plot that shows the rank popularity of your favorite dog breeds over 2013-2020.</p>
+<div class="puzzle">
+<div>
+<h3 id="bonus-exercise">Bonus exercise</h3>
+<p>Try making a plot that shows the popularity rank of your favorite dog breeds (select up to a handful) over 2013-2020.</p>
 <details>
 <summary>
 <b>Hints </b>(click here)
 </summary>
 <br>
-<p>Use your tidy dataframe, <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> to pick the Breeds you want to keep, and maybe a combined point and line plot.</p>
+<p>Use your tidy dataframe, <a href="https://dplyr.tidyverse.org/reference/filter.html" target="_blank" rel="noopener"><code>filter()</code></a> to pick the <code>Breed</code>s you want to keep, and maybe a combined point (<a href="https://ggplot2.tidyverse.org/reference/geom_point.html" target="_blank" rel="noopener"><code>geom_point()</code></a>) and line (<a href="https://ggplot2.tidyverse.org/reference/geom_path.html" target="_blank" rel="noopener"><code>geom_line()</code></a>) plot.</p>
 </details>
 <br>
 <details>
@@ -1275,8 +1280,6 @@
 </details>
 </div>
 </div>
-<br>
-<hr>
 <br>
 
                     </div>
