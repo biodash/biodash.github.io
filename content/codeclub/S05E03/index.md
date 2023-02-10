@@ -13,6 +13,7 @@ image:
   caption: "Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"
   focal_point: ""
   preview_only: false
+
 rmd_hash: c121d0f3f4e1f454
 
 ---
