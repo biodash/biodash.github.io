@@ -5,15 +5,15 @@ subtitle: "Today, we will revisit tidy data, review pivot_longer() and learn piv
 summary: "Today, we will revisit tidy data, review pivot_longer() and learn pivot_wider()."
 authors: [jessica-cooperstone]
 tags: [codeclub, r4ds]
-date: "2023-02-07"
-lastmod: "2023-02-07"
+date: "2023-02-10"
+lastmod: "2023-02-10"
 toc: true
 
 image: 
   caption: "Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"
   focal_point: ""
   preview_only: false
-rmd_hash: dacaaa835de64465
+rmd_hash: 974bb7a8d64d16dc
 
 ---
 
@@ -507,7 +507,7 @@ Take that new dataframe you've just made using [`pivot_longer()`](https://tidyr.
 
 <br>
 
-Hints
+Try using [`pivot_longer()`](https://tidyr.tidyverse.org/reference/pivot_longer.html) and make sure you specify `names_from =` and `values_from =`.
 
 </details>
 
@@ -597,7 +597,7 @@ Use your tidy dataframe, [`filter()`](https://dplyr.tidyverse.org/reference/filt
 <span></span>
 <span><span class='nv'>breed_rank_tidy</span> <span class='o'>|&gt;</span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>Breed</span> <span class='o'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='nv'>fav_breeds</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
-<span><span class='c'># filter(Breed == c("French Bulldogs", "Poodles")) |&gt; # also works</span></span>
+<span><span class='c'># filter(Breed == "French Bulldogs" | Breed == "Poodles") |&gt; # also works</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>rank</span>, color <span class='o'>=</span> <span class='nv'>Breed</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
