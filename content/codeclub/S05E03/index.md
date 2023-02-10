@@ -5,15 +5,15 @@ subtitle: "Today, we will revisit tidy data, review pivot_longer() and learn piv
 summary: "Today, we will revisit tidy data, review pivot_longer() and learn pivot_wider()."
 authors: [jessica-cooperstone]
 tags: [codeclub, r4ds]
-date: "2023-02-09"
-lastmod: "2023-02-09"
+date: "2023-02-10"
+lastmod: "2023-02-10"
 toc: true
 
 image: 
   caption: "Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"
   focal_point: ""
   preview_only: false
-rmd_hash: 4a1a156ee22f8683
+rmd_hash: c121d0f3f4e1f454
 
 ---
 
@@ -659,7 +659,7 @@ Use your tidy dataframe, [`filter()`](https://dplyr.tidyverse.org/reference/filt
 <span></span>
 <span><span class='nv'>breed_rank_tidy</span> <span class='o'>|&gt;</span></span>
 <span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>Breed</span> <span class='o'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='nv'>fav_breeds</span><span class='o'>)</span> <span class='o'>|&gt;</span></span>
-<span><span class='c'># filter(Breed == c("French Bulldogs", "Poodles")) |&gt; # also works</span></span>
+<span><span class='c'># filter(Breed %in% c("French Bulldogs", "Poodles")) |&gt; # also works</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>year</span>, y <span class='o'>=</span> <span class='nv'>rank</span>, color <span class='o'>=</span> <span class='nv'>Breed</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
