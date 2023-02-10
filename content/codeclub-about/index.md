@@ -11,7 +11,7 @@ toc: true
 <div class="alert alert-note">
 <div>
 
-<b>Code Club will restart for the Spring of '23 on January 26th &mdash;
+<b>Code Club has restarted for the '23 Spring semester on January 26th &mdash;
 see the <a href="/codeclub-schedule/">schedule</a>. <br>
 You can join us at any point &mdash; to do so, please fill out
 <a href="#sign-up">this form!</a></b>
