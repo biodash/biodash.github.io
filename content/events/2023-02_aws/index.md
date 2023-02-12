@@ -4,13 +4,13 @@ toc: true
 
 # Online AWS Workshop
 
-Wednesday, February 28th, 2023
+Wednesday, February 28th, 2023 -- 3-5 pm -- online-only
 
 <br>
 
 ----
 
-Code Club will organize a workshop from 3-5 pm on Amazon Web Services (AWS),
+Code Club will organize a free workshop from 3-5 pm on Amazon Web Services (AWS),
 led by AWS instructors.
 The workshop will take place on Wednesday February 28th, 2023, from 3-5 pm.
 
@@ -56,8 +56,8 @@ Here is what will be covered during this general immersion day on AWS:
 
 **Please use the form below to sign up!**
 
-Thanks to Code Club participant Margo Freed for suggesting this workshop,
-and putting us in touch with the folks at AWS!
+Thanks to Code Club participant Margo Freed for suggesting this workshop
+and helping to organize it!
 
 ### Sign up
 
@@ -65,7 +65,6 @@ To sign up for the AWS workshop, please fill out the Google Form below.
 
 <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfX3OdSi5z7V6uPc1mwnj5NMZjIlEe_bvdfWE4XOZkCzrfdhA/viewform?embedded=true" width="800" height="1404" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 
-<br/> <br/> <br/>
+<br> <br>
 
 ----
-
