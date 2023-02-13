@@ -4,7 +4,7 @@ toc: true
 
 # Online AWS Workshop
 
-Wednesday, February 28th, 2023 -- 3-5 pm -- online-only
+Tuesday, February 28th, 2023 -- 3-5 pm -- online-only
 
 <br>
 
@@ -12,7 +12,7 @@ Wednesday, February 28th, 2023 -- 3-5 pm -- online-only
 
 Code Club will organize a free workshop from 3-5 pm on Amazon Web Services (AWS),
 led by AWS instructors.
-The workshop will take place on Wednesday February 28th, 2023, from 3-5 pm.
+The workshop will take place on Tuesday February 28th, 2023, from 3-5 pm.
 
 ### Why cloud computing with AWS?
 
