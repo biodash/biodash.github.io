@@ -1,0 +1,248 @@
+---
+title: '7 Workflow: code style'
+author: "Michael Broe"
+date: "2023-02-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+```
+
+### Introduction
+
+Today's class is in an Rmarkdown document, since I wanted to explore the material interactively.
+
+To grab the file execute the following (either in an R Script or an RMarkdown code chunk):
+
+```{r}
+todays_R_script <- 'https://github.com/biodash/biodash.github.io/raw/master/assets/data/7_workflow_code_style.Rmd'
+
+# go get that file! 
+download.file(url = todays_R_script, destfile = "7_workflow_code_style.Rmd")
+
+```
+
+In modern R (including R for Data Science) text-books you are bombarded with examples of **tidy** data. But over the last two meetings we saw that data isn't always tidy in the wild.
+
+Also in this text there are hundreds of examples of good **coding style**. You probably take it for granted. But similarly code in the wild is not always well-styled.
+
+The Reddit discussion group r/badcode has many examples of badly styled code in a variety of languages.
+
+You might wonder how to make your own code look as good as it appears in the texts.
+
+The most important thing to take away from this class is that there are established conventions for formatting code
+
+These conventions are so clear and established that you can write an alogrithm to mimic them, which is what the "styler" package does, which well start using shortly.
+
+Knowing this helps you when writing your own code, since you don't have to make a personal judgement call. 
+
+You don't have to master this all at once, but it's important to know that conventions do exist, and it's best practice to follow them.
+
+Consistent style means that others (and you when you revisit your code in the future) will find it much easier to read and comprehend. And if you send your code to a more experienced user for help they will really appreciate nicely styled code.
+
+But I think the most important reason for using good style is that it *highlights the logical structure* of your code. Furthermore, bad style is distracting and prevents you focussing on the *content* of your code. Good style is in a sense invisible.
+
+Above we loaded the "nycflights13" package. We can look at that in help. We can also get a sense of it using "head" and "glimpse":
+
+```{r, eval=FALSE}
+head(flights)
+```
+
+```{r, eval=FALSE}
+glimpse(flights)
+```
+
+If we wanted to used RStudio's Viewer tool to explore, we first need to import the dataframe as an object in our Environment, like this:
+
+```{r}
+my_flights <- flights
+```
+
+### Names
+
+Variable names are briefly discussed in Section 3.3 (Workflow: basics). Variable names (those created by <- and by functions like mutate(), which adds a new column variable) should use only lowercase letters, numbers, and "_". Use _ to separate words within a name.
+
+```{r, eval=FALSE}
+# Strive for:
+
+short_flights <- flights |> filter(air_time < 60) # snake case
+
+# Avoid:
+SHORTFLIGHTS <- flights |> filter(air_time < 60) # all caps
+shortFlights <- flights |> filter(air_time < 60) # camel case
+Short_flights <- flights |> filter(air_time < 60) # any use of caps
+short.flights <- flights |> filter(air_time < 60) # "." as a separator
+```
+
+Names are best if they are long and descriptive, not short and fast to type. And with auto-completion there is no penalty for using long names. Generally, variable names should be nouns and function names should be verbs.
+
+(Also notice the variable names of the columns in the "flights" data frame).
+
+### Spaces
+
+Put spaces on either side of mathematical operators apart from ^ (i.e. +, -, ==, <, …), and around the assignment operator (<-).
+
+```{r,eval=FALSE}
+# Strive for
+z <- (a + b)^2 / d
+
+# Avoid
+z<-( a + b ) ^ 2/d
+```
+
+RStudio gives you help with some operators, but not all.
+
+```{r, eval=FALSE}
+# short_flights <- flights |> filter(air_time < 60)
+
+```
+
+We can use the package styler to format code according to the [tidyverse style guide](style.tidyverse.org) which also has more information on styling.
+
+The `styler` package installs in a differnt way than we have seen before. After installation, it appears as an Addin in the RStudio Command Palette, which is pulled up by Ctrl+Shift+P (Cmd+Shift+P on macOS). Let's pull it up now. Notice that there are currently no styler commands in here.
+
+Command palettes have become a fixture of modern IDEs, and with good reason. They improve:
+
+**Keyboard accessibility**; even commands that do not have keyboard shortcuts are easily invoked from the palette.
+
+**Speed**; it is often much faster to invoke a command from the palette with a few quick keystrokes than to reach for the mouse or drill into a menu.
+
+**Discoverability**; every RStudio command is in the palette, it can be browsed to find a command for a task by name without trying to figure out which menu or toolbar might contain it.
+
+Now we'll install styler.
+
+```{r, eval=FALSE}
+install.packages("styler")
+```
+
+Styler commands now automatically appear in the Command Palette (there's no need to use the `library()` command). Let's try it: select some code, then execute "Style selection" from the Command Palette.
+
+```{r, eval=FALSE}
+short_flights <- flights |> filter(air_time<60)
+```
+
+Generally we don't want extra spaces, even though the code runs (R is actually very permissive about this):
+
+```{r, eval=FALSE}
+short_flights <- flights |> filter               (       air_time
+                                                         <60)
+```
+
+But sometimes this freedom can be useful if it improves alignment:
+
+```{r, eval=FALSE}
+# Good
+list(
+  total = a + b + c,
+  mean  = (a + b + c) / n
+)
+
+
+flights |> 
+  mutate(
+    speed      = air_time / distance,
+    dep_hour   = dep_time %/% 100,
+    dep_minute = dep_time %%  100
+  )
+```
+
+Note here how the placement of the final parens is aligned with the start of the data structure or function where it's defined. This makes it clearer exactly *what* the closing parens is closing.
+
+Aligning curly braces, {}, is especially important in embedded code blocks:
+
+```{r, eval=FALSE}
+# if(y==0){if(x>0){log(x)}else{message("x is negative or zero")}}else{y^x}
+
+```
+
+### Pipes
+
+|> should always have a space before it and should typically be the last thing on a line. This makes it easier to add new steps, rearrange existing steps, modify elements within a step, and get a 50,000 ft view by skimming the verbs on the left-hand side. Again, styling reveals the logic.
+
+```{r, eval=FALSE}
+# Strive for 
+flights |>  
+  filter(!is.na(arr_delay), !is.na(tailnum)) |> 
+  count(dest)
+
+# Avoid
+flights|>filter(!is.na(arr_delay), !is.na(tailnum))|>count(dest)
+```
+### ggplot2
+
+The same basic rules that apply to the pipe also apply to ggplot2; just treat + the same way as |>.
+
+```{r, eval=FALSE}
+flights |> 
+  group_by(month) |> 
+  summarize(
+    delay = mean(arr_delay, na.rm = TRUE)
+  ) |> 
+  ggplot(aes(x = month, y = delay)) +
+  geom_point() + 
+  geom_line()
+```
+
+If you can't easily fit all of the arguments to a function on a single line, or if the pileup becomes unclear, put each argument on it's own line:
+
+```{r, eval=FALSE}
+# Avoid:
+
+flights |> 
+  group_by(dest) |> 
+  summarize(
+    distance = mean(distance), speed = mean(air_time / distance, na.rm = TRUE)) |> 
+  ggplot(aes(x = distance, y = speed)) +
+  geom_smooth(method = "loess", span = 0.5, se = FALSE, color = "white", linewidth = 4) +
+  geom_point()
+
+# Strive for:
+  
+flights |> 
+  group_by(dest) |> 
+  summarize(
+    distance = mean(distance),
+    speed = mean(air_time / distance, na.rm = TRUE)
+  ) |> 
+  ggplot(aes(x = distance, y = speed)) +
+  geom_smooth(
+    method = "loess",
+    span = 0.5,
+    se = FALSE, 
+    color = "white", 
+    linewidth = 4
+  ) +
+  geom_point()
+```
+
+
+### Sectioning comments
+
+These only work in scripts, not markdown. That's what markdown headings are for. 
+
+RStudio provides a keyboard shortcut to create these headers (Cmd/Ctrl + Shift + R), and will display them in the code navigation drop-down at the bottom-left of the editor.
+
+### Breakout Rooms
+
+For each exercise, manually restyle the pipeline using the guidelines above. Your formatting should make the logic of the code more obvious. Check your solution against the version produced by styler.
+
+Bonus: check that you understand what the dplyr verbs are doing line by line.
+
+#### Exercise 1
+```{r}
+flights|>filter(dest=="IAH")|>group_by(year,month,day)|>summarize(n=n(),delay=mean(arr_delay,na.rm=TRUE))|>filter(n>10)
+```
+
+#### Exercise 2
+```{r}
+flights|>filter(carrier=="UA",dest%in%c("IAH","HOU"),sched_dep_time>0900,sched_arr_time<2000)|>group_by(flight)|>summarize(delay=mean(arr_delay,na.rm=TRUE),cancelled=sum(is.na(arr_delay)),n=n())|>filter(n>10)
+```
+
+
+[EOB]
