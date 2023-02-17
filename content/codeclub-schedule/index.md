@@ -24,7 +24,6 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session | Date    | Presenter  | Topic + link to book chapter                                     |
 |---------|---------|------------|------------------------------------------------------------------|
-| S05E04  | Feb 16  | Michael    | [**R4DS, Ch. 7: Code Style**](https://r4ds.hadley.nz/workflow-style.html) |
 | S05E05  | Feb 23  | Jelmer     | [**R4DS, Ch. 8: Data Import, I**](https://r4ds.hadley.nz/data-import.html) |
 | S05E06  | Mar 02  | Stephen    | [**R4DS, Ch. 8: Data Import, II**](https://r4ds.hadley.nz/data-import.html) |
 | S05E07  | Mar 09  | Jessica    | [**R4DS, Ch. 9: Scripts & Projects**](https://r4ds.hadley.nz/workflow-scripts.html) |
@@ -43,6 +42,7 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | S05E01  | Jan 26  | Jelmer     | [**R4DS, Ch. 4: Pipes**](https://biodash.github.io/codeclub/s05e01_pipes/) |
 | S05E02  | Feb 02  | Stephen    | [**R4DS, Ch. 6: Tidy Data, I**](https://biodash.github.io/codeclub/s05e02/) |
 | S05E03  | Feb 09  | Jessica & Daniel | [**R4DS, Ch. 6: Tidy Data, II**](https://biodash.github.io/codeclub/s05e03/) |
+| S05E04  | Feb 16  | Michael    | [**R4DS, Ch. 7: Code Style**](https://r4ds.hadley.nz/workflow-style.html) |
 
 <br>
 
