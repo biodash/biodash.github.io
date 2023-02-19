@@ -1,0 +1,536 @@
+---
+output: hugodown::md_document
+title: "S05E05: R for Data Science (2e) - Ch. 8 - Data Import"
+subtitle: "Today, we'll cover an essential component of working with R: how to import your data into R!"
+summary: "Today, we'll cover an essential component of working with R: how to import your data into R! We'll do so with functions from one of the core tidyverse packages: readr"
+authors: [admin]
+tags: [codeclub, r4ds]
+date: "`r Sys.Date()`"
+lastmod: "`r Sys.Date()`"
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = TRUE, cache = FALSE)
+knitr::opts_knit$set(root.dir = here::here("content/codeclub/S05E05"))
+```
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Introduction
+
+### Setting up
+
+Today, we'll talk about reading data into R.
+We'll be using the _readr_ package, which is part of the core tidyverse,
+and is therefore loaded by `library(tidyverse)`:
+
+```{r}
+library(tidyverse)
+```
+
+To clean up column names, we'll use the _janitor_ package,
+which you can install as follows:
+
+```{r, eval=FALSE}
+install.packages("janitor")
+```
+
+We also need to download a couple of files so that we can practice importing
+them:
+
+```{r, eval=FALSE}
+url_csv <- "https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/students.csv"
+download.file(url = url_csv, destfile = "students.csv")
+
+url_csv_noheader <- "https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/students_noheader.csv"
+download.file(url = url_csv_noheader, destfile = "students_noheader.csv")
+
+url_csv_meta <- "https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/students_with_meta.csv"
+download.file(url = url_csv_meta, destfile = "students_with_meta.csv")
+
+url_tsv <- "https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/students.tsv"
+download.file(url = url_tsv, destfile = "students.tsv")
+```
+
+### Tabular files
+
+We'll focus on reading **tabular plain text** files,
+which is by far the most common input file type for R.
+By _tabular_, I mean that these files have rows and columns.
+The columns in tabular files are most commonly separated by either:
+
+- **Commas**: such files are often called **CSV** files, for Comma-Separated Values.
+  They are usually saved with a `.csv` or simply a `.txt` extension.
+  
+- **Tabs**: such files are often called **TSV** files, for Tab-Separated Values.
+  They are usually saved with a `.tsv` or again, simply a `.txt` extension.
+
+For example, let's take a look at a CSV and a TSV file containing same data
+on 6 students and the food they eat:
+
+```{bash, echo=FALSE}
+cat students.csv
+```
+
+```{bash, echo=FALSE}
+cat students.tsv
+```
+
+_(Note that R Markdown is putting `#>` in front of each line, this is not part of the file.)_
+
+While we'll be using the _readr_ package, base R has similar functions that
+you may run into, like `read.table()`.
+But the _readr_ ones are faster and have several other nice features.
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Basics of reading in tabular files
+
+We'll start by reading in the `students.csv` CSV file that we saw above.
+
+CSV files can be read with _readr_'s `read_csv()` function,
+which is the function we'll mostly use today.
+But note that below, I'll often say that "_readr_" does this and that,
+instead of referring to the specific function.
+That is because the _readr_ functions for different file types all behave
+very similarly, which is nice!
+
+We will first use the `read_csv()` function in the most basic possible way,
+that is, by only providing the filename:
+
+```{r}
+students <- read_csv("students.csv")
+```
+
+We have saved the contents of the file in the dataframe `students`,
+which we'll print below.
+But the function is quite chatty and prints the following information about
+what it has done to screen:
+
+- How many rows and columns it read
+- Which column delimiter it used
+- How many and which columns were assigned to each data type
+
+<div class="alert alert-note"><div>
+A column in an R dataframe can only contain a single formal data type.
+If a mixture of types (e.g. numbers and character strings) is present in one column,
+all entries will be _coerced to a single data type_.
+That data type is typically `chr` (character),
+since a number can be represented as a character string but not vice versa.
+</div></div>
+
+When you don't specify the column types, as above, _readr infers_ them:
+4 columns were interpreted as character columns (`chr`),
+and 1 column as numeric (`dbl` for "double", i.e. a floating point number).
+Let's take a look at the resulting dataframe (tibble),
+paying attention to the column types:
+
+```{r}
+students
+```
+
+Rarely, _readr_ will misinterpret column types.
+In that case, it's possible to manually specify the column types:
+we'll see how to do this next week.
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Interlude: File paths
+
+In the above example, we simply provided a file name.
+This code therefore assumes that the file is present in your current R
+"working directory".
+^[Which should in fact be the case when you run all the code on this page:
+the `download.file` function similarly downloaded the file to your
+working directory, because we only gave that function a file name too.]
+If the file is located elsewhere, that code will fail:
+_readr_ will _not_ look for a file with this name across your entire computer.
+
+<div class="alert alert-note"><div>
+
+To see what your working directory is, you can run `getwd()`:
+
+```{r}
+getwd()
+```
+
+</div></div>
+
+If the file you want to read is not in your current working directory,
+you can:
+
+- Change your working directory with `setwd()` (_not_ recommended)
+- Include the _location_ of the file when you call the function
+
+If the file is in a folder "downstream" from your working directory,
+you can easily find it by typing a quote symbol (double `"` or single `'`)
+either in a script or in the console, and pressing <kdb>tab</kbd>.
+This allows you to browse your files starting from your working directory:
+
+<figure>
+<p align="center"> 
+<img src=img/path_completion.png width="50%">
+<figcaption>You can browse files by opening quotes!</figcaption>
+</p>
+</figure>
+
+If that's not the case,
+it may be easiest to copy the location using your computer's file browser,
+and paste that location into R.
+
+Here are two examples of including folder names with a function like `read_csv()`:  
+
+```{r, eval=FALSE}
+read_csv("data/more_students.csv")
+
+read_csv("C:/Users/jelmer/R_data/other_students.csv")
+```
+
+Note that in R,
+you can _always_ use forward slashes `/` to separate folder regardless of your
+operating system
+(If you have Windows, which uses backslashes `\` instead,
+then backslashes will also work in R.) 
+
+<div class="alert alert-note"><div>
+In two weeks, we'll talk about RStudio "Projects",
+which can make your life a lot easier when it comes to file paths and never
+having to change your working directory.
+</div></div>
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Common challenges with input files
+
+### No headers
+
+Some files have no first line with column names.
+That leads to problems when using all the defaults:
+
+```{r, message=FALSE}
+read_csv("students_noheader.csv")
+```
+
+Oops! The first row of data was interpreted as column names.
+We can tell _readr_ to not do this by adding `col_names = FALSE`:
+
+```{r, message=FALSE}
+read_csv("students_noheader.csv", col_names = FALSE)
+```
+
+That's better! But of course, we can't automatically get useful column names,
+and they are now named `X1`, `X2`, etc.
+We could set the column names after reading the file,
+but we can also provide a vector of column names to the `col_names` argument
+of `read_csv()`:
+
+```{r, message=FALSE}
+student_colnames <- c("student_id", "full_name", "fav_food", "meal_plan", "age")
+
+read_csv("students_noheader.csv", col_names = student_colnames)
+```
+
+### Extra header or metadata lines
+
+Other files will contain lines at the top that are not part of the table,
+but contain some sort of annotations or metadata, for instance:
+
+```{bash, echo=FALSE}
+cat students_with_meta.csv
+```
+
+Since there are two metadata lines,
+we can tell *readr* to skip those first 2 lines with the `skip = n` argument:
+
+```{r, message=FALSE}
+read_csv("students_with_meta.csv", skip = 2)
+```
+
+Another way of skipping lines is with the `comment` argument,
+which can be used when all metadata lines start with a certain character,
+like `#` in our case:
+
+```{r, message=FALSE}
+read_csv("students_with_meta.csv", comment = "#")
+```
+
+Why might it be preferable to use `comment` over `skip`, when possible?
+
+### Missing values denotations
+
+R has a special data type for missing values: `NA`.
+It is important for downstream analyses that missing values are actually
+interpreted by R as `NA`s.
+
+The `na` argument of the *readr* functions controls
+which values are interpreted as `NA`.
+The default is  to interpret _empty cells_ and _cells that only contain "NA"_
+as `NA`.
+In R code, this default is `c("", "NA")`, as we can see in the `read_csv()` help.
+
+However, sometimes files use other symbols to denote missing values,
+such as `999`, `X`, `-`, or, like in the `students.csv` file, `N/A`.
+It turns out that our `students.csv` file uses empty cells _and_ `N/A`
+(and even plain `NA`s...),
+so we'll have to tell `read_csv()` about that as follows: 
+
+```{r, message=FALSE}
+read_csv("students.csv", na = c("N/A", ""))
+```
+
+Compare this to the output when reading in without specifying `na` --
+pay attention the the 3rd value in the `favourite.food` column:
+
+```{r, message=FALSE}
+read_csv("students.csv")
+```
+
+### Crappy column names
+
+You might have noticed the backticks around `Student ID` and `Full Name`
+when we display the dataframe.
+This is because these column names contain spaces,
+which are _allowed_ but quite inconvenient in R.
+
+We could go ahead and rename columns after reading in the file, e.g.:
+
+```{r, message=FALSE}
+# You'll need to use the backticks to refer to the column name with spaces!
+read_csv("students.csv") |> 
+  rename(student_id = `Student ID`)
+```
+
+But the `students.csv` file has terribly inconsistent column name styling
+throughout,
+with `favourite.food` (`.` separating words), `mealPlan` ("camel case"),
+and `AGE` (all caps) as the other column names.
+Renaming all columns gets tedious quickly,
+and would in fact become a serious chore if the file had, say, 50 columns.
+
+The really nice `clean_names()` function from the _janitor_ package
+converts all column names to "snake case" style
+(all lowercase, words separated by underscores, as we saw last week):
+
+```{r, message=FALSE}
+read_csv("students.csv") |>
+  janitor::clean_names()
+```
+
+<div class="alert alert-note"><div>
+The notation above with `janitor::` in front of the function name is
+making explicit that this function is part of the _janitor_ package;
+also, when we use this notation,
+we don't need to have the package _loaded_.
+</div></div>
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Other file types
+
+- In the breakout rooms, you'll practice with a **TSV file**:
+  as we discussed above, these are tab-delimited.
+  They can be read with `read_tsv()`.
+  
+- For tabular plain text files with a **different delimiter** than commas or tabs
+  (e.g., spaces), you can use `read_delim()` and specify the delimiter.
+
+- **Excel files** can be read with the _readxl_ package:
+  see the bonus exercise.
+
+- **Unstructured** (non-tabular) plain text files can be read with the base R
+  `readLines()` function.
+  
+- Sometimes you will create complex **R objects** that aren't easily saved as
+  a plain text file.
+  These can be saved as binary (non-human readable) `.rds` files
+  with `write_rds()` and read with `read_rds()`.
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Breakout rooms
+
+If you haven't done so already,
+please download the CSV and TSV files and make sure you have _janitor_
+installed (see the code in the Introduction).
+
+<div class="puzzle"><div>
+
+### Exercise 1: `read_tsv()`
+
+Let's try `read_csv()`'s counterpart for TSV (tab-separated) files: `read_tsv()`.
+
+The `students.tsv` file that you have downloaded contains the exact same data
+as the `students.csv` file we've practiced with.
+
+Read in `students.tsv`, making sure to get the `NA`s right,
+and to clean up the column names with `clean_names()`.
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+read_tsv("students.tsv", na = c("N/A", "")) |>
+  janitor::clean_names()
+```
+
+</details>
+</div></div>
+
+<br>
+
+<div class="puzzle"><div>
+
+### Exercise 2: A challenging file
+
+Try reading in the `exercise2.csv` file that you downloaded:
+
+```{bash, echo=FALSE}
+cat exercise2.csv
+```
+
+<details><summary><b>Hints</b>(click here)</summary>
+<br>
+
+- Notice that there are metadata / comment lines both at the start and the end
+  of the file!
+  
+- You cannot specify multiple `comment` symbols to `read_csv()`,
+  so you'll have to use both the `skip` _and_ `comment` arguments.
+  
+- You'll also want to take care of the fact that there is no line with column names.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+read_csv("exercise2.csv", skip = 1, comment = "%", col_names = FALSE)
+```
+
+Or, with descriptive column names:
+
+```{r}
+student_colnames <- c("student_id", "full_name", "fav_food", "meal_plan", "age")
+
+read_csv("exercise2.csv", skip = 1, comment = "%", col_names = student_colnames)
+```
+
+</details>
+</div></div>
+
+<br>
+
+<div class="puzzle"><div>
+
+### Bonus: reading an Excel file
+
+In this exercise, you'll use a function from the _readxl_ package to read an
+Excel file. We need to do a couple of things to get set up first.
+
+- You can install and then load the _readxl_ package as follows:
+
+```{r, eval=FALSE}
+install.packages("readxl")
+```
+
+```{r}
+library(readxl)
+```
+
+- You can download the excel file as follows:
+
+```{r, eval=FALSE}
+url_xls <- "https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/breed_ranks.xlsx"
+download.file(url = url_xls, destfile = "students.xls")
+```
+
+Now, use the `read_excel()` function from the _readxl_ package to read the
+`breed_ranks.xlsx` file.
+
+Bonus <sup>bonus</sup>: There are two sheets, `Sheet1` and `Sheet2`.
+Can you read both in?
+And can you combine the resulting dataframes into a single one?
+
+<details><summary><b>Hints</b>(click here)</summary>
+<br>
+
+- Take a look at the `read_excel()` help page
+  (e.g., type `?read_excel` in the R console) to figure out the syntax.
+
+- When you don't specify the `sheet` argument, it will read in the first one.
+
+- You can "vertically" combine dataframes using the `bind_rows()` function.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+You can read the first sheet with:
+
+```{r}
+breed_ranks <- read_excel("breed_ranks.xlsx")
+
+# Or, equivalently:
+#breed_ranks <- read_excel("breed_ranks.xlsx", sheet = 1)
+```
+
+You can read the second sheet with:
+
+```{r}
+breed_ranks2 <- read_excel("breed_ranks.xlsx", sheet = 2)
+
+# Or, equivalently:
+#breed_ranks <- read_excel("breed_ranks.xlsx", sheet = 1)
+```
+
+You can combine the two dataframes with:
+
+```{r}
+breed_ranks_all <- bind_rows(breed_ranks, breed_ranks2)
+```
+
+Let's check the numbers of rows:
+
+```{r}
+nrow(breed_ranks)
+
+nrow(breed_ranks2)
+
+nrow(breed_ranks_all)
+```
+
+Let's take a look at the first few rows:
+
+```{r}
+head(breed_ranks_all)
+```
+
+</details>
+</div></div>
+
+</div></div>
+
+<br>
+
+----
+
+<br>
