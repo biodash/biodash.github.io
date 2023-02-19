@@ -33,7 +33,7 @@
   
     
   
-  <meta name="description" content="Today, we&#39;ll cover an essential component of working with R: how to import your data into R! We&#39;ll do so with functions from one of the core tidyverse packages: readr" />
+  <meta name="description" content="Today, we&#39;ll cover an essential component of working with R: how to import your data into R! We&#39;ll do so with functions from one of the core tidyverse packages: readr." />
 
   
   <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s05e05/" />
@@ -333,7 +333,7 @@
   <meta property="og:site_name" content="BioDASH" />
   <meta property="og:url" content="https://biodash.github.io/codeclub/s05e05/" />
   <meta property="og:title" content="S05E05: R for Data Science (2e) - Ch. 8 - Data Import | BioDASH" />
-  <meta property="og:description" content="Today, we&#39;ll cover an essential component of working with R: how to import your data into R! We&#39;ll do so with functions from one of the core tidyverse packages: readr" /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
+  <meta property="og:description" content="Today, we&#39;ll cover an essential component of working with R: how to import your data into R! We&#39;ll do so with functions from one of the core tidyverse packages: readr." /><meta property="og:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" />
     <meta property="twitter:image" content="https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png" /><meta property="og:locale" content="en-us" />
   
     
@@ -342,7 +342,7 @@
         content="2023-02-19T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2023-02-19T09:46:13-05:00">
+    <meta property="article:modified_time" content="2023-02-19T10:13:53-05:00">
   
 
   
@@ -714,7 +714,7 @@
       </ul>
     </li>
     <li><a href="#basics-of-reading-in-tabular-files">Basics of reading in tabular files</a></li>
-    <li><a href="#interlude-file-paths">Interlude: File paths</a></li>
+    <li><a href="#interlude-file-locations">Interlude: File locations</a></li>
     <li><a href="#common-challenges-with-input-files">Common challenges with input files</a>
       <ul>
         <li><a href="#no-headers">No headers</a></li>
@@ -883,13 +883,13 @@
 #> 5    Chidiegwu Dunkel    Pizza   Breakfast and lunch five
 #> 6    Güvenç Attila   Ice cream   Lunch only  6</code></pre>
 </div>
-<p><em>(Note that R Markdown is putting <code>#&gt;</code> in front of each line, this is not part of the file.)</em></p>
+<p><em>(R Markdown is putting <code>#&gt;</code> in front of each line in the output above,</em> <em>this is not part of the files.)</em></p>
 <p>While we&rsquo;ll be using the <em>readr</em> package, base R has similar functions that you may run into, like <a href="https://rdrr.io/r/utils/read.table.html" target="_blank" rel="noopener"><code>read.table()</code></a>. But the <em>readr</em> ones are faster and have several other nice features.</p>
 <br>
 <hr>
 <h2 id="basics-of-reading-in-tabular-files">Basics of reading in tabular files</h2>
 <p>We&rsquo;ll start by reading in the <code>students.csv</code> CSV file that we saw above.</p>
-<p>CSV files can be read with <em>readr</em>&rsquo;s <a href="https://readr.tidyverse.org/reference/read_delim.html" target="_blank" rel="noopener"><code>read_csv()</code></a> function, which is the function we&rsquo;ll mostly use today. But note that below, I&rsquo;ll often say that &ldquo;<em>readr</em>&rdquo; does this and that, instead of referring to the specific function. That is because the <em>readr</em> functions for different file types all behave very similarly, which is nice!</p>
+<p><strong>CSV files can be read with <em>readr</em>&rsquo;s <a href="https://readr.tidyverse.org/reference/read_delim.html" target="_blank" rel="noopener"><code>read_csv()</code></a> function</strong>, which is the function we&rsquo;ll mostly use today. But note that below, I&rsquo;ll often say that &ldquo;<em>readr</em>&rdquo; does this and that, instead of referring to the specific function. That is because the <em>readr</em> functions for different file types all behave very similarly, which is nice!</p>
 <p>We will first use the <a href="https://readr.tidyverse.org/reference/read_delim.html" target="_blank" rel="noopener"><code>read_csv()</code></a> function in the most basic possible way, that is, by only providing the filename:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>students</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"students.csv"</span><span class='o'>)</span></span>
@@ -913,7 +913,7 @@
 <p>A column in an R dataframe can only contain a single formal data type. If a mixture of types (e.g. numbers and character strings) is present in one column, all entries will be <em>coerced to a single data type</em>. That data type is typically <code>chr</code> (character), since a number can be represented as a character string but not vice versa.</p>
 </div>
 </div>
-<p>When you don&rsquo;t specify the column types, as above, <em>readr infers</em> them: 4 columns were interpreted as character columns (<code>chr</code>), and 1 column as numeric (<code>dbl</code> for &ldquo;double&rdquo;, i.e. a floating point number). Let&rsquo;s take a look at the resulting dataframe (tibble), paying attention to the column types:</p>
+<p><strong><em>readr</em> infers the column types</strong> when you don&rsquo;t specify them, as above: 4 columns were interpreted as character columns (<code>chr</code>), and 1 column as numeric (<code>dbl</code> for &ldquo;double&rdquo;, i.e. a floating point number). Let&rsquo;s take a look at the resulting dataframe (tibble), paying attention to the column types:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>students</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 5</span></span></span>
@@ -929,8 +929,8 @@
 <p>Rarely, <em>readr</em> will misinterpret column types. In that case, it&rsquo;s possible to manually specify the column types: we&rsquo;ll see how to do this next week.</p>
 <br>
 <hr>
-<h2 id="interlude-file-paths">Interlude: File paths</h2>
-<p>In the above example, we simply provided a file name. This code therefore assumes that the file is present in your current R &ldquo;working directory&rdquo;. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> If the file is located elsewhere, that code will fail: <em>readr</em> will <em>not</em> look for a file with this name across your entire computer.</p>
+<h2 id="interlude-file-locations">Interlude: File locations</h2>
+<p>In the above example, we simply provided a file name. This code therefore assumes that the file is present in your current R &ldquo;working directory&rdquo; <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>. If the file is located elsewhere, that code will fail: <em>readr</em> will <em>not</em> look for a file with this name across your entire computer.</p>
 <div class="alert alert-note">
 <div>
 <p>To see what your working directory is, you can run <a href="https://rdrr.io/r/base/getwd.html" target="_blank" rel="noopener"><code>getwd()</code></a>:</p>
@@ -938,6 +938,7 @@
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; [1] "/home/jelmer/Dropbox/mcic/website/hugodown/content/codeclub/S05E05"</span></span></code></pre>
 </div>
+<p>And your working directory is also shown at the top of the console pane.</p>
 </div>
 </div>
 <p>If the file you want to read is not in your current working directory, you can:</p>
@@ -1279,7 +1280,7 @@ You can browse files by opening quotes!
 <span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>url_xls</span>, destfile <span class='o'>=</span> <span class='s'>"students.xls"</span><span class='o'>)</span></span></code></pre>
 </div>
 <p>Now, use the <a href="https://readxl.tidyverse.org/reference/read_excel.html" target="_blank" rel="noopener"><code>read_excel()</code></a> function from the <em>readxl</em> package to read the <code>breed_ranks.xlsx</code> file.</p>
-<p>Bonus <sup>bonus</sup>: There are two sheets, <code>Sheet1</code> and <code>Sheet2</code>. Can you read both in? And can you combine the resulting dataframes into a single one?</p>
+<p>Bonus<sup>2</sup>: There are two sheets, <code>Sheet1</code> and <code>Sheet2</code>. Can you read both in? And can you combine the resulting dataframes into a single one?</p>
 <details>
 <summary>
 <b>Hints</b>(click here)
@@ -1312,10 +1313,7 @@ You can browse files by opening quotes!
 </div>
 <p>You can read the second sheet with:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_ranks2</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readxl.tidyverse.org/reference/read_excel.html'>read_excel</a></span><span class='o'>(</span><span class='s'>"breed_ranks.xlsx"</span>, sheet <span class='o'>=</span> <span class='m'>2</span><span class='o'>)</span></span>
-<span></span>
-<span><span class='c'># Or, equivalently:</span></span>
-<span><span class='c'>#breed_ranks &lt;- read_excel("breed_ranks.xlsx", sheet = 1)</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_ranks2</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readxl.tidyverse.org/reference/read_excel.html'>read_excel</a></span><span class='o'>(</span><span class='s'>"breed_ranks.xlsx"</span>, sheet <span class='o'>=</span> <span class='m'>2</span><span class='o'>)</span></span></code></pre>
 </div>
 <p>You can combine the two dataframes with:</p>
 <div class="highlight">
@@ -1323,11 +1321,11 @@ You can browse files by opening quotes!
 </div>
 <p>Let&rsquo;s check the numbers of rows:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks</span><span class='o'>)</span> <span class='c'># From sheet 1</span></span>
 <span><span class='c'>#&gt; [1] 100</span></span><span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks2</span><span class='o'>)</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks2</span><span class='o'>)</span> <span class='c'># From sheet 2</span></span>
 <span><span class='c'>#&gt; [1] 94</span></span><span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks_all</span><span class='o'>)</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks_all</span><span class='o'>)</span> <span class='c'># Both combined</span></span>
 <span><span class='c'>#&gt; [1] 194</span></span></code></pre>
 </div>
 <p>Let&rsquo;s take a look at the first few rows:</p>
