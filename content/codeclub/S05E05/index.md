@@ -2,13 +2,13 @@
 output: hugodown::md_document
 title: "S05E05: R for Data Science (2e) - Ch. 8 - Data Import"
 subtitle: "Today, we'll cover an essential component of working with R: how to import your data into R!"
-summary: "Today, we'll cover an essential component of working with R: how to import your data into R! We'll do so with functions from one of the core tidyverse packages: readr"
+summary: "Today, we'll cover an essential component of working with R: how to import your data into R! We'll do so with functions from one of the core tidyverse packages: readr."
 authors: [admin]
 tags: [codeclub, r4ds]
 date: "2023-02-19"
 lastmod: "2023-02-19"
 toc: true
-rmd_hash: 1235d3cff179a613
+rmd_hash: d3a6813ccc349801
 
 ---
 
@@ -96,7 +96,7 @@ For example, let's take a look at a CSV and a TSV file containing same data on 6
 
 </div>
 
-*(Note that R Markdown is putting `#>` in front of each line, this is not part of the file.)*
+*(R Markdown is putting `#>` in front of each line in the output above,* *this is not part of the files.)*
 
 While we'll be using the *readr* package, base R has similar functions that you may run into, like [`read.table()`](https://rdrr.io/r/utils/read.table.html). But the *readr* ones are faster and have several other nice features.
 
@@ -108,7 +108,7 @@ While we'll be using the *readr* package, base R has similar functions that you 
 
 We'll start by reading in the `students.csv` CSV file that we saw above.
 
-CSV files can be read with *readr*'s [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function, which is the function we'll mostly use today. But note that below, I'll often say that "*readr*" does this and that, instead of referring to the specific function. That is because the *readr* functions for different file types all behave very similarly, which is nice!
+**CSV files can be read with *readr*'s [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function**, which is the function we'll mostly use today. But note that below, I'll often say that "*readr*" does this and that, instead of referring to the specific function. That is because the *readr* functions for different file types all behave very similarly, which is nice!
 
 We will first use the [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function in the most basic possible way, that is, by only providing the filename:
 
@@ -142,7 +142,7 @@ A column in an R dataframe can only contain a single formal data type. If a mixt
 
 </div>
 
-When you don't specify the column types, as above, *readr infers* them: 4 columns were interpreted as character columns (`chr`), and 1 column as numeric (`dbl` for "double", i.e. a floating point number). Let's take a look at the resulting dataframe (tibble), paying attention to the column types:
+***readr* infers the column types** when you don't specify them, as above: 4 columns were interpreted as character columns (`chr`), and 1 column as numeric (`dbl` for "double", i.e. a floating point number). Let's take a look at the resulting dataframe (tibble), paying attention to the column types:
 
 <div class="highlight">
 
@@ -165,9 +165,9 @@ Rarely, *readr* will misinterpret column types. In that case, it's possible to m
 
 ------------------------------------------------------------------------
 
-## Interlude: File paths
+## Interlude: File locations
 
-In the above example, we simply provided a file name. This code therefore assumes that the file is present in your current R "working directory". [^1] If the file is located elsewhere, that code will fail: *readr* will *not* look for a file with this name across your entire computer.
+In the above example, we simply provided a file name. This code therefore assumes that the file is present in your current R "working directory" [^1]. If the file is located elsewhere, that code will fail: *readr* will *not* look for a file with this name across your entire computer.
 
 <div class="alert alert-note">
 
@@ -181,6 +181,8 @@ To see what your working directory is, you can run [`getwd()`](https://rdrr.io/r
 <span><span class='c'>#&gt; [1] "/home/jelmer/Dropbox/mcic/website/hugodown/content/codeclub/S05E05"</span></span></code></pre>
 
 </div>
+
+And your working directory is also shown at the top of the console pane.
 
 </div>
 
@@ -641,7 +643,7 @@ In this exercise, you'll use a function from the *readxl* package to read an Exc
 
 Now, use the [`read_excel()`](https://readxl.tidyverse.org/reference/read_excel.html) function from the *readxl* package to read the `breed_ranks.xlsx` file.
 
-Bonus <sup>bonus</sup>: There are two sheets, `Sheet1` and `Sheet2`. Can you read both in? And can you combine the resulting dataframes into a single one?
+Bonus<sup>2</sup>: There are two sheets, `Sheet1` and `Sheet2`. Can you read both in? And can you combine the resulting dataframes into a single one?
 
 <details>
 <summary>
@@ -682,10 +684,7 @@ You can read the second sheet with:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_ranks2</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readxl.tidyverse.org/reference/read_excel.html'>read_excel</a></span><span class='o'>(</span><span class='s'>"breed_ranks.xlsx"</span>, sheet <span class='o'>=</span> <span class='m'>2</span><span class='o'>)</span></span>
-<span></span>
-<span><span class='c'># Or, equivalently:</span></span>
-<span><span class='c'>#breed_ranks &lt;- read_excel("breed_ranks.xlsx", sheet = 1)</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>breed_ranks2</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readxl.tidyverse.org/reference/read_excel.html'>read_excel</a></span><span class='o'>(</span><span class='s'>"breed_ranks.xlsx"</span>, sheet <span class='o'>=</span> <span class='m'>2</span><span class='o'>)</span></span></code></pre>
 
 </div>
 
@@ -701,11 +700,11 @@ Let's check the numbers of rows:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks</span><span class='o'>)</span> <span class='c'># From sheet 1</span></span>
 <span><span class='c'>#&gt; [1] 100</span></span><span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks2</span><span class='o'>)</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks2</span><span class='o'>)</span> <span class='c'># From sheet 2</span></span>
 <span><span class='c'>#&gt; [1] 94</span></span><span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks_all</span><span class='o'>)</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='o'>(</span><span class='nv'>breed_ranks_all</span><span class='o'>)</span> <span class='c'># Both combined</span></span>
 <span><span class='c'>#&gt; [1] 194</span></span></code></pre>
 
 </div>

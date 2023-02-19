@@ -2,7 +2,7 @@
 output: hugodown::md_document
 title: "S05E05: R for Data Science (2e) - Ch. 8 - Data Import"
 subtitle: "Today, we'll cover an essential component of working with R: how to import your data into R!"
-summary: "Today, we'll cover an essential component of working with R: how to import your data into R! We'll do so with functions from one of the core tidyverse packages: readr"
+summary: "Today, we'll cover an essential component of working with R: how to import your data into R! We'll do so with functions from one of the core tidyverse packages: readr."
 authors: [admin]
 tags: [codeclub, r4ds]
 date: "`r Sys.Date()`"
@@ -79,7 +79,8 @@ cat students.csv
 cat students.tsv
 ```
 
-_(Note that R Markdown is putting `#>` in front of each line, this is not part of the file.)_
+_(R Markdown is putting `#>` in front of each line in the output above,_
+_this is not part of the files.)_
 
 While we'll be using the _readr_ package, base R has similar functions that
 you may run into, like `read.table()`.
@@ -93,7 +94,7 @@ But the _readr_ ones are faster and have several other nice features.
 
 We'll start by reading in the `students.csv` CSV file that we saw above.
 
-CSV files can be read with _readr_'s `read_csv()` function,
+**CSV files can be read with _readr_'s `read_csv()` function**,
 which is the function we'll mostly use today.
 But note that below, I'll often say that "_readr_" does this and that,
 instead of referring to the specific function.
@@ -124,7 +125,7 @@ That data type is typically `chr` (character),
 since a number can be represented as a character string but not vice versa.
 </div></div>
 
-When you don't specify the column types, as above, _readr infers_ them:
+**_readr_ infers the column types** when you don't specify them, as above:
 4 columns were interpreted as character columns (`chr`),
 and 1 column as numeric (`dbl` for "double", i.e. a floating point number).
 Let's take a look at the resulting dataframe (tibble),
@@ -142,14 +143,14 @@ we'll see how to do this next week.
 
 --------------------------------------------------------------------------------
 
-## Interlude: File paths
+## Interlude: File locations
 
 In the above example, we simply provided a file name.
 This code therefore assumes that the file is present in your current R
-"working directory".
+"working directory"
 ^[Which should in fact be the case when you run all the code on this page:
 the `download.file` function similarly downloaded the file to your
-working directory, because we only gave that function a file name too.]
+working directory, because we only gave that function a file name too.].
 If the file is located elsewhere, that code will fail:
 _readr_ will _not_ look for a file with this name across your entire computer.
 
@@ -160,6 +161,8 @@ To see what your working directory is, you can run `getwd()`:
 ```{r}
 getwd()
 ```
+
+And your working directory is also shown at the top of the console pane.
 
 </div></div>
 
@@ -463,7 +466,7 @@ download.file(url = url_xls, destfile = "students.xls")
 Now, use the `read_excel()` function from the _readxl_ package to read the
 `breed_ranks.xlsx` file.
 
-Bonus <sup>bonus</sup>: There are two sheets, `Sheet1` and `Sheet2`.
+Bonus<sup>2</sup>: There are two sheets, `Sheet1` and `Sheet2`.
 Can you read both in?
 And can you combine the resulting dataframes into a single one?
 
@@ -497,9 +500,6 @@ You can read the second sheet with:
 
 ```{r}
 breed_ranks2 <- read_excel("breed_ranks.xlsx", sheet = 2)
-
-# Or, equivalently:
-#breed_ranks <- read_excel("breed_ranks.xlsx", sheet = 1)
 ```
 
 You can combine the two dataframes with:
@@ -511,11 +511,11 @@ breed_ranks_all <- bind_rows(breed_ranks, breed_ranks2)
 Let's check the numbers of rows:
 
 ```{r}
-nrow(breed_ranks)
+nrow(breed_ranks) # From sheet 1
 
-nrow(breed_ranks2)
+nrow(breed_ranks2) # From sheet 2
 
-nrow(breed_ranks_all)
+nrow(breed_ranks_all) # Both combined
 ```
 
 Let's take a look at the first few rows:
