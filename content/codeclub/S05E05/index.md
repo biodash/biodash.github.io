@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-02-20"
 lastmod: "2023-02-20"
 toc: true
-rmd_hash: c7a993995fda7542
+rmd_hash: 4b59e93968409bdb
 
 ---
 
@@ -62,9 +62,9 @@ We also need to download a couple of files so that we can practice importing the
 
 </div>
 
-### Tabular files
+### Rectangular, plain-text files
 
-We'll focus on reading **tabular plain text** files, which is by far the most common input file type for R. By *tabular*, I mean that these files have rows and columns. The columns in tabular files are most commonly separated by either:
+We'll focus on reading **rectangular plain text** files, which is by far the most common input file type for R. By *rectangular*, I mean that these files have rows and columns. The columns in rectangular files are most commonly separated by either:
 
 -   **Commas**: such files are often called **CSV** files, for Comma-Separated Values. They are usually saved with a `.csv` or simply a `.txt` extension.
 
@@ -98,9 +98,9 @@ While we'll be using the *readr* package, base R has similar functions that you 
 
 ------------------------------------------------------------------------
 
-## Basics of reading in tabular files
+## Basics of reading rectangular files
 
-We'll start by reading in the `students.csv` CSV file that we saw above.
+We'll start by reading the `students.csv` CSV file that we saw above.
 
 **CSV files can be read with *readr*'s [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function**, which is the function we'll mostly use today. But note that below, I'll often say that "*readr*" does this and that, instead of referring to the specific function. That is because the *readr* functions for different file types all behave very similarly, which is nice!
 
@@ -439,11 +439,11 @@ The notation above with `janitor::` in front of the function name is making expl
 
 -   In the breakout rooms, you'll practice with a **TSV file**: as we discussed above, these are tab-delimited. They can be read with [`read_tsv()`](https://readr.tidyverse.org/reference/read_delim.html).
 
--   For tabular plain text files with a **different delimiter** than commas or tabs (e.g., spaces), you can use [`read_delim()`](https://readr.tidyverse.org/reference/read_delim.html) and specify the delimiter.
+-   For rectangular plain text files with a **different delimiter** than commas or tabs (e.g., spaces), you can use [`read_delim()`](https://readr.tidyverse.org/reference/read_delim.html) and specify the delimiter.
 
 -   **Excel files** can be read with the *readxl* package: see the bonus exercise.
 
--   **Unstructured** (non-tabular) plain text files can be read with the base R [`readLines()`](https://rdrr.io/r/base/readLines.html) function.
+-   **Unstructured** (non-rectangular) plain text files can be read with the base R [`readLines()`](https://rdrr.io/r/base/readLines.html) function.
 
 -   Sometimes you will create complex **R objects** that aren't easily saved as a plain text file. These can be saved as binary (non-human readable) `.rds` files with [`write_rds()`](https://readr.tidyverse.org/reference/read_rds.html) and read with [`read_rds()`](https://readr.tidyverse.org/reference/read_rds.html).
 
