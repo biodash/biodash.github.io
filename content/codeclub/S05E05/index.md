@@ -5,10 +5,10 @@ subtitle: "Today, we'll cover an essential component of working with R: how to i
 summary: "Today, we'll cover an essential component of working with R: how to import your data into R! We'll do so with functions from one of the core tidyverse packages: readr."
 authors: [admin]
 tags: [codeclub, r4ds]
-date: "2023-02-19"
-lastmod: "2023-02-19"
+date: "2023-02-20"
+lastmod: "2023-02-20"
 toc: true
-rmd_hash: d3a6813ccc349801
+rmd_hash: f2264c21644af0ac
 
 ---
 
@@ -72,31 +72,21 @@ We'll focus on reading **tabular plain text** files, which is by far the most co
 
 For example, let's take a look at a CSV and a TSV file containing same data on 6 students and the food they eat:
 
-<div class="highlight">
+    Student ID,Full Name,favourite.food,mealPlan,AGE
+    1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
+    2,Barclay Lynn,French fries,Lunch only,5
+    3,Jayendra Lyne,N/A,Breakfast and lunch,7
+    4,Leon Rossini,Anchovies,Lunch only,
+    5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
+    6,Güvenç Attila,Ice cream,Lunch only,6
 
-<pre class='chroma'><code class='language-r' data-lang='r'>#> Student ID,Full Name,favourite.food,mealPlan,AGE
-#> 1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
-#> 2,Barclay Lynn,French fries,Lunch only,5
-#> 3,Jayendra Lyne,N/A,Breakfast and lunch,7
-#> 4,Leon Rossini,Anchovies,Lunch only,
-#> 5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
-#> 6,Güvenç Attila,Ice cream,Lunch only,6</code></pre>
-
-</div>
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'>#> Student ID Full Name   favourite.food  mealPlan    AGE
-#> 1    Sunil Huffmann  Strawberry yoghurt  Lunch only  4
-#> 2    Barclay Lynn    French fries    Lunch only  5
-#> 3    Jayendra Lyne   N/A Breakfast and lunch 7
-#> 4    Leon Rossini    Anchovies   Lunch only  
-#> 5    Chidiegwu Dunkel    Pizza   Breakfast and lunch five
-#> 6    Güvenç Attila   Ice cream   Lunch only  6</code></pre>
-
-</div>
-
-*(R Markdown is putting `#>` in front of each line in the output above,* *this is not part of the files.)*
+    Student ID      Full Name       favourite.food  mealPlan        AGE
+    1       Sunil Huffmann  Strawberry yoghurt      Lunch only      4
+    2       Barclay Lynn    French fries    Lunch only      5
+    3       Jayendra Lyne   N/A     Breakfast and lunch     7
+    4       Leon Rossini    Anchovies       Lunch only
+    5       Chidiegwu Dunkel        Pizza   Breakfast and lunch     five
+    6       Güvenç Attila   Ice cream       Lunch only      6
 
 While we'll be using the *readr* package, base R has similar functions that you may run into, like [`read.table()`](https://rdrr.io/r/utils/read.table.html). But the *readr* ones are faster and have several other nice features.
 
@@ -159,7 +149,7 @@ A column in an R dataframe can only contain a single formal data type. If a mixt
 
 </div>
 
-Rarely, *readr* will misinterpret column types. In that case, it's possible to manually specify the column types: we'll see how to do this next week.
+Rarely, *readr* will misinterpret column types. In that case, it's possible to **manually specify the column types**: we'll see how to do this next week.
 
 <br>
 
@@ -167,7 +157,9 @@ Rarely, *readr* will misinterpret column types. In that case, it's possible to m
 
 ## Interlude: File locations
 
-In the above example, we simply provided a file name. This code therefore assumes that the file is present in your current R "working directory" [^1]. If the file is located elsewhere, that code will fail: *readr* will *not* look for a file with this name across your entire computer.
+In the above example, we simply provided a file name without a location to [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html). Doing so signals to R that the file is present in your current R "working directory". For the `students.csv` file, that should have been the case, since we also downloaded it to our working directory: we provided the `download.file` also with a file name only.
+
+But if the file is located elsewhere, that code will fail: *readr* will *not* search your computer for a file with this name.
 
 <div class="alert alert-note">
 
@@ -182,7 +174,7 @@ To see what your working directory is, you can run [`getwd()`](https://rdrr.io/r
 
 </div>
 
-And your working directory is also shown at the top of the console pane.
+And your working directory is also shown at the top of the RStudio console pane.
 
 </div>
 
@@ -190,8 +182,8 @@ And your working directory is also shown at the top of the console pane.
 
 If the file you want to read is not in your current working directory, you can:
 
--   Change your working directory with [`setwd()`](https://rdrr.io/r/base/getwd.html) (*not* recommended)
--   Include the *location* of the file when you call the function
+-   Change your working directory with [`setwd()`](https://rdrr.io/r/base/getwd.html) (generally not recommended)
+-   Include the *location* of the file when calling [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) (and other functions)
 
 If the file is in a folder "downstream" from your working directory, you can easily find it by typing a quote symbol (double `"` or single `'`) either in a script or in the console, and pressing <kdb>tab</kbd>. This allows you to browse your files starting from your working directory:
 
@@ -204,7 +196,7 @@ You can browse files by opening quotes!
 </p>
 </figure>
 
-If that's not the case, it may be easiest to copy the location using your computer's file browser, and paste that location into R.
+If that's not the case, it may be easiest to copy the location using your computer's file browser, and paste that location into your code.
 
 Here are two examples of including folder names with a function like [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html):
 
@@ -216,7 +208,7 @@ Here are two examples of including folder names with a function like [`read_csv(
 
 </div>
 
-Note that in R, you can *always* use forward slashes `/` to separate folder regardless of your operating system (If you have Windows, which uses backslashes `\` instead, then backslashes will also work in R.)
+Note that in R, you can *always* use forward slashes `/` to separate folder regardless of your operating system (If you have Windows, which uses backslashes `\` instead, then backslashes will also work.)
 
 <div class="alert alert-note">
 
@@ -469,7 +461,7 @@ Let's try [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html)'
 
 The `students.tsv` file that you have downloaded contains the exact same data as the `students.csv` file we've practiced with.
 
-Read in `students.tsv`, making sure to get the `NA`s right, and to clean up the column names with `clean_names()`.
+**Read in `students.tsv`, making sure to get the `NA`s right,** **and to clean up the column names like we did above.**
 
 <details>
 <summary>
@@ -515,20 +507,25 @@ Read in `students.tsv`, making sure to get the `NA`s right, and to clean up the 
 
 ### Exercise 2: A challenging file
 
-Try reading in the `exercise2.csv` file that you downloaded:
+Start by downloading a new CSV file:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'>#> # This file is still incomplete
-#> 1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
-#> 2,Barclay Lynn,French fries,Lunch only,5
-#> 3,Jayendra Lyne,N/A,Breakfast and lunch,7
-#> 4,Leon Rossini,Anchovies,Lunch only,
-#> 5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
-#> 6,Güvenç Attila,Ice cream,Lunch only,6
-#> % More data will be entered soon!</code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>url_tsv</span> <span class='o'>&lt;-</span> <span class='s'>"https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/exercise2.csv"</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>url_tsv</span>, destfile <span class='o'>=</span> <span class='s'>"exercise2.csv"</span><span class='o'>)</span></span></code></pre>
 
 </div>
+
+Now, try reading in this `exercise2.csv` file, which has the following content:
+
+    # This file is still incomplete
+    1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
+    2,Barclay Lynn,French fries,Lunch only,5
+    3,Jayendra Lyne,N/A,Breakfast and lunch,7
+    4,Leon Rossini,Anchovies,Lunch only,
+    5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
+    6,Güvenç Attila,Ice cream,Lunch only,6
+    % More data will be entered soon!
 
 <details>
 <summary>
@@ -746,6 +743,4 @@ Let's take a look at the first few rows:
 ------------------------------------------------------------------------
 
 <br>
-
-[^1]: Which should in fact be the case when you run all the code on this page: the `download.file` function similarly downloaded the file to your working directory, because we only gave that function a file name too.
 
