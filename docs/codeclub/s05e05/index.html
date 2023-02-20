@@ -339,10 +339,10 @@
     
       <meta
         property="article:published_time"
-        content="2023-02-19T00:00:00&#43;00:00"
+        content="2023-02-20T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2023-02-19T10:13:53-05:00">
+    <meta property="article:modified_time" content="2023-02-20T13:45:45-05:00">
   
 
   
@@ -788,7 +788,7 @@
   <span class="article-date">
     
     
-    Feb 19, 2023
+    Feb 20, 2023
   </span>
   
 
@@ -865,25 +865,22 @@
 </li>
 </ul>
 <p>For example, let&rsquo;s take a look at a CSV and a TSV file containing same data on 6 students and the food they eat:</p>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'>#> Student ID,Full Name,favourite.food,mealPlan,AGE
-#> 1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
-#> 2,Barclay Lynn,French fries,Lunch only,5
-#> 3,Jayendra Lyne,N/A,Breakfast and lunch,7
-#> 4,Leon Rossini,Anchovies,Lunch only,
-#> 5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
-#> 6,Güvenç Attila,Ice cream,Lunch only,6</code></pre>
-</div>
-<div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'>#> Student ID Full Name   favourite.food  mealPlan    AGE
-#> 1    Sunil Huffmann  Strawberry yoghurt  Lunch only  4
-#> 2    Barclay Lynn    French fries    Lunch only  5
-#> 3    Jayendra Lyne   N/A Breakfast and lunch 7
-#> 4    Leon Rossini    Anchovies   Lunch only  
-#> 5    Chidiegwu Dunkel    Pizza   Breakfast and lunch five
-#> 6    Güvenç Attila   Ice cream   Lunch only  6</code></pre>
-</div>
-<p><em>(R Markdown is putting <code>#&gt;</code> in front of each line in the output above,</em> <em>this is not part of the files.)</em></p>
+<pre><code>Student ID,Full Name,favourite.food,mealPlan,AGE
+1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
+2,Barclay Lynn,French fries,Lunch only,5
+3,Jayendra Lyne,N/A,Breakfast and lunch,7
+4,Leon Rossini,Anchovies,Lunch only,
+5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
+6,Güvenç Attila,Ice cream,Lunch only,6
+
+Student ID      Full Name       favourite.food  mealPlan        AGE
+1       Sunil Huffmann  Strawberry yoghurt      Lunch only      4
+2       Barclay Lynn    French fries    Lunch only      5
+3       Jayendra Lyne   N/A     Breakfast and lunch     7
+4       Leon Rossini    Anchovies       Lunch only
+5       Chidiegwu Dunkel        Pizza   Breakfast and lunch     five
+6       Güvenç Attila   Ice cream       Lunch only      6
+</code></pre>
 <p>While we&rsquo;ll be using the <em>readr</em> package, base R has similar functions that you may run into, like <a href="https://rdrr.io/r/utils/read.table.html" target="_blank" rel="noopener"><code>read.table()</code></a>. But the <em>readr</em> ones are faster and have several other nice features.</p>
 <br>
 <hr>
@@ -926,11 +923,12 @@
 <span><span class='c'>#&gt; <span style='color: #555555;'>5</span>            5 Chidiegwu Dunkel Pizza              Breakfast and lunch five </span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'>6</span>            6 Güvenç Attila    Ice cream          Lunch only          6</span></span></code></pre>
 </div>
-<p>Rarely, <em>readr</em> will misinterpret column types. In that case, it&rsquo;s possible to manually specify the column types: we&rsquo;ll see how to do this next week.</p>
+<p>Rarely, <em>readr</em> will misinterpret column types. In that case, it&rsquo;s possible to <strong>manually specify the column types</strong>: we&rsquo;ll see how to do this next week.</p>
 <br>
 <hr>
 <h2 id="interlude-file-locations">Interlude: File locations</h2>
-<p>In the above example, we simply provided a file name. This code therefore assumes that the file is present in your current R &ldquo;working directory&rdquo; <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>. If the file is located elsewhere, that code will fail: <em>readr</em> will <em>not</em> look for a file with this name across your entire computer.</p>
+<p>In the above example, we simply provided a file name without a location to <a href="https://readr.tidyverse.org/reference/read_delim.html" target="_blank" rel="noopener"><code>read_csv()</code></a>. Doing so signals to R that the file is present in your current R &ldquo;working directory&rdquo;. For the <code>students.csv</code> file, that should have been the case, since we also downloaded it to our working directory: we provided the <code>download.file</code> also with a file name only.</p>
+<p>But if the file is located elsewhere, that code will fail: <em>readr</em> will <em>not</em> search your computer for a file with this name.</p>
 <div class="alert alert-note">
 <div>
 <p>To see what your working directory is, you can run <a href="https://rdrr.io/r/base/getwd.html" target="_blank" rel="noopener"><code>getwd()</code></a>:</p>
@@ -938,13 +936,13 @@
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; [1] "/home/jelmer/Dropbox/mcic/website/hugodown/content/codeclub/S05E05"</span></span></code></pre>
 </div>
-<p>And your working directory is also shown at the top of the console pane.</p>
+<p>And your working directory is also shown at the top of the RStudio console pane.</p>
 </div>
 </div>
 <p>If the file you want to read is not in your current working directory, you can:</p>
 <ul>
-<li>Change your working directory with <a href="https://rdrr.io/r/base/getwd.html" target="_blank" rel="noopener"><code>setwd()</code></a> (<em>not</em> recommended)</li>
-<li>Include the <em>location</em> of the file when you call the function</li>
+<li>Change your working directory with <a href="https://rdrr.io/r/base/getwd.html" target="_blank" rel="noopener"><code>setwd()</code></a> (generally not recommended)</li>
+<li>Include the <em>location</em> of the file when calling <a href="https://readr.tidyverse.org/reference/read_delim.html" target="_blank" rel="noopener"><code>read_csv()</code></a> (and other functions)</li>
 </ul>
 <p>If the file is in a folder &ldquo;downstream&rdquo; from your working directory, you can easily find it by typing a quote symbol (double <code>&quot;</code> or single <code>'</code>) either in a script or in the console, and pressing <kdb>tab</kbd>. This allows you to browse your files starting from your working directory:</p>
 <figure>
@@ -955,14 +953,14 @@ You can browse files by opening quotes!
 </figcaption>
 </p>
 </figure>
-<p>If that&rsquo;s not the case, it may be easiest to copy the location using your computer&rsquo;s file browser, and paste that location into R.</p>
+<p>If that&rsquo;s not the case, it may be easiest to copy the location using your computer&rsquo;s file browser, and paste that location into your code.</p>
 <p>Here are two examples of including folder names with a function like <a href="https://readr.tidyverse.org/reference/read_delim.html" target="_blank" rel="noopener"><code>read_csv()</code></a>:</p>
 <div class="highlight">
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"data/more_students.csv"</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"C:/Users/jelmer/R_data/other_students.csv"</span><span class='o'>)</span></span></code></pre>
 </div>
-<p>Note that in R, you can <em>always</em> use forward slashes <code>/</code> to separate folder regardless of your operating system (If you have Windows, which uses backslashes <code>\</code> instead, then backslashes will also work in R.)</p>
+<p>Note that in R, you can <em>always</em> use forward slashes <code>/</code> to separate folder regardless of your operating system (If you have Windows, which uses backslashes <code>\</code> instead, then backslashes will also work.)</p>
 <div class="alert alert-note">
 <div>
 <p>In two weeks, we&rsquo;ll talk about RStudio &ldquo;Projects&rdquo;, which can make your life a lot easier when it comes to file paths and never having to change your working directory.</p>
@@ -1147,7 +1145,7 @@ You can browse files by opening quotes!
 <h3 id="exercise-1-read_tsv">Exercise 1: <code>read_tsv()</code></h3>
 <p>Let&rsquo;s try <a href="https://readr.tidyverse.org/reference/read_delim.html" target="_blank" rel="noopener"><code>read_csv()</code></a>&rsquo;s counterpart for TSV (tab-separated) files: <a href="https://readr.tidyverse.org/reference/read_delim.html" target="_blank" rel="noopener"><code>read_tsv()</code></a>.</p>
 <p>The <code>students.tsv</code> file that you have downloaded contains the exact same data as the <code>students.csv</code> file we&rsquo;ve practiced with.</p>
-<p>Read in <code>students.tsv</code>, making sure to get the <code>NA</code>s right, and to clean up the column names with <code>clean_names()</code>.</p>
+<p><strong>Read in <code>students.tsv</code>, making sure to get the <code>NA</code>s right,</strong> <strong>and to clean up the column names like we did above.</strong></p>
 <details>
 <summary>
 <b>Solution</b>(click here)
@@ -1180,17 +1178,21 @@ You can browse files by opening quotes!
 <div class="puzzle">
 <div>
 <h3 id="exercise-2-a-challenging-file">Exercise 2: A challenging file</h3>
-<p>Try reading in the <code>exercise2.csv</code> file that you downloaded:</p>
+<p>Start by downloading a new CSV file:</p>
 <div class="highlight">
-<pre class='chroma'><code class='language-r' data-lang='r'>#> # This file is still incomplete
-#> 1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
-#> 2,Barclay Lynn,French fries,Lunch only,5
-#> 3,Jayendra Lyne,N/A,Breakfast and lunch,7
-#> 4,Leon Rossini,Anchovies,Lunch only,
-#> 5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
-#> 6,Güvenç Attila,Ice cream,Lunch only,6
-#> % More data will be entered soon!</code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>url_tsv</span> <span class='o'>&lt;-</span> <span class='s'>"https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/exercise2.csv"</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>url_tsv</span>, destfile <span class='o'>=</span> <span class='s'>"exercise2.csv"</span><span class='o'>)</span></span></code></pre>
 </div>
+<p>Now, try reading in this <code>exercise2.csv</code> file, which has the following content:</p>
+<pre><code># This file is still incomplete
+1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
+2,Barclay Lynn,French fries,Lunch only,5
+3,Jayendra Lyne,N/A,Breakfast and lunch,7
+4,Leon Rossini,Anchovies,Lunch only,
+5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
+6,Güvenç Attila,Ice cream,Lunch only,6
+% More data will be entered soon!
+</code></pre>
 <details>
 <summary>
 <b>Hints</b>(click here)
@@ -1355,14 +1357,6 @@ You can browse files by opening quotes!
 <br>
 <hr>
 <br>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>Which should in fact be the case when you run all the code on this page: the <code>download.file</code> function similarly downloaded the file to your working directory, because we only gave that function a file name too. <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
 
                     </div>
 
