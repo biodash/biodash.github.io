@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-02-20"
 lastmod: "2023-02-20"
 toc: true
-rmd_hash: f2264c21644af0ac
+rmd_hash: c7a993995fda7542
 
 ---
 
@@ -68,9 +68,7 @@ We'll focus on reading **tabular plain text** files, which is by far the most co
 
 -   **Commas**: such files are often called **CSV** files, for Comma-Separated Values. They are usually saved with a `.csv` or simply a `.txt` extension.
 
--   **Tabs**: such files are often called **TSV** files, for Tab-Separated Values. They are usually saved with a `.tsv` or again, simply a `.txt` extension.
-
-For example, let's take a look at a CSV and a TSV file containing same data on 6 students and the food they eat:
+<!-- -->
 
     Student ID,Full Name,favourite.food,mealPlan,AGE
     1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
@@ -80,6 +78,10 @@ For example, let's take a look at a CSV and a TSV file containing same data on 6
     5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
     6,Güvenç Attila,Ice cream,Lunch only,6
 
+-   **Tabs**: such files are often called **TSV** files, for Tab-Separated Values. They are usually saved with a `.tsv` or again, simply a `.txt` extension.
+
+<!-- -->
+
     Student ID      Full Name       favourite.food  mealPlan        AGE
     1       Sunil Huffmann  Strawberry yoghurt      Lunch only      4
     2       Barclay Lynn    French fries    Lunch only      5
@@ -87,6 +89,8 @@ For example, let's take a look at a CSV and a TSV file containing same data on 6
     4       Leon Rossini    Anchovies       Lunch only
     5       Chidiegwu Dunkel        Pizza   Breakfast and lunch     five
     6       Güvenç Attila   Ice cream       Lunch only      6
+
+The examples above were of a CSV and a TSV file containing same data on 6 students and the food they eat -- which we will be practicing with today.
 
 While we'll be using the *readr* package, base R has similar functions that you may run into, like [`read.table()`](https://rdrr.io/r/utils/read.table.html). But the *readr* ones are faster and have several other nice features.
 
