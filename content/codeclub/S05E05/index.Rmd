@@ -383,7 +383,7 @@ installed (see the code in the Introduction).
 
 <div class="puzzle"><div>
 
-### Exercise 1: `read_tsv()`
+### Exercise 1: A TSV file
 
 Let's try `read_csv()`'s counterpart for TSV (tab-separated) files: `read_tsv()`.
 
@@ -395,6 +395,12 @@ as the `students.csv` file we've practiced with.
 
 <details><summary><b>Solution</b>(click here)</summary>
 <br>
+
+- Since missing values are represented both as "N/A" and empty cells (""),
+  we'll use `na = c("N/A", "")`.
+  
+- We pipe the output to the `clean_names()` function to get consistently
+  "snake case"-styled column names.
 
 ```{r}
 read_tsv("students.tsv", na = c("N/A", "")) |>
@@ -410,7 +416,7 @@ read_tsv("students.tsv", na = c("N/A", "")) |>
 
 ### Exercise 2: A challenging file
 
-Start by downloading a new CSV file:
+Start by downloading the following CSV file:
 
 ```{r}
 url_tsv <- "https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/exercise2.csv"
@@ -448,11 +454,19 @@ Now, try reading in this `exercise2.csv` file, which has the following content:
 <details><summary><b>Solution</b>(click here)</summary>
 <br>
 
+- We'll take care of ignoring the first metadata line with `skip = 1`,
+  and the trailing line with `comment = %` since that line starts with a `%`.
+
+- We use `col_names = FALSE` to make sure the first row of data does not get
+  wrongly interpreted as column names
+
 ```{r}
 read_csv("exercise2.csv", skip = 1, comment = "%", col_names = FALSE)
 ```
 
-Or, with descriptive column names:
+The code above resulted in column names like `X1` and `X2`.
+To get descriptive column names, we'll have to write a vector with such names,
+and pass those to `col_names =`:
 
 ```{r}
 student_colnames <- c("student_id", "full_name", "fav_food", "meal_plan", "age")
@@ -486,13 +500,13 @@ library(readxl)
 
 ```{r, eval=FALSE}
 url_xls <- "https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/breed_ranks.xlsx"
-download.file(url = url_xls, destfile = "students.xls")
+download.file(url = url_xls, destfile = "breed_ranks.xlsx")
 ```
 
 Now, use the `read_excel()` function from the _readxl_ package to read the
 `breed_ranks.xlsx` file.
 
-Bonus<sup>2</sup>: There are two sheets, `Sheet1` and `Sheet2`.
+Bonus<sup>2</sup>: There are two sheets in the Excel file: `Sheet1` and `Sheet2`.
 Can you read both in?
 And can you combine the resulting dataframes into a single one?
 
@@ -513,7 +527,8 @@ And can you combine the resulting dataframes into a single one?
 <details><summary><b>Solution</b>(click here)</summary>
 <br>
 
-You can read the first sheet with:
+`read_excel` will by default read the first sheet of an Excel file,
+so you can read the first sheet simply with:
 
 ```{r}
 breed_ranks <- read_excel("breed_ranks.xlsx")
@@ -522,19 +537,22 @@ breed_ranks <- read_excel("breed_ranks.xlsx")
 #breed_ranks <- read_excel("breed_ranks.xlsx", sheet = 1)
 ```
 
-You can read the second sheet with:
+You can read the second sheet by using the `sheet =` argument:
 
 ```{r}
 breed_ranks2 <- read_excel("breed_ranks.xlsx", sheet = 2)
 ```
 
-You can combine the two dataframes with:
+You can combine the two dataframes with the `bind_rows()` function,
+which will simply "row-bind" (vertically paste, or "concatenate") the two files:
 
 ```{r}
 breed_ranks_all <- bind_rows(breed_ranks, breed_ranks2)
 ```
 
-Let's check the numbers of rows:
+(The base R function `rbind()` would also work.)
+
+Let's check the numbers of rows to check that our row-binding was successful:
 
 ```{r}
 nrow(breed_ranks) # From sheet 1
@@ -544,7 +562,7 @@ nrow(breed_ranks2) # From sheet 2
 nrow(breed_ranks_all) # Both combined
 ```
 
-Let's take a look at the first few rows:
+Let's also take a look at the first few rows of the dataframe:
 
 ```{r}
 head(breed_ranks_all)
@@ -558,5 +576,3 @@ head(breed_ranks_all)
 <br>
 
 ----
-
-<br>

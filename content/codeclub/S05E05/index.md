@@ -5,10 +5,10 @@ subtitle: "Today, we'll cover an essential component of working with R: how to i
 summary: "Today, we'll cover an essential component of working with R: how to import your data into R! We'll do so with functions from one of the core tidyverse packages: readr."
 authors: [admin]
 tags: [codeclub, r4ds]
-date: "2023-02-20"
-lastmod: "2023-02-20"
+date: "2023-02-21"
+lastmod: "2023-02-21"
 toc: true
-rmd_hash: 4b59e93968409bdb
+rmd_hash: 0882499a75d4b1a0
 
 ---
 
@@ -459,7 +459,7 @@ If you haven't done so already, please download the CSV and TSV files and make s
 
 <div>
 
-### Exercise 1: `read_tsv()`
+### Exercise 1: A TSV file
 
 Let's try [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html)'s counterpart for TSV (tab-separated) files: [`read_tsv()`](https://readr.tidyverse.org/reference/read_delim.html).
 
@@ -473,6 +473,10 @@ The `students.tsv` file that you have downloaded contains the exact same data as
 </summary>
 
 <br>
+
+-   Since missing values are represented both as "N/A" and empty cells (""), we'll use `na = c("N/A", "")`.
+
+-   We pipe the output to the `clean_names()` function to get consistently "snake case"-styled column names.
 
 <div class="highlight">
 
@@ -511,7 +515,7 @@ The `students.tsv` file that you have downloaded contains the exact same data as
 
 ### Exercise 2: A challenging file
 
-Start by downloading a new CSV file:
+Start by downloading the following CSV file:
 
 <div class="highlight">
 
@@ -555,6 +559,10 @@ Now, try reading in this `exercise2.csv` file, which has the following content:
 
 <br>
 
+-   We'll take care of ignoring the first metadata line with `skip = 1`, and the trailing line with `comment = %` since that line starts with a `%`.
+
+-   We use `col_names = FALSE` to make sure the first row of data does not get wrongly interpreted as column names
+
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"exercise2.csv"</span>, skip <span class='o'>=</span> <span class='m'>1</span>, comment <span class='o'>=</span> <span class='s'>"%"</span>, col_names <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span></span>
@@ -577,7 +585,7 @@ Now, try reading in this `exercise2.csv` file, which has the following content:
 
 </div>
 
-Or, with descriptive column names:
+The code above resulted in column names like `X1` and `X2`. To get descriptive column names, we'll have to write a vector with such names, and pass those to `col_names =`:
 
 <div class="highlight">
 
@@ -638,13 +646,13 @@ In this exercise, you'll use a function from the *readxl* package to read an Exc
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>url_xls</span> <span class='o'>&lt;-</span> <span class='s'>"https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/breed_ranks.xlsx"</span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>url_xls</span>, destfile <span class='o'>=</span> <span class='s'>"students.xls"</span><span class='o'>)</span></span></code></pre>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>url_xls</span>, destfile <span class='o'>=</span> <span class='s'>"breed_ranks.xlsx"</span><span class='o'>)</span></span></code></pre>
 
 </div>
 
 Now, use the [`read_excel()`](https://readxl.tidyverse.org/reference/read_excel.html) function from the *readxl* package to read the `breed_ranks.xlsx` file.
 
-Bonus<sup>2</sup>: There are two sheets, `Sheet1` and `Sheet2`. Can you read both in? And can you combine the resulting dataframes into a single one?
+Bonus<sup>2</sup>: There are two sheets in the Excel file: `Sheet1` and `Sheet2`. Can you read both in? And can you combine the resulting dataframes into a single one?
 
 <details>
 <summary>
@@ -670,7 +678,7 @@ Bonus<sup>2</sup>: There are two sheets, `Sheet1` and `Sheet2`. Can you read bot
 
 <br>
 
-You can read the first sheet with:
+`read_excel` will by default read the first sheet of an Excel file, so you can read the first sheet simply with:
 
 <div class="highlight">
 
@@ -681,7 +689,7 @@ You can read the first sheet with:
 
 </div>
 
-You can read the second sheet with:
+You can read the second sheet by using the `sheet =` argument:
 
 <div class="highlight">
 
@@ -689,7 +697,7 @@ You can read the second sheet with:
 
 </div>
 
-You can combine the two dataframes with:
+You can combine the two dataframes with the [`bind_rows()`](https://dplyr.tidyverse.org/reference/bind_rows.html) function, which will simply "row-bind" (vertically paste, or "concatenate") the two files:
 
 <div class="highlight">
 
@@ -697,7 +705,9 @@ You can combine the two dataframes with:
 
 </div>
 
-Let's check the numbers of rows:
+(The base R function [`rbind()`](https://rdrr.io/r/base/cbind.html) would also work.)
+
+Let's check the numbers of rows to check that our row-binding was successful:
 
 <div class="highlight">
 
@@ -710,7 +720,7 @@ Let's check the numbers of rows:
 
 </div>
 
-Let's take a look at the first few rows:
+Let's also take a look at the first few rows of the dataframe:
 
 <div class="highlight">
 
@@ -745,6 +755,4 @@ Let's take a look at the first few rows:
 <br>
 
 ------------------------------------------------------------------------
-
-<br>
 
