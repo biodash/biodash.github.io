@@ -91,9 +91,10 @@ Student ID      Full Name       favourite.food  mealPlan        AGE
 The examples above were of a CSV and a TSV file containing same data
 on 6 students and the food they eat -- which we will be practicing with today.
 
-While we'll be using the _readr_ package, base R has similar functions that
+We will be using functions from the _readr_ package today,
+though it's worth mentioning base R has similar functions
 you may run into, like `read.table()`.
-But the _readr_ ones are faster and have several other nice features.
+But the _readr_ functions are faster and have several other nice features.
 
 <br>
 
@@ -110,14 +111,14 @@ instead of referring to the specific function.
 That is because the _readr_ functions for different file types all behave
 very similarly, which is nice!
 
-We will first use the `read_csv()` function in the most basic possible way,
-that is, by only providing the filename:
+We will first use the `read_csv()` function in the most basic possible way --
+we only provide it with a file name:
 
 ```{r}
 students <- read_csv("students.csv")
 ```
 
-We have saved the contents of the file in the dataframe `students`,
+We have stored the contents of the file in the dataframe `students`,
 which we'll print below.
 But the function is quite chatty and prints the following information about
 what it has done to screen:
@@ -157,10 +158,10 @@ we'll see how to do this next week.
 In the above example, we simply provided a file name without a location to
 `read_csv()`.
 Doing so signals to R that the file is present in your current R
-"working directory".
-For the `students.csv` file, that should have been the case,
-since we also downloaded it to our working directory:
-we provided the `download.file` also with a file name only.
+"working directory" (directory is just another word for "folder").
+The `students.csv` file should have indeed been in your working directory:
+when we ran `download.file` above, we similarly provided it with only a file name,
+and the file should have therefore also been downloaded to our working directory.
 
 But if the file is located elsewhere, that code will fail:
 _readr_ will _not_ search your computer for a file with this name.
@@ -185,7 +186,7 @@ you can:
 
 If the file is in a folder "downstream" from your working directory,
 you can easily find it by typing a quote symbol (double `"` or single `'`)
-either in a script or in the console, and pressing <kdb>tab</kbd>.
+either in a script or in the console, and pressing <kbd>Tab</kbd>.
 This allows you to browse your files starting from your working directory:
 
 <figure>
@@ -208,13 +209,13 @@ read_csv("C:/Users/jelmer/R_data/other_students.csv")
 ```
 
 Note that in R,
-you can _always_ use forward slashes `/` to separate folder regardless of your
-operating system
-(If you have Windows, which uses backslashes `\` instead,
+you can _always_ use **forward slashes `/`** to separate folders,
+regardless of your operating system
+(If you have Windows, which generally uses backslashes `\` instead,
 then backslashes will also work.) 
 
 <div class="alert alert-note"><div>
-In two weeks, we'll talk about RStudio "Projects",
+In two weeks, we'll talk about **RStudio "Projects"**,
 which can make your life a lot easier when it comes to file paths and never
 having to change your working directory.
 </div></div>
@@ -225,7 +226,7 @@ having to change your working directory.
 
 ## Common challenges with input files
 
-### No headers
+### No column names
 
 Some files have no first line with column names.
 That leads to problems when using all the defaults:
@@ -248,6 +249,8 @@ but we can also provide a vector of column names to the `col_names` argument
 of `read_csv()`:
 
 ```{r, message=FALSE}
+# (I am creating a vector with column names up front. But this is just for code
+#  clarity -- you can also pass the names to read_csv directly.)
 student_colnames <- c("student_id", "full_name", "fav_food", "meal_plan", "age")
 
 read_csv("students_noheader.csv", col_names = student_colnames)
@@ -258,11 +261,19 @@ read_csv("students_noheader.csv", col_names = student_colnames)
 Other files will contain lines at the top that are not part of the table,
 but contain some sort of annotations or metadata, for instance:
 
-```{bash, echo=FALSE}
-cat students_with_meta.csv
+```
+# This file contains important information
+# about some of our students
+Student ID,Full Name,favourite.food,mealPlan,AGE
+1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
+2,Barclay Lynn,French fries,Lunch only,5
+3,Jayendra Lyne,N/A,Breakfast and lunch,7
+4,Leon Rossini,Anchovies,Lunch only,
+5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
+6,Güvenç Attila,Ice cream,Lunch only,6
 ```
 
-Since there are two metadata lines,
+Since there are two "metadata lines",
 we can tell *readr* to skip those first 2 lines with the `skip = n` argument:
 
 ```{r, message=FALSE}
@@ -287,12 +298,12 @@ interpreted by R as `NA`s.
 
 The `na` argument of the *readr* functions controls
 which values are interpreted as `NA`.
-The default is  to interpret _empty cells_ and _cells that only contain "NA"_
-as `NA`.
+The default is  to interpret **empty cells** and
+**cells that only contain "NA"** as `NA`.
 In R code, this default is `c("", "NA")`, as we can see in the `read_csv()` help.
 
-However, sometimes files use other symbols to denote missing values,
-such as `999`, `X`, `-`, or, like in the `students.csv` file, `N/A`.
+However, a file sometimes use other symbols to denote missing values,
+such as `999`, `X`, `-`, or `N/A`, like in the `students.csv` file.
 It turns out that our `students.csv` file uses empty cells _and_ `N/A`
 (and even plain `NA`s...),
 so we'll have to tell `read_csv()` about that as follows: 

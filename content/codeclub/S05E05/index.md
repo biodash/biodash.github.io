@@ -5,10 +5,10 @@ subtitle: "Today, we'll cover an essential component of working with R: how to i
 summary: "Today, we'll cover an essential component of working with R: how to import your data into R! We'll do so with functions from one of the core tidyverse packages: readr."
 authors: [admin]
 tags: [codeclub, r4ds]
-date: "2023-02-21"
-lastmod: "2023-02-21"
+date: "2023-02-22"
+lastmod: "2023-02-22"
 toc: true
-rmd_hash: 0882499a75d4b1a0
+rmd_hash: 0b464eec39c7b805
 
 ---
 
@@ -92,7 +92,7 @@ We'll focus on reading **rectangular plain text** files, which is by far the mos
 
 The examples above were of a CSV and a TSV file containing same data on 6 students and the food they eat -- which we will be practicing with today.
 
-While we'll be using the *readr* package, base R has similar functions that you may run into, like [`read.table()`](https://rdrr.io/r/utils/read.table.html). But the *readr* ones are faster and have several other nice features.
+We will be using functions from the *readr* package today, though it's worth mentioning base R has similar functions you may run into, like [`read.table()`](https://rdrr.io/r/utils/read.table.html). But the *readr* functions are faster and have several other nice features.
 
 <br>
 
@@ -104,7 +104,7 @@ We'll start by reading the `students.csv` CSV file that we saw above.
 
 **CSV files can be read with *readr*'s [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function**, which is the function we'll mostly use today. But note that below, I'll often say that "*readr*" does this and that, instead of referring to the specific function. That is because the *readr* functions for different file types all behave very similarly, which is nice!
 
-We will first use the [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function in the most basic possible way, that is, by only providing the filename:
+We will first use the [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function in the most basic possible way -- we only provide it with a file name:
 
 <div class="highlight">
 
@@ -120,7 +120,7 @@ We will first use the [`read_csv()`](https://readr.tidyverse.org/reference/read_
 
 </div>
 
-We have saved the contents of the file in the dataframe `students`, which we'll print below. But the function is quite chatty and prints the following information about what it has done to screen:
+We have stored the contents of the file in the dataframe `students`, which we'll print below. But the function is quite chatty and prints the following information about what it has done to screen:
 
 -   How many rows and columns it read
 -   Which column delimiter it used
@@ -161,7 +161,7 @@ Rarely, *readr* will misinterpret column types. In that case, it's possible to *
 
 ## Interlude: File locations
 
-In the above example, we simply provided a file name without a location to [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html). Doing so signals to R that the file is present in your current R "working directory". For the `students.csv` file, that should have been the case, since we also downloaded it to our working directory: we provided the `download.file` also with a file name only.
+In the above example, we simply provided a file name without a location to [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html). Doing so signals to R that the file is present in your current R "working directory" (directory is just another word for "folder"). The `students.csv` file should have indeed been in your working directory: when we ran `download.file` above, we similarly provided it with only a file name, and the file should have therefore also been downloaded to our working directory.
 
 But if the file is located elsewhere, that code will fail: *readr* will *not* search your computer for a file with this name.
 
@@ -189,7 +189,7 @@ If the file you want to read is not in your current working directory, you can:
 -   Change your working directory with [`setwd()`](https://rdrr.io/r/base/getwd.html) (generally not recommended)
 -   Include the *location* of the file when calling [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) (and other functions)
 
-If the file is in a folder "downstream" from your working directory, you can easily find it by typing a quote symbol (double `"` or single `'`) either in a script or in the console, and pressing <kdb>tab</kbd>. This allows you to browse your files starting from your working directory:
+If the file is in a folder "downstream" from your working directory, you can easily find it by typing a quote symbol (double `"` or single `'`) either in a script or in the console, and pressing <kbd>Tab</kbd>. This allows you to browse your files starting from your working directory:
 
 <figure>
 <p align="center">
@@ -212,13 +212,13 @@ Here are two examples of including folder names with a function like [`read_csv(
 
 </div>
 
-Note that in R, you can *always* use forward slashes `/` to separate folder regardless of your operating system (If you have Windows, which uses backslashes `\` instead, then backslashes will also work.)
+Note that in R, you can *always* use **forward slashes `/`** to separate folders, regardless of your operating system (If you have Windows, which generally uses backslashes `\` instead, then backslashes will also work.)
 
 <div class="alert alert-note">
 
 <div>
 
-In two weeks, we'll talk about RStudio "Projects", which can make your life a lot easier when it comes to file paths and never having to change your working directory.
+In two weeks, we'll talk about **RStudio "Projects"**, which can make your life a lot easier when it comes to file paths and never having to change your working directory.
 
 </div>
 
@@ -230,7 +230,7 @@ In two weeks, we'll talk about RStudio "Projects", which can make your life a lo
 
 ## Common challenges with input files
 
-### No headers
+### No column names
 
 Some files have no first line with column names. That leads to problems when using all the defaults:
 
@@ -269,7 +269,9 @@ That's better! But of course, we can't automatically get useful column names, an
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>student_colnames</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"student_id"</span>, <span class='s'>"full_name"</span>, <span class='s'>"fav_food"</span>, <span class='s'>"meal_plan"</span>, <span class='s'>"age"</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># (I am creating a vector with column names up front. But this is just for code</span></span>
+<span><span class='c'>#  clarity -- you can also pass the names to read_csv directly.)</span></span>
+<span><span class='nv'>student_colnames</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"student_id"</span>, <span class='s'>"full_name"</span>, <span class='s'>"fav_food"</span>, <span class='s'>"meal_plan"</span>, <span class='s'>"age"</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"students_noheader.csv"</span>, col_names <span class='o'>=</span> <span class='nv'>student_colnames</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 6 × 5</span></span></span>
@@ -288,21 +290,17 @@ That's better! But of course, we can't automatically get useful column names, an
 
 Other files will contain lines at the top that are not part of the table, but contain some sort of annotations or metadata, for instance:
 
-<div class="highlight">
+    # This file contains important information
+    # about some of our students
+    Student ID,Full Name,favourite.food,mealPlan,AGE
+    1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
+    2,Barclay Lynn,French fries,Lunch only,5
+    3,Jayendra Lyne,N/A,Breakfast and lunch,7
+    4,Leon Rossini,Anchovies,Lunch only,
+    5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
+    6,Güvenç Attila,Ice cream,Lunch only,6
 
-<pre class='chroma'><code class='language-r' data-lang='r'>#> # This file contains important information
-#> # about some of our students
-#> Student ID,Full Name,favourite.food,mealPlan,AGE
-#> 1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
-#> 2,Barclay Lynn,French fries,Lunch only,5
-#> 3,Jayendra Lyne,N/A,Breakfast and lunch,7
-#> 4,Leon Rossini,Anchovies,Lunch only,
-#> 5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
-#> 6,Güvenç Attila,Ice cream,Lunch only,6</code></pre>
-
-</div>
-
-Since there are two metadata lines, we can tell *readr* to skip those first 2 lines with the `skip = n` argument:
+Since there are two "metadata lines", we can tell *readr* to skip those first 2 lines with the `skip = n` argument:
 
 <div class="highlight">
 
@@ -342,9 +340,9 @@ Why might it be preferable to use `comment` over `skip`, when possible?
 
 R has a special data type for missing values: `NA`. It is important for downstream analyses that missing values are actually interpreted by R as `NA`s.
 
-The `na` argument of the *readr* functions controls which values are interpreted as `NA`. The default is to interpret *empty cells* and *cells that only contain "NA"* as `NA`. In R code, this default is `c("", "NA")`, as we can see in the [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) help.
+The `na` argument of the *readr* functions controls which values are interpreted as `NA`. The default is to interpret **empty cells** and **cells that only contain "NA"** as `NA`. In R code, this default is `c("", "NA")`, as we can see in the [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) help.
 
-However, sometimes files use other symbols to denote missing values, such as `999`, `X`, `-`, or, like in the `students.csv` file, `N/A`. It turns out that our `students.csv` file uses empty cells *and* `N/A` (and even plain `NA`s...), so we'll have to tell [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) about that as follows:
+However, a file sometimes use other symbols to denote missing values, such as `999`, `X`, `-`, or `N/A`, like in the `students.csv` file. It turns out that our `students.csv` file uses empty cells *and* `N/A` (and even plain `NA`s...), so we'll have to tell [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) about that as follows:
 
 <div class="highlight">
 
