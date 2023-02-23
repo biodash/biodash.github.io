@@ -5,7 +5,7 @@
     <link>https://biodash.github.io/tags/codeclub/</link>
       <atom:link href="https://biodash.github.io/tags/codeclub/index.xml" rel="self" type="application/rss+xml" />
     <description>codeclub</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Wed, 22 Feb 2023 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Thu, 23 Feb 2023 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://biodash.github.io/media/logo_hu6407506e646a281542ecb299640680ce_37988_300x300_fit_lanczos_2.png</url>
       <title>codeclub</title>
@@ -15,29 +15,37 @@
     <item>
       <title>S05E05: R for Data Science (2e) - Ch. 8 - Data Import</title>
       <link>https://biodash.github.io/codeclub/s05e05/</link>
-      <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 23 Feb 2023 00:00:00 +0000</pubDate>
       <guid>https://biodash.github.io/codeclub/s05e05/</guid>
       <description>&lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;h3 id=&#34;setting-up&#34;&gt;Setting up&lt;/h3&gt;
-&lt;p&gt;Today, we&amp;rsquo;ll talk about reading data into R. We&amp;rsquo;ll be using the &lt;em&gt;readr&lt;/em&gt; package, which is part of the core tidyverse, and is therefore loaded by &lt;a href=&#34;https://tidyverse.tidyverse.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library(tidyverse)&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;Today, we&amp;rsquo;ll talk about reading data into R.&lt;/p&gt;
+&lt;p&gt;If you want to follow along yourself, you need to download several practice files. All code to do so can be found on this page, but if you don&amp;rsquo;t want to keep copy-pasting lines of code, I recommend that you download this R script with all of today&amp;rsquo;s code, open it, and run the code from there:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;url_script&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/codeclub_S05E05.R&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;url_script&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;codeclub_S05E05.R&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We&amp;rsquo;ll be using the &lt;em&gt;readr&lt;/em&gt; package, which is part of the core tidyverse, and is therefore loaded by &lt;a href=&#34;https://tidyverse.tidyverse.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library(tidyverse)&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching packages&lt;/span&gt; ─────────────────────────────────────── tidyverse 1.3.2 ──&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;ggplot2&lt;/span&gt; 3.4.0     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;purrr  &lt;/span&gt; 1.0.1&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tibble &lt;/span&gt; 3.1.8     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr  &lt;/span&gt; 1.1.0&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tidyr  &lt;/span&gt; 1.3.0     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;stringr&lt;/span&gt; 1.5.0&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;readr  &lt;/span&gt; 2.1.3     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;forcats&lt;/span&gt; 1.0.0&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching core tidyverse packages&lt;/span&gt; ──────────────────────── tidyverse 2.0.0 ──&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr    &lt;/span&gt; 1.1.0     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;readr    &lt;/span&gt; 2.1.4&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;forcats  &lt;/span&gt; 1.0.0     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;stringr  &lt;/span&gt; 1.5.0&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;ggplot2  &lt;/span&gt; 3.4.1     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tibble   &lt;/span&gt; 3.1.8&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;lubridate&lt;/span&gt; 1.9.2     &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;tidyr    &lt;/span&gt; 1.3.0&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BB00;&#39;&gt;✔&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;purrr    &lt;/span&gt; 1.0.1     &lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Conflicts&lt;/span&gt; ────────────────────────────────────────── tidyverse_conflicts() ──&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;filter()&lt;/span&gt; masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::filter()&lt;/span&gt;&lt;/span&gt;
-&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;    masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::lag()&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;    masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::lag()&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BBBB;&#39;&gt;ℹ&lt;/span&gt; Use the &lt;a href=&#39;http://conflicted.r-lib.org/&#39;&gt;conflicted package&lt;/a&gt; to force all conflicts to become errors&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;To clean up column names, we&amp;rsquo;ll use the &lt;em&gt;janitor&lt;/em&gt; package, which you can install as follows:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;janitor&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;We also need to download a couple of files so that we can practice importing them:&lt;/p&gt;
+&lt;p&gt;We also need to download a couple of files to practice importing data (copy-and-paste this entire code block into R with the Copy button in the top right):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;url_csv&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/students.csv&#34;&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;url_csv&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;students.csv&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
@@ -54,7 +62,7 @@
 &lt;h3 id=&#34;rectangular-plain-text-files&#34;&gt;Rectangular, plain-text files&lt;/h3&gt;
 &lt;p&gt;We&amp;rsquo;ll focus on reading &lt;strong&gt;rectangular plain text&lt;/strong&gt; files, which is by far the most common input file type for R. By &lt;em&gt;rectangular&lt;/em&gt;, I mean that these files have rows and columns. The columns in rectangular files are most commonly separated by either:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Commas&lt;/strong&gt;: such files are often called &lt;strong&gt;CSV&lt;/strong&gt; files, for Comma-Separated Values. They are usually saved with a &lt;code&gt;.csv&lt;/code&gt; or simply a &lt;code&gt;.txt&lt;/code&gt; extension.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Commas&lt;/strong&gt;: such files are often called &lt;strong&gt;CSV&lt;/strong&gt; files, for Comma-Separated Values. They are usually saved with a &lt;code&gt;.csv&lt;/code&gt; or simply a &lt;code&gt;.txt&lt;/code&gt; extension. Here is an example &amp;ndash; this is the &lt;code&gt;students.csv&lt;/code&gt; file you just downloaded (with some data on students and the food they eat):&lt;/li&gt;
 &lt;/ul&gt;
 &lt;!-- --&gt;
 &lt;pre&gt;&lt;code&gt;Student ID,Full Name,favourite.food,mealPlan,AGE
@@ -66,7 +74,7 @@
 6,Güvenç Attila,Ice cream,Lunch only,6
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Tabs&lt;/strong&gt;: such files are often called &lt;strong&gt;TSV&lt;/strong&gt; files, for Tab-Separated Values. They are usually saved with a &lt;code&gt;.tsv&lt;/code&gt; or again, simply a &lt;code&gt;.txt&lt;/code&gt; extension.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tabs&lt;/strong&gt;: such files are often called &lt;strong&gt;TSV&lt;/strong&gt; files, for Tab-Separated Values. They are usually saved with a &lt;code&gt;.tsv&lt;/code&gt; or again, simply a &lt;code&gt;.txt&lt;/code&gt; extension. Here is an example &amp;ndash; this is the &lt;code&gt;students.tsv&lt;/code&gt; file you just downloaded (showing the exact same data as in the CSV above):&lt;/li&gt;
 &lt;/ul&gt;
 &lt;!-- --&gt;
 &lt;pre&gt;&lt;code&gt;Student ID      Full Name       favourite.food  mealPlan        AGE
@@ -77,12 +85,11 @@
 5       Chidiegwu Dunkel        Pizza   Breakfast and lunch     five
 6       Güvenç Attila   Ice cream       Lunch only      6
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The examples above were of a CSV and a TSV file containing same data on 6 students and the food they eat &amp;ndash; which we will be practicing with today.&lt;/p&gt;
 &lt;p&gt;We will be using functions from the &lt;em&gt;readr&lt;/em&gt; package today, though it&amp;rsquo;s worth mentioning base R has similar functions you may run into, like &lt;a href=&#34;https://rdrr.io/r/utils/read.table.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read.table()&lt;/code&gt;&lt;/a&gt;. But the &lt;em&gt;readr&lt;/em&gt; functions are faster and have several other nice features.&lt;/p&gt;
 &lt;br&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;basics-of-reading-rectangular-files&#34;&gt;Basics of reading rectangular files&lt;/h2&gt;
-&lt;p&gt;We&amp;rsquo;ll start by reading the &lt;code&gt;students.csv&lt;/code&gt; CSV file that we saw above.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll start by reading the &lt;code&gt;students.csv&lt;/code&gt; CSV file that you have downloaded and that we saw above.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;CSV files can be read with &lt;em&gt;readr&lt;/em&gt;&amp;rsquo;s &lt;a href=&#34;https://readr.tidyverse.org/reference/read_delim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read_csv()&lt;/code&gt;&lt;/a&gt; function&lt;/strong&gt;, which is the function we&amp;rsquo;ll mostly use today. But note that below, I&amp;rsquo;ll often say that &amp;ldquo;&lt;em&gt;readr&lt;/em&gt;&amp;rdquo; does this and that, instead of referring to the specific function. That is because the &lt;em&gt;readr&lt;/em&gt; functions for different file types all behave very similarly, which is nice!&lt;/p&gt;
 &lt;p&gt;We will first use the &lt;a href=&#34;https://readr.tidyverse.org/reference/read_delim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read_csv()&lt;/code&gt;&lt;/a&gt; function in the most basic possible way &amp;ndash; we only provide it with a file name:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
@@ -96,7 +103,7 @@
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BBBB;&#39;&gt;ℹ&lt;/span&gt; Use `spec()` to retrieve the full column specification for this data.&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BBBB;&#39;&gt;ℹ&lt;/span&gt; Specify the column types or set `show_col_types = FALSE` to quiet this message.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;We have stored the contents of the file in the dataframe &lt;code&gt;students&lt;/code&gt;, which we&amp;rsquo;ll print below. But the function is quite chatty and prints the following information about what it has done to screen:&lt;/p&gt;
+&lt;p&gt;We have stored the contents of the file in the dataframe &lt;code&gt;students&lt;/code&gt;, which we&amp;rsquo;ll print below. The function is quite chatty and prints the following information about what it has done to screen:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;How many rows and columns it read&lt;/li&gt;
 &lt;li&gt;Which column delimiter it used&lt;/li&gt;
@@ -146,14 +153,17 @@
 &lt;p align=&#34;center&#34;&gt;
 &lt;img src=img/path_completion.png width=&#34;50%&#34;&gt;
 &lt;figcaption&gt;
-You can browse files by opening quotes!
+You can browse files by opening quotes and pressing Tab!
 &lt;/figcaption&gt;
 &lt;/p&gt;
 &lt;/figure&gt;
 &lt;p&gt;If that&amp;rsquo;s not the case, it may be easiest to copy the location using your computer&amp;rsquo;s file browser, and paste that location into your code.&lt;/p&gt;
 &lt;p&gt;Here are two examples of including folder names with a function like &lt;a href=&#34;https://readr.tidyverse.org/reference/read_delim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read_csv()&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://readr.tidyverse.org/reference/read_delim.html&#39;&gt;read_csv&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;data/more_students.csv&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# Don&#39;t try to run this, you won&#39;t have files at these locations&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;c&#39;&gt;# This is just meant as a general example&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://readr.tidyverse.org/reference/read_delim.html&#39;&gt;read_csv&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;data/more_students.csv&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://readr.tidyverse.org/reference/read_delim.html&#39;&gt;read_csv&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;C:/Users/jelmer/R_data/other_students.csv&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
@@ -409,7 +419,10 @@ Student ID,Full Name,favourite.food,mealPlan,AGE
 &lt;p&gt;Notice that there are metadata / comment lines both at the start and the end of the file!&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;You cannot specify multiple &lt;code&gt;comment&lt;/code&gt; symbols to &lt;a href=&#34;https://readr.tidyverse.org/reference/read_delim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read_csv()&lt;/code&gt;&lt;/a&gt;, so you&amp;rsquo;ll have to use both the &lt;code&gt;skip&lt;/code&gt; &lt;em&gt;and&lt;/em&gt; &lt;code&gt;comment&lt;/code&gt; arguments.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;comment&lt;/code&gt; argument also works for lines that aren&amp;rsquo;t at the top of the file.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;But you cannot specify multiple &lt;code&gt;comment&lt;/code&gt; symbols to &lt;a href=&#34;https://readr.tidyverse.org/reference/read_delim.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;read_csv()&lt;/code&gt;&lt;/a&gt;, so you&amp;rsquo;ll have to use both the &lt;code&gt;skip&lt;/code&gt; &lt;em&gt;and&lt;/em&gt; &lt;code&gt;comment&lt;/code&gt; arguments.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;You&amp;rsquo;ll also want to take care of the fact that there is no line with column names.&lt;/p&gt;
