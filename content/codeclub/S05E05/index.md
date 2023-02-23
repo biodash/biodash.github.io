@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-02-23"
 lastmod: "2023-02-23"
 toc: true
-rmd_hash: 9ee5af0970c4cfe9
+rmd_hash: 569f1dd769f22831
 
 ---
 
@@ -31,7 +31,15 @@ If you want to follow along yourself, you need to download several practice file
 
 </div>
 
-We'll be using the *readr* package, which is part of the core tidyverse, and is therefore loaded by [`library(tidyverse)`](https://tidyverse.tidyverse.org):
+To clean up column names, we'll use the *janitor* package, which you can install as follows:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"janitor"</span><span class='o'>)</span></span></code></pre>
+
+</div>
+
+We'll mostly be using the *readr* package, which is part of the core tidyverse, and is therefore loaded by [`library(tidyverse)`](https://tidyverse.tidyverse.org):
 
 <div class="highlight">
 
@@ -46,14 +54,6 @@ We'll be using the *readr* package, which is part of the core tidyverse, and is 
 <span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>filter()</span> masks <span style='color: #0000BB;'>stats</span>::filter()</span></span>
 <span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>lag()</span>    masks <span style='color: #0000BB;'>stats</span>::lag()</span></span>
 <span><span class='c'>#&gt; <span style='color: #00BBBB;'>ℹ</span> Use the <a href='http://conflicted.r-lib.org/'>conflicted package</a> to force all conflicts to become errors</span></span></code></pre>
-
-</div>
-
-To clean up column names, we'll use the *janitor* package, which you can install as follows:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"janitor"</span><span class='o'>)</span></span></code></pre>
 
 </div>
 
