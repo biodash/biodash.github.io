@@ -5,10 +5,10 @@ subtitle: "Today, we'll cover an essential component of working with R: how to i
 summary: "Today, we'll cover an essential component of working with R: how to import your data into R! We'll do so with functions from one of the core tidyverse packages: readr."
 authors: [admin]
 tags: [codeclub, r4ds]
-date: "2023-02-22"
-lastmod: "2023-02-22"
+date: "2023-02-23"
+lastmod: "2023-02-23"
 toc: true
-rmd_hash: 0b464eec39c7b805
+rmd_hash: 9ee5af0970c4cfe9
 
 ---
 
@@ -20,19 +20,32 @@ rmd_hash: 0b464eec39c7b805
 
 ### Setting up
 
-Today, we'll talk about reading data into R. We'll be using the *readr* package, which is part of the core tidyverse, and is therefore loaded by [`library(tidyverse)`](https://tidyverse.tidyverse.org):
+Today, we'll talk about reading data into R.
+
+If you want to follow along yourself, you need to download several practice files. All code to do so can be found on this page, but if you don't want to keep copy-pasting lines of code, I recommend that you download this R script with all of today's code, open it, and run the code from there:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>url_script</span> <span class='o'>&lt;-</span> <span class='s'>"https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/codeclub_S05E05.R"</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>url_script</span>, destfile <span class='o'>=</span> <span class='s'>"codeclub_S05E05.R"</span><span class='o'>)</span></span></code></pre>
+
+</div>
+
+We'll be using the *readr* package, which is part of the core tidyverse, and is therefore loaded by [`library(tidyverse)`](https://tidyverse.tidyverse.org):
 
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span> ─────────────────────────────────────── tidyverse 1.3.2 ──</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>ggplot2</span> 3.4.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>purrr  </span> 1.0.1</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tibble </span> 3.1.8     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>dplyr  </span> 1.1.0</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tidyr  </span> 1.3.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>stringr</span> 1.5.0</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>readr  </span> 2.1.3     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>forcats</span> 1.0.0</span></span>
+<span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>dplyr    </span> 1.1.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>readr    </span> 2.1.4</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>forcats  </span> 1.0.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>stringr  </span> 1.5.0</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>ggplot2  </span> 3.4.1     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tibble   </span> 3.1.8</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>lubridate</span> 1.9.2     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tidyr    </span> 1.3.0</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>purrr    </span> 1.0.1     </span></span>
 <span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
 <span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>filter()</span> masks <span style='color: #0000BB;'>stats</span>::filter()</span></span>
-<span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>lag()</span>    masks <span style='color: #0000BB;'>stats</span>::lag()</span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>lag()</span>    masks <span style='color: #0000BB;'>stats</span>::lag()</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BBBB;'>ℹ</span> Use the <a href='http://conflicted.r-lib.org/'>conflicted package</a> to force all conflicts to become errors</span></span></code></pre>
 
 </div>
 
@@ -44,7 +57,7 @@ To clean up column names, we'll use the *janitor* package, which you can install
 
 </div>
 
-We also need to download a couple of files so that we can practice importing them:
+We also need to download a couple of files to practice importing data (copy-and-paste this entire code block into R with the Copy button in the top right):
 
 <div class="highlight">
 
@@ -66,7 +79,7 @@ We also need to download a couple of files so that we can practice importing the
 
 We'll focus on reading **rectangular plain text** files, which is by far the most common input file type for R. By *rectangular*, I mean that these files have rows and columns. The columns in rectangular files are most commonly separated by either:
 
--   **Commas**: such files are often called **CSV** files, for Comma-Separated Values. They are usually saved with a `.csv` or simply a `.txt` extension.
+-   **Commas**: such files are often called **CSV** files, for Comma-Separated Values. They are usually saved with a `.csv` or simply a `.txt` extension. Here is an example -- this is the `students.csv` file you just downloaded (with some data on students and the food they eat):
 
 <!-- -->
 
@@ -78,7 +91,7 @@ We'll focus on reading **rectangular plain text** files, which is by far the mos
     5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
     6,Güvenç Attila,Ice cream,Lunch only,6
 
--   **Tabs**: such files are often called **TSV** files, for Tab-Separated Values. They are usually saved with a `.tsv` or again, simply a `.txt` extension.
+-   **Tabs**: such files are often called **TSV** files, for Tab-Separated Values. They are usually saved with a `.tsv` or again, simply a `.txt` extension. Here is an example -- this is the `students.tsv` file you just downloaded (showing the exact same data as in the CSV above):
 
 <!-- -->
 
@@ -90,8 +103,6 @@ We'll focus on reading **rectangular plain text** files, which is by far the mos
     5       Chidiegwu Dunkel        Pizza   Breakfast and lunch     five
     6       Güvenç Attila   Ice cream       Lunch only      6
 
-The examples above were of a CSV and a TSV file containing same data on 6 students and the food they eat -- which we will be practicing with today.
-
 We will be using functions from the *readr* package today, though it's worth mentioning base R has similar functions you may run into, like [`read.table()`](https://rdrr.io/r/utils/read.table.html). But the *readr* functions are faster and have several other nice features.
 
 <br>
@@ -100,7 +111,7 @@ We will be using functions from the *readr* package today, though it's worth men
 
 ## Basics of reading rectangular files
 
-We'll start by reading the `students.csv` CSV file that we saw above.
+We'll start by reading the `students.csv` CSV file that you have downloaded and that we saw above.
 
 **CSV files can be read with *readr*'s [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function**, which is the function we'll mostly use today. But note that below, I'll often say that "*readr*" does this and that, instead of referring to the specific function. That is because the *readr* functions for different file types all behave very similarly, which is nice!
 
@@ -120,7 +131,7 @@ We will first use the [`read_csv()`](https://readr.tidyverse.org/reference/read_
 
 </div>
 
-We have stored the contents of the file in the dataframe `students`, which we'll print below. But the function is quite chatty and prints the following information about what it has done to screen:
+We have stored the contents of the file in the dataframe `students`, which we'll print below. The function is quite chatty and prints the following information about what it has done to screen:
 
 -   How many rows and columns it read
 -   Which column delimiter it used
@@ -195,7 +206,7 @@ If the file is in a folder "downstream" from your working directory, you can eas
 <p align="center">
 <img src=img/path_completion.png width="50%">
 <figcaption>
-You can browse files by opening quotes!
+You can browse files by opening quotes and pressing Tab!
 </figcaption>
 </p>
 </figure>
@@ -206,7 +217,10 @@ Here are two examples of including folder names with a function like [`read_csv(
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"data/more_students.csv"</span><span class='o'>)</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># Don't try to run this, you won't have files at these locations</span></span>
+<span><span class='c'># This is just meant as a general example</span></span>
+<span></span>
+<span><span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"data/more_students.csv"</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='o'>(</span><span class='s'>"C:/Users/jelmer/R_data/other_students.csv"</span><span class='o'>)</span></span></code></pre>
 
@@ -542,7 +556,9 @@ Now, try reading in this `exercise2.csv` file, which has the following content:
 
 -   Notice that there are metadata / comment lines both at the start and the end of the file!
 
--   You cannot specify multiple `comment` symbols to [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html), so you'll have to use both the `skip` *and* `comment` arguments.
+-   The `comment` argument also works for lines that aren't at the top of the file.
+
+-   But you cannot specify multiple `comment` symbols to [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html), so you'll have to use both the `skip` *and* `comment` arguments.
 
 -   You'll also want to take care of the fact that there is no line with column names.
 
