@@ -27,7 +27,11 @@
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nv&#39;&gt;url_script&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/codeclub_S05E05.R&#34;&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/download.file.html&#39;&gt;download.file&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;url &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;nv&#39;&gt;url_script&lt;/span&gt;, destfile &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&#34;codeclub_S05E05.R&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;We&amp;rsquo;ll be using the &lt;em&gt;readr&lt;/em&gt; package, which is part of the core tidyverse, and is therefore loaded by &lt;a href=&#34;https://tidyverse.tidyverse.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library(tidyverse)&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;To clean up column names, we&amp;rsquo;ll use the &lt;em&gt;janitor&lt;/em&gt; package, which you can install as follows:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;
+&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;janitor&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;We&amp;rsquo;ll mostly be using the &lt;em&gt;readr&lt;/em&gt; package, which is part of the core tidyverse, and is therefore loaded by &lt;a href=&#34;https://tidyverse.tidyverse.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;library(tidyverse)&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;
 &lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;kr&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/base/library.html&#39;&gt;library&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt;&lt;a href=&#39;https://tidyverse.tidyverse.org&#39;&gt;tidyverse&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; ── &lt;span style=&#39;font-weight: bold;&#39;&gt;Attaching core tidyverse packages&lt;/span&gt; ──────────────────────── tidyverse 2.0.0 ──&lt;/span&gt;&lt;/span&gt;
@@ -40,10 +44,6 @@
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;filter()&lt;/span&gt; masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::filter()&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #BB0000;&#39;&gt;✖&lt;/span&gt; &lt;span style=&#39;color: #0000BB;&#39;&gt;dplyr&lt;/span&gt;::&lt;span style=&#39;color: #00BB00;&#39;&gt;lag()&lt;/span&gt;    masks &lt;span style=&#39;color: #0000BB;&#39;&gt;stats&lt;/span&gt;::lag()&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span class=&#39;c&#39;&gt;#&amp;gt; &lt;span style=&#39;color: #00BBBB;&#39;&gt;ℹ&lt;/span&gt; Use the &lt;a href=&#39;http://conflicted.r-lib.org/&#39;&gt;conflicted package&lt;/a&gt; to force all conflicts to become errors&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;To clean up column names, we&amp;rsquo;ll use the &lt;em&gt;janitor&lt;/em&gt; package, which you can install as follows:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;
-&lt;pre class=&#39;chroma&#39;&gt;&lt;code class=&#39;language-r&#39; data-lang=&#39;r&#39;&gt;&lt;span&gt;&lt;span class=&#39;nf&#39;&gt;&lt;a href=&#39;https://rdrr.io/r/utils/install.packages.html&#39;&gt;install.packages&lt;/a&gt;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;s&#39;&gt;&#34;janitor&#34;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;We also need to download a couple of files to practice importing data (copy-and-paste this entire code block into R with the Copy button in the top right):&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;

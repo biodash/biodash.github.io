@@ -1,7 +1,7 @@
 # Setting up -------------------------------------------------------------------
 # Packages
-library(tidyverse)
 install.packages("janitor")
+library(tidyverse)
 
 # Downloading the practice files
 url_csv <- "https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E05/students.csv"
