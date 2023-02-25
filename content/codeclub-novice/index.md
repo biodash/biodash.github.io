@@ -25,7 +25,10 @@ here are some additional resources:
 - Excellent comprehensive introductions are the [R Basics](https://www.edx.org/course/data-science-r-basics)
   and [Visualization](https://www.edx.org/course/data-science-visualization) classes by Rafael Irizarry
   that can be freely accessed; you do have to create an account. 
-
+- OSU TDAI videos:
+  - [Installing R / R Studio](https://mediasite.osu.edu/Mediasite/Play/f7d6605508f842d09fd5b5ec9c88619a1d)
+  - [R / R Studio Introduction](https://mediasite.osu.edu/Mediasite/Play/3d2f076f64854b57a6e5e5a99b60d6781d)
+ 
 Also, don't hesitate to reach out to the [Code Club organizers](/codeclub-about/#organizers)
 if you have any questions! 
 
