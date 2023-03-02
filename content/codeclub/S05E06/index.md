@@ -3,12 +3,12 @@ output: hugodown::md_document
 title: "S05E05: R for Data Science (2e) - Ch. 8 - Data Import, Part II"
 subtitle: "Today, we'll continue with the R4DS on data import (and export)"
 summary: "Today, we'll continue with the R4DS on data import (and export)"
-authors: [admin]
+authors: [stephen-opiyo]
 tags: [codeclub, r4ds]
 date: "2023-03-02"
 lastmod: "2023-03-02"
 toc: true
-rmd_hash: eccfcf326a3c9790
+rmd_hash: c9940b7f332b5339
 
 ---
 
@@ -22,11 +22,11 @@ Today we will continue with the [R for Data Science chapter 8 on importing data]
 
 We will cover a few more tricks to import data with *readr*, and will also cover *exporting* data. We will talk about:
 
-1.  Controlling column types, <br>
+1.  Controlling column types when reading data,
 
-2.  Reading data from multiple files, and <br>
+2.  Reading data from multiple files, and
 
-3.  Writing to a file. <br>
+3.  Writing to a file.
 
 We will again be using the `tidyverse` and `janitor` packages, so we first need make sure these packages are installed, and then load them for the current session using [`library()`](https://rdrr.io/r/base/library.html) commands:
 
