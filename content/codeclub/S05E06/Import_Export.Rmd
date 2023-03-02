@@ -1,0 +1,228 @@
+---
+title: "Import and exporting data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+Today we will continue with Data import covered last week, we will also cover exporting data.<br />
+We will cover; <br />
+1) Controlling column types, <br />
+2) Reading data from multiple files, and <br />
+3) writing to a file. <br />
+We will again be using the `tidyverse` and `janitor` packages, so we first need make sure these packages are installed, and then load them for the current session by doing `library()` commands:
+
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+## Controlling column types
+A comma separated value (CSV) file doesn’t contain any information about the type of each variable (i.e. whether it’s a logical, number, string, etc.), so `readr` will try to guess the type of variable. To find the type of a variable in  each column, readr pulls 1000 rows spaced evenly from the first row to the last, ignoring missing values.It then works through the following questions:<br />
+•	Does it contain only F, T, FALSE, or TRUE (ignoring case)? If so, it’s a logical. <br />
+•	Does it contain only numbers (e.g. 1, -4.5, 5e6, Inf)? If so, it’s a number.<br />
+•	Does it match the ISO8601 standard? If so, it’s a date or date-time. ISO 8601 is an international standard covering the worldwide exchange and communication of date and time-related data.<br />
+•	Otherwise, it must be a string.<br />
+
+You can see that behavior in action in this simple example:
+```{r}
+read_csv("
+  logical,numeric,date,string
+  TRUE,1,2021-01-15,abc
+  false,4.5,2021-02-15,def
+  T,Inf,2021-02-16,ghi"
+)
+```
+
+This heuristic approach works well with a clean dataset. If we don't have clean dataset, column detection fails because a column contains unexpected values. One of the most common causes for this is a missing value, recorded using something other than the NA that `stringr` expects.
+
+Let us take this example of csv file with a missing value represented with a dot.
+
+```{r}
+csv <- "
+  x
+  10
+  .
+  20
+  30"
+df <- read_csv(csv)
+```
+
+If we read it without any additional arguments, "x" becomes a character column:
+But what happens if you have thousands of rows with only a few missing values represented by .s speckled among them? Use argument "col_types" to tell `readr` that "x" column is numeric and see where it fails. "col_types" argument takes a named "list"
+
+```{r}
+df <- read_csv(csv, col_types = list(x = col_double()))
+```
+`read_csv()` reports that there was a problem, and tells us we can find out more with `problems()`:
+
+```{r}
+problems(df)
+```
+
+There was a problem in row 3, col 1 where readr expected a double but got a dot .
+
+We can now set na = ".", the automatic guessing succeeds, giving us the numeric column that we want:
+
+```{r}
+df <- read_csv(csv, na = ".")
+```
+
+It’s also possible to override the default column by switching from list() to cols():
+
+```{r}
+csv <- "
+x,y,z
+1,2,3"
+read_csv(csv)
+```
+
+csv is numeric.  We can switch from default numeric to character
+
+```{r}
+read_csv(csv, col_types = cols(.default = col_character()))
+```
+
+Another useful helper is `cols_only()` which will read in only the columns you specify:
+
+```{r}
+read_csv(
+  "x,y,z
+  1,2,3",
+  col_types = cols_only(x = col_character())
+)
+```
+
+## Column types ##
+`readr` provides a total of nine column types for you to use: <br />
+•	col_logical() and col_double() read logicals and real numbers. They’re relatively rarely needed (except as above), since readr will usually guess them for you.<br />
+•	col_integer() reads integers. We distinguish integers and doubles in this book because they’re functionally equivalent, but reading integers explicitly can occasionally be useful because they occupy half the memory of doubles.<br />
+•	col_character() reads strings. This is sometimes useful to specify explicitly when you have a column that is a numeric identifier, i.e. long series of digits that identifies some object, but it doesn’t make sense to (e.g.) divide it in half.<br />
+•	col_factor(), col_date(), and col_datetime() create factors, dates, and date-times respectively; you’ll learn more about those when we get to those data types in Chapter 18 and Chapter 19.<br />
+•	col_number() is a permissive numeric parser that will ignore non-numeric components, and is particularly useful for currencies. You’ll learn more about it in Chapter 15. <br />
+•	col_skip() skips a column so it’s not included in the result. <br />
+
+## Break out exercise 1:
+Use a dataset students used last week. <br />
+1) Convert all columns to factors. Hint use col_types and .default
+
+Solution 
+```{r}
+read_csv("students.csv", col_types = cols(.default = col_factor()))
+
+```
+
+## Reading data from multiple files
+read_csv() you can read these data in at once and stack them on top of each other in a single data frame. id parameter add a new column called file to the resulting data frame that identifies the file the data come from. This is especially helpful in circumstances where the files you’re reading in do not have an identifying column that can help you trace the observations back to their original sources.
+
+```{r}
+sales_files <- c("01-sales.csv", "02-sales.csv", "03-sales.csv")
+read_csv(sales_files, id = "file")
+```
+If you have many files you want to read in, it can get cumbersome to write out their names as a list. Instead, you can use the base `list.files`() function to find the files for you by matching a pattern in the file names
+
+```{r}
+sales_files <- list.files("~/", pattern = "sales\\.csv$", full.names = TRUE)
+sales_files
+```
+
+## Writing to a file
+`readr` also comes with two useful functions for writing data back to disk: write_csv() and write_tsv(). 
+The most important arguments are x (the data frame to save), and file (the location to save it). You can also specify how missing values are written with na, and if you want to append to an existing file.
+
+```{r}
+students <- read_csv("students.csv", col_types = cols(.default = col_character()))
+students
+```
+All columns are characters 
+
+Now let us change column meal_plan into factor
+
+```{r}
+students <- students |>
+    janitor::clean_names() |>
+    mutate(
+        meal_plan = factor(meal_plan),
+        age = parse_number(if_else(age == "five", "5", age))
+    )
+students
+```
+You can see now that column meal_plan is a factor, and column age is numeric
+
+Now let us write students file
+
+```{r}
+write_csv(students, "students.csv")
+```
+
+Now let us read students dataset
+```{r}
+students <- read_csv("students.csv")
+students
+```
+ You can see that column meal_plan is a character. Note that the type information is lost when you save to csv. `write_rds`() and `read_rds`() are uniform wrappers around the base functions, and can be used to solve the problem of lost of information.
+
+
+```{r}
+write_rds(students, "students.rds")
+read_rds("students.rds")
+```
+
+## Data entry
+Sometimes you’ll need to assemble a tibble “by hand” doing a little data entry in your R script. There are two useful functions to help you do this which differ in whether you layout the tibble by columns or by rows. `tibble`() works by column:
+
+```{r}
+tibble(
+  x = c(1, 2, 5), 
+  y = c("h", "m", "g"),
+  z = c(0.08, 0.83, 0.60)
+)
+```
+
+Note that every column in tibble must be same size, so you’ll get an error if they’re not:
+
+`tribble`(), short for transposed tibble, which lets you lay out your data row by row. tribble()is customized for data entry in code: column headings start with ~ and entries are separated by commas. This makes it possible to lay out small amounts of data in an easy to read form:
+
+
+```{r}
+tribble(
+  ~x, ~y, ~z,
+  "h", 1, 0.08,
+  "m", 2, 0.83,
+  "g", 5, 0.60,
+)
+
+```
+
+
+## Break out exercise 2:
+Read dataset 03-sales.csv and name it S3. <br />
+1) Convert all of S3 into factors. Hint use col_types and .default
+
+Solution 1
+```{r}
+S3 <- read_csv("03-sales.csv", col_types = cols(.default = col_factor()))
+S3
+```
+
+2) write S3 using write_csv and name it S4, and read S4. Are the columns of S4 still factors? Explain why.
+
+Solution 2
+```{r}
+write_csv(S3, "S4.csv")
+read_csv("S4.csv")
+```
+S4 columns changed from factors to characters and numerics because information is lost while using writing file using 'readr <br />
+
+3) Bonus question. write S3 and and name it S5, and read S5. Are columns of S5 still factors? Explain why.<br />
+
+Solution 3
+```{r}
+write_rds(S3, "S5.csv")
+read_rds("S5.csv")
+```
+
+S5 columns are still factors because `write_rds` preserve column information 

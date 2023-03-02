@@ -1,0 +1,196 @@
+---
+output: hugodown::md_document
+title: "S05E05: R for Data Science (2e) - Ch. 8 - Data Import, Part II"
+subtitle: "Today, we'll continue with the R4DS on data import (and export)"
+summary: "Today, we'll continue with the R4DS on data import (and export)"
+authors: [admin]
+tags: [codeclub, r4ds]
+date: "`r Sys.Date()`"
+lastmod: "`r Sys.Date()`"
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = TRUE, cache = FALSE)
+knitr::opts_knit$set(root.dir = here::here("content/codeclub/S05E06"))
+```
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Introduction
+
+Today we will continue with the
+[R for Data Science chapter 8 on importing data](https://r4ds.hadley.nz/).
+
+We will cover a few more tricks to import data with _readr_,
+and will also cover _exporting_ data.
+We will talk about:
+
+1) Controlling column types, <br>
+
+2) Reading data from multiple files, and <br>
+
+3) Writing to a file. <br>
+
+We will again be using the `tidyverse` and `janitor` packages,
+so we first need make sure these packages are installed,
+and then load them for the current session using `library()` commands:
+
+```{r}
+# If you don't have these installed:
+#install.packages("tidyverse")
+#install.packages("janitor")
+
+# To load the packages
+library(tidyverse)
+library(janitor)
+```
+
+--------------------------------------------------------------------------------
+
+<br>
+
+## Book Chapter 8.3 and 8.4
+
+Let's switch to [the book](https://r4ds.hadley.nz/data-import.html#sec-col-types)
+for this part.
+
+--------------------------------------------------------------------------------
+
+<br>
+
+## Breakout Rooms I
+
+We'll use the `03-sales.csv` file from the examples in the book.
+You can download it as follows to your current R working directory:
+
+```{r, eval=FALSE}
+url_csv <- "https://github.com/biodash/biodash.github.io/raw/master/content/codeclub/S05E06/03-sales.csv"
+download.file(url = url_csv, destfile = "03-sales.csv")
+```
+
+<div class="puzzle"><div>
+
+### Exercise 1
+
+Read the `03-sales.csv` file, but with the following twist:
+read _all_ columns as _factors_.
+
+<details><summary><b>Hints</b>(click here)</summary>
+<br>
+
+Use the `col_types` argument and within that,
+call the `cols` function  and specify a `.default`.
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+read_csv("03-sales.csv",
+         col_types = cols(.default = col_factor()))
+```
+
+</details>
+</div></div>
+
+--------------------------------------------------------------------------------
+
+<br>
+
+## Book Chapter 8.5 and 8.6
+
+Let's switch back to [the book](https://r4ds.hadley.nz/data-import.html#sec-writing-to-a-file)
+for this part.
+
+--------------------------------------------------------------------------------
+
+<br>
+
+## Breakout Rooms I
+
+<div class="puzzle"><div>
+
+### Exercise 2
+
+Write the dataframe that you read in Exercise 1 to a CSV file.
+Recall that all columns in the dataframe are stored as _factors_.
+
+Then, read the CSV file you just created back in,
+without specifying any additional arguments to `read_csv()`.
+
+Check whether the columns are still factors, and explain why.
+
+<details><summary><b>Hints</b>(click here)</summary>
+<br>
+
+- Assign the initial `read_csv()` output to a dataframe,
+  then use `write_csv()` to write it to a CSV file.
+  
+- Recall that a CSV file is a plain text file.
+  Can a plain text file store "metadata" about column types?
+
+</details>
+
+<br>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+sales <- read_csv("03-sales.csv",
+                  col_types = cols(.default = col_factor()))
+
+write_csv(sales, "sales.csv")
+
+read_csv("sales.csv")
+```
+
+When we read the file back in, the columns are no longer factors but
+characters and numerics,
+because this sort of information is lost when writing to a plain text file.
+
+</details>
+</div></div>
+
+<br>
+
+<div class="puzzle"><div>
+
+### Exercise 3
+
+Repeat what you did in Exercise 2, but now write to and read from an `RDS`
+file.
+
+Again, check whether the columns are still factors, and explain why.
+
+<details><summary><b>Hints</b>(click here)</summary>
+<br>
+
+Use the `write_rds()` and `read_rds()` functions.
+
+</details>
+<br>
+
+<details><summary><b>Solution</b>(click here)</summary>
+<br>
+
+```{r}
+sales <- read_csv("03-sales.csv",
+                  col_types = cols(.default = col_factor()))
+
+write_rds(sales, "sales.rds")
+
+read_rds("sales.rds")
+```
+
+The columns are still factors because RDS files preserve all information about
+R objects, including column type information.
+
+</details>
+</div></div>
