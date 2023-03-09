@@ -5,15 +5,15 @@ subtitle: "Today we will go over tools for organizing code: scripts and projects
 summary: "Today we will go over tools for organizing code: scripts and projects, and ways to write code to facilitate getting help."
 authors: [jessica-cooperstone]
 tags: [codeclub, r4ds]
-date: "2023-03-08"
-lastmod: "2023-03-08"
+date: "2023-03-09"
+lastmod: "2023-03-09"
 toc: true
 
 image: 
   caption: "Artwork by [@allison_horst](https://twitter.com/allison_horst)"
   focal_point: ""
   preview_only: false
-rmd_hash: 6867de9d206b0695
+rmd_hash: 1d7271a7e410cc39
 
 ---
 
@@ -80,10 +80,9 @@ Talking about conventions for saving and naming might sound picky, but doing thi
 
 <p align="center">
 <img src=img/setwd_v_rproj.png width="60%" alt="A cartoon of a cracked glass cube looking frustrated with casts on its arm and leg, with bandaids on it, containing “setwd”, looks on at a metal riveted cube labeled “R Proj” holding a skateboard looking sympathetic, and a smaller cube with a helmet on labeled “here” doing a trick on a skateboard.">
-<figcaption>
-Artwork by [@allison_horst](https://twitter.com/allison_horst)
-</figcaption>
 </p>
+
+Artwork by [@allison_horst](https://twitter.com/allison_horst)
 
 ### A reminder about directories
 
@@ -109,10 +108,9 @@ To do this, you should create a reprex: a **repr**oducible **ex**ample.
 
 <p align="center">
 <img src=img/reprex.png width="80%" alt="A side-by-side comparison of a monster providing problematic code to tech support when it is on a bunch of crumpled, disorganized papers, with both monsters looking sad and very stressed (left), compared to victorious looking monsters celebrating when code is provided in a nice box with a bow labeled “reprex”. Title text reads “reprex: make reproducible examples. Help them help everyone!” Learn more about reprex.">
-<figcaption>
-Artwork by [@allison_horst](https://twitter.com/allison_horst)
-</figcaption>
 </p>
+
+Artwork by [@allison_horst](https://twitter.com/allison_horst)
 
 Within your reprex, you should:
 
