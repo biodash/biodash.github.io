@@ -1,8 +1,8 @@
 ---
 output: hugodown::md_document
 title: "S05E07: R4DS (2e) - Ch. 9 - Workflow: scripts and projects"
-subtitle: "Today we will go over two tools for organizing code: scripts and projects."
-summary: "Today we will go over two tools for organizing code: scripts and projects."
+subtitle: "Today we will go over tools for organizing code: scripts and projects, and ways to write code to facilitate getting help."
+summary: "Today we will go over tools for organizing code: scripts and projects, and ways to write code to facilitate getting help."
 authors: [jessica-cooperstone]
 tags: [codeclub, r4ds]
 date: "2023-03-08"
@@ -13,7 +13,7 @@ image:
   caption: "Artwork by [@allison_horst](https://twitter.com/allison_horst)"
   focal_point: ""
   preview_only: false
-rmd_hash: 65347eb28269a621
+rmd_hash: 6867de9d206b0695
 
 ---
 
@@ -21,10 +21,11 @@ rmd_hash: 65347eb28269a621
 
 ## Introduction
 
-Today we are going to talk about two tools that will help you organize and execute your code:
+Today we are going to talk about tools that will help you organize and execute your code, and get help when you need it:
 
 -   scripts: a `.R` file where you can write code, execute code, and save code for future use.
 -   projects: a .`Rproj` file that allows you to keep all the files associated with an a analysis together.
+-   reprex: a **repr**oducible **ex**ample that allows someone else to help you troubleshoot your problem.
 
 <br>
 
