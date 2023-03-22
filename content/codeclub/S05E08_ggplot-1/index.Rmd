@@ -1,0 +1,385 @@
+---
+title: "Chapter 10 - Visualizing Data, 1"
+subtitle: "Introduction to Data Visualization with **ggplot2**"
+summary: "In this session of Code Club, we'll look at how to visualize data in R using **ggplot2**."  
+authors: [michael-broe]
+date: "2023-03-23"
+output: hugodown::md_document
+toc: true
+image: 
+  caption: "Artwork by [@allison_horst](https://twitter.com/allison_horst)"
+  focal_point: ""
+  preview_only: false
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<br> <br> <br>
+
+------------------------------------------------------------------------
+
+## New To Code Club?
+
+-   First, check out the [Code Club Computer Setup](/codeclub-setup/)
+    instructions, which also has some pointers that might be helpful if
+    you're new to R or RStudio.
+
+-   Please open RStudio before Code Club to test things out -- if you
+    run into issues, join early and we'll troubleshoot.
+
+------------------------------------------------------------------------
+
+## Session Goals
+
+-   Learn the philosophy of **coding** a graphic.
+-   Learn the basic **template** of a **ggplot2** graphic, so you can
+    reuse it for multiple chart types.
+-   Learn how you can quickly add visual information to a graphic using
+    **aesthetics** and **layers**.
+
+------------------------------------------------------------------------
+
+## Intro: The ggplot2 philosophy
+
+We have already seen that in R, instead of manually manipulating data
+frames as you might do when editing Excel sheets, we **code** the
+operations we want to perform using **dplyr** verbs like `select()`,
+`mutate()`, `summarize()`, and so on.
+
+In a similar way when performing visualization, instead of clicking on a
+chart type in Excel, we **code the chart** in R.
+
+And just as **dplyr** gives us efficient ways to manipulate data frames,
+**ggplot2** (which is also part of the tidyverse) gives us efficient
+ways to manipulate charts/plots/graphics (we use these terms
+interchangeably).
+
+The **gg** in **ggplot2** stands for *grammar of graphics*, a systematic
+approach for designing statistical plots developed by Leland Wilkinson.
+The idea behind this was to think about 'pulling apart' various plots
+into their shared component pieces, then provide code that could put
+them together again. We can then create new plots like we create new
+sentences (once we understand this grammar).
+
+There are two parts to this. First, the 'nouns and verbs' we need to
+work with plots are very different than those we need to work with data
+frames. **ggplot2** is like a mini-language of its own, with its own
+verbs and syntax.
+
+Second, this notion of pulling apart a graphic leads to the idea of
+*layers*. You can build up a plot of any complexity by *overlaying*
+different views of the same data.
+
+There's a learning curve here for sure, but there are a couple of things
+that help us.
+
+First, every graphic shares a *common template*. This is like thinking
+about the sentence "The cat sat on the mat" grammatically as the
+template `NP V PP` (`N`oun `P`hrase "The cat", `V`erb "sat",
+`P`repositional `P`hrase "on the mat"). Once you understand this
+structure you can "say" a *lot* of different things.
+
+(And I mean a *lot*. The [ggplot cheat
+sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) lists over 40 plot-types, but because this is a
+language, users can create their own
+[extensions](https://exts.ggplot2.tidyverse.org/gallery/) that you can
+also utilize, adding over 80 more.)
+
+Second, the way we put layers together is identical to the way we use
+pipes. You can read `%>%` as "and then": `select()` *and then* `mutate()`
+*and then* `summarize()`. In graphics, we can say "show this layer, and
+then *overlay* this layer, and then *overlay* this layer", etc., using a
+very similar syntax.
+
+<br>
+
+------------------------------------------------------------------------
+
+## Examples
+
+So how does this work in practice? We'll work through visualizing the
+**iris** dataset that you've seen before. This is an extremely famous
+[dataset](https://en.m.wikipedia.org/wiki/Iris_flower_data_set) that was
+first analyzed by R. A. Fisher in 1936: *The use of multiple
+measurements in taxonomic problems*. He was attempting to use petal
+and sepal measurements to discriminate one species from another.
+
+**ggplot2** is part of the tidyverse package so we need to load that
+first:
+
+```{r, warning = FALSE}
+# this assumes you've already installed tidyverse
+library(tidyverse)
+```
+
+And recall that the **iris** dataset (3 species, 50 observations per
+species) is automatically available to us:
+
+```{r}
+head(iris)
+```
+
+What is the correlation between petal length and width in these species?
+Are longer petals also wider? We can visualize this with a scatterplot.
+But first let's look a the ggplot template. (Note the package is **ggplot2**, the command is `ggplot`.)
+
+    ggplot(data = <DATA>) + 
+      <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+
+These are the obligatory parts of any plot. The first argument to
+`ggplot()` is the data frame:
+
+```{r}
+ggplot(data = iris)
+```
+
+This is not very interesting! but it's notable that it is *something*.
+`ggplot()` has created a base coordinate system (a base layer) that we
+can add visual layers to. The *add a layer* operator is "**+**", which
+is the ggplot equivalent of the pipe symbol, and **it must occur at the
+end of the line**.
+
+The next argument specifies the kind plot we want: scatterplot, bar
+chart, fitted line, boxplot, pie chart, etc. **ggplot2** refers to these as
+**geoms**: the geometrical object that a plot uses to represent data.
+You can see an overview of many of these geoms in the [cheat
+sheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf).
+The geom for a scatterplot is `geom_point()`.
+
+But we also require a `mapping` argument, which maps the *variables* in
+the dataset we want to focus on to their *visual representation* in the
+plot. 
+
+And finally we need to specify an **aesthetic** for the geometric
+objects in the plot, which will control things like shape, color,
+transparency, etc. Perhaps surprisingly, for a scatterplot, the x
+and y coordinates are aesthetics, since these control,  not the shape or
+color, but the relative position of the points in the coordinate system.
+
+Here is our complete plot:
+
+```{r}
+ggplot(data = iris) +
+  geom_point(mapping = aes(x = Petal.Length, y = Petal.Width))
+```
+
+There is clearly a positive correlation between length and width. And we
+can make this even more apparent by visually fitting a line to the data, by
+*overlaying* another geom in the same plot.
+
+```{r}
+ggplot(data = iris) +
+  geom_point(mapping = aes(x = Petal.Length, y = Petal.Width)) +
+  geom_smooth(mapping = aes(x = Petal.Length, y = Petal.Width))
+```
+
+There is clearly some code redundancy here, and we really don't want the x, y mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:
+
+```{r}
+ggplot(data = iris, (mapping = aes(x = Petal.Length, y = Petal.Width))) +
+  geom_point() +
+  geom_smooth()
+```
+So we have the possibility of *local* layer specifications, and *global* specifications. Global specifications are *inherited* by all the local layers.
+
+### The power of aesthetics
+
+The aim of Fisher's paper was to try to discriminate different species based on their morphological measurements. It looks from this plot that there are two distinct clusters. Do these clusters correspond to different species? There are two clusters, but three species. How can we explore this further?
+
+Our current plot uses two numeric variables: `Petal.Length` and `Petal.width`. We can add a third categorical variable, like `Species`, to a two dimensional scatterplot by mapping it to a different visual aesthetic. We've mapped length and width to x,y coordinates. Now we'll simultaneously map species to `color` by expanding our list of aesthetics:
+
+```{r}
+ggplot(data = iris) +
+  (mapping = aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+  geom_point()
+```
+
+The R help for a specific geoms will list, among other things, all the aesthetics that geom supports.
+
+## Breakout Rooms
+
+In the exercises we'll be looking a little more at the **iris** data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in **Excercise 7**.
+
+If you haven't installed the NHANES dataset do:
+```{r}
+install.packages("NHANES", repos = "http://cran.us.r-project.org")
+```
+Once installed, load it with:
+```{r}
+library(NHANES)
+```
+
+A prebuilt joined data set has been loaded on github.
+
+```{r}
+# create a data directory for the new file if you haven't done so yet:
+dir.create('data/birds', recursive = TRUE)
+
+# set the url
+joined_data_url <- 'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/04_ggplot2/joined_data.tsv'
+
+# set the path for the downloaded file
+joined_file <- 'data/birds/joined_data.tsv'
+
+#download to file
+download.file(url = joined_data_url, destfile = joined_file)
+
+# read file
+joined_data <- read_tsv(joined_file)
+
+```
+
+
+
+## Exercise 1
+
+:::puzzle
+
+Revisit the **iris** data set, and plot sepal width (y) against sepal length (x) colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?
+
+<details> <summary> Hints (click here) </summary>
+
+<br>Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one.
+<br>
+<br>
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+<br>
+
+```{r}
+ggplot(data = iris) +
+  (mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point()
+```
+
+Note this solution shows yet another way to position global mapping information: as its own layer. This can help readability and avoid too many nested parentheses.
+</details>
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 2
+
+:::puzzle
+
+Use the NHANES data set to plot body mass index (y) against height (x). Color by gender. Which gender has the highest BMI?
+
+<details> <summary> Hints (click here) </summary>
+<br><code>glimpse()</code> the dataset to identify the variable names.
+<br> 
+<br>
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+```{r}
+ggplot(data = NHANES) +
+  geom_point(mapping = (aes(x = Height, y = BMI, color = Gender)))
+```
+</details>
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 3
+
+:::puzzle
+
+Use the same plot but now color by physical activity. How active are those people with the highest BMI?
+
+<details> <summary> Hints (click here) </summary>
+<br>Again, <code>glimpse()</code> the dataset to identify the variable names.
+<br>
+<br>
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+ggplot(data = NHANES) +
+  geom_point(mapping = (aes(x = Height, y = BMI, color = PhysActive)))
+```
+</details>
+:::
+
+------------------------------------------------------------------------
+
+## Exercise 4
+
+:::puzzle
+
+Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the `joined_data` set, plot adult body mass (y) against longevity (x). Identify extreme data points at the high end of body mass. How can we identify what these points represent?
+
+<details> <summary> Hints (click here) </summary>
+<br>
+Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here?
+<br>
+<br>
+</details>
+
+<details> <summary> Solution (click here) </summary>
+
+<br>
+```{r}
+ggplot(data = joined_data) +
+  geom_point(mapping = (aes(x = longevity_y, y = adult_body_mass_g)))
+```
+
+```{r}
+joined_data %>% 
+  filter(adult_body_mass_g > 10000)
+```
+```{r}
+joined_data %>% 
+  filter(adult_body_mass_g > 10000) %>% 
+  select(species) %>% 
+  distinct()
+```
+```{r}
+joined_data %>% 
+  filter(adult_body_mass_g > 10000) %>% 
+  select(adult_body_mass_g) %>% 
+  distinct()
+```
+
+</details>
+:::
+
+## Bonus, a new geom!
+
+:::puzzle
+
+Revisit the **iris** data and generate a density histogram for sepal length, categorized by species.
+
+<details> <summary> Hints (click here) </summary>
+<br>Use <code>geom_density()</code>. Check the help to see what aesthetics it supports. Note that while you 'color' a point, you 'fill' an area.
+<br>
+<br>
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+```{r}
+ggplot(data = iris) +
+  (mapping = (aes(x = Sepal.Length, fill = Species))) +
+  geom_density(alpha = 0.5)
+```
+Note, what does the **alpha** aesthetic control?
+<br>
+
+</details>
+:::
+------------------------------------------------------------------------
+
+
+
+
+<br> <br> <br> <br>
