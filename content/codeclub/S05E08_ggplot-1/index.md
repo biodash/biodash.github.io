@@ -2,7 +2,7 @@
 title: "Chapter 10 - Visualizing Data, 1"
 subtitle: "Introduction to Data Visualization with **ggplot2**"
 summary: "In this session of Code Club, we'll look at how to visualize data in R using **ggplot2**."  
-authors: [jessica-cooperstone]
+authors: [michael-broe, jessica-cooperstone]
 date: "2023-03-23"
 output: hugodown::md_document
 toc: true
@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: f1a734c7dd51119e
+rmd_hash: 4e502fd27b0016e4
 
 ---
 
@@ -73,16 +73,14 @@ So how does this work in practice? We'll work through visualizing the **iris** d
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># this assumes you've already installed tidyverse</span></span>
 <span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>dplyr    </span> 1.1.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>readr    </span> 2.1.4</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>forcats  </span> 1.0.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>stringr  </span> 1.5.0</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>ggplot2  </span> 3.4.1     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tibble   </span> 3.1.8</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>lubridate</span> 1.9.2     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tidyr    </span> 1.3.0</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>purrr    </span> 1.0.1     </span></span>
+<span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching packages</span> ─────────────────────────────────────── tidyverse 1.3.2 ──</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>ggplot2</span> 3.4.0      <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>purrr  </span> 1.0.1 </span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tibble </span> 3.1.8      <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>dplyr  </span> 1.0.10</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tidyr  </span> 1.2.1      <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>stringr</span> 1.5.0 </span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>readr  </span> 2.1.3      <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>forcats</span> 0.5.2 </span></span>
 <span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
 <span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>filter()</span> masks <span style='color: #0000BB;'>stats</span>::filter()</span></span>
-<span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>lag()</span>    masks <span style='color: #0000BB;'>stats</span>::lag()</span></span>
-<span><span class='c'>#&gt; <span style='color: #00BBBB;'>ℹ</span> Use the <a href='http://conflicted.r-lib.org/'>conflicted package</a> to force all conflicts to become errors</span></span></code></pre>
+<span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>lag()</span>    masks <span style='color: #0000BB;'>stats</span>::lag()</span></span></code></pre>
 
 </div>
 
@@ -151,7 +149,7 @@ There is clearly some code redundancy here, and we really don't want the x, y ma
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span>, <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span>, mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; `geom_smooth()` using method = 'loess' and formula = 'y ~ x'</span></span></code></pre>
@@ -185,9 +183,9 @@ The R help for a specific geoms will list, among other things, all the aesthetic
 
 ## Breakout Rooms
 
-In the exercises we'll be looking a little more at the **iris** data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in **Excercise 7**.
+In the exercises we'll be looking a little more at the **iris** data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built [some time ago](https://biodash.github.io/codeclub/03_joining-datasets/).
 
-If you haven't installed the NHANES dataset do:
+Please install the NHANES dataset:
 
 <div class="highlight">
 
@@ -203,7 +201,7 @@ Once installed, load it with:
 
 </div>
 
-A prebuilt joined data set has been loaded on github.
+A prebuilt joined data set on birds can be downloaded using the code below.
 
 <div class="highlight">
 
