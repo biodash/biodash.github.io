@@ -2,7 +2,7 @@
 title: "Chapter 10 - Visualizing Data, 1"
 subtitle: "Introduction to Data Visualization with **ggplot2**"
 summary: "In this session of Code Club, we'll look at how to visualize data in R using **ggplot2**."  
-authors: [michael-broe]
+authors: [jessica-cooperstone]
 date: "2023-03-23"
 output: hugodown::md_document
 toc: true
@@ -13,7 +13,7 @@ image:
 editor_options: 
   markdown: 
     wrap: 72
-rmd_hash: e5c218db05c73947
+rmd_hash: f1a734c7dd51119e
 
 ---
 
@@ -179,6 +179,10 @@ Our current plot uses two numeric variables: `Petal.Length` and `Petal.width`. W
 
 The R help for a specific geoms will list, among other things, all the aesthetics that geom supports.
 
+<br>
+
+------------------------------------------------------------------------
+
 ## Breakout Rooms
 
 In the exercises we'll be looking a little more at the **iris** data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in **Excercise 7**.
@@ -187,9 +191,7 @@ If you haven't installed the NHANES dataset do:
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"NHANES"</span>, repos <span class='o'>=</span> <span class='s'>"http://cran.us.r-project.org"</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; Installing package into '/home/jelmer/R/x86_64-pc-linux-gnu-library/4.2'</span></span>
-<span><span class='c'>#&gt; (as 'lib' is unspecified)</span></span></code></pre>
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"NHANES"</span>, repos <span class='o'>=</span> <span class='s'>"http://cran.us.r-project.org"</span><span class='o'>)</span></span></code></pre>
 
 </div>
 
@@ -206,20 +208,25 @@ A prebuilt joined data set has been loaded on github.
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># create a data directory for the new file if you haven't done so yet:</span></span>
-<span><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>'data/birds'</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"data/birds"</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='c'># set the url</span></span>
-<span><span class='nv'>joined_data_url</span> <span class='o'>&lt;-</span> <span class='s'>'https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/04_ggplot2/joined_data.tsv'</span></span>
+<span><span class='nv'>joined_data_url</span> <span class='o'>&lt;-</span> <span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E08_ggplot-1/joined_data.tsv"</span></span>
 <span></span>
 <span><span class='c'># set the path for the downloaded file</span></span>
-<span><span class='nv'>joined_file</span> <span class='o'>&lt;-</span> <span class='s'>'data/birds/joined_data.tsv'</span></span>
+<span><span class='nv'>joined_file</span> <span class='o'>&lt;-</span> <span class='s'>"data/birds/joined_data.tsv"</span></span>
 <span></span>
 <span><span class='c'>#download to file</span></span>
 <span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>joined_data_url</span>, destfile <span class='o'>=</span> <span class='nv'>joined_file</span><span class='o'>)</span></span>
 <span></span>
 <span><span class='c'># read file</span></span>
-<span><span class='nv'>joined_data</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_tsv</a></span><span class='o'>(</span><span class='nv'>joined_file</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; <span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>311441</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>9</span></span></span>
+<span><span class='nv'>joined_data</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_tsv</a></span><span class='o'>(</span><span class='nv'>joined_file</span><span class='o'>)</span></span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>#&gt; <span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>311441</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>9</span></span></span>
 <span><span class='c'>#&gt; <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span></span>
 <span><span class='c'>#&gt; <span style='font-weight: bold;'>Delimiter:</span> "\t"</span></span>
 <span><span class='c'>#&gt; <span style='color: #BB0000;'>chr</span>  (4): species, locality, stateProvince, species_en</span></span>
@@ -231,7 +238,7 @@ A prebuilt joined data set has been loaded on github.
 
 </div>
 
-## Exercise 1
+### Exercise 1
 
 <div class="puzzle">
 
@@ -256,7 +263,7 @@ Solution (click here)
 <span>  <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Sepal.Length</span>, y <span class='o'>=</span> <span class='nv'>Sepal.Width</span>, color <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -267,7 +274,7 @@ Note this solution shows yet another way to position global mapping information:
 
 ------------------------------------------------------------------------
 
-## Exercise 2
+### Exercise 2
 
 <div class="puzzle">
 
@@ -290,7 +297,7 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>NHANES</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Height</span>, y <span class='o'>=</span> <span class='nv'>BMI</span>, color <span class='o'>=</span> <span class='nv'>Gender</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; Warning: Removed 366 rows containing missing values (`geom_point()`).</span></span></code></pre>
-<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -300,7 +307,7 @@ Solution (click here)
 
 ------------------------------------------------------------------------
 
-## Exercise 3
+### Exercise 3
 
 <div class="puzzle">
 
@@ -324,7 +331,7 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>NHANES</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Height</span>, y <span class='o'>=</span> <span class='nv'>BMI</span>, color <span class='o'>=</span> <span class='nv'>PhysActive</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; Warning: Removed 366 rows containing missing values (`geom_point()`).</span></span></code></pre>
-<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -334,7 +341,7 @@ Solution (click here)
 
 ------------------------------------------------------------------------
 
-## Exercise 4
+### Exercise 4
 
 <div class="puzzle">
 
@@ -357,7 +364,7 @@ Solution (click here)
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>joined_data</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>longevity_y</span>, y <span class='o'>=</span> <span class='nv'>adult_body_mass_g</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; Warning: Removed 24089 rows containing missing values (`geom_point()`).</span></span></code></pre>
-<img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -416,7 +423,7 @@ Solution (click here)
 
 </div>
 
-## Bonus, a new geom!
+### Bonus exercise: a new geom!
 
 <div class="puzzle">
 
@@ -440,7 +447,7 @@ Solution (click here)
 <span>  <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Sepal.Length</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
