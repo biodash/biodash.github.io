@@ -1,0 +1,1552 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.0.0-beta.3 for Hugo" />
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Jelmer Poelstra" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="In this session of Code Club, we&#39;ll look at how to visualize data in R using **ggplot2**." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://biodash.github.io/codeclub/s05e08_ggplot-1/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#3f51b5" />
+  
+
+  
+  
+    
+    <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+      
+    
+
+    
+    
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Mono&family=Roboto:wght@400;700&display=swap" media="print" onload="this.media='all'">
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.80f9a276c6100914c616a06e45ba8d09.css" />
+
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9F9CQ7P0DX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'G-9F9CQ7P0DX', {});
+  gtag('set', {'cookie_flags': 'SameSite=None;Secure'});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="/index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_32x32_fill_lanczos_center_2.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hucc2cf774636a7e386557c89fa75ff618_191491_180x180_fill_lanczos_center_2.png" />
+
+  <link rel="canonical" href="https://biodash.github.io/codeclub/s05e08_ggplot-1/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="BioDASH" />
+  <meta property="og:url" content="https://biodash.github.io/codeclub/s05e08_ggplot-1/" />
+  <meta property="og:title" content="Chapter 10 - Visualizing Data, 1 | BioDASH" />
+  <meta property="og:description" content="In this session of Code Club, we&#39;ll look at how to visualize data in R using **ggplot2**." /><meta property="og:image" content="https://biodash.github.io/codeclub/s05e08_ggplot-1/featured.png" />
+    <meta property="twitter:image" content="https://biodash.github.io/codeclub/s05e08_ggplot-1/featured.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2023-03-23T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2023-03-23T10:00:46-04:00">
+  
+
+  
+
+
+
+  
+
+  
+
+  <link rel='stylesheet' href='/css/highlight-light.css' title='hl-light'>
+<link rel='stylesheet' href='/css/highlight-dark.css' title='hl-dark' disabled>
+
+
+
+  <title>Chapter 10 - Visualizing Data, 1 | BioDASH</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="e9bf67e60b97ae26481cc4c4a7bbdc8a" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.min.7a224883d792570fd34d30c7134eace3.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/"><img src="/media/logo_hu6407506e646a281542ecb299640680ce_37988_0x70_resize_lanczos_2.png" alt="BioDASH"></a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Code Club</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/codeclub-schedule/"><span>- <b>Schedule</b></span></a>
+            
+              <a class="dropdown-item" href="/codeclub-schedule/#previous-semesters"><span>- Past Sessions</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-setup/"><span>- Computer Setup</span></a>
+            
+              <a class="dropdown-item" href="/"><span>------------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-suggest/"><span>- Suggest a Topic</span></a>
+            
+              <a class="dropdown-item" href="/"><span>-----------------------</span></a>
+            
+              <a class="dropdown-item" href="/codeclub-about/"><span>- <b>About Code Club & Join Us!</b></span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"><span>Tutorials & Resources</span><span class="caret"></span>
+          </a>
+          <div class="dropdown-menu">
+            
+              <a class="dropdown-item" href="/events/2023-02_aws/"><span>AWS Workshop (Feb '23)</span></a>
+            
+              <a class="dropdown-item" href="/"><span>---------------------</span></a>
+            
+              <a class="dropdown-item" href="/tutorials/r-resources-tips/"><span>- R Resources and Tips</span></a>
+            
+              <a class="dropdown-item" href="/"><span>--------------------</span></a>
+            
+              <a class="dropdown-item" href="https://mcic-osu.github.io/2020-12-microbiomics-workshop/"><span>- Metabarcoding workshop (Fall '20)</span></a>
+            
+              <a class="dropdown-item" href="/tutorials/2021-01_rnaseq/"><span>- RNA-seq intro meetings (Spring '21)</span></a>
+            
+              <a class="dropdown-item" href="https://mcic-osu.github.io/pracs-sp21/"><span>- Computing Course (Spring '21)</span></a>
+            
+              <a class="dropdown-item" href="https://mcic-osu.github.io/cl-workshop-22/"><span>- Command-line, shell scripting and OSC Workshop (Summer '22)</span></a>
+            
+          </div>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/support/"><span>Bioinformatics Support</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="https://github.com/biodash/biodash.github.io" target="_blank" rel="noopener"><i class='fab fa-github'></i><span></span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/index.xml" target="_blank" rel="noopener"><i class='fas fa-rss'></i><span></span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+        
+      
+        
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    
+<div class="container-fluid docs">
+    <div class="row flex-xl-nowrap">
+        <div class="d-none d-xl-block col-xl-2 docs-toc">
+            <ul class="nav toc-top">
+                <li><a href="#" id="back_to_top" class="docs-toc-title">Contents</a></li>
+            </ul>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#new-to-code-club">New To Code Club?</a></li>
+    <li><a href="#session-goals">Session Goals</a></li>
+    <li><a href="#intro-the-ggplot2-philosophy">Intro: The ggplot2 philosophy</a></li>
+    <li><a href="#examples">Examples</a>
+      <ul>
+        <li><a href="#the-power-of-aesthetics">The power of aesthetics</a></li>
+      </ul>
+    </li>
+    <li><a href="#breakout-rooms">Breakout Rooms</a>
+      <ul>
+        <li><a href="#exercise-1">Exercise 1</a></li>
+        <li><a href="#exercise-2">Exercise 2</a></li>
+        <li><a href="#exercise-3">Exercise 3</a></li>
+        <li><a href="#exercise-4">Exercise 4</a></li>
+        <li><a href="#bonus-exercise-a-new-geom">Bonus exercise: a new geom!</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+        <main class="col-12 col-md-0 col-xl-10 py-md-3 pl-md-5 docs-content" role="main">
+            
+
+            <article class="article">
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+
+<div class="article-container pt-3">
+  <h1>Chapter 10 - Visualizing Data, 1</h1>
+
+  
+  <p class="page-subtitle">Introduction to Data Visualization with <strong>ggplot2</strong></p>
+  
+
+  
+
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  <span >
+      <a href="/authors/jessica-cooperstone/">Jessica Cooperstone</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+    Mar 23, 2023
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 542px;">
+  <div style="position: relative">
+    <img src="/codeclub/s05e08_ggplot-1/featured_hu2f0387e934c2998c442d76c721ee0fab_1696061_720x0_resize_lanczos_2.png" alt="" class="featured-image">
+    <span class="article-header-caption">Artwork by <a href="https://twitter.com/allison_horst">@allison_horst</a></span>
+  </div>
+</div>
+
+
+
+                <div class="article-container">
+                    <div class="article-style">
+                        <p><br> <br> <br></p>
+<hr>
+<h2 id="new-to-code-club">New To Code Club?</h2>
+<ul>
+<li>
+<p>First, check out the <a href="/codeclub-setup/">Code Club Computer Setup</a> instructions, which also has some pointers that might be helpful if you&rsquo;re new to R or RStudio.</p>
+</li>
+<li>
+<p>Please open RStudio before Code Club to test things out &ndash; if you run into issues, join early and we&rsquo;ll troubleshoot.</p>
+</li>
+</ul>
+<hr>
+<h2 id="session-goals">Session Goals</h2>
+<ul>
+<li>Learn the philosophy of <strong>coding</strong> a graphic.</li>
+<li>Learn the basic <strong>template</strong> of a <strong>ggplot2</strong> graphic, so you can reuse it for multiple chart types.</li>
+<li>Learn how you can quickly add visual information to a graphic using <strong>aesthetics</strong> and <strong>layers</strong>.</li>
+</ul>
+<hr>
+<h2 id="intro-the-ggplot2-philosophy">Intro: The ggplot2 philosophy</h2>
+<p>We have already seen that in R, instead of manually manipulating data frames as you might do when editing Excel sheets, we <strong>code</strong> the operations we want to perform using <strong>dplyr</strong> verbs like <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a>, <a href="https://dplyr.tidyverse.org/reference/mutate.html" target="_blank" rel="noopener"><code>mutate()</code></a>, <a href="https://dplyr.tidyverse.org/reference/summarise.html" target="_blank" rel="noopener"><code>summarize()</code></a>, and so on.</p>
+<p>In a similar way when performing visualization, instead of clicking on a chart type in Excel, we <strong>code the chart</strong> in R.</p>
+<p>And just as <strong>dplyr</strong> gives us efficient ways to manipulate data frames, <strong>ggplot2</strong> (which is also part of the tidyverse) gives us efficient ways to manipulate charts/plots/graphics (we use these terms interchangeably).</p>
+<p>The <strong>gg</strong> in <strong>ggplot2</strong> stands for <em>grammar of graphics</em>, a systematic approach for designing statistical plots developed by Leland Wilkinson. The idea behind this was to think about &lsquo;pulling apart&rsquo; various plots into their shared component pieces, then provide code that could put them together again. We can then create new plots like we create new sentences (once we understand this grammar).</p>
+<p>There are two parts to this. First, the &lsquo;nouns and verbs&rsquo; we need to work with plots are very different than those we need to work with data frames. <strong>ggplot2</strong> is like a mini-language of its own, with its own verbs and syntax.</p>
+<p>Second, this notion of pulling apart a graphic leads to the idea of <em>layers</em>. You can build up a plot of any complexity by <em>overlaying</em> different views of the same data.</p>
+<p>There&rsquo;s a learning curve here for sure, but there are a couple of things that help us.</p>
+<p>First, every graphic shares a <em>common template</em>. This is like thinking about the sentence &ldquo;The cat sat on the mat&rdquo; grammatically as the template <code>NP V PP</code> (<code>N</code>oun <code>P</code>hrase &ldquo;The cat&rdquo;, <code>V</code>erb &ldquo;sat&rdquo;, <code>P</code>repositional <code>P</code>hrase &ldquo;on the mat&rdquo;). Once you understand this structure you can &ldquo;say&rdquo; a <em>lot</em> of different things.</p>
+<p>(And I mean a <em>lot</em>. The <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf" target="_blank" rel="noopener">ggplot cheat sheet</a> lists over 40 plot-types, but because this is a language, users can create their own <a href="https://exts.ggplot2.tidyverse.org/gallery/" target="_blank" rel="noopener">extensions</a> that you can also utilize, adding over 80 more.)</p>
+<p>Second, the way we put layers together is identical to the way we use pipes. You can read <code>%&gt;%</code> as &ldquo;and then&rdquo;: <a href="https://dplyr.tidyverse.org/reference/select.html" target="_blank" rel="noopener"><code>select()</code></a> <em>and then</em> <a href="https://dplyr.tidyverse.org/reference/mutate.html" target="_blank" rel="noopener"><code>mutate()</code></a> <em>and then</em> <a href="https://dplyr.tidyverse.org/reference/summarise.html" target="_blank" rel="noopener"><code>summarize()</code></a>. In graphics, we can say &ldquo;show this layer, and then <em>overlay</em> this layer, and then <em>overlay</em> this layer&rdquo;, etc., using a very similar syntax.</p>
+<br>
+<hr>
+<h2 id="examples">Examples</h2>
+<p>So how does this work in practice? We&rsquo;ll work through visualizing the <strong>iris</strong> dataset that you&rsquo;ve seen before. This is an extremely famous <a href="https://en.m.wikipedia.org/wiki/Iris_flower_data_set" target="_blank" rel="noopener">dataset</a> that was first analyzed by R. A. Fisher in 1936: <em>The use of multiple measurements in taxonomic problems</em>. He was attempting to use petal and sepal measurements to discriminate one species from another.</p>
+<p><strong>ggplot2</strong> is part of the tidyverse package so we need to load that first:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># this assumes you've already installed tidyverse</span></span>
+<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>dplyr    </span> 1.1.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>readr    </span> 2.1.4</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>forcats  </span> 1.0.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>stringr  </span> 1.5.0</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>ggplot2  </span> 3.4.1     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tibble   </span> 3.1.8</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>lubridate</span> 1.9.2     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>tidyr    </span> 1.3.0</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>purrr    </span> 1.0.1     </span></span>
+<span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>filter()</span> masks <span style='color: #0000BB;'>stats</span>::filter()</span></span>
+<span><span class='c'>#&gt; <span style='color: #BB0000;'>✖</span> <span style='color: #0000BB;'>dplyr</span>::<span style='color: #00BB00;'>lag()</span>    masks <span style='color: #0000BB;'>stats</span>::lag()</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BBBB;'>ℹ</span> Use the <a href='http://conflicted.r-lib.org/'>conflicted package</a> to force all conflicts to become errors</span></span></code></pre>
+</div>
+<p>And recall that the <strong>iris</strong> dataset (3 species, 50 observations per species) is automatically available to us:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='o'>(</span><span class='nv'>iris</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
+<span><span class='c'>#&gt; 1          5.1         3.5          1.4         0.2  setosa</span></span>
+<span><span class='c'>#&gt; 2          4.9         3.0          1.4         0.2  setosa</span></span>
+<span><span class='c'>#&gt; 3          4.7         3.2          1.3         0.2  setosa</span></span>
+<span><span class='c'>#&gt; 4          4.6         3.1          1.5         0.2  setosa</span></span>
+<span><span class='c'>#&gt; 5          5.0         3.6          1.4         0.2  setosa</span></span>
+<span><span class='c'>#&gt; 6          5.4         3.9          1.7         0.4  setosa</span></span></code></pre>
+</div>
+<p>What is the correlation between petal length and width in these species? Are longer petals also wider? We can visualize this with a scatterplot. But first let&rsquo;s look a the ggplot template. (Note the package is <strong>ggplot2</strong>, the command is <code>ggplot</code>.)</p>
+<pre><code>ggplot(data = &lt;DATA&gt;) + 
+  &lt;GEOM_FUNCTION&gt;(mapping = aes(&lt;MAPPINGS&gt;))
+</code></pre>
+<p>These are the obligatory parts of any plot. The first argument to <a href="https://ggplot2.tidyverse.org/reference/ggplot.html" target="_blank" rel="noopener"><code>ggplot()</code></a> is the data frame:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-3-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>This is not very interesting! but it&rsquo;s notable that it is <em>something</em>. <a href="https://ggplot2.tidyverse.org/reference/ggplot.html" target="_blank" rel="noopener"><code>ggplot()</code></a> has created a base coordinate system (a base layer) that we can add visual layers to. The <em>add a layer</em> operator is &ldquo;<strong>+</strong>&rdquo;, which is the ggplot equivalent of the pipe symbol, and <strong>it must occur at the end of the line</strong>.</p>
+<p>The next argument specifies the kind plot we want: scatterplot, bar chart, fitted line, boxplot, pie chart, etc. <strong>ggplot2</strong> refers to these as <strong>geoms</strong>: the geometrical object that a plot uses to represent data. You can see an overview of many of these geoms in the <a href="https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf" target="_blank" rel="noopener">cheat sheet</a>. The geom for a scatterplot is <a href="https://ggplot2.tidyverse.org/reference/geom_point.html" target="_blank" rel="noopener"><code>geom_point()</code></a>.</p>
+<p>But we also require a <code>mapping</code> argument, which maps the <em>variables</em> in the dataset we want to focus on to their <em>visual representation</em> in the plot.</p>
+<p>And finally we need to specify an <strong>aesthetic</strong> for the geometric objects in the plot, which will control things like shape, color, transparency, etc. Perhaps surprisingly, for a scatterplot, the x and y coordinates are aesthetics, since these control, not the shape or color, but the relative position of the points in the coordinate system.</p>
+<p>Here is our complete plot:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>There is clearly a positive correlation between length and width. And we can make this even more apparent by visually fitting a line to the data, by <em>overlaying</em> another geom in the same plot.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; `geom_smooth()` using method = 'loess' and formula = 'y ~ x'</span></span></code></pre>
+<p><img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>There is clearly some code redundancy here, and we really don&rsquo;t want the x, y mapping of these two layers to be independent. We can extract the common mapping information and move it to the top level:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span>, <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='o'>(</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; `geom_smooth()` using method = 'loess' and formula = 'y ~ x'</span></span></code></pre>
+<p><img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>So we have the possibility of <em>local</em> layer specifications, and <em>global</em> specifications. Global specifications are <em>inherited</em> by all the local layers.</p>
+<h3 id="the-power-of-aesthetics">The power of aesthetics</h3>
+<p>The aim of Fisher&rsquo;s paper was to try to discriminate different species based on their morphological measurements. It looks from this plot that there are two distinct clusters. Do these clusters correspond to different species? There are two clusters, but three species. How can we explore this further?</p>
+<p>Our current plot uses two numeric variables: <code>Petal.Length</code> and <code>Petal.width</code>. We can add a third categorical variable, like <code>Species</code>, to a two dimensional scatterplot by mapping it to a different visual aesthetic. We&rsquo;ve mapped length and width to x,y coordinates. Now we&rsquo;ll simultaneously map species to <code>color</code> by expanding our list of aesthetics:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span>, color <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>The R help for a specific geoms will list, among other things, all the aesthetics that geom supports.</p>
+<br>
+<hr>
+<h2 id="breakout-rooms">Breakout Rooms</h2>
+<p>In the exercises we&rsquo;ll be looking a little more at the <strong>iris</strong> data, and in addition, the NHANES data we used last week, and the left-joined bird dataset we built last week in <strong>Excercise 7</strong>.</p>
+<p>If you haven&rsquo;t installed the NHANES dataset do:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='o'>(</span><span class='s'>"NHANES"</span>, repos <span class='o'>=</span> <span class='s'>"http://cran.us.r-project.org"</span><span class='o'>)</span></span></code></pre>
+</div>
+<p>Once installed, load it with:</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'>NHANES</span><span class='o'>)</span></span></code></pre>
+</div>
+<p>A prebuilt joined data set has been loaded on github.</p>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># create a data directory for the new file if you haven't done so yet:</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='o'>(</span><span class='s'>"data/birds"</span>, recursive <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span></span>
+<span></span>
+<span><span class='c'># set the url</span></span>
+<span><span class='nv'>joined_data_url</span> <span class='o'>&lt;-</span> <span class='s'>"https://raw.githubusercontent.com/biodash/biodash.github.io/master/content/codeclub/S05E08_ggplot-1/joined_data.tsv"</span></span>
+<span></span>
+<span><span class='c'># set the path for the downloaded file</span></span>
+<span><span class='nv'>joined_file</span> <span class='o'>&lt;-</span> <span class='s'>"data/birds/joined_data.tsv"</span></span>
+<span></span>
+<span><span class='c'>#download to file</span></span>
+<span><span class='nf'><a href='https://rdrr.io/r/utils/download.file.html'>download.file</a></span><span class='o'>(</span>url <span class='o'>=</span> <span class='nv'>joined_data_url</span>, destfile <span class='o'>=</span> <span class='nv'>joined_file</span><span class='o'>)</span></span>
+<span></span>
+<span><span class='c'># read file</span></span>
+<span><span class='nv'>joined_data</span> <span class='o'>&lt;-</span> <span class='nf'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_tsv</a></span><span class='o'>(</span><span class='nv'>joined_file</span><span class='o'>)</span></span></code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>#&gt; <span style='font-weight: bold;'>Rows: </span><span style='color: #0000BB;'>311441</span> <span style='font-weight: bold;'>Columns: </span><span style='color: #0000BB;'>9</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>Column specification</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────────</span></span></span>
+<span><span class='c'>#&gt; <span style='font-weight: bold;'>Delimiter:</span> "\t"</span></span>
+<span><span class='c'>#&gt; <span style='color: #BB0000;'>chr</span>  (4): species, locality, stateProvince, species_en</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BB00;'>dbl</span>  (4): adult_body_mass_g, adult_svl_cm, longevity_y, litter_or_clutch_size_n</span></span>
+<span><span class='c'>#&gt; <span style='color: #0000BB;'>dttm</span> (1): eventDate</span></span>
+<span><span class='c'>#&gt; </span></span>
+<span><span class='c'>#&gt; <span style='color: #00BBBB;'>ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class='c'>#&gt; <span style='color: #00BBBB;'>ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span></code></pre>
+</div>
+<h3 id="exercise-1">Exercise 1</h3>
+<div class="puzzle">
+<p>Revisit the <strong>iris</strong> data set, and plot sepal width (y) against sepal length (x) colored by species. Which morphological character, petals or sepals, provides the greatest discrimination between species?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>Simply reuse the code we used for petals. You can often leverage code from an old plot for a new one. <br> <br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Sepal.Length</span>, y <span class='o'>=</span> <span class='nv'>Sepal.Width</span>, color <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Note this solution shows yet another way to position global mapping information: as its own layer. This can help readability and avoid too many nested parentheses.</p>
+</details>
+</div>
+<hr>
+<h3 id="exercise-2">Exercise 2</h3>
+<div class="puzzle">
+<p>Use the NHANES data set to plot body mass index (y) against height (x). Color by gender. Which gender has the highest BMI?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br><code>glimpse()</code> the dataset to identify the variable names. <br> <br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>NHANES</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Height</span>, y <span class='o'>=</span> <span class='nv'>BMI</span>, color <span class='o'>=</span> <span class='nv'>Gender</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; Warning: Removed 366 rows containing missing values (`geom_point()`).</span></span></code></pre>
+<p><img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+</div>
+<hr>
+<h3 id="exercise-3">Exercise 3</h3>
+<div class="puzzle">
+<p>Use the same plot but now color by physical activity. How active are those people with the highest BMI?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>Again, <code>glimpse()</code> the dataset to identify the variable names. <br> <br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>NHANES</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Height</span>, y <span class='o'>=</span> <span class='nv'>BMI</span>, color <span class='o'>=</span> <span class='nv'>PhysActive</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; Warning: Removed 366 rows containing missing values (`geom_point()`).</span></span></code></pre>
+<p><img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+</details>
+</div>
+<hr>
+<h3 id="exercise-4">Exercise 4</h3>
+<div class="puzzle">
+<p>Often plotting the data allows us to identify outliers, which may be data-entry errors, or genuinely extreme data. Using the <code>joined_data</code> set, plot adult body mass (y) against longevity (x). Identify extreme data points at the high end of body mass. How can we identify what these points represent?</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br> Examine the plot to find an appropriate threshold value, and filter the data using that value. How many data points are there passing that threshold? What species are represented by these data points? How many weights are reported? Why is the plot misleading here? <br> <br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>joined_data</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>longevity_y</span>, y <span class='o'>=</span> <span class='nv'>adult_body_mass_g</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; Warning: Removed 24089 rows containing missing values (`geom_point()`).</span></span></code></pre>
+<p><img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>joined_data</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>adult_body_mass_g</span> <span class='o'>&gt;</span> <span class='m'>10000</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 228 × 9</span></span></span>
+<span><span class='c'>#&gt;    species   local…¹ state…² eventDate           speci…³ adult…⁴ adult…⁵ longe…⁶</span></span>
+<span><span class='c'>#&gt;    <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dttm&gt;</span>              <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>     <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 1</span> Cygnus o… Findlay Ohio    2008-02-17 <span style='color: #555555;'>00:00:00</span> Mute S…   <span style='text-decoration: underline;'>10</span>230    142.    27.7</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 2</span> Cygnus o… Dundee  Ohio    2004-02-16 <span style='color: #555555;'>00:00:00</span> Mute S…   <span style='text-decoration: underline;'>10</span>230    142.    27.7</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 3</span> Cygnus o… 44805 … Ohio    2006-02-18 <span style='color: #555555;'>00:00:00</span> Mute S…   <span style='text-decoration: underline;'>10</span>230    142.    27.7</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 4</span> Cygnus o… 45011 … Ohio    2005-02-19 <span style='color: #555555;'>00:00:00</span> Mute S…   <span style='text-decoration: underline;'>10</span>230    142.    27.7</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 5</span> Cygnus b… 45042 … Ohio    2009-02-13 <span style='color: #555555;'>00:00:00</span> Trumpe…   <span style='text-decoration: underline;'>10</span>300    159.    26.5</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 6</span> Cygnus o… 44813 … Ohio    2007-02-19 <span style='color: #555555;'>00:00:00</span> Mute S…   <span style='text-decoration: underline;'>10</span>230    142.    27.7</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 7</span> Cygnus o… Spencer Ohio    2008-02-16 <span style='color: #555555;'>00:00:00</span> Mute S…   <span style='text-decoration: underline;'>10</span>230    142.    27.7</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 8</span> Cygnus o… 44903 … Ohio    2009-02-16 <span style='color: #555555;'>00:00:00</span> Mute S…   <span style='text-decoration: underline;'>10</span>230    142.    27.7</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'> 9</span> Cygnus o… 44601 … Ohio    2002-02-16 <span style='color: #555555;'>00:00:00</span> Mute S…   <span style='text-decoration: underline;'>10</span>230    142.    27.7</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>10</span> Cygnus o… Avon L… Ohio    2007-02-17 <span style='color: #555555;'>00:00:00</span> Mute S…   <span style='text-decoration: underline;'>10</span>230    142.    27.7</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># … with 218 more rows, 1 more variable: litter_or_clutch_size_n &lt;dbl&gt;, and</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   abbreviated variable names ¹​locality, ²​stateProvince, ³​species_en,</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>#   ⁴​adult_body_mass_g, ⁵​adult_svl_cm, ⁶​longevity_y</span></span></span></code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>joined_data</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>adult_body_mass_g</span> <span class='o'>&gt;</span> <span class='m'>10000</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>species</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span><span class='o'>(</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 2 × 1</span></span></span>
+<span><span class='c'>#&gt;   species          </span></span>
+<span><span class='c'>#&gt;   <span style='color: #555555; font-style: italic;'>&lt;chr&gt;</span>            </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span> Cygnus olor      </span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span> Cygnus buccinator</span></span></code></pre>
+</div>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nv'>joined_data</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='o'>(</span><span class='nv'>adult_body_mass_g</span> <span class='o'>&gt;</span> <span class='m'>10000</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='o'>(</span><span class='nv'>adult_body_mass_g</span><span class='o'>)</span> <span class='o'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> </span>
+<span>  <span class='nf'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span><span class='o'>(</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'># A tibble: 2 × 1</span></span></span>
+<span><span class='c'>#&gt;   adult_body_mass_g</span></span>
+<span><span class='c'>#&gt;               <span style='color: #555555; font-style: italic;'>&lt;dbl&gt;</span></span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>1</span>             <span style='text-decoration: underline;'>10</span>230</span></span>
+<span><span class='c'>#&gt; <span style='color: #555555;'>2</span>             <span style='text-decoration: underline;'>10</span>300</span></span></code></pre>
+</div>
+</details>
+</div>
+<h3 id="bonus-exercise-a-new-geom">Bonus exercise: a new geom!</h3>
+<div class="puzzle">
+<p>Revisit the <strong>iris</strong> data and generate a density histogram for sepal length, categorized by species.</p>
+<details>
+<summary>
+Hints (click here)
+</summary>
+<br>Use <code>geom_density()</code>. Check the help to see what aesthetics it supports. Note that while you 'color' a point, you 'fill' an area. <br> <br>
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<br>
+<div class="highlight">
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='o'>(</span><span class='nv'>mapping</span> <span class='o'>=</span> <span class='o'>(</span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Sepal.Length</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
+</code></pre>
+<p><img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" /></p>
+</div>
+<p>Note, what does the <strong>alpha</strong> aesthetic control? <br></p>
+</details>
+</div>
+<hr>
+<p><br> <br></p>
+
+                    </div>
+
+                    <br>
+
+                    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://biodash.github.io/codeclub/s05e08_ggplot-1/&amp;text=Chapter%2010%20-%20Visualizing%20Data,%201" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://biodash.github.io/codeclub/s05e08_ggplot-1/&amp;t=Chapter%2010%20-%20Visualizing%20Data,%201" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Chapter%2010%20-%20Visualizing%20Data,%201&amp;body=https://biodash.github.io/codeclub/s05e08_ggplot-1/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://biodash.github.io/codeclub/s05e08_ggplot-1/&amp;title=Chapter%2010%20-%20Visualizing%20Data,%201" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Chapter%2010%20-%20Visualizing%20Data,%201%20https://biodash.github.io/codeclub/s05e08_ggplot-1/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://biodash.github.io/codeclub/s05e08_ggplot-1/&amp;title=Chapter%2010%20-%20Visualizing%20Data,%201" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="/authors/jessica-cooperstone/"><img class="avatar mr-3 avatar-circle" src="/authors/jessica-cooperstone/avatar_hub3c8c373219f94b7f8251ccae20f3fcb_68385_270x270_fill_q90_lanczos_center.jpg" alt="Jessica Cooperstone"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/authors/jessica-cooperstone/">Jessica Cooperstone</a></h5>
+      <h6 class="card-subtitle">Assistant Professor at HCS</h6>
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:cooperstone.1@osu.edu" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/CooperstoneLab" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=d-FkQNQAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/jcooperstone" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://phytochemicals.osu.edu/" target="_blank" rel="noopener">
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <br>
+
+                    <hr class="separator">
+
+                    <div class="clearfix">
+                        
+                        
+                        <span class="previous-link">
+                            <a href="https://biodash.github.io/codeclub/s05e07_scripts-projects/">← S05E07: R4DS (2e) - Ch. 9 - Workflow: scripts and projects</a>
+                        </span>
+                        
+                        
+                        
+                    </div>
+
+                    <hr class="separator">
+
+                </div>
+
+            </article>
+
+            
+        </main>
+    </div>
+</div>
+
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+    
+    <p class="powered-by">
+      <a href="/license/">LICENSE: CC-BY-SA <br> <i class="fab fa-creative-commons fa-2x"></i><i class="fab fa-creative-commons-by fa-2x"></i><i class="fab fa-creative-commons-sa fa-2x"></i> </a><br>
+    </p>
+    
+</footer>
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key="></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.25/gmaps.min.js" integrity="sha256-7vjlAeb8OaTrCXZkCNun9djzuB2owUsaO72kXaFDBJs=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="/js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+      
+    
+    <script src="/en/js/wowchemy.min.2f16af175a3ec51b41b36bb4934b1cf7.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>
