@@ -23,6 +23,12 @@ knitr::opts_knit$set(root.dir = here::here("content/codeclub/S05E09"))
 
 ### Session goals
 
+- Recap last week's material on aesthetic mappings and geom layers
+- Learn about the difference between local and global aesthetic mappings
+- See several additional aesthetic mappings (like `shape` and `fill`)
+  and geoms (like `geom_boxplot` and `geom_violin`)
+- See an example of a geom from an "extension" package to make a ridgeway plot
+
 ### Setting up
 
 The _ggplot2_ package is one of the core _tidyverse_ packages,
@@ -32,8 +38,9 @@ tidyverse:
 ```{r}
 # If you don't have the tidyverse installed, first do so as follows:
 # install.packages("tidyverse")
+```
 
-# If you have the tidyverse installed, you only need to load it:
+```{r}
 library(tidyverse)
 ```
 
@@ -119,10 +126,10 @@ ggplot(data = iris,
   geom_point(color = "blue")
 ```
 
-The key difference in the syntax of the code above is _not_ that color is
+The key difference in the syntax of the code above is _not_ that `color` is
 specified inside `geom_point()` rather than `ggplot()`:
 as we'll see below, aesthetic mappings can be set in either location.
-Instead, the key difference is that we are not specifying it insides an
+Instead, it is that we are not specifying `color` inside an
 `aes()` function call.
 
 <br>
@@ -137,8 +144,7 @@ types, which are added to a plot with `geom_...()` functions.
 
 And that different geoms can be layered on top of each other,
 such as when you want to show the raw data points (`geom_point()`)
-along with summaries of the data such as a trend line (`geom_smooth()`) or
-a box plot (`geom_boxplot()`).
+along with summaries of the data such as a trend line (`geom_smooth()`).
 
 ### Local vs global aesthetics
 
@@ -175,7 +181,8 @@ ggplot(data = iris,
   geom_smooth()
 ```
 
-Now, we got a single line (and a single statistical fit) that ignore `Species`.
+Now, we got a single line (and a single statistical fit) that ignores
+the `Species` identity of each flower.
 
 ### Many different geoms, same syntax
 
@@ -184,14 +191,14 @@ _ggplot_ has dozens of different geoms -- for an overview, see
 that Jessica linked to last week or the ggplot
 [reference on geoms](https://ggplot2.tidyverse.org/reference/#geoms).
 
-Some of these are more commonly used than others.
+Let's see a couple more commonly used geoms.
 Last week we talked a bit about how a scatterplot does not always make it easy
 to compare the distributions of a variable among groups.
 
 Useful plot types for showing and comparing distributions are histograms,
 density plots, box plots, and violin plots.
 Notice below that we use nearly identical code to make these different plots
-(in this case, to show the distribution of `Petal.Length` among iris species).
+(in this case, to show the distribution of `Petal.Length` among iris species):
 
 ```{r}
 ggplot(data = iris,
@@ -272,12 +279,39 @@ You will use these columns:
 
 ### Exercise 1
 
-- Very similar to our `iris` plot above,
-  make a ridgeline plot of mileage (`hwy`) for cars with different drive trains
-  (`drive`).
-  And like in our `iris` plot,
-  also map the `fill` aesthetic to the categorical variable (`drive`).
+Very similar to our `iris` plot above,
+make a ridgeline plot of mileage (`hwy`) for cars with different drive trains
+(`drive`).
   
+And like in our `iris` plot,
+also map the `fill` aesthetic to the categorical variable (`drive`).
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+```{r}
+ggplot(data = mpg,
+       mapping = aes(x = hwy, y = drv, fill = drv)) +
+  geom_density_ridges()
+```
+
+</details>
+
+:::
+
+<br>
+
+:::puzzle
+
+### Exercise 2
+
+Let's try to make the plot you made in Exercise 1 a bit nicer.
+
+- One issue is that the density shapes overlap.
+  We can elegantly solve this by making them somewhat transparent,
+  which we can do by setting `alpha`, e.g. to 0.5
+  (you would do this in the same way you would e.g. _set_ (not _map_!) the color).
+
 - What do you think would happen if you _also_ map the **`color`** aesthetic
   to `drive`? Check if you're right by making the plot.
 
@@ -286,10 +320,17 @@ You will use these columns:
   Make the legend disappear by adding `show.legend = FALSE` inside
   `geom_density_ridges()`.
 
+<details> <summary> Hints (click here) </summary>
+<br>
+
+- To set alpha to 0.5, use `geom_density_ridges(alpha = 0.5)`.
+
+</details>
+
 <details> <summary> Solution (click here) </summary>
 <br>
 
-- Initial plot:
+- Making the shapes partially transparent:
 
 ```{r}
 ggplot(data = mpg,
@@ -326,7 +367,7 @@ ggplot(data = mpg,
 
 :::puzzle
 
-### Exercise 2
+### Exercise 3
 
 - Why does the following code not result in a plot with blue points?
 
@@ -387,7 +428,7 @@ ggplot(data = mpg) +
 
 :::puzzle
 
-### Exercise 3
+### Bonus Exercise
 
 What happens if you map an aesthetic to something other than a variable name,
 like `aes(color = displ < 5)`?
@@ -403,7 +444,7 @@ Do you understand why this code produces the resulting plot?
 
 - To understand what is happening:
   what would `displ < 5` by itself return?
-  (To directly test this, run `mpg$displ < 5`)
+  (To directly test this, run `mpg$displ < 5`.)
 
 </details>
 

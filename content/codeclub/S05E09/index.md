@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-03-28"
 lastmod: "2023-03-28"
 toc: true
-rmd_hash: 4d14143524d2c54d
+rmd_hash: eeea24508fbe0a35
 
 ---
 
@@ -20,6 +20,11 @@ rmd_hash: 4d14143524d2c54d
 
 ### Session goals
 
+-   Recap last week's material on aesthetic mappings and geom layers
+-   Learn about the difference between local and global aesthetic mappings
+-   See several additional aesthetic mappings (like `shape` and `fill`) and geoms (like `geom_boxplot` and `geom_violin`)
+-   See an example of a geom from an "extension" package to make a ridgeway plot
+
 ### Setting up
 
 The *ggplot2* package is one of the core *tidyverse* packages, so it's generally most convenient to load it along with the rest of the tidyverse:
@@ -27,10 +32,13 @@ The *ggplot2* package is one of the core *tidyverse* packages, so it's generally
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'># If you don't have the tidyverse installed, first do so as follows:</span></span>
-<span><span class='c'># install.packages("tidyverse")</span></span>
-<span></span>
-<span><span class='c'># If you have the tidyverse installed, you only need to load it:</span></span>
-<span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span>
+<span><span class='c'># install.packages("tidyverse")</span></span></code></pre>
+
+</div>
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='kr'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='o'>(</span><span class='nv'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; ── <span style='font-weight: bold;'>Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
 <span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>dplyr    </span> 1.1.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>readr    </span> 2.1.4</span></span>
 <span><span class='c'>#&gt; <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>forcats  </span> 1.0.0     <span style='color: #00BB00;'>✔</span> <span style='color: #0000BB;'>stringr  </span> 1.5.0</span></span>
@@ -90,7 +98,7 @@ We learned that we create ggplots by "mapping" variables (dataframe columns) to 
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span>, color <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-4-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -106,7 +114,7 @@ Let's try `shape` instead of `color` to distinguish the iris species:
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span>, shape <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-5-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -118,7 +126,7 @@ Or `size`:
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span>, size <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; Warning: Using <span style='color: #00BB00;'>size</span> for a discrete variable is not advised.</span></span></code></pre>
-<img src="figs/unnamed-chunk-6-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -134,11 +142,11 @@ While `color` and the other "visual properties" mentioned above can be used as a
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, y <span class='o'>=</span> <span class='nv'>Petal.Width</span>, shape <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>color <span class='o'>=</span> <span class='s'>"blue"</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-7-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
-The key difference in the syntax of the code above is *not* that color is specified inside [`geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html) rather than [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html): as we'll see below, aesthetic mappings can be set in either location. Instead, the key difference is that we are not specifying it insides an [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) function call.
+The key difference in the syntax of the code above is *not* that `color` is specified inside [`geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html) rather than [`ggplot()`](https://ggplot2.tidyverse.org/reference/ggplot.html): as we'll see below, aesthetic mappings can be set in either location. Instead, it is that we are not specifying `color` inside an [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) function call.
 
 <br>
 
@@ -148,7 +156,7 @@ The key difference in the syntax of the code above is *not* that color is specif
 
 Last week, we learned that ggplot geometric objects (i.e., "**geoms**") are essentially plot types, which are added to a plot with `geom_...()` functions.
 
-And that different geoms can be layered on top of each other, such as when you want to show the raw data points ([`geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html)) along with summaries of the data such as a trend line ([`geom_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)) or a box plot ([`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)).
+And that different geoms can be layered on top of each other, such as when you want to show the raw data points ([`geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html)) along with summaries of the data such as a trend line ([`geom_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html)).
 
 ### Local vs global aesthetics
 
@@ -167,7 +175,7 @@ For instance, if we globally map `Species` to `color`, this will apply to the [`
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; `geom_smooth()` using method = 'loess' and formula = 'y ~ x'</span></span></code></pre>
-<img src="figs/unnamed-chunk-8-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -182,19 +190,19 @@ Compare this with the plot that is created when we define the `color` mapping *l
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>color <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; `geom_smooth()` using method = 'loess' and formula = 'y ~ x'</span></span></code></pre>
-<img src="figs/unnamed-chunk-9-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
-Now, we got a single line (and a single statistical fit) that ignore `Species`.
+Now, we got a single line (and a single statistical fit) that ignores the `Species` identity of each flower.
 
 ### Many different geoms, same syntax
 
 *ggplot* has dozens of different geoms -- for an overview, see [this cheatsheet](https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf) that Jessica linked to last week or the ggplot [reference on geoms](https://ggplot2.tidyverse.org/reference/#geoms).
 
-Some of these are more commonly used than others. Last week we talked a bit about how a scatterplot does not always make it easy to compare the distributions of a variable among groups.
+Let's see a couple more commonly used geoms. Last week we talked a bit about how a scatterplot does not always make it easy to compare the distributions of a variable among groups.
 
-Useful plot types for showing and comparing distributions are histograms, density plots, box plots, and violin plots. Notice below that we use nearly identical code to make these different plots (in this case, to show the distribution of `Petal.Length` among iris species).
+Useful plot types for showing and comparing distributions are histograms, density plots, box plots, and violin plots. Notice below that we use nearly identical code to make these different plots (in this case, to show the distribution of `Petal.Length` among iris species):
 
 <div class="highlight">
 
@@ -202,7 +210,7 @@ Useful plot types for showing and comparing distributions are histograms, densit
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre>
-<img src="figs/unnamed-chunk-10-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -212,7 +220,7 @@ Useful plot types for showing and comparing distributions are histograms, densit
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-11-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -224,7 +232,7 @@ In the plots above, we only needed one axis (`x`), since the other axis consiste
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nv'>Petal.Length</span>, x <span class='o'>=</span> <span class='nv'>Species</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-12-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -234,7 +242,7 @@ In the plots above, we only needed one axis (`x`), since the other axis consiste
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nv'>Petal.Length</span>, x <span class='o'>=</span> <span class='nv'>Species</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_violin.html'>geom_violin</a></span><span class='o'>(</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-13-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-14-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -260,7 +268,7 @@ Then we can load it and use the ridgeplot geom [`geom_density_ridges()`](https:/
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Sepal.Length</span>, y <span class='o'>=</span> <span class='nv'>Species</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; Picking joint bandwidth of 0.181</span></span></code></pre>
-<img src="figs/unnamed-chunk-15-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -299,11 +307,9 @@ You will use these columns:
 
 ### Exercise 1
 
--   Very similar to our `iris` plot above, make a ridgeline plot of mileage (`hwy`) for cars with different drive trains (`drive`). And like in our `iris` plot, also map the `fill` aesthetic to the categorical variable (`drive`).
+Very similar to our `iris` plot above, make a ridgeline plot of mileage (`hwy`) for cars with different drive trains (`drive`).
 
--   What do you think would happen if you *also* map the **`color`** aesthetic to `drive`? Check if you're right by making the plot.
-
--   As soon as we use the `color` and/or `fill` aesthetics, a legend will pop up. Do we need a legend in this case? Make the legend disappear by adding `show.legend = FALSE` inside [`geom_density_ridges()`](https://wilkelab.org/ggridges/reference/geom_density_ridges.html).
+And like in our `iris` plot, also map the `fill` aesthetic to the categorical variable (`drive`).
 
 <details>
 <summary>
@@ -312,39 +318,13 @@ Solution (click here)
 
 <br>
 
--   Initial plot:
-
 <div class="highlight">
 
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>mpg</span>,</span>
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>hwy</span>, y <span class='o'>=</span> <span class='nv'>drv</span>, fill <span class='o'>=</span> <span class='nv'>drv</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; Picking joint bandwidth of 1.28</span></span></code></pre>
-<img src="figs/unnamed-chunk-17-1.png" width="700px" style="display: block; margin: auto;" />
-
-</div>
-
--   When we map the `color` aesthetic, the **line** (as opposed to the *fill*) around the density shapes will get different colors:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>mpg</span>,</span>
-<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>hwy</span>, y <span class='o'>=</span> <span class='nv'>drv</span>, fill <span class='o'>=</span> <span class='nv'>drv</span>, color <span class='o'>=</span> <span class='nv'>drv</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
+<span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; Picking joint bandwidth of 1.28</span></span></code></pre>
 <img src="figs/unnamed-chunk-18-1.png" width="700px" style="display: block; margin: auto;" />
-
-</div>
-
--   We don't need a legend for `drv` here because we are already showing this information along the y-axis (for that matter, we don't need different colors, but it makes the plot prettier). We can turn off the legend as follows:
-
-<div class="highlight">
-
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>mpg</span>,</span>
-<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>hwy</span>, y <span class='o'>=</span> <span class='nv'>drv</span>, fill <span class='o'>=</span> <span class='nv'>drv</span>, color <span class='o'>=</span> <span class='nv'>drv</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span>, show.legend <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span></span>
-<span><span class='c'>#&gt; Picking joint bandwidth of 1.28</span></span></code></pre>
-<img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -357,6 +337,77 @@ Solution (click here)
 <div class="puzzle">
 
 ### Exercise 2
+
+Let's try to make the plot you made in Exercise 1 a bit nicer.
+
+-   One issue is that the density shapes overlap. We can elegantly solve this by making them somewhat transparent, which we can do by setting `alpha`, e.g. to 0.5 (you would do this in the same way you would e.g. *set* (not *map*!) the color).
+
+-   What do you think would happen if you *also* map the **`color`** aesthetic to `drive`? Check if you're right by making the plot.
+
+-   As soon as we use the `color` and/or `fill` aesthetics, a legend will pop up. Do we need a legend in this case? Make the legend disappear by adding `show.legend = FALSE` inside [`geom_density_ridges()`](https://wilkelab.org/ggridges/reference/geom_density_ridges.html).
+
+<details>
+<summary>
+Hints (click here)
+</summary>
+
+<br>
+
+-   To set alpha to 0.5, use `geom_density_ridges(alpha = 0.5)`.
+
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+
+<br>
+
+-   Making the shapes partially transparent:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>mpg</span>,</span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>hwy</span>, y <span class='o'>=</span> <span class='nv'>drv</span>, fill <span class='o'>=</span> <span class='nv'>drv</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; Picking joint bandwidth of 1.28</span></span></code></pre>
+<img src="figs/unnamed-chunk-19-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
+-   When we map the `color` aesthetic, the **line** (as opposed to the *fill*) around the density shapes will get different colors:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>mpg</span>,</span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>hwy</span>, y <span class='o'>=</span> <span class='nv'>drv</span>, fill <span class='o'>=</span> <span class='nv'>drv</span>, color <span class='o'>=</span> <span class='nv'>drv</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; Picking joint bandwidth of 1.28</span></span></code></pre>
+<img src="figs/unnamed-chunk-20-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
+-   We don't need a legend for `drv` here because we are already showing this information along the y-axis (for that matter, we don't need different colors, but it makes the plot prettier). We can turn off the legend as follows:
+
+<div class="highlight">
+
+<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>mpg</span>,</span>
+<span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>hwy</span>, y <span class='o'>=</span> <span class='nv'>drv</span>, fill <span class='o'>=</span> <span class='nv'>drv</span>, color <span class='o'>=</span> <span class='nv'>drv</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
+<span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span>, show.legend <span class='o'>=</span> <span class='kc'>FALSE</span><span class='o'>)</span></span>
+<span><span class='c'>#&gt; Picking joint bandwidth of 1.28</span></span></code></pre>
+<img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" />
+
+</div>
+
+</details>
+
+</div>
+
+<br>
+
+<div class="puzzle">
+
+### Exercise 3
 
 -   Why does the following code not result in a plot with blue points?
 
@@ -385,7 +436,7 @@ First, let's see the plot that the code produces:
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>mpg</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>displ</span>, y <span class='o'>=</span> <span class='nv'>hwy</span>, color <span class='o'>=</span> <span class='s'>"blue"</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-21-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -399,7 +450,7 @@ First, let's see the plot that the code produces:
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>displ</span>, y <span class='o'>=</span> <span class='nv'>hwy</span><span class='o'>)</span>,</span>
 <span>             color <span class='o'>=</span> <span class='s'>"blue"</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-22-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-24-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
@@ -417,7 +468,7 @@ First, let's see the plot that the code produces:
 
 <div class="puzzle">
 
-### Exercise 3
+### Bonus Exercise
 
 What happens if you map an aesthetic to something other than a variable name, like `aes(color = displ < 5)`? Note, you'll also need to specify `x` and `y`.
 
@@ -432,7 +483,7 @@ Hints (click here)
 
 -   You can for example plot the `mpg` data with `displ` along the x-axis and `hwy` along the y-axis.
 
--   To understand what is happening: what would `displ < 5` by itself return? (To directly test this, run `mpg$displ < 5`)
+-   To understand what is happening: what would `displ < 5` by itself return? (To directly test this, run `mpg$displ < 5`.)
 
 </details>
 <details>
@@ -449,7 +500,7 @@ In the resulting plot, the `color` aesthetic will be mapped to *whether or not t
 <pre class='chroma'><code class='language-r' data-lang='r'><span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>mpg</span><span class='o'>)</span> <span class='o'>+</span> </span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='o'>(</span>mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>displ</span>, y <span class='o'>=</span> <span class='nv'>hwy</span>, color <span class='o'>=</span> <span class='nv'>displ</span> <span class='o'>&lt;</span> <span class='m'>5</span><span class='o'>)</span><span class='o'>)</span></span>
 </code></pre>
-<img src="figs/unnamed-chunk-23-1.png" width="700px" style="display: block; margin: auto;" />
+<img src="figs/unnamed-chunk-25-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
 
