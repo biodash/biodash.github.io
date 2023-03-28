@@ -1,0 +1,440 @@
+---
+output: hugodown::md_document
+title: "R4DS Chapter 10: ggplot layers, part 2"
+subtitle: "More aesthetic mappings and geoms"
+summary: "Today, we'll continue to learn about data visualization with ggplot2, focusing on aesthetic mappings and geoms."
+authors: [admin]
+tags: [codeclub, r4ds]
+date: "`r Sys.Date()`"
+lastmod: "`r Sys.Date()`"
+toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = TRUE, cache = FALSE)
+knitr::opts_knit$set(root.dir = here::here("content/codeclub/S05E09"))
+```
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Introduction
+
+### Session goals
+
+### Setting up
+
+The _ggplot2_ package is one of the core _tidyverse_ packages,
+so it's generally most convenient to load it along with the rest of the
+tidyverse:
+
+```{r}
+# If you don't have the tidyverse installed, first do so as follows:
+# install.packages("tidyverse")
+
+# If you have the tidyverse installed, you only need to load it:
+library(tidyverse)
+```
+
+We'll talk about formatting plots to your heart's delight in Chapter 12,
+but one trick for now is to set a ggplot2 plotting "theme" that differs from
+the default for the rest of your R session:
+
+```{r}
+# - Overview of themes: https://ggplot2.tidyverse.org/reference/ggtheme.html
+# - The default base_size is 11, setting to 13 will make any text larger
+theme_set(theme_minimal(base_size = 13))
+```
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## 10.2 -- Aesthetic mappings
+
+### Recap of last week
+
+In last week's session, we worked with the built-in `iris` dataframe,
+which has flower measurements for 3 species of iris:
+
+```{r}
+head(iris)
+```
+
+We learned that we create ggplots by "mapping" variables (dataframe columns)
+to so-called "aesthetics" such as the `x`-axis, the `y`-axis, and `color`:
+
+- If we map the `iris` dataframe variable `Petal.Length` to the `x`-axis aesthetic,
+  then the x-axis of our plot will represent the values from the column
+  `Petal.Length` in the dataframe.
+
+- If we map the variable `Species` to the `color` aesthetic,
+  then observations are colored according to the values in the `Species` column,
+  i.e. according to which species of iris they belong to.  
+
+```{r}
+# Recall: wrapping code inside "aes()" conveys that we are mapping aesthetics
+ggplot(data = iris,
+       mapping = aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+  geom_point()
+```
+
+### Other aesthetics
+
+Several other aesthetics exist,
+such as `fill` (like `color`, but then to _fill in_ areas),
+point `shape` and `size`,
+line `linewidth` and `linetype`,
+and `alpha` (transparency).
+
+Let's try `shape` instead of `color` to distinguish the iris species:
+
+```{r}
+ggplot(data = iris,
+       mapping = aes(x = Petal.Length, y = Petal.Width, shape = Species)) +
+  geom_point()
+```
+
+Or `size`:
+
+```{r}
+ggplot(data = iris,
+       mapping = aes(x = Petal.Length, y = Petal.Width, size = Species)) +
+  geom_point()
+```
+
+Why would _ggplot_ give us a warning here?
+When _is_ size a useful aesthetic?
+
+### Visual properties
+
+While `color` and the other "visual properties" mentioned above can be used as
+an aesthetic,
+they can also be set manually for all the data at once:
+
+```{r}
+ggplot(data = iris,
+       mapping = aes(x = Petal.Length, y = Petal.Width, shape = Species)) +
+  geom_point(color = "blue")
+```
+
+The key difference in the syntax of the code above is _not_ that color is
+specified inside `geom_point()` rather than `ggplot()`:
+as we'll see below, aesthetic mappings can be set in either location.
+Instead, the key difference is that we are not specifying it insides an
+`aes()` function call.
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## 10.3 -- Geometric objects
+
+Last week,
+we learned that ggplot geometric objects (i.e., "**geoms**") are essentially plot
+types, which are added to a plot with `geom_...()` functions.
+
+And that different geoms can be layered on top of each other,
+such as when you want to show the raw data points (`geom_point()`)
+along with summaries of the data such as a trend line (`geom_smooth()`) or
+a box plot (`geom_boxplot()`).
+
+### Local vs global aesthetics
+
+One thing that's important to realize once you start using multiple geoms in
+a single plot is the distinction between "global" versus "local" aesthetics:
+
+- **Global aesthetics** apply to all geoms in the plot,
+  and are added in the initial `ggplot()` call
+  (or in a stand-alone `aes()` layer).
+  
+- **Local aesthetics** apply only to the geom to which they are added.
+
+For instance, if we globally map `Species` to `color`,
+this will apply to the `geom_point()` and `geom_smooth()` calls below it:
+
+```{r}
+ggplot(data = iris,
+       mapping = aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+  geom_point() +
+  geom_smooth()
+```
+
+Note also that in case of `geom_smooth()`,
+which summarizes the data using a statistical function,
+this summarizing is done entirely _separately_ for each species!
+
+Compare this with the plot that is created when we define the `color` mapping
+_locally_, and _only_ for `geom_point()`:
+
+```{r}
+ggplot(data = iris,
+       mapping = aes(x = Petal.Length, y = Petal.Width)) +
+  geom_point(mapping = aes(color = Species)) +
+  geom_smooth()
+```
+
+Now, we got a single line (and a single statistical fit) that ignore `Species`.
+
+### Many different geoms, same syntax
+
+_ggplot_ has dozens of different geoms -- for an overview, see
+[this cheatsheet](https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf)
+that Jessica linked to last week or the ggplot
+[reference on geoms](https://ggplot2.tidyverse.org/reference/#geoms).
+
+Some of these are more commonly used than others.
+Last week we talked a bit about how a scatterplot does not always make it easy
+to compare the distributions of a variable among groups.
+
+Useful plot types for showing and comparing distributions are histograms,
+density plots, box plots, and violin plots.
+Notice below that we use nearly identical code to make these different plots
+(in this case, to show the distribution of `Petal.Length` among iris species).
+
+```{r}
+ggplot(data = iris,
+       mapping = aes(x = Petal.Length, fill = Species)) +
+  geom_histogram()
+```
+
+```{r}
+ggplot(data = iris,
+       mapping = aes(x = Petal.Length, fill = Species)) +
+  geom_density()
+```
+
+In the plots above, we only needed one axis (`x`),
+since the other axis consisted of counts/density computed by the plot itself.
+For box and violin plots, we do specify an x-axis when we want to show
+multiple groups:
+
+```{r}
+ggplot(data = iris,
+       mapping = aes(y = Petal.Length, x = Species, fill = Species)) +
+  geom_boxplot()
+```
+
+```{r}
+ggplot(data = iris,
+       mapping = aes(y = Petal.Length, x = Species, fill = Species)) +
+  geom_violin()
+```
+
+### Geoms from ggplot "extension" packages
+
+There are also many
+[ggplot extension packages (see this link for an overview)](https://exts.ggplot2.tidyverse.org/gallery/).
+Some of these offer additional geoms,
+like the recently popular "ridgeline" plots from the _ggridges_ package.
+
+First, we'll have to install the package:
+
+```{r, eval=FALSE}
+install.packages("ggridges")
+```
+
+Then we can load it and use the ridgeplot geom `geom_density_ridges()`
+just like any other geom:
+
+```{r}
+library(ggridges)
+
+ggplot(data = iris,
+       mapping = aes(x = Sepal.Length, y = Species, fill = Species)) +
+  geom_density_ridges(alpha = 0.5)
+```
+
+(Above, we set `alpha` to 0.5 to get medium transparency of the fill colors.)
+
+<br>
+
+--------------------------------------------------------------------------------
+
+## Breakout Rooms
+
+The following exercises use another built-in R dataframe, `mpg`,
+which has some statistics on cars.
+
+```{r}
+head(mpg)
+```
+
+You will use these columns:
+
+- `displ` is the engine size (or "displacement")
+- `hwy` is gas mileage (miles per gallon) when driving on a highway
+- `drv` is the type of "drive train",
+  where `f` = front-wheel drive, `r` = rear wheel drive, `4` = 4wd.
+
+:::puzzle
+
+### Exercise 1
+
+- Very similar to our `iris` plot above,
+  make a ridgeline plot of mileage (`hwy`) for cars with different drive trains
+  (`drive`).
+  And like in our `iris` plot,
+  also map the `fill` aesthetic to the categorical variable (`drive`).
+  
+- What do you think would happen if you _also_ map the **`color`** aesthetic
+  to `drive`? Check if you're right by making the plot.
+
+- As soon as we use the `color` and/or `fill` aesthetics, a legend will pop up.
+  Do we need a legend in this case?
+  Make the legend disappear by adding `show.legend = FALSE` inside
+  `geom_density_ridges()`.
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+- Initial plot:
+
+```{r}
+ggplot(data = mpg,
+       mapping = aes(x = hwy, y = drv, fill = drv)) +
+  geom_density_ridges(alpha = 0.5)
+```
+
+- When we map the `color` aesthetic,
+  the **line** (as opposed to the _fill_) around the density shapes will
+  get different colors:
+
+```{r}
+ggplot(data = mpg,
+       mapping = aes(x = hwy, y = drv, fill = drv, color = drv)) +
+  geom_density_ridges(alpha = 0.5)
+```
+
+- We don't need a legend for `drv` here because we are already showing this
+  information along the y-axis
+  (for that matter, we don't need different colors, but it makes the plot
+  prettier). We can turn off the legend as follows:
+
+```{r}
+ggplot(data = mpg,
+       mapping = aes(x = hwy, y = drv, fill = drv, color = drv)) +
+  geom_density_ridges(alpha = 0.5, show.legend = FALSE)
+```
+
+</details>
+
+:::
+
+<br>
+
+:::puzzle
+
+### Exercise 2
+
+- Why does the following code not result in a plot with blue points?
+
+```{r, eval=FALSE}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+```
+
+- Can you correct the error to create a plot with blue points? 
+
+- Going back to the initial erroneous code:
+  does _ggplot_'s behavior make sense to you,
+  or would you have expected an error, for example?
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+First, let's see the plot that the code produces:
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+```
+
+- The error in the code is that `color = "blue"` was placed _inside_ the `aes()`
+  function.
+  As such, `color` was interpreted as an aesthetic mapping,
+  not as a visual property.
+
+- Here is the correct code and plot:
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy),
+             color = "blue")
+```
+
+- You might have been surprised that the inital code did not result in an error,
+  since we normally map dataframe columns (like `displ` and `hwy` in this plot)
+  to aesthetics, and `"blue"` is not a name of one of the columns in `mpg`.
+
+  But, because `"blue"` was quoted,
+  it was interpreted as a stand-alone _vector_ instead.
+  And in turn, because of R's automatic vector recycling,
+  `"blue"` was repeated as many times as needed, under the hood,
+  to map it to all observations in the plot.
+
+  (This leads to the realization that you don't _have to_ map aesthetics to
+  dataframe columns,
+  you can also provide stand-alone vectors:
+  you'll see more of that in the next exercise.)
+
+</details>
+
+:::
+
+<br>
+
+:::puzzle
+
+### Exercise 3
+
+What happens if you map an aesthetic to something other than a variable name,
+like `aes(color = displ < 5)`?
+Note, you’ll also need to specify `x` and `y`.
+
+Do you understand why this code produces the resulting plot?
+
+<details> <summary> Hints (click here) </summary>
+<br>
+
+- You can for example plot the `mpg` data
+  with `displ` along the x-axis and `hwy` along the y-axis.
+
+- To understand what is happening:
+  what would `displ < 5` by itself return?
+  (To directly test this, run `mpg$displ < 5`)
+
+</details>
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+In the resulting plot,
+the `color` aesthetic will be mapped to
+_whether or not the value of `displ` is below 5_:
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = displ < 5))
+```
+
+By itself, `displ < 5` within the ggplot functions will return in a logical
+vector: a vector with `TRUE` and `FALSE` for each corresponding `displ` value
+that tells us whether this value is smaller than 5 (=> `TRUE`)
+or not (=> `FALSE`).
+To see this in a stand-alone manner, we can run:
+
+```{r}
+mpg$displ < 5
+```
+
+Next, ggplot is able to map this vector to the color aesthetic in the plot,
+just like it maps dataframe columns to an aesthetic
+(after all, dataframe columns are just vectors, too).
+
+</details>
+
+:::
+
+<br> <br>
