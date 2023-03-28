@@ -24,13 +24,9 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session | Date    | Presenter  | Topic + link to book chapter                                     |
 |---------|---------|------------|------------------------------------------------------------------|
-| S05E06  | Mar 02  | Stephen    | [**R4DS, Ch. 8: Data Import, II**](https://r4ds.hadley.nz/data-import.html) |
-| S05E07  | Mar 09  | Jessica    | [**R4DS, Ch. 9: Scripts & Projects**](https://r4ds.hadley.nz/workflow-scripts.html) |
-| -       | Mar 16  | -          | Spring Break |
-| S05E08  | Mar 23  | TBD        | TBD |
-| S05E09  | Mar 30  | TBD        | TBD |
-| S05E10  | Apr 06  | TBD        | TBD |
-| S05E11  | Apr 13  | TBD        | TBD |
+| S05E09  | Mar 30  | Jelmer     | [**R4DS, Ch. 10: ggplot layers, part 2**](/codeclub/s05e09/) |
+| S05E10  | Apr 06  | TBD        | [**R4DS, Ch. 10: ggplot layers, part 3**](https://r4ds.hadley.nz/layers.html) |
+| S05E11  | Apr 13  | TBD        | [**R4DS, Ch. 10: ggplot layers, part 4**](https://r4ds.hadley.nz/layers.html) |
 | S05E12  | Apr 20  | TBD        | TBD |
 | S05E13  | Apr 27  | TBD        | TBD |
 
@@ -38,11 +34,15 @@ You can join us either on Zoom (sign up for the link) or in-person:
 
 | Session | Date    | Presenter  | Topic + link to BioDASH page                                     |
 |---------|---------|------------|------------------------------------------------------------------|
-| S05E01  | Jan 26  | Jelmer     | [**R4DS, Ch. 4: Pipes**](https://biodash.github.io/codeclub/s05e01_pipes/) |
-| S05E02  | Feb 02  | Stephen    | [**R4DS, Ch. 6: Tidy Data, I**](https://biodash.github.io/codeclub/s05e02/) |
-| S05E03  | Feb 09  | Jessica & Daniel | [**R4DS, Ch. 6: Tidy Data, II**](https://biodash.github.io/codeclub/s05e03/) |
+| S05E01  | Jan 26  | Jelmer     | [**R4DS, Ch. 4: Pipes**](/codeclub/s05e01_pipes/) |
+| S05E02  | Feb 02  | Stephen    | [**R4DS, Ch. 6: Tidy Data, I**](/codeclub/s05e02/) |
+| S05E03  | Feb 09  | Jessica & Daniel | [**R4DS, Ch. 6: Tidy Data, II**](/codeclub/s05e03/) |
 | S05E04  | Feb 16  | Michael    | [**R4DS, Ch. 7: Code Style**](https://r4ds.hadley.nz/workflow-style.html) |
-| S05E05  | Feb 23  | Jelmer     | [**R4DS, Ch. 8: Data Import, I**](https://biodash.github.io/codeclub/s05e05/) |
+| S05E05  | Feb 23  | Jelmer     | [**R4DS, Ch. 8: Data Import, I**](/codeclub/s05e05/) |
+| S05E06  | Mar 02  | Stephen    | [**R4DS, Ch. 8: Data Import, II**](https://r4ds.hadley.nz/data-import.html) |
+| S05E07  | Mar 09  | Jessica    | [**R4DS, Ch. 9: Scripts & Projects**](https://r4ds.hadley.nz/workflow-scripts.html) |
+| -       | Mar 16  | -          | Spring Break |
+| S05E08  | Mar 23  | Jessica    | [**R4DS, Ch. 10: ggplot layers, part 1**](/codeclub/s05e08_ggplot-1/)   |
 
 <br>
 
