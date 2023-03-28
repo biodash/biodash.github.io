@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-03-28"
 lastmod: "2023-03-28"
 toc: true
-rmd_hash: eeea24508fbe0a35
+rmd_hash: 5531fc60bb343a74
 
 ---
 
@@ -266,13 +266,11 @@ Then we can load it and use the ridgeplot geom [`geom_density_ridges()`](https:/
 <span></span>
 <span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span>,</span>
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Sepal.Length</span>, y <span class='o'>=</span> <span class='nv'>Species</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
-<span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span>alpha <span class='o'>=</span> <span class='m'>0.5</span><span class='o'>)</span></span>
+<span>  <span class='nf'><a href='https://wilkelab.org/ggridges/reference/geom_density_ridges.html'>geom_density_ridges</a></span><span class='o'>(</span><span class='o'>)</span></span>
 <span><span class='c'>#&gt; Picking joint bandwidth of 0.181</span></span></code></pre>
 <img src="figs/unnamed-chunk-16-1.png" width="700px" style="display: block; margin: auto;" />
 
 </div>
-
-(Above, we set `alpha` to 0.5 to get medium transparency of the fill colors.)
 
 <br>
 
@@ -356,6 +354,9 @@ Hints (click here)
 -   To set alpha to 0.5, use `geom_density_ridges(alpha = 0.5)`.
 
 </details>
+
+<br>
+
 <details>
 <summary>
 Solution (click here)
@@ -363,7 +364,7 @@ Solution (click here)
 
 <br>
 
--   Making the shapes partially transparent:
+-   Making the shapes partially transparent using `alpha`:
 
 <div class="highlight">
 
@@ -486,6 +487,9 @@ Hints (click here)
 -   To understand what is happening: what would `displ < 5` by itself return? (To directly test this, run `mpg$displ < 5`.)
 
 </details>
+
+<br>
+
 <details>
 <summary>
 Solution (click here)
