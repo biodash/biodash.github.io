@@ -8,7 +8,7 @@ tags: [codeclub, r4ds]
 date: "2023-03-29"
 lastmod: "2023-03-29"
 toc: true
-rmd_hash: 18764a195b3e9b50
+rmd_hash: 1468e796cf0b0f87
 
 ---
 
@@ -52,7 +52,7 @@ The *ggplot2* package is one of the core *tidyverse* packages, so it's generally
 
 </div>
 
-We'll talk about formatting plots to your heart's delight in Chapter 12, but one trick for now is to set a different *ggplot* plotting "theme" for the rest of your R session:
+We'll talk about formatting plots to your heart's delight in Chapter 12, but one trick for now is **setting a different *ggplot* plotting "theme" for the entire R session:**
 
 <div class="highlight">
 
@@ -130,7 +130,7 @@ Or `size`:
 
 </div>
 
-Why would *ggplot* give us a warning here? When *is* size a useful aesthetic?
+**Why would *ggplot* give us a warning here?** When *is* size a useful aesthetic?
 
 ### Visual properties
 
@@ -210,7 +210,6 @@ Useful plot types for showing and comparing distributions are histograms, densit
 <span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span>,</span>
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='o'>(</span><span class='o'>)</span></span>
-<span></span>
 <span><span class='c'># Right</span></span>
 <span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span>,</span>
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>x <span class='o'>=</span> <span class='nv'>Petal.Length</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
@@ -220,7 +219,6 @@ Useful plot types for showing and comparing distributions are histograms, densit
 
 <div class="highlight">
 
-<pre class='chroma'><code class='language-r' data-lang='r'><span><span class='c'>#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre>
 <img src="figs/unnamed-chunk-12-1.png" width="95%" style="display: block; margin: auto;" />
 
 </div>
@@ -233,7 +231,6 @@ In the plots above, we only needed one axis (`x`), since the other axis consiste
 <span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span>,</span>
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nv'>Petal.Length</span>, x <span class='o'>=</span> <span class='nv'>Species</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
 <span>  <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='o'>(</span><span class='o'>)</span></span>
-<span></span>
 <span><span class='c'># Right:</span></span>
 <span><span class='nf'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='o'>(</span>data <span class='o'>=</span> <span class='nv'>iris</span>,</span>
 <span>       mapping <span class='o'>=</span> <span class='nf'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='o'>(</span>y <span class='o'>=</span> <span class='nv'>Petal.Length</span>, x <span class='o'>=</span> <span class='nv'>Species</span>, fill <span class='o'>=</span> <span class='nv'>Species</span><span class='o'>)</span><span class='o'>)</span> <span class='o'>+</span></span>
@@ -273,7 +270,7 @@ Then we can load it and use the ridgeplot geom [`geom_density_ridges()`](https:/
 
 </div>
 
-We can improve on a plot like this plot a bit, for instance by making the density shapes semi-transparent. We'll do that in the exercises below.
+A plot like this can be improved a bit, for instance by making the density shapes semi-transparent. We'll do that in the exercises below.
 
 <br>
 
