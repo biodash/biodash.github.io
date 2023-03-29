@@ -45,8 +45,8 @@ library(tidyverse)
 ```
 
 We'll talk about formatting plots to your heart's delight in Chapter 12,
-but one trick for now is to set a ggplot2 plotting "theme" that differs from
-the default for the rest of your R session:
+but one trick for now is to set a different _ggplot_ plotting "theme" 
+for the rest of your R session:
 
 ```{r}
 # - Overview of themes: https://ggplot2.tidyverse.org/reference/ggtheme.html
@@ -72,11 +72,10 @@ head(iris)
 We learned that we create ggplots by "mapping" variables (dataframe columns)
 to so-called "aesthetics" such as the `x`-axis, the `y`-axis, and `color`:
 
-- If we map the `iris` dataframe variable `Petal.Length` to the `x`-axis aesthetic,
-  then the x-axis of our plot will represent the values from the column
-  `Petal.Length` in the dataframe.
+- If we map the `iris` dataframe column `Petal.Length` to the `x`-axis aesthetic,
+  then the values from that column will be plotted along the x-axis.
 
-- If we map the variable `Species` to the `color` aesthetic,
+- If we map the `iris` dataframe column `Species` to the `color` aesthetic,
   then observations are colored according to the values in the `Species` column,
   i.e. according to which species of iris they belong to.  
 
@@ -148,8 +147,7 @@ along with summaries of the data such as a trend line (`geom_smooth()`).
 
 ### Local vs global aesthetics
 
-One thing that's important to realize once you start using multiple geoms in
-a single plot is the distinction between "global" versus "local" aesthetics:
+It's useful to understand the distinction between "global" and "local" aesthetics:
 
 - **Global aesthetics** apply to all geoms in the plot,
   and are added in the initial `ggplot()` call
@@ -167,12 +165,12 @@ ggplot(data = iris,
   geom_smooth()
 ```
 
-Note also that in case of `geom_smooth()`,
+(Note also that in case of `geom_smooth()`,
 which summarizes the data using a statistical function,
-this summarizing is done entirely _separately_ for each species!
+this summarizing is done entirely _separately_ for each species!)
 
-Compare this with the plot that is created when we define the `color` mapping
-_locally_, and _only_ for `geom_point()`:
+In contrast, when we define the `color` mapping _locally_,
+and _only_ for `geom_point()`, we get this:
 
 ```{r}
 ggplot(data = iris,
@@ -193,23 +191,37 @@ that Jessica linked to last week or the ggplot
 
 Let's see a couple more commonly used geoms.
 Last week we talked a bit about how a scatterplot does not always make it easy
-to compare the distributions of a variable among groups.
+to compares the distributions of a variable among groups.
 
 Useful plot types for showing and comparing distributions are histograms,
 density plots, box plots, and violin plots.
 Notice below that we use nearly identical code to make these different plots
 (in this case, to show the distribution of `Petal.Length` among iris species):
 
-```{r}
+```{r, eval=FALSE}
+# Left
 ggplot(data = iris,
        mapping = aes(x = Petal.Length, fill = Species)) +
   geom_histogram()
-```
 
-```{r}
+# Right
 ggplot(data = iris,
        mapping = aes(x = Petal.Length, fill = Species)) +
   geom_density()
+```
+
+```{r, echo=FALSE, out.width="95%"}
+library(patchwork)
+
+p1 <- ggplot(data = iris,
+             mapping = aes(x = Petal.Length, fill = Species)) +
+  geom_histogram()
+
+p2 <- ggplot(data = iris,
+             mapping = aes(x = Petal.Length, fill = Species)) +
+  geom_density()
+
+p1 + p2 & theme_minimal(base_size = 12)
 ```
 
 In the plots above, we only needed one axis (`x`),
@@ -217,16 +229,28 @@ since the other axis consisted of counts/density computed by the plot itself.
 For box and violin plots, we do specify an x-axis when we want to show
 multiple groups:
 
-```{r}
+```{r, eval=FALSE}
+# Left
 ggplot(data = iris,
        mapping = aes(y = Petal.Length, x = Species, fill = Species)) +
   geom_boxplot()
-```
 
-```{r}
+# Right:
 ggplot(data = iris,
        mapping = aes(y = Petal.Length, x = Species, fill = Species)) +
   geom_violin()
+```
+
+```{r, echo=FALSE, out.width="95%"}
+p1 <- ggplot(data = iris,
+             mapping = aes(y = Petal.Length, x = Species, fill = Species)) +
+  geom_boxplot()
+
+p2 <- ggplot(data = iris,
+             mapping = aes(y = Petal.Length, x = Species, fill = Species)) +
+  geom_violin()
+
+p1 + p2 & theme_minimal(base_size = 12)
 ```
 
 ### Geoms from ggplot "extension" packages
@@ -253,6 +277,10 @@ ggplot(data = iris,
   geom_density_ridges()
 ```
 
+We can improve on a plot like this plot a bit,
+for instance by making the density shapes semi-transparent.
+We'll do that in the exercises below.
+
 <br>
 
 --------------------------------------------------------------------------------
@@ -266,23 +294,22 @@ which has some statistics on cars.
 head(mpg)
 ```
 
-You will use these columns:
+You will be using the following columns:
 
-- `displ` is the engine size (or "displacement")
+- `displ` is the engine size ("displacement")
 - `hwy` is gas mileage (miles per gallon) when driving on a highway
 - `drv` is the type of "drive train",
-  where `f` = front-wheel drive, `r` = rear wheel drive, `4` = 4wd.
+  where `f` = front-wheel drive, `r` = rear wheel drive, `4` = 4wd
 
 :::puzzle
 
 ### Exercise 1
 
-Very similar to our `iris` plot above,
+Along the same lines as our last `iris` plot above,
 make a ridgeline plot of mileage (`hwy`) for cars with different drive trains
 (`drive`).
   
-And like in our `iris` plot,
-also map the `fill` aesthetic to the categorical variable (`drive`).
+And like in our `iris` plot, also map the `fill` aesthetic to `drive`.
 
 <details> <summary> Solution (click here) </summary>
 <br>
@@ -306,22 +333,14 @@ ggplot(data = mpg,
 Let's try to make the plot you made in Exercise 1 a bit nicer.
 
 - One issue is that the density shapes overlap.
-  We can elegantly solve this by making them somewhat transparent,
+  We can elegantly solve this by making them semi-transparent,
   which we can do by setting `alpha`, e.g. to 0.5
   (you would do this in the same way you would e.g. _set_ (not _map_!) the color).
-
-- What do you think would happen if you _also_ map the **`color`** aesthetic
-  to `drive`? Check if you're right by making the plot.
-
-- As soon as we use the `color` and/or `fill` aesthetics, a legend will pop up.
-  Do we need a legend in this case?
-  Make the legend disappear by adding `show.legend = FALSE` inside
-  `geom_density_ridges()`.
 
 <details> <summary> Hints (click here) </summary>
 <br>
 
-- To set alpha to 0.5, use `geom_density_ridges(alpha = 0.5)`.
+To set alpha to 0.5, use `geom_density_ridges(alpha = 0.5)`.
 
 </details>
 
@@ -330,7 +349,7 @@ Let's try to make the plot you made in Exercise 1 a bit nicer.
 <details> <summary> Solution (click here) </summary>
 <br>
 
-- Making the shapes partially transparent using `alpha`:
+Making the shapes partially transparent using `alpha`:
 
 ```{r}
 ggplot(data = mpg,
@@ -338,9 +357,18 @@ ggplot(data = mpg,
   geom_density_ridges(alpha = 0.5)
 ```
 
-- When we map the `color` aesthetic,
-  the **line** (as opposed to the _fill_) around the density shapes will
-  get different colors:
+</details>
+<br>
+
+- What do you think would happen if you _also_ map the `color` aesthetic
+  to `drive`? Check if you're right by making the plot.
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+When we map the `color` aesthetic,
+the **lines** (as opposed to the _fills_) around the density shapes will
+get different colors:
 
 ```{r}
 ggplot(data = mpg,
@@ -348,10 +376,21 @@ ggplot(data = mpg,
   geom_density_ridges(alpha = 0.5)
 ```
 
-- We don't need a legend for `drv` here because we are already showing this
-  information along the y-axis
-  (for that matter, we don't need different colors, but it makes the plot
-  prettier). We can turn off the legend as follows:
+</details>
+<br>
+
+- As soon as we use the `color` and/or `fill` aesthetics, a legend will pop up.
+  Do we need a legend in this case?
+  Make the legend disappear by adding `show.legend = FALSE` inside
+  `geom_density_ridges()`.
+
+<details> <summary> Solution (click here) </summary>
+<br>
+
+We don't need a legend for `drv` here because we are already showing this
+information along the y-axis
+(for that matter, we don't need different colors, but it makes the plot
+prettier). We can turn off the legend as follows:
 
 ```{r}
 ggplot(data = mpg,
@@ -370,6 +409,8 @@ ggplot(data = mpg,
 ### Exercise 3
 
 - Why does the following code not result in a plot with blue points?
+  Does _ggplot_'s behavior here make sense to you,
+  or would you have expected an error?
 
 ```{r, eval=FALSE}
 ggplot(data = mpg) + 
@@ -377,10 +418,6 @@ ggplot(data = mpg) +
 ```
 
 - Can you correct the error to create a plot with blue points? 
-
-- Going back to the initial erroneous code:
-  does _ggplot_'s behavior make sense to you,
-  or would you have expected an error, for example?
 
 <details> <summary> Solution (click here) </summary>
 <br>
@@ -405,7 +442,7 @@ ggplot(data = mpg) +
              color = "blue")
 ```
 
-- You might have been surprised that the inital code did not result in an error,
+- You might have been surprised that the initial code did not result in an error,
   since we normally map dataframe columns (like `displ` and `hwy` in this plot)
   to aesthetics, and `"blue"` is not a name of one of the columns in `mpg`.
 
@@ -414,11 +451,6 @@ ggplot(data = mpg) +
   And in turn, because of R's automatic vector recycling,
   `"blue"` was repeated as many times as needed, under the hood,
   to map it to all observations in the plot.
-
-  (This leads to the realization that you don't _have to_ map aesthetics to
-  dataframe columns,
-  you can also provide stand-alone vectors:
-  you'll see more of that in the next exercise.)
 
 </details>
 
@@ -472,7 +504,7 @@ To see this in a stand-alone manner, we can run:
 mpg$displ < 5
 ```
 
-Next, ggplot is able to map this vector to the color aesthetic in the plot,
+Next, _ggplot_ is able to map this vector to the color aesthetic in the plot,
 just like it maps dataframe columns to an aesthetic
 (after all, dataframe columns are just vectors, too).
 
