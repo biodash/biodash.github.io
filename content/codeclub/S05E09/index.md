@@ -5,10 +5,10 @@ subtitle: "More aesthetic mappings and geoms"
 summary: "Today, we'll continue to learn about data visualization with ggplot2, focusing on aesthetic mappings and geoms."
 authors: [admin]
 tags: [codeclub, r4ds]
-date: "2023-03-29"
-lastmod: "2023-03-29"
+date: "2023-03-30"
+lastmod: "2023-03-30"
 toc: true
-rmd_hash: 1468e796cf0b0f87
+rmd_hash: 564d04c11a76815c
 
 ---
 
@@ -359,8 +359,6 @@ Solution (click here)
 </summary>
 
 <br>
-
-Making the shapes partially transparent using `alpha`:
 
 <div class="highlight">
 
