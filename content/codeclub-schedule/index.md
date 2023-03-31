@@ -5,32 +5,27 @@ title: "Schedule for Code Club"
 
 ------------------------------------------------------------------------
 
-## Spring '23
+## Code Club is on break.
 
-We are meeting on **Thursdays at 4 pm**, starting January 26th.
+The Code Club Spring '23 semester has ended early due to absences among the
+organizers; we had our last session on March 30th.
+We hope to be back with a new series of sessions in the summer.
 
-If you haven't previously signed up,
-[do so using the form](/codeclub-about/#sign-up)!
+For Code Club topic suggestions, you can use
+[this form](/codeclub-suggest/) and you can always sign up for future sessions
+[using this form](/codeclub-about/#sign-up)!
 
-You can join us either on Zoom (sign up for the link) or in-person:
+<br>
 
-- In **Columbus**, Jessica will be in Howlett 340.
-- In **Wooster**, Jelmer will be in Selby 203.
+------------------------------------------------------------------------
 
-### Upcoming sessions
+## Previous semesters
 
-- R4DS = [The R for Data Science book](https://r4ds.hadley.nz/).  
-  Note that we have switched to the _second edition_!
+Ask us for access to the Zoom recordings of previous Code Club sessions!
 
-| Session | Date    | Presenter  | Topic + link to book chapter                                     |
-|---------|---------|------------|------------------------------------------------------------------|
-| S05E09  | Mar 30  | Jelmer     | [**R4DS, Ch. 10: ggplot layers, part 2**](/codeclub/s05e09/) |
-| S05E10  | Apr 06  | TBD        | [**R4DS, Ch. 10: ggplot layers, part 3**](https://r4ds.hadley.nz/layers.html) |
-| S05E11  | Apr 13  | TBD        | [**R4DS, Ch. 10: ggplot layers, part 4**](https://r4ds.hadley.nz/layers.html) |
-| S05E12  | Apr 20  | TBD        | TBD |
-| S05E13  | Apr 27  | TBD        | TBD |
+### Spring '23
 
-### Past sessions
+- R4DS = [The R for Data Science book (2nd edition)](https://r4ds.hadley.nz/)
 
 | Session | Date    | Presenter  | Topic + link to BioDASH page                                     |
 |---------|---------|------------|------------------------------------------------------------------|
@@ -41,16 +36,8 @@ You can join us either on Zoom (sign up for the link) or in-person:
 | S05E05  | Feb 23  | Jelmer     | [**R4DS, Ch. 8: Data Import, I**](/codeclub/s05e05/) |
 | S05E06  | Mar 02  | Stephen    | [**R4DS, Ch. 8: Data Import, II**](https://r4ds.hadley.nz/data-import.html) |
 | S05E07  | Mar 09  | Jessica    | [**R4DS, Ch. 9: Scripts & Projects**](https://r4ds.hadley.nz/workflow-scripts.html) |
-| -       | Mar 16  | -          | Spring Break |
 | S05E08  | Mar 23  | Jessica    | [**R4DS, Ch. 10: ggplot layers, part 1**](/codeclub/s05e08_ggplot-1/)   |
-
-<br>
-
-------------------------------------------------------------------------
-
-## Previous semesters
-
-Ask us for access to the Zoom recordings of previous Code Club sessions!
+| S05E09  | Mar 30  | Jelmer     | [**R4DS, Ch. 10: ggplot layers, part 2**](/codeclub/s05e09/) |
 
 ### Summer & Fall '22
 
