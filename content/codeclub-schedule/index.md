@@ -5,15 +5,13 @@ title: "Schedule for Code Club"
 
 ------------------------------------------------------------------------
 
-## Code Club is on break.
+## Code Club will restart at the end of August
 
-The Code Club Spring '23 semester has ended early due to absences among the
-organizers; we had our last session on March 30th.
-We hope to be back with a new series of sessions in the summer.
+During the first part of the semester,
+we will cover how to make a website with Quarto/RMarkdown and Git/GitHub.
+During the second part of the semester, we will learn about R Shiny.
 
-For Code Club topic suggestions, you can use
-[this form](/codeclub-suggest/) and you can always sign up for future sessions
-[using this form](/codeclub-about/#sign-up)!
+[See this form for more information and to sign up!](https://forms.office.com/r/SgmdwJXEXx)
 
 <br>
 

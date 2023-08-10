@@ -8,16 +8,17 @@ toc: true
 
 <br>
 
-<div class="alert alert-note">
-<div>
+<div class="alert alert-note"><div>
 
-<b>Code Club has restarted for the '23 Spring semester on January 26th &mdash;
-see the <a href="/codeclub-schedule/">schedule</a>. <br>
-You can join us at any point &mdash; to do so, please fill out
-<a href="#sign-up">this form!</a></b>
+Code Club will restart at the end of August
 
-</div>
-</div>
+During the first part of the semester,
+we will cover how to make a website with Quarto/RMarkdown and Git/GitHub.
+During the second part of the semester, we will learn about R Shiny.
+
+<a href="https://forms.office.com/r/SgmdwJXEXx">See this form for more information and to sign up!</a>
+
+</div></div>
 
 OSU Code Club is a regularly occurring, interactive, online and in-person gathering to improve coding skills.
 We aim for a supportive and fun culture of learning together, and hope to offer something to participants at any experience level.
